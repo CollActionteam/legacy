@@ -33,9 +33,11 @@ namespace CollAction
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
+            Environment = env;
         }
 
         public IConfigurationRoot Configuration { get; }
+        public IHostingEnvironment Environment { get; private set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -61,9 +63,8 @@ namespace CollAction
 
             services.Configure<MvcOptions>(options =>
             {
-#if (!DEBUG)
-                options.Filters.Add(new RequireHttpsAttribute());
-#endif
+                if (Environment.IsProduction())
+                    options.Filters.Add(new RequireHttpsAttribute());
             });
 
             // Add application services.
