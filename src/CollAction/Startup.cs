@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using CollAction.Data;
 using CollAction.Models;
 using CollAction.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CollAction
 {
@@ -47,7 +48,23 @@ namespace CollAction
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 8;
+            });
+
             services.AddMvc();
+
+            services.Configure<MvcOptions>(options =>
+            {
+#if (!DEBUG)
+                options.Filters.Add(new RequireHttpsAttribute());
+#endif
+            });
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
