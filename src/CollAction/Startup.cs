@@ -70,6 +70,13 @@ namespace CollAction
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+            services.Configure<AuthMessageSenderOptions>(options =>
+            {
+                options.FromName = Configuration["FromName"];
+                options.FromAddress = Configuration["FromAddress"];
+                options.SendGridKey = Configuration["SendGridKey"];
+                options.SendGridUser = Configuration["SendGridUser"];
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

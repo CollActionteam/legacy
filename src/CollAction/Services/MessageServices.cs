@@ -1,6 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.Extensions.Options;
+using SendGrid;
+using System;
+using System.Net.Mail;
 using System.Threading.Tasks;
 
 namespace CollAction.Services
@@ -10,16 +11,31 @@ namespace CollAction.Services
     // For more details see this link http://go.microsoft.com/fwlink/?LinkID=532713
     public class AuthMessageSender : IEmailSender, ISmsSender
     {
+        private readonly IOptions<AuthMessageSenderOptions> _authOptions;
+
+        public AuthMessageSender(IOptions<AuthMessageSenderOptions> authOptions)
+        {
+            _authOptions = authOptions;
+        }
+
         public Task SendEmailAsync(string email, string subject, string message)
         {
-            // Plug in your email service here to send an email.
-            return Task.FromResult(0);
+            SendGridMessage gridMessage = new SendGridMessage()
+            {
+                From = new MailAddress(_authOptions.Value.FromAddress, _authOptions.Value.FromName),
+                Subject = subject,
+                Text = message,
+                Html = message
+            };
+            gridMessage.AddTo(email);
+
+            return new Web(_authOptions.Value.SendGridKey).DeliverAsync(gridMessage);
         }
 
         public Task SendSmsAsync(string number, string message)
         {
+            throw new NotImplementedException();
             // Plug in your SMS service here to send a text message.
-            return Task.FromResult(0);
         }
     }
 }
