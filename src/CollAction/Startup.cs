@@ -75,7 +75,6 @@ namespace CollAction
                 options.FromName = Configuration["FromName"];
                 options.FromAddress = Configuration["FromAddress"];
                 options.SendGridKey = Configuration["SendGridKey"];
-                options.SendGridUser = Configuration["SendGridUser"];
             });
         }
 
