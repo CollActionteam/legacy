@@ -15,12 +15,26 @@ namespace CollAction.Data
         {
         }
 
+        public DbSet<Project> Project { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            // Customize the ASP.NET Identity model and override the defaults if needed.
-            // For example, you can rename the ASP.NET Identity table names and more.
-            // Add your customizations after calling base.OnModelCreating(builder);
+
+            builder.Entity<Project>()
+                   .HasOne(p => p.Owner)
+                   .WithMany(u => u.Projects)
+                   .HasForeignKey(p => p.OwnerId);
+
+            builder.Entity<Project>()
+                   .HasMany(p => p.Subscriptions)
+                   .WithOne(s => s.Project)
+                   .HasForeignKey(s => s.ProjectId);
+
+            builder.Entity<ApplicationUser>()
+                   .HasMany(u => u.Subscriptions)
+                   .WithOne(s => s.User)
+                   .HasForeignKey(s => s.UserId);
         }
     }
 }
