@@ -20,6 +20,21 @@ namespace CollAction.Controllers
         }
 
         // GET: Projects
+        public IActionResult Start()
+        {
+            ViewData["Message"] = "Your application description page.";
+
+            return View("Create");
+        }
+
+        public IActionResult Find()
+        {
+            ViewData["Message"] = "Your application description page.";
+
+            return View("Create");
+        }
+
+
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Project.Include(p => p.Owner);

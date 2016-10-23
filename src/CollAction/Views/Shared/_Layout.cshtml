@@ -30,9 +30,9 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li><a asp-area="" asp-controller="Projects" asp-action="Find">Find Project</a></li>
+                    <li><a asp-area="" asp-controller="Projects" asp-action="Start">Start Project</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
@@ -40,10 +40,23 @@
     </div>
     <div class="container body-content">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2016 - CollAction</p>
-        </footer>
+    </div>
+    
+    <div id="footer" class="navbar navbar-inverse navbar-fixed-bottom">
+        <div class="container">
+            <div class="navbar-header">
+                <p class="navbar-text">&copy; CollAction All Rights Reserved.</p> 
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a asp-area="" asp-controller="Projects" asp-action="Find">Find Project</a></li>
+                    <li><a asp-area="" asp-controller="Projects" asp-action="Start">Start Project</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="FAQ">FAQ</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                </ul>            
+            </div>
+        </div>
     </div>
 
     <environment names="Development">

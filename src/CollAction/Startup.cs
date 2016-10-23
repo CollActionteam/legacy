@@ -103,6 +103,43 @@ namespace CollAction
 
             app.UseMvc(routes =>
             {
+
+                //routes.MapRoute(null,
+                //    "Page{page}",
+                //    new { controller = "Product", action = "List", category = (string)null },
+                //    new { page = @"\d+" }
+                //);
+
+                //routes.MapRoute(null,
+                //    "{category}",
+                //    new { controller = "Product", action = "List", page = 1 }
+                //);
+
+                routes.MapRoute("find",
+                     "find",
+                     new { controller = "Projects", action = "Find" }
+                );
+
+                routes.MapRoute("start",
+                     "start",
+                     new { controller = "Projects", action = "Start" }
+                );
+
+                routes.MapRoute("about",
+                     "about",
+                     new { controller = "Home", action = "About" }
+                 );
+
+                routes.MapRoute("faq",
+                     "faq",
+                     new { controller = "Home", action = "FAQ" }
+                 );
+
+                routes.MapRoute("contact",
+                     "contact",
+                     new { controller = "Home", action = "Contact" }
+                 );
+
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");

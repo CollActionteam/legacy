@@ -15,8 +15,6 @@ namespace CollAction.Controllers
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
-
             return View();
         }
 
@@ -24,6 +22,11 @@ namespace CollAction.Controllers
         {
             ViewData["Message"] = "Your contact page.";
 
+            return View();
+        }
+
+        public ViewResult FAQ()
+        {
             return View();
         }
 
