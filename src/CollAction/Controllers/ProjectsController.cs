@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CollAction.Data;
 using CollAction.Models;
+using Microsoft.Extensions.Localization;
 
 namespace CollAction.Controllers
 {
     public class ProjectsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IStringLocalizer<ProjectsController> _localizer;
 
-        public ProjectsController(ApplicationDbContext context)
+        public ProjectsController(ApplicationDbContext context, IStringLocalizer<ProjectsController> localizer)
         {
-            _context = context;    
+            _context = context;
+            _localizer = localizer;
         }
 
         // GET: Projects

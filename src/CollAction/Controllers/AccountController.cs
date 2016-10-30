@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using CollAction.Models;
 using CollAction.Models.AccountViewModels;
 using CollAction.Services;
+using Microsoft.Extensions.Localization;
 
 namespace CollAction.Controllers
 {
@@ -22,19 +23,22 @@ namespace CollAction.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
+        private readonly IStringLocalizer<AccountController> _localizer;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
             ISmsSender smsSender,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory,
+            IStringLocalizer<AccountController> localizer)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
+            _localizer = localizer;
         }
 
         //
@@ -76,7 +80,7 @@ namespace CollAction.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, _localizer["Invalid login attempt."]);
                     return View(model);
                 }
             }
@@ -111,8 +115,8 @@ namespace CollAction.Controllers
                 {
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                    await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
-                        $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
+                    await _emailSender.SendEmailAsync(model.Email, _localizer["Confirm your account"],
+                        $"{_localizer["Please confirm your account by clicking this link"]}: <a href='{callbackUrl}'>{_localizer["link"]}</a>");
                     _logger.LogInformation(3, "User created a new account with password.");
                     return RedirectToLocal(returnUrl);
                 }
@@ -155,7 +159,7 @@ namespace CollAction.Controllers
         {
             if (remoteError != null)
             {
-                ModelState.AddModelError(string.Empty, $"Error from external provider: {remoteError}");
+                ModelState.AddModelError(string.Empty, $"{_localizer["Error from external provider"]}: {remoteError}");
                 return View(nameof(Login));
             }
             var info = await _signInManager.GetExternalLoginInfoAsync();
@@ -271,7 +275,7 @@ namespace CollAction.Controllers
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
                 await _emailSender.SendEmailAsync(model.Email, "Reset Password",
-                   $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
+                   $"{_localizer["Please reset your password by clicking here"]}: <a href='{callbackUrl}'>{_localizer["link"]}</a>");
                 return View("ForgotPasswordConfirmation");
             }
 
@@ -373,7 +377,7 @@ namespace CollAction.Controllers
                 return View("Error");
             }
 
-            var message = "Your security code is: " + code;
+            var message = _localizer["Your security code is: "] + code;
             if (model.SelectedProvider == "Email")
             {
                 await _emailSender.SendEmailAsync(await _userManager.GetEmailAsync(user), "Security Code", message);
@@ -428,7 +432,7 @@ namespace CollAction.Controllers
             }
             else
             {
-                ModelState.AddModelError(string.Empty, "Invalid code.");
+                ModelState.AddModelError(string.Empty, _localizer["Invalid code."]);
                 return View(model);
             }
         }
@@ -459,7 +463,6 @@ namespace CollAction.Controllers
                 return RedirectToAction(nameof(HomeController.Index), "Home");
             }
         }
-
         #endregion
     }
 }

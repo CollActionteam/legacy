@@ -1,5 +1,9 @@
-﻿@{
-    ViewData["Title"] = "About";
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+
+@{
+    ViewData["Title"] = Localizer["About"];
 }
 <div>
     <h3>CollAction.org - the first Crowd Acting platform in the world.</h3>

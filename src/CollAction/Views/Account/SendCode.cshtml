@@ -1,4 +1,8 @@
-﻿@model SendCodeViewModel
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+
+@model SendCodeViewModel
 @{
     ViewData["Title"] = "Send Verification Code";
 }

@@ -1,5 +1,9 @@
-﻿@{
-    ViewData["Title"] = "FAQ";
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+
+@{
+    ViewData["Title"] = Localizer["FAQ"];
 }
 @section styles {
     <link rel="stylesheet" href="~/css/faq.css" />

@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using CollAction.Models;
 using CollAction.Models.ManageViewModels;
 using CollAction.Services;
+using Microsoft.Extensions.Localization;
 
 namespace CollAction.Controllers
 {
@@ -20,19 +21,22 @@ namespace CollAction.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
+        private readonly IStringLocalizer<ManageController> _localizer;
 
         public ManageController(
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
         IEmailSender emailSender,
         ISmsSender smsSender,
-        ILoggerFactory loggerFactory)
+        ILoggerFactory loggerFactory,
+        IStringLocalizer<ManageController> localizer)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<ManageController>();
+            _localizer = localizer;
         }
 
         //
@@ -41,12 +45,12 @@ namespace CollAction.Controllers
         public async Task<IActionResult> Index(ManageMessageId? message = null)
         {
             ViewData["StatusMessage"] =
-                message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
-                : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
-                : message == ManageMessageId.SetTwoFactorSuccess ? "Your two-factor authentication provider has been set."
-                : message == ManageMessageId.Error ? "An error has occurred."
-                : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
-                : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
+                message == ManageMessageId.ChangePasswordSuccess ? _localizer["Your password has been changed."]
+                : message == ManageMessageId.SetPasswordSuccess ? _localizer["Your password has been set."]
+                : message == ManageMessageId.SetTwoFactorSuccess ? _localizer["Your two-factor authentication provider has been set."]
+                : message == ManageMessageId.Error ? _localizer["An error has occurred."]
+                : message == ManageMessageId.AddPhoneSuccess ? _localizer["Your phone number was added."]
+                : message == ManageMessageId.RemovePhoneSuccess ? _localizer["Your phone number was removed."]
                 : "";
 
             var user = await GetCurrentUserAsync();
@@ -109,7 +113,7 @@ namespace CollAction.Controllers
                 return View("Error");
             }
             var code = await _userManager.GenerateChangePhoneNumberTokenAsync(user, model.PhoneNumber);
-            await _smsSender.SendSmsAsync(model.PhoneNumber, "Your security code is: " + code);
+            await _smsSender.SendSmsAsync(model.PhoneNumber, _localizer["Your security code is: "] + code);
             return RedirectToAction(nameof(VerifyPhoneNumber), new { PhoneNumber = model.PhoneNumber });
         }
 
@@ -181,7 +185,7 @@ namespace CollAction.Controllers
                 }
             }
             // If we got this far, something failed, redisplay the form
-            ModelState.AddModelError(string.Empty, "Failed to verify phone number");
+            ModelState.AddModelError(string.Empty, _localizer["Failed to verify phone number"]);
             return View(model);
         }
 
@@ -277,9 +281,9 @@ namespace CollAction.Controllers
         public async Task<IActionResult> ManageLogins(ManageMessageId? message = null)
         {
             ViewData["StatusMessage"] =
-                message == ManageMessageId.RemoveLoginSuccess ? "The external login was removed."
-                : message == ManageMessageId.AddLoginSuccess ? "The external login was added."
-                : message == ManageMessageId.Error ? "An error has occurred."
+                message == ManageMessageId.RemoveLoginSuccess ? _localizer["The external login was removed."]
+                : message == ManageMessageId.AddLoginSuccess ? _localizer["The external login was added."]
+                : message == ManageMessageId.Error ? _localizer["An error has occurred."]
                 : "";
             var user = await GetCurrentUserAsync();
             if (user == null)
