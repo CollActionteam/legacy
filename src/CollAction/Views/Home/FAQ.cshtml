@@ -1,6 +1,224 @@
 ﻿@{
     ViewData["Title"] = "FAQ";
 }
-<h2>Frequently Asked Questions</h2>
+@section styles {
+    <link rel="stylesheet" href="~/css/faq.css" />
+}
+@section scripts {
+    <script src="~/js/faq.js" asp-append-version="true"></script>
+}
+<h3>Frequently Asked Questions</h3>
 
+<div class="panel-group">
+    <div class="panel panel-default">
+        <div class="panel-heading" data-toggle="collapse" href="#collapseCollAction">
+            <h3 class="panel-title" >
+                <span class="fa fa-question" aria-hidden="true"></span>&nbsp;
+                WHAT IS COLLACTION?
+                <span class="fa fa-angle-down pull-right"></span>
+            </h3>
+        </div>
+        <div id="collapseCollAction" class="panel-collapse collapse">
+            <div class="panel-body">
+                Foundation helps people CollAction collective action to solve problems through crowd acting. We are a foundation, and thus have no profit.
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading" data-toggle="collapse" href="#collapseCrowdActing">
+            <h3 class="panel-title">
+                <span class="fa fa-hand-o-up" aria-hidden="true"></span>&nbsp;
+                HUH? CROWD ACTING? WHAT IS THAT?
+                <span class="fa fa-angle-down pull-right"></span>
+            </h3>
+        </div>
+        <div id="collapseCrowdActing" class="panel-collapse collapse">
+            <div class="panel-body">
+                The term Crowd Acting, as used herein, is a term that has been launched by CollAction Foundation. It means as much as "Conditional, collective action in favor of a social purpose." To put it simply, we propose to crowd acting the question, "businesswomen your action if you know one hundred / thousand / million / billion other people would do it?" An example of a crowd acting project: "if we find 10,000 people who promise about steps on energy as 9,999 other people do it, then we all move. " So it works like crowdfunding, but people commit actions, rather than money.
+                <br />
+                In practice, followed by a crowd acting project three steps:
+                <ol>
+                    <li>
+                        A Project Starter launches a project collaction.org. He / she represents a certain action (eg switching to green energy) with an associated target (minimum number of participants) and a deadline.
+                    </li>
+                    <li>
+                        Project Supporters commit to the action, provided that the target is reached within the deadline.
+                    </li>
+                    <li>
+                        When the target is indeed reached, everyone comes flocking into action.
+                    </li>
+                </ol>
+                More information can be found on <a href="http://www.crowdacting.org/">www.crowdacting.org</a>.
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading" data-toggle="collapse" href="#collapseCrowdActingNew">
+            <h3 class="panel-title">
+                <span class="fa fa-lightbulb-o" aria-hidden="true"></span>&nbsp;
+                CROWD ACTING - IS IT NEW?
+                <span class="fa fa-angle-down pull-right"></span>
+            </h3>
+        </div>
+        <div id="collapseCrowdActingNew" class="panel-collapse collapse">
+            <div class="panel-body">
+                The term Crowd Acting is new and in this sense the world helped by CollAction Foundation, but the underlying concept has been around a long time. Crowdfunding is a form of acting crowd: people act (give money) in crowdfunding collective (all together) and conditional (subject to a particular target, eg, 100,000 euros is reached). Learn how crowd acting matches and different from other initiatives can be found on <a href="http://www.crowdacting.org/">www.crowdacting.org</a>.
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading" data-toggle="collapse" href="#collapseProblems">
+            <h3 class="panel-title">
+                <span class="fa fa-cloud" aria-hidden="true"></span>&nbsp;
+                WHAT ARE COLLECTIVE ACTION PROBLEMS?
+                <span class="fa fa-angle-down pull-right"></span>
+            </h3>
+        </div>
+        <div id="collapseProblems" class="panel-collapse collapse">
+            <div class="panel-body">
+                Collective action problems are situations in which it is to work together in the interest of the group, but where coordination is a challenge. This allows each individual has an incentive to act in its own interest. This <a href="https://www.youtube.com/watch?v=p3KlgxYhDbk">video</a> explains it well (in english).
+                <br />
+                A well-known example of a collective action problem is the tragedy of the commons.
+                <br />
+                The believe is a common piece of pasture land where cows graze from different farmers. Every farmer will naturally earn as much as possible at the lowest possible cost and thus has an individual interest in order to allow as many of his cows from the common eating grass. However, all other farmers will think so and soon is the commons destroyed by overgrazing. For each farmer, it makes little sense to do something about it on his own - knowing (or fearing) other farmers largest possible share of the common grass will usurp, is the commons nevertheless grazed. The farmer thus had better add some cows, he has short term in any case benefit. In the long term, however, lose all farmers, and thus the community because the land can be depreciated when it is completely grazed.
+                <br />
+                Examples of (major and minor) collective action problems: global warming, congestion, overcrowding, <a href="http://www.crowdacting.org/blog/why-crowdacting">the wear uncomfortable high heels</a>, appalling working conditions, the cleaning of a student, corruption, overfishing, etc.
+                <br />
+                Traditionally, there are two solutions to collective action problems:
+                <ol>
+                    <li>
+                        Privatization: the commons can be distributed among the farmers. Now the farmers have benefited from to take care of their own piece of ground well, so they have long-term something;
+                    </li>
+                    <li>
+                        Regulation: there arrangements can be created and maintained on the use of the commons. For example, there may be a limit to the number of cows per farmer.
+                    </li>
+                </ol>
+                However, these solutions are not at all collective action problems of application. For example, it is not so easy (or desirable) to privatize certain goods (how you privatize the ozone layer, or migratory fish populations?). It also appears regulation and enforcement of cross-border problems difficult (remember the tedious process to do something internationally on climate change).
+                <br />
+                This requires a new solution: crowd acting.
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading" data-toggle="collapse" href="#collapseLearnMore">
+            <h3 class="panel-title">
+                <span class="fa fa-book" aria-hidden="true"></span>&nbsp;
+                WHERE DO I LEARN MORE ABOUT CROWD ACTING?
+                <span class="fa fa-angle-down pull-right"></span>
+            </h3>
+        </div>
+        <div id="collapseLearnMore" class="panel-collapse collapse">
+            <div class="panel-body">
+                <a href="http://www.crowdacting.org/">www.crowdacting.org</a>.
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading" data-toggle="collapse" href="#collapseStart">
+            <h3 class="panel-title">
+                <span class="fa fa-play-circle" aria-hidden="true"></span>&nbsp;
+                CAN I START A PROJECT?
+                <span class="fa fa-angle-down pull-right"></span>
+            </h3>
+        </div>
+        <div id="collapseStart" class="panel-collapse collapse">
+            <div class="panel-body">
+                Yes! You can create a project @Html.ActionLink("here", "Start", "Projects"). Make sure you first check here if your idea meets the criteria.
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading" data-toggle="collapse" href="#collapseCriteria">
+            <h3 class="panel-title">
+                <span class="fa fa-list" aria-hidden="true"></span>&nbsp;
+                WHAT ARE THE CRITERIA THAT A PROJECT MUST MEET?
+                <span class="fa fa-angle-down pull-right"></span>
+            </h3>
+        </div>
+        <div id="collapseCriteria" class="panel-collapse collapse">
+            <div class="panel-body">
+                A project may only be placed if it meets the following criteria:
+                <ul>
+                    <li>
+                        The project aims to make a positive social and / or environmental contribution to your neighborhood, city, country or the world.
+                    </li>
+                    <li>
+                        The project is not aimed at personal gain.
+                    </li>
+                    <li>
+                        The project does not involve initiatives aimed at conversion or activism (religious or political).
+                    </li>
+                    <li>
+                        The project does not involve initiatives that are illegal and do not meet the regulatory requirements of the Netherlands or the country of export.
+                    </li>
+                    <li>
+                        The online project application form is fully and truthfully filled with a bright, clear and readable project description and objectives. The CollAction team may request and / or edit your text clarification if necessary.
+                    </li>
+                    <li>
+                        Project Starter has thought carefully about how people of commitment can be moved to action. Here we can help you!
+                    </li>
+                    <li>
+                        The project is ambitious but realistic - the CollAction review committee assesses whether this is the case. Project Starter can / activate its own network, and / or have a good plan to reach your target
+                    </li>
+                    <li>
+                        The Starter Project is committed to assess the impact of the measure (number of people who have taken action) and to share this information with CollAction.
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading" data-toggle="collapse" href="#collapseHowLong">
+            <h3 class="panel-title">
+                <span class="fa fa-clock-o" aria-hidden="true"></span>&nbsp;
+                HOW LONG DOES AN ACTION?
+                <span class="fa fa-angle-down pull-right"></span>
+            </h3>
+        </div>
+        <div id="collapseHowLong" class="panel-collapse collapse">
+            <div class="panel-body">
+                Some actions are disposable - think of a switch to a fair bank or green energy. Other projects may take longer. For example, eating less meat, visits periodically lonely elderly, or helping refugees with Dutch lessons. In other words, the duration of the action saves per project.
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading" data-toggle="collapse" href="#collapseNotReached">
+            <h3 class="panel-title">
+                <span class="fa fa-stop" aria-hidden="true"></span>&nbsp;
+                WHAT HAPPENS IF A TARGET IS NOT REACHED?
+                <span class="fa fa-angle-down pull-right"></span>
+            </h3>
+        </div>
+        <div id="collapseNotReached" class="panel-collapse collapse">
+            <div class="panel-body">
+                Then, in principle, no one need to come into action. Acting crowd means no cure, no action. But if you really are inspired to do take action, we welcome that, of course.
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading" data-toggle="collapse" href="#collapseHowKnow">
+            <h3 class="panel-title">
+                <span class="fa fa-rocket" aria-hidden="true"></span>&nbsp;
+                HOW DO I KNOW THAT PEOPLE ACTUALLY TAKE ACTION?
+                <span class="fa fa-angle-down pull-right"></span>
+            </h3>
+        </div>
+        <div id="collapseHowKnow" class="panel-collapse collapse">
+            <div class="panel-body">
+                You know that is not always 100% sure. By acting crowd goes initially to trust. Trust that people want to work together for a better world. Confidence that people are attached to their karma points. And trust that people honor their agreements. We hope to create a community of people who take their commitment seriously and we are trying to create a culture where deal is a deal.
+                <br />
+                That said, we also build some processes to maximize commitments into action! What these processes are precisely, depends on the type of project. For some projects (such as switching projects, for example to a fair bank or green energy) the transition may already conditionally be put in motion at the time of commitment. If the target is reached then automatically be supporters of the project transferred. When local projects of social control will play a greater role. Still other projects are purely on trust. We will extensively experiment with different tricks, tools and approaches. We ask you to start thinking of projects carefully about this question - the team CollAction stands ready to contribute ideas!
+            </div>
+        </div>
+    </div>
+</div>
 
