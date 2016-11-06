@@ -30,11 +30,29 @@ namespace CollAction.Controllers
             return View("Create");
         }
 
+        // GET: Project/Find
+        [HttpGet]
         public IActionResult Find()
         {
-            ViewData["Message"] = "Your application description page.";
+            return View(new FindProjectViewModel { Projects = new List<Project>() });
+        }
 
-            return View("Create");
+        // POST: Project/Find
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Find(FindProjectViewModel model)
+        {
+            string searchText = model.SearchText.ToLower();
+            model.Projects = await _context.Project
+                    .Include(p => p.Owner)
+                    .Where(p =>
+                            p.Description.ToLower().Contains(searchText) ||
+                            p.Name.ToLower().Contains(searchText) ||
+                            p.ShortDescription.ToLower().Contains(searchText) ||
+                            p.Title.ToLower().Contains(searchText)
+                    )
+                    .ToListAsync();
+            return View(model);
         }
 
 
