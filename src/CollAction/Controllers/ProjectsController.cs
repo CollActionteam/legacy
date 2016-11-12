@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using CollAction.Data;
 using CollAction.Models;
 using Microsoft.Extensions.Localization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CollAction.Controllers
 {
@@ -22,11 +23,14 @@ namespace CollAction.Controllers
             _localizer = localizer;
         }
 
-        // GET: Projects
-        public IActionResult Start()
+        public ViewResult StartInfo()
         {
-            ViewData["Message"] = "Your application description page.";
+            return View();
+        }
 
+        [Authorize]
+        public ViewResult StartForm()
+        {
             return View("Create");
         }
 

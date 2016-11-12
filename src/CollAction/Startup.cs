@@ -124,17 +124,6 @@ namespace CollAction
             app.UseMvc(routes =>
             {
 
-                //routes.MapRoute(null,
-                //    "Page{page}",
-                //    new { controller = "Product", action = "List", category = (string)null },
-                //    new { page = @"\d+" }
-                //);
-
-                //routes.MapRoute(null,
-                //    "{category}",
-                //    new { controller = "Product", action = "List", page = 1 }
-                //);
-
                 routes.MapRoute("find",
                      "find",
                      new { controller = "Projects", action = "Find" }
@@ -142,7 +131,7 @@ namespace CollAction
 
                 routes.MapRoute("start",
                      "start",
-                     new { controller = "Projects", action = "Start" }
+                     new { controller = "Projects", action = "StartInfo" }
                 );
 
                 routes.MapRoute("about",
