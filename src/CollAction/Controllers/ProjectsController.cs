@@ -9,6 +9,7 @@ using CollAction.Data;
 using CollAction.Models;
 using Microsoft.Extensions.Localization;
 using Microsoft.AspNetCore.Authorization;
+using System.Text.RegularExpressions;
 
 namespace CollAction.Controllers
 {
@@ -35,30 +36,67 @@ namespace CollAction.Controllers
         }
 
         // GET: Project/Find
-        [HttpGet]
-        public IActionResult Find()
-        {
-            return View(new FindProjectViewModel { Projects = new List<Project>() });
-        }
-
-        // POST: Project/Find
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Find(FindProjectViewModel model)
         {
-            string searchText = model.SearchText.ToLower();
-            model.Projects = await _context.Project
-                    .Include(p => p.Owner)
-                    .Where(p =>
-                            p.Description.ToLower().Contains(searchText) ||
-                            p.Name.ToLower().Contains(searchText) ||
-                            p.ShortDescription.ToLower().Contains(searchText) ||
-                            p.Title.ToLower().Contains(searchText)
-                    )
-                    .ToListAsync();
+            if (model.SearchText == null) {
+                return View(new FindProjectViewModel { Projects = new List<Project>() });
+            }
+
+            // TODO: Deal with different languages! So far only english handled, also migrations will be needed for other languages too.
+
+            string[] searchTerms = GetValidSearchTerms(model.SearchText);
+            model.Projects = new List<Project>();
+            if (searchTerms.Length != 0) {
+                string language = "english";
+                model.Projects = await BuildFullTextSearchQuery<Project>(_context.Project, searchTerms, language).ToListAsync();
+            }
+            
             return View(model);
         }
 
+        private string[] GetValidSearchTerms(string searchText)
+        {
+            string[] searchTerms = { };
+            if (searchText.Length != 0)
+            {
+                string pattern = "\\W+"; // Match any non-word characters
+                string replacement = " ";
+                Regex regex = new Regex(pattern);
+                string justWordCharactersAndSpaces = regex.Replace(searchText, replacement);
+                searchTerms = justWordCharactersAndSpaces.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            }
+            return searchTerms;
+        }
+
+        private IQueryable<T> BuildFullTextSearchQuery<T>(DbSet<T> entitySet, string[] searchTerms, string language) where T : class
+        {
+            string entityName =     typeof(T).Name;
+            string tsvectorTerm =   GetTsvectorTerm(language);
+            string tsrankTerm =     GetTsrankTerm(tsvectorTerm);
+            string tsqueryTerm =    GetTsqueryTermForSearchParameter(language);
+            string searchTerm =     String.Join("|", searchTerms);
+            return entitySet.FromSql(
+                        "SELECT *, " + tsrankTerm + " " +
+                        "FROM \"" + entityName + "\", " + tsqueryTerm + " \"Query\" " +
+                        "WHERE \"Query\" @@ " + tsvectorTerm + " " +
+                        "ORDER BY \"Rank\" DESC LIMIT 20 ",
+                        searchTerm);
+        }
+
+        private string GetTsvectorTerm(string language)
+        {
+            return "\"FullTextSearchVector_" + language + "\"";
+        }
+
+        private string GetTsrankTerm(string tsvectorTerm)
+        {
+            return "ts_rank_cd(" + tsvectorTerm + ", \"Query\") AS \"Rank\"";
+        }
+
+        private string GetTsqueryTermForSearchParameter(string language)
+        {
+            return "to_tsquery('" + language + "', @p0)";
+        }
 
         public async Task<IActionResult> Index()
         {
