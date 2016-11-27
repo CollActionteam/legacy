@@ -12,6 +12,8 @@ using CollAction.Models;
 using CollAction.Models.AccountViewModels;
 using CollAction.Services;
 using Microsoft.Extensions.Localization;
+using CollAction.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace CollAction.Controllers
 {
@@ -24,6 +26,7 @@ namespace CollAction.Controllers
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
         private readonly IStringLocalizer<AccountController> _localizer;
+        private readonly ApplicationDbContext _context;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
@@ -31,7 +34,8 @@ namespace CollAction.Controllers
             IEmailSender emailSender,
             ISmsSender smsSender,
             ILoggerFactory loggerFactory,
-            IStringLocalizer<AccountController> localizer)
+            IStringLocalizer<AccountController> localizer,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -39,6 +43,7 @@ namespace CollAction.Controllers
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
             _localizer = localizer;
+            _context = context;
         }
 
         //
@@ -435,6 +440,21 @@ namespace CollAction.Controllers
                 ModelState.AddModelError(string.Empty, _localizer["Invalid code."]);
                 return View(model);
             }
+        }
+
+        //
+        // GET: /Account/UserProfile
+        [HttpGet]
+        public async Task<IActionResult> UserProfile(string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+
+            var applicationDbContext = _context.Project.Include(p => p.Owner);
+            List<Project> subscribed = new List<Project> { }; // TODO: Flesh this out...
+
+            var userId = _userManager.GetUserId(User); // Get user id:
+            List<Project> created = await applicationDbContext.Where(p => p.OwnerId == userId).ToListAsync();
+            return View(new UserProfileViewModel { SubscribedProjects = subscribed, CreatedProjects = created });
         }
 
         #region Helpers

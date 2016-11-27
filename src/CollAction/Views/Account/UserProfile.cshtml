@@ -1,0 +1,149 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+
+@model UserProfileViewModel
+
+@{
+    ViewData["Title"] = "Your Profile";
+    var sample = Model.SubscribedProjects.FirstOrDefault();
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<h4>Projects You've Subscribed To</h4>
+
+@if (Model.SubscribedProjects.Count() != 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(name => sample.Deadline)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(name => sample.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(name => sample.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(name => sample.ShortDescription)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(name => sample.Target)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(name => sample.Title)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in @Model.SubscribedProjects)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(content => item.Deadline)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(content => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(content => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(content => item.ShortDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(content => item.Target)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(content => item.Title)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+} else
+{
+    <p>
+        You are not currently subscribed to any projects. Subscribe by
+        browsing the @Html.ActionLink("Project List", "Index", "Projects")
+        or by using the @Html.ActionLink("Find Project", "Find", "Projects") page.
+    </p>
+}
+<br />
+
+<h4>Projects You've Created</h4>
+
+@if (Model.CreatedProjects.Count() != 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(name => sample.Deadline)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(name => sample.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(name => sample.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(name => sample.ShortDescription)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(name => sample.Target)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(name => sample.Title)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in @Model.CreatedProjects)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(content => item.Deadline)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(content => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(content => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(content => item.ShortDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(content => item.Target)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(content => item.Title)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>
+        You have not yet created an projects. Create a project by using the
+        @Html.ActionLink("Start Project", "StartInfo", "Projects") page.
+    </p>
+}
