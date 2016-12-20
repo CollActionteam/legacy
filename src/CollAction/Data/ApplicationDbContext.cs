@@ -47,6 +47,8 @@ namespace CollAction.Data
         /// Seed the database with initialisation data here
         /// </summary>
         /// <param name="configuration">Configuration</param>
+        /// <param name="roleManager">Role managers to create and query roles</param>
+        /// <param name="userManager">User manager to create and query users</param>
         /// <param name="token">Cancellation token</param>
         public async Task Seed(IConfigurationRoot configuration, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
@@ -55,7 +57,7 @@ namespace CollAction.Data
             IdentityRole adminRole = await roleManager.FindByNameAsync(adminRoleName);
             if (adminRole == null)
             {
-                adminRole = new IdentityRole(adminRoleName);
+                adminRole = new IdentityRole(adminRoleName) { NormalizedName = adminRoleName };
                 IdentityResult result = await roleManager.CreateAsync(adminRole);
                 if (!result.Succeeded)
                     throw new InvalidOperationException($"Error creating role.{Environment.NewLine}{string.Join(Environment.NewLine, result.Errors.Select(e => $"{e.Code}: {e.Description}"))}");
