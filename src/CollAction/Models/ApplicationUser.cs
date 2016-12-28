@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CollAction.Models
 {
@@ -10,6 +8,6 @@ namespace CollAction.Models
     public class ApplicationUser : IdentityUser
     {
         public List<Project> Projects { get; set; }
-        public List<Subscription> Subscriptions { get; set; }
+        public List<ProjectParticipant> Participates { get; set; }
     }
 }

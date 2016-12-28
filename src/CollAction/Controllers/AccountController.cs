@@ -449,7 +449,7 @@ namespace CollAction.Controllers
         {
             ViewData["ReturnUrl"] = returnUrl;
 
-            var applicationDbContext = _context.Project.Include(p => p.Owner);
+            var applicationDbContext = _context.Projects.Include(p => p.Owner);
             List<Project> subscribed = new List<Project> { }; // TODO: Flesh this out...
 
             var userId = _userManager.GetUserId(User); // Get user id:

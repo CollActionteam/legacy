@@ -38,7 +38,7 @@ namespace CollAction
         }
 
         public IConfigurationRoot Configuration { get; }
-        public IHostingEnvironment Environment { get; private set; }
+        public IHostingEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)

@@ -9,7 +9,6 @@ using CollAction.Data;
 using CollAction.Models;
 using Microsoft.Extensions.Localization;
 using Microsoft.AspNetCore.Authorization;
-using System.Text.RegularExpressions;
 
 namespace CollAction.Controllers
 {
@@ -42,65 +41,14 @@ namespace CollAction.Controllers
                 return View(new FindProjectViewModel { Projects = new List<Project>() });
             }
 
-            // TODO: Deal with different languages! So far only english handled, also migrations will be needed for other languages too.
-
-            string[] searchTerms = GetValidSearchTerms(model.SearchText);
-            model.Projects = new List<Project>();
-            if (searchTerms.Length != 0) {
-                string language = "english";
-                model.Projects = await BuildFullTextSearchQuery<Project>(_context.Project, searchTerms, language).ToListAsync();
-            }
+            model.Projects = await _context.Projects.Where(p => p.Name.Contains(model.SearchText) || p.Description.Contains(model.SearchText)).ToListAsync();
             
             return View(model);
         }
 
-        private string[] GetValidSearchTerms(string searchText)
-        {
-            string[] searchTerms = { };
-            if (searchText.Length != 0)
-            {
-                string pattern = "\\W+"; // Match any non-word characters
-                string replacement = " ";
-                Regex regex = new Regex(pattern);
-                string justWordCharactersAndSpaces = regex.Replace(searchText, replacement);
-                searchTerms = justWordCharactersAndSpaces.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            }
-            return searchTerms;
-        }
-
-        private IQueryable<T> BuildFullTextSearchQuery<T>(DbSet<T> entitySet, string[] searchTerms, string language) where T : class
-        {
-            string entityName =     typeof(T).Name;
-            string tsvectorTerm =   GetTsvectorTerm(language);
-            string tsrankTerm =     GetTsrankTerm(tsvectorTerm);
-            string tsqueryTerm =    GetTsqueryTermForSearchParameter(language);
-            string searchTerm =     String.Join("|", searchTerms);
-            return entitySet.FromSql(
-                        "SELECT *, " + tsrankTerm + " " +
-                        "FROM \"" + entityName + "\", " + tsqueryTerm + " \"Query\" " +
-                        "WHERE \"Query\" @@ " + tsvectorTerm + " " +
-                        "ORDER BY \"Rank\" DESC LIMIT 20 ",
-                        searchTerm);
-        }
-
-        private string GetTsvectorTerm(string language)
-        {
-            return "\"FullTextSearchVector_" + language + "\"";
-        }
-
-        private string GetTsrankTerm(string tsvectorTerm)
-        {
-            return "ts_rank_cd(" + tsvectorTerm + ", \"Query\") AS \"Rank\"";
-        }
-
-        private string GetTsqueryTermForSearchParameter(string language)
-        {
-            return "to_tsquery('" + language + "', @p0)";
-        }
-
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Project.Include(p => p.Owner);
+            var applicationDbContext = _context.Projects.Include(p => p.Owner);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -112,7 +60,7 @@ namespace CollAction.Controllers
                 return NotFound();
             }
 
-            var project = await _context.Project.SingleOrDefaultAsync(m => m.Id == id);
+            var project = await _context.Projects.SingleOrDefaultAsync(m => m.Id == id);
             if (project == null)
             {
                 return NotFound();
@@ -153,7 +101,7 @@ namespace CollAction.Controllers
                 return NotFound();
             }
 
-            var project = await _context.Project.SingleOrDefaultAsync(m => m.Id == id);
+            var project = await _context.Projects.SingleOrDefaultAsync(m => m.Id == id);
             if (project == null)
             {
                 return NotFound();
@@ -206,7 +154,7 @@ namespace CollAction.Controllers
                 return NotFound();
             }
 
-            var project = await _context.Project.SingleOrDefaultAsync(m => m.Id == id);
+            var project = await _context.Projects.SingleOrDefaultAsync(m => m.Id == id);
             if (project == null)
             {
                 return NotFound();
@@ -220,15 +168,15 @@ namespace CollAction.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var project = await _context.Project.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Project.Remove(project);
+            var project = await _context.Projects.SingleOrDefaultAsync(m => m.Id == id);
+            _context.Projects.Remove(project);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
         private bool ProjectExists(int id)
         {
-            return _context.Project.Any(e => e.Id == id);
+            return _context.Projects.Any(e => e.Id == id);
         }
     }
 }

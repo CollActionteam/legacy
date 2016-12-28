@@ -15,30 +15,42 @@ namespace CollAction.Models
 
         [Required]
         [MaxLength(128)]
-        [MinLength(6)]
         public string Name { get; set; }
 
         [Required]
-        [MaxLength(256)]
-        [MinLength(6)]
-        public string Title { get; set; }
+        public ProjectStatus Status { get; set; }
 
         [Required]
-        [MaxLength(1024)]
-        [MinLength(12)]
-        public string ShortDescription { get; set; }
+        public int CategoryId { get; set; }
+        [ForeignKey("CategoryId")]
+        public Category Category { get; set; }
 
         [Required]
-        [MinLength(12)]
-        public string Description { get; set; }
-
-        public int Target { get; set; }
-        public DateTime Deadline { get; set; }
+        public int LocationId { get; set; }
+        [ForeignKey("LocationId")]
+        public Location Location { get; set; }
 
         [Required]
         public string OwnerId { get; set; }
+        [ForeignKey("OwnerId")]
         public ApplicationUser Owner { get; set; }
 
-        public List<Subscription> Subscriptions { get; set; }
+        [Required]
+        public int Target { get; set; }
+
+        [Required]
+        public DateTime Start { get; set; }
+        [Required]
+        public DateTime End { get; set; }
+
+        [Required]
+        public string Description { get; set; }
+
+        [Required]
+        [MaxLength(1024)]
+        public string Goal { get; set; }
+
+        public List<ProjectTag> Tags { get; set; }
+        public List<ProjectParticipant> Participants { get; set; }
     }
 }
