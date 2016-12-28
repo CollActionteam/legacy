@@ -11,18 +11,54 @@
 }
 
 .footer {
-    background-color: #222;
-    color: #9d9d9d;
     text-decoration: none;
+    font-size: .85em;
+    line-height: 2em;
 }
 
 .footer a {
-  color: inherit; 
-  text-decoration: inherit; 
+    color: inherit; 
+    text-decoration: inherit; 
 }
 
 .footer a:hover  {
-    color: white !important;
+    text-decoration: underline; 
+}
+
+.footer ul {
+    margin: 0px;
+    padding: 0px;
+}
+
+.footer li {
+    list-style: none;
+}
+
+.footer h5 {
+    text-transform: uppercase;
+    font-size: .95em;
+}
+
+.footer .tag-list li {
+    border: 1px solid #ccc;
+    display: inline;
+    padding: 1px 3px;
+    font-size: .75em;
+    text-transform: uppercase;
+    border-radius: 3px;
+}
+
+.footer .column-container {
+    border-right: 1px solid #ccc;
+    height: 150px;
+}
+
+.footer .social-list i {
+    margin-right: 5px;
+}
+
+.footer .column-container:last-child {
+    border-right: none !important;
 }
 
 /* Set widths on the form inputs since otherwise they're 100% wide */
