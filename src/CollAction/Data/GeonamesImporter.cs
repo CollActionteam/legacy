@@ -52,7 +52,7 @@ namespace CollAction.Data.Geonames
         private async Task ImportContinents()
         {
             IEnumerable<LocationContinent> continents =
-                File.ReadLines($"Geonames{Path.DirectorySeparatorChar}continents.txt")
+                File.ReadLines($"Data{Path.DirectorySeparatorChar}Geonames{Path.DirectorySeparatorChar}continents.txt")
                     .Select(line =>
                     {
                         string[] parts = line.Split('\t');
@@ -71,7 +71,7 @@ namespace CollAction.Data.Geonames
         private async Task ImportCountries()
         {
             IEnumerable<LocationCountry> countries =
-                File.ReadLines($"Geonames{Path.DirectorySeparatorChar}countryInfo.txt")
+                File.ReadLines($"Data{Path.DirectorySeparatorChar}Geonames{Path.DirectorySeparatorChar}countryInfo.txt")
                     .Where(line => !line.StartsWith("#", StringComparison.Ordinal))
                     .Select(line =>
                     {
@@ -93,7 +93,7 @@ namespace CollAction.Data.Geonames
         private async Task ImportLocationLevel1()
         {
             IEnumerable<LocationLevel1> locationLevel1 =
-                File.ReadLines($"Geonames{Path.DirectorySeparatorChar}admin1Codes.txt")
+                File.ReadLines($"Data{Path.DirectorySeparatorChar}Geonames{Path.DirectorySeparatorChar}admin1Codes.txt")
                     .Select(line =>
                     {
                         string[] parts = line.Split('\t');
@@ -112,7 +112,7 @@ namespace CollAction.Data.Geonames
         private async Task ImportLocationLevel2()
         {
             IEnumerable<LocationLevel2> locationLevel2 =
-                File.ReadLines($"Geonames{Path.DirectorySeparatorChar}admin2Codes.txt")
+                File.ReadLines($"Data{Path.DirectorySeparatorChar}Geonames{Path.DirectorySeparatorChar}admin2Codes.txt")
                     .Select(line =>
                     {
                         string[] parts = line.Split('\t');
@@ -139,7 +139,7 @@ namespace CollAction.Data.Geonames
         private async Task ImportAlternateNames()
         {
             IEnumerable<LocationAlternateName> names =
-                LinesFromZip($"Geonames{Path.DirectorySeparatorChar}alternateNames.zip", "alternateNames.txt")
+                LinesFromZip($"Data{Path.DirectorySeparatorChar}Geonames{Path.DirectorySeparatorChar}alternateNames.zip", "alternateNames.txt")
                 .Select(line =>
                 {
                     string[] parts = line.Split('\t');
@@ -170,7 +170,7 @@ namespace CollAction.Data.Geonames
         private async Task ImportRootLocations()
         {
             IEnumerable<Location> locations =
-                LinesFromZip($"Geonames{Path.DirectorySeparatorChar}allCountries.Zip", "allCountries.txt")
+                LinesFromZip($"Data{Path.DirectorySeparatorChar}Geonames{Path.DirectorySeparatorChar}allCountries.Zip", "allCountries.txt")
                 .Select(line =>
                 {
                     string[] parts = line.Split('\t');
