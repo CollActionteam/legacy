@@ -156,11 +156,8 @@ namespace CollAction.Data.Geonames
                     };
                 });
 
-            const int batchSize = 100;
-            while (names.Any())
+            foreach (IEnumerable<LocationAlternateName> batch in Batch(names, 100))
             {
-                IEnumerable<LocationAlternateName> batch = names.Take(batchSize);
-                names = names.Skip(batchSize);
                 _context.LocationAlternateNames.AddRange(batch);
                 await _context.SaveChangesAsync();
                 _context.DetachAll();
@@ -189,11 +186,8 @@ namespace CollAction.Data.Geonames
                     };
                 });
 
-            const int batchSize = 100;
-            while (locations.Any())
+            foreach (IEnumerable<Location> batch in Batch(locations, 100))
             {
-                IEnumerable<Location> batch = locations.Take(batchSize);
-                locations = locations.Skip(batchSize);
                 _context.Locations.AddRange(batch);
                 await _context.SaveChangesAsync();
                 _context.DetachAll();
@@ -210,6 +204,23 @@ namespace CollAction.Data.Geonames
                 while ((line = reader.ReadLine()) != null)
                     yield return line;
             }
+        }
+
+        private IEnumerable<IEnumerable<T>> Batch<T>(IEnumerable<T> list, int batchSize)
+        {
+            List<T> batch = new List<T>(batchSize);
+            foreach (T item in list)
+            {
+                batch.Add(item);
+                if (batch.Count == batchSize)
+                {
+                    yield return batch;
+                    batch = new List<T>(batchSize);
+                }
+            }
+
+            if (batch.Count > 0)
+                yield return batch;
         }
 
         private static Dictionary<char, LocationFeatureClass> FeatureClassCodes = new Dictionary<char, LocationFeatureClass>()
