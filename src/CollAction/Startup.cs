@@ -107,10 +107,13 @@ namespace CollAction
                 .WriteTo.RollingFile("log-{Date}.txt", LogEventLevel.Information);
             
             if (Configuration["SlackHook"] != null)
-                configuration.WriteTo.Slack(Configuration["SlackHook"], null, null, null, null, null, LogEventLevel.Warning);
+                configuration.WriteTo.Slack(Configuration["SlackHook"], null, null, null, null, null, LogEventLevel.Error);
 
             if (env.IsDevelopment())
-                configuration.WriteTo.LiterateConsole(LogEventLevel.Debug);
+            {
+                configuration.WriteTo.LiterateConsole()
+                             .WriteTo.Trace();
+            }
 
             Log.Logger = configuration.CreateLogger();
             loggerFactory.AddSerilog();
