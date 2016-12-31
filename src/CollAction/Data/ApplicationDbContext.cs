@@ -44,6 +44,7 @@ namespace CollAction.Data
         {
             base.OnModelCreating(builder);
 
+            builder.Entity<Project>().Property(p => p.DisplayPriority).HasDefaultValue(ProjectDisplayPriority.Medium);
             builder.Entity<ProjectParticipant>().HasKey("UserId", "ProjectId");
             builder.Entity<ProjectTag>().HasKey("TagId", "ProjectId");
             builder.Entity<Location>().HasOne(l => l.Country)

@@ -11,6 +11,7 @@ namespace CollAction.Models
         Open = 1,
         Closed = 2,
         Successfull = 3,
-        Failed = 4
+        Failed = 4,
+        Deleted = 5
     }
 }

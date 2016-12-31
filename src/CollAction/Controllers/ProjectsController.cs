@@ -195,7 +195,13 @@ namespace CollAction.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var project = await _context.Projects.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Projects.Remove(project);
+
+            if (_userManager.GetUserId(User) != project.OwnerId)
+            {
+                return NotFound();
+            }
+
+            project.Status = ProjectStatus.Deleted;
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }

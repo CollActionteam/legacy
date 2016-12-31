@@ -48,6 +48,8 @@ namespace CollAction.Models
         [Required]
         [MaxLength(1024)]
         public string Goal { get; set; }
+        
+        public ProjectDisplayPriority DisplayPriority { get; set; }
 
         public List<ProjectTag> Tags { get; set; }
         public List<ProjectParticipant> Participants { get; set; }
