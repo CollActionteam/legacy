@@ -114,7 +114,7 @@ namespace CollAction.Controllers
 
             if (_userManager.GetUserId(User) != project.OwnerId)
             {
-                return NotFound();
+                return Forbid();
             }
 
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Description");
@@ -137,7 +137,7 @@ namespace CollAction.Controllers
 
             if (_userManager.GetUserId(User) != project.OwnerId)
             {
-                return NotFound();
+                return Forbid();
             }
 
             if (ModelState.IsValid)
@@ -182,7 +182,7 @@ namespace CollAction.Controllers
 
             if (_userManager.GetUserId(User) != project.OwnerId)
             {
-                return NotFound();
+                return Forbid();
             }
 
             return View(project);
@@ -198,7 +198,7 @@ namespace CollAction.Controllers
 
             if (_userManager.GetUserId(User) != project.OwnerId)
             {
-                return NotFound();
+                return Forbid();
             }
 
             project.Status = ProjectStatus.Deleted;

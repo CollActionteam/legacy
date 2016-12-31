@@ -38,6 +38,10 @@
                     <li><a asp-area="" asp-controller="Projects" asp-action="Find">Find Project</a></li>
                     <li><a asp-area="" asp-controller="Projects" asp-action="StartInfo">Start Project</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
+                    @if (User.IsInRole("admin"))
+                    {
+                        <li><a asp-area="" asp-controller="Admin" asp-action="Index">Admin Dashboard</a></li>
+                    }
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
