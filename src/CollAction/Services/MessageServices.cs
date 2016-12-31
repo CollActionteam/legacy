@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using SendGrid;
+using Serilog;
 using System;
 using System.Net.Mail;
 using System.Threading.Tasks;
@@ -20,6 +21,7 @@ namespace CollAction.Services
 
         public Task SendEmailAsync(string email, string subject, string message)
         {
+            Log.Information("sending email to {0} with subject {1}", email, subject);
             SendGridMessage gridMessage = new SendGridMessage()
             {
                 From = new MailAddress(_authOptions.Value.FromAddress, _authOptions.Value.FromName),

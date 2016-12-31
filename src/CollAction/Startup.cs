@@ -14,6 +14,9 @@ using System.Globalization;
 using Microsoft.AspNetCore.Localization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Serilog;
+using Serilog.Events;
+using Serilog.Sinks.Slack;
 
 namespace CollAction
 {
@@ -84,7 +87,7 @@ namespace CollAction
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime applicationLifetime)
         {
             var supportedCultures = new[]
             {
@@ -99,8 +102,19 @@ namespace CollAction
                 SupportedUICultures = supportedCultures,
             });
 
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
+            // Configure logging
+            LoggerConfiguration configuration = new LoggerConfiguration()
+                .WriteTo.RollingFile("log-{Date}.txt", LogEventLevel.Information);
+            
+            if (Configuration["SlackHook"] != null)
+                configuration.WriteTo.Slack(Configuration["SlackHook"], null, null, null, null, null, LogEventLevel.Warning);
+
+            if (env.IsDevelopment())
+                configuration.WriteTo.LiterateConsole(LogEventLevel.Debug);
+
+            Log.Logger = configuration.CreateLogger();
+            loggerFactory.AddSerilog();
+            applicationLifetime.ApplicationStopping.Register(() => Log.CloseAndFlush());
 
             if (env.IsDevelopment())
             {
