@@ -186,7 +186,7 @@ namespace CollAction.Migrations
                     Description = table.Column<string>(nullable: false),
                     End = table.Column<DateTime>(nullable: false),
                     Goal = table.Column<string>(maxLength: 1024, nullable: false),
-                    LocationId = table.Column<int>(nullable: false),
+                    LocationId = table.Column<int>(nullable: true),
                     Name = table.Column<string>(maxLength: 128, nullable: false),
                     OwnerId = table.Column<string>(nullable: false),
                     Start = table.Column<DateTime>(nullable: false),
@@ -515,7 +515,7 @@ namespace CollAction.Migrations
                 column: "LocationId",
                 principalTable: "Locations",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_LocationAlternateNames_Locations_LocationId",

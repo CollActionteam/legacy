@@ -25,8 +25,7 @@ namespace CollAction.Models
         [ForeignKey("CategoryId")]
         public Category Category { get; set; }
 
-        [Required]
-        public int LocationId { get; set; }
+        public int? LocationId { get; set; }
         [ForeignKey("LocationId")]
         public Location Location { get; set; }
 

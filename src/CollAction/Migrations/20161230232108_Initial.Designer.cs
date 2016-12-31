@@ -8,7 +8,7 @@ using CollAction.Data;
 namespace CollAction.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20161230174309_Initial")]
+    [Migration("20161230232108_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -262,7 +262,7 @@ namespace CollAction.Migrations
                         .IsRequired()
                         .HasAnnotation("MaxLength", 1024);
 
-                    b.Property<int>("LocationId");
+                    b.Property<int?>("LocationId");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -515,8 +515,7 @@ namespace CollAction.Migrations
 
                     b.HasOne("CollAction.Models.Location", "Location")
                         .WithMany()
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("LocationId");
 
                     b.HasOne("CollAction.Models.ApplicationUser", "Owner")
                         .WithMany("Projects")

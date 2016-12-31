@@ -9,6 +9,7 @@ using CollAction.Data;
 using CollAction.Models;
 using Microsoft.Extensions.Localization;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace CollAction.Controllers
 {
@@ -16,11 +17,13 @@ namespace CollAction.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IStringLocalizer<ProjectsController> _localizer;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ProjectsController(ApplicationDbContext context, IStringLocalizer<ProjectsController> localizer)
+        public ProjectsController(ApplicationDbContext context, IStringLocalizer<ProjectsController> localizer, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _localizer = localizer;
+            _userManager = userManager;
         }
 
         public ViewResult StartInfo()
@@ -28,20 +31,14 @@ namespace CollAction.Controllers
             return View();
         }
 
-        [Authorize]
-        public ViewResult StartForm()
-        {
-            return View("Create");
-        }
-
         // GET: Project/Find
         public async Task<IActionResult> Find(FindProjectViewModel model)
         {
             if (model.SearchText == null) {
-                return View(new FindProjectViewModel { Projects = new List<Project>() });
+                return View(new FindProjectViewModel { Projects = await _context.Projects.ToListAsync() });
             }
 
-            model.Projects = await _context.Projects.Where(p => p.Name.Contains(model.SearchText) || p.Description.Contains(model.SearchText)).ToListAsync();
+            model.Projects = await _context.Projects.Where(p => p.Name.Contains(model.SearchText) || p.Description.Contains(model.SearchText) || p.Goal.Contains(model.SearchText)).ToListAsync();
             
             return View(model);
         }
@@ -70,9 +67,11 @@ namespace CollAction.Controllers
         }
 
         // GET: Projects/Create
+        [Authorize]
         public IActionResult Create()
         {
-            ViewData["OwnerId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Description");
+            ViewData["LocationId"] = new SelectList(_context.Locations, "Id", "Name", null);
             return View();
         }
 
@@ -81,19 +80,25 @@ namespace CollAction.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Deadline,Description,Name,OwnerId,ShortDescription,Target,Title")] Project project)
+        [Authorize]
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,Goal,CategoryId,LocationId,Target,End")] Project project)
         {
-            if (ModelState.IsValid)
+            project.OwnerId = (await _userManager.GetUserAsync(User)).Id;
+            project.Start = DateTime.UtcNow;
+            ModelState.Clear();
+            if (TryValidateModel(project))
             {
                 _context.Add(project);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewData["OwnerId"] = new SelectList(_context.Users, "Id", "Id", project.OwnerId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Description");
+            ViewData["LocationId"] = new SelectList(_context.Locations, "Id", "Name", null);
             return View(project);
         }
 
         // GET: Projects/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -106,7 +111,14 @@ namespace CollAction.Controllers
             {
                 return NotFound();
             }
-            ViewData["OwnerId"] = new SelectList(_context.Users, "Id", "Id", project.OwnerId);
+
+            if (_userManager.GetUserId(User) != project.OwnerId)
+            {
+                return NotFound();
+            }
+
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Description");
+            ViewData["LocationId"] = new SelectList(_context.Locations, "Id", "Name", null);
             return View(project);
         }
 
@@ -115,9 +127,15 @@ namespace CollAction.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Deadline,Description,Name,OwnerId,ShortDescription,Target,Title")] Project project)
+        [Authorize]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Goal,CategoryId,LocationId,Target,End")] Project project)
         {
             if (id != project.Id)
+            {
+                return NotFound();
+            }
+
+            if (_userManager.GetUserId(User) != project.OwnerId)
             {
                 return NotFound();
             }
@@ -131,7 +149,7 @@ namespace CollAction.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProjectExists(project.Id))
+                    if (!(await _context.Projects.AnyAsync(e => e.Id == id)))
                     {
                         return NotFound();
                     }
@@ -142,11 +160,11 @@ namespace CollAction.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            ViewData["OwnerId"] = new SelectList(_context.Users, "Id", "Id", project.OwnerId);
             return View(project);
         }
 
         // GET: Projects/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -154,8 +172,15 @@ namespace CollAction.Controllers
                 return NotFound();
             }
 
+
             var project = await _context.Projects.SingleOrDefaultAsync(m => m.Id == id);
+
             if (project == null)
+            {
+                return NotFound();
+            }
+
+            if (_userManager.GetUserId(User) != project.OwnerId)
             {
                 return NotFound();
             }
@@ -166,17 +191,13 @@ namespace CollAction.Controllers
         // POST: Projects/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var project = await _context.Projects.SingleOrDefaultAsync(m => m.Id == id);
             _context.Projects.Remove(project);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
-        }
-
-        private bool ProjectExists(int id)
-        {
-            return _context.Projects.Any(e => e.Id == id);
         }
     }
 }
