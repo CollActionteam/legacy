@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CollAction.Data;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -53,5 +55,35 @@ namespace CollAction.Models
 
         public List<ProjectTag> Tags { get; set; }
         public List<ProjectParticipant> Participants { get; set; }
+
+        [NotMapped]
+        public string HashTags
+            => string.Join(";", Tags?.Select(tag => tag.Tag.Name) ?? Enumerable.Empty<string>());
+
+        public async Task SetTags(ApplicationDbContext context, params string[] tagNames)
+        {
+            List<Tag> tags = await context.Tags.Where(tag => tagNames.Contains(tag.Name)).ToListAsync();
+            IEnumerable<string> missingTags = tagNames.Where(tagName => !tags.Any(tag => tag.Name.Equals(tagName, StringComparison.Ordinal)));
+            if (missingTags.Any())
+            {
+                List<Tag> newTags = missingTags.Select(tagName => new Tag() { Name = tagName }).ToList();
+                context.Tags.AddRange(newTags);
+                tags.AddRange(newTags);
+                await context.SaveChangesAsync();
+            }
+
+            List<ProjectTag> projectTags = await context.ProjectTags.Where(projectTag => projectTag.ProjectId == Id).ToListAsync();
+            IEnumerable<ProjectTag> redundantTags = projectTags.Where(projectTag => !tags.Any(tag => tag.Id == projectTag.TagId));
+
+            IEnumerable<ProjectTag> newProjectTags = tags.Where(tag => !projectTags.Any(projectTag => tag.Id == projectTag.TagId))
+                                                         .Select(tag => new ProjectTag() { TagId = tag.Id, ProjectId = Id });
+
+            if (redundantTags.Any() || newProjectTags.Any())
+            {
+                context.ProjectTags.RemoveRange(redundantTags);
+                context.ProjectTags.AddRange(newProjectTags);
+                await context.SaveChangesAsync();
+            }
+        }
     }
 }
