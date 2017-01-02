@@ -8,7 +8,7 @@ namespace CollAction.Models
     public enum ProjectStatus
     {
         Hidden = 0,
-        Open = 1,
+        Running = 1,
         Successfull = 2,
         Failed = 3,
         Deleted = 4
