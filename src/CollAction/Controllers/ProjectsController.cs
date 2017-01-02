@@ -70,8 +70,8 @@ namespace CollAction.Controllers
         [Authorize]
         public IActionResult Create()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Description");
-            ViewData["LocationId"] = new SelectList(_context.Locations, "Id", "Name", null);
+            ViewData["CategoryId"] = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
+            ViewData["LocationId"] = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", null);
             return View();
         }
 
@@ -92,8 +92,8 @@ namespace CollAction.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Description");
-            ViewData["LocationId"] = new SelectList(_context.Locations, "Id", "Name", null);
+            ViewData["CategoryId"] = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
+            ViewData["LocationId"] = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", null);
             return View(project);
         }
 
@@ -117,8 +117,8 @@ namespace CollAction.Controllers
                 return Forbid();
             }
 
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Description");
-            ViewData["LocationId"] = new SelectList(_context.Locations, "Id", "Name", null);
+            ViewData["CategoryId"] = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
+            ViewData["LocationId"] = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", null);
             return View(project);
         }
 

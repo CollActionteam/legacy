@@ -53,6 +53,18 @@ namespace CollAction.Models
         
         public ProjectDisplayPriority DisplayPriority { get; set; }
 
+        [NotMapped]
+        public bool IsRunning
+            => Status == ProjectStatus.Open && Start <= DateTime.Now && End > DateTime.Now;
+
+        [NotMapped]
+        public bool IsComingSoon
+            => Status == ProjectStatus.Open && Start > DateTime.Now;
+
+        [NotMapped]
+        public bool IsClosed
+            => Status == ProjectStatus.Open && End <= DateTime.Now;
+
         public List<ProjectTag> Tags { get; set; }
         public List<ProjectParticipant> Participants { get; set; }
 

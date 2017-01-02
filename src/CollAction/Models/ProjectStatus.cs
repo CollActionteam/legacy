@@ -9,9 +9,8 @@ namespace CollAction.Models
     {
         Hidden = 0,
         Open = 1,
-        Closed = 2,
-        Successfull = 3,
-        Failed = 4,
-        Deleted = 5
+        Successfull = 2,
+        Failed = 3,
+        Deleted = 4
     }
 }
