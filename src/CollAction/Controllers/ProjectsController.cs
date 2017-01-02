@@ -68,7 +68,7 @@ namespace CollAction.Controllers
 
         // GET: Projects/Create
         [Authorize]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             ViewData["CategoryId"] = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
             ViewData["LocationId"] = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", null);
