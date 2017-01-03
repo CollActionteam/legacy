@@ -10,6 +10,8 @@ using CollAction.Models;
 using Microsoft.Extensions.Localization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using System.Data.SqlClient;
+using Npgsql;
 
 namespace CollAction.Controllers
 {
@@ -70,9 +72,10 @@ namespace CollAction.Controllers
         [Authorize]
         public async Task<IActionResult> Create()
         {
-            ViewData["CategoryId"] = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
-            ViewData["LocationId"] = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", null);
-            return View();
+            var categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
+            var locations = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", null);
+            var createProjectViewModel = new CreateProjectViewModel(categories, locations);
+            return View(createProjectViewModel);
         }
 
         // POST: Projects/Create
@@ -81,20 +84,49 @@ namespace CollAction.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Goal,CategoryId,LocationId,Target,End")] Project project)
+        public async Task<IActionResult> Create([Bind("Name,Description,Goal,CategoryId,LocationId,Target,End")] CreateProjectViewModel createProjectVM)
         {
-            project.OwnerId = (await _userManager.GetUserAsync(User)).Id;
-            project.Start = DateTime.UtcNow;
             ModelState.Clear();
-            if (TryValidateModel(project))
+            if (TryValidateModel(createProjectVM))
             {
-                _context.Add(project);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                var project = new Project
+                {
+                    OwnerId = (await _userManager.GetUserAsync(User)).Id,
+                    Name = createProjectVM.Name,
+                    Description = createProjectVM.Description,
+                    Goal = createProjectVM.Goal,
+                    CategoryId = createProjectVM.CategoryId,
+                    LocationId = createProjectVM.LocationId,
+                    Target = createProjectVM.Target,
+                    End = createProjectVM.End,
+                    Start = DateTime.UtcNow
+                };
+                
+                try
+                {
+                    _context.Add(project);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+                catch (DbUpdateException ex)
+                {
+                    if (ex.InnerException is PostgresException)
+                    {
+                        var pgex = (PostgresException)ex.InnerException;
+                        if (pgex.SqlState == "23505" && pgex.ConstraintName == "AK_Projects_Name")
+                        {
+                            ModelState.AddModelError(string.Empty, _localizer["A project with the same name already exists."]);
+                        }
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
             }
-            ViewData["CategoryId"] = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
-            ViewData["LocationId"] = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", null);
-            return View(project);
+            createProjectVM.Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
+            createProjectVM.Locations = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", null);
+            return View(createProjectVM);
         }
 
         // GET: Projects/Edit/5

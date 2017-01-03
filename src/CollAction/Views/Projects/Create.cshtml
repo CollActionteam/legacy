@@ -2,7 +2,7 @@
 
 @inject IViewLocalizer Localizer
 
-@model CollAction.Models.Project
+@model CollAction.Models.CreateProjectViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -39,14 +39,14 @@
         <div class="form-group">
             <label asp-for="CategoryId" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                @Html.DropDownList("CategoryId")
+                @Html.DropDownList("CategoryId", Model.Categories)
                 <span asp-validation-for="CategoryId" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
             <label asp-for="LocationId" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                @Html.DropDownList("LocationId")
+                @Html.DropDownList("LocationId", Model.Locations)
                 <span asp-validation-for="LocationId" class="text-danger" />
             </div>
         </div>
