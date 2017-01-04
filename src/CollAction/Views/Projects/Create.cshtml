@@ -2,7 +2,7 @@
 
 @inject IViewLocalizer Localizer
 
-@model CollAction.Models.Project
+@model CollAction.Models.CreateProjectViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -16,10 +16,10 @@
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
-            <label asp-for="Deadline" class="col-md-2 control-label"></label>
+            <label asp-for="Name" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Deadline" class="form-control" />
-                <span asp-validation-for="Deadline" class="text-danger" />
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
@@ -30,23 +30,24 @@
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="Name" class="col-md-2 control-label"></label>
+            <label asp-for="Goal" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger" />
+                <input asp-for="Goal" class="form-control" />
+                <span asp-validation-for="Goal" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="OwnerId" class="col-md-2 control-label"></label>
+            <label asp-for="CategoryId" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <select asp-for="OwnerId" class ="form-control" asp-items="ViewBag.OwnerId"></select>
+                @Html.DropDownList("CategoryId", Model.Categories)
+                <span asp-validation-for="CategoryId" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="ShortDescription" class="col-md-2 control-label"></label>
+            <label asp-for="LocationId" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="ShortDescription" class="form-control" />
-                <span asp-validation-for="ShortDescription" class="text-danger" />
+                @Html.DropDownList("LocationId", Model.Locations)
+                <span asp-validation-for="LocationId" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
@@ -57,12 +58,13 @@
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="Title" class="col-md-2 control-label"></label>
+            <label asp-for="End" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger" />
+                <input asp-for="End" class="form-control" />
+                <span asp-validation-for="End" class="text-danger" />
             </div>
         </div>
+
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn btn-default" />

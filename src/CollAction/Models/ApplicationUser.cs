@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace CollAction.Models
 {
-    // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser
     {
+        [MaxLength(250)]
+        public string FirstName { get; set; }
+        [MaxLength(250)]
+        public string LastName { get; set; }
         public List<Project> Projects { get; set; }
-        public List<Subscription> Subscriptions { get; set; }
+        public List<ProjectParticipant> Participates { get; set; }
     }
 }

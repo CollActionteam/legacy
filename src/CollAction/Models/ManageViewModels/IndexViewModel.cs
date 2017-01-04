@@ -17,5 +17,9 @@ namespace CollAction.Models.ManageViewModels
         public bool TwoFactor { get; set; }
 
         public bool BrowserRemembered { get; set; }
+
+        public IList<Project> ProjectsCreated { get; set; }
+
+        public IList<Project> ProjectsParticipated { get; set; }
     }
 }

@@ -9,7 +9,9 @@ using CollAction.Data;
 using CollAction.Models;
 using Microsoft.Extensions.Localization;
 using Microsoft.AspNetCore.Authorization;
-using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Identity;
+using System.Data.SqlClient;
+using Npgsql;
 
 namespace CollAction.Controllers
 {
@@ -17,11 +19,13 @@ namespace CollAction.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IStringLocalizer<ProjectsController> _localizer;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ProjectsController(ApplicationDbContext context, IStringLocalizer<ProjectsController> localizer)
+        public ProjectsController(ApplicationDbContext context, IStringLocalizer<ProjectsController> localizer, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _localizer = localizer;
+            _userManager = userManager;
         }
 
         public ViewResult StartInfo()
@@ -29,78 +33,21 @@ namespace CollAction.Controllers
             return View();
         }
 
-        [Authorize]
-        public ViewResult StartForm()
-        {
-            return View("Create");
-        }
-
         // GET: Project/Find
         public async Task<IActionResult> Find(FindProjectViewModel model)
         {
             if (model.SearchText == null) {
-                return View(new FindProjectViewModel { Projects = new List<Project>() });
+                return View(new FindProjectViewModel { Projects = await _context.Projects.ToListAsync() });
             }
 
-            // TODO: Deal with different languages! So far only english handled, also migrations will be needed for other languages too.
-
-            string[] searchTerms = GetValidSearchTerms(model.SearchText);
-            model.Projects = new List<Project>();
-            if (searchTerms.Length != 0) {
-                string language = "english";
-                model.Projects = await BuildFullTextSearchQuery<Project>(_context.Project, searchTerms, language).ToListAsync();
-            }
+            model.Projects = await _context.Projects.Where(p => p.Name.Contains(model.SearchText) || p.Description.Contains(model.SearchText) || p.Goal.Contains(model.SearchText)).ToListAsync();
             
             return View(model);
         }
 
-        private string[] GetValidSearchTerms(string searchText)
-        {
-            string[] searchTerms = { };
-            if (searchText.Length != 0)
-            {
-                string pattern = "\\W+"; // Match any non-word characters
-                string replacement = " ";
-                Regex regex = new Regex(pattern);
-                string justWordCharactersAndSpaces = regex.Replace(searchText, replacement);
-                searchTerms = justWordCharactersAndSpaces.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            }
-            return searchTerms;
-        }
-
-        private IQueryable<T> BuildFullTextSearchQuery<T>(DbSet<T> entitySet, string[] searchTerms, string language) where T : class
-        {
-            string entityName =     typeof(T).Name;
-            string tsvectorTerm =   GetTsvectorTerm(language);
-            string tsrankTerm =     GetTsrankTerm(tsvectorTerm);
-            string tsqueryTerm =    GetTsqueryTermForSearchParameter(language);
-            string searchTerm =     String.Join("|", searchTerms);
-            return entitySet.FromSql(
-                        "SELECT *, " + tsrankTerm + " " +
-                        "FROM \"" + entityName + "\", " + tsqueryTerm + " \"Query\" " +
-                        "WHERE \"Query\" @@ " + tsvectorTerm + " " +
-                        "ORDER BY \"Rank\" DESC LIMIT 20 ",
-                        searchTerm);
-        }
-
-        private string GetTsvectorTerm(string language)
-        {
-            return "\"FullTextSearchVector_" + language + "\"";
-        }
-
-        private string GetTsrankTerm(string tsvectorTerm)
-        {
-            return "ts_rank_cd(" + tsvectorTerm + ", \"Query\") AS \"Rank\"";
-        }
-
-        private string GetTsqueryTermForSearchParameter(string language)
-        {
-            return "to_tsquery('" + language + "', @p0)";
-        }
-
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Project.Include(p => p.Owner);
+            var applicationDbContext = _context.Projects.Include(p => p.Owner);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -112,7 +59,7 @@ namespace CollAction.Controllers
                 return NotFound();
             }
 
-            var project = await _context.Project.SingleOrDefaultAsync(m => m.Id == id);
+            var project = await _context.Projects.SingleOrDefaultAsync(m => m.Id == id);
             if (project == null)
             {
                 return NotFound();
@@ -122,10 +69,13 @@ namespace CollAction.Controllers
         }
 
         // GET: Projects/Create
-        public IActionResult Create()
+        [Authorize]
+        public async Task<IActionResult> Create()
         {
-            ViewData["OwnerId"] = new SelectList(_context.Users, "Id", "Id");
-            return View();
+            var categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
+            var locations = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", null);
+            var createProjectViewModel = new CreateProjectViewModel(categories, locations);
+            return View(createProjectViewModel);
         }
 
         // POST: Projects/Create
@@ -133,19 +83,54 @@ namespace CollAction.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Deadline,Description,Name,OwnerId,ShortDescription,Target,Title")] Project project)
+        [Authorize]
+        public async Task<IActionResult> Create([Bind("Name,Description,Goal,CategoryId,LocationId,Target,End")] CreateProjectViewModel createProjectVM)
         {
-            if (ModelState.IsValid)
+            ModelState.Clear();
+            if (TryValidateModel(createProjectVM))
             {
-                _context.Add(project);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                var project = new Project
+                {
+                    OwnerId = (await _userManager.GetUserAsync(User)).Id,
+                    Name = createProjectVM.Name,
+                    Description = createProjectVM.Description,
+                    Goal = createProjectVM.Goal,
+                    CategoryId = createProjectVM.CategoryId,
+                    LocationId = createProjectVM.LocationId,
+                    Target = createProjectVM.Target,
+                    End = createProjectVM.End,
+                    Start = DateTime.UtcNow
+                };
+                
+                try
+                {
+                    _context.Add(project);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+                catch (DbUpdateException ex)
+                {
+                    if (ex.InnerException is PostgresException)
+                    {
+                        var pgex = (PostgresException)ex.InnerException;
+                        if (pgex.SqlState == "23505" && pgex.ConstraintName == "AK_Projects_Name")
+                        {
+                            ModelState.AddModelError(string.Empty, _localizer["A project with the same name already exists."]);
+                        }
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
             }
-            ViewData["OwnerId"] = new SelectList(_context.Users, "Id", "Id", project.OwnerId);
-            return View(project);
+            createProjectVM.Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
+            createProjectVM.Locations = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", null);
+            return View(createProjectVM);
         }
 
         // GET: Projects/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -153,12 +138,19 @@ namespace CollAction.Controllers
                 return NotFound();
             }
 
-            var project = await _context.Project.SingleOrDefaultAsync(m => m.Id == id);
+            var project = await _context.Projects.SingleOrDefaultAsync(m => m.Id == id);
             if (project == null)
             {
                 return NotFound();
             }
-            ViewData["OwnerId"] = new SelectList(_context.Users, "Id", "Id", project.OwnerId);
+
+            if (_userManager.GetUserId(User) != project.OwnerId)
+            {
+                return Forbid();
+            }
+
+            ViewData["CategoryId"] = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
+            ViewData["LocationId"] = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", null);
             return View(project);
         }
 
@@ -167,11 +159,17 @@ namespace CollAction.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Deadline,Description,Name,OwnerId,ShortDescription,Target,Title")] Project project)
+        [Authorize]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Goal,CategoryId,LocationId,Target,End")] Project project)
         {
             if (id != project.Id)
             {
                 return NotFound();
+            }
+
+            if (_userManager.GetUserId(User) != project.OwnerId)
+            {
+                return Forbid();
             }
 
             if (ModelState.IsValid)
@@ -183,7 +181,7 @@ namespace CollAction.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProjectExists(project.Id))
+                    if (!(await _context.Projects.AnyAsync(e => e.Id == id)))
                     {
                         return NotFound();
                     }
@@ -194,11 +192,11 @@ namespace CollAction.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            ViewData["OwnerId"] = new SelectList(_context.Users, "Id", "Id", project.OwnerId);
             return View(project);
         }
 
         // GET: Projects/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -206,10 +204,17 @@ namespace CollAction.Controllers
                 return NotFound();
             }
 
-            var project = await _context.Project.SingleOrDefaultAsync(m => m.Id == id);
+
+            var project = await _context.Projects.SingleOrDefaultAsync(m => m.Id == id);
+
             if (project == null)
             {
                 return NotFound();
+            }
+
+            if (_userManager.GetUserId(User) != project.OwnerId)
+            {
+                return Forbid();
             }
 
             return View(project);
@@ -218,17 +223,19 @@ namespace CollAction.Controllers
         // POST: Projects/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var project = await _context.Project.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Project.Remove(project);
+            var project = await _context.Projects.SingleOrDefaultAsync(m => m.Id == id);
+
+            if (_userManager.GetUserId(User) != project.OwnerId)
+            {
+                return Forbid();
+            }
+
+            project.Status = ProjectStatus.Deleted;
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
-        }
-
-        private bool ProjectExists(int id)
-        {
-            return _context.Project.Any(e => e.Id == id);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CollAction.Data;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,30 +17,85 @@ namespace CollAction.Models
 
         [Required]
         [MaxLength(128)]
-        [MinLength(6)]
         public string Name { get; set; }
 
         [Required]
-        [MaxLength(256)]
-        [MinLength(6)]
-        public string Title { get; set; }
+        public ProjectStatus Status { get; set; }
 
         [Required]
-        [MaxLength(1024)]
-        [MinLength(12)]
-        public string ShortDescription { get; set; }
+        public int CategoryId { get; set; }
+        [ForeignKey("CategoryId")]
+        public Category Category { get; set; }
 
-        [Required]
-        [MinLength(12)]
-        public string Description { get; set; }
-
-        public int Target { get; set; }
-        public DateTime Deadline { get; set; }
+        public int? LocationId { get; set; }
+        [ForeignKey("LocationId")]
+        public Location Location { get; set; }
 
         [Required]
         public string OwnerId { get; set; }
+        [ForeignKey("OwnerId")]
         public ApplicationUser Owner { get; set; }
 
-        public List<Subscription> Subscriptions { get; set; }
+        [Required]
+        public int Target { get; set; }
+
+        [Required]
+        public DateTime Start { get; set; }
+        [Required]
+        public DateTime End { get; set; }
+
+        [Required]
+        public string Description { get; set; }
+
+        [Required]
+        [MaxLength(1024)]
+        public string Goal { get; set; }
+        
+        public ProjectDisplayPriority DisplayPriority { get; set; }
+
+        [NotMapped]
+        public bool IsActive
+            => Status == ProjectStatus.Running && Start <= DateTime.Now && End >= DateTime.Now;
+
+        [NotMapped]
+        public bool IsComingSoon
+            => Status == ProjectStatus.Running && Start > DateTime.Now;
+
+        [NotMapped]
+        public bool IsClosed
+            => Status == ProjectStatus.Running && End < DateTime.Now;
+
+        public List<ProjectTag> Tags { get; set; }
+        public List<ProjectParticipant> Participants { get; set; }
+
+        [NotMapped]
+        public string HashTags
+            => string.Join(";", Tags?.Select(tag => tag.Tag.Name) ?? Enumerable.Empty<string>());
+
+        public async Task SetTags(ApplicationDbContext context, params string[] tagNames)
+        {
+            List<Tag> tags = await context.Tags.Where(tag => tagNames.Contains(tag.Name)).ToListAsync();
+            IEnumerable<string> missingTags = tagNames.Where(tagName => !tags.Any(tag => tag.Name.Equals(tagName, StringComparison.Ordinal)));
+            if (missingTags.Any())
+            {
+                List<Tag> newTags = missingTags.Select(tagName => new Tag() { Name = tagName }).ToList();
+                context.Tags.AddRange(newTags);
+                tags.AddRange(newTags);
+                await context.SaveChangesAsync();
+            }
+
+            List<ProjectTag> projectTags = await context.ProjectTags.Where(projectTag => projectTag.ProjectId == Id).ToListAsync();
+            IEnumerable<ProjectTag> redundantTags = projectTags.Where(projectTag => !tags.Any(tag => tag.Id == projectTag.TagId));
+
+            IEnumerable<ProjectTag> newProjectTags = tags.Where(tag => !projectTags.Any(projectTag => tag.Id == projectTag.TagId))
+                                                         .Select(tag => new ProjectTag() { TagId = tag.Id, ProjectId = Id });
+
+            if (redundantTags.Any() || newProjectTags.Any())
+            {
+                context.ProjectTags.RemoveRange(redundantTags);
+                context.ProjectTags.AddRange(newProjectTags);
+                await context.SaveChangesAsync();
+            }
+        }
     }
 }

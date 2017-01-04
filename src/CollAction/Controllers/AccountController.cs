@@ -442,21 +442,6 @@ namespace CollAction.Controllers
             }
         }
 
-        //
-        // GET: /Account/UserProfile
-        [HttpGet]
-        public async Task<IActionResult> UserProfile(string returnUrl = null)
-        {
-            ViewData["ReturnUrl"] = returnUrl;
-
-            var applicationDbContext = _context.Project.Include(p => p.Owner);
-            List<Project> subscribed = new List<Project> { }; // TODO: Flesh this out...
-
-            var userId = _userManager.GetUserId(User); // Get user id:
-            List<Project> created = await applicationDbContext.Where(p => p.OwnerId == userId).ToListAsync();
-            return View(new UserProfileViewModel { SubscribedProjects = subscribed, CreatedProjects = created });
-        }
-
         #region Helpers
 
         private void AddErrors(IdentityResult result)

@@ -1,0 +1,100 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+@model IEnumerable<Project>
+
+@{
+    ViewData["Title"] = "Manage Projects";
+}
+
+<h2>@ViewData["Title"].</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Owner)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Goal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Location)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Target)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Start)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.End)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DisplayPriority)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tags)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(content => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(content => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(content => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(content => item.Owner.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(content => item.Goal)
+                </td>
+                <td>
+                    @Html.DisplayFor(content => item.Category.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(content => item.Location.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(content => item.Target)
+                </td>
+                <td>
+                    @Html.DisplayFor(content => item.Start)
+                </td>
+                <td>
+                    @Html.DisplayFor(content => item.End)
+                </td>
+                <td>
+                    @Html.DisplayFor(context => item.DisplayPriority)
+                </td>
+                <td>
+                    @Html.DisplayFor(context => item.HashTags)
+                </td>
+                <td>
+                    <a asp-action="ManageProject" asp-route-id="@item.Id">Manage</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

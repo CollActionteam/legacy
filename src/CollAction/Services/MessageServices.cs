@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using SendGrid;
+using Serilog;
 using System;
 using System.Net.Mail;
 using System.Threading.Tasks;
@@ -12,14 +14,17 @@ namespace CollAction.Services
     public class AuthMessageSender : IEmailSender, ISmsSender
     {
         private readonly IOptions<AuthMessageSenderOptions> _authOptions;
+        private readonly ILogger<AuthMessageSender> _logger;
 
-        public AuthMessageSender(IOptions<AuthMessageSenderOptions> authOptions)
+        public AuthMessageSender(IOptions<AuthMessageSenderOptions> authOptions, ILoggerFactory loggerFactory)
         {
             _authOptions = authOptions;
+            _logger = loggerFactory.CreateLogger<AuthMessageSender>();
         }
 
         public Task SendEmailAsync(string email, string subject, string message)
         {
+            _logger.LogInformation("sending email to {0} with subject {1}", email, subject);
             SendGridMessage gridMessage = new SendGridMessage()
             {
                 From = new MailAddress(_authOptions.Value.FromAddress, _authOptions.Value.FromName),
