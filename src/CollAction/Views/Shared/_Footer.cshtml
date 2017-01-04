@@ -1,57 +1,59 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 
 @inject IViewLocalizer Localizer
+<div class="footer container">
 
-<div id="footer" class="footer">
-  <div class="container">
-    <div class="row">
+  <div class="row">
+    @await Html.PartialAsync("_Logo")
+  </div>
 
-      <div class="col-md-3 column-container">
-        <h3>CollAction</h3>
-        <a href="#">@Localizer["More"]</a>
-      </div>
+  <div class="row">
+    <ul class="col-md-2">
+      <li><a href="#">@Localizer["Home"]</a></li>
+      <li><a href="#">@Localizer["Find Project"]</a></li>
+      <li><a href="#">@Localizer["Start Project"]</a></li>
+      <li><a href="#">@Localizer["About Us"]</a></li>
+    </ul>
 
-      <div class="col-md-2 column-container">
-        <h5>@Localizer["Menu"]</h5>
-        <ul>
-          <li><a href="#">@Localizer["Find Project"]</a></li>
-          <li><a href="#">@Localizer["Start Project"]</a></li>
-          <li><a href="#">@Localizer["CollAction"]</a></li>
-          <li><a href="#">@Localizer["FAQ"]</a></li>
-        </ul>
-      </div>
+    <ul class="col-md-2">
+      <li><a href="#">@Localizer["Login"]</a></li>
+      <li><a href="#">@Localizer["Sign Up"]</a></li>
+      <li><a href="#">@Localizer["Mission"]</a></li>
+      <li><a href="#">@Localizer["Team"]</a></li>
+    </ul>
 
-      <div class="col-md-2 column-container">
-        <h5>@Localizer["Tags"]</h5>
-        <ul class="tag-list">
-          <li>Environment</li>
-          <li>Community</li>
-          <li>Consuming</li>
-          <li>Wellbeing</li>
-          <li>Governence</li>
-          <li>Health</li>
-        </ul>
-      </div>
+    <ul class="col-md-2">
+      <li><a href="#">@Localizer["Jobs"]</a></li>
+      <li><a href="#">@Localizer["Partners"]</a></li>
+      <li><a href="#">@Localizer["Press"]</a></li>
+      <li><a href="#">@Localizer["FAQs"]</a></li>
+    </ul>
 
-      <div class="col-md-2 column-container">
-        <h5>@Localizer["Follow Us"]</h5>
-        <ul class="social-list">
-          <li><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://collaction.org/"><i class="fa fa-facebook marginright"></i>Facebook</a></li>
-          <li>
-            <a target="_blank" href="https://twitter.com/intent/tweet?original_referer=http://collaction.org/&amp;url=http://collaction.org/"><i class="fa fa-twitter marginright"></i>Twitter</a>
-          </li>
-          <li><a target="_blank" href="http://www.pinterest.com/pin/create/button/?url=http%3A%2F%2Fcollaction.org%2F"><i class="fa fa-pinterest marginright"></i>Pinterest</a></li>
-          <li><a target="_blank" href="https://plus.google.com/share?url=http://collaction.org/"><i class="fa fa-google-plus marginright"></i>Google+</a></li>
-        </ul>
-      </div>
+    <ul class="col-md-2">
+      <li><a href="#">@Localizer["Blog"]</a></li>
+      <li><a href="#">@Localizer["Newsletter"]</a></li>
+      <li><a href="#">@Localizer["Contact"]</a></li>
+    </ul>
 
-      <div class="col-md-2 column-container">
-        <h5>@Localizer["Contact Us"]</h5>
-        <a href="mailto:action@colaction.com">action&#64;collaction.com</a>
-        <p>Address Here</p>
-        <h5>@Localizer["Show Map"]</h5>
-        <p>&copy;CollAction All Rights Reserved</p>
-      </div>
+    <div class="col-md-2">
+      <h5>@Localizer["Follow Us"]</h5>
+      <ul class="social-list">
+        <li><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://collaction.org/"><i class="fa fa-facebook marginright"></i>Facebook</a></li>
+        <li>
+          <a target="_blank" href="https://twitter.com/intent/tweet?original_referer=http://collaction.org/&amp;url=http://collaction.org/"><i class="fa fa-twitter marginright"></i>Twitter</a>
+        </li>
+        <li><a target="_blank" href="http://www.pinterest.com/pin/create/button/?url=http%3A%2F%2Fcollaction.org%2F"><i class="fa fa-pinterest marginright"></i>Pinterest</a></li>
+        <li><a target="_blank" href="https://plus.google.com/share?url=http://collaction.org/"><i class="fa fa-google-plus marginright"></i>Google+</a></li>
+      </ul>
     </div>
+
+    <div class="col-md-2">
+      <h5>@Localizer["Contact Us"]</h5>
+      <a href="mailto:action@colaction.com">action&#64;collaction.com</a>
+      <p>Address Here</p>
+      <h5>@Localizer["Show Map"]</h5>
+      <p>&copy;CollAction All Rights Reserved</p>
+    </div>
+
   </div>
 </div>
