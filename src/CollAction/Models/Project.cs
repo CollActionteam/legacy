@@ -55,15 +55,15 @@ namespace CollAction.Models
 
         [NotMapped]
         public bool IsActive
-            => Status == ProjectStatus.Running && Start <= DateTime.Now && End >= DateTime.Now;
+            => Status == ProjectStatus.Running && Start <= DateTime.UtcNow && End >= DateTime.UtcNow;
 
         [NotMapped]
         public bool IsComingSoon
-            => Status == ProjectStatus.Running && Start > DateTime.Now;
+            => Status == ProjectStatus.Running && Start > DateTime.UtcNow;
 
         [NotMapped]
         public bool IsClosed
-            => Status == ProjectStatus.Running && End < DateTime.Now;
+            => Status == ProjectStatus.Running && End < DateTime.UtcNow;
 
         public List<ProjectTag> Tags { get; set; }
         public List<ProjectParticipant> Participants { get; set; }
