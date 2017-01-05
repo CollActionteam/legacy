@@ -1,29 +1,87 @@
-﻿#contentBody {
-    padding-top: 50px;
-    padding-bottom: 50px;
+﻿body {
+    font-family: 'Raleway', sans-serif;
+    color: #111;
 }
 
-/* Wrapping element */
-/* Set some basic padding to keep content from hitting the edges */
 .body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+    margin-top: 50px;
+}
+
+.dotbackground {
+  background:  radial-gradient(rgb(255, 255, 255) 5px, rgba(0,0,0,0) 5px), radial-gradient(#efefef 5px, rgba(0,0,0,0) 5px), rgba(147, 148, 148, 0);
+  background-position: 0 0, 30px 30px;
+  background-size: 100px 100px;
+}
+
+.heading {
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 2em;
+}
+
+.heading span {
+    font-weight: 400;
+}
+
+.heading .logo {
+    background-image: url(/images/sprites.png);
+    width: 23px;
+    height: 19px;
+    background-position-x: -119px;
+    background-position-y: -5px;
+    display: inline-block;
+}
+
+.heading .text {
+    display: inline-block;
+}
+
+.header #NavigationBar a {
+    font-weight: 700;
 }
 
 .footer {
-    background-color: #222;
-    color: #9d9d9d;
     text-decoration: none;
+    font-size: .85em;
+    line-height: 2.5em;
+    color: #999;
+    font-weight: bold;
 }
 
-.footer a {
-  color: inherit; 
-  text-decoration: inherit; 
+
+.footer a,
+.header a {
+    color: inherit; 
+    text-decoration: inherit; 
 }
 
-.footer a:hover  {
-    color: white !important;
+.footer li {
+    list-style: none;
 }
+
+.footer h5 {
+    text-transform: uppercase;
+    font-size: .95em;
+}
+
+.footer .tag-list li {
+    border: 1px solid #ccc;
+    display: inline;
+    padding: 1px 3px;
+    font-size: .75em;
+    text-transform: uppercase;
+    border-radius: 3px;
+}
+
+.footer .social-list {
+    padding: 0px;
+    margin: 0px;
+}
+
+.footer .social-list i {
+    margin-right: 5px;
+}
+
 
 /* Set widths on the form inputs since otherwise they're 100% wide */
 input,
