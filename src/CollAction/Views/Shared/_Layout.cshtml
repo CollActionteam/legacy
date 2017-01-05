@@ -33,7 +33,7 @@
                     <span class="icon-bar"></span>
                 </button>
 
-                @await Html.PartialAsync("_Logo")
+                @Html.Partial("_Logo")
 
             </div>
             <div id="NavigationBar" class="navbar-collapse collapse">
@@ -55,7 +55,7 @@
         @RenderBody()
     </div>
 
-    @await Html.PartialAsync("_Footer")
+    @Html.Partial("_Footer")
     
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
