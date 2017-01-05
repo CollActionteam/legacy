@@ -2,17 +2,17 @@
 
 @inject IViewLocalizer Localizer
 
-@model CollAction.Models.CreateProjectViewModel
+@model EditProjectViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = Localizer["Create"];
 }
 
-<h2>Create</h2>
+<h2>@Localizer["Create"]</h2>
 
 <form asp-action="Create">
     <div class="form-horizontal">
-        <h4>Project</h4>
+        <h4>@Localizer["Project"]</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
@@ -74,7 +74,7 @@
 </form>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">@Localizer["Back to List"]</a>
 </div>
 
 @section Scripts {

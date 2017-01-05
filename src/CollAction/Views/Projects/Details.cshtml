@@ -2,69 +2,81 @@
 
 @inject IViewLocalizer Localizer
 
-@model CollAction.Models.Project
+@model CollAction.Models.DisplayProjectViewModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = Localizer["Details"];
 }
 
-<h2>Details</h2>
+<h2>@Localizer["Details"]</h2>
 
 <div>
-    <h4>Project</h4>
+    <h4>@Localizer["Project"]</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.Project.Name)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.Project.Name)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Description)
+            @Html.DisplayNameFor(model => model.Project.Description)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Description)
+            @Html.DisplayFor(model => model.Project.Description)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Goal)
+            @Html.DisplayNameFor(model => model.Project.Goal)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Goal)
+            @Html.DisplayFor(model => model.Project.Goal)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Category)
+            @Html.DisplayNameFor(model => model.Project.Category)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Category)
+            @Html.DisplayFor(model => model.Project.Category.Name)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Location)
+            @Html.DisplayNameFor(model => model.Project.Location)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Location)
+            @Html.DisplayFor(model => model.Project.Location.Name)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Target)
+            @Html.DisplayNameFor(model => model.Project.Target)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Target)
+            @Html.DisplayFor(model => model.Project.Target)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Start)
+            @Html.DisplayNameFor(model => model.Project.Start)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Start)
+            @Html.DisplayFor(model => model.Project.Start)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.End)
+            @Html.DisplayNameFor(model => model.Project.End)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.End)
+            @Html.DisplayFor(model => model.Project.End)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Project.StatusDescription)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Project.StatusDescription)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Progress)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Progress)%
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.Project.Id">@Localizer["Edit"]</a> |
+    <a asp-action="Index">@Localizer["Back to List"]</a>
 </div>

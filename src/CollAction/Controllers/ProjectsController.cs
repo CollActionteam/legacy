@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -34,21 +35,22 @@ namespace CollAction.Controllers
         }
 
         // GET: Project/Find
-        public async Task<IActionResult> Find(FindProjectViewModel model)
+        public async Task<IActionResult> Find(FindProjectsViewModel model)
         {
             if (model.SearchText == null) {
-                return View(new FindProjectViewModel { Projects = await _context.Projects.ToListAsync() });
+                return View(new FindProjectsViewModel {
+                    Projects = await GetProjectDisplayItemsWhere(p => p.Status != ProjectStatus.Hidden)
+                });
             }
 
-            model.Projects = await _context.Projects.Where(p => p.Name.Contains(model.SearchText) || p.Description.Contains(model.SearchText) || p.Goal.Contains(model.SearchText)).ToListAsync();
-            
+            model.Projects = await GetProjectDisplayItemsWhere(
+                p => p.Status != ProjectStatus.Hidden && (p.Name.Contains(model.SearchText) || p.Description.Contains(model.SearchText) || p.Goal.Contains(model.SearchText)));
             return View(model);
         }
 
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Projects.Include(p => p.Owner);
-            return View(await applicationDbContext.ToListAsync());
+            return View(await GetProjectDisplayItemsWhere(p => p.Status != ProjectStatus.Hidden));
         }
 
         // GET: Projects/Details/5
@@ -59,13 +61,30 @@ namespace CollAction.Controllers
                 return NotFound();
             }
 
-            var project = await _context.Projects.SingleOrDefaultAsync(m => m.Id == id);
-            if (project == null)
+            List<DisplayProjectViewModel> items = await GetProjectDisplayItemsWhere(p => p.Id == id && p.Status != ProjectStatus.Hidden);
+            if (items.Count == 0)
             {
                 return NotFound();
             }
 
-            return View(project);
+            return View(items.First());
+        }
+
+        public async Task<List<DisplayProjectViewModel>> GetProjectDisplayItemsWhere(Expression<Func<Project, bool>> WhereExpression)
+        {
+            return await _context.Projects
+                .Where(WhereExpression)
+                .Include(p => p.Category)
+                .Include(p => p.Location)
+                .GroupJoin(_context.ProjectParticipants,
+                    project => project.Id,
+                    participants => participants.ProjectId,
+                    (project, participantsGroup) => new DisplayProjectViewModel
+                    {
+                        Project = project,
+                        Participants = participantsGroup.Count()
+                    })
+                .ToListAsync();
         }
 
         // GET: Projects/Create
@@ -74,7 +93,7 @@ namespace CollAction.Controllers
         {
             var categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
             var locations = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", null);
-            var createProjectViewModel = new CreateProjectViewModel(categories, locations);
+            var createProjectViewModel = new EditProjectViewModel(categories, locations);
             return View(createProjectViewModel);
         }
 
@@ -84,21 +103,21 @@ namespace CollAction.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Create([Bind("Name,Description,Goal,CategoryId,LocationId,Target,End")] CreateProjectViewModel createProjectVM)
+        public async Task<IActionResult> Create([Bind("Name,Description,Goal,CategoryId,LocationId,Target,End")] EditProjectViewModel createProjectViewModel)
         {
             ModelState.Clear();
-            if (TryValidateModel(createProjectVM))
+            if (TryValidateModel(createProjectViewModel))
             {
                 var project = new Project
                 {
                     OwnerId = (await _userManager.GetUserAsync(User)).Id,
-                    Name = createProjectVM.Name,
-                    Description = createProjectVM.Description,
-                    Goal = createProjectVM.Goal,
-                    CategoryId = createProjectVM.CategoryId,
-                    LocationId = createProjectVM.LocationId,
-                    Target = createProjectVM.Target,
-                    End = createProjectVM.End,
+                    Name = createProjectViewModel.Name,
+                    Description = createProjectViewModel.Description,
+                    Goal = createProjectViewModel.Goal,
+                    CategoryId = createProjectViewModel.CategoryId,
+                    LocationId = createProjectViewModel.LocationId,
+                    Target = createProjectViewModel.Target,
+                    End = createProjectViewModel.End,
                     Start = DateTime.UtcNow
                 };
                 
@@ -110,23 +129,16 @@ namespace CollAction.Controllers
                 }
                 catch (DbUpdateException ex)
                 {
-                    if (ex.InnerException is PostgresException)
-                    {
-                        var pgex = (PostgresException)ex.InnerException;
-                        if (pgex.SqlState == "23505" && pgex.ConstraintName == "AK_Projects_Name")
-                        {
-                            ModelState.AddModelError(string.Empty, _localizer["A project with the same name already exists."]);
-                        }
-                    }
-                    else
+                    if (!HandleUpdateException(ex))
                     {
                         throw;
                     }
                 }
             }
-            createProjectVM.Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
-            createProjectVM.Locations = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", null);
-            return View(createProjectVM);
+
+            createProjectViewModel.Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
+            createProjectViewModel.Locations = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", null);
+            return View(createProjectViewModel);
         }
 
         // GET: Projects/Edit/5
@@ -149,9 +161,21 @@ namespace CollAction.Controllers
                 return Forbid();
             }
 
-            ViewData["CategoryId"] = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
-            ViewData["LocationId"] = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", null);
-            return View(project);
+            var editProjectViewModel = new EditProjectViewModel
+            {
+                Id = project.Id,
+                Name = project.Name,
+                Description = project.Description,
+                Goal = project.Goal,
+                CategoryId = project.CategoryId,
+                Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description", project.CategoryId),
+                LocationId = project.LocationId,
+                Locations = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", project.LocationId),
+                Target = project.Target,
+                End = project.End
+            };
+
+            return View(editProjectViewModel);
         }
 
         // POST: Projects/Edit/5
@@ -160,9 +184,15 @@ namespace CollAction.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Goal,CategoryId,LocationId,Target,End")] Project project)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,OwnerId,Name,Description,Goal,CategoryId,LocationId,Target,End")] EditProjectViewModel editProjectViewModel)
         {
-            if (id != project.Id)
+            if (id != editProjectViewModel.Id)
+            {
+                return NotFound();
+            }
+
+            var project = await _context.Projects.SingleOrDefaultAsync(m => m.Id == id);
+            if (project == null)
             {
                 return NotFound();
             }
@@ -172,12 +202,22 @@ namespace CollAction.Controllers
                 return Forbid();
             }
 
-            if (ModelState.IsValid)
+            ModelState.Clear();
+            if (TryValidateModel(editProjectViewModel))
             {
+                project.Name = editProjectViewModel.Name;
+                project.Description = editProjectViewModel.Description;
+                project.Goal = editProjectViewModel.Goal;
+                project.CategoryId = editProjectViewModel.CategoryId;
+                project.LocationId = editProjectViewModel.LocationId;
+                project.Target = editProjectViewModel.Target;
+                project.End = editProjectViewModel.End;
+
                 try
                 {
                     _context.Update(project);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction("Index");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -190,9 +230,32 @@ namespace CollAction.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Index");
+                catch (DbUpdateException ex)
+                {
+                    if (!HandleUpdateException(ex))
+                    {
+                        throw;
+                    }
+                }
             }
-            return View(project);
+
+            editProjectViewModel.Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description", project.CategoryId);
+            editProjectViewModel.Locations = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", project.LocationId);
+            return View(editProjectViewModel);
+        }
+
+        private bool HandleUpdateException(Exception ex)
+        {
+            if (ex.InnerException is PostgresException)
+            {
+                var pgex = (PostgresException)ex.InnerException;
+                if (pgex.SqlState == "23505" && pgex.ConstraintName == "AK_Projects_Name")
+                {
+                    ModelState.AddModelError(string.Empty, _localizer["A project with the same name already exists."]);
+                }
+                return true;
+            }
+            return false;
         }
 
         // GET: Projects/Delete/5

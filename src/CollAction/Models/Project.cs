@@ -67,10 +67,31 @@ namespace CollAction.Models
 
         public List<ProjectTag> Tags { get; set; }
         public List<ProjectParticipant> Participants { get; set; }
-
+        
         [NotMapped]
         public string HashTags
             => string.Join(";", Tags?.Select(tag => tag.Tag.Name) ?? Enumerable.Empty<string>());
+
+        [NotMapped]
+        public int RemainingDays
+            => Convert.ToInt32(Math.Round((End - Start).TotalDays));
+
+        [NotMapped]
+        [Display(Name = "Status")]
+        public string StatusDescription
+        {
+            get
+            {
+                if (Status == ProjectStatus.Hidden) { return "hidden"; }
+                else if (IsActive) { return String.Format("open, {0} days left", RemainingDays); }
+                else if (IsComingSoon) { return "coming soon"; }
+                else if (IsClosed) { return "closed"; }
+                else if (Status == ProjectStatus.Successful) { return "successful"; }
+                else if (Status == ProjectStatus.Failed) { return "failed"; }
+                else if (Status == ProjectStatus.Deleted) { return "deleted"; }
+                else { return "undefined"; }
+            }
+        }
 
         public async Task SetTags(ApplicationDbContext context, params string[] tagNames)
         {
