@@ -41,7 +41,7 @@
                 @Html.DisplayNameFor(model => model.Project.End)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Project.Status)
+                @Html.DisplayNameFor(model => model.StatusDescription)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Progress)
@@ -77,7 +77,7 @@
                 @Html.DisplayFor(content => item.Project.End)
             </td>
             <td>
-                @Html.DisplayFor(content => item.Project.StatusDescription)
+                @Html.DisplayFor(content => item.StatusDescription)
             </td>
             <td>
                 @Html.DisplayFor(content => item.Progress)%

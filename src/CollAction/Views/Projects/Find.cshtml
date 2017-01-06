@@ -58,7 +58,7 @@
                 @Html.DisplayNameFor(model => DefaultDisplayProjectViewModel.Project.End)
             </th>
             <th>
-                @Html.DisplayNameFor(model => DefaultDisplayProjectViewModel.Project.Status)
+                @Html.DisplayNameFor(model => DefaultDisplayProjectViewModel.StatusDescription)
             </th>
             <th>
                 @Html.DisplayNameFor(model => DefaultDisplayProjectViewModel.Progress)
@@ -94,7 +94,7 @@
                 @Html.DisplayFor(content => item.Project.End)
             </td>
             <td>
-                @Html.DisplayFor(content => item.Project.StatusDescription)
+                @Html.DisplayFor(content => item.StatusDescription)
             </td>
             <td>
                 @Html.DisplayFor(content => item.Progress)%

@@ -184,7 +184,7 @@ namespace CollAction.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,OwnerId,Name,Description,Goal,CategoryId,LocationId,Target,End")] EditProjectViewModel editProjectViewModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Goal,CategoryId,LocationId,Target,End")] EditProjectViewModel editProjectViewModel)
         {
             if (id != editProjectViewModel.Id)
             {
