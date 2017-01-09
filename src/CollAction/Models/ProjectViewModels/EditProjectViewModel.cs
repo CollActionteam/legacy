@@ -22,9 +22,7 @@ namespace CollAction.Models
 
         public int Id { get; set; }
 
-        public string OwnerId { get; set; }
-
-        [Required(ErrorMessage = "You must provide a name for your project.")]
+        [Required(ErrorMessage = "You must provide a unique name for your project.")]
         [Display(Name = "Project name")]
         [MaxLength(128)]
         public string Name { get; set; }

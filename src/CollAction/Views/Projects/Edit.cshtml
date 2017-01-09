@@ -21,6 +21,7 @@
             <div class="col-md-10">
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger" />
+                @Html.ValidationMessage("Name")
             </div>
         </div>
         <div class="form-group">

@@ -20,7 +20,7 @@ namespace CollAction.Models
             this.Locations = locations; 
         }
 
-        [Required(ErrorMessage = "You must provide a name for your project.")]
+        [Required(ErrorMessage = "You must provide a unique name for your project.")]
         [Display(Name = "Project name")]
         [MaxLength(128)]
         public string Name { get; set; }

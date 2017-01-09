@@ -2,10 +2,11 @@
 
 @inject IViewLocalizer Localizer
 
-@model IEnumerable<DisplayProjectViewModel>
+@model BrowseProjectsViewModel
 
 @{
     ViewData["Title"] = Localizer["Index"];
+    var defaultDisplayModel = BrowseProjectsViewModel.DefaultDisplayProjectViewModel;
 }
 
 <h2>@Localizer["Index"]</h2>
@@ -17,40 +18,41 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Project.Name)
+                @Html.DisplayNameFor(model => defaultDisplayModel.Project.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Project.Description)
+                @Html.DisplayNameFor(model => defaultDisplayModel.Project.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Project.Goal)
+                @Html.DisplayNameFor(model => defaultDisplayModel.Project.Goal)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Project.Category)
+                @Html.DisplayNameFor(model => defaultDisplayModel.Project.Category)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Project.Location)
+                @Html.DisplayNameFor(model => defaultDisplayModel.Project.Location)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Project.Target)
+                @Html.DisplayNameFor(model => defaultDisplayModel.Project.Target)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Project.Start)
+                @Html.DisplayNameFor(model => defaultDisplayModel.Project.Start)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Project.End)
+                @Html.DisplayNameFor(model => defaultDisplayModel.Project.End)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StatusDescription)
+                @Html.DisplayNameFor(model => defaultDisplayModel.StatusDescription)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Progress)
+                @Html.DisplayNameFor(model => defaultDisplayModel.Progress)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.Projects)
+{
         <tr>
             <td>
                 @Html.DisplayFor(content => item.Project.Name)
@@ -82,11 +84,20 @@
             <td>
                 @Html.DisplayFor(content => item.Progress)%
             </td>
+        @if (Model.OwnerId == item.Project.OwnerId)
+        {
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Project.Id">@Localizer["Edit"]</a> |
                 <a asp-action="Details" asp-route-id="@item.Project.Id">@Localizer["Details"]</a> |
                 <a asp-action="Delete" asp-route-id="@item.Project.Id">@Localizer["Delete"]</a>
             </td>
+        }
+        else
+        {
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Project.Id">@Localizer["Details"]</a>
+            </td>
+        }
         </tr>
 }
     </tbody>
