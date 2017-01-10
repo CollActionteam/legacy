@@ -67,7 +67,7 @@ namespace CollAction.Models
 
         public List<ProjectTag> Tags { get; set; }
         public List<ProjectParticipant> Participants { get; set; }
-
+        
         [NotMapped]
         public string HashTags
             => string.Join(";", Tags?.Select(tag => tag.Tag.Name) ?? Enumerable.Empty<string>());

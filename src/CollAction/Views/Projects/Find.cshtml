@@ -2,17 +2,18 @@
 
 @inject IViewLocalizer Localizer
 
-@model FindProjectViewModel
+@model FindProjectsViewModel
 
 @{
-    ViewData["Title"] = "Find";
+    ViewData["Title"] = Localizer["Find"];
+    var defaultDisplayModel = FindProjectsViewModel.DefaultDisplayProjectViewModel;
 }
 
-<h2>Find</h2>
+<h2>@Localizer["Find"]</h2>
 
 <form asp-action="Find">
     <div class="form-horizontal">
-        <h4>Project</h4>
+        <h4>@Localizer["Project"]</h4>
         <hr />
         <div class="form-group">
             <label asp-for="SearchText" class="col-md-2 control-label"></label>
@@ -33,28 +34,34 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Projects.First().Name)
+                @Html.DisplayNameFor(model => defaultDisplayModel.Project.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Projects.First().Description)
+                @Html.DisplayNameFor(model => defaultDisplayModel.Project.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Projects.First().Goal)
+                @Html.DisplayNameFor(model => defaultDisplayModel.Project.Goal)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Projects.First().Category)
+                @Html.DisplayNameFor(model => defaultDisplayModel.Project.Category)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Projects.First().Location)
+                @Html.DisplayNameFor(model => defaultDisplayModel.Project.Location)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Projects.First().Target)
+                @Html.DisplayNameFor(model => defaultDisplayModel.Project.Target)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Projects.First().Start)
+                @Html.DisplayNameFor(model => defaultDisplayModel.Project.Start)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Projects.First().End)
+                @Html.DisplayNameFor(model => defaultDisplayModel.Project.End)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => defaultDisplayModel.StatusDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => defaultDisplayModel.Progress)
             </th>
             <th></th>
         </tr>
@@ -63,41 +70,56 @@
 @foreach (var item in @Model.Projects) {
         <tr>
             <td>
-                @Html.DisplayFor(content => item.Name)
+                @Html.DisplayFor(content => item.Project.Name)
             </td>
             <td>
-                @Html.DisplayFor(content => item.Description)
+                @Html.DisplayFor(content => item.Project.Description)
             </td>
             <td>
-                @Html.DisplayFor(content => item.Goal)
+                @Html.DisplayFor(content => item.Project.Goal)
             </td>
             <td>
-                @Html.DisplayFor(content => item.Category)
+                @Html.DisplayFor(content => item.Project.Category.Name)
             </td>
             <td>
-                @Html.DisplayFor(content => item.Location)
+                @Html.DisplayFor(content => item.Project.Location.Name)
             </td>
             <td>
-                @Html.DisplayFor(content => item.Target)
+                @Html.DisplayFor(content => item.Project.Target)
             </td>
             <td>
-                @Html.DisplayFor(content => item.Start)
+                @Html.DisplayFor(content => item.Project.Start)
             </td>
             <td>
-                @Html.DisplayFor(content => item.End)
+                @Html.DisplayFor(content => item.Project.End)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @Html.DisplayFor(content => item.StatusDescription)
             </td>
+            <td>
+                @Html.DisplayFor(content => item.Progress)%
+            </td>
+        @if (Model.OwnerId == item.Project.OwnerId)
+        {
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Project.Id">@Localizer["Edit"]</a> |
+                <a asp-action="Details" asp-route-id="@item.Project.Id">@Localizer["Details"]</a> |
+                <a asp-action="Delete" asp-route-id="@item.Project.Id">@Localizer["Delete"]</a>
+            </td>
+        }
+        else
+        {
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Project.Id">@Localizer["Details"]</a>
+            </td>
+        }
         </tr>
 }
     </tbody>
 </table>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">@Localizer["Back to List"]</a>
 </div>
 
 @section Scripts {

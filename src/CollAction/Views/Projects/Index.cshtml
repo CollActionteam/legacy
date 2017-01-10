@@ -2,79 +2,102 @@
 
 @inject IViewLocalizer Localizer
 
-@model IEnumerable<Project>
+@model BrowseProjectsViewModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = Localizer["Index"];
+    var defaultDisplayModel = BrowseProjectsViewModel.DefaultDisplayProjectViewModel;
 }
 
-<h2>Index</h2>
+<h2>@Localizer["Index"]</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">@Localizer["Create New"]</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => defaultDisplayModel.Project.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                @Html.DisplayNameFor(model => defaultDisplayModel.Project.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Goal)
+                @Html.DisplayNameFor(model => defaultDisplayModel.Project.Goal)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Category)
+                @Html.DisplayNameFor(model => defaultDisplayModel.Project.Category)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Location)
+                @Html.DisplayNameFor(model => defaultDisplayModel.Project.Location)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Target)
+                @Html.DisplayNameFor(model => defaultDisplayModel.Project.Target)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Start)
+                @Html.DisplayNameFor(model => defaultDisplayModel.Project.Start)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.End)
+                @Html.DisplayNameFor(model => defaultDisplayModel.Project.End)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => defaultDisplayModel.StatusDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => defaultDisplayModel.Progress)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.Projects)
+{
         <tr>
             <td>
-                @Html.DisplayFor(content => item.Name)
+                @Html.DisplayFor(content => item.Project.Name)
             </td>
             <td>
-                @Html.DisplayFor(content => item.Description)
+                @Html.DisplayFor(content => item.Project.Description)
             </td>
             <td>
-                @Html.DisplayFor(content => item.Goal)
+                @Html.DisplayFor(content => item.Project.Goal)
             </td>
             <td>
-                @Html.DisplayFor(content => item.Category)
+                @Html.DisplayFor(content => item.Project.Category.Name)
             </td>
             <td>
-                @Html.DisplayFor(content => item.Location)
+                @Html.DisplayFor(content => item.Project.Location.Name)
             </td>
             <td>
-                @Html.DisplayFor(content => item.Target)
+                @Html.DisplayFor(content => item.Project.Target)
             </td>
             <td>
-                @Html.DisplayFor(content => item.Start)
+                @Html.DisplayFor(content => item.Project.Start)
             </td>
             <td>
-                @Html.DisplayFor(content => item.End)
+                @Html.DisplayFor(content => item.Project.End)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @Html.DisplayFor(content => item.StatusDescription)
             </td>
+            <td>
+                @Html.DisplayFor(content => item.Progress)%
+            </td>
+        @if (Model.OwnerId == item.Project.OwnerId)
+        {
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Project.Id">@Localizer["Edit"]</a> |
+                <a asp-action="Details" asp-route-id="@item.Project.Id">@Localizer["Details"]</a> |
+                <a asp-action="Delete" asp-route-id="@item.Project.Id">@Localizer["Delete"]</a>
+            </td>
+        }
+        else
+        {
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Project.Id">@Localizer["Details"]</a>
+            </td>
+        }
         </tr>
 }
     </tbody>

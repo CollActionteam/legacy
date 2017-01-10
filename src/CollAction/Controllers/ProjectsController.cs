@@ -34,21 +34,30 @@ namespace CollAction.Controllers
         }
 
         // GET: Project/Find
-        public async Task<IActionResult> Find(FindProjectViewModel model)
+        public async Task<IActionResult> Find(FindProjectsViewModel model)
         {
-            if (model.SearchText == null) {
-                return View(new FindProjectViewModel { Projects = await _context.Projects.ToListAsync() });
+            if (model.SearchText == null)
+            {
+                return View(new FindProjectsViewModel
+                {
+                    OwnerId = (await _userManager.GetUserAsync(User)).Id,
+                    Projects = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted)
+                });
             }
 
-            model.Projects = await _context.Projects.Where(p => p.Name.Contains(model.SearchText) || p.Description.Contains(model.SearchText) || p.Goal.Contains(model.SearchText)).ToListAsync();
-            
+            model.OwnerId = (await _userManager.GetUserAsync(User)).Id;
+            model.Projects = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted &&
+                (p.Name.Contains(model.SearchText) || p.Description.Contains(model.SearchText) || p.Goal.Contains(model.SearchText)));
             return View(model);
         }
 
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Projects.Include(p => p.Owner);
-            return View(await applicationDbContext.ToListAsync());
+            return View(new BrowseProjectsViewModel
+            {
+                OwnerId = (await _userManager.GetUserAsync(User)).Id,
+                Projects = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted)
+            });
         }
 
         // GET: Projects/Details/5
@@ -59,23 +68,24 @@ namespace CollAction.Controllers
                 return NotFound();
             }
 
-            var project = await _context.Projects.SingleOrDefaultAsync(m => m.Id == id);
-            if (project == null)
+            List<DisplayProjectViewModel> items = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Id == id && p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted);
+            if (items.Count == 0)
             {
                 return NotFound();
             }
 
-            return View(project);
+            return View(items.First());
         }
 
         // GET: Projects/Create
         [Authorize]
         public async Task<IActionResult> Create()
         {
-            var categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
-            var locations = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", null);
-            var createProjectViewModel = new CreateProjectViewModel(categories, locations);
-            return View(createProjectViewModel);
+            return View(new CreateProjectViewModel
+            {
+                Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description"),
+                Locations = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", null)
+            });
         }
 
         // POST: Projects/Create
@@ -84,49 +94,36 @@ namespace CollAction.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Create([Bind("Name,Description,Goal,CategoryId,LocationId,Target,End")] CreateProjectViewModel createProjectVM)
+        public async Task<IActionResult> Create([Bind("Name,Description,Goal,CategoryId,LocationId,Target,End")] CreateProjectViewModel createProjectViewModel)
         {
-            ModelState.Clear();
-            if (TryValidateModel(createProjectVM))
+            // Make sure the project name is unique.
+            if (await _context.Projects.AnyAsync(p => p.Name == createProjectViewModel.Name))
             {
-                var project = new Project
-                {
-                    OwnerId = (await _userManager.GetUserAsync(User)).Id,
-                    Name = createProjectVM.Name,
-                    Description = createProjectVM.Description,
-                    Goal = createProjectVM.Goal,
-                    CategoryId = createProjectVM.CategoryId,
-                    LocationId = createProjectVM.LocationId,
-                    Target = createProjectVM.Target,
-                    End = createProjectVM.End,
-                    Start = DateTime.UtcNow
-                };
-                
-                try
-                {
-                    _context.Add(project);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction("Index");
-                }
-                catch (DbUpdateException ex)
-                {
-                    if (ex.InnerException is PostgresException)
-                    {
-                        var pgex = (PostgresException)ex.InnerException;
-                        if (pgex.SqlState == "23505" && pgex.ConstraintName == "AK_Projects_Name")
-                        {
-                            ModelState.AddModelError(string.Empty, _localizer["A project with the same name already exists."]);
-                        }
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                ModelState.AddModelError("Name", _localizer["A project with the same name already exists."]);
             }
-            createProjectVM.Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
-            createProjectVM.Locations = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", null);
-            return View(createProjectVM);
+
+            if (!ModelState.IsValid) {
+                createProjectViewModel.Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
+                createProjectViewModel.Locations = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", null);
+                return View(createProjectViewModel);
+            }
+
+            var project = new Project
+            {
+                OwnerId = (await _userManager.GetUserAsync(User)).Id,
+                Name = createProjectViewModel.Name,
+                Description = createProjectViewModel.Description,
+                Goal = createProjectViewModel.Goal,
+                CategoryId = createProjectViewModel.CategoryId,
+                LocationId = createProjectViewModel.LocationId,
+                Target = createProjectViewModel.Target,
+                End = createProjectViewModel.End,
+                Start = DateTime.UtcNow
+            };
+            
+            _context.Add(project);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
 
         // GET: Projects/Edit/5
@@ -149,9 +146,21 @@ namespace CollAction.Controllers
                 return Forbid();
             }
 
-            ViewData["CategoryId"] = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
-            ViewData["LocationId"] = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", null);
-            return View(project);
+            var editProjectViewModel = new EditProjectViewModel
+            {
+                Id = project.Id,
+                Name = project.Name,
+                Description = project.Description,
+                Goal = project.Goal,
+                CategoryId = project.CategoryId,
+                Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description", project.CategoryId),
+                LocationId = project.LocationId,
+                Locations = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", project.LocationId),
+                Target = project.Target,
+                End = project.End
+            };
+
+            return View(editProjectViewModel);
         }
 
         // POST: Projects/Edit/5
@@ -160,9 +169,15 @@ namespace CollAction.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Goal,CategoryId,LocationId,Target,End")] Project project)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Goal,CategoryId,LocationId,Target,End")] EditProjectViewModel editProjectViewModel)
         {
-            if (id != project.Id)
+            if (id != editProjectViewModel.Id)
+            {
+                return NotFound();
+            }
+
+            var project = await _context.Projects.SingleOrDefaultAsync(m => m.Id == id);
+            if (project == null)
             {
                 return NotFound();
             }
@@ -172,27 +187,44 @@ namespace CollAction.Controllers
                 return Forbid();
             }
 
-            if (ModelState.IsValid)
+            // If the project name changed make sure it is still unique.
+            if (project.Name != editProjectViewModel.Name && await _context.Projects.AnyAsync(p => p.Name == editProjectViewModel.Name))
             {
-                try
-                {
-                    _context.Update(project);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!(await _context.Projects.AnyAsync(e => e.Id == id)))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                ModelState.AddModelError("Name", _localizer["A project with the same name already exists."]);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                editProjectViewModel.Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
+                editProjectViewModel.Locations = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", null);
+                return View(editProjectViewModel);
+            }
+
+            project.Name = editProjectViewModel.Name;
+            project.Description = editProjectViewModel.Description;
+            project.Goal = editProjectViewModel.Goal;
+            project.CategoryId = editProjectViewModel.CategoryId;
+            project.LocationId = editProjectViewModel.LocationId;
+            project.Target = editProjectViewModel.Target;
+            project.End = editProjectViewModel.End;
+
+            try
+            {
+                _context.Update(project);
+                await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(project);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!(await _context.Projects.AnyAsync(e => e.Id == id)))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
         }
 
         // GET: Projects/Delete/5
@@ -203,7 +235,6 @@ namespace CollAction.Controllers
             {
                 return NotFound();
             }
-
 
             var project = await _context.Projects.SingleOrDefaultAsync(m => m.Id == id);
 

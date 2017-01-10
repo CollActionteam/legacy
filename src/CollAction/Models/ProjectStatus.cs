@@ -9,7 +9,7 @@ namespace CollAction.Models
     {
         Hidden = 0,
         Running = 1,
-        Successfull = 2,
+        Successful = 2,
         Failed = 3,
         Deleted = 4
     }

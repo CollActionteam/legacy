@@ -7,18 +7,20 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CollAction.Models
 {
-    public class CreateProjectViewModel
+    public class EditProjectViewModel
     {
         public SelectList Categories;
         public SelectList Locations;
 
-        public CreateProjectViewModel() { }
+        public EditProjectViewModel() { }
 
-        public CreateProjectViewModel(SelectList categories, SelectList locations)
+        public EditProjectViewModel(SelectList categories, SelectList locations)
         {
             this.Categories = categories;
             this.Locations = locations; 
         }
+
+        public int Id { get; set; }
 
         [Required(ErrorMessage = "You must provide a unique name for your project.")]
         [Display(Name = "Project name")]
