@@ -10,8 +10,6 @@ using CollAction.Models;
 using Microsoft.Extensions.Localization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using System.Data.SqlClient;
-using Npgsql;
 
 namespace CollAction.Controllers
 {
