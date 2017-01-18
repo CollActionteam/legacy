@@ -1,0 +1,40 @@
+.footer {
+    text-decoration: none;
+    font-size: .85em;
+    line-height: 2.5em;
+    color: #999;
+    font-weight: bold;
+}
+
+.footer a,
+.header a {
+    color: inherit; 
+    text-decoration: inherit; 
+}
+
+.footer li {
+    list-style: none;
+}
+
+.footer h5 {
+    text-transform: uppercase;
+    font-size: .95em;
+}
+
+.footer .tag-list li {
+    border: 1px solid #ccc;
+    display: inline;
+    padding: 1px 3px;
+    font-size: .75em;
+    text-transform: uppercase;
+    border-radius: 3px;
+}
+
+.footer .social-list {
+    padding: 0px;
+    margin: 0px;
+}
+
+.footer .social-list i {
+    margin-right: 5px;
+}

@@ -1,0 +1,26 @@
+.heading {
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 2em;
+}
+
+.heading span {
+    font-weight: 400;
+}
+
+.heading .logo {
+    background-image: url(/images/sprites.png);
+    width: 23px;
+    height: 19px;
+    background-position-x: -119px;
+    background-position-y: -5px;
+    display: inline-block;
+}
+
+.heading .text {
+    display: inline-block;
+}
+
+.header #NavigationBar a {
+    font-weight: 700;
+}
