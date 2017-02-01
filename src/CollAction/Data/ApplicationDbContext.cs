@@ -45,7 +45,7 @@ namespace CollAction.Data
             base.OnModelCreating(builder);
 
             builder.Entity<Tag>().HasAlternateKey(t => t.Name);
-            builder.Entity<Project>().HasAlternateKey(p => p.Name);
+            builder.Entity<Project>().HasIndex(p => p.Name).HasName("IX_Projects_Name").IsUnique();
             builder.Entity<Project>().Property(p => p.DisplayPriority).HasDefaultValue(ProjectDisplayPriority.Medium);
             builder.Entity<ProjectParticipant>().HasKey("UserId", "ProjectId");
             builder.Entity<ProjectTag>().HasKey("TagId", "ProjectId");
