@@ -4,6 +4,26 @@
     line-height: 2.5em;
     color: #999;
     font-weight: bold;
+    .social-list {
+        padding: 0px;
+        margin: 0px;
+
+        li {
+            display: inline;
+        }
+
+        i {
+            margin-right: 5px;
+        }
+    }
+
+    #mc_embed_signup {
+        label, 
+        #mc-embedded-subscribe,
+        .indicates-required {
+            display: none;
+        }
+    }
 }
 
 .footer a,
