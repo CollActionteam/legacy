@@ -41,15 +41,25 @@ namespace CollAction.Models
 
         [Required]
         public DateTime Start { get; set; }
+        
         [Required]
         public DateTime End { get; set; }
 
         [Required]
+        [MaxLength(1024)]
         public string Description { get; set; }
 
         [Required]
         [MaxLength(1024)]
         public string Goal { get; set; }
+        
+        [Required]
+        [MaxLength(512)]
+        public string Proposal { get; set; }
+
+        [Required]
+        [MaxLength(2048)]
+        public string Comments { get; set; }
         
         public ProjectDisplayPriority DisplayPriority { get; set; }
 

@@ -32,6 +32,13 @@
             </div>
         </div>
         <div class="form-group">
+            <label asp-for="Proposal" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Proposal" class="form-control" />
+                <span asp-validation-for="Proposal" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
             <label asp-for="Goal" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <input asp-for="Goal" class="form-control" />
@@ -64,6 +71,13 @@
             <div class="col-md-10">
                 <input asp-for="End" class="form-control" />
                 <span asp-validation-for="End" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Comments" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Comments" class="form-control" />
+                <span asp-validation-for="Comments" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
