@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CollAction.Models
 {
-    public class FindProjectsViewModel
+    public class FindProjectViewModel
     {
         public string OwnerId { get; set; }
 

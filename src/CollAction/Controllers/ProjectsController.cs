@@ -34,11 +34,11 @@ namespace CollAction.Controllers
         }
 
         // GET: Project/Find
-        public async Task<IActionResult> Find(FindProjectsViewModel model)
+        public async Task<IActionResult> Find(FindProjectViewModel model)
         {
             if (model.SearchText == null)
             {
-                return View(new FindProjectsViewModel
+                return View(new FindProjectViewModel
                 {
                     OwnerId = (await _userManager.GetUserAsync(User)).Id,
                     Projects = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted)
