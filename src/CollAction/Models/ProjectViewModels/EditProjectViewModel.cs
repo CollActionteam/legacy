@@ -24,17 +24,27 @@ namespace CollAction.Models
 
         [Required(ErrorMessage = "You must provide a unique name for your project.")]
         [Display(Name = "Project name")]
-        [MaxLength(128)]
+        [MaxLength(50)]
         public string Name { get; set; }
 
+        [Required(ErrorMessage = "Describe your proposal.")]
+        [Display(Prompt = "e.g. \"If X people commit to doing Y, we'll all do it together!\"")]
+        [MaxLength(300)]
+        public string Proposal { get; set; }
+
         [Required(ErrorMessage = "Give a succinct description of the issues your project is designed to address")]
-        [Display(Prompt = "E.g Reduce plastic waste and save our oceans!")]
+        [Display(Name = "Short description", Prompt = "E.g Reduce plastic waste and save our oceans!")]
+        [MaxLength(1000)]
         public string Description { get; set; }
 
         [Required(ErrorMessage = "Describe what you hope to have achieved on successful completion of your project")]
-        [Display(Prompt = "Max 1000 characters")]
-        [MaxLength(1024)]
+        [Display(Name = "Goal/Impact", Prompt = "Max 1000 characters")]
+        [MaxLength(1000)]
         public string Goal { get; set; }
+
+        [Display(Name = "Other comments", Prompt = "e.g. Background, process, FAQs, about the initiator")]
+        [MaxLength(2000)]
+        public string CreatorComments { get; set; }
 
         [Required]
         [Display(Name = "Category")]

@@ -8,9 +8,10 @@ using CollAction.Data;
 namespace CollAction.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170201235715_ProjectProposalCreatorComments")]
+    partial class ProjectProposalCreatorComments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.1");
@@ -297,13 +298,11 @@ namespace CollAction.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasAlternateKey("Name");
+
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("LocationId");
-
-                    b.HasIndex("Name")
-                        .IsUnique()
-                        .HasName("IX_Projects_Name");
 
                     b.HasIndex("OwnerId");
 
