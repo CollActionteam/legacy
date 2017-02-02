@@ -4,10 +4,7 @@
   "description": "CollAction Front End Application",
   "main": "app/index.ts",
   "scripts": {
-<<<<<<< HEAD
-=======
     "start": "webpack -w",
->>>>>>> a51b640... Added mailchimp form
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Stewart Matheson",
