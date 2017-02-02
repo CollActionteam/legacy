@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CollAction.Migrations
 {
-    public partial class ProjectProposalComments : Migration
+    public partial class ProjectProposalCreatorComments : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "Comments",
+                name: "CreatorComments",
                 table: "Projects",
                 maxLength: 2048,
                 nullable: false,
@@ -32,7 +32,7 @@ namespace CollAction.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "Comments",
+                name: "CreatorComments",
                 table: "Projects");
 
             migrationBuilder.DropColumn(

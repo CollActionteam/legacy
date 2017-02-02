@@ -42,7 +42,7 @@ namespace CollAction.Models
 
         [Display(Name = "Other comments", Prompt = "e.g. Background, process, FAQs, about the initiator")]
         [MaxLength(2000)]
-        public string Comments { get; set; }
+        public string CreatorComments { get; set; }
 
         [Required]
         [Display(Name = "Category")]

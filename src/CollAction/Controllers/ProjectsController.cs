@@ -94,7 +94,7 @@ namespace CollAction.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Create([Bind("Name,Description,Goal,Proposal,Comments,CategoryId,LocationId,Target,End")] CreateProjectViewModel createProjectViewModel)
+        public async Task<IActionResult> Create([Bind("Name,Description,Goal,Proposal,CreatorComments,CategoryId,LocationId,Target,End")] CreateProjectViewModel createProjectViewModel)
         {
             // Make sure the project name is unique.
             if (await _context.Projects.AnyAsync(p => p.Name == createProjectViewModel.Name))
@@ -115,7 +115,7 @@ namespace CollAction.Controllers
                 Description = createProjectViewModel.Description,
                 Goal = createProjectViewModel.Goal,
                 Proposal = createProjectViewModel.Proposal,
-                Comments = createProjectViewModel.Comments,
+                CreatorComments = createProjectViewModel.CreatorComments,
                 CategoryId = createProjectViewModel.CategoryId,
                 LocationId = createProjectViewModel.LocationId,
                 Target = createProjectViewModel.Target,
@@ -155,7 +155,7 @@ namespace CollAction.Controllers
                 Description = project.Description,
                 Goal = project.Goal,
                 Proposal = project.Proposal,
-                Comments = project.Comments,
+                CreatorComments = project.CreatorComments,
                 CategoryId = project.CategoryId,
                 Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description", project.CategoryId),
                 LocationId = project.LocationId,
@@ -173,7 +173,7 @@ namespace CollAction.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Goal,Proposal,Comments,CategoryId,LocationId,Target,End")] EditProjectViewModel editProjectViewModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Goal,Proposal,CreatorComments,CategoryId,LocationId,Target,End")] EditProjectViewModel editProjectViewModel)
         {
             if (id != editProjectViewModel.Id)
             {
@@ -208,7 +208,7 @@ namespace CollAction.Controllers
             project.Description = editProjectViewModel.Description;
             project.Goal = editProjectViewModel.Goal;
             project.Proposal = editProjectViewModel.Proposal;
-            project.Comments = editProjectViewModel.Comments;
+            project.CreatorComments = editProjectViewModel.CreatorComments;
             project.CategoryId = editProjectViewModel.CategoryId;
             project.LocationId = editProjectViewModel.LocationId;
             project.Target = editProjectViewModel.Target;

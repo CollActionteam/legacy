@@ -8,8 +8,8 @@ using CollAction.Data;
 namespace CollAction.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170201024510_ProjectProposalComments")]
-    partial class ProjectProposalComments
+    [Migration("20170201235715_ProjectProposalCreatorComments")]
+    partial class ProjectProposalCreatorComments
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -259,7 +259,7 @@ namespace CollAction.Migrations
 
                     b.Property<int>("CategoryId");
 
-                    b.Property<string>("Comments")
+                    b.Property<string>("CreatorComments")
                         .IsRequired()
                         .HasAnnotation("MaxLength", 2048);
 

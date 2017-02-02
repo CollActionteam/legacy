@@ -258,7 +258,7 @@ namespace CollAction.Migrations
 
                     b.Property<int>("CategoryId");
 
-                    b.Property<string>("Comments")
+                    b.Property<string>("CreatorComments")
                         .IsRequired()
                         .HasAnnotation("MaxLength", 2048);
 

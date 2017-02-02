@@ -59,7 +59,7 @@ namespace CollAction.Models
 
         [Required]
         [MaxLength(2048)]
-        public string Comments { get; set; }
+        public string CreatorComments { get; set; }
         
         public ProjectDisplayPriority DisplayPriority { get; set; }
 
