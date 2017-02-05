@@ -1,0 +1,35 @@
+@import "../colors.scss";
+
+#find-project {
+  width: 100%;
+
+  #project-filter {
+    color: #eee;
+    padding: 30px;
+    background-color: #333;
+    font-size: 3em;
+
+    .project-filter-drop-down {
+      cursor: pointer;
+      display: inline-block;
+      border: 3px solid #eee;
+      padding: 0px 25px;
+      border-radius: 35px;
+      margin: 15px 0px;
+
+      i {
+        font-size: 0.75em;
+        margin-left: 5px;
+      }
+    }
+  }
+}
+
+#start-project {
+  #nice-button {
+    background-color: $coll-action-green;
+    width: 300px;
+    height: 300px;
+    border-radius: 150px;
+  }
+}
