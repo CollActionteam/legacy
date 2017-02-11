@@ -10,91 +10,110 @@
 
 <div id="start-project">
     <div id="start-project-intro">
-        <div id="nice-button">@Localizer["Nice"]!</div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div id="nice-button">@Localizer["Nice"]!</div>
+            </div>
+            <div class="col-md-8">
+                <h2>Title</h2>
+                <p>
+                    You would like to start a project? Great! Step 1 is filling out the form below. Your application will be reviewed by the CollAction team as soon as possible. Once it’s been approved it will be uploaded to the website and you can get started! The CollAction might be in touch with you if there are any questions about your application.
+                </p>
+            </div>
+        </div>
+
+        <div class="row" id="project-steps">
+            <div class="col-md-12">
+                <h1>Starting A Project</h1>
+                <h6>(IS SUPER EASY)</h6>
+            </div>
+            <div class="col-md-6">
+                Test 1 
+            </div>
+            <div class="col-md-6">
+                Test 2
+            </div>
+        </div>
+
     </div>
 </div>
 
-<h2>@Localizer["Create"]</h2>
-
-<form asp-action="Create">
-    <div class="form-horizontal">
-        <h4>@Localizer["Project"]</h4>
-        <hr />
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-group">
-            <label asp-for="Name" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger" />
-                @Html.ValidationMessage("Name")
+<div class="row">
+    <form asp-action="Create">
+        <div class="form-horizontal">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger" />
+                    @Html.ValidationMessage("Name")
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Proposal" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="Proposal" class="form-control" />
+                    <span asp-validation-for="Proposal" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Goal" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="Goal" class="form-control" />
+                    <span asp-validation-for="Goal" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="CategoryId" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    @Html.DropDownList("CategoryId", Model.Categories)
+                    <span asp-validation-for="CategoryId" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="LocationId" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    @Html.DropDownList("LocationId", Model.Locations)
+                    <span asp-validation-for="LocationId" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Target" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="Target" class="form-control" />
+                    <span asp-validation-for="Target" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="End" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="End" class="form-control" />
+                    <span asp-validation-for="End" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatorComments" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="CreatorComments" class="form-control" />
+                    <span asp-validation-for="CreatorComments" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-default" />
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <label asp-for="Description" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Proposal" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Proposal" class="form-control" />
-                <span asp-validation-for="Proposal" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Goal" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Goal" class="form-control" />
-                <span asp-validation-for="Goal" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="CategoryId" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                @Html.DropDownList("CategoryId", Model.Categories)
-                <span asp-validation-for="CategoryId" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="LocationId" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                @Html.DropDownList("LocationId", Model.Locations)
-                <span asp-validation-for="LocationId" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Target" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Target" class="form-control" />
-                <span asp-validation-for="Target" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="End" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="End" class="form-control" />
-                <span asp-validation-for="End" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="CreatorComments" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="CreatorComments" class="form-control" />
-                <span asp-validation-for="CreatorComments" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
-</form>
-
-<div>
-    <a asp-action="Index">@Localizer["Back to List"]</a>
+    </form>
 </div>
 
 @section Scripts {

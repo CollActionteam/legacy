@@ -26,10 +26,49 @@
 }
 
 #start-project {
+  #project-steps {
+    h1, h6 {
+      text-align: center;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    h6 {
+      font-size: 2.5em;
+    }
+  }
+
   #nice-button {
     background-color: $coll-action-green;
+    color: #fff;
     width: 300px;
     height: 300px;
     border-radius: 150px;
+    padding: 50px;
+    font-size: 6em;
+    font-weight: 900;
+    padding: 90px 50px;
   }
+
+  h2 {
+    color: $coll-action-green;
+  }
+
+  p {
+    font-size: 1.25em;
+  }
+
+  .row {
+    margin-bottom: 50px;
+  }
+
+  h1 {
+    font-size: 4em;
+    color: $coll-action-green;
+  }
+
+  h6 {
+
+  } 
+
 }
