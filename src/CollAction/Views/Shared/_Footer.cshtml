@@ -1,39 +1,42 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 
 @inject IViewLocalizer Localizer
-<div class="footer container">
+<div class="footer container-fluid">
 
   <div class="row">
-    @Html.Partial("_Logo")
+    <div class="col-xs-12">
+      @Html.Partial("_Logo")
+    </div>
   </div>
 
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-xs-4">
       Test
     </div>
 
-    <ul class="col-md-2">
+    <ul class="col-xs-2">
       <li><a href="#">@Localizer["Home"]</a></li>
       <li><a href="#">@Localizer["Find Project"]</a></li>
       <li><a href="#">@Localizer["Start Project"]</a></li>
       <li><a href="#">@Localizer["About Us"]</a></li>
     </ul>
 
-    <ul class="col-md-2">
+    <ul class="col-xs-2">
       <li><a href="#">@Localizer["Login"]</a></li>
       <li><a href="#">@Localizer["Sign Up"]</a></li>
       <li><a href="#">@Localizer["Mission"]</a></li>
       <li><a href="#">@Localizer["Team"]</a></li>
     </ul>
 
-    <ul class="col-md-1">
+    <ul class="col-xs-1">
       <li><a href="#">@Localizer["Jobs"]</a></li>
       <li><a href="#">@Localizer["Partners"]</a></li>
       <li><a href="#">@Localizer["Press"]</a></li>
       <li><a href="#">@Localizer["FAQs"]</a></li>
     </ul>
 
-    <div class="col-md-3">
+
+    <div class="col-xs-3">
       <h5>@Localizer["Follow Us"]</h5>
       <ul class="social-list">
         <li><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://collaction.org/"><i class="fa fa-facebook marginright"></i></a></li>

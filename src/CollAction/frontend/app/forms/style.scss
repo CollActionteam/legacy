@@ -1,0 +1,25 @@
+
+form {
+  label {
+    font-weight: bold;
+  }
+
+  .form-control {
+    margin: 10px 0px;
+    outline: none;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    width: 100%;
+    font-size: 1em;
+  }
+
+  input[type='submit'] {
+    background-color: green;
+    color: #fff;
+    padding: 10px 50px;
+    border: none;
+    border-radius: 20px;
+    font-size: 1em;
+  }
+}
