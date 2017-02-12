@@ -17,28 +17,31 @@
     @RenderSection("styles", required: false)
 </head>
 <body>
-    <div class="navbar navbar-fixed-top header">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                @Html.Partial("_Logo")
-            </div>
-            <div id="NavigationBar" class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Projects" asp-action="Find">Find Project</a></li>
-                    <li><a asp-area="" asp-controller="Projects" asp-action="StartInfo">Start Project</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    @if (User.IsInRole("admin"))
-                    {
-                        <li><a asp-area="" asp-controller="Admin" asp-action="Index">Admin Dashboard</a></li>
-                    }
-                </ul>
-                @await Html.PartialAsync("_LoginPartial")
+    <div class="container">
+        <div id="header">
+            <div class="row">
+                <div class="col-xs-3">
+                    @Html.Partial("_Logo")
+                </div>
+                <div class="col-xs-5 nav-bar" >
+                    <ul>
+                        <li><a asp-area="" asp-controller="Projects" asp-action="Find">Find Project</a></li>
+                        <li><a asp-area="" asp-controller="Projects" asp-action="StartInfo">Start Project</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
+                        @if (User.IsInRole("admin"))
+                        {
+                            <li><a asp-area="" asp-controller="Admin" asp-action="Index">Admin Dashboard</a></li>
+                        }
+                    </ul>
+                </div>
+                <div class="col-xs-4 nav-bar">
+                    @await Html.PartialAsync("_LoginPartial")
+                </div>
             </div>
         </div>
     </div>
 
     @RenderBody()
-
     @Html.Partial("_Footer")
     <script src="~/js/bundle.js"></script>
 </body>
