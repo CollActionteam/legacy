@@ -40,9 +40,14 @@
             </div>
         </div>
     </div>
-
+    
     @RenderBody()
     @Html.Partial("_Footer")
-    <script src="~/js/bundle.js"></script>
-</body>
+    <environment names="Development">
+        <script src="~/js/bundle.js?@DateTime.Now.Ticks.ToString()"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/js/bundle.js"></script>
+    </environment>
+    </body>
 </html>
