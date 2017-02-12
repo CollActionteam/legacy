@@ -8,25 +8,58 @@
     ViewData["Title"] = Localizer["Create"];
 }
 
-<div id="project-create-nice" class="container">
-    <div class="row">
-        <div class="col-xs-6">
-            <div clsas="nice-circle">
-                Nice!
+<div id="project-create-nice">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-3">
+                <div id="nice-circle">
+                    Nice!
+                </div>
             </div>
-        </div>
-        <div class="col-xs-6">
+            <div class="col-xs-9">
+                <h1>Title</h1>
+
+                Would you like to do something about a social or environmental problem? Would you like to lead the crowdacting movement? Start a project on CollAction! 
+                
+                There are a few criteria that your project needs to meet – so please check those here first. We’ll wait while you read it… [link (new tab) to FAQs at the level of “What are the criteria that a project has to meet?”]
+
+                …All good? Then click here to start your project! [link to Start Project form page (through log in/registration)  
+            </div>
         </div>
     </div>
 </div>
 
-<div id="project-create-starting" class="container">
+<div id="project-create-starting">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h1>Starting a Project</h1>
+                <h4>(It's Super Easy)</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6">
+                <h5>In 6 easy Steps</h5>
+                <ul>
+                    <li><div class="coll-action-dot-point">1</div>Step 1</li>
+                    <li><div class="coll-action-dot-point">2</div>Step 2</li>
+                    <li><div class="coll-action-dot-point">3</div>Step 3</li>
+                    <li><div class="coll-action-dot-point">4</div>Step 4</li>
+                    <li><div class="coll-action-dot-point">5</div>Step 5</li>
+                    <li><div class="coll-action-dot-point">6</div>Step 6</li>
+                </ul>
+            </div>
+            <div class="col-xs-6">
+                Build The Sprite Sheet for this
+            </div>
+        </div>
+    </div>
 </div>
 
 <div id="project-create-form">
     <div class="container">
         <div class="row">
-            <div class="col-xs-12">
+            <div class="col-xs-6 col-xs-offset-3">
                 <form asp-action="Create">
 
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
