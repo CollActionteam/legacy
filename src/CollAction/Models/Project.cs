@@ -60,7 +60,11 @@ namespace CollAction.Models
         [Required]
         [MaxLength(2048)]
         public string CreatorComments { get; set; }
-        
+
+        public int? ImageFileId { get; set; }
+        [ForeignKey("ImageFileId")]
+        public ImageFile BannerImage { get; set; }
+
         public ProjectDisplayPriority DisplayPriority { get; set; }
 
         [NotMapped]

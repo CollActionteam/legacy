@@ -86,6 +86,16 @@
         <dd>
             @Html.DisplayFor(model => model.Progress)%
         </dd>
+        @{ var image = Model.Project.BannerImage; }
+        @if (image != null)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => image)
+            </dt>
+            <dd>
+                <img src="@Url.Content(image.Filepath)" width="@image.Width" height="@image.Height" class="banner-image" alt="Banner image not found." />
+            </dd>
+        }
     </dl>
 </div>
 <div>

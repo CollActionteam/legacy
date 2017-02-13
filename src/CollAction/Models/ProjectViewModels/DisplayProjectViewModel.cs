@@ -49,6 +49,7 @@ namespace CollAction.Models
                 .Where(WhereExpression)
                 .Include(p => p.Category)
                 .Include(p => p.Location)
+                .Include(p => p.BannerImage)
                 .GroupJoin(context.ProjectParticipants,
                     project => project.Id,
                     participants => participants.ProjectId,

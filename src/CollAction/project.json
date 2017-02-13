@@ -40,7 +40,9 @@
     "Serilog.Sinks.RollingFile": "3.3.0-dev-00758",
     "Serilog.Sinks.Literate": "2.1.0-dev-00034",
     "Serilog.Sinks.Slack": "1.2.49",
-    "Serilog.Sinks.Trace": "2.1.0"  },
+    "Serilog.Sinks.Trace": "2.1.0",
+    "CoreCompat.System.Drawing": "1.0.0-beta006"
+  },
 
   "tools": {
     "Microsoft.AspNetCore.Razor.Tools": "1.0.0-preview2-final",
