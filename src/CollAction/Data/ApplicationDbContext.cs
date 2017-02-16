@@ -36,6 +36,7 @@ namespace CollAction.Data
         public DbSet<LocationLevel1> LocationLevel1 { get; set; }
         public DbSet<LocationLevel2> LocationLevel2 { get; set; }
         public DbSet<ImageFile> ImageFiles { get; set; }
+        public DbSet<Job> Jobs { get; set; }
 
         /// <summary>
         /// Configure the model (foreign keys, relations, primary keys, etc)
