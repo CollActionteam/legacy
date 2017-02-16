@@ -40,7 +40,7 @@ namespace CollAction.Controllers
             {
                 return View(new FindProjectViewModel
                 {
-                    OwnerId = (await _userManager.GetUserAsync(User)).Id,
+                    OwnerId = _userManager.GetUserId(User),
                     Projects = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted)
                 });
             }
@@ -55,7 +55,7 @@ namespace CollAction.Controllers
         {
             return View(new BrowseProjectsViewModel
             {
-                OwnerId = (await _userManager.GetUserAsync(User)).Id,
+                OwnerId = _userManager.GetUserId(User),
                 Projects = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted)
             });
         }
@@ -110,7 +110,7 @@ namespace CollAction.Controllers
 
             var project = new Project
             {
-                OwnerId = (await _userManager.GetUserAsync(User)).Id,
+                OwnerId = _userManager.GetUserId(User),
                 Name = createProjectViewModel.Name,
                 Description = createProjectViewModel.Description,
                 Goal = createProjectViewModel.Goal,
