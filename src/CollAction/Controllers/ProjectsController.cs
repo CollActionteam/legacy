@@ -40,12 +40,12 @@ namespace CollAction.Controllers
             {
                 return View(new FindProjectViewModel
                 {
-                    OwnerId = _userManager.GetUserId(User),
+                    OwnerId = (await _userManager.GetUserAsync(User))?.Id,
                     Projects = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted)
                 });
             }
 
-            model.OwnerId = (await _userManager.GetUserAsync(User)).Id;
+            model.OwnerId = (await _userManager.GetUserAsync(User))?.Id;
             model.Projects = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted &&
                 (p.Name.Contains(model.SearchText) || p.Description.Contains(model.SearchText) || p.Goal.Contains(model.SearchText)));
             return View(model);
@@ -55,7 +55,7 @@ namespace CollAction.Controllers
         {
             return View(new BrowseProjectsViewModel
             {
-                OwnerId = _userManager.GetUserId(User),
+                OwnerId = (await _userManager.GetUserAsync(User))?.Id,
                 Projects = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted)
             });
         }
@@ -110,7 +110,7 @@ namespace CollAction.Controllers
 
             var project = new Project
             {
-                OwnerId = _userManager.GetUserId(User),
+                OwnerId = (await _userManager.GetUserAsync(User)).Id,
                 Name = createProjectViewModel.Name,
                 Description = createProjectViewModel.Description,
                 Goal = createProjectViewModel.Goal,
