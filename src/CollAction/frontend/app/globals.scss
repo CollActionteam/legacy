@@ -1,0 +1,18 @@
+$coll-action-green: #23D884;
+
+@mixin coll-action-button {
+    background-color: $coll-action-green;
+    color: #fff;
+    padding: 10px 50px;
+    border: none;
+    border-radius: 20px;
+    font-size: 1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+
+    a {
+      text-decoration: none;
+    }
+}  

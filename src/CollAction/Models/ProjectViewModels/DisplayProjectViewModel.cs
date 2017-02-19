@@ -49,14 +49,7 @@ namespace CollAction.Models
                 .Where(WhereExpression)
                 .Include(p => p.Category)
                 .Include(p => p.Location)
-                .GroupJoin(context.ProjectParticipants,
-                    project => project.Id,
-                    participants => participants.ProjectId,
-                    (project, participantsGroup) => new DisplayProjectViewModel
-                    {
-                        Project = project,
-                        Participants = participantsGroup.Count()
-                    })
+                .Select(p => new DisplayProjectViewModel(){ Project = p })
                 .ToListAsync();
         }
     }

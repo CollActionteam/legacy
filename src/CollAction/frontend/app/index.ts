@@ -1,4 +1,5 @@
 import "./global/bootstrap.css";
+import "./global/dotbackground.scss";
 import "./project/style.scss";
 import "./forms/style.scss";
 import "./global/body.scss";

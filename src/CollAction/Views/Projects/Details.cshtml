@@ -8,7 +8,56 @@
     ViewData["Title"] = Localizer["Details"];
 }
 
-<h2>@Localizer["Details"]</h2>
+
+<div id="project-details">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 dotbackground" id="project-background">
+            </div> 
+        </div> 
+
+        <div class="row" id="project-starter-row">
+            <div class="col-xs-3" >
+                <div id="project-starter-avatar"></div>
+                <h3>Project Starter</h3>
+                <p>Natalie Portman</p>
+            </div> 
+
+            <div class="col-xs-3" >
+                Share Buttons
+            </div> 
+
+            <div class="col-xs-6" >
+                <div id="project-info-card">
+                    <div id="project-category">
+                        @Html.DisplayFor(model => model.Project.Category.Name)
+                    </div>
+                    <h1>@Html.DisplayFor(model => model.Project.Name)</h1>
+                    <h2>@Html.DisplayFor(model => model.Progress)%</h2>
+                    <a id="take-part-button">Take Part</a>
+                </div>
+            </div> 
+        </div> 
+
+
+        <div class="row">
+            <hr />
+            <div class="col-xs-4">
+                <p>Proposal</p>
+                <p>@Html.DisplayFor(model => model.Project.Proposal)</p>
+            </div>
+            <div class="col-xs-8">
+                Goal / Impact
+            </div>
+        </div> 
+
+        <div class="row">
+            <hr />
+        </div> 
+    </div> 
+</div> 
+
+<!--h2>@Localizer["Details"]</h2>
 
 <div>
     <h4>@Localizer["Project"]</h4>
@@ -90,4 +139,4 @@
 </div>
 <div>
     <a asp-action="Index">@Localizer["Back to List"]</a>
-</div>
+</div-->
