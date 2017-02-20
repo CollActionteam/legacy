@@ -8,9 +8,10 @@ using CollAction.Data;
 namespace CollAction.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170212091943_JobTable")]
+    partial class JobTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.1");
@@ -131,9 +132,9 @@ namespace CollAction.Migrations
                         .IsRequired()
                         .HasAnnotation("MaxLength", 500);
 
-                    b.Property<int?>("LocationId");
+                    b.Property<int>("LocationId");
 
-                    b.Property<DateTime>("PostDate");
+                    b.Property<DateTime>("Posting");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -308,8 +309,6 @@ namespace CollAction.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("BannerImageFileId");
-
                     b.Property<int>("CategoryId");
 
                     b.Property<string>("CreatorComments")
@@ -350,8 +349,6 @@ namespace CollAction.Migrations
                     b.Property<int>("Target");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BannerImageFileId");
 
                     b.HasIndex("CategoryId");
 
@@ -523,7 +520,8 @@ namespace CollAction.Migrations
                 {
                     b.HasOne("CollAction.Models.Location", "Location")
                         .WithMany()
-                        .HasForeignKey("LocationId");
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("CollAction.Models.Location", b =>
@@ -595,10 +593,6 @@ namespace CollAction.Migrations
 
             modelBuilder.Entity("CollAction.Models.Project", b =>
                 {
-                    b.HasOne("CollAction.Models.ImageFile", "BannerImage")
-                        .WithMany()
-                        .HasForeignKey("BannerImageFileId");
-
                     b.HasOne("CollAction.Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
