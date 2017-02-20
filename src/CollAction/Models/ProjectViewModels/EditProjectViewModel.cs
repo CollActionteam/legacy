@@ -63,10 +63,10 @@ namespace CollAction.Models
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime End { get; set; }
 
-        [Display(Name = "Banner image", Prompt = "1366x767px JPEG, GIF, PNG, BMP")]
+        [Display(Name = "Banner image", Prompt = "1024x768px JPEG, GIF, PNG, BMP")]
         [FileSize(1024000)] // 1MB
         [FileType("jpg, jpeg, gif, png, bmp")]
-        [MinImageDimensions("1366x768")]
+        [MaxImageDimensions(1024, 768)]
         public IFormFile BannerImageUpload { get; set; }
 
         public bool HasBannerImageUpload { get { return BannerImageUpload != null && BannerImageUpload.Length > 0; } }

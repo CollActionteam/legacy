@@ -15,6 +15,7 @@ using System.Data.SqlClient;
 using Npgsql;
 using Microsoft.AspNetCore.Hosting;
 using CollAction.Helpers;
+using System.Text.RegularExpressions;
 
 namespace CollAction.Controllers
 {
@@ -131,14 +132,16 @@ namespace CollAction.Controllers
 
             if (createProjectViewModel.HasBannerImageUpload)
             {
-                IFileManager manager = new ProjectBannerImageManager
+                var manager = new ImageFileManager
                 {
                     Context = _context,
                     WebRoot = _hostingEnvironment.WebRootPath,
-                    Project = project,
-                    ImageMetaDataReader = new SDImageMetaDataReader()
+                    WebFolder = Path.Combine("usercontent", "bannerimages")
                 };
-                await manager.UploadFormFile(createProjectViewModel.BannerImageUpload);
+                
+                // Don't trust the users _formFile.FileName to be unique, so generate our own unique one "banner_<formatted-Project.Name>.<FileType>"
+                var uniqueFileName = (new Regex(@"[^A-Za-z0-9]+")).Replace("banner_" + project.Name, "_").Trim(new char[] { '_' });
+                project.BannerImage = await manager.UploadFormFile(createProjectViewModel.BannerImageUpload, uniqueFileName);
             }
 
             _context.Add(project);
@@ -235,14 +238,21 @@ namespace CollAction.Controllers
 
             if (editProjectViewModel.HasBannerImageUpload)
             {
-                IFileManager manager = new ProjectBannerImageManager
+                var manager = new ImageFileManager
                 {
                     Context = _context,
                     WebRoot = _hostingEnvironment.WebRootPath,
-                    Project = project,
-                    ImageMetaDataReader = new SDImageMetaDataReader()
+                    WebFolder = Path.Combine("usercontent", "bannerimages")
                 };
-                await manager.UploadFormFile(editProjectViewModel.BannerImageUpload);
+
+                if (project.BannerImage != null)
+                {
+                    manager.DeleteImageFile(project.BannerImage);
+                }
+
+                // Don't trust the users _formFile.FileName to be unique, so generate our own unique one "banner_<formatted-Project.Name>.<FileType>"
+                var uniqueFileName = (new Regex(@"[^A-Za-z0-9]+")).Replace("banner_" + project.Name, "_").Trim(new char[] { '_' });
+                project.BannerImage = await manager.UploadFormFile(editProjectViewModel.BannerImageUpload, uniqueFileName);
             }
 
             try
