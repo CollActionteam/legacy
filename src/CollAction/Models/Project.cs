@@ -61,9 +61,9 @@ namespace CollAction.Models
         [MaxLength(2048)]
         public string CreatorComments { get; set; }
 
-        public int? VideoLinkId { get; set; }
-        [ForeignKey("VideoLinkId")]
-        public VideoLink VideoLink { get; set; }
+        public int? DescriptionVideoLinkId { get; set; }
+        [ForeignKey("DescriptionVideoLinkId")]
+        public VideoLink DescriptionVideoLink { get; set; }
         
         public ProjectDisplayPriority DisplayPriority { get; set; }
 
