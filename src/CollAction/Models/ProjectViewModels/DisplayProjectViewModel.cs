@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace CollAction.Models
 {
@@ -14,6 +15,21 @@ namespace CollAction.Models
         public Project Project { get; set; }
 
         public int Participants { get; set; }
+
+        public bool HasDescriptionVideo { get { return Project.DescriptionVideoLink != null; } }
+
+        public string DescriptionVideoYouTubeEmbedLink {
+            get {
+                if (!HasDescriptionVideo) { return ""; }
+
+                var regex = new Regex(@"^(?:https?:\/\/www\.youtube\.com\/watch\?v=)((?:\w|-){11,})(?:\S+)?$");
+                Match match = regex.Match(Project.DescriptionVideoLink.Link);
+
+                if (!match.Success) { return ""; }
+
+                return "https://www.youtube.com/embed/" + match.Groups[1].Value;
+            }
+        }
 
         public int RemainingDays
             => Convert.ToInt32(Math.Round((Project.End - Project.Start).TotalDays));
@@ -49,6 +65,7 @@ namespace CollAction.Models
                 .Where(WhereExpression)
                 .Include(p => p.Category)
                 .Include(p => p.Location)
+                .Include(p => p.DescriptionVideoLink)
                 .GroupJoin(context.ProjectParticipants,
                     project => project.Id,
                     participants => participants.ProjectId,
