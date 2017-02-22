@@ -8,9 +8,10 @@ using CollAction.Data;
 namespace CollAction.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170221053119_DescriptionVideoLink")]
+    partial class DescriptionVideoLink
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.1");
@@ -420,8 +421,7 @@ namespace CollAction.Migrations
                     b.Property<DateTime>("Date");
 
                     b.Property<string>("Link")
-                        .IsRequired()
-                        .HasAnnotation("MaxLength", 2083);
+                        .IsRequired();
 
                     b.HasKey("Id");
 
