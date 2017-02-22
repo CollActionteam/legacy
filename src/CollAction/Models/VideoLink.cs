@@ -11,6 +11,7 @@ namespace CollAction.Models
         public int Id { get; set; }
 
         [Required]
+        [MaxLength(2083)]
         public string Link { get; set; }
 
         [Required]
