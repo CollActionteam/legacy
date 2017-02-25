@@ -164,6 +164,11 @@ namespace CollAction
                      new { controller = "Home", action = "Contact" }
                  );
 
+                routes.MapRoute("getCategories",
+                     "projects/categories",
+                     new { controller = "Projects", action = "GetCategories" }
+                 );
+                
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
