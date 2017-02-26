@@ -1,39 +1,110 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26206.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8D5AED3B-606E-4771-9AEA-AA9C95AF05E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend", "Backend\Backend.csproj", "{DB667B30-77E5-4F4C-A594-1139C710660E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CB96FAA2-37E8-4B49-A96E-1F963DE9283D}"
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{51C74C39-2056-46A7-A5B3-17DB27D9CFB1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Environment", "Environment", "{BB43C69D-A79B-40B6-9680-E4B14B883C72}"
 	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
+		env_backend = env_backend
+		env_postgres = env_postgres
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CollAction", "src\CollAction\CollAction.xproj", "{0AE92E84-65DE-4525-89F1-C438650BB03D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Frontend", "Frontend", "{834181D9-545B-452B-83E5-386C5F57A8BE}"
+	ProjectSection(SolutionItems) = preProject
+		Frontend\.gitignore = Frontend\.gitignore
+		Frontend\package.json = Frontend\package.json
+		Frontend\tsconfig.json = Frontend\tsconfig.json
+		Frontend\tslint.json = Frontend\tslint.json
+		Frontend\webpack.config.js = Frontend\webpack.config.js
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollAction.Test", "CollAction.Test\CollAction.Test.csproj", "{BA700F86-5FBB-4451-851C-7462424D2FD2}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "app", "app", "{2DAAE74F-710B-4FFB-BE96-31D01A547F66}"
+	ProjectSection(SolutionItems) = preProject
+		Frontend\app\colors.scss = Frontend\app\colors.scss
+		Frontend\app\index.ts = Frontend\app\index.ts
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "footer", "footer", "{4D495D6F-4893-4C6C-AF76-CED6B0A10389}"
+	ProjectSection(SolutionItems) = preProject
+		Frontend\app\footer\style.scss = Frontend\app\footer\style.scss
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "forms", "forms", "{52348DAF-5F18-4E2D-AE9D-0E1894DE5D1E}"
+	ProjectSection(SolutionItems) = preProject
+		Frontend\app\forms\style.scss = Frontend\app\forms\style.scss
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "global", "global", "{BCFEEC0C-0FC4-4263-989D-6F361E21552E}"
+	ProjectSection(SolutionItems) = preProject
+		Frontend\app\global\body.scss = Frontend\app\global\body.scss
+		Frontend\app\global\bootstrap.css = Frontend\app\global\bootstrap.css
+		Frontend\app\global\dotbackground.scss = Frontend\app\global\dotbackground.scss
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "header", "header", "{5A6EE1B4-FB16-4DE5-A391-892A05BD02C6}"
+	ProjectSection(SolutionItems) = preProject
+		Frontend\app\header\style.scss = Frontend\app\header\style.scss
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "project", "project", "{07ECBF60-B4C8-4F11-9BD3-BD5E1B105734}"
+	ProjectSection(SolutionItems) = preProject
+		Frontend\app\project\DropDown.tsx = Frontend\app\project\DropDown.tsx
+		Frontend\app\project\FindProject.tsx = Frontend\app\project\FindProject.tsx
+		Frontend\app\project\index.tsx = Frontend\app\project\index.tsx
+		Frontend\app\project\LandscapeCarousel.tsx = Frontend\app\project\LandscapeCarousel.tsx
+		Frontend\app\project\ProjectFilter.tsx = Frontend\app\project\ProjectFilter.tsx
+		Frontend\app\project\ProjectList.tsx = Frontend\app\project\ProjectList.tsx
+		Frontend\app\project\style.scss = Frontend\app\project\style.scss
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0AE92E84-65DE-4525-89F1-C438650BB03D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0AE92E84-65DE-4525-89F1-C438650BB03D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0AE92E84-65DE-4525-89F1-C438650BB03D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0AE92E84-65DE-4525-89F1-C438650BB03D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BA700F86-5FBB-4451-851C-7462424D2FD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BA700F86-5FBB-4451-851C-7462424D2FD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BA700F86-5FBB-4451-851C-7462424D2FD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BA700F86-5FBB-4451-851C-7462424D2FD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB667B30-77E5-4F4C-A594-1139C710660E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB667B30-77E5-4F4C-A594-1139C710660E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB667B30-77E5-4F4C-A594-1139C710660E}.Debug|x64.ActiveCfg = Debug|x64
+		{DB667B30-77E5-4F4C-A594-1139C710660E}.Debug|x64.Build.0 = Debug|x64
+		{DB667B30-77E5-4F4C-A594-1139C710660E}.Debug|x86.ActiveCfg = Debug|x86
+		{DB667B30-77E5-4F4C-A594-1139C710660E}.Debug|x86.Build.0 = Debug|x86
+		{DB667B30-77E5-4F4C-A594-1139C710660E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB667B30-77E5-4F4C-A594-1139C710660E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB667B30-77E5-4F4C-A594-1139C710660E}.Release|x64.ActiveCfg = Release|x64
+		{DB667B30-77E5-4F4C-A594-1139C710660E}.Release|x64.Build.0 = Release|x64
+		{DB667B30-77E5-4F4C-A594-1139C710660E}.Release|x86.ActiveCfg = Release|x86
+		{DB667B30-77E5-4F4C-A594-1139C710660E}.Release|x86.Build.0 = Release|x86
+		{51C74C39-2056-46A7-A5B3-17DB27D9CFB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51C74C39-2056-46A7-A5B3-17DB27D9CFB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51C74C39-2056-46A7-A5B3-17DB27D9CFB1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{51C74C39-2056-46A7-A5B3-17DB27D9CFB1}.Debug|x64.Build.0 = Debug|Any CPU
+		{51C74C39-2056-46A7-A5B3-17DB27D9CFB1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{51C74C39-2056-46A7-A5B3-17DB27D9CFB1}.Debug|x86.Build.0 = Debug|Any CPU
+		{51C74C39-2056-46A7-A5B3-17DB27D9CFB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51C74C39-2056-46A7-A5B3-17DB27D9CFB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51C74C39-2056-46A7-A5B3-17DB27D9CFB1}.Release|x64.ActiveCfg = Release|Any CPU
+		{51C74C39-2056-46A7-A5B3-17DB27D9CFB1}.Release|x64.Build.0 = Release|Any CPU
+		{51C74C39-2056-46A7-A5B3-17DB27D9CFB1}.Release|x86.ActiveCfg = Release|Any CPU
+		{51C74C39-2056-46A7-A5B3-17DB27D9CFB1}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{0AE92E84-65DE-4525-89F1-C438650BB03D} = {8D5AED3B-606E-4771-9AEA-AA9C95AF05E9}
-		{BA700F86-5FBB-4451-851C-7462424D2FD2} = {8D5AED3B-606E-4771-9AEA-AA9C95AF05E9}
+		{2DAAE74F-710B-4FFB-BE96-31D01A547F66} = {834181D9-545B-452B-83E5-386C5F57A8BE}
+		{4D495D6F-4893-4C6C-AF76-CED6B0A10389} = {2DAAE74F-710B-4FFB-BE96-31D01A547F66}
+		{52348DAF-5F18-4E2D-AE9D-0E1894DE5D1E} = {2DAAE74F-710B-4FFB-BE96-31D01A547F66}
+		{BCFEEC0C-0FC4-4263-989D-6F361E21552E} = {2DAAE74F-710B-4FFB-BE96-31D01A547F66}
+		{5A6EE1B4-FB16-4DE5-A391-892A05BD02C6} = {2DAAE74F-710B-4FFB-BE96-31D01A547F66}
+		{07ECBF60-B4C8-4F11-9BD3-BD5E1B105734} = {2DAAE74F-710B-4FFB-BE96-31D01A547F66}
 	EndGlobalSection
 EndGlobal

@@ -1,0 +1,3 @@
+POSTGRES_PASSWORD=replace_on_deployment
+POSTGRES_USER=postgres
+POSTGRES_DB=CollActionDb
