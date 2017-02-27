@@ -617,8 +617,7 @@ namespace CollAction.Migrations
 
                     b.HasOne("CollAction.Models.VideoLink", "DescriptionVideoLink")
                         .WithMany()
-                        .HasForeignKey("DescriptionVideoLinkId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("DescriptionVideoLinkId");
 
                     b.HasOne("CollAction.Models.Location", "Location")
                         .WithMany()

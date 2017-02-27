@@ -94,7 +94,7 @@ namespace CollAction.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Create([Bind("Name,Description,Goal,Proposal,CreatorComments,CategoryId,LocationId,Target,End,DescriptionVideoLink")] CreateProjectViewModel createProjectViewModel)
+        public async Task<IActionResult> Create(CreateProjectViewModel createProjectViewModel)
         {
             // Make sure the project name is unique.
             if (await _context.Projects.AnyAsync(p => p.Name == createProjectViewModel.Name))
@@ -106,12 +106,6 @@ namespace CollAction.Controllers
                 createProjectViewModel.Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
                 createProjectViewModel.Locations = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", null);
                 return View(createProjectViewModel);
-            }
-
-            VideoLink descriptionVideoLink = null;
-            if (createProjectViewModel.DescriptionVideoLink != null)
-            {
-                descriptionVideoLink = new VideoLink { Link = createProjectViewModel.DescriptionVideoLink, Date = DateTime.UtcNow };
             }
 
             var project = new Project
@@ -126,9 +120,10 @@ namespace CollAction.Controllers
                 LocationId = createProjectViewModel.LocationId,
                 Target = createProjectViewModel.Target,
                 End = createProjectViewModel.End,
-                Start = DateTime.UtcNow,
-                DescriptionVideoLink = descriptionVideoLink
+                Start = DateTime.UtcNow
             };
+
+            project.SetDescriptionVideoLink(_context, createProjectViewModel.DescriptionVideoLink);
             
             _context.Add(project);
             await _context.SaveChangesAsync();
@@ -181,7 +176,7 @@ namespace CollAction.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Goal,Proposal,CreatorComments,CategoryId,LocationId,Target,End,DescriptionVideoLink")] EditProjectViewModel editProjectViewModel)
+        public async Task<IActionResult> Edit(int id, EditProjectViewModel editProjectViewModel)
         {
             if (id != editProjectViewModel.Id)
             {
@@ -212,28 +207,6 @@ namespace CollAction.Controllers
                 return View(editProjectViewModel);
             }
 
-            VideoLink descriptionVideoLink = null;
-
-            // If the video link hasn't changed...
-            if (project.DescriptionVideoLink?.Link == editProjectViewModel.DescriptionVideoLink)
-            {
-                descriptionVideoLink = project.DescriptionVideoLink;
-            }
-            else
-            {
-                // Remove the project's previously recorded video link if it exists.
-                if (project.DescriptionVideoLink != null)
-                {
-                    _context.VideoLinks.Remove(project.DescriptionVideoLink);
-                }
-
-                // If a new video link was specified add it to the VideoLinks table.
-                if (editProjectViewModel.DescriptionVideoLink != null)
-                {
-                    descriptionVideoLink = new VideoLink { Link = editProjectViewModel.DescriptionVideoLink, Date = DateTime.UtcNow };
-                }
-            }
-
             project.Name = editProjectViewModel.Name;
             project.Description = editProjectViewModel.Description;
             project.Goal = editProjectViewModel.Goal;
@@ -243,7 +216,8 @@ namespace CollAction.Controllers
             project.LocationId = editProjectViewModel.LocationId;
             project.Target = editProjectViewModel.Target;
             project.End = editProjectViewModel.End;
-            project.DescriptionVideoLink = descriptionVideoLink;
+
+            project.SetDescriptionVideoLink(_context, editProjectViewModel.DescriptionVideoLink);
 
             try
             {

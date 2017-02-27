@@ -20,14 +20,17 @@ namespace CollAction.Models
 
         public string DescriptionVideoYouTubeEmbedLink {
             get {
-                if (!HasDescriptionVideo) { return ""; }
+                return HasDescriptionVideo ? "https://www.youtube.com/embed/" + YouTubeId : "";
+            }
+        }
 
-                var regex = new Regex(@"^(?:https?:\/\/www\.youtube\.com\/watch\?v=)((?:\w|-){11,})(?:\S+)?$");
-                Match match = regex.Match(Project.DescriptionVideoLink.Link);
-
-                if (!match.Success) { return ""; }
-
-                return "https://www.youtube.com/embed/" + match.Groups[1].Value;
+        private string YouTubeId {
+            get {
+                // Extract the YouTubeId from a link of this form http://www.youtube.com/watch?v=-wtIMTCHWuI
+                Uri uri = new Uri(Project.DescriptionVideoLink.Link);
+                var queryDictionary = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
+                Microsoft.Extensions.Primitives.StringValues youTubeId;
+                return queryDictionary.Count == 1 && queryDictionary.TryGetValue("v", out youTubeId) ? youTubeId.ToString() : "";
             }
         }
 

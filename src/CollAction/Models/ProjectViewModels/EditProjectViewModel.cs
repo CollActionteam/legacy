@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using CollAction.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations.Schema;
+using CollAction.ValidationAttributes;
 
 namespace CollAction.Models
 {
@@ -62,7 +63,7 @@ namespace CollAction.Models
         public DateTime End { get; set; }
 
         [Display(Name = "YouTube Video Link", Prompt = "Descriptive Video. e.g. http://www.youtube.com/watch?v=-wtIMTCHWuI")]
-        [RegularExpression(@"^(?:https?:\/\/www\.youtube\.com\/watch\?v=)(?:\w|-){11,}(?:\S+)?$", ErrorMessage = "Only YouTube video links of the form http://www.youtube.com/watch?v=<your-video-id> are accepted!")]
+        [YouTubeLink]
         public string DescriptionVideoLink { get; set; }
     }
 }

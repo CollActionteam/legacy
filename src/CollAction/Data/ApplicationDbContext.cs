@@ -50,10 +50,6 @@ namespace CollAction.Data
             builder.Entity<Tag>().HasAlternateKey(t => t.Name);
             builder.Entity<Project>().HasIndex(p => p.Name).HasName("IX_Projects_Name").IsUnique();
             builder.Entity<Project>().Property(p => p.DisplayPriority).HasDefaultValue(ProjectDisplayPriority.Medium);
-            builder.Entity<Project>().HasOne(v => v.DescriptionVideoLink)
-                                     .WithMany()
-                                     .HasForeignKey(v => v.DescriptionVideoLinkId)
-                                     .OnDelete(DeleteBehavior.Cascade);
             builder.Entity<ProjectParticipant>().HasKey("UserId", "ProjectId");
             builder.Entity<ProjectTag>().HasKey("TagId", "ProjectId");
             builder.Entity<Location>().HasOne(l => l.Country)
