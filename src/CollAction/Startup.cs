@@ -165,7 +165,7 @@ namespace CollAction
                  );
 
                 routes.MapRoute("getCategories",
-                     "projects/categories",
+                     "categories",
                      new { controller = "Projects", action = "GetCategories" }
                  );
                 
