@@ -20,7 +20,6 @@ namespace CollAction.Models
 
         [Required]
         [MaxLength(16)]
-        [RegularExpression("^(?i:)(?:jpg|jpeg|gif|png|bmp)$", ErrorMessage = "Only JPEG, GIF, PNG and BMP image formats are accepted.")]
         public string Format { get; set; }
         
         [Required]

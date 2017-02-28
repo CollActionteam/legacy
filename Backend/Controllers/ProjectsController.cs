@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,6 +11,11 @@ using CollAction.Models;
 using Microsoft.Extensions.Localization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using System.Data.SqlClient;
+using Npgsql;
+using Microsoft.AspNetCore.Hosting;
+using CollAction.Helpers;
+using System.Text.RegularExpressions;
 
 namespace CollAction.Controllers
 {
@@ -18,12 +24,14 @@ namespace CollAction.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IStringLocalizer<ProjectsController> _localizer;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
-        public ProjectsController(ApplicationDbContext context, IStringLocalizer<ProjectsController> localizer, UserManager<ApplicationUser> userManager)
+        public ProjectsController(ApplicationDbContext context, IStringLocalizer<ProjectsController> localizer, UserManager<ApplicationUser> userManager, IHostingEnvironment hostingEnvironment)
         {
             _context = context;
             _localizer = localizer;
             _userManager = userManager;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public ViewResult StartInfo()
@@ -92,7 +100,7 @@ namespace CollAction.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Create([Bind("Name,Description,Goal,Proposal,CreatorComments,CategoryId,LocationId,Target,End")] CreateProjectViewModel createProjectViewModel)
+        public async Task<IActionResult> Create([Bind("Name,Description,Goal,Proposal,CreatorComments,CategoryId,LocationId,Target,End,BannerImageUpload")] CreateProjectViewModel createProjectViewModel)
         {
             // Make sure the project name is unique.
             if (await _context.Projects.AnyAsync(p => p.Name == createProjectViewModel.Name))
@@ -118,9 +126,16 @@ namespace CollAction.Controllers
                 LocationId = createProjectViewModel.LocationId,
                 Target = createProjectViewModel.Target,
                 End = createProjectViewModel.End,
-                Start = DateTime.UtcNow
+                Start = DateTime.UtcNow,
+                BannerImage = null 
             };
-            
+
+            if (createProjectViewModel.HasBannerImageUpload)
+            {
+                var manager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "bannerimages"));
+                project.BannerImage = await manager.UploadFormFile(createProjectViewModel.BannerImageUpload, Guid.NewGuid().ToString() /* unique filename */);
+            }
+
             _context.Add(project);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
@@ -135,7 +150,7 @@ namespace CollAction.Controllers
                 return NotFound();
             }
 
-            var project = await _context.Projects.SingleOrDefaultAsync(m => m.Id == id);
+            var project = await _context.Projects.Include(p => p.BannerImage).SingleOrDefaultAsync(m => m.Id == id);
             if (project == null)
             {
                 return NotFound();
@@ -159,7 +174,8 @@ namespace CollAction.Controllers
                 LocationId = project.LocationId,
                 Locations = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", project.LocationId),
                 Target = project.Target,
-                End = project.End
+                End = project.End,
+                BannerImageFile = project.BannerImage
             };
 
             return View(editProjectViewModel);
@@ -171,14 +187,14 @@ namespace CollAction.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Goal,Proposal,CreatorComments,CategoryId,LocationId,Target,End")] EditProjectViewModel editProjectViewModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Goal,Proposal,CreatorComments,CategoryId,LocationId,Target,End,BannerImageUpload")] EditProjectViewModel editProjectViewModel)
         {
             if (id != editProjectViewModel.Id)
             {
                 return NotFound();
             }
 
-            var project = await _context.Projects.SingleOrDefaultAsync(m => m.Id == id);
+            var project = await _context.Projects.Include(p => p.BannerImage).SingleOrDefaultAsync(m => m.Id == id);
             if (project == null)
             {
                 return NotFound();
@@ -211,6 +227,13 @@ namespace CollAction.Controllers
             project.LocationId = editProjectViewModel.LocationId;
             project.Target = editProjectViewModel.Target;
             project.End = editProjectViewModel.End;
+
+            if (editProjectViewModel.HasBannerImageUpload)
+            {
+                var manager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "bannerimages"));
+                if (project.BannerImage != null) { manager.DeleteImageFile(project.BannerImage); }
+                project.BannerImage = await manager.UploadFormFile(editProjectViewModel.BannerImageUpload, Guid.NewGuid().ToString() /* unique filename */);
+            }
 
             try
             {
@@ -271,6 +294,12 @@ namespace CollAction.Controllers
             project.Status = ProjectStatus.Deleted;
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetCategories()
+        {       
+            return Json(await _context.Categories.Select(c => new { c.Id, c.Name }).ToListAsync());
         }
     }
 }

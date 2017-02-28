@@ -319,6 +319,8 @@ namespace CollAction.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
 
+                    b.Property<int?>("BannerImageFileId");
+
                     b.Property<int>("CategoryId");
 
                     b.Property<string>("CreatorComments")
@@ -361,6 +363,8 @@ namespace CollAction.Migrations
                     b.Property<int>("Target");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BannerImageFileId");
 
                     b.HasIndex("CategoryId");
 
@@ -620,6 +624,10 @@ namespace CollAction.Migrations
 
             modelBuilder.Entity("CollAction.Models.Project", b =>
                 {
+                    b.HasOne("CollAction.Models.ImageFile", "BannerImage")
+                        .WithMany()
+                        .HasForeignKey("BannerImageFileId");
+
                     b.HasOne("CollAction.Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
