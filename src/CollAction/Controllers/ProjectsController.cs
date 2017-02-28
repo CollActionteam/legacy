@@ -132,16 +132,8 @@ namespace CollAction.Controllers
 
             if (createProjectViewModel.HasBannerImageUpload)
             {
-                var manager = new ImageFileManager
-                {
-                    Context = _context,
-                    WebRoot = _hostingEnvironment.WebRootPath,
-                    WebFolder = Path.Combine("usercontent", "bannerimages")
-                };
-                
-                // Don't trust the users _formFile.FileName to be unique, so generate our own unique one "banner_<formatted-Project.Name>.<FileType>"
-                var uniqueFileName = (new Regex(@"[^A-Za-z0-9]+")).Replace("banner_" + project.Name, "_").Trim(new char[] { '_' });
-                project.BannerImage = await manager.UploadFormFile(createProjectViewModel.BannerImageUpload, uniqueFileName);
+                var manager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "bannerimages"));
+                project.BannerImage = await manager.UploadFormFile(createProjectViewModel.BannerImageUpload, Guid.NewGuid().ToString() /* unique filename */);
             }
 
             _context.Add(project);
@@ -238,21 +230,9 @@ namespace CollAction.Controllers
 
             if (editProjectViewModel.HasBannerImageUpload)
             {
-                var manager = new ImageFileManager
-                {
-                    Context = _context,
-                    WebRoot = _hostingEnvironment.WebRootPath,
-                    WebFolder = Path.Combine("usercontent", "bannerimages")
-                };
-
-                if (project.BannerImage != null)
-                {
-                    manager.DeleteImageFile(project.BannerImage);
-                }
-
-                // Don't trust the users _formFile.FileName to be unique, so generate our own unique one "banner_<formatted-Project.Name>.<FileType>"
-                var uniqueFileName = (new Regex(@"[^A-Za-z0-9]+")).Replace("banner_" + project.Name, "_").Trim(new char[] { '_' });
-                project.BannerImage = await manager.UploadFormFile(editProjectViewModel.BannerImageUpload, uniqueFileName);
+                var manager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "bannerimages"));
+                if (project.BannerImage != null) { manager.DeleteImageFile(project.BannerImage); }
+                project.BannerImage = await manager.UploadFormFile(editProjectViewModel.BannerImageUpload, Guid.NewGuid().ToString() /* unique filename */);
             }
 
             try
