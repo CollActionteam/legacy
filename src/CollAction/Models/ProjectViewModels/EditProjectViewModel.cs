@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using CollAction.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Http;
+using CollAction.ValidationAttributes;
 
 namespace CollAction.Models
 {
@@ -60,5 +62,15 @@ namespace CollAction.Models
         [Required]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime End { get; set; }
+
+        [Display(Name = "Banner image", Prompt = "1024x768px JPEG, GIF, PNG, BMP")]
+        [FileSize(1024000)] // 1MB
+        [FileType("jpg", "jpeg", "gif", "png", "bmp")]
+        [MaxImageDimensions(1024, 768)]
+        public IFormFile BannerImageUpload { get; set; }
+
+        public bool HasBannerImageUpload { get { return BannerImageUpload != null && BannerImageUpload.Length > 0; } }
+
+        public ImageFile BannerImageFile { get; set; }
     }
 }

@@ -8,9 +8,10 @@ using CollAction.Data;
 namespace CollAction.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170219232500_BannerImageFileId")]
+    partial class BannerImageFileId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.1");
@@ -120,30 +121,6 @@ namespace CollAction.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ImageFiles");
-                });
-
-            modelBuilder.Entity("CollAction.Models.Job", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasAnnotation("MaxLength", 500);
-
-                    b.Property<int?>("LocationId");
-
-                    b.Property<DateTime>("PostDate");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasAnnotation("MaxLength", 200);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LocationId");
-
-                    b.ToTable("Jobs");
                 });
 
             modelBuilder.Entity("CollAction.Models.Location", b =>
@@ -320,8 +297,6 @@ namespace CollAction.Migrations
                         .IsRequired()
                         .HasAnnotation("MaxLength", 1024);
 
-                    b.Property<int?>("DescriptionVideoLinkId");
-
                     b.Property<int>("DisplayPriority")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValue(1);
@@ -356,8 +331,6 @@ namespace CollAction.Migrations
                     b.HasIndex("BannerImageFileId");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("DescriptionVideoLinkId");
 
                     b.HasIndex("LocationId");
 
@@ -414,22 +387,6 @@ namespace CollAction.Migrations
                     b.HasAlternateKey("Name");
 
                     b.ToTable("Tags");
-                });
-
-            modelBuilder.Entity("CollAction.Models.VideoLink", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("Date");
-
-                    b.Property<string>("Link")
-                        .IsRequired()
-                        .HasAnnotation("MaxLength", 2083);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("VideoLinks");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
@@ -539,13 +496,6 @@ namespace CollAction.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("CollAction.Models.Job", b =>
-                {
-                    b.HasOne("CollAction.Models.Location", "Location")
-                        .WithMany()
-                        .HasForeignKey("LocationId");
-                });
-
             modelBuilder.Entity("CollAction.Models.Location", b =>
                 {
                     b.HasOne("CollAction.Models.LocationCountry", "Country")
@@ -623,10 +573,6 @@ namespace CollAction.Migrations
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("CollAction.Models.VideoLink", "DescriptionVideoLink")
-                        .WithMany()
-                        .HasForeignKey("DescriptionVideoLinkId");
 
                     b.HasOne("CollAction.Models.Location", "Location")
                         .WithMany()
