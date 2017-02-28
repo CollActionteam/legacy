@@ -8,9 +8,10 @@ using CollAction.Data;
 namespace CollAction.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170221050306_VideoLink")]
+    partial class VideoLink
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.1");
@@ -308,8 +309,6 @@ namespace CollAction.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("BannerImageFileId");
-
                     b.Property<int>("CategoryId");
 
                     b.Property<string>("CreatorComments")
@@ -319,8 +318,6 @@ namespace CollAction.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasAnnotation("MaxLength", 1024);
-
-                    b.Property<int?>("DescriptionVideoLinkId");
 
                     b.Property<int>("DisplayPriority")
                         .ValueGeneratedOnAdd()
@@ -351,13 +348,11 @@ namespace CollAction.Migrations
 
                     b.Property<int>("Target");
 
+                    b.Property<int?>("VideoLinkId");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("BannerImageFileId");
-
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("DescriptionVideoLinkId");
 
                     b.HasIndex("LocationId");
 
@@ -366,6 +361,8 @@ namespace CollAction.Migrations
                         .HasName("IX_Projects_Name");
 
                     b.HasIndex("OwnerId");
+
+                    b.HasIndex("VideoLinkId");
 
                     b.ToTable("Projects");
                 });
@@ -424,8 +421,7 @@ namespace CollAction.Migrations
                     b.Property<DateTime>("Date");
 
                     b.Property<string>("Link")
-                        .IsRequired()
-                        .HasAnnotation("MaxLength", 2083);
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -615,18 +611,10 @@ namespace CollAction.Migrations
 
             modelBuilder.Entity("CollAction.Models.Project", b =>
                 {
-                    b.HasOne("CollAction.Models.ImageFile", "BannerImage")
-                        .WithMany()
-                        .HasForeignKey("BannerImageFileId");
-
                     b.HasOne("CollAction.Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("CollAction.Models.VideoLink", "DescriptionVideoLink")
-                        .WithMany()
-                        .HasForeignKey("DescriptionVideoLinkId");
 
                     b.HasOne("CollAction.Models.Location", "Location")
                         .WithMany()
@@ -636,6 +624,10 @@ namespace CollAction.Migrations
                         .WithMany("Projects")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("CollAction.Models.VideoLink", "VideoLink")
+                        .WithMany()
+                        .HasForeignKey("VideoLinkId");
                 });
 
             modelBuilder.Entity("CollAction.Models.ProjectParticipant", b =>

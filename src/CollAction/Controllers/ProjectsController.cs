@@ -295,5 +295,11 @@ namespace CollAction.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public async Task<JsonResult> GetCategories()
+        {       
+            return Json(await _context.Categories.Select(c => new { c.Id, c.Name }).ToListAsync());
+        }
     }
 }

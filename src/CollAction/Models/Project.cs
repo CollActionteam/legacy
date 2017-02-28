@@ -65,6 +65,10 @@ namespace CollAction.Models
         [ForeignKey("BannerImageFileId")]
         public ImageFile BannerImage { get; set; }
 
+        public int? DescriptionVideoLinkId { get; set; }
+        [ForeignKey("DescriptionVideoLinkId")]
+        public VideoLink DescriptionVideoLink { get; set; }
+        
         public ProjectDisplayPriority DisplayPriority { get; set; }
 
         [NotMapped]

@@ -8,9 +8,10 @@ using CollAction.Data;
 namespace CollAction.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170221053119_DescriptionVideoLink")]
+    partial class DescriptionVideoLink
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.1");
@@ -308,8 +309,6 @@ namespace CollAction.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("BannerImageFileId");
-
                     b.Property<int>("CategoryId");
 
                     b.Property<string>("CreatorComments")
@@ -352,8 +351,6 @@ namespace CollAction.Migrations
                     b.Property<int>("Target");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BannerImageFileId");
 
                     b.HasIndex("CategoryId");
 
@@ -424,8 +421,7 @@ namespace CollAction.Migrations
                     b.Property<DateTime>("Date");
 
                     b.Property<string>("Link")
-                        .IsRequired()
-                        .HasAnnotation("MaxLength", 2083);
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -615,10 +611,6 @@ namespace CollAction.Migrations
 
             modelBuilder.Entity("CollAction.Models.Project", b =>
                 {
-                    b.HasOne("CollAction.Models.ImageFile", "BannerImage")
-                        .WithMany()
-                        .HasForeignKey("BannerImageFileId");
-
                     b.HasOne("CollAction.Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
