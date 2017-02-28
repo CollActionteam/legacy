@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using CollAction.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations.Schema;
+using CollAction.ValidationAttributes;
 
 namespace CollAction.Models
 {
@@ -58,5 +59,9 @@ namespace CollAction.Models
         [Required]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime End { get; set; }
+
+        [Display(Name = "YouTube Video Link", Prompt = "Descriptive Video. e.g. http://www.youtube.com/watch?v=-wtIMTCHWuI")]
+        [YouTubeLink]
+        public string DescriptionVideoLink { get; set; }
     }
 }

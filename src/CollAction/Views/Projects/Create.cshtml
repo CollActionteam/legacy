@@ -52,50 +52,55 @@
 
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
-                        <label asp-for="Name" class="  control-label"></label>
+                        <label asp-for="Name" class="control-label"></label>
                         <input asp-for="Name" class="form-control" />
                         <span asp-validation-for="Name" class="text-danger" />
                         @Html.ValidationMessage("Name")
                     </div>
                     <div class="form-group">
-                        <label asp-for="Description" class="  control-label"></label>
+                        <label asp-for="Description" class="control-label"></label>
                         <input asp-for="Description" class="form-control" />
                         <span asp-validation-for="Description" class="text-danger" />
                     </div>
                     <div class="form-group">
-                        <label asp-for="Proposal" class="  control-label"></label>
+                        <label asp-for="Proposal" class="control-label"></label>
                         <input asp-for="Proposal" class="form-control" />
                         <span asp-validation-for="Proposal" class="text-danger" />
                     </div>
                     <div class="form-group">
-                        <label asp-for="Goal" class="  control-label"></label>
+                        <label asp-for="Goal" class="control-label"></label>
                         <input asp-for="Goal" class="form-control" />
                         <span asp-validation-for="Goal" class="text-danger" />
                     </div>
                     <div class="form-group">
-                        <label asp-for="CategoryId" class="  control-label"></label>
+                        <label asp-for="CategoryId" class="control-label"></label>
                         @Html.DropDownList("CategoryId", Model.Categories)
                         <span asp-validation-for="CategoryId" class="text-danger" />
                     </div>
                     <div class="form-group">
-                        <label asp-for="LocationId" class="  control-label"></label>
+                        <label asp-for="LocationId" class="control-label"></label>
                         @Html.DropDownList("LocationId", Model.Locations)
                         <span asp-validation-for="LocationId" class="text-danger" />
                     </div>
                     <div class="form-group">
-                        <label asp-for="Target" class="  control-label"></label>
+                        <label asp-for="Target" class="control-label"></label>
                         <input asp-for="Target" class="form-control" />
                         <span asp-validation-for="Target" class="text-danger" />
                     </div>
                     <div class="form-group">
-                        <label asp-for="End" class="  control-label"></label>
+                        <label asp-for="End" class="control-label"></label>
                         <input asp-for="End" class="form-control" />
                         <span asp-validation-for="End" class="text-danger" />
                     </div>
                     <div class="form-group">
-                        <label asp-for="CreatorComments" class="  control-label"></label>
+                        <label asp-for="CreatorComments" class="control-label"></label>
                         <input asp-for="CreatorComments" class="form-control" />
                         <span asp-validation-for="CreatorComments" class="text-danger" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DescriptionVideoLink" class="control-label"></label>
+                        <input asp-for="DescriptionVideoLink" class="form-control" />
+                        <span asp-validation-for="DescriptionVideoLink" class="text-danger" />
                     </div>
                     <div class="form-group">
                         <input type="submit" value="Create" class="btn btn-default" />

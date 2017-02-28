@@ -67,7 +67,7 @@ namespace CollAction.Data
                                       .HasForeignKey(l => l.Level2Id)
                                       .OnDelete(DeleteBehavior.SetNull);
             builder.Entity<LocationLevel2>().HasOne(l => l.Location);
-       }
+            }
 
         /// <summary>
         /// Seed the database with initialisation data here

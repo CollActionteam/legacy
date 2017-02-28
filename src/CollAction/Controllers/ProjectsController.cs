@@ -94,7 +94,7 @@ namespace CollAction.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Create([Bind("Name,Description,Goal,Proposal,CreatorComments,CategoryId,LocationId,Target,End")] CreateProjectViewModel createProjectViewModel)
+        public async Task<IActionResult> Create(CreateProjectViewModel createProjectViewModel)
         {
             // Make sure the project name is unique.
             if (await _context.Projects.AnyAsync(p => p.Name == createProjectViewModel.Name))
@@ -122,6 +122,8 @@ namespace CollAction.Controllers
                 End = createProjectViewModel.End,
                 Start = DateTime.UtcNow
             };
+
+            project.SetDescriptionVideoLink(_context, createProjectViewModel.DescriptionVideoLink);
             
             _context.Add(project);
             await _context.SaveChangesAsync();
@@ -137,7 +139,7 @@ namespace CollAction.Controllers
                 return NotFound();
             }
 
-            var project = await _context.Projects.SingleOrDefaultAsync(m => m.Id == id);
+            var project = await _context.Projects.Include(p => p.DescriptionVideoLink).SingleOrDefaultAsync(m => m.Id == id);
             if (project == null)
             {
                 return NotFound();
@@ -161,7 +163,8 @@ namespace CollAction.Controllers
                 LocationId = project.LocationId,
                 Locations = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", project.LocationId),
                 Target = project.Target,
-                End = project.End
+                End = project.End,
+                DescriptionVideoLink = project.DescriptionVideoLink?.Link
             };
 
             return View(editProjectViewModel);
@@ -173,14 +176,14 @@ namespace CollAction.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Goal,Proposal,CreatorComments,CategoryId,LocationId,Target,End")] EditProjectViewModel editProjectViewModel)
+        public async Task<IActionResult> Edit(int id, EditProjectViewModel editProjectViewModel)
         {
             if (id != editProjectViewModel.Id)
             {
                 return NotFound();
             }
 
-            var project = await _context.Projects.SingleOrDefaultAsync(m => m.Id == id);
+            var project = await _context.Projects.Include(p => p.DescriptionVideoLink).SingleOrDefaultAsync(m => m.Id == id);
             if (project == null)
             {
                 return NotFound();
@@ -213,6 +216,8 @@ namespace CollAction.Controllers
             project.LocationId = editProjectViewModel.LocationId;
             project.Target = editProjectViewModel.Target;
             project.End = editProjectViewModel.End;
+
+            project.SetDescriptionVideoLink(_context, editProjectViewModel.DescriptionVideoLink);
 
             try
             {
