@@ -65,7 +65,7 @@ namespace CollAction.Models
 
         [Display(Name = "Banner image", Prompt = "1024x768px JPEG, GIF, PNG, BMP")]
         [FileSize(1024000)] // 1MB
-        [FileType("jpg, jpeg, gif, png, bmp")]
+        [FileType("jpg", "jpeg", "gif", "png", "bmp")]
         [MaxImageDimensions(1024, 768)]
         public IFormFile BannerImageUpload { get; set; }
 

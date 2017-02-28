@@ -9,11 +9,11 @@ namespace CollAction.ValidationAttributes
 {
     public class FileTypeAttribute : ValidationAttribute
     {
-        private readonly List<string> _types;
+        private readonly string[] _types;
 
-        public FileTypeAttribute(string types)
+        public FileTypeAttribute(params string[] types)
         {
-            _types = types.Split(',').Select(t => t.Trim().ToLower()).ToList();
+            _types = types;
         }
 
         public override bool IsValid(object value)
