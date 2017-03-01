@@ -1,7 +1,7 @@
 version: '2'
 
 services:
-  backend:
+  collaction:
     build:
       args:
         source: ${DOCKER_BUILD_SOURCE}

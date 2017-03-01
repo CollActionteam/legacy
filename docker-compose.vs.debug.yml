@@ -1,8 +1,8 @@
 version: '2'
 
 services:
-  backend:
-    image: backend:dev
+  collaction:
+    image: collaction:dev
     build:
       args:
         source: ${DOCKER_BUILD_SOURCE}

@@ -1,7 +1,7 @@
 version: '2'
 
 services:
-  backend:
+  collaction:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:

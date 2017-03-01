@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.26206.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{51C74C39-2056-46A7-A5B3-17DB27D9CFB1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8C93DECB-4DF9-4D39-9817-A30E0B5D1EB2} = {8C93DECB-4DF9-4D39-9817-A30E0B5D1EB2}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollAction", "CollAction\CollAction.csproj", "{8C93DECB-4DF9-4D39-9817-A30E0B5D1EB2}"
 EndProject

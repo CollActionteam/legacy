@@ -1,13 +1,13 @@
 version: '2'
 
 services:
-  backend:
-    image: backend
+  collaction:
+    image: collaction
     build:
-      context: ./Backend
+      context: ./CollAction
       dockerfile: Dockerfile
     environment:
-      - env_backend
+      - env_collaction
     depends_on:
       - db
     links:
