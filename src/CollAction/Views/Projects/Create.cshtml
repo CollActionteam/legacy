@@ -103,6 +103,11 @@
                         @Html.ValidationMessage("BannerImageUpload")
                     </div>
                     <div class="form-group">
+                        <label asp-for="DescriptionVideoLink" class="control-label"></label>
+                        <input asp-for="DescriptionVideoLink" class="form-control" />
+                        <span asp-validation-for="DescriptionVideoLink" class="text-danger" />
+                    </div>
+                    <div class="form-group">
                         <input type="submit" value="Create" class="btn btn-default" />
                     </div>
                 </form>

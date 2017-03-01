@@ -100,7 +100,7 @@ namespace CollAction.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Create([Bind("Name,Description,Goal,Proposal,CreatorComments,CategoryId,LocationId,Target,End,BannerImageUpload")] CreateProjectViewModel createProjectViewModel)
+        public async Task<IActionResult> Create(CreateProjectViewModel createProjectViewModel)
         {
             // Make sure the project name is unique.
             if (await _context.Projects.AnyAsync(p => p.Name == createProjectViewModel.Name))
@@ -130,6 +130,8 @@ namespace CollAction.Controllers
                 BannerImage = null 
             };
 
+            project.SetDescriptionVideoLink(_context, createProjectViewModel.DescriptionVideoLink);
+
             if (createProjectViewModel.HasBannerImageUpload)
             {
                 var manager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "bannerimages"));
@@ -150,7 +152,7 @@ namespace CollAction.Controllers
                 return NotFound();
             }
 
-            var project = await _context.Projects.Include(p => p.BannerImage).SingleOrDefaultAsync(m => m.Id == id);
+            var project = await _context.Projects.Include(p => p.BannerImage).Include(p => p.DescriptionVideoLink).SingleOrDefaultAsync(m => m.Id == id);
             if (project == null)
             {
                 return NotFound();
@@ -175,6 +177,7 @@ namespace CollAction.Controllers
                 Locations = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", project.LocationId),
                 Target = project.Target,
                 End = project.End,
+                DescriptionVideoLink = project.DescriptionVideoLink?.Link,
                 BannerImageFile = project.BannerImage
             };
 
@@ -187,14 +190,14 @@ namespace CollAction.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Goal,Proposal,CreatorComments,CategoryId,LocationId,Target,End,BannerImageUpload")] EditProjectViewModel editProjectViewModel)
+        public async Task<IActionResult> Edit(int id, EditProjectViewModel editProjectViewModel)
         {
             if (id != editProjectViewModel.Id)
             {
                 return NotFound();
             }
 
-            var project = await _context.Projects.Include(p => p.BannerImage).SingleOrDefaultAsync(m => m.Id == id);
+            var project = await _context.Projects.Include(p => p.BannerImage).Include(p => p.DescriptionVideoLink).SingleOrDefaultAsync(m => m.Id == id);
             if (project == null)
             {
                 return NotFound();
@@ -227,6 +230,8 @@ namespace CollAction.Controllers
             project.LocationId = editProjectViewModel.LocationId;
             project.Target = editProjectViewModel.Target;
             project.End = editProjectViewModel.End;
+
+            project.SetDescriptionVideoLink(_context, editProjectViewModel.DescriptionVideoLink);
 
             if (editProjectViewModel.HasBannerImageUpload)
             {

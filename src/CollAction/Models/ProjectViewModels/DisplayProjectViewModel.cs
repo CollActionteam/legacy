@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace CollAction.Models
 {
@@ -14,6 +15,24 @@ namespace CollAction.Models
         public Project Project { get; set; }
 
         public int Participants { get; set; }
+
+        public bool HasDescriptionVideo { get { return Project.DescriptionVideoLink != null; } }
+
+        public string DescriptionVideoYouTubeEmbedLink {
+            get {
+                return HasDescriptionVideo ? "https://www.youtube.com/embed/" + YouTubeId : "";
+            }
+        }
+
+        private string YouTubeId {
+            get {
+                // Extract the YouTubeId from a link of this form http://www.youtube.com/watch?v=-wtIMTCHWuI
+                Uri uri = new Uri(Project.DescriptionVideoLink.Link);
+                var queryDictionary = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
+                Microsoft.Extensions.Primitives.StringValues youTubeId;
+                return queryDictionary.Count == 1 && queryDictionary.TryGetValue("v", out youTubeId) ? youTubeId.ToString() : "";
+            }
+        }
 
         public int RemainingDays
             => Convert.ToInt32(Math.Round((Project.End - Project.Start).TotalDays));
@@ -50,6 +69,7 @@ namespace CollAction.Models
                 .Include(p => p.Category)
                 .Include(p => p.Location)
                 .Include(p => p.BannerImage)
+                .Include(p => p.DescriptionVideoLink)
                 .GroupJoin(context.ProjectParticipants,
                     project => project.Id,
                     participants => participants.ProjectId,
