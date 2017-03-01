@@ -1,7 +1,7 @@
 module.exports = {
-  entry: './app/index.ts',
+  entry: './Frontend/app/index.ts',
   output: {
-    path: '../Backend/wwwroot/js',
+    path: './wwwroot/js',
     filename: 'bundle.js',
   },
   resolve: {

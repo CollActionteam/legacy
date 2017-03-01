@@ -1,10 +1,10 @@
 {
   "include": [
-    "app/**/*"
+    "Frontend/app/**/*"
   ],
 
   "exclude": [
-    "node_modules"
+    "../node_modules"
   ],
 
   "compilerOptions": {

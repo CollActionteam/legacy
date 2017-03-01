@@ -2,7 +2,7 @@
   "name": "collaction-frontend",
   "version": "1.0.0",
   "description": "CollAction Front End Application",
-  "main": "app/index.ts",
+  "main": "Frontend/app/index.ts",
   "scripts": {
     "build": "webpack",
     "watch": "webpack -w"
