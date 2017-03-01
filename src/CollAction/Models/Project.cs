@@ -16,7 +16,7 @@ namespace CollAction.Models
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(128)]
+        [MaxLength(50)]
         public string Name { get; set; }
 
         [Required]
@@ -46,19 +46,19 @@ namespace CollAction.Models
         public DateTime End { get; set; }
 
         [Required]
-        [MaxLength(1024)]
+        [MaxLength(1000)]
         public string Description { get; set; }
 
         [Required]
-        [MaxLength(1024)]
+        [MaxLength(1000)]
         public string Goal { get; set; }
         
         [Required]
-        [MaxLength(512)]
+        [MaxLength(300)]
         public string Proposal { get; set; }
 
         [Required]
-        [MaxLength(2048)]
+        [MaxLength(2000)]
         public string CreatorComments { get; set; }
 
         public int? BannerImageFileId { get; set; }
