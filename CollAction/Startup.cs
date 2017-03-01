@@ -105,7 +105,7 @@ namespace CollAction
             LoggerConfiguration configuration = new LoggerConfiguration()
                 .WriteTo.RollingFile("log-{Date}.txt", LogEventLevel.Information);
             
-            if (Configuration["SlackHook"] != null)
+            if (!string.IsNullOrEmpty(Configuration["SlackHook"]))
                 configuration.WriteTo.Slack(Configuration["SlackHook"], null, null, null, null, null, LogEventLevel.Error);
 
             if (env.IsDevelopment())

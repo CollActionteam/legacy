@@ -6,7 +6,7 @@ services:
     build:
       context: ./CollAction
       dockerfile: Dockerfile
-    environment:
+    env_file:
       - env_collaction
     depends_on:
       - db
