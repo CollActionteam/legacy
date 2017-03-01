@@ -218,17 +218,18 @@ namespace CollAction.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    BannerImageFileId = table.Column<int>(nullable: true),
                     CategoryId = table.Column<int>(nullable: false),
-                    CreatorComments = table.Column<string>(maxLength: 2048, nullable: false),
-                    Description = table.Column<string>(maxLength: 1024, nullable: false),
+                    CreatorComments = table.Column<string>(maxLength: 2000, nullable: false),
+                    Description = table.Column<string>(maxLength: 1000, nullable: false),
                     DescriptionVideoLinkId = table.Column<int>(nullable: true),
                     DisplayPriority = table.Column<int>(nullable: false, defaultValue: 1),
                     End = table.Column<DateTime>(nullable: false),
-                    Goal = table.Column<string>(maxLength: 1024, nullable: false),
+                    Goal = table.Column<string>(maxLength: 1000, nullable: false),
                     LocationId = table.Column<int>(nullable: true),
-                    Name = table.Column<string>(maxLength: 128, nullable: false),
+                    Name = table.Column<string>(maxLength: 50, nullable: false),
                     OwnerId = table.Column<string>(nullable: false),
-                    Proposal = table.Column<string>(maxLength: 512, nullable: false),
+                    Proposal = table.Column<string>(maxLength: 300, nullable: false),
                     Start = table.Column<DateTime>(nullable: false),
                     Status = table.Column<int>(nullable: false),
                     Target = table.Column<int>(nullable: false)
@@ -236,6 +237,12 @@ namespace CollAction.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Projects", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Projects_ImageFiles_BannerImageFileId",
+                        column: x => x.BannerImageFileId,
+                        principalTable: "ImageFiles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Projects_Categories_CategoryId",
                         column: x => x.CategoryId,
@@ -512,6 +519,11 @@ namespace CollAction.Migrations
                 column: "LocationId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Projects_BannerImageFileId",
+                table: "Projects",
+                column: "BannerImageFileId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Projects_CategoryId",
                 table: "Projects",
                 column: "CategoryId");
@@ -649,9 +661,6 @@ namespace CollAction.Migrations
                 table: "LocationLevel2");
 
             migrationBuilder.DropTable(
-                name: "ImageFiles");
-
-            migrationBuilder.DropTable(
                 name: "Jobs");
 
             migrationBuilder.DropTable(
@@ -686,6 +695,9 @@ namespace CollAction.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "ImageFiles");
 
             migrationBuilder.DropTable(
                 name: "Categories");

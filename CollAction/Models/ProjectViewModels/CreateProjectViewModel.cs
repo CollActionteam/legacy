@@ -68,5 +68,9 @@ namespace CollAction.Models
         public IFormFile BannerImageUpload { get; set; }
 
         public bool HasBannerImageUpload { get { return BannerImageUpload != null && BannerImageUpload.Length > 0; } }
+
+        [Display(Name = "YouTube Video Link", Prompt = "Descriptive Video. e.g. http://www.youtube.com/watch?v=-wtIMTCHWuI")]
+        [YouTubeLink]
+        public string DescriptionVideoLink { get; set; }
     }
 }
