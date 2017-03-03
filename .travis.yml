@@ -1,7 +1,7 @@
 language: csharp
 solution: CollAction.sln
-sudo: required
 dotnet: 1.0.0-preview2-1-003177
+mono: none
 dist: trusty
 script:
   - ./build.sh
