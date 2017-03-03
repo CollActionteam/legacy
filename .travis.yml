@@ -1,0 +1,5 @@
+language: csharp
+solution: CollAction.sln
+install:
+  - sudo apt-get install nodejs npm
+  - ./build.sh

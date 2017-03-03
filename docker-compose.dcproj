@@ -7,6 +7,9 @@
     <DockerServiceName>collaction</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
+    <None Include=".travis.yml" />
+    <None Include="build.ps1" />
+    <None Include="build.sh" />
     <None Include="docker-compose.override.yml">
       <DependentUpon>docker-compose.yml</DependentUpon>
     </None>
