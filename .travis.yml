@@ -5,7 +5,7 @@ mono: none
 dist: trusty
 sudo: required
 script:
-  - dotnet restore CollAction
-  - dotnet publish CollAction -c Release
-  - docker-compose -f docker-compose.yml -f docker-compose.vs.release.yml build
+  - dotnet restore ./CollAction/CollAction.csproj
+  - dotnet publish ./CollAction/CollAction.csproj -c Release
+  - docker-compose -f ./docker-compose.yml -f ./docker-compose.vs.release.yml build
   - docker save collaction > ./CollAction.tar
