@@ -3,5 +3,6 @@ solution: CollAction.sln
 dotnet: 1.0.0-preview2-1-003177
 mono: none
 dist: trusty
+sudo: required
 script:
-  - ./build.sh
+  - sudo ./build.sh
