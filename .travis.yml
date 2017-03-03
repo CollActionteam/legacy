@@ -1,5 +1,7 @@
 language: csharp
 solution: CollAction.sln
-install:
-  - sudo apt-get install nodejs npm
+sudo: required
+dotnet: 1.0.0-preview2-1-003177
+dist: trusty
+script:
   - ./build.sh
