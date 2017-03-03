@@ -1,0 +1,12 @@
+DbPassword=replace_on_deployment
+DbHost=db
+DbUser=postgres
+DbPort=5432
+Db=CollActionDb
+FromName=
+SendGridUser=
+SendGridKey=
+AdminPassword=
+AdminEmail=your@email
+ImportLocationData=0
+SlackHook=
