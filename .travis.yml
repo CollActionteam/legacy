@@ -1,6 +1,6 @@
 language: csharp
 solution: CollAction.sln
-dotnet: 1.0.0-preview2-1-003177
+dotnet: 1.0.0-preview3-004056
 mono: none
 dist: trusty
 sudo: required
