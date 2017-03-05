@@ -110,5 +110,18 @@
     </dl>
 </div>
 <div>
+    @{
+        if (Model.IsUserCommitted)
+        {
+            <h1>You're participating!</h1>
+        }
+        else
+        {
+            <a asp-action="Commit" asp-route-id="@Model.Project.Id">@Localizer["TAKE PART"]</a>
+        }
+    }
+    
+</div>
+<div>
     <a asp-action="Index">@Localizer["Back to List"]</a>
 </div>

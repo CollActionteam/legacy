@@ -1,0 +1,30 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+
+@model CollAction.Models.CommitProjectViewModel
+
+@{
+    ViewData["Title"] = Localizer["Participate"];
+}
+
+@{
+    if (Model.IsUserCommitted)
+    {
+        <h1>You're already participating!</h1>
+    }
+    else
+    {
+        @using (Html.BeginForm("Commit", "Projects", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.ProjectId)
+            @Html.HiddenFor(m => m.ProjectName)
+            <div>
+                <p>@Model.ProjectName</p>
+                <input type="submit" value="@Localizer["I participate"]" class="btn btn-default" />
+            </div>
+        }
+    }
+}
+

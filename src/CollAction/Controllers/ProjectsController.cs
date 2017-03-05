@@ -25,6 +25,7 @@ namespace CollAction.Controllers
         private readonly IStringLocalizer<ProjectsController> _localizer;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly ProjectService _service;
 
         public ProjectsController(ApplicationDbContext context, IStringLocalizer<ProjectsController> localizer, UserManager<ApplicationUser> userManager, IHostingEnvironment hostingEnvironment)
         {
@@ -32,6 +33,7 @@ namespace CollAction.Controllers
             _localizer = localizer;
             _userManager = userManager;
             _hostingEnvironment = hostingEnvironment;
+            _service = new ProjectService(_context);
         }
 
         public ViewResult StartInfo()
@@ -79,8 +81,14 @@ namespace CollAction.Controllers
             {
                 return NotFound();
             }
+            DisplayProjectViewModel displayProject = items.First();
+            string userId = (await _userManager.GetUserAsync(User))?.Id;
+            if (userId != null && (await _service.GetParticipant(userId, displayProject.Project.Id) != null))
+            {
+                displayProject.IsUserCommitted = true;
+            }
 
-            return View(items.First());
+            return View(displayProject);
         }
 
         // GET: Projects/Create
@@ -299,6 +307,44 @@ namespace CollAction.Controllers
             project.Status = ProjectStatus.Deleted;
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Commit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var project =  await _service.GetProjectById(id); 
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            var commitProjectViewModel = new CommitProjectViewModel
+            {
+                ProjectId = project.Id,
+                ProjectName = project.Name,
+                IsUserCommitted = (await _service.GetParticipant((await _userManager.GetUserAsync(User)).Id, project.Id) != null)
+            };
+            
+            return View(commitProjectViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> Commit(int id, CommitProjectViewModel commitProjectViewModel)
+        {
+            if (id != commitProjectViewModel.ProjectId)
+            {
+                return NotFound();
+            }
+            
+            bool success = await _service.AddParticipant((await _userManager.GetUserAsync(User)).Id, commitProjectViewModel.ProjectId);
+            return success ? View("ThankYouCommit", commitProjectViewModel) : View("Error");
         }
 
         [HttpGet]
