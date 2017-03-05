@@ -1,0 +1,23 @@
+version: '2'
+
+services:
+  collaction:
+    image: collaction
+    build:
+      context: ./CollAction
+      dockerfile: Dockerfile
+    env_file:
+      - env_collaction
+    depends_on:
+      - db
+    links:
+      - db
+    ports:
+      - "5000:5000"
+
+  db:
+    image: postgres
+    env_file:
+      - env_postgres
+    ports:
+      - "5432:5432"
