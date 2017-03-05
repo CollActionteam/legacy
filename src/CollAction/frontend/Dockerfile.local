@@ -1,0 +1,7 @@
+FROM node
+
+COPY app /app
+WORKDIR /app
+RUN rm -Rf node_modules
+RUN npm install
+ENTRYPOINT [ "npm", "start" ]

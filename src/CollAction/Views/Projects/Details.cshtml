@@ -33,7 +33,44 @@
                         @Html.DisplayFor(model => model.Project.Category.Name)
                     </div>
                     <h1>@Html.DisplayFor(model => model.Project.Name)</h1>
-                    <h2>@Html.DisplayFor(model => model.Progress)%</h2>
+                    <div id="project-progress">
+                        <canvas id="project-pie-chart"></canvas>
+                        <h2>@Html.DisplayFor(model => model.Progress)%</h2>
+                    </div>
+
+                    <div id="more-info">
+                        <p>@Html.DisplayFor(model => model.Project.Description)</p>
+                        <p>@Html.DisplayFor(model => model.Project.Proposal)</p>
+                    </div>
+
+                    <hr />
+
+                    <div id="project-location">
+                        <p>
+                            <i class="fa fa-map-marker"></i>
+                            @Html.DisplayFor(model => model.Project.Location.Name)
+                        </p>
+                    </div>
+
+                    <div id="project-participation">
+                        <ul>
+                            <li>
+                                <h4>20 uur</h4>
+                                <p>To go</p>
+                            </li>
+
+                            <li>
+                                <h4>30.000</h4>
+                                <p>Target</p>
+                            </li>
+
+                            <li>
+                                <h4>15.000</h4>
+                                <p>Deelnemers</p>
+                            </li>
+                        </ul>
+                    </div>
+
                     <a id="take-part-button">Take Part</a>
                 </div>
             </div> 
@@ -43,19 +80,41 @@
         <div class="row">
             <hr />
             <div class="col-xs-4">
-                <p>Proposal</p>
+                <p>@Html.DisplayNameFor(model => model.Project.Proposal)</p>
                 <p>@Html.DisplayFor(model => model.Project.Proposal)</p>
             </div>
             <div class="col-xs-8">
-                Goal / Impact
+                <p>@Html.DisplayNameFor(model => model.Project.Goal)</p>
+                <p>@Html.DisplayFor(model => model.Project.Goal)</p>
             </div>
         </div> 
 
         <div class="row">
-            <hr />
+            <figure class="project-image">
+                <div class="col-xs-4 caption">
+                    <figcaption>
+                        <h5>This is the caption title</h5>
+                        <p>This is where we would put a long image caption</p>
+                    </figcaption>
+                </div> 
+                <div class="col-xs-8 image">
+                    <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=Project%20Image&w=1150&h=450">
+                        <i class="fa fa-arrows-alt marginright"></i>
+                    </img>
+                </div> 
+            </figure>
         </div> 
+
     </div> 
 </div> 
+
+<script type="text/javascript">
+    const percentComplete = @Html.DisplayFor(model => model.Progress);
+    window.onload = function () {
+        const element = document.getElementById("project-pie-chart");
+        window.collAction.drawPieChart(percentComplete, element);
+    };
+</script>
 
 <!--h2>@Localizer["Details"]</h2>
 
