@@ -1,0 +1,11 @@
+language: csharp
+solution: CollAction.sln
+dotnet: 1.0.0-preview3-004056
+mono: none
+dist: trusty
+sudo: required
+script:
+  - dotnet restore ./CollAction/CollAction.csproj
+  - dotnet publish ./CollAction/CollAction.csproj -c Release
+  - docker-compose -f ./docker-compose.yml -f ./docker-compose.vs.release.yml build
+  - docker save collaction > ./CollAction.tar
