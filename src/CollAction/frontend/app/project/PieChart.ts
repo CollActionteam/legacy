@@ -1,6 +1,6 @@
-window.collAction = window.collAction || {}
+window["CollAction"] = window["CollAction"] || {};
 
-window.collAction.drawPieChart = function (percentComplete: number, canvas: HTMLCanvasElement): void {
+window["CollAction"].drawPieChart = function (percentComplete: number, canvas: HTMLCanvasElement): void {
   var ctx = canvas.getContext("2d");
   var lastend = 4.71239;
   var data = [percentComplete, 100 - percentComplete ]; // If you add more data values make sure you add more colors
