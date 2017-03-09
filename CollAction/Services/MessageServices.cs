@@ -1,9 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SendGrid;
-using Serilog;
+using SendGrid.Helpers.Mail;
 using System;
-using System.Net.Mail;
 using System.Threading.Tasks;
 
 namespace CollAction.Services
@@ -27,14 +26,14 @@ namespace CollAction.Services
             _logger.LogInformation("sending email to {0} with subject {1}", email, subject);
             SendGridMessage gridMessage = new SendGridMessage()
             {
-                From = new MailAddress(_authOptions.Value.FromAddress, _authOptions.Value.FromName),
+                From = new EmailAddress(_authOptions.Value.FromAddress, _authOptions.Value.FromName),
                 Subject = subject,
-                Text = message,
-                Html = message
+                PlainTextContent = message,
+                HtmlContent = message
             };
-            gridMessage.AddTo(email);
-
-            return new Web(_authOptions.Value.SendGridKey).DeliverAsync(gridMessage);
+            gridMessage.AddTo(new EmailAddress(email));
+            SendGridClient client = new SendGridClient(_authOptions.Value.SendGridKey);
+            return client.SendEmailAsync(gridMessage);
         }
 
         public Task SendSmsAsync(string number, string message)
