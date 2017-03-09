@@ -3,6 +3,7 @@ import * as ReactDOM from "react-dom";
 import FindProject from "./FindProject";
 import LandscapeCarousel from "./LandscapeCarousel";
 import "./style.scss";
+import "./PieChart";
 
 function renderComponentIf(component, element) {
   if (element) {

@@ -8,107 +8,110 @@
     ViewData["Title"] = Localizer["Details"];
 }
 
-<h2>@Localizer["Details"]</h2>
 
-<div>
-    <h4>@Localizer["Project"]</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Project.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Project.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Project.Description)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Project.Description)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Project.Proposal)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Project.Proposal)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Project.Goal)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Project.Goal)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Project.Category)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Project.Category.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Project.Location)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Project.Location.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Project.Target)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Project.Target)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Project.Start)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Project.Start)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Project.End)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Project.End)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Project.CreatorComments)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Project.CreatorComments)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.StatusDescription)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.StatusDescription)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Progress)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Progress)%
-        </dd>
+<div id="project-details">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 dotbackground" id="project-background">
+            </div> 
+        </div> 
 
-    @{ var image = Model.Project.BannerImage; }
-    @if (image != null)
-    {
-        <dt>
-            @Html.DisplayNameFor(model => image)
-        </dt>
-        <dd>
-            <img src="@Url.Content(image.Filepath)" width="@image.Width" height="@image.Height" class="banner-image" alt="Banner image not found." />
-        </dd>
-    }
+        <div class="row" id="project-starter-row">
+            <div class="col-xs-3" >
+                <div id="project-starter-avatar"></div>
+                <h3>Project Starter</h3>
+                <p>Natalie Portman</p>
+            </div> 
 
-    @if (Model.HasDescriptionVideo) {
-        <dt>
-            @Localizer["Descriptive Video"]
-        </dt>
-        <dd>
-            <iframe width="560" height="315" src="@Model.DescriptionVideoYouTubeEmbedLink" frameborder="0" allowfullscreen></iframe>
-        </dd>
-    }
+            <div class="col-xs-3" >
+                Share Buttons
+            </div> 
 
-    </dl>
-</div>
-<div>
-    <a asp-action="Index">@Localizer["Back to List"]</a>
-</div>
+            <div class="col-xs-6" >
+                <div id="project-info-card">
+                    <div id="project-category">
+                        @Html.DisplayFor(model => model.Project.Category.Name)
+                    </div>
+                    <h1>@Html.DisplayFor(model => model.Project.Name)</h1>
+                    <div id="project-progress">
+                        <canvas id="project-pie-chart"></canvas>
+                        <h2>@Html.DisplayFor(model => model.Progress)%</h2>
+                    </div>
+
+                    <div id="more-info">
+                        <p>@Html.DisplayFor(model => model.Project.Description)</p>
+                        <p>@Html.DisplayFor(model => model.Project.Proposal)</p>
+                    </div>
+
+                    <hr />
+
+                    <div id="project-location">
+                        <p>
+                            <i class="fa fa-map-marker"></i>
+                            @Html.DisplayFor(model => model.Project.Location.Name)
+                        </p>
+                    </div>
+
+                    <div id="project-participation">
+                        <ul>
+                            <li>
+                                <h4>20 uur</h4>
+                                <p>To go</p>
+                            </li>
+
+                            <li>
+                                <h4>30.000</h4>
+                                <p>Target</p>
+                            </li>
+
+                            <li>
+                                <h4>15.000</h4>
+                                <p>Deelnemers</p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <a id="take-part-button">Take Part</a>
+                </div>
+            </div> 
+        </div> 
+
+
+        <div class="row">
+            <hr />
+            <div class="col-xs-4">
+                <p>@Html.DisplayNameFor(model => model.Project.Proposal)</p>
+                <p>@Html.DisplayFor(model => model.Project.Proposal)</p>
+            </div>
+            <div class="col-xs-8">
+                <p>@Html.DisplayNameFor(model => model.Project.Goal)</p>
+                <p>@Html.DisplayFor(model => model.Project.Goal)</p>
+            </div>
+        </div> 
+
+        <div class="row">
+            <figure class="project-image">
+                <div class="col-xs-4 caption">
+                    <figcaption>
+                        <h5>This is the caption title</h5>
+                        <p>This is where we would put a long image caption</p>
+                    </figcaption>
+                </div> 
+                <div class="col-xs-8 image">
+                    <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=Project%20Image&w=1150&h=450">
+                        <i class="fa fa-arrows-alt marginright"></i>
+                    </img>
+                </div> 
+            </figure>
+        </div> 
+
+    </div> 
+</div> 
+
+<script type="text/javascript">
+    const percentComplete = @Html.DisplayFor(model => model.Progress);
+    window.onload = function () {
+        const element = document.getElementById("project-pie-chart");
+        window.collAction.drawPieChart(percentComplete, element);
+    };
+</script>
