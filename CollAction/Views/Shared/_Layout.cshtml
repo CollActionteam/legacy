@@ -49,5 +49,6 @@
     <environment names="Staging,Production">
         <script src="~/js/bundle.js"></script>
     </environment>
-    </body>
+    @RenderSection("scripts", required: false)
+  </body>
 </html>
