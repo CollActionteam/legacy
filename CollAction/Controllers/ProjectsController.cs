@@ -15,6 +15,7 @@ using System.Data.SqlClient;
 using Npgsql;
 using Microsoft.AspNetCore.Hosting;
 using CollAction.Helpers;
+using CollAction.Services;
 using System.Text.RegularExpressions;
 
 namespace CollAction.Controllers
@@ -25,15 +26,15 @@ namespace CollAction.Controllers
         private readonly IStringLocalizer<ProjectsController> _localizer;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IHostingEnvironment _hostingEnvironment;
-        private readonly ProjectService _service;
+        private readonly IProjectService _service;
 
-        public ProjectsController(ApplicationDbContext context, IStringLocalizer<ProjectsController> localizer, UserManager<ApplicationUser> userManager, IHostingEnvironment hostingEnvironment)
+        public ProjectsController(ApplicationDbContext context, IStringLocalizer<ProjectsController> localizer, UserManager<ApplicationUser> userManager, IHostingEnvironment hostingEnvironment, IProjectService service)
         {
             _context = context;
             _localizer = localizer;
             _userManager = userManager;
             _hostingEnvironment = hostingEnvironment;
-            _service = new ProjectService(_context);
+            _service = service;
         }
 
         public ViewResult StartInfo()

@@ -83,6 +83,7 @@ namespace CollAction
                 options.FromAddress = Configuration["FromAddress"];
                 options.SendGridKey = Configuration["SendGridKey"];
             });
+            services.AddScoped<IProjectService, ProjectService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

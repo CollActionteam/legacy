@@ -7,12 +7,12 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace CollAction.Helpers
+namespace CollAction.Services
 {
-    public class ProjectService
+    public class ProjectService : IProjectService
     {
         private readonly ApplicationDbContext _context;
-        
+
         public ProjectService(ApplicationDbContext context)
         {
             _context = context;
@@ -30,12 +30,8 @@ namespace CollAction.Helpers
                 .ToListAsync();
         }
 
-        public async Task<bool> AddParticipant(string userId, int projectId) 
+        public async Task<bool> AddParticipant(string userId, int projectId)
         {
-            var existingParticipant = await GetParticipant(userId, projectId);
-            if (existingParticipant != null) 
-                return false;
-
             var participant = new ProjectParticipant
             {
                 UserId = userId,
@@ -47,7 +43,7 @@ namespace CollAction.Helpers
                 _context.Add(participant);
                 await _context.SaveChangesAsync();
             }
-            catch (Exception ex)
+            catch (DbUpdateException)
             {
                 return false;
             }
