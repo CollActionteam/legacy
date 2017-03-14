@@ -70,15 +70,15 @@
                         </ul>
                     </div>
                     @{
-												if (Model.IsUserCommitted)
-												{
-														<h1>You're participating!</h1>
-												}
-												else
-												{
-														<a id="take-part-button" asp-action="Commit" asp-route-id="@Model.Project.Id">Take Part</a>
-												}
-    								}
+					    if (Model.IsUserCommitted)
+					    {
+					        <p>You're participating!</p>
+					    }
+					    else
+					    {
+					        <a id="take-part-button" asp-action="Commit" asp-route-id="@Model.Project.Id">Take Part</a>
+					    }
+    				}
                 </div>
             </div> 
         </div> 
