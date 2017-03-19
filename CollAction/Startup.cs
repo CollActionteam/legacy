@@ -174,12 +174,14 @@ namespace CollAction
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
+            Console.WriteLine("running migrations");
             using (var userManager = app.ApplicationServices.GetService<UserManager<ApplicationUser>>())
             using (var roleManager = app.ApplicationServices.GetService<RoleManager<IdentityRole>>())
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             using (var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
             {
                 context.Database.Migrate();
+                Console.WriteLine("running seed process");
                 Task.Run(() => context.Seed(Configuration, userManager, roleManager)).Wait();
             }
         }
