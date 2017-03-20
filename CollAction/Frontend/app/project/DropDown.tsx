@@ -36,7 +36,7 @@ export default class DropDown extends React.Component<IDropdownProps, IDropdownS
     });
 
     if (this.state.currentlySelected !== option) {
-      this.props.onChange(this.state.currentlySelected);
+      this.props.onChange(option);
     }
   }
 

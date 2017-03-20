@@ -1,12 +1,17 @@
-import ProjectFilter from "./ProjectFilter";
+import { ProjectFilter, IProjectFilterState } from "./ProjectFilter";
 import ProjectList from "./ProjectList";
 import * as React from "react";
 
 export default class FindProject extends React.Component<null, {}> {
+
+  onChange (currentState: IProjectFilterState) {
+    console.log(currentState);
+  }
+
   render () {
     return (
       <div id="find-project">
-        <ProjectFilter />
+        <ProjectFilter onChange={(searchState: IProjectFilterState) => this.onChange(searchState) }/>
         <ProjectList />
       </div>
     );

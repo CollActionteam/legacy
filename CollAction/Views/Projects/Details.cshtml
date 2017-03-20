@@ -110,6 +110,19 @@
                 </figure>
             </div> 
          }
+
+
+         @if (Model.HasDescriptionVideo) 
+         {
+        <dt>
+            @Localizer["Descriptive Video"]
+        </dt>
+        <dd>
+            <iframe width="560" height="315" src="@Model.DescriptionVideoYouTubeEmbedLink" frameborder="0" allowfullscreen></iframe>
+        </dd>
+        }  
+    
+
     </div> 
 </div> 
 
