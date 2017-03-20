@@ -57,7 +57,6 @@ namespace CollAction.Models
         [MaxLength(300)]
         public string Proposal { get; set; }
 
-        [Required]
         [MaxLength(2000)]
         public string CreatorComments { get; set; }
 

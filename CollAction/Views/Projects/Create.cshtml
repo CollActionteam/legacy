@@ -76,15 +76,20 @@
                         @Html.DropDownList("CategoryId", Model.Categories)
                         <span asp-validation-for="CategoryId" class="text-danger" />
                     </div>
-                    <div class="form-group">
+                    @*<div class="form-group">
                         <label asp-for="LocationId" class="control-label"></label>
                         @Html.DropDownList("LocationId", Model.Locations)
                         <span asp-validation-for="LocationId" class="text-danger" />
-                    </div>
+                    </div>*@
                     <div class="form-group">
                         <label asp-for="Target" class="control-label"></label>
                         <input asp-for="Target" class="form-control" />
                         <span asp-validation-for="Target" class="text-danger" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Start" class="control-label"></label>
+                        <input asp-for="Start" class="form-control" />
+                        <span asp-validation-for="Start" class="text-danger" />
                     </div>
                     <div class="form-group">
                         <label asp-for="End" class="control-label"></label>
@@ -106,6 +111,11 @@
                         <label asp-for="DescriptionVideoLink" class="control-label"></label>
                         <input asp-for="DescriptionVideoLink" class="form-control" />
                         <span asp-validation-for="DescriptionVideoLink" class="text-danger" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Hashtag" class="control-label"></label>
+                        <input asp-for="Hashtag" class="form-control" />
+                        <span asp-validation-for="Hashtag" class="text-danger" />
                     </div>
                     <div class="form-group">
                         <input type="submit" value="Create" class="btn btn-default" />
