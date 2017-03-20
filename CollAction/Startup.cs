@@ -104,16 +104,14 @@ namespace CollAction
 
             // Configure logging
             LoggerConfiguration configuration = new LoggerConfiguration()
-                .WriteTo.RollingFile("log-{Date}.txt", LogEventLevel.Information);
+                .WriteTo.RollingFile("log-{Date}.txt", LogEventLevel.Information)
+                .WriteTo.LiterateConsole(LogEventLevel.Information);
             
             if (!string.IsNullOrEmpty(Configuration["SlackHook"]))
                 configuration.WriteTo.Slack(Configuration["SlackHook"], null, null, null, null, null, LogEventLevel.Error);
 
             if (env.IsDevelopment())
-            {
-                configuration.WriteTo.LiterateConsole()
-                             .WriteTo.Trace();
-            }
+                configuration.WriteTo.Trace();
 
             Log.Logger = configuration.CreateLogger();
             loggerFactory.AddSerilog();
@@ -174,14 +172,12 @@ namespace CollAction
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            Console.WriteLine("running migrations");
             using (var userManager = app.ApplicationServices.GetService<UserManager<ApplicationUser>>())
             using (var roleManager = app.ApplicationServices.GetService<RoleManager<IdentityRole>>())
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             using (var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
             {
                 context.Database.Migrate();
-                Console.WriteLine("running seed process");
                 Task.Run(() => context.Seed(Configuration, userManager, roleManager)).Wait();
             }
         }

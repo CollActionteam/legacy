@@ -11,7 +11,6 @@ namespace CollAction
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("starting collaction");
             var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
