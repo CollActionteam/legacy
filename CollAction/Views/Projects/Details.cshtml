@@ -89,22 +89,27 @@
             </div>
         </div> 
 
-        <div class="row">
-            <figure class="project-image">
-                <div class="col-xs-4 caption">
-                    <figcaption>
-                        <h5>This is the caption title</h5>
-                        <p>This is where we would put a long image caption</p>
-                    </figcaption>
-                </div> 
-                <div class="col-xs-8 image">
-                    <img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=Project%20Image&w=1150&h=450">
-                        <i class="fa fa-arrows-alt marginright"></i>
-                    </img>
-                </div> 
-            </figure>
-        </div> 
-
+        @{ var image = Model.Project.BannerImage; }
+        @if (image != null)
+        {
+            <div class="row">
+                <figure class="project-image">
+                    <div class="col-xs-4 caption">
+                        <figcaption>
+                            <h5>This is the caption title</h5>
+                            <p>This is where we would put a long image caption</p>
+                           @Html.DisplayNameFor(model => image)
+                        </figcaption>
+                    </div> 
+                    <div class="col-xs-8 image">
+                       <!--img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=Project%20Image&w=1150&h=450"-->
+                       <img src="@Url.Content(image.Filepath)" width="@image.Width" height="@image.Height" class="banner-image" alt="Banner image not found." />
+                            <i class="fa fa-arrows-alt marginright"></i>
+                        </img>
+                    </div> 
+                </figure>
+            </div> 
+         }
     </div> 
 </div> 
 
@@ -112,6 +117,6 @@
     const percentComplete = @Html.DisplayFor(model => model.Progress);
     window.onload = function () {
         const element = document.getElementById("project-pie-chart");
-        window.collAction.drawPieChart(percentComplete, element);
+        window.CollAction.drawPieChart(percentComplete, element);
     };
 </script>
