@@ -99,8 +99,6 @@ namespace CollAction.Controllers
             return View(new CreateProjectViewModel
             {
                 Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description"),
-                // TODO: Add this back in when we've come up with a solution that doesn't involve returning the entire locations table!!!
-                //Locations = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", null)
             });
         }
 
@@ -120,8 +118,6 @@ namespace CollAction.Controllers
 
             if (!ModelState.IsValid) {
                 createProjectViewModel.Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
-                // TODO: Add this back in when we've come up with a solution that doesn't involve returning the entire locations table!!!
-                //createProjectViewModel.Locations = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", null);
                 return View(createProjectViewModel);
             }
 
@@ -193,8 +189,6 @@ namespace CollAction.Controllers
                 CategoryId = project.CategoryId,
                 Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description", project.CategoryId),
                 LocationId = project.LocationId,
-                // TODO: Add this back in when we've come up with a solution that doesn't involve returning the entire locations table!!!
-                //Locations = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", project.LocationId),
                 Target = project.Target,
                 Start = project.Start,
                 End = project.End,
@@ -239,8 +233,6 @@ namespace CollAction.Controllers
             if (!ModelState.IsValid)
             {
                 editProjectViewModel.Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
-                // TODO: Add this back in when we've come up with a solution that doesn't involve returning the entire locations table!!!
-                //editProjectViewModel.Locations = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", null);
                 return View(editProjectViewModel);
             }
 
