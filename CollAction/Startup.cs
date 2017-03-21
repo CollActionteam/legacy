@@ -32,7 +32,7 @@ namespace CollAction
             if (env.IsDevelopment())
             {
                 // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                builder.AddUserSecrets();
+                builder.AddUserSecrets<Startup>();
             }
 
             Configuration = builder.Build();
@@ -104,16 +104,14 @@ namespace CollAction
 
             // Configure logging
             LoggerConfiguration configuration = new LoggerConfiguration()
-                .WriteTo.RollingFile("log-{Date}.txt", LogEventLevel.Information);
+                .WriteTo.RollingFile("log-{Date}.txt", LogEventLevel.Information)
+                .WriteTo.LiterateConsole(LogEventLevel.Information);
             
             if (!string.IsNullOrEmpty(Configuration["SlackHook"]))
                 configuration.WriteTo.Slack(Configuration["SlackHook"], null, null, null, null, null, LogEventLevel.Error);
 
             if (env.IsDevelopment())
-            {
-                configuration.WriteTo.LiterateConsole()
-                             .WriteTo.Trace();
-            }
+                configuration.WriteTo.Trace();
 
             Log.Logger = configuration.CreateLogger();
             loggerFactory.AddSerilog();
