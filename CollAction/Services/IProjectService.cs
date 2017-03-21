@@ -15,5 +15,7 @@ namespace CollAction.Services
         Task<bool> AddParticipant(string userId, int projectId);
 
         Task<ProjectParticipant> GetParticipant(string userId, int projectId);
+
+        Task<IEnumerable<TileProject>> GetTileProjects(Expression<Func<Project, bool>> WhereExpression);
     }
 }

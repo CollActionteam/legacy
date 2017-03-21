@@ -166,7 +166,12 @@ namespace CollAction
                      "categories",
                      new { controller = "Projects", action = "GetCategories" }
                  );
-                
+
+                routes.MapRoute("GetTileProjects",
+                     "tileProjects",
+                     new { controller = "Projects", action = "GetTileProjects" }
+                 );
+
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
