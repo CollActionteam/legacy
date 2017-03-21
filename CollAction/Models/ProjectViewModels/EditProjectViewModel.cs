@@ -60,6 +60,12 @@ namespace CollAction.Models
         public int Target { get; set; }
 
         [Required]
+        [Display(Name = "Start date")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime Start { get; set; }
+
+        [Required]
+        [Display(Name = "Deadline")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime End { get; set; }
 
@@ -76,5 +82,10 @@ namespace CollAction.Models
         [Display(Name = "YouTube Video Link", Prompt = "Descriptive Video. e.g. http://www.youtube.com/watch?v=-wtIMTCHWuI")]
         [YouTubeLink]
         public string DescriptionVideoLink { get; set; }
+
+        [Display(Name = "Hashtag", Prompt = "Max 30 characters. e.g. '#tag1;#tag2'")]
+        [MaxLength(30)]
+        [RegularExpression(@"^#[a-zA-Z_]\w*(;#[a-zA-Z_]+\w*)*$", ErrorMessage = "No spaces, must contain a letter, can contain digits and underscores. Seperate multiple tags with a colon ';'.")]
+        public string Hashtag { get; set; }
     }
 }

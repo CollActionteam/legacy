@@ -99,7 +99,6 @@ namespace CollAction.Controllers
             return View(new CreateProjectViewModel
             {
                 Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description"),
-                Locations = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", null)
             });
         }
 
@@ -119,7 +118,6 @@ namespace CollAction.Controllers
 
             if (!ModelState.IsValid) {
                 createProjectViewModel.Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
-                createProjectViewModel.Locations = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", null);
                 return View(createProjectViewModel);
             }
 
@@ -134,8 +132,8 @@ namespace CollAction.Controllers
                 CategoryId = createProjectViewModel.CategoryId,
                 LocationId = createProjectViewModel.LocationId,
                 Target = createProjectViewModel.Target,
+                Start = createProjectViewModel.Start,
                 End = createProjectViewModel.End,
-                Start = DateTime.UtcNow,
                 BannerImage = null 
             };
 
@@ -149,6 +147,10 @@ namespace CollAction.Controllers
 
             _context.Add(project);
             await _context.SaveChangesAsync();
+
+            // Only call this once we have a valid Project.Id
+            await project.SetTags(_context, createProjectViewModel.Hashtag?.Split(';') ?? new string[0]);
+            
             return RedirectToAction("Index");
         }
 
@@ -161,7 +163,11 @@ namespace CollAction.Controllers
                 return NotFound();
             }
 
-            var project = await _context.Projects.Include(p => p.BannerImage).Include(p => p.DescriptionVideoLink).SingleOrDefaultAsync(m => m.Id == id);
+            var project = await _context.Projects
+                                    .Include(p => p.BannerImage)
+                                    .Include(p => p.DescriptionVideoLink)
+                                    .Include(p => p.Tags).ThenInclude(t => t.Tag)
+                                    .SingleOrDefaultAsync(p => p.Id == id);
             if (project == null)
             {
                 return NotFound();
@@ -183,11 +189,12 @@ namespace CollAction.Controllers
                 CategoryId = project.CategoryId,
                 Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description", project.CategoryId),
                 LocationId = project.LocationId,
-                Locations = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", project.LocationId),
                 Target = project.Target,
+                Start = project.Start,
                 End = project.End,
                 DescriptionVideoLink = project.DescriptionVideoLink?.Link,
-                BannerImageFile = project.BannerImage
+                BannerImageFile = project.BannerImage,
+                Hashtag = project.HashTags
             };
 
             return View(editProjectViewModel);
@@ -226,7 +233,6 @@ namespace CollAction.Controllers
             if (!ModelState.IsValid)
             {
                 editProjectViewModel.Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
-                editProjectViewModel.Locations = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", null);
                 return View(editProjectViewModel);
             }
 
@@ -238,6 +244,7 @@ namespace CollAction.Controllers
             project.CategoryId = editProjectViewModel.CategoryId;
             project.LocationId = editProjectViewModel.LocationId;
             project.Target = editProjectViewModel.Target;
+            project.Start = editProjectViewModel.Start;
             project.End = editProjectViewModel.End;
 
             project.SetDescriptionVideoLink(_context, editProjectViewModel.DescriptionVideoLink);
@@ -248,6 +255,8 @@ namespace CollAction.Controllers
                 if (project.BannerImage != null) { manager.DeleteImageFile(project.BannerImage); }
                 project.BannerImage = await manager.UploadFormFile(editProjectViewModel.BannerImageUpload, Guid.NewGuid().ToString() /* unique filename */);
             }
+
+            await project.SetTags(_context, editProjectViewModel.Hashtag?.Split(';') ?? new string[0]);
 
             try
             {
