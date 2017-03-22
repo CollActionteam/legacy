@@ -1,4 +1,5 @@
 @import "./globals.scss";
+@import "./FindProject.scss";
 
 #project-create-form {
   background-color: #efefef; 
@@ -87,56 +88,6 @@
 
 }
 
-#find-project {
-  width: 100%;
-
-  #project-filter {
-    color: #eee;
-    padding: 30px;
-    background-color: #333;
-    font-size: 3em;
-
-    .project-filter-drop-down {
-      cursor: pointer;
-      display: inline-block;
-      border: 3px solid #eee;
-      padding: 0px 25px;
-      border-radius: 35px;
-      margin: 15px;
-      user-select: none;
-      position: relative;
-
-      i {
-        font-size: 0.75em;
-        margin-left: 5px;
-      }
-
-      .drop-down-options {
-        position: absolute;
-        z-index: 1;
-        -webkit-box-shadow: 10px 10px 10px -5px rgba(170,170,170,1);
-        -moz-box-shadow: 10px 10px 10px -5px rgba(170,170,170,1);
-        box-shadow: 10px 10px 10px -5px rgba(170,170,170,1);
-        background-color: #fff;
-        color: #333;
-        padding: 15px;
-        border-radius: 15px;
-        width: 200px;
-        font-size: 16px;
-        left: 0px;
-
-        ul {
-          margin: 0px;
-          padding: 0px;
-          li {
-            list-style: none;
-            margin: 10px 0px;
-          }
-        }
-      }
-    }
-  }
-}
 
 #start-project {
   #project-steps {

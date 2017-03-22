@@ -43,13 +43,15 @@ export class ProjectFilter extends React.Component<IProjectFilterProps, IProject
   render () {
     return (
       <div id="project-filter">
-        Show me
-        <DropDown onChange={value => this.onChange("filter", value)} options={filterList} />
-        projects sorted on
-        <DropDown onChange={value => this.onChange("location", value)} options={locationList}/>
-        <br />
-        which are
-        <DropDown onChange={value => this.onChange("status", value)} options={statusList} />
+        <div className="container">
+          Show me
+          <DropDown onChange={value => this.onChange("filter", value)} options={filterList} />
+          projects sorted on
+          <DropDown onChange={value => this.onChange("location", value)} options={locationList}/>
+          <br />
+          which are
+          <DropDown onChange={value => this.onChange("status", value)} options={statusList} />
+        </div>
       </div>
     );
   }
