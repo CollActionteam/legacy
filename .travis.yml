@@ -1,0 +1,6 @@
+language: csharp
+dotnet: 1.0.1
+mono: none
+script:
+  - dotnet restore CollAction
+  - dotnet publish CollAction -c Release
