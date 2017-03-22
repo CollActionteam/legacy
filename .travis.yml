@@ -1,6 +1,18 @@
 language: csharp
 dotnet: 1.0.1
 mono: none
+dist: trusty
+sudo: required
+before_install:
+  - sudo apt-get update
+  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-engine
+services:
+  - docker
 script:
   - dotnet restore CollAction
   - dotnet publish CollAction -c Release
+  - docker build -t $DOCKER_REPO CollAction
+after_success:
+  - if [[ "$TRAVIS_BRANCH" != "master" ]]; then echo "Docker pushes are only done for the master branch. Current branch is $TRAVIS_BRANCH"; exit 0; fi
+  - docker login -p=$DOCKER_PASSWORD -u=$DOCKER_USERNAME
+  - docker push $DOCKER_REPO
