@@ -20,10 +20,10 @@
     <div class="container">
         <div id="header">
             <div class="row">
-                <div class="col-xs-3">
+                <div class="col-md-3 col-xs-12">
                     @Html.Partial("_Logo")
                 </div>
-                <div class="col-xs-5 nav-bar" >
+                <div class="col-md-5 col-xs-12 nav-bar" >
                     <ul>
                         <li><a asp-area="" asp-controller="Projects" asp-action="Find">Find Project</a></li>
                         <li><a asp-area="" asp-controller="Projects" asp-action="StartInfo">Start Project</a></li>
@@ -34,7 +34,7 @@
                         }
                     </ul>
                 </div>
-                <div class="col-xs-4 nav-bar">
+                <div class="col-md-4 col-xs-12 nav-bar">
                     @await Html.PartialAsync("_LoginPartial")
                 </div>
             </div>
