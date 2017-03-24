@@ -9,8 +9,8 @@ using CollAction.Models;
 namespace CollAction.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170321060805_ApplicationUserNewsletterSubscription")]
-    partial class ApplicationUserNewsletterSubscription
+    [Migration("20170324015949_NewsletterSubscription")]
+    partial class NewsletterSubscription
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -43,7 +43,7 @@ namespace CollAction.Migrations
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
 
-                    b.Property<bool>("NewsletterSubscription");
+                    b.Property<int?>("NewsletterSubscriptionId");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256);
@@ -65,6 +65,8 @@ namespace CollAction.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("NewsletterSubscriptionId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -316,6 +318,24 @@ namespace CollAction.Migrations
                     b.ToTable("LocationLevel2");
                 });
 
+            modelBuilder.Entity("CollAction.Models.NewsletterSubscription", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
+
+                    b.Property<string>("Email")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasName("IX_NewsletterSubscription_Email");
+
+                    b.ToTable("NewsletterSubscriptions");
+                });
+
             modelBuilder.Entity("CollAction.Models.Project", b =>
                 {
                     b.Property<int>("Id")
@@ -548,6 +568,13 @@ namespace CollAction.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("CollAction.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("CollAction.Models.NewsletterSubscription", "NewsletterSubscription")
+                        .WithMany()
+                        .HasForeignKey("NewsletterSubscriptionId");
                 });
 
             modelBuilder.Entity("CollAction.Models.Job", b =>
