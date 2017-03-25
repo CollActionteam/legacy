@@ -1,15 +1,9 @@
 import * as React from "react";
-import * as ReactDOM from "react-dom";
 import FindProject from "./FindProject";
 import LandscapeCarousel from "./LandscapeCarousel";
 import "./styles/index.scss";
 import "./PieChart";
-
-function renderComponentIf(component, element) {
-  if (element) {
-    ReactDOM.render(component, element);
-  }
-}
+import renderComponentIf from "../global/renderComponentIf";
 
 const startProjectSteps = [
   {

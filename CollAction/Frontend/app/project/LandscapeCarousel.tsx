@@ -37,7 +37,7 @@ export default class LandscapeCarousel extends React.Component<ILandscapeCarouse
   render () {
     return (
       <div>
-        <div className="col-xs-4 col-xs-offset-2 landscape-carousel-select">
+        <div className="col-md-4 col-md-offset-2 col-xs-12 landscape-carousel-select">
           <p>In 6 easy Steps</p>
           <ul>
             {this.props.items.map((item, index) => <Item key={index + 1}

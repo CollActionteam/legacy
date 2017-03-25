@@ -27,6 +27,11 @@
 
 
 #header {
+    #hamburger-icon {
+        font-size: 22px;
+        margin: 7px;
+    }
+
     margin: 20px 0px;
 
     form {
@@ -42,15 +47,26 @@
         text-decoration: none;
     }
 
-    ul {
+    #header-menu {
         list-style: none;
         padding: 0px;
         margin: 0px;
+
+        li {
+            display: inline;
+            margin: 0px 5px 0px 0px;
+        }
     }
 
-    li {
-        display: inline;
-        margin: 0px 5px 0px 0px;
+    #draw-menu {
+        list-style: none;
+        padding: 0px;
+        margin: 0px;
+
+        li {
+            margin: 20px;
+        }
     }
 
 }
+
