@@ -5,8 +5,10 @@ import "./forms/style.scss";
 import "./global/body.scss";
 import "./header/style.scss";
 import "./footer/style.scss";
+import "./home/index.ts";
 import "./project/index.tsx";
 import "./global/index";
+
 import * as jQuery from "jquery";
 import * as injectTapEventPlugin from "react-tap-event-plugin";
 
