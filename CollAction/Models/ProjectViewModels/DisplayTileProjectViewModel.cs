@@ -28,7 +28,7 @@ namespace CollAction.Models
 
         public string RemainingTime { get; set; }
 
-        public string BannerImagePath { get; set; } = "https://placeholdit.imgix.net/~text?txtsize=33&txt=Project%20Image";
+        public string BannerImagePath { get; set; }
 
         public int Target { get; set; }
 
@@ -49,12 +49,8 @@ namespace CollAction.Models
 
         private void setRemainingTime(DateTime projectStart, DateTime projectEnd)
         {
-            TimeSpan remainingTime;
-
-            if (DateTime.UtcNow >= projectEnd || projectEnd <= projectStart)
-                remainingTime =  TimeSpan.Zero;
-            remainingTime= projectEnd - (DateTime.UtcNow > projectStart ? DateTime.UtcNow : projectStart);
-
+            TimeSpan remainingTime = (DateTime.UtcNow >= projectEnd || projectEnd <= projectStart) ? TimeSpan.Zero : projectEnd - (DateTime.UtcNow > projectStart ? DateTime.UtcNow : projectStart);
+            
             if (remainingTime.TotalDays < 1)
                 RemainingTime = String.Format("{0} {1}", remainingTime.Hours, remainingTime.Hours == 1 ? _localizer["hour"] : _localizer["hours"]);
             else
