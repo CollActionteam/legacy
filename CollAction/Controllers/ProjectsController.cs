@@ -366,31 +366,10 @@ namespace CollAction.Controllers
         [HttpGet]
         public async Task<JsonResult> GetTileProjects(int? categoryId, int? locationId)
         {
-            var tileProjects = await _service.GetTileProjects(p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted
+            var displayTileProjectViewModels = await _service.GetTileProjects(Url, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted
             && (categoryId != null ? p.CategoryId == categoryId : true) && (locationId != null ? p.LocationId == locationId : true));
-
-            List<DisplayTileProjectViewModel> displayTileProjectViewModel = tileProjects.Select(t =>
-            {
-                var tileViewModel = new DisplayTileProjectViewModel
-                {
-                    ProjectId = t.ProjectId,
-                    ProjectName = t.ProjectName,
-                    ProjectProposal = t.ProjectProposal,
-                    CategoryName = t.CategoryName,
-                    CategoryColorHex = t.CategoryColorHex,
-                    LocationName = t.LocationName,
-                    Target = t.Target,
-                    Participants = t.Participants,
-                    ProgressPercent = t.ProgressPercent,
-                    BannerImagePath = (t.BannerImage != null) ? Url.Content(t.BannerImage.Filepath.Replace('\\', '/')) : "https://placeholdit.imgix.net/~text?txtsize=33&txt=Project%20Image"
-                };
-                tileViewModel.setRemainingTime(t.RemainingTime);
-                tileViewModel.setStatusTexts(t.ProjectStatus, t.IsActive, t.IsComingSoon, t.IsClosed);
-                return tileViewModel;
-            }
-            ).ToList();
-
-            return Json(displayTileProjectViewModel);
+            
+            return Json(displayTileProjectViewModels);
         }
     }
 }

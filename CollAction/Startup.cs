@@ -163,12 +163,12 @@ namespace CollAction
                  );
 
                 routes.MapRoute("getCategories",
-                     "categories",
+                     "api/categories",
                      new { controller = "Projects", action = "GetCategories" }
                  );
 
                 routes.MapRoute("GetTileProjects",
-                     "tileProjects",
+                     "api/projects/find",
                      new { controller = "Projects", action = "GetTileProjects" }
                  );
 

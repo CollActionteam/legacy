@@ -1,10 +1,19 @@
-﻿using Microsoft.AspNetCore.Mvc.Routing;
+﻿using Microsoft.Extensions.Localization;
 using System;
 
 namespace CollAction.Models
 {
     public class DisplayTileProjectViewModel
     {
+        private readonly IStringLocalizer _localizer;
+
+        public DisplayTileProjectViewModel(IStringLocalizer localizer, DateTime projectStart, DateTime projectEnd, ProjectStatus projectStatus, bool IsActive, bool isComingSoon, bool isClosed)
+        {
+            _localizer = localizer;
+            setRemainingTime(projectStart, projectEnd);
+            setStatusTexts(projectStatus, IsActive, isComingSoon, isClosed);
+        }
+
         public int ProjectId { get; set; }
 
         public string ProjectName { get; set; }
@@ -19,33 +28,47 @@ namespace CollAction.Models
 
         public string RemainingTime { get; set; }
 
-        public string BannerImagePath { get; set; }
+        public string BannerImagePath { get; set; } = "https://placeholdit.imgix.net/~text?txtsize=33&txt=Project%20Image";
 
         public int Target { get; set; }
 
         public int Participants { get; set; }
 
-        public int ProgressPercent { get; set; }
+        public int ProgressPercent
+        {
+            get
+            {
+                return Math.Min(Participants * 100 / Target, 100);
+            }
+        }
 
         public string StatusText { get; set; }
 
         public string StatusSubText { get; set; }
 
 
-        public void setRemainingTime(TimeSpan remainingTime)
+        private void setRemainingTime(DateTime projectStart, DateTime projectEnd)
         {
+            TimeSpan remainingTime;
+
+            if (DateTime.UtcNow >= projectEnd || projectEnd <= projectStart)
+                remainingTime =  TimeSpan.Zero;
+            remainingTime= projectEnd - (DateTime.UtcNow > projectStart ? DateTime.UtcNow : projectStart);
+
             if (remainingTime.TotalDays < 1)
-                RemainingTime = String.Format("{0} {1}", remainingTime.Hours, remainingTime.Hours == 1 ? "hour" : "hours");
+                RemainingTime = String.Format("{0} {1}", remainingTime.Hours, remainingTime.Hours == 1 ? _localizer["hour"] : _localizer["hours"]);
             else
-                RemainingTime = String.Format("{0} {1}", remainingTime.Days, remainingTime.Days == 1 ? "day" : "days");
+                RemainingTime = String.Format("{0} {1}", remainingTime.Days, remainingTime.Days == 1 ? _localizer["day"] : _localizer["days"]);
         }
 
-        public void setStatusTexts(ProjectStatus projectStatus, bool IsActive, bool isComingSoon, bool isClosed)
+        private void setStatusTexts(ProjectStatus projectStatus, bool IsActive, bool isComingSoon, bool isClosed)
         {
             if (IsActive)
                 StatusText = "OPEN!";
             else if (isComingSoon)
                 StatusText = "COMING SOON";
+            else if (isClosed)
+                StatusText = "CLOSED";
             else if (projectStatus == ProjectStatus.Successful)
             {
                 StatusText = "CLOSED SUCCESSFUL";
