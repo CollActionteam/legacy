@@ -28,18 +28,14 @@ namespace CollAction.Models
 
         public async Task SetNewsletterSubscription(ApplicationDbContext context, string email, bool wantsSubscription)
         {
-            NewsletterSubscription subscription = await context.NewsletterSubscriptions.SingleOrDefaultAsync(s => s.Email.Equals(email, StringComparison.Ordinal));
+            NewsletterSubscription subscription = await context.NewsletterSubscriptions.SingleOrDefaultAsync(s => s.Email.ToLower() == email.ToLower());
             if (wantsSubscription)
             {
                 NewsletterSubscription = subscription == null ? new NewsletterSubscription { Email = email } : subscription;
             }
             else
             {
-                if (subscription != null)
-                {
-                    context.NewsletterSubscriptions.Remove(subscription);
-                    await context.SaveChangesAsync();
-                }
+                if (subscription != null) { context.NewsletterSubscriptions.Remove(subscription); }
                 NewsletterSubscription = null;
             }
         }

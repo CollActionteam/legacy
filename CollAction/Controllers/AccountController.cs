@@ -115,7 +115,7 @@ namespace CollAction.Controllers
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                user.SetNewsletterSubscription(_context, model.Email, model.NewsletterSubscription);
+                await user.SetNewsletterSubscription(_context, model.Email, model.NewsletterSubscription);
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
