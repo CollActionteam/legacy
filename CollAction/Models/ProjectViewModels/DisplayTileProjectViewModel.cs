@@ -42,6 +42,8 @@ namespace CollAction.Models
             }
         }
 
+        public string Status { get; set; }
+
         public string StatusText { get; set; }
 
         public string StatusSubText { get; set; }
@@ -60,20 +62,31 @@ namespace CollAction.Models
         private void setStatusTexts(ProjectStatus projectStatus, bool IsActive, bool isComingSoon, bool isClosed)
         {
             if (IsActive)
-                StatusText = "OPEN!";
+            {
+                Status = "open";
+                StatusText = _localizer["OPEN!"];
+            }
             else if (isComingSoon)
-                StatusText = "COMING SOON";
+            {
+                Status = "comingSoon";
+                StatusText = _localizer["COMING SOON"];
+            }
             else if (isClosed)
-                StatusText = "CLOSED";
+            {
+                Status = "closed";
+                StatusText = _localizer["CLOSED"];
+            }
             else if (projectStatus == ProjectStatus.Successful)
             {
-                StatusText = "CLOSED SUCCESSFUL";
-                StatusSubText = "WIN!";
+                Status = "successful";
+                StatusText = _localizer["CLOSED SUCCESSFUL"];
+                StatusSubText = _localizer["WIN!"];
             }
             else if (projectStatus == ProjectStatus.Failed)
             {
-                StatusText = "CLOSED FAIL";
-                StatusSubText = "OUCH!";
+                Status = "fail";
+                StatusText = _localizer["CLOSED FAIL"];
+                StatusSubText = _localizer["OUCH!"];
             }
         }
 
