@@ -15,6 +15,8 @@ namespace CollAction.Models
 
         public int Participants { get; set; }
 
+        public bool IsUserCommitted { get; set; } = false;
+
         public bool HasDescriptionVideo { get { return Project.DescriptionVideoLink != null; } }
 
         public string DescriptionVideoYouTubeEmbedLink {

@@ -15,6 +15,7 @@ using System.Data.SqlClient;
 using Npgsql;
 using Microsoft.AspNetCore.Hosting;
 using CollAction.Helpers;
+using CollAction.Services;
 using System.Text.RegularExpressions;
 
 namespace CollAction.Controllers
@@ -25,13 +26,15 @@ namespace CollAction.Controllers
         private readonly IStringLocalizer<ProjectsController> _localizer;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IProjectService _service;
 
-        public ProjectsController(ApplicationDbContext context, IStringLocalizer<ProjectsController> localizer, UserManager<ApplicationUser> userManager, IHostingEnvironment hostingEnvironment)
+        public ProjectsController(ApplicationDbContext context, IStringLocalizer<ProjectsController> localizer, UserManager<ApplicationUser> userManager, IHostingEnvironment hostingEnvironment, IProjectService service)
         {
             _context = context;
             _localizer = localizer;
             _userManager = userManager;
             _hostingEnvironment = hostingEnvironment;
+            _service = service;
         }
 
         public ViewResult StartInfo()
@@ -79,8 +82,14 @@ namespace CollAction.Controllers
             {
                 return NotFound();
             }
+            DisplayProjectViewModel displayProject = items.First();
+            string userId = (await _userManager.GetUserAsync(User))?.Id;
+            if (userId != null && (await _service.GetParticipant(userId, displayProject.Project.Id) != null))
+            {
+                displayProject.IsUserCommitted = true;
+            }
 
-            return View(items.First());
+            return View(displayProject);
         }
 
         // GET: Projects/Create
@@ -90,7 +99,6 @@ namespace CollAction.Controllers
             return View(new CreateProjectViewModel
             {
                 Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description"),
-                Locations = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", null)
             });
         }
 
@@ -110,7 +118,6 @@ namespace CollAction.Controllers
 
             if (!ModelState.IsValid) {
                 createProjectViewModel.Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
-                createProjectViewModel.Locations = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", null);
                 return View(createProjectViewModel);
             }
 
@@ -125,8 +132,8 @@ namespace CollAction.Controllers
                 CategoryId = createProjectViewModel.CategoryId,
                 LocationId = createProjectViewModel.LocationId,
                 Target = createProjectViewModel.Target,
+                Start = createProjectViewModel.Start,
                 End = createProjectViewModel.End,
-                Start = DateTime.UtcNow,
                 BannerImage = null 
             };
 
@@ -140,6 +147,10 @@ namespace CollAction.Controllers
 
             _context.Add(project);
             await _context.SaveChangesAsync();
+
+            // Only call this once we have a valid Project.Id
+            await project.SetTags(_context, createProjectViewModel.Hashtag?.Split(';') ?? new string[0]);
+            
             return RedirectToAction("Index");
         }
 
@@ -152,7 +163,11 @@ namespace CollAction.Controllers
                 return NotFound();
             }
 
-            var project = await _context.Projects.Include(p => p.BannerImage).Include(p => p.DescriptionVideoLink).SingleOrDefaultAsync(m => m.Id == id);
+            var project = await _context.Projects
+                                    .Include(p => p.BannerImage)
+                                    .Include(p => p.DescriptionVideoLink)
+                                    .Include(p => p.Tags).ThenInclude(t => t.Tag)
+                                    .SingleOrDefaultAsync(p => p.Id == id);
             if (project == null)
             {
                 return NotFound();
@@ -174,11 +189,12 @@ namespace CollAction.Controllers
                 CategoryId = project.CategoryId,
                 Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description", project.CategoryId),
                 LocationId = project.LocationId,
-                Locations = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", project.LocationId),
                 Target = project.Target,
+                Start = project.Start,
                 End = project.End,
                 DescriptionVideoLink = project.DescriptionVideoLink?.Link,
-                BannerImageFile = project.BannerImage
+                BannerImageFile = project.BannerImage,
+                Hashtag = project.HashTags
             };
 
             return View(editProjectViewModel);
@@ -217,7 +233,6 @@ namespace CollAction.Controllers
             if (!ModelState.IsValid)
             {
                 editProjectViewModel.Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
-                editProjectViewModel.Locations = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", null);
                 return View(editProjectViewModel);
             }
 
@@ -229,6 +244,7 @@ namespace CollAction.Controllers
             project.CategoryId = editProjectViewModel.CategoryId;
             project.LocationId = editProjectViewModel.LocationId;
             project.Target = editProjectViewModel.Target;
+            project.Start = editProjectViewModel.Start;
             project.End = editProjectViewModel.End;
 
             project.SetDescriptionVideoLink(_context, editProjectViewModel.DescriptionVideoLink);
@@ -239,6 +255,8 @@ namespace CollAction.Controllers
                 if (project.BannerImage != null) { manager.DeleteImageFile(project.BannerImage); }
                 project.BannerImage = await manager.UploadFormFile(editProjectViewModel.BannerImageUpload, Guid.NewGuid().ToString() /* unique filename */);
             }
+
+            await project.SetTags(_context, editProjectViewModel.Hashtag?.Split(';') ?? new string[0]);
 
             try
             {
@@ -301,10 +319,57 @@ namespace CollAction.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize]
+        public async Task<IActionResult> Commit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var project =  await _service.GetProjectById(id); 
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            var commitProjectViewModel = new CommitProjectViewModel
+            {
+                ProjectId = project.Id,
+                ProjectName = project.Name,
+                IsUserCommitted = (await _service.GetParticipant((await _userManager.GetUserAsync(User)).Id, project.Id) != null)
+            };
+            
+            return View(commitProjectViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> Commit(int id, CommitProjectViewModel commitProjectViewModel)
+        {
+            if (id != commitProjectViewModel.ProjectId)
+            {
+                return NotFound();
+            }
+            
+            bool success = await _service.AddParticipant((await _userManager.GetUserAsync(User)).Id, commitProjectViewModel.ProjectId);
+            return success ? View("ThankYouCommit", commitProjectViewModel) : View("Error");
+        }
+
         [HttpGet]
         public async Task<JsonResult> GetCategories()
         {       
             return Json(await _context.Categories.Select(c => new { c.Id, c.Name }).ToListAsync());
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetTileProjects(int? categoryId, int? locationId)
+        {
+            var displayTileProjectViewModels = await _service.GetTileProjects(Url, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted
+            && (categoryId != null ? p.CategoryId == categoryId : true) && (locationId != null ? p.LocationId == locationId : true));
+            
+            return Json(displayTileProjectViewModels);
         }
     }
 }

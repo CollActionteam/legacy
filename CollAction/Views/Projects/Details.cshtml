@@ -8,7 +8,6 @@
     ViewData["Title"] = Localizer["Details"];
 }
 
-
 <div id="project-details">
     <div class="container">
         <div class="row">
@@ -61,8 +60,16 @@
                             </li>
                         </ul>
                     </div>
-
-                    <a id="take-part-button">Take Part</a>
+                    @{
+					    if (Model.IsUserCommitted)
+					    {
+					        <p>You're participating!</p>
+					    }
+					    else
+					    {
+					        <a id="take-part-button" asp-action="Commit" asp-route-id="@Model.Project.Id">Take Part</a>
+					    }
+    				}
                 </div>
             </div> 
         </div> 
