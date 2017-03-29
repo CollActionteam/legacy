@@ -18,7 +18,7 @@ const TeamMemberThumb = ({ teamMember }) => {
   const imageSrc = `/images/team/${teamMember.name}.jpg`;
   return (
     <div className="team-member">
-      <div>
+      <div className="team-member-image-container">
         <img src={imageSrc} />
       </div>
       <div>
@@ -32,11 +32,15 @@ const TeamMemberThumb = ({ teamMember }) => {
 }
 
 const NavigationDots = ({ currentIndex, length}) => {
+  const dotClicked = () => {
+    const node = this.getDomNode();
+  };
+
   const dots = [...Array(length).keys()].map((index) => {
     if (index === currentIndex) {
-      return <div className="dot dot-active" key={index} />;
+      return <div className="dot dot-active" key={index} onClick={dotClicked} />;
     }
-    return <div className="dot" key={index} />;
+    return <div className="dot" key={index} onClick={dotClicked}/>;
   });
 
   return (
