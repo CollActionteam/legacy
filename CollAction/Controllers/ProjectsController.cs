@@ -362,5 +362,14 @@ namespace CollAction.Controllers
         {       
             return Json(await _context.Categories.Select(c => new { c.Id, c.Name }).ToListAsync());
         }
+
+        [HttpGet]
+        public async Task<JsonResult> GetTileProjects(int? categoryId, int? locationId)
+        {
+            var displayTileProjectViewModels = await _service.GetTileProjects(Url, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted
+            && (categoryId != null ? p.CategoryId == categoryId : true) && (locationId != null ? p.LocationId == locationId : true));
+            
+            return Json(displayTileProjectViewModels);
+        }
     }
 }

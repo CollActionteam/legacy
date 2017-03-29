@@ -1,4 +1,5 @@
 ﻿using CollAction.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -15,5 +16,9 @@ namespace CollAction.Services
         Task<bool> AddParticipant(string userId, int projectId);
 
         Task<ProjectParticipant> GetParticipant(string userId, int projectId);
+
+        Task<IEnumerable<DisplayTileProjectViewModel>> GetTileProjects(IUrlHelper urlHelper, Expression<Func<Project, bool>> WhereExpression);
+
+        string GetImagePath(IUrlHelper url, ImageFile imageFile, string defaultImagePath);
     }
 }
