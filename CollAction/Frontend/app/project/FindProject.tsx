@@ -1,37 +1,35 @@
-import { ProjectFilter, IProjectFilterState } from "./ProjectFilter";
+import { ProjectFilter, IProjectFilter } from "./ProjectFilter";
 import ProjectList from "./ProjectList";
 import * as React from "react";
 import { IProject } from "./ProjectList";
 
+
 interface IFindProjectState {
   projectList: IProject[];
-  projectFilterState: IProjectFilterState;
+  projectFilterState: IProjectFilter;
   projectFetching: boolean;
   projectFetchError: any;
+
 }
 
 export default class FindProject extends React.Component<null, IFindProjectState> {
   constructor (props) {
     super(props);
     const projectList = [];
-    const projectFilterState:IProjectFilterState = {
-      filter: '1',
-      status: '2',
-      location: '3',
-    };
 
     this.state = {
       projectList,
-      projectFilterState,
+      projectFilterState: null,
       projectFetching: false,
       projectFetchError: null,
     };
   }
 
-  async fetchProjects() {
+  async fetchProjects(projectFilter: IProjectFilter) {
     this.setState({ projectFetching: true });
     try {
-      const searchProjectRequest: Request = new Request("/Projects/Find");
+      const url: string = `/api/projects/find?categoryId=${projectFilter.categoryId}&statusId=${this.state.projectFilterState.statusId}`;
+      const searchProjectRequest: Request = new Request(url);
       const fetchResult: Response = await fetch(searchProjectRequest);
       const jsonResponse = await fetchResult.json();
       this.setState({ projectFetching: false, projectList: jsonResponse });
@@ -40,15 +38,15 @@ export default class FindProject extends React.Component<null, IFindProjectState
     }
   }
 
-  onChange (newState: IProjectFilterState) {
+  onChange (newState: IProjectFilter) {
     this.setState({ projectFilterState: newState });
-    this.fetchProjects();
+    this.fetchProjects(newState);
   }
 
   render () {
     return (
       <div id="find-project">
-        <ProjectFilter onChange={(searchState: IProjectFilterState) => this.onChange(searchState) }/>
+        <ProjectFilter onChange={(searchState: IProjectFilter) => this.onChange(searchState) }/>
         <ProjectList projectList={this.state.projectList} />
       </div>
     );

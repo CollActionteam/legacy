@@ -1,41 +1,89 @@
 import * as React from "react";
+import { IDropDownListItem } from "./DropDown";
 import DropDown from "./DropDown";
 
-const filterList = [ "all", "some" ];
-const statusList = [ "open", "closed", "funded" ];
-const locationList = [ "earth", "somewhere else" ];
-
-function onFilterChanged () {
-  console.log('onChange');
-}
-
 interface IProjectFilterProps {
-  onChange: (projectFilterState: IProjectFilterState) => void;
+  onChange: (projectFilterState: IProjectFilter) => void;
 }
 
-export interface IProjectFilterState {
-  filter: string;
-  status: string;
-  location: string;
+export interface IProjectFilter {
+  categoryId: string;
+  statusId: string;
+}
+
+interface IProjectFilterState {
+  categories: IDropDownListItem[];
+  statusList: IDropDownListItem[];
+  categoriesFetching: boolean;
+  categoriesFetchError: any;
+  filterState: IProjectFilter;
 }
 
 export class ProjectFilter extends React.Component<IProjectFilterProps, IProjectFilterState> {
 
   constructor (props) {
     super(props);
+
+    const statusList: IDropDownListItem[] = [
+      { id: "1", name: "open" },
+      { id: "2", name: "closed" },
+      { id: "3", name: "funded" },
+    ];
+
     this.state = {
-      filter: filterList[0],
-      status: statusList[0],
-      location: locationList[0],
+      filterState : {
+        categoryId: null,
+        statusId: statusList[0].id,
+      },
+      categories: [],
+      categoriesFetching: false,
+      categoriesFetchError: null,
+      statusList,
     };
   }
 
-  onChange(field: string, value: string) {
+  componentDidMount() {
+    this.fetchCategories();
+  }
+
+  async fetchCategories() {
+    try {
+      this.setState({ categoriesFetching: true });
+      const getCategoriesRequest: Request = new Request("/api/categories");
+      const fetchResult: Response = await fetch(getCategoriesRequest);
+      const jsonResponse = await fetchResult.json();
+
+      this.setState({
+        categoriesFetching: false,
+        categories: jsonResponse,
+        filterState: {
+          ...this.state.filterState,
+          categoryId: jsonResponse[0].id.toString(),
+        },
+      });
+
+      this.props.onChange({
+        ...this.state.filterState,
+        categoryId: jsonResponse[0].id.toString(),
+      });
+
+    } catch (e) {
+      console.error(e);
+      this.setState({ categoriesFetching: false, categoriesFetchError: e });
+    }
+  }
+
+  onChange(field: string, value: IDropDownListItem) {
     const toUpdate = {};
-    toUpdate[field] = value;
-    this.setState(toUpdate);
+    toUpdate[field] = value.id.toString();
+    this.setState({
+      filterState: {
+        ...this.state.filterState,
+        ...toUpdate,
+      }
+    });
     this.props.onChange({
-      ...this.state,
+      ...this.state.filterState,
       ...toUpdate,
     });
   }
@@ -47,12 +95,9 @@ export class ProjectFilter extends React.Component<IProjectFilterProps, IProject
           <div className="row">
             <div className="col-xs-12">
               Show me
-              <DropDown onChange={value => this.onChange("filter", value)} options={filterList} />
-              projects sorted on
-              <DropDown onChange={value => this.onChange("location", value)} options={locationList}/>
-              <br />
-              which are
-              <DropDown onChange={value => this.onChange("status", value)} options={statusList} />
+              <DropDown onChange={value => this.onChange("categoryId", value)} options={this.state.categories} />
+              projects which are
+              <DropDown onChange={value => this.onChange("statusId", value)} options={this.state.statusList} />
             </div>
           </div>
         </div>

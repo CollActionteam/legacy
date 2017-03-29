@@ -1,3 +1,5 @@
+@import '../../mixins';
+
 #find-project {
   width: 100%;
 
@@ -23,10 +25,10 @@
       }
 
       .drop-down-options {
+        @include card;
         position: absolute;
         z-index: 1;
-        padding: 15px;
-        width: 200px;
+        padding: 30px;
         font-size: 16px;
         left: 0px;
 
