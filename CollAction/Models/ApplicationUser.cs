@@ -28,10 +28,11 @@ namespace CollAction.Models
 
         public async Task SetNewsletterSubscription(ApplicationDbContext context, string email, bool wantsSubscription)
         {
-            NewsletterSubscription subscription = await context.NewsletterSubscriptions.SingleOrDefaultAsync(s => s.Email.ToLower() == email.ToLower());
+            string formattedEmail = email.ToLower();
+            NewsletterSubscription subscription = await context.NewsletterSubscriptions.SingleOrDefaultAsync(s => s.Email == formattedEmail);
             if (wantsSubscription)
             {
-                NewsletterSubscription = subscription == null ? new NewsletterSubscription { Email = email } : subscription;
+                NewsletterSubscription = subscription == null ? new NewsletterSubscription { Email = formattedEmail } : subscription;
             }
             else
             {
