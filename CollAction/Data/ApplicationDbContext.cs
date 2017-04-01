@@ -37,6 +37,7 @@ namespace CollAction.Data
         public DbSet<ImageFile> ImageFiles { get; set; }
         public DbSet<VideoLink> VideoLinks { get; set; }
         public DbSet<Job> Jobs { get; set; }
+        public DbSet<NewsletterSubscription> NewsletterSubscriptions { get; set; }
 
         /// <summary>
         /// Configure the model (foreign keys, relations, primary keys, etc)
@@ -66,7 +67,8 @@ namespace CollAction.Data
                                       .HasForeignKey(l => l.Level2Id)
                                       .OnDelete(DeleteBehavior.SetNull);
             builder.Entity<LocationLevel2>().HasOne(l => l.Location);
-            }
+            builder.Entity<NewsletterSubscription>().HasIndex(s => s.Email).HasName("IX_NewsletterSubscription_Email").IsUnique();
+        }
 
         /// <summary>
         /// Seed the database with initialisation data here
