@@ -61,7 +61,7 @@ namespace CollAction.Services
 
         public async Task<IEnumerable<DisplayTileProjectViewModel>> GetTileProjects(IUrlHelper urlHelper, Expression<Func<Project, bool>> WhereExpression)
         {
-            return await _context.Projects
+            return _context.Projects
                .Where(WhereExpression)
                .OrderBy(p => p.DisplayPriority)
                .Select(p =>
@@ -77,7 +77,7 @@ namespace CollAction.Services
                     Target = p.Target,
                     Participants = p.Participants.Count()
                 })
-               .ToListAsync();
+               .ToList();
         }
 
         public string GetImagePath(IUrlHelper url, ImageFile imageFile, string defaultImagePath)
