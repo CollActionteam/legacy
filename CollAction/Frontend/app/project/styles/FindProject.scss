@@ -1,0 +1,115 @@
+@import '../../mixins';
+
+#find-project {
+  width: 100%;
+
+  #project-filter {
+    color: #eee;
+    padding: 30px 0px;
+    background-color: #333;
+    font-size: 3em;
+
+    .project-filter-drop-down {
+      cursor: pointer;
+      display: inline-block;
+      border: 3px solid #eee;
+      padding: 0px 25px;
+      border-radius: 35px;
+      margin: 15px;
+      user-select: none;
+      position: relative;
+
+      i {
+        font-size: 0.75em;
+        margin-left: 5px;
+      }
+
+      .drop-down-options {
+        @include card;
+        position: absolute;
+        z-index: 1;
+        padding: 30px;
+        font-size: 16px;
+        left: 0px;
+
+        ul {
+          margin: 0px;
+          padding: 0px;
+          li {
+            list-style: none;
+            margin: 10px 0px;
+          }
+        }
+      }
+    }
+  }
+}
+
+#project-list {
+  padding: 30px 0px;
+
+  .project-thumb {
+    box-shadow: 6px 6px 62px -30px rgba(0,0,0,0.6);
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 0px !important;
+
+    .project-thumb-image {
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      width: 100%;
+      height: 200px;
+    }
+
+    .project-thumb-stats,
+    .project-thumb-about,
+    .project-thumb-button,
+    .project-thumb-body {
+      margin: 15px; 
+
+      p {
+        margin: 0px;
+      }
+    }
+
+    .project-thumb-about {
+      font-weight: bold;
+      font-size: 32px;
+    }
+
+    .project-thumb-button {
+      width: 60%;
+      margin: 15px auto;
+      a {
+        @include coll-action-button;
+        font-size: 10px;
+      }
+    }
+
+    .project-thumb-stats {
+      padding-top: 5px;
+      border-top: 1px solid #ccc;
+      > div {
+        width: 33%;
+        display: inline-block;
+      }
+
+      .label {
+        font-size: 10px;
+      }
+
+      .value {
+        font-size: 16px;
+      }
+    }
+
+    .category-name {
+      display: inline-block;
+      margin: 15px;
+      padding: 3px 10px;
+      border-radius: 5px;
+      color: #fff;
+      float: right;
+    }
+  }
+}

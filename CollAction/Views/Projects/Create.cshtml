@@ -8,46 +8,10 @@
     ViewData["Title"] = Localizer["Create"];
 }
 
-<div id="project-create-nice">
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-3">
-                <div id="nice-circle">
-                    Nice!
-                </div>
-            </div>
-            <div class="col-xs-9">
-                <h1>Copy Needed</h1>
-                <p>
-                    Would you like to do something about a social or environmental problem? Would you like to lead the crowdacting movement? Start a project on CollAction! 
-                    
-                    There are a few criteria that your project needs to meet – so please check those here first. We’ll wait while you read it… [link (new tab) to FAQs at the level of “What are the criteria that a project has to meet?”]
-
-                    …All good? Then click here to start your project! [link to Start Project form page (through log in/registration)  
-                </p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="project-create-starting">
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-12">
-                <h1>Starting a Project</h1>
-                <h4>(It's Super Easy)</h4>
-            </div>
-        </div>
-        <div class="row">
-            <div id="project-create-landscape-carousel"></div>
-        </div>
-    </div>
-</div>
-
 <div id="project-create-form">
     <div class="container">
         <div class="row">
-            <div class="col-xs-6 col-xs-offset-3">
+            <div class="col-md-6 col-md-offset-3 col-xs-12">
                 <form asp-action="Create" enctype="multipart/form-data">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">

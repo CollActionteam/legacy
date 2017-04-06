@@ -6,78 +6,43 @@
     ViewData["Title"] = Localizer["Start Project"];
 }
 
-<h2>Start Project</h2>
-<p>
-    Do you want to solve a social, societal, cultural and/or ecological
-    problem? Do you want to lead the crowdacting movement? In
-    that case, you should start a project! However, there are some
-    criteria which your project has to meet – you can find these with
-    the frequently asked questions @Html.ActionLink("on this page", "About", "Home").
-</p>
-<br />
-<h3>The steps</h3>
 
-<p> project consists of the next 6 steps:</p>
-<ol>
-    <li>
-        <b>Registering</b>: Complete the below registration form in full.
-    </li>
-    <li>
-        <b>Assessment</b>: CollAction judges if your project meets the
-        criteria @Html.ActionLink("on this page", "About", "Home"). If necessary, CollAction contacts you to
-        discuss/clarify it.
-    </li>
-    <li>
-        <b>Placement</b>: On approval, the project will be placed on
-        collaction.org.
-    </li>
-    <li>
-        <b>Campaign</b>: You are going to campaign to reach your target.
-    </li>
-    <li>
-        <b>Action</b>: When the target has been reached, all supporters will
-        take action.
-    </li>
-    <li>
-        <b>Measuring of the impact</b>: After the action period, you
-        measure how many people did act in the end and you share this
-        with the CollAction team.
-    </li>
-</ol>
-<br />
-<h3>Registering a Project</h3>
-<p>
-    Great that you would like to start a project! Step 1 is to fill in the
-    registration form. Below you can find the details that you need to
-    register your project. Your entry will be tested by CollAction.org
-    based on the criteria mentioned. On approval, your project will
-    appear on the site and people can start registering for it!
-</p>
-<ul>
-    <li>
-        NAME PROJECT
-    </li>
-    <li>
-        SHORT DESCRIPTION
-    </li>
-    <li>
-        GOAL
-    </li>
-    <li>
-        TARGET &amp; DEADLINE
-    </li>
-    <li>
-        (OPTIONAL) VIDEO/IMAGE
-    </li>
-    <li>
-        ADDITIONAL REMARKS
-    </li>
-</ul>
-<p>
-    Fill in the form as clearly as possible: this is information that will
-    eventually end up on collaction.org!
-</p>
-<br />
+<div id="project-create-nice">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 hidden-xs">
+                <div id="nice-circle">
+                    Nice!
+                </div>
+            </div>
+            <div class="col-md-9 col-xs-12">
+                <h1>Start Project</h1>
+                <p>
+                    Would you like to do something about a social or environmental problem? Would you like to lead the crowdacting movement? Start a project on CollAction! 
+                    
+                    There are a few criteria that your project needs to meet – so please check those here first. We’ll wait while you read it… [link (new tab) to FAQs at the level of “What are the criteria that a project has to meet?”]
+
+                    …All good? Then click here to start your project! [link to Start Project form page (through log in/registration)  
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="project-create-starting">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h1>Starting a Project</h1>
+                <h4>(It's Super Easy)</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div id="project-create-landscape-carousel"></div>
+        </div>
+    </div>
+</div>
+
 <div class="text-center">
     @Html.ActionLink("GO TO THE REGISTRATION FORM", "Create", "Projects", null, new { @class = "btn btn-success" })
 </div>

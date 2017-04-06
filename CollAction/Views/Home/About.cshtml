@@ -5,21 +5,115 @@
 @{
     ViewData["Title"] = Localizer["About"];
 }
-<div>
-    <h3>CollAction.org - the first Crowd Acting platform in the world.</h3>
-    <blockquote>
-        <p>“A better world starts with the crowd.”</p>
-    </blockquote>
+
+<div id="about-page">
+
+   <div class="container">
+     <div class="row" id="intro">
+        <nav class="hidden-xs col-md-2">
+            <ul>
+                <li><a href="#about-us">About Us</a></li>
+                <li><a href="#about-collaction">About CollAction</a></li>
+                <li><a href="#meet-the-team">Meet The Team</a></li>
+                <li><a href="#jobs">Jobs</a></li>
+                <li><a href="#partners">Partners</a></li>
+                <li><a href="#faq">FAQ</a></li>
+            </ul>
+        </nav>
+      </div>
+    </div>
 
     <div class="embed-responsive embed-responsive-16by9">
         <iframe class="embed-responsive-item" src="http://www.youtube.com/embed/u6tqZqoh8DY?theme=dark&amp;rel=0&amp;wmode=transparent" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
     </div>
 
-    <br />
-    <br />
-    <br />
-    @Html.Partial("FAQ")
-    <br />
-    <hr />
+    <div id="about-us">
+        <div class="container" >
+            <div class="row" id="intro">
+                <div class="col-xs-12 col-md-9 col-md-offset-3">
+                    <h1>Our Mission</h1>
+                </div>
+                <div class="col-xs-12 col-md-9 col-md-offset-3">
+                    <h2>It's our mission to solve problems</h2>
+                    <p>
+                        Do you sometimes have the feeling that your actions are only a drop in the ocean? Well, not anymore, because we are introducing crowdacting: taking action knowing that you are one of many. We revamp the neighbourhood with a hundred people or switch to renewable energy with hundreds or thousands of people at the same time. Find out more about what crowdacting is in the video or the FAQs, take action collectively with one of the existing projects [hyperlink to Find Project page], or start your own crowdacting project [hyperlink to Start Project page].
+                    </p>
+                    <h3>“Power to the Crowd” [green and italic]</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="about-collaction">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-md-9 col-md-offset-3">
+                    <h1>About Collaction</h1>
+                </div>
+                <div class="col-xs-12 col-md-9 col-md-offset-3">
+                    <p>
+                        All about collaction.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="meet-the-team">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-md-9 col-md-offset-3">
+                    <h1>Meet the team</h1>
+                </div>
+                <div class="col-xs-12 col-md-9 col-md-offset-3">
+                    <div id="meet-the-team-widget"> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="jobs">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-md-9 col-md-offset-3">
+                    <h1>Want to join our team?</h1>
+                </div>
+                <div class="col-xs-12 col-md-9 col-md-offset-3">
+                    <p>
+                        All about collaction.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="partners">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-md-9 col-md-offset-3">
+                    <h1>Partners</h1>
+                </div>
+                <div class="col-xs-12 col-md-9 col-md-offset-3">
+                    <p>
+                        All about collaction.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="faq">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-md-9 col-md-offset-3">
+                    <h1>Frequently Asked Questions</h1>
+                </div>
+                <div class="col-xs-12 col-md-9 col-md-offset-3">
+                    @Html.Partial("FAQ")
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>
