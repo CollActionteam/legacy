@@ -1,0 +1,22 @@
+
+#index {
+  a {
+    @include coll-action-button;
+    width: 100%;
+  }
+
+  #three-steps,
+  #intro-text,
+  #banner-title {
+    padding: 50px 0px;
+  }
+
+  #banner-title {
+    background-color: #ccc;
+    color: $coll-action-green;
+  }
+
+  #three-steps {
+    background-color: $background-gray;
+  }
+}
