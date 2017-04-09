@@ -3,20 +3,111 @@
   a {
     @include coll-action-button;
     width: 100%;
+    margin-bottom: 20px;
+  }
+
+  #title-row {
+    h1 {
+      font-weight: bold;
+    }
+
+    h1, h2 {
+      margin:0px;
+      padding:0px;
+      font-weight: 400;
+    }
+
+    text-align: center;
+    margin-bottom: 50px;
+  }
+
+  #intro-text,
+  #three-steps {
+    h3 {
+      color: $coll-action-green;
+    }
+  }
+
+  #intro-text {
+    text-align: center;
+  }
+
+  #three-steps {
+    text-align: center;
   }
 
   #three-steps,
   #intro-text,
-  #banner-title {
+  #project-actions,
+  #project-share {
     padding: 50px 0px;
   }
 
+  #project-share {
+
+    h3 {
+      text-align: center;
+      color: $coll-action-green;
+    }
+
+    #homepage-share-buttons {
+      width: 135px;
+      margin: 0px auto;
+      .SocialMediaShareButton {
+        display: inline-block;
+        font-size: 20px;
+        padding: 7px 12px;
+        border-radius: 35px;
+        width: 40px;
+        height: 40px;
+        color: #fff;
+        margin-right: 5px;
+      }
+
+      .SocialMediaShareButton--facebook {
+        background-color: #3b5998;
+      }
+
+      .SocialMediaShareButton--twitter {
+        background-color: #00aced;
+      }
+
+      .SocialMediaShareButton--linkedin {
+        background-color: #007bb6;
+      }
+
+    }
+  }
+
   #banner-title {
-    background-color: #ccc;
+    background-color: #333;
     color: $coll-action-green;
+    padding: 150px 0px;
+
   }
 
   #three-steps {
     background-color: $background-gray;
+  }
+}
+
+@media (min-width: 991px) {
+  #project-actions {
+    display:none;
+  }
+
+  #banner-title {
+    a {
+      height: 150px;
+      border-radius: 150px;
+      width: 150px;
+      padding: 65px 0px;
+    }
+  }
+}
+
+@media (max-width: 991px) {
+  #project-create-starting {
+    display:none;
   }
 }

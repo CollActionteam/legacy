@@ -9,31 +9,44 @@
 <div id="index">
     <div id="banner-title">
         <div class="container">
-            <div class="row">
-                <div class="col-xs-12 col-md-9 col-md-offset-3">
-                    <h1>Title</h1>
+            <div class="row" id="title-row">
+                <div class="col-xs-12">
+                    <h1>@Localizer["POWER TO THE CROWD"]</h1>
                 </div>
-                <div class="col-xs-12 col-md-9 col-md-offset-3">
-                    <h2>Subtitle</h2>
+                <div class="col-xs-12">
+                    <h1>@Localizer["BEGINT BIJ DE CROWD"]</h1>
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-12 col-md-5 col-md-offset-7">
-                    <a href="/Projects/Find">Find Project</a>
+                <div class="col-xs-12 col-md-2 col-md-offset-4">
+                    <a href="/Projects/Find">
+                        @Localizer["Find Project"]
+                    </a>
                 </div>
-                <div class="col-xs-12 col-md-5 col-md-offset-7">
-                    <a href="/Projects/Create">Start a Project</a>
+                <div class="col-xs-12 col-md-2">
+                    <a href="/Projects/Create">
+                        @Localizer["Start a Project"]
+                    </a>
                 </div>
             </div>
         </div>
+
+        <div id="down-arrow">
+
+        </div>
+
     </div>
 
     <div id="intro-text">
         <div class="container">
             <div class="row">
-                <div class="col-xs-12 col-md-9 col-md-offset-3">
-                    <h1>Title</h1>
-                    <p>All About Croud Acting</p>
+                <div class="col-xs-12">
+                    <h3>
+                        Do you want to make the world a better place, but do you sometimes feel that your actions are only a drop in the ocean?
+                    </h3>
+                    <p>
+                        Well, not anymore, because we are introducing crowdacting: taking action knowing that you are one of many. We revamp the neighbourhood with a hundred people or switch to renewable energy with thousands at the same time. Find out more about crowdacting here [link to About page], take action collectively with one of the existing projects, or start your own crowdacting project. 
+                    </p>
                 </div>
             </div>
         </div>
@@ -42,47 +55,82 @@
     <div id="three-steps">
         <div class="container">
             <div class="row">
-                <div class="col-xs-12 col-md-3 col-md-offset-2">
-                    Croud acting in there steps
+                <div class="col-xs-12">
+                    <h2>@Localizer["Crowdacting in 3 steps"]</h2>
                 </div>
 
-                <div class="col-xs-12 col-md-3 col-md-offset-2">
+                <div class="col-xs-12 col-md-4">
                     <img href="/images/step1.jpg">
-                    <h3>Title</h3>
-                    <p>All About This Step</p>
+                    <h3>@Localizer["Proposal"]</h3>
+                    <p>
+                        @Localizer["Someone proposes a collective action and sets a target number of participants and a deadline"]
+                    </p>
                 </div>
 
-                <div class="col-xs-12 col-md-3">
+                <div class="col-xs-12 col-md-4">
                     <img href="/images/step1.jpg">
-                    <h3>Title</h3>
-                    <p>All About This Step</p>
+                    <h3>@Localizer["Crowd"]</h3>
+                    <p>
+                        @Localizer["Supporters pledge to join if the target is met before the deadline"]
+                    </p>
                 </div>
 
-                <div class="col-xs-12 col-md-3">
+                <div class="col-xs-12 col-md-4">
                     <img href="/images/step1.jpg">
-                    <h3>Title</h3>
-                    <p>All About This Step</p>
+                    <h3>@Localizer["Act"]</h3>
+                    <p>
+                        @Localizer["When the target number of supporters is met, we all act!"]
+                    </p>
                 </div>
 
             </div>
         </div>
     </div>
 
-    <div id="join-project">
+    <div id="project-actions">
         <div class="container">
-
-            <div class="row">
-                <div class="col-xs-12 col-md-3 col-md-offset-2">
-                    <h4>Join a Project</h4>
+            <div class="row project-action-buttons">
+                <div class="col-xs-12">
+                    <a href="/start">
+                        @Localizer["Starting a Project"]
+                    </a>
+                </div>
+                <div class="col-xs-12">
+                    <a href="/Projects/Find">
+                        @Localizer["Browse Projects"]
+                    </a>
                 </div>
             </div>
+        </div>
+    </div>
 
+    <div id="join-a-project"> 
+    </div>
+
+    <div id="project-create-starting">
+        <div class="container">
             <div class="row">
-                <div class="col-xs-12 col-md-3 col-md-offset-2">
-                    <div id="join-project-widget"></div>
+                <div class="col-xs-12">
+                    <h1>Starting a Project</h1>
+                    <h4>(It's Super Easy)</h4>
                 </div>
             </div>
+            <div class="row">
+                <div id="project-create-landscape-carousel"></div>
+            </div>
+        </div>
+    </div>
 
+    <div id="project-share">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12" id="share-title">
+                    <h3>Share Coll Action</h3>
+                </div>
+                <div class="col-xs-12">
+                    <div id="homepage-share-buttons"></div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

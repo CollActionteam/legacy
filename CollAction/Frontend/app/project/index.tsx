@@ -38,6 +38,11 @@ renderComponentIf(
 );
 
 renderComponentIf(
-  <FindProject />,
+  <FindProject controller={true} />,
   document.getElementById("project-controller")
+);
+
+renderComponentIf(
+  <FindProject controller={false} />,
+  document.getElementById("join-a-project")
 );

@@ -28,5 +28,8 @@
     "tslint": "^4.4.2",
     "typescript": "^2.1.5",
     "webpack": "^1.14.0"
+  },
+  "dependencies": {
+    "react-share": "^1.13.0"
   }
 }

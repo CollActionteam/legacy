@@ -1,10 +1,15 @@
+@import "../colors";
+
 #footer {
+    background-color: #efefef;
     padding: 50px 0px;
     text-decoration: none;
     font-size: .85em;
     line-height: 2.5em;
-    color: #999;
-    font-weight: bold;
+
+    ul {
+      margin-top: 0px;
+    }
 
     .social-list {
         padding: 0px;
@@ -12,10 +17,12 @@
         display: inline-block;
 
         li {
+            font-weight: bold;
+            color: #fff;
             float: left;
             height: 35px;
             width: 35px;
-            background-color: #efefef;
+            background-color: $coll-action-green;
             font-size: 1.5em;
             border-radius: 1em;
             margin-right: 5px;
