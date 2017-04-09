@@ -34,6 +34,21 @@
 
   #three-steps {
     text-align: center;
+    background-color: $background-gray;
+  }
+
+  #join-a-project {
+    h3 {
+      text-align: center;
+      font-size: 4em;
+      text-transform: uppercase;
+      letter-spacing: 10px;
+      color: $coll-action-green;
+    }
+  }
+
+  #project-create-starting {
+    background-color: #efefef;
   }
 
   #three-steps,
@@ -86,9 +101,6 @@
 
   }
 
-  #three-steps {
-    background-color: $background-gray;
-  }
 }
 
 @media (min-width: 991px) {
@@ -110,4 +122,8 @@
   #project-create-starting {
     display:none;
   }
+  #join-a-project {
+    display:none;
+  }
+
 }

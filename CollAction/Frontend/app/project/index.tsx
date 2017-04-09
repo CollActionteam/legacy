@@ -44,5 +44,5 @@ renderComponentIf(
 
 renderComponentIf(
   <FindProject controller={false} />,
-  document.getElementById("join-a-project")
+  document.getElementById("projects-container")
 );
