@@ -8,7 +8,7 @@
 
   #title-row {
     h1 {
-      font-weight: bold;
+      font-weight: 700;
     }
 
     h1, h2 {
@@ -97,8 +97,8 @@
   #banner-title {
     background-color: #333;
     color: $coll-action-green;
-    padding: 150px 0px;
     background: url(/images/front-page.jpg) no-repeat center;
+    padding: 150px 0px;
     background-size: 100%;
   }
 
@@ -117,6 +117,14 @@
       padding: 65px 0px;
     }
   }
+
+  #index {
+    #title-row {
+      h1 {
+        font-size: 5em;
+      }
+    }
+  }
 }
 
 @media (max-width: 991px) {
@@ -127,4 +135,16 @@
     display:none;
   }
 
+  #index {
+
+    #banner-title {
+      background-size: 230%;
+    }    
+
+    #title-row {
+      h1 {
+        font-size: 2.5em;
+      }
+    }
+  }
 }
