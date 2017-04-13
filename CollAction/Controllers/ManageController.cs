@@ -22,6 +22,7 @@ namespace CollAction.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
+        private readonly INewsletterSubscriptionService _newsletterSubscriptionService;
         private readonly ILogger _logger;
         private readonly IStringLocalizer<ManageController> _localizer;
         private readonly ApplicationDbContext _context;
@@ -31,6 +32,7 @@ namespace CollAction.Controllers
         SignInManager<ApplicationUser> signInManager,
         IEmailSender emailSender,
         ISmsSender smsSender,
+        INewsletterSubscriptionService newsletterSubscriptionService,
         ILoggerFactory loggerFactory,
         IStringLocalizer<ManageController> localizer,
         ApplicationDbContext context)
@@ -39,6 +41,7 @@ namespace CollAction.Controllers
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
+            _newsletterSubscriptionService = newsletterSubscriptionService;
             _logger = loggerFactory.CreateLogger<ManageController>();
             _localizer = localizer;
             _context = context;
@@ -70,10 +73,25 @@ namespace CollAction.Controllers
                 TwoFactor = await _userManager.GetTwoFactorEnabledAsync(user),
                 Logins = await _userManager.GetLoginsAsync(user),
                 BrowserRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user),
+                NewsletterSubscription = await _newsletterSubscriptionService.IsSubscribedAsync(user.Email),
                 ProjectsCreated = await _context.Projects.Where(p => p.OwnerId == user.Id).ToListAsync(),
                 ProjectsParticipated = await _context.ProjectParticipants.Where(p => p.UserId == user.Id).Include(p => p.Project).Select(p => p.Project).ToListAsync()
             };
             return View(model);
+        }
+
+        //
+        // POST: /Manage/NewsletterSubscription
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> NewsletterSubscription(IndexViewModel model)
+        {
+            var user = await GetCurrentUserAsync();
+            if (user != null)
+            {
+                await _newsletterSubscriptionService.SetSubscriptionAsync(user.Email, model.NewsletterSubscription, false);
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         //
