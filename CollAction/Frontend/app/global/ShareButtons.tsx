@@ -20,7 +20,7 @@ class ShareButtons extends React.Component<IShareButtonsProps, null> {
   render () {
     const url: string = window.location.toString();
     return (
-      <div>
+      <div className="share-buttons">
         <FacebookShareButton url={this.props.url} title={this.props.title} >
           <i className="fa fa-facebook"></i>
         </FacebookShareButton>
@@ -38,4 +38,9 @@ class ShareButtons extends React.Component<IShareButtonsProps, null> {
 renderComponentIf(
   <ShareButtons title="CollAction" url="collaction.com" />,
   document.getElementById("homepage-share-buttons")
+);
+
+renderComponentIf(
+  <ShareButtons title="CollAction" url="collaction.com" />,
+  document.getElementById("project-details-share-buttons")
 );

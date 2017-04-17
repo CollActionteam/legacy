@@ -65,33 +65,6 @@
       color: $coll-action-green;
     }
 
-    #homepage-share-buttons {
-      width: 135px;
-      margin: 0px auto;
-      .SocialMediaShareButton {
-        display: inline-block;
-        font-size: 20px;
-        padding: 7px 12px;
-        border-radius: 35px;
-        width: 40px;
-        height: 40px;
-        color: #fff;
-        margin-right: 5px;
-      }
-
-      .SocialMediaShareButton--facebook {
-        background-color: #3b5998;
-      }
-
-      .SocialMediaShareButton--twitter {
-        background-color: #00aced;
-      }
-
-      .SocialMediaShareButton--linkedin {
-        background-color: #007bb6;
-      }
-
-    }
   }
 
   #banner-title {
