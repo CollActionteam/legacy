@@ -19,7 +19,7 @@ namespace CollAction.Models.ManageViewModels
 
         public bool BrowserRemembered { get; set; }
 
-        [Display(Name = "I would like to receive an update from CollAction every once in a while - don't worry, we like spam as little as you do! \U0001F642")]
+        [Display(Name = "I would like to receive an update from CollAction every once in a while - don't worry, we like spam as little as you do! 🙂")]
         public bool NewsletterSubscription { get; set; }
 
         public IList<Project> ProjectsCreated { get; set; }
