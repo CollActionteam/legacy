@@ -23,7 +23,7 @@ class ProjectThumb extends React.Component<IProject, null> {
       backgroundImage: `url(${this.props.bannerImagePath})`,
     };
 
-    const link = `/Projects/Details${this.props.projectId}`;
+    const link = `/Projects/Details/${this.props.projectId}`;
 
     return (
       <div className="col-xs-12 col-md-3 project-thumb">
