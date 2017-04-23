@@ -81,6 +81,13 @@
             </div>
         </div>
         <div class="form-group">
+            <label asp-for="Project.Proposal" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Project.Proposal" class="form-control" />
+                <span asp-validation-for="Project.Proposal" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
             <label asp-for="Project.Goal" class="col-md-2 control-label"></label>
             <div class="col-md-10">
                 <input asp-for="Project.Goal" class="form-control" />
