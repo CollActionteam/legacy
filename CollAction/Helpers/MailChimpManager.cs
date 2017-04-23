@@ -13,6 +13,8 @@ namespace CollAction.Helpers
 {
     public class MailChimpManager
     {
+        public enum SubscriptionStatus { NotFound, Pending, Subscribed, Unknown };
+
         public struct ListMemberInfo { public string status; }
 
         private readonly string _apiKey;
@@ -26,51 +28,62 @@ namespace CollAction.Helpers
             _dataCenter = apiKey.Split('-')[1];
         }
 
-        public async Task<String> GetListMemberStatusAsync(string listId, string email)
+        public async Task<SubscriptionStatus> GetListMemberStatusAsync(string listId, string email)
         {
-            var client = PrepareHttpClient();
-            HttpResponseMessage response = await client.GetAsync(GetListMemberUri(listId, email) + "?fields=status");
-
-            if (response.StatusCode == HttpStatusCode.NotFound) { return null; }
-
-            if (response.StatusCode != HttpStatusCode.OK)
+            using (var client = new HttpClient())
             {
-                throw new Exception("Failed to add or update MailChimp list member. Status code: " + response.StatusCode);
-            }
+                PrepareHttpClient(client);
+                HttpResponseMessage response = await client.GetAsync(GetListMemberUri(listId, email) + "?fields=status");
 
-            ListMemberInfo info = JsonConvert.DeserializeObject<ListMemberInfo>(await response.Content.ReadAsStringAsync());
-            return info.status;
+                if (response.StatusCode == HttpStatusCode.NotFound) { return SubscriptionStatus.NotFound; }
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    throw new Exception("Failed to add or update MailChimp list member. Status code: " + response.StatusCode);
+                }
+
+                ListMemberInfo info = JsonConvert.DeserializeObject<ListMemberInfo>(await response.Content.ReadAsStringAsync());
+                switch (info.status) {
+                    case "pending": return SubscriptionStatus.Pending;
+                    case "subscribed": return SubscriptionStatus.Subscribed;
+                    default: return SubscriptionStatus.Unknown;
+                }
+            }
         }
 
         public async Task AddOrUpdateListMemberAsync(string listId, string email, bool usePendingStatusIfNew = true)
         {
-            var client = PrepareHttpClient();
-            StringContent content = new StringContent(GetAddOrUpdateListMemberParametersJSON(email, usePendingStatusIfNew), Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await client.PutAsync(GetListMemberUri(listId, email), content);
-
-            if (response.StatusCode != HttpStatusCode.OK)
+            using (var client = new HttpClient())
             {
-                throw new Exception("Failed to add or update MailChimp list member. Status code: " + response.StatusCode);
+                PrepareHttpClient(client);
+                StringContent content = new StringContent(GetAddOrUpdateListMemberParametersJSON(email, usePendingStatusIfNew), Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await client.PutAsync(GetListMemberUri(listId, email), content);
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    throw new Exception("Failed to add or update MailChimp list member. Status code: " + response.StatusCode);
+                }
             }
         }
 
         public async Task DeleteListMemberAsync(string listId, string email)
         {
-            var client = PrepareHttpClient();
-            HttpResponseMessage response = await client.DeleteAsync(GetListMemberUri(listId, email));
-
-            if (response.StatusCode != HttpStatusCode.NoContent && response.StatusCode != HttpStatusCode.NotFound)
+            using (var client = new HttpClient())
             {
-                throw new Exception("Failed to delete MailChimp list member. Status code: " + response.StatusCode);
+                PrepareHttpClient(client);
+                HttpResponseMessage response = await client.DeleteAsync(GetListMemberUri(listId, email));
+
+                if (response.StatusCode != HttpStatusCode.NoContent && response.StatusCode != HttpStatusCode.NotFound)
+                {
+                    throw new Exception("Failed to delete MailChimp list member. Status code: " + response.StatusCode);
+                }
             }
         }
 
-        private HttpClient PrepareHttpClient()
+        private void PrepareHttpClient(HttpClient client)
         {
-            var client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", _apiKey);
             client.BaseAddress = RootUri;
-            return client;
         }
 
         private string GetListMemberUri(string listId, string email)

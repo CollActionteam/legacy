@@ -9,7 +9,7 @@ namespace CollAction.Tests
     [TestClass]
     public class MailChimpManagerTests
     {
-        private readonly string newsletterListId = "2141ab4819"; // The ID for our "CollAction Newsletter" list on MailChimp.
+        private readonly string newsletterListId = "15af77a9bb"; // The ID for our "Test List" list on MailChimp.
 
         private MailChimpManager BuildMailChimpManager()
         {
@@ -24,8 +24,8 @@ namespace CollAction.Tests
             MailChimpManager manager = BuildMailChimpManager();
             string email = "non-existing-collaction-test-email@outlook.com";
 
-            String status = await manager.GetListMemberStatusAsync(newsletterListId, email);
-            Assert.IsNull(status);
+            MailChimpManager.SubscriptionStatus status = await manager.GetListMemberStatusAsync(newsletterListId, email);
+            Assert.IsTrue(status == MailChimpManager.SubscriptionStatus.NotFound);
         }
 
         [TestMethod]
@@ -35,9 +35,8 @@ namespace CollAction.Tests
             string email = "collaction-test-email@outlook.com";
 
             await manager.AddOrUpdateListMemberAsync(newsletterListId, email, false);
-            String status = await manager.GetListMemberStatusAsync(newsletterListId, email);
-            Assert.IsNotNull(status);
-            Assert.IsTrue(status == "subscribed");
+            MailChimpManager.SubscriptionStatus status = await manager.GetListMemberStatusAsync(newsletterListId, email);
+            Assert.IsTrue(status == MailChimpManager.SubscriptionStatus.Subscribed);
         }
 
         [TestMethod]
@@ -47,13 +46,12 @@ namespace CollAction.Tests
             string email = "collaction-test-email@outlook.com";
 
             await manager.AddOrUpdateListMemberAsync(newsletterListId, email, false);
-            String status = await manager.GetListMemberStatusAsync(newsletterListId, email);
-            Assert.IsNotNull(status);
-            Assert.IsTrue(status == "subscribed");
+            MailChimpManager.SubscriptionStatus status = await manager.GetListMemberStatusAsync(newsletterListId, email);
+            Assert.IsTrue(status == MailChimpManager.SubscriptionStatus.Subscribed);
 
             await manager.DeleteListMemberAsync(newsletterListId, email);
             status = await manager.GetListMemberStatusAsync(newsletterListId, email);
-            Assert.IsNull(status);
+            Assert.IsTrue(status == MailChimpManager.SubscriptionStatus.NotFound);
         }
 
         [TestMethod]
@@ -63,8 +61,8 @@ namespace CollAction.Tests
             string email = "non-existing-collaction-test-email@outlook.com";
 
             await manager.DeleteListMemberAsync(newsletterListId, email);
-            String status = await manager.GetListMemberStatusAsync(newsletterListId, email);
-            Assert.IsNull(status);
+            MailChimpManager.SubscriptionStatus status = await manager.GetListMemberStatusAsync(newsletterListId, email);
+            Assert.IsTrue(status == MailChimpManager.SubscriptionStatus.NotFound);
         }
     }
 }

@@ -18,8 +18,8 @@ namespace CollAction.Services
 
         public async Task<bool> IsSubscribedAsync(string email)
         {
-            String status = await manager.GetListMemberStatusAsync(newsletterListId, email);
-            return status != null && (status == "pending" || status == "subscribed");
+            MailChimpManager.SubscriptionStatus status = await manager.GetListMemberStatusAsync(newsletterListId, email);
+            return status == MailChimpManager.SubscriptionStatus.Pending || status == MailChimpManager.SubscriptionStatus.Subscribed;
         }
 
         public async Task SetSubscriptionAsync(string email, bool wantsSubscription, bool requireEmailConfirmationIfSubscribing)
