@@ -84,6 +84,11 @@ namespace CollAction
                 options.SendGridKey = Configuration["SendGridKey"];
             });
             services.AddScoped<IProjectService, ProjectService>();
+            services.AddTransient<INewsletterSubscriptionService, NewsletterSubscriptionService>();
+            services.Configure<NewsletterSubscriptionServiceOptions>(options =>
+            {
+                options.MailChimpKey = Configuration["MailChimpKey"];
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

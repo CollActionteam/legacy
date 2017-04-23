@@ -26,6 +26,7 @@ namespace CollAction.Controllers
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
         private readonly IStringLocalizer<AccountController> _localizer;
+        private readonly INewsletterSubscriptionService _newsletterSubscriptionService;
         private readonly ApplicationDbContext _context;
 
         public AccountController(
@@ -35,6 +36,7 @@ namespace CollAction.Controllers
             ISmsSender smsSender,
             ILoggerFactory loggerFactory,
             IStringLocalizer<AccountController> localizer,
+            INewsletterSubscriptionService newsletterSubscriptionService,
             ApplicationDbContext context)
         {
             _userManager = userManager;
@@ -43,6 +45,7 @@ namespace CollAction.Controllers
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
             _localizer = localizer;
+            _newsletterSubscriptionService = newsletterSubscriptionService;
             _context = context;
         }
 
@@ -118,6 +121,8 @@ namespace CollAction.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    await _newsletterSubscriptionService.SetSubscriptionAsync(model.Email, model.NewsletterSubscription);
+
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
                     await _emailSender.SendEmailAsync(model.Email, _localizer["Confirm your account"],
