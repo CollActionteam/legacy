@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import { ShareButtons as ReactShareButtons } from "react-share";
 import renderComponentIf from "./renderComponentIf";
