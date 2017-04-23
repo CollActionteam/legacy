@@ -1,0 +1,123 @@
+
+#index {
+  a {
+    @include coll-action-button;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  #title-row {
+    h1 {
+      font-weight: 700;
+    }
+
+    h1, h2 {
+      margin:0px;
+      padding:0px;
+      font-weight: 400;
+    }
+
+    text-align: center;
+    margin-bottom: 50px;
+  }
+
+  #intro-text,
+  #three-steps {
+    h3 {
+      color: $coll-action-green;
+    }
+  }
+
+  #intro-text {
+    text-align: center;
+  }
+
+  #three-steps {
+    text-align: center;
+    background-color: $background-gray;
+  }
+
+  #join-a-project {
+    h3 {
+      text-align: center;
+      font-size: 4em;
+      text-transform: uppercase;
+      letter-spacing: 10px;
+      color: $coll-action-green;
+    }
+  }
+
+  #project-create-starting {
+    background-color: #efefef;
+  }
+
+  #three-steps,
+  #intro-text,
+  #project-actions,
+  #project-share {
+    padding: 50px 0px;
+  }
+
+  #project-share {
+
+    h3 {
+      text-align: center;
+      color: $coll-action-green;
+    }
+
+  }
+
+  #banner-title {
+    background-color: #333;
+    color: $coll-action-green;
+    background: url(/images/front-page.jpg) no-repeat center;
+    padding: 150px 0px;
+    background-size: 100%;
+  }
+
+}
+
+@media (min-width: 991px) {
+  #project-actions {
+    display:none;
+  }
+
+  #banner-title {
+    a {
+      height: 150px;
+      border-radius: 150px;
+      width: 150px;
+      padding: 65px 0px;
+    }
+  }
+
+  #index {
+    #title-row {
+      h1 {
+        font-size: 5em;
+      }
+    }
+  }
+}
+
+@media (max-width: 991px) {
+  #project-create-starting {
+    display:none;
+  }
+  #join-a-project {
+    display:none;
+  }
+
+  #index {
+
+    #banner-title {
+      background-size: 230%;
+    }    
+
+    #title-row {
+      h1 {
+        font-size: 2.5em;
+      }
+    }
+  }
+}
