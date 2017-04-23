@@ -1,15 +1,17 @@
 .share-buttons {
-  width: 135px;
-  margin: 0px auto;
+
+  .share-count {
+    color: #3b5998;
+    font-weight: bold;
+  } 
+
   .SocialMediaShareButton {
-    display: inline-block;
     font-size: 20px;
     padding: 7px 12px;
     border-radius: 35px;
     width: 40px;
     height: 40px;
     color: #fff;
-    margin-right: 5px;
   }
   .SocialMediaShareButton--facebook {
     background-color: #3b5998;
