@@ -12,22 +12,23 @@ const {
 } = ReactShareButtons;
 
 interface IShareButtonsProps {
-  title: string;
-  url: string;
+  title?: string;
+  url?: string;
 }
 
 class ShareButtons extends React.Component<IShareButtonsProps, null> {
   render () {
-    const url: string = window.location.toString();
+    const url: string = window.location.host + window.location.pathname;
+    const title: string = this.props.title || window.document.title;
     return (
       <div className="share-buttons">
-        <FacebookShareButton url={this.props.url} title={this.props.title} >
+        <FacebookShareButton title={title} url={url} >
           <i className="fa fa-facebook"></i>
         </FacebookShareButton>
-        <TwitterShareButton url={this.props.url} title={this.props.title}>
+        <TwitterShareButton url={url} title={title}>
           <i className="fa fa-twitter"></i>
         </TwitterShareButton>
-        <LinkedinShareButton url={this.props.url} title={this.props.title}>
+        <LinkedinShareButton url={url} title={title} description={url}>
           <i className="fa fa-linkedin"></i>
         </LinkedinShareButton>
      </div>
@@ -36,11 +37,11 @@ class ShareButtons extends React.Component<IShareButtonsProps, null> {
 }
 
 renderComponentIf(
-  <ShareButtons title="CollAction" url="collaction.com" />,
+  <ShareButtons />,
   document.getElementById("homepage-share-buttons")
 );
 
 renderComponentIf(
-  <ShareButtons title="CollAction" url="collaction.com" />,
+  <ShareButtons />,
   document.getElementById("project-details-share-buttons")
 );
