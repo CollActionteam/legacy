@@ -30,7 +30,7 @@ namespace CollAction.Models
         {
             get
             {
-                return (unchecked((uint)Color)).ToString("X");
+                return (unchecked((uint)Color)).ToString("X6");
             }
 
             set
