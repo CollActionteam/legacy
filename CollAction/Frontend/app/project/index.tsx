@@ -1,9 +1,13 @@
 import * as React from "react";
 import FindProject from "./FindProject";
 import LandscapeCarousel from "./LandscapeCarousel";
-import "./styles/index.scss";
+
+import "./styles/FindProject.scss";
+import "./styles/ProjectDetails.scss";
+import "./styles/ProjectCreate.scss";
 
 import "./PieChart";
+
 import renderComponentIf from "../global/renderComponentIf";
 
 const startProjectSteps = [

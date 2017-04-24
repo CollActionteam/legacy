@@ -1,11 +1,11 @@
 @import '../../mixins';
+@import "../../colors";
 
 #find-project {
   width: 100%;
 
   #project-filter {
     color: #eee;
-    padding: 200px 0px;
     background-color: #333;
     font-size: 3em;
     background: url(/images/find-projects.jpg) no-repeat center;

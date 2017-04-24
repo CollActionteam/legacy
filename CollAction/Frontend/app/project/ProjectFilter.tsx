@@ -90,7 +90,7 @@ export class ProjectFilter extends React.Component<IProjectFilterProps, IProject
 
   render () {
     return (
-      <div id="project-filter">
+      <div id="project-filter" className="banner">
         <div className="container">
           <div className="row">
             <div className="col-xs-12">
