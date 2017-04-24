@@ -1,14 +1,25 @@
 @import '../../mixins';
 @import "../../colors";
 
+@media (min-width: 991px) {
+  #project-filter {
+    padding: 150px 0px;
+  }
+}
+
+@media (max-width: 991px) {
+  #project-filter {
+    padding: 30px 0px;
+  }
+}
+
 #find-project {
   width: 100%;
 
   #project-filter {
     color: #eee;
-    background-color: #333;
     font-size: 3em;
-    background: url(/images/find-projects.jpg) no-repeat center;
+    background-image: url(/images/find-projects.jpg);
     background-size: 100%;
 
     .project-filter-drop-down {
