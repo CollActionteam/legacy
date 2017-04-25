@@ -1,7 +1,5 @@
 import * as React from "react";
 import renderComponentIf from "./renderComponentIf";
-import Drawer from "material-ui/Drawer";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 
 interface IMobileNavDrawState {
   open: boolean;
@@ -14,39 +12,48 @@ export default class MobileNavDraw extends React.Component<null, IMobileNavDrawS
     this.state = { open: false };
   }
 
-  onClick() {
-    this.setState({
-      open: !this.state.open
-    });
+  open() {
+    this.setState({open: true});
+  }
+
+  close() {
+    this.setState({open: false});
+  }
+
+  renderMenu () {
+    const self = this;
+    return(
+      <div id="draw-menu">
+        <div id="draw-menu-close-button" onClick={() => self.close()}>
+          <i className="fa fa-times" aria-hidden="true"></i>
+        </div>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/find">Find Project</a></li>
+            <li><a href="/start">Start Project</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/login">Login</a></li>
+        </ul>
+      </div>
+    );
   }
 
   render () {
+    const self = this;
     return (
       <div>
         <i className="fa fa-bars"
           id="hamburger-icon"
           aria-hidden="true"
-          onClick={() => this.onClick()}>
+          onClick={() => self.open()}>
         </i>
-
-        <Drawer
-          docked={false}
-          width={200}
-          open={this.state.open}
-          onRequestChange={(open) => this.setState({open})}
-          >
-          <ul id="draw-menu">
-              <li><a href="/find">Find Project</a></li>
-              <li><a href="/start">Start Project</a></li>
-              <li><a href="/about">About</a></li>
-          </ul>
-        </Drawer>
+        { this.state.open ? this.renderMenu() : null }
       </div>
     );
   }
 }
 
 renderComponentIf(
-  <MuiThemeProvider><MobileNavDraw /></MuiThemeProvider>,
+  <MobileNavDraw />,
   document.getElementById("mobile-nav-draw")
 );

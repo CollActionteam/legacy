@@ -58,6 +58,12 @@
     padding: 50px 0px;
   }
 
+  #banner-title {
+    background-image: url(/images/front-page.jpg);
+    padding: 150px 0px;
+    color: $coll-action-green;
+  }
+
   #project-share {
 
     h3 {
@@ -65,14 +71,6 @@
       color: $coll-action-green;
     }
 
-  }
-
-  #banner-title {
-    background-color: #333;
-    color: $coll-action-green;
-    background: url(/images/front-page.jpg) no-repeat center;
-    padding: 150px 0px;
-    background-size: 100%;
   }
 
 }
@@ -109,10 +107,6 @@
   }
 
   #index {
-
-    #banner-title {
-      background-size: 230%;
-    }    
 
     #title-row {
       h1 {

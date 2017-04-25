@@ -1,13 +1,5 @@
-import "./global/bootstrap.css";
-import "./global/dotbackground.scss";
-import "./project/styles/index.scss";
-import "./admin/styles/index.scss";
-import "./forms/style.scss";
-import "./global/body.scss";
-import "./header/style.scss";
-import "./footer/style.scss";
-import "./home/index.ts";
-import "./project/index.tsx";
+import "./home/index";
+import "./project/index";
 import "./global/index";
 
 import * as jQuery from "jquery";
