@@ -1,15 +1,40 @@
 @import '../../mixins';
 @import "../../colors";
 
-@media (min-width: 991px) {
+@media only screen and (min-width: 992px) {
   #project-filter {
     padding: 150px 0px;
+    font-size: 2.75em;
+
+    .project-filter-control {
+      display: inline-block;
+    }
+
+    .project-filter-drop-down {
+      margin: 15px;
+    }
   }
 }
 
-@media (max-width: 991px) {
+@media only screen and (max-width: 992px) {
   #project-filter {
-    padding: 30px 0px;
+    font-size: 1.75em;
+    padding: 70px 0px;
+    
+    ul {
+      text-align: center;
+    }
+
+    .project-filter-drop-down {
+      width: 250px;
+      margin: 15px 15px 15px 0px;
+      text-align: center;
+
+      i {
+        float: right;
+        margin-top: 8px;
+      }
+    }
   }
 }
 
@@ -18,9 +43,14 @@
 
   #project-filter {
     color: #eee;
-    font-size: 3em;
     background-image: url(/images/find-projects.jpg);
     background-size: 100%;
+
+    ul {
+      list-style: none;
+      margin: 0px;
+      padding: 0px;
+    }
 
     .project-filter-drop-down {
       cursor: pointer;
@@ -28,7 +58,6 @@
       border: 3px solid #eee;
       padding: 0px 25px;
       border-radius: 35px;
-      margin: 15px;
       user-select: none;
       position: relative;
 

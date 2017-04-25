@@ -25,9 +25,9 @@ export class ProjectFilter extends React.Component<IProjectFilterProps, IProject
     super(props);
 
     const statusList: IDropDownListItem[] = [
-      { id: "1", name: "open" },
-      { id: "2", name: "closed" },
-      { id: "3", name: "funded" },
+      { id: "1", name: "Open" },
+      { id: "2", name: "Closed" },
+      { id: "3", name: "Funded" },
     ];
 
     this.state = {
@@ -89,16 +89,39 @@ export class ProjectFilter extends React.Component<IProjectFilterProps, IProject
   }
 
   render () {
+    const categoriesDropDown = <DropDown
+      onChange={value => this.onChange("categoryId", value)}
+      options={this.state.categories} />;
+
+    const statusDropDown = <DropDown
+      onChange={value => this.onChange("statusId", value)}
+      options={this.state.statusList} />;
+
     return (
       <div id="project-filter" className="banner">
         <div className="container">
           <div className="row">
+
             <div className="col-xs-12">
-              Show me
-              <DropDown onChange={value => this.onChange("categoryId", value)} options={this.state.categories} />
-              projects which are
-              <DropDown onChange={value => this.onChange("statusId", value)} options={this.state.statusList} />
+              <ul>
+                <li className= "project-filter-control hidden-sm hidden-md hidden-lg">
+                  Filter Projects By
+                </li>
+                <li className= "project-filter-control  hidden-xs">
+                  Show me
+                </li>
+                <li className= "project-filter-control">
+                  { categoriesDropDown }
+                </li>
+                <li className= "project-filter-control hidden-xs">
+                  projects which are
+                </li>
+                <li className= "project-filter-control">
+                  { statusDropDown }
+                </li>
+              </ul>
             </div>
+
           </div>
         </div>
       </div>
