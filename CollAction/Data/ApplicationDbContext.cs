@@ -136,13 +136,13 @@ namespace CollAction.Data
             if (!(await Categories.AnyAsync()))
             {
                 Categories.AddRange(new[] {
-                    new Category() { Name = "Environment", ColorHex = "FFFFFFFF", Description = "Environment", File = "" },
-                    new Category() { Name = "Community", ColorHex = "FFFFFFFF", Description = "Community", File = "" },
-                    new Category() { Name = "Consuming", ColorHex = "FFFFFFFF", Description = "Consuming", File = "" },
-                    new Category() { Name = "Wellbeing", ColorHex = "FFFFFFFF", Description = "Wellbeing", File = "" },
-                    new Category() { Name = "Governance", ColorHex = "FFFFFFFF", Description = "Governance", File = "" },
-                    new Category() { Name = "Health", ColorHex = "FFFFFFFF", Description = "Health", File = "" },
-                    new Category() { Name = "Other", ColorHex = "FFFFFFFF", Description = "Other", File = "" },
+                    new Category() { Name = "Environment", ColorHex = "E88424", Description = "Environment", File = "" },
+                    new Category() { Name = "Community", ColorHex = "7B2164", Description = "Community", File = "" },
+                    new Category() { Name = "Consuming", ColorHex = "9D1D20", Description = "Consuming", File = "" },
+                    new Category() { Name = "Wellbeing", ColorHex = "3762AE", Description = "Wellbeing", File = "" },
+                    new Category() { Name = "Governance", ColorHex = "29ABE2", Description = "Governance", File = "" },
+                    new Category() { Name = "Health", ColorHex = "EB078C", Description = "Health", File = "" },
+                    new Category() { Name = "Other", ColorHex = "007D43", Description = "Other", File = "" },
                 });
                 await SaveChangesAsync();
                 DetachAll();

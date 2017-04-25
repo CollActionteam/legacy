@@ -30,6 +30,13 @@
   }
 }
 
+#project-registration-button {
+  a {
+    @include coll-action-button;
+    margin: 50px 0px;
+  }
+}
+
 #project-create-starting {
   padding: 50px 0px;
 
