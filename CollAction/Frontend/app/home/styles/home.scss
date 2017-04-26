@@ -1,6 +1,7 @@
 
 #index {
-  a {
+
+  .banner-link {
     @include coll-action-button;
     width: 100%;
     margin-bottom: 20px;
@@ -24,6 +25,11 @@
   #intro-text,
   #three-steps {
     h3 {
+      color: $coll-action-green;
+    }
+
+    a {
+      font-weight: bold;
       color: $coll-action-green;
     }
   }
@@ -62,6 +68,8 @@
     background-image: url(/images/front-page.jpg);
     padding: 150px 0px;
     color: $coll-action-green;
+
+    
   }
 
   #project-share {
@@ -81,7 +89,7 @@
   }
 
   #banner-title {
-    a {
+    .banner-link {
       height: 150px;
       border-radius: 150px;
       width: 150px;
