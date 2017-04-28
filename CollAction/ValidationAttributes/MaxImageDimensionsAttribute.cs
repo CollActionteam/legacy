@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ImageSharp;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 
@@ -22,8 +22,17 @@ namespace CollAction.ValidationAttributes
         public override bool IsValid(object value)
         {
             if (value == null) return true;
-            var image = Image.FromStream((value as IFormFile).OpenReadStream());
-            return image.Width <= _maxWidth && image.Height <= _maxHeight;
+            using (Stream imageStream = (value as IFormFile).OpenReadStream())
+            {
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    imageStream.CopyTo(ms);
+                    using (Image image = Image.Load(ms.ToArray()))
+                    {
+                        return image.Width <= _maxWidth && image.Height <= _maxHeight;
+                    }
+                }
+            }
         }
 
         public override string FormatErrorMessage(string name)

@@ -60,15 +60,6 @@ namespace CollAction.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> Index()
-        {
-            return View(new BrowseProjectsViewModel
-            {
-                OwnerId = (await _userManager.GetUserAsync(User))?.Id,
-                Projects = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted)
-            });
-        }
-
         // GET: Projects/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -153,7 +144,7 @@ namespace CollAction.Controllers
             // Only call this once we have a valid Project.Id
             await project.SetTags(_context, createProjectViewModel.Hashtag?.Split(';') ?? new string[0]);
             
-            return RedirectToAction("Index");
+            return RedirectToAction("Find");
         }
 
         // GET: Projects/Edit/5
@@ -264,7 +255,7 @@ namespace CollAction.Controllers
             {
                 _context.Update(project);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Find");
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -318,7 +309,7 @@ namespace CollAction.Controllers
 
             project.Status = ProjectStatus.Deleted;
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("Find");
         }
 
         [Authorize]
