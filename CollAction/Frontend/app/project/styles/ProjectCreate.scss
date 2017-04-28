@@ -1,7 +1,5 @@
 @import "../../mixins.scss";
 @import "../../colors.scss";
-@import "./FindProject.scss";
-@import "./ProjectDetails.scss";
 
 #project-create-form {
   background-color: #efefef; 
@@ -29,6 +27,18 @@
   p {
     line-height: 1.5;
     font-size: 1.25em;
+  }
+
+  a {
+    color: $coll-action-green;
+  }
+
+}
+
+#project-registration-button {
+  a {
+    @include coll-action-button;
+    margin: 50px 0px;
   }
 }
 

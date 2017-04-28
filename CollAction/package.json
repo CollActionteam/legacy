@@ -16,7 +16,6 @@
     "@types/react-tap-event-plugin": "0.0.30",
     "css-loader": "^0.26.1",
     "jquery": "^3.1.1",
-    "material-ui": "^0.17.1",
     "node-sass": "^4.3.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",

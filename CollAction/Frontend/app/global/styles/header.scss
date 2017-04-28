@@ -1,0 +1,102 @@
+@import "../../colors";
+
+.heading {
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 2em;
+}
+
+.heading span {
+    font-weight: 400;
+}
+
+.heading .logo {
+    background-image: url(/images/sprites.png);
+    width: 14px;
+    height: 20px;
+    background-position-x: -169px;
+    background-position-y: 0px;
+    display: inline-block;
+    background-size: 148px;
+}
+
+.heading .text {
+    display: inline-block;
+}
+
+#header #NavigationBar a {
+    font-weight: 700;
+}
+
+
+#header {
+    #hamburger-icon {
+        font-size: 22px;
+        margin: 7px;
+    }
+
+    margin: 20px 0px;
+
+    form {
+        float:right;
+    }
+
+    .nav-bar {
+        margin-top: 11px;
+    }
+
+    a {
+        color: #111;
+        text-decoration: none;
+    }
+
+    #header-menu {
+        list-style: none;
+        padding: 0px;
+        margin: 0px;
+
+        li {
+            display: inline;
+            margin: 0px 5px 0px 0px;
+        }
+    }
+
+    #draw-menu {
+        ul {
+            list-style: none;
+            padding: 0px;
+            margin: 70px 0px 0px 0px;
+        }
+
+        li {
+            margin: 30px 20px;
+            font-size: 22px;
+            a {
+                color: $coll-action-green;
+            }
+        }
+
+        #draw-menu-close-button {
+            font-size: 30px;
+            margin: -2px 20px 20px 20px;
+        }
+
+        position: absolute;
+        background-color: #fff;
+        left: 0px;
+        top: 0px;
+        z-index: 21;
+        height: 100vh;
+        width: 100vw;
+    }
+
+}
+
+@media (max-width: 991px) {
+    .logo-container {
+        text-align: center;
+        .text {
+            margin-left:-75px;
+        }
+    }
+}

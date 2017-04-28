@@ -20,9 +20,9 @@
     <div class="container">
         <div id="header">
             <div class="row">
-                <div class="hidden-md hidden-sm hidden-lg col-xs-1" id="mobile-nav-draw">
+                <div class="hidden-md hidden-sm hidden-lg col-xs-2" id="mobile-nav-draw">
                 </div>
-                <div class="col-md-3 col-xs-11">
+                <div class="col-md-3 col-xs-10">
                     @Html.Partial("_Logo")
                 </div>
                 <div class="col-md-5 col-xs-12 nav-bar hidden-xs" >
@@ -45,6 +45,7 @@
     
     @RenderBody()
     @Html.Partial("_Footer")
+
     <environment names="Development">
         <script src="~/js/bundle.js?@DateTime.Now.Ticks.ToString()"></script>
     </environment>

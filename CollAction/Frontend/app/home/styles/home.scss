@@ -1,6 +1,7 @@
 
 #index {
-  a {
+
+  .banner-link {
     @include coll-action-button;
     width: 100%;
     margin-bottom: 20px;
@@ -24,6 +25,11 @@
   #intro-text,
   #three-steps {
     h3 {
+      color: $coll-action-green;
+    }
+
+    a {
+      font-weight: bold;
       color: $coll-action-green;
     }
   }
@@ -58,6 +64,14 @@
     padding: 50px 0px;
   }
 
+  #banner-title {
+    background-image: url(/images/front-page.jpg);
+    padding: 150px 0px;
+    color: $coll-action-green;
+
+    
+  }
+
   #project-share {
 
     h3 {
@@ -65,14 +79,6 @@
       color: $coll-action-green;
     }
 
-  }
-
-  #banner-title {
-    background-color: #333;
-    color: $coll-action-green;
-    background: url(/images/front-page.jpg) no-repeat center;
-    padding: 150px 0px;
-    background-size: 100%;
   }
 
 }
@@ -83,7 +89,7 @@
   }
 
   #banner-title {
-    a {
+    .banner-link {
       height: 150px;
       border-radius: 150px;
       width: 150px;
@@ -109,10 +115,6 @@
   }
 
   #index {
-
-    #banner-title {
-      background-size: 230%;
-    }    
 
     #title-row {
       h1 {

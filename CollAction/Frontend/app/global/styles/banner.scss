@@ -1,0 +1,13 @@
+@import "../../colors";
+
+.banner {
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+@media (max-width: 991px) {
+  .banner {
+    background-size: 230%;
+  }
+}

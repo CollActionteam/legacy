@@ -361,7 +361,7 @@ namespace CollAction.Controllers
         [HttpGet]
         public async Task<JsonResult> GetCategories()
         {       
-            return Json(await _context.Categories.Select(c => new { c.Id, c.Name }).ToListAsync());
+            return Json(await _context.Categories.Where(c => c.Name != "Other").Select(c => new { c.Id, c.Name }).ToListAsync());
         }
 
         [HttpGet]

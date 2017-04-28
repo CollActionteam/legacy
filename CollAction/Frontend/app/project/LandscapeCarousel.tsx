@@ -35,21 +35,34 @@ export default class LandscapeCarousel extends React.Component<ILandscapeCarouse
   }
 
   render () {
+    const currentImageSoruce: string = `/images/steps/${this.state.selected + 1}.png`;
     return (
       <div>
-        <div className="col-md-4 col-md-offset-2 col-xs-12 landscape-carousel-select">
-          <p>In 6 easy Steps</p>
-          <ul>
-            {this.props.items.map((item, index) => <Item key={index + 1}
-              isSelected={index === this.state.selected}
-              stepCount={index + 1}
-              onClick={() => this.onItemClicked(index)}
-              itemTitle={item.name} />)}
-          </ul>
+
+        <div className="row">
+          <div className="col-md-4 col-md-offset-2 col-xs-12 landscape-carousel-select">
+            <p>In 6 easy Steps</p>
+          </div>
+
+          <div className="col-xs-4 landscape-carousel-body">
+            <p>{this.props.items[this.state.selected].text}</p>
+          </div>
         </div>
 
-        <div className="col-xs-4 landscape-carousel-body">
-          <p>{this.props.items[this.state.selected].text}</p>
+        <div className="row">
+          <div className="col-md-4 col-md-offset-2 col-xs-12 landscape-carousel-select">
+            <ul>
+              {this.props.items.map((item, index) => <Item key={index + 1}
+                isSelected={index === this.state.selected}
+                stepCount={index + 1}
+                onClick={() => this.onItemClicked(index)}
+                itemTitle={item.name} />)}
+            </ul>
+          </div>
+
+          <div className="col-xs-4 landscape-carousel-body">
+            <img src={currentImageSoruce} />
+          </div>
         </div>
 
       </div>

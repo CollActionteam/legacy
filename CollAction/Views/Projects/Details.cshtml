@@ -5,7 +5,7 @@
 @model CollAction.Models.DisplayProjectViewModel
 
 @{
-    ViewData["Title"] = Localizer["Details"];
+    ViewData["Title"] = @Model.Project.Name + " " + @Localizer["Details"];
 }
 
 <div id="project-details">
