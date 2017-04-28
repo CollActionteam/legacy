@@ -51,4 +51,7 @@ npm run build</PreBuildEvent>
   <ItemGroup>
     <PackageReference Update="Microsoft.NETCore.App" Version="1.1.0" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot\js\" />
+  </ItemGroup>
 </Project>

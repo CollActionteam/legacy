@@ -98,6 +98,7 @@ namespace CollAction.Controllers
         {
             return View(new CreateProjectViewModel
             {
+                Start = DateTime.UtcNow.Date,
                 Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description"),
             });
         }
