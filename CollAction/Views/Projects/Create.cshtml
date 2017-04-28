@@ -17,64 +17,62 @@
                     <div class="form-group">
                         <label asp-for="Name" class="control-label"></label>
                         <input asp-for="Name" class="form-control" />
-                        <span asp-validation-for="Name" class="text-danger" />
                         @Html.ValidationMessage("Name")
                     </div>
                     <div class="form-group">
                         <label asp-for="Description" class="control-label"></label>
                         <input asp-for="Description" class="form-control" />
-                        <span asp-validation-for="Description" class="text-danger" />
+                        @Html.ValidationMessage("Description")
                     </div>
                     <div class="form-group">
                         <label asp-for="Proposal" class="control-label"></label>
                         <input asp-for="Proposal" class="form-control" />
-                        <span asp-validation-for="Proposal" class="text-danger" />
+                        @Html.ValidationMessage("Proposal")
                     </div>
                     <div class="form-group">
                         <label asp-for="Goal" class="control-label"></label>
                         <input asp-for="Goal" class="form-control" />
-                        <span asp-validation-for="Goal" class="text-danger" />
+                        @Html.ValidationMessage("Goal")
                     </div>
                     <div class="form-group">
                         <label asp-for="CategoryId" class="control-label"></label>
                         @Html.DropDownList("CategoryId", Model.Categories)
-                        <span asp-validation-for="CategoryId" class="text-danger" />
+                        @Html.ValidationMessage("CategoryId")
                     </div>
                     <div class="form-group">
                         <label asp-for="Target" class="control-label"></label>
                         <input asp-for="Target" class="form-control" />
-                        <span asp-validation-for="Target" class="text-danger" />
+                        @Html.ValidationMessage("Target")
                     </div>
                     <div class="form-group">
                         <label asp-for="Start" class="control-label"></label>
                         <input asp-for="Start" class="form-control" />
-                        <span asp-validation-for="Start" class="text-danger" />
+                        @Html.ValidationMessage("Start")
                     </div>
                     <div class="form-group">
                         <label asp-for="End" class="control-label"></label>
                         <input asp-for="End" class="form-control" />
-                        <span asp-validation-for="End" class="text-danger" />
+                        @Html.ValidationMessage("End")
                     </div>
                     <div class="form-group">
                         <label asp-for="CreatorComments" class="control-label"></label>
                         <input asp-for="CreatorComments" class="form-control" />
-                        <span asp-validation-for="CreatorComments" class="text-danger" />
+                        @Html.ValidationMessage("CreatorComments")
                     </div>
                     <div class="form-group">
                         <label asp-for="BannerImageUpload" class="control-label"></label>
                         <input asp-for="BannerImageUpload" class="form-control" />
-                        <span asp-validation-for="BannerImageUpload" class="text-danger" />
                         @Html.ValidationMessage("BannerImageUpload")
                     </div>
                     <div class="form-group">
                         <label asp-for="DescriptionVideoLink" class="control-label"></label>
                         <input asp-for="DescriptionVideoLink" class="form-control" />
-                        <span asp-validation-for="DescriptionVideoLink" class="text-danger" />
+                        @Html.ValidationMessage("DescriptionVideoLink")
                     </div>
                     <div class="form-group">
                         <label asp-for="Hashtag" class="control-label"></label>
                         <input asp-for="Hashtag" class="form-control" />
-                        <span asp-validation-for="Hashtag" class="text-danger" />
+                        @Html.ValidationMessage("Hashtag")
                     </div>
                     <div class="form-group">
                         <input type="submit" value="Create" class="btn btn-default" />
@@ -86,5 +84,5 @@
 </div>
 
 @section Scripts {
-     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+     @{Html.RenderPartial("_ValidationScriptsPartial");}
  }

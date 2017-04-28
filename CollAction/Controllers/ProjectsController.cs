@@ -99,6 +99,7 @@ namespace CollAction.Controllers
             return View(new CreateProjectViewModel
             {
                 Start = DateTime.UtcNow.Date,
+                End = DateTime.UtcNow.Date.AddMonths(1),
                 Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description"),
             });
         }

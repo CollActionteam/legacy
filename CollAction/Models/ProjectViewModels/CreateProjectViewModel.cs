@@ -58,13 +58,13 @@ namespace CollAction.Models
         public int Target { get; set; }
 
         [Required]
+        [DataType(DataType.Date)]
         [Display(Name = "Start date")]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime Start { get; set; }
 
         [Required]
+        [DataType(DataType.Date)]
         [Display(Name = "Deadline")]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime End { get; set; }
 
         [Display(Name = "Banner image", Prompt = "1024x768px JPEG, GIF, PNG, BMP")]
@@ -79,7 +79,7 @@ namespace CollAction.Models
         [YouTubeLink]
         public string DescriptionVideoLink { get; set; }
 
-        [Display(Name = "Hashtag", Prompt = "Max 30 characters. e.g. '#tag1;#tag2'")]
+        [Display(Name = "Hashtag", Prompt = "Max 30 characters. e.g. 'tag1;tag2'")]
         [MaxLength(30)]
         [RegularExpression(@"^#[a-zA-Z_]\w*(;#[a-zA-Z_]+\w*)*$", ErrorMessage = "No spaces, must contain a letter, can contain digits and underscores. Seperate multiple tags with a colon ';'.")]
         public string Hashtag { get; set; }
