@@ -17,27 +17,29 @@
     @RenderSection("styles", required: false)
 </head>
 <body>
-    <div class="container">
-        <div id="header">
-            <div class="row">
-                <div class="hidden-md hidden-sm hidden-lg col-xs-2" id="mobile-nav-draw">
-                </div>
-                <div class="col-md-3 col-xs-10">
-                    @Html.Partial("_Logo")
-                </div>
-                <div class="col-md-5 col-xs-12 nav-bar hidden-xs" >
-                    <ul id="header-menu">
-                        <li><a asp-area="" asp-controller="Projects" asp-action="Find">Find Project</a></li>
-                        <li><a asp-area="" asp-controller="Projects" asp-action="StartInfo">Start Project</a></li>
-                        <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                        @if (User.IsInRole("admin"))
-                        {
-                            <li><a asp-area="" asp-controller="Admin" asp-action="Index">Admin Dashboard</a></li>
-                        }
-                    </ul>
-                </div>
-                <div class="col-md-4 col-xs-12 nav-bar hidden-xs">
-                    @await Html.PartialAsync("_LoginPartial")
+    <div id="header-container">
+        <div class="container">
+            <div id="header">
+                <div class="row">
+                    <div class="hidden-md hidden-sm hidden-lg col-xs-2" id="mobile-nav-draw">
+                    </div>
+                    <div class="col-md-3 col-xs-10">
+                        @Html.Partial("_Logo")
+                    </div>
+                    <div class="col-md-5 col-xs-12 nav-bar hidden-xs" >
+                        <ul id="header-menu">
+                            <li><a asp-area="" asp-controller="Projects" asp-action="Find">Find Project</a></li>
+                            <li><a asp-area="" asp-controller="Projects" asp-action="StartInfo">Start Project</a></li>
+                            <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
+                            @if (User.IsInRole("admin"))
+                            {
+                                <li><a asp-area="" asp-controller="Admin" asp-action="Index">Admin Dashboard</a></li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="col-md-4 col-xs-12 nav-bar hidden-xs">
+                        @await Html.PartialAsync("_LoginPartial")
+                    </div>
                 </div>
             </div>
         </div>
