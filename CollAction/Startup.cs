@@ -177,6 +177,11 @@ namespace CollAction
                      new { controller = "Projects", action = "GetTileProjects" }
                  );
 
+                routes.MapRoute("GetStatuses",
+                     "api/status",
+                     new { controller = "Projects", action = "GetStatuses" }
+                 );
+
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
