@@ -26,7 +26,10 @@ namespace CollAction.Helpers
             if (formFile == null) { return null; }
             string extension = Path.GetExtension(formFile.FileName).ToLower().Substring(1); // Strip the "."
             await SaveFileToFileSystem(formFile, fileName, extension);
-            return await CreateImageFileModel(fileName, extension);
+            var imageModel = await CreateImageFileModel(fileName, extension);
+            _context.ImageFiles.Add(imageModel);
+            await _context.SaveChangesAsync(); // need to save to the database to get an ID
+            return imageModel;
         }
 
         private async Task SaveFileToFileSystem(IFormFile formFile, string fileName, string extension)
@@ -59,7 +62,6 @@ namespace CollAction.Helpers
 
         private async Task<ImageFile> CreateImageFileModel(string fileName, string extension)
         {
-            ImageFile imageFile;
             var webPath = GetWebPath(fileName, extension);
             var fullPath = Path.Combine(_webRoot, webPath);
             using (var input = File.OpenRead(fullPath))
@@ -68,7 +70,7 @@ namespace CollAction.Helpers
                 {
                     await input.CopyToAsync(ms);
                     Image image = Image.Load(ms.ToArray());
-                    imageFile = new ImageFile
+                    return new ImageFile
                     {
                         Name = fileName,
                         Filepath = "\\" + webPath,
@@ -79,7 +81,6 @@ namespace CollAction.Helpers
                     };
                 }
             }
-            return imageFile;
         }
 
         private string GetWebPath(string fileName, string extension)

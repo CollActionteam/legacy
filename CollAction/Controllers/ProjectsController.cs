@@ -245,7 +245,10 @@ namespace CollAction.Controllers
             if (editProjectViewModel.HasBannerImageUpload)
             {
                 var manager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "bannerimages"));
-                if (project.BannerImage != null) { manager.DeleteImageFile(project.BannerImage); }
+                if (project.BannerImage != null)
+                {
+                    manager.DeleteImageFile(project.BannerImage);
+                }
                 project.BannerImage = await manager.UploadFormFile(editProjectViewModel.BannerImageUpload, Guid.NewGuid().ToString() /* unique filename */);
             }
 
