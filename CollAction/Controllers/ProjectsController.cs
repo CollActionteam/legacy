@@ -60,15 +60,6 @@ namespace CollAction.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> Index()
-        {
-            return View(new BrowseProjectsViewModel
-            {
-                OwnerId = (await _userManager.GetUserAsync(User))?.Id,
-                Projects = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted)
-            });
-        }
-
         // GET: Projects/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -98,6 +89,8 @@ namespace CollAction.Controllers
         {
             return View(new CreateProjectViewModel
             {
+                Start = DateTime.UtcNow.Date,
+                End = DateTime.UtcNow.Date.AddMonths(1),
                 Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description"),
             });
         }
@@ -151,7 +144,7 @@ namespace CollAction.Controllers
             // Only call this once we have a valid Project.Id
             await project.SetTags(_context, createProjectViewModel.Hashtag?.Split(';') ?? new string[0]);
             
-            return RedirectToAction("Index");
+            return RedirectToAction("Find");
         }
 
         // GET: Projects/Edit/5
@@ -252,7 +245,10 @@ namespace CollAction.Controllers
             if (editProjectViewModel.HasBannerImageUpload)
             {
                 var manager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "bannerimages"));
-                if (project.BannerImage != null) { manager.DeleteImageFile(project.BannerImage); }
+                if (project.BannerImage != null)
+                {
+                    manager.DeleteImageFile(project.BannerImage);
+                }
                 project.BannerImage = await manager.UploadFormFile(editProjectViewModel.BannerImageUpload, Guid.NewGuid().ToString() /* unique filename */);
             }
 
@@ -262,7 +258,7 @@ namespace CollAction.Controllers
             {
                 _context.Update(project);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Find");
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -316,7 +312,7 @@ namespace CollAction.Controllers
 
             project.Status = ProjectStatus.Deleted;
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("Find");
         }
 
         [Authorize]

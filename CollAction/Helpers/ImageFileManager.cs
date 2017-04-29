@@ -1,12 +1,9 @@
 ﻿using CollAction.Data;
 using CollAction.Models;
+using ImageSharp;
 using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace CollAction.Helpers
@@ -29,7 +26,10 @@ namespace CollAction.Helpers
             if (formFile == null) { return null; }
             string extension = Path.GetExtension(formFile.FileName).ToLower().Substring(1); // Strip the "."
             await SaveFileToFileSystem(formFile, fileName, extension);
-            return CreateImageFileModel(fileName, extension);
+            var imageModel = await CreateImageFileModel(fileName, extension);
+            _context.ImageFiles.Add(imageModel);
+            await _context.SaveChangesAsync(); // need to save to the database to get an ID
+            return imageModel;
         }
 
         private async Task SaveFileToFileSystem(IFormFile formFile, string fileName, string extension)
@@ -60,25 +60,27 @@ namespace CollAction.Helpers
             _context.ImageFiles.Remove(imageFile);
         }
 
-        private ImageFile CreateImageFileModel(string fileName, string extension)
+        private async Task<ImageFile> CreateImageFileModel(string fileName, string extension)
         {
-            ImageFile imageFile = null;
             var webPath = GetWebPath(fileName, extension);
             var fullPath = Path.Combine(_webRoot, webPath);
             using (var input = File.OpenRead(fullPath))
             {
-                var image = Image.FromStream(input);
-                imageFile = new ImageFile
+                using (MemoryStream ms = new MemoryStream())
                 {
-                    Name = fileName,
-                    Filepath = "\\" + webPath,
-                    Format = extension,
-                    Width = image.Width,
-                    Height = image.Height,
-                    Date = DateTime.Now
-                };
+                    await input.CopyToAsync(ms);
+                    Image image = Image.Load(ms.ToArray());
+                    return new ImageFile
+                    {
+                        Name = fileName,
+                        Filepath = "\\" + webPath,
+                        Format = extension,
+                        Width = image.Width,
+                        Height = image.Height,
+                        Date = DateTime.Now
+                    };
+                }
             }
-            return imageFile;
         }
 
         private string GetWebPath(string fileName, string extension)
