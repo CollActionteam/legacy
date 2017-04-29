@@ -1,0 +1,13 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+
+@model CollAction.Models.ProjectViewModels.ThankYouCreateProjectViewModel
+
+@{
+    ViewData["Title"] = Localizer["Thank You"];
+}
+
+<h2>@Model.Name</h2>
+<h1>Awesome!</h1>
+<h2>Thank you for creating this project! An administrator will approve your project.</h2>

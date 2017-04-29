@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Hosting;
 using CollAction.Helpers;
 using CollAction.Services;
 using System.Text.RegularExpressions;
+using CollAction.Models.ProjectViewModels;
 
 namespace CollAction.Controllers
 {
@@ -27,14 +28,16 @@ namespace CollAction.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly IProjectService _service;
+        private readonly IEmailSender _emailSender;
 
-        public ProjectsController(ApplicationDbContext context, IStringLocalizer<ProjectsController> localizer, UserManager<ApplicationUser> userManager, IHostingEnvironment hostingEnvironment, IProjectService service)
+        public ProjectsController(ApplicationDbContext context, IStringLocalizer<ProjectsController> localizer, UserManager<ApplicationUser> userManager, IHostingEnvironment hostingEnvironment, IProjectService service, IEmailSender emailSender)
         {
             _context = context;
             _localizer = localizer;
             _userManager = userManager;
             _hostingEnvironment = hostingEnvironment;
             _service = service;
+            _emailSender = emailSender;
         }
 
         public ViewResult StartInfo()
@@ -143,8 +146,19 @@ namespace CollAction.Controllers
 
             // Only call this once we have a valid Project.Id
             await project.SetTags(_context, createProjectViewModel.Hashtag?.Split(';') ?? new string[0]);
+
+            // Notify admins and creator through e-mail
+            ApplicationUser user = await _userManager.GetUserAsync(User);
+            await _emailSender.SendEmailAsync(user.Email, $"Thank you for creating {project.Name}", "Hello");
+
+            var administrators = await _userManager.GetUsersInRoleAsync("admin");
+            foreach (var admin in administrators)
+                await _emailSender.SendEmailAsync(admin.Email, $"New project created - {project.Name}", "Hello");
             
-            return RedirectToAction("Find");
+            return View("ThankYouCreate", new ThankYouCreateProjectViewModel()
+            {
+                Name = project.Name
+            });
         }
 
         // GET: Projects/Edit/5
