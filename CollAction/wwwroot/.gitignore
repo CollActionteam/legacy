@@ -1,6 +1,0 @@
-﻿# Ignore everything in this directory
-*
-# Except this file
-!images
-!.gitignore
-js
