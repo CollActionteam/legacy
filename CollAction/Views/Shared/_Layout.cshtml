@@ -9,19 +9,12 @@
         <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
     </environment>
     <environment names="Staging,Production">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" 
-              asp-fallback-href="~/lib/font-awesome/css/font-awesome.css" 
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+              asp-fallback-href="~/lib/font-awesome/css/font-awesome.css"
               asp-fallback-test-class="fa" asp-fallback-test-property="display" asp-fallback-test-value="inline-block" />
     </environment>
     <link href="https://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet">
     @RenderSection("styles", required: false)
-    @RenderSection("scripts", required: false)
-    <environment names="Development">
-        <script src="~/js/bundle.js?@DateTime.Now.Ticks.ToString()"></script>
-    </environment>
-    <environment names="Staging,Production">
-        <script src="~/js/bundle.js"></script>
-    </environment>
 </head>
 <body>
     <div class="container">
@@ -32,7 +25,7 @@
                 <div class="col-md-3 col-xs-10">
                     @Html.Partial("_Logo")
                 </div>
-                <div class="col-md-5 col-xs-12 nav-bar hidden-xs" >
+                <div class="col-md-5 col-xs-12 nav-bar hidden-xs">
                     <ul id="header-menu">
                         <li><a asp-area="" asp-controller="Projects" asp-action="Find">Find Project</a></li>
                         <li><a asp-area="" asp-controller="Projects" asp-action="StartInfo">Start Project</a></li>
@@ -49,8 +42,16 @@
             </div>
         </div>
     </div>
-    
+
     @RenderBody()
     @Html.Partial("_Footer")
-  </body>
+
+    <environment names="Development">
+        <script src="~/js/bundle.js?@DateTime.Now.Ticks.ToString()"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/js/bundle.js"></script>
+    </environment>
+    @RenderSection("scripts", required: false)
+</body>
 </html>
