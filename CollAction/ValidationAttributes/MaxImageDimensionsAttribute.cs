@@ -27,9 +27,16 @@ namespace CollAction.ValidationAttributes
                 using (MemoryStream ms = new MemoryStream())
                 {
                     imageStream.CopyTo(ms);
-                    using (Image image = Image.Load(ms.ToArray()))
+                    try
                     {
-                        return image.Width <= _maxWidth && image.Height <= _maxHeight;
+                        using (Image image = Image.Load(ms.ToArray()))
+                        {
+                            return image.Width <= _maxWidth && image.Height <= _maxHeight;
+                        }
+                    }
+                    catch (NotSupportedException)
+                    {
+                        return false;
                     }
                 }
             }
