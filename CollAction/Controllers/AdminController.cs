@@ -1,15 +1,16 @@
 ﻿using CollAction.Data;
+using CollAction.Helpers;
 using CollAction.Models;
 using CollAction.Models.AdminViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace CollAction.Controllers
@@ -20,14 +21,17 @@ namespace CollAction.Controllers
         public AdminController(
             UserManager<ApplicationUser> userManager,
             IStringLocalizer<AccountController> localizer,
+            IHostingEnvironment hostingEnvironment,
             ApplicationDbContext context)
         {
             _userManager = userManager;
             _localizer = localizer;
             _context = context;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         private readonly ApplicationDbContext _context;
+        private readonly IHostingEnvironment _hostingEnvironment;
         private readonly IStringLocalizer<AccountController> _localizer;
         private readonly UserManager<ApplicationUser> _userManager;
 
@@ -48,13 +52,23 @@ namespace CollAction.Controllers
 
             ManageProjectViewModel model = new ManageProjectViewModel()
             {
-                Project = project,
                 UserList = new SelectList(await _context.Users.ToListAsync(), "Id", "UserName", null),
-                LocationList = new SelectList(await _context.Locations.ToListAsync(), "Id", "Name", null),
                 CategoryList = new SelectList(await _context.Categories.ToListAsync(), "Id", "Name", null),
                 DisplayPriorityList = new SelectList(Enum.GetValues(typeof(ProjectDisplayPriority))),
                 StatusList = new SelectList(Enum.GetValues(typeof(ProjectStatus))),
-                ProjectTags = project.HashTags
+                Hashtag = project.HashTags,
+                Name = project.Name,
+                Description = project.Description,
+                CategoryId = project.CategoryId,
+                CreatorComments = project.CreatorComments,
+                End = project.End,
+                Start = project.Start,
+                Target = project.Target,
+                DisplayPriority = project.DisplayPriority,
+                Goal = project.Goal,
+                OwnerId = project.OwnerId,
+                Status = project.Status,
+                Proposal = project.Proposal
             };
 
             return View(model);
@@ -62,30 +76,39 @@ namespace CollAction.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ManageProject([Bind("Project,ProjectTags")]ManageProjectViewModel model)
+        public async Task<IActionResult> ManageProject(ManageProjectViewModel model)
         {
             if (ModelState.IsValid)
             {
-                try
+                Project project = await _context.Projects.FindAsync(model.Id);
+                project.Name = model.Name;
+                project.Description = model.Description;
+                project.Goal = model.Goal;
+                project.Proposal = model.Proposal;
+                project.CreatorComments = model.CreatorComments;
+                project.CategoryId = model.CategoryId;
+                project.Target = model.Target;
+                project.Start = model.Start;
+                project.End = model.End;
+                project.Status = model.Status;
+                project.OwnerId = model.OwnerId;
+                project.DisplayPriority = model.DisplayPriority;
+                if (model.HasBannerImageUpload)
                 {
-                    _context.Update(model.Project);
-                    await _context.SaveChangesAsync();
-                    await model.Project.SetTags(_context, model.ProjectTags?.Split(';') ?? new string[0]);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!(await _context.Projects.AnyAsync(e => e.Id == model.Project.Id)))
+                    var manager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "bannerimages"));
+                    if (project.BannerImage != null)
                     {
-                        return NotFound();
+                        manager.DeleteImageFile(project.BannerImage);
                     }
-                    else
-                    {
-                        throw;
-                    }
+                    project.BannerImage = await manager.UploadFormFile(model.BannerImageUpload, Guid.NewGuid().ToString() /* unique filename */);
                 }
+                await project.SetTags(_context, model.Hashtag?.Split(';') ?? new string[0]);
+                project.SetDescriptionVideoLink(_context, model.DescriptionVideoLink);
+                await _context.SaveChangesAsync();
                 return RedirectToAction("ManageProjectsIndex");
             }
-            return await ManageProject(model.Project.Id);
+            else
+                return View(model);
         }
     }
 }

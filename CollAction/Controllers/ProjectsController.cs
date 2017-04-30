@@ -172,10 +172,10 @@ namespace CollAction.Controllers
             }
 
             var project = await _context.Projects
-                                    .Include(p => p.BannerImage)
-                                    .Include(p => p.DescriptionVideoLink)
-                                    .Include(p => p.Tags).ThenInclude(t => t.Tag)
-                                    .SingleOrDefaultAsync(p => p.Id == id);
+                                        .Include(p => p.BannerImage)
+                                        .Include(p => p.DescriptionVideoLink)
+                                        .Include(p => p.Tags).ThenInclude(t => t.Tag)
+                                        .SingleOrDefaultAsync(p => p.Id == id);
             if (project == null)
             {
                 return NotFound();

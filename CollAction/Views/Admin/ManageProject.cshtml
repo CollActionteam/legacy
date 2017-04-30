@@ -11,111 +11,96 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<form asp-action="ManageProject">
-    <div class="form-horizontal">
-        <h4>Project</h4>
-        <hr />
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <input type="hidden" asp-for="Project.Id" />
-        <div class="form-group">
-            <label asp-for="Project.Name" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Project.Name" class="form-control" />
-                <span asp-validation-for="Project.Name" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Project.Status" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                @Html.DropDownList("Project.Status", Model.StatusList)
-                <span asp-validation-for="Project.Status" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Project.Category" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                @Html.DropDownList("Project.CategoryId", Model.CategoryList)
-                <span asp-validation-for="Project.CategoryId" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Project.Location" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                @Html.DropDownList("Project.LocationId", Model.LocationList)
-                <span asp-validation-for="Project.LocationId" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Project.Owner" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                @Html.DropDownList("Project.OwnerId", Model.UserList)
-                <span asp-validation-for="Project.OwnerId" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Project.Target" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Project.Target" class="form-control" />
-                <span asp-validation-for="Project.Target" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Project.Start" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Project.Start" type="date" class="form-control" />
-                <span asp-validation-for="Project.Start" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Project.End" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Project.End" type="date" class="form-control" />
-                <span asp-validation-for="Project.End" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Project.Description" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Project.Description" class="form-control" />
-                <span asp-validation-for="Project.Description" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Project.Proposal" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Project.Proposal" class="form-control" />
-                <span asp-validation-for="Project.Proposal" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Project.Goal" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="Project.Goal" class="form-control" />
-                <span asp-validation-for="Project.Goal" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Project.DisplayPriority" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                @Html.DropDownList("Project.DisplayPriority", Model.DisplayPriorityList)
-                <span asp-validation-for="Project.DisplayPriority" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="ProjectTags" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="ProjectTags" class="form-control" />
-                @Html.ValidationMessage("ProjectTags")
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Update" class="btn btn-default" />
+<div id="project-manage-form">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3 col-xs-12">
+                <form asp-action="ManageProject" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        @Html.ValidationMessage("Name")
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label"></label>
+                        <input asp-for="Description" class="form-control" />
+                        @Html.ValidationMessage("Description")
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Proposal" class="control-label"></label>
+                        <input asp-for="Proposal" class="form-control" />
+                        @Html.ValidationMessage("Proposal")
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Goal" class="control-label"></label>
+                        <input asp-for="Goal" class="form-control" />
+                        @Html.ValidationMessage("Goal")
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Status" class="control-label"></label>
+                        @Html.DropDownList("Status", Model.StatusList)
+                        @Html.ValidationMessage("Status")
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="CategoryId" class="control-label"></label>
+                        @Html.DropDownList("CategoryId", Model.CategoryList)
+                        @Html.ValidationMessage("CategoryId")
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="OwnerId" class="control-label"></label>
+                        @Html.DropDownList("OwnerId", Model.UserList)
+                        @Html.ValidationMessage("OwnerId")
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Target" class="control-label"></label>
+                        <input asp-for="Target" class="form-control" />
+                        @Html.ValidationMessage("Target")
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Start" class="control-label"></label>
+                        <input asp-for="Start" type="date" class="form-control" /> 
+                        @Html.ValidationMessage("Start")
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="End" class="control-label"></label>
+                        <input asp-for="End" type="date" class="form-control" />
+                        @Html.ValidationMessage("End")
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DisplayPriority" class="control-label"></label>
+                        @Html.DropDownList("DisplayPriority", Model.DisplayPriorityList)
+                        @Html.ValidationMessage("DisplayPriority")
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="BannerImageUpload" class="control-label"></label>
+                        <input asp-for="BannerImageUpload" class="form-control" />
+                        @Html.ValidationMessage("BannerImageUpload")
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DescriptionVideoLink" class="control-label"></label>
+                        <input asp-for="DescriptionVideoLink" class="form-control" />
+                        @Html.ValidationMessage("DescriptionVideoLink")
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Hashtag" class="control-label"></label>
+                        <input asp-for="Hashtag" class="form-control" />
+                        @Html.ValidationMessage("Hashtag")
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Update" class="btn btn-default" />
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-</form>
+</div>
 
 <div>
     <a asp-action="ManageProjectsIndex">Back to List</a>
 </div>
+
+@section Scripts {
+    @{Html.RenderPartial("_ValidationScriptsPartial");}
+}
