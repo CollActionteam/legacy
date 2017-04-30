@@ -150,26 +150,26 @@ namespace CollAction.Controllers
 
             // Notify admins and creator through e-mail
             string confirmationEmail = 
-                $"Hi!<br>" +
-                $"<br>" +
-                $"Thanks for submitting a project on www.collaction.org!<br>" +
-                $"The CollAction Team will review your project as soon as possible – if it meets all the criteria we’ll publish the project on the website and will let you know, so you can start promoting it!If we have any additional questions or comments, we’ll reach out to your by email.<br>" +
-                $"<br>" +
-                $"Thanks so much for driving the CollAction / crowdacting movement!<br>" +
-                $"<br>" +
-                $"Warm regards,<br>" +
-                $"The CollAction team";
+                "Hi!<br>" +
+                "<br>" +
+                "Thanks for submitting a project on www.collaction.org!<br>" +
+                "The CollAction Team will review your project as soon as possible – if it meets all the criteria we’ll publish the project on the website and will let you know, so you can start promoting it!If we have any additional questions or comments, we’ll reach out to your by email.<br>" +
+                "<br>" +
+                "Thanks so much for driving the CollAction / crowdacting movement!<br>" +
+                "<br>" +
+                "Warm regards,<br>" +
+                "The CollAction team";
             string subject = $"Confirmation email - start project {project.Name}";
 
             ApplicationUser user = await _userManager.GetUserAsync(User);
             await _emailSender.SendEmailAsync(user.Email, subject, confirmationEmail);
 
             string confirmationEmailAdmin =
-                $"Hi!<br>" +
-                $"<br>" +
-                $"There's a new project waiting for approval: {project.Name}<br>" +
-                $"Warm regards,<br>" +
-                $"The CollAction team";
+                "Hi!<br>" +
+                "<br>" +
+                "There's a new project waiting for approval: {project.Name}<br>" +
+                "Warm regards,<br>" +
+                "The CollAction team";
 
             var administrators = await _userManager.GetUsersInRoleAsync("admin");
             foreach (var admin in administrators)

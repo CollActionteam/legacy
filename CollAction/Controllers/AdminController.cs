@@ -94,16 +94,16 @@ namespace CollAction.Controllers
                 if (approved)
                 {
                     string approvalEmail = 
-                        $"Hi!<br>" +
-                        $"<br>" +
-                        $"The CollAction Team has reviewed your project proposal and is very happy to share that your project has been approved and now live on www.collaction.org!<br>" +
-                        $"<br>" +
-                        $"So feel very welcome to start promoting it!If you have any further questions, feel free to contact the CollAction Team at collactionteam@gmail.com. And don’t forget to tag CollAction in your messages on social media so we can help you spread the word(FB: @collaction.org, Twitter: @collaction_org)!<br>" +
-                        $"<br>" +
-                        $"Thanks again for driving the CollAction / crowdacting movement!<br>" +
-                        $"<br>" +
-                        $"Warm regards,<br>" +
-                        $"The CollAction team<br>";
+                        "Hi!<br>" +
+                        "<br>" +
+                        "The CollAction Team has reviewed your project proposal and is very happy to share that your project has been approved and now live on www.collaction.org!<br>" +
+                        "<br>" +
+                        "So feel very welcome to start promoting it!If you have any further questions, feel free to contact the CollAction Team at collactionteam@gmail.com. And don’t forget to tag CollAction in your messages on social media so we can help you spread the word(FB: @collaction.org, Twitter: @collaction_org)!<br>" +
+                        "<br>" +
+                        "Thanks again for driving the CollAction / crowdacting movement!<br>" +
+                        "<br>" +
+                        "Warm regards,<br>" +
+                        "The CollAction team<br>";
 
                     string subject = $"Approval - {project.Name}";
 
@@ -112,16 +112,16 @@ namespace CollAction.Controllers
                 else if (successfull)
                 {
                     string successEmail = 
-                        $"Hi!<br>" +
-                        $"<br>" +
-                        $"The CollAction Team has reviewed your project and is very happy to share that your project has been declared a success!<br>" +
-                        $"<br>" +
-                        $"If you have any further questions, feel free to contact the CollAction Team at collactionteam@gmail.com. And don’t forget to tag CollAction in your messages on social media so we can help you spread the word(FB: @collaction.org, Twitter: @collaction_org)!<br>" +
-                        $"<br>" +
-                        $"Thanks again for driving the CollAction / crowdacting movement!<br>" +
-                        $"<br>" +
-                        $"Warm regards,<br>" +
-                        $"The CollAction team<br>";
+                        "Hi!<br>" +
+                        "<br>" +
+                        "The deadline of the project you have started on www.collaction.org has passed. We're very happy to see that the target you have set has been reached! Congratulations! Now it's time to act collectively!<br>" +
+                        "<br>" +
+                        "The CollAction Team might reach out to you with more specifics (this is an automated message). If you have any further questions yourself, feel free to contact the CollAction Team at collactionteam@gmail.com. And don’t forget to tag CollAction in your messages on social media so we can help you spread the word on your achievement (FB: @collaction.org, Twitter: @collaction_org)!<br>" +
+                        "<br>" +
+                        "Thanks again for driving the CollAction / crowdacting movement!<br>" +
+                        "<br>" +
+                        "Warm regards,<br>" +
+                        "The CollAction team<br>";
 
                     string subject = $"Success - {project.Name}";
 
@@ -130,16 +130,16 @@ namespace CollAction.Controllers
                 else if (failed)
                 {
                     string failedEmail = 
-                        $"Hi!<br>" +
-                        $"<br>" +
-                        $"The CollAction Team has reviewed your project and is sorry to share that your project has failed.<br>" +
-                        $"<br>" +
-                        $"If you have any further questions, feel free to contact the CollAction Team at collactionteam @gmail.com.And don’t forget to tag CollAction in your messages on social media so we can help you spread the word(FB: @collaction.org, Twitter: @collaction_org)!<br>" +
-                        $"<br>" +
-                        $"Thanks again for driving the CollAction / crowdacting movement!<br>" +
-                        $"<br>" +
-                        $"Warm regards,<br>" +
-                        $"The CollAction team<br>";
+                        "Hi!<br>" +
+                        "<br>" +
+                        "The deadline of the project you have started on www.collaction.org has passed. Unfortunately the target that you have set has not been reached. Great effort though!<br>" +
+                        "<br>" +
+                        "The CollAction Team might reach out to you with more specifics (this is an automated message). If you have any further questions yourself, feel free to contact the CollAction Team at collactionteam@gmail.com.<br>" +
+                        "<br>" +
+                        "Thanks again for driving the CollAction / crowdacting movement and better luck next time!<br>" +
+                        "<br>" +
+                        "Warm regards,<br>" +
+                        "The CollAction team<br>";
 
                     string subject = $"Failed - {project.Name}";
 
