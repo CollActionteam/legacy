@@ -18,6 +18,7 @@ using CollAction.Helpers;
 using CollAction.Services;
 using System.Text.RegularExpressions;
 using CollAction.Models.ProjectViewModels;
+using System.Linq.Expressions;
 
 namespace CollAction.Controllers
 {
@@ -374,12 +375,35 @@ namespace CollAction.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> GetTileProjects(int? categoryId, int? locationId)
+        public async Task<JsonResult> GetTileProjects(int? categoryId, string statusId)
         {
-            var displayTileProjectViewModels = await _service.GetTileProjects(Url, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted
-            && (categoryId != null ? p.CategoryId == categoryId : true) && (locationId != null ? p.LocationId == locationId : true));
+            Expression<Func<Project, bool>> projectExpression = (p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted
+            && (categoryId != null ? p.CategoryId == categoryId : true));
+
+            Expression<Func<Project, bool>> statusExpression;
+            switch (statusId)
+            {
+                case "open": statusExpression = (p => p.Status == ProjectStatus.Running && p.Start <= DateTime.UtcNow && p.End >= DateTime.UtcNow); break;
+                case "closed": statusExpression = (p => (p.Status == ProjectStatus.Running && p.End < DateTime.UtcNow) || p.Status == ProjectStatus.Successful || p.Status == ProjectStatus.Failed); break;
+                case "comingSoon": statusExpression = (p => p.Status == ProjectStatus.Running && p.Start > DateTime.UtcNow); break;
+                default: statusExpression = (p => true); break;
+            }
+            
+            var displayTileProjectViewModels = await _service.GetTileProjects(Url,
+                Expression.Lambda<Func<Project, bool>>(Expression.AndAlso(projectExpression.Body, Expression.Invoke(statusExpression, projectExpression.Parameters[0])), projectExpression.Parameters[0]));
             
             return Json(displayTileProjectViewModels);
+        }
+
+        [HttpGet]
+        public JsonResult GetStatuses()
+        {
+            return Json(new List<FindStatusViewModel>
+            {
+                new FindStatusViewModel{Id = "open", Status = "open"},
+                new FindStatusViewModel{Id = "closed",Status = "closed"},
+                new FindStatusViewModel{Id = "comingSoon",Status = "coming soon"}
+            });
         }
     }
 }
