@@ -81,7 +81,7 @@ namespace CollAction.Models
 
         [Display(Name = "Hashtag", Prompt = "Max 30 characters. e.g. 'tag1;tag2'")]
         [MaxLength(30)]
-        [RegularExpression(@"^#[a-zA-Z_]\w*(;#[a-zA-Z_]+\w*)*$", ErrorMessage = "No spaces, must contain a letter, can contain digits and underscores. Seperate multiple tags with a colon ';'.")]
+        [RegularExpression(@"^[a-zA-Z_]+(;[a-zA-Z_]+)*$", ErrorMessage = "No spaces, must contain a letter, can contain digits and underscores. Seperate multiple tags with a colon ';'.")]
         public string Hashtag { get; set; }
     }
 }
