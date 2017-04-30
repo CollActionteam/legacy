@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CollAction.Helpers;
 
 namespace CollAction.Models
 {
@@ -19,14 +20,13 @@ namespace CollAction.Models
 
         public bool HasDescriptionVideo { get { return Project.DescriptionVideoLink != null; } }
 
-        public string DescriptionVideoYouTubeEmbedLink {
-            get {
-                return HasDescriptionVideo ? "https://www.youtube.com/embed/" + YouTubeId : "";
-            }
-        }
+        public string DescriptionVideoYouTubeEmbedLink
+            => HasDescriptionVideo ? "https://www.youtube.com/embed/" + YouTubeId : "";
 
-        private string YouTubeId {
-            get {
+        private string YouTubeId
+        {
+            get
+            {
                 // Extract the YouTubeId from a link of this form http://www.youtube.com/watch?v=-wtIMTCHWuI
                 Uri uri = new Uri(Project.DescriptionVideoLink.Link);
                 var queryDictionary = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
@@ -35,22 +35,25 @@ namespace CollAction.Models
             }
         }
 
-        public int RemainingDays
-            => Convert.ToInt32(Math.Round((Project.End - Project.Start).TotalDays));
+        public TimeSpan RemainingTime
+            => Project.End - DateTime.UtcNow;
 
-        [Display(Name = "Status")]
-        public string StatusDescription
+        public string RemainingTimeUserFriendly
         {
             get
             {
-                if (Project.Status == ProjectStatus.Hidden) { return "hidden"; }
-                else if (Project.IsActive) { return String.Format("open, {0} days left", RemainingDays); }
-                else if (Project.IsComingSoon) { return "coming soon"; }
-                else if (Project.IsClosed) { return "closed"; }
-                else if (Project.Status == ProjectStatus.Successful) { return "successful"; }
-                else if (Project.Status == ProjectStatus.Failed) { return "failed"; }
-                else if (Project.Status == ProjectStatus.Deleted) { return "deleted"; }
-                else { return "undefined"; }
+                if (RemainingTime.Years() > 1)
+                    return $"{RemainingTime.Years()} years";
+                else if (RemainingTime.Months() > 1)
+                    return $"{RemainingTime.Months()} months";
+                else if (RemainingTime.Weeks() > 1)
+                    return $"{RemainingTime.Weeks()} weeks";
+                else if (RemainingTime.Days > 1)
+                    return $"{RemainingTime.Days} days";
+                else if (RemainingTime.Hours > 1)
+                    return $"{RemainingTime.Hours} hours";
+                else
+                    return $"{RemainingTime.Minutes} minutes";
             }
         }
 
