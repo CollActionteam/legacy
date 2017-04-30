@@ -28,43 +28,43 @@
                     <div class="form-group">
                         <label asp-for="FirstName" class="control-label"></label>
                         <input asp-for="FirstName" class="form-control" />
-                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                        @Html.ValidationMessage("FirstName")
                     </div>
 
                     <div class="form-group">
                         <label asp-for="LastName" class="control-label"></label>
                         <input asp-for="LastName" class="form-control" />
-                        <span asp-validation-for="LastName" class="text-danger"></span>
+                        @Html.ValidationMessage("LastName")
                     </div>
 
                     <div class="form-group">
                         <label asp-for="Email" class="control-label"></label>
                         <input asp-for="Email" class="form-control" />
-                        <span asp-validation-for="Email" class="text-danger"></span>
+                        @Html.ValidationMessage("Email")
                     </div>
                     
                     <div class="form-group">
                         <label asp-for="ConfirmEmail" class="control-label"></label>
                         <input asp-for="ConfirmEmail" class="form-control" />
-                        <span asp-validation-for="ConfirmEmail" class="text-danger"></span>
+                        @Html.ValidationMessage("ConfirmEmail")
                     </div>
 
                     <div class="form-group">
                         <label asp-for="Password" class="control-label"></label>
                         <input asp-for="Password" class="form-control" />
-                        <span asp-validation-for="Password" class="text-danger"></span>
+                        @Html.ValidationMessage("Password")
                     </div>
 
                     <div class="form-group">
                         <label asp-for="ConfirmPassword" class="control-label"></label>
                         <input asp-for="ConfirmPassword" class="form-control" />
-                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        @Html.ValidationMessage("ConfirmPassword")
                     </div>
                     
                     <div class="form-group">
                         <label asp-for="NewsletterSubscription" class="control-label"></label>
                         @Html.CheckBoxFor(m => m.NewsletterSubscription)
-                        <span asp-validation-for="NewsletterSubscription" class="text-danger"></span>
+                        @Html.ValidationMessage("NewsletterSubscription")
                     </div>
 
                     <div class="form-group">
@@ -77,5 +77,5 @@
 </div> 
 
 @section Scripts {
-    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    @{ Html.RenderPartial("_ValidationScriptsPartial"); }
 }
