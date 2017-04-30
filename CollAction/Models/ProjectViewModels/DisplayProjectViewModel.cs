@@ -74,6 +74,7 @@ namespace CollAction.Models
                 .Include(p => p.Location)
                 .Include(p => p.BannerImage)
                 .Include(p => p.DescriptionVideoLink)
+                .Include(p => p.Owner)
                 .GroupJoin(context.ProjectParticipants,
                     project => project.Id,
                     participants => participants.ProjectId,
