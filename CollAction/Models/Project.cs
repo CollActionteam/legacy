@@ -121,10 +121,20 @@ namespace CollAction.Models
             if (DescriptionVideoLink?.Link != videoLink)
             {
                 // Remove the project's previously recorded video link if it exists.
-                if (DescriptionVideoLink != null) { context.VideoLinks.Remove(DescriptionVideoLink); }
+                if (DescriptionVideoLink != null)
+                {
+                    context.VideoLinks.Remove(DescriptionVideoLink);
+                }
 
                 // If a new video link was specified add it to the VideoLinks table.
-                if (videoLink != null) { DescriptionVideoLink = new VideoLink { Link = videoLink, Date = DateTime.UtcNow }; }
+                if (videoLink != null)
+                {
+                    DescriptionVideoLink = new VideoLink
+                    {
+                        Link = videoLink,
+                        Date = DateTime.UtcNow
+                    };
+                }
             }
         }
     }
