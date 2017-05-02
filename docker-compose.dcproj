@@ -17,7 +17,7 @@
       <DependentUpon>docker-compose.yml</DependentUpon>
     </None>
     <None Include="docker-compose.yml" />
-    <None Include="env_collaction" />
-    <None Include="env_postgres" />
+    <None Include="env_collaction.template" />
+    <None Include="env_postgres.template" />
   </ItemGroup>
 </Project>

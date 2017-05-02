@@ -149,12 +149,31 @@ namespace CollAction.Controllers
             await project.SetTags(_context, createProjectViewModel.Hashtag?.Split(';') ?? new string[0]);
 
             // Notify admins and creator through e-mail
+            string confirmationEmail = 
+                "Hi!<br>" +
+                "<br>" +
+                "Thanks for submitting a project on www.collaction.org!<br>" +
+                "The CollAction Team will review your project as soon as possible – if it meets all the criteria we’ll publish the project on the website and will let you know, so you can start promoting it!If we have any additional questions or comments, we’ll reach out to your by email.<br>" +
+                "<br>" +
+                "Thanks so much for driving the CollAction / crowdacting movement!<br>" +
+                "<br>" +
+                "Warm regards,<br>" +
+                "The CollAction team";
+            string subject = $"Confirmation email - start project {project.Name}";
+
             ApplicationUser user = await _userManager.GetUserAsync(User);
-            await _emailSender.SendEmailAsync(user.Email, $"Thank you for creating {project.Name}", "Hello");
+            await _emailSender.SendEmailAsync(user.Email, subject, confirmationEmail);
+
+            string confirmationEmailAdmin =
+                "Hi!<br>" +
+                "<br>" +
+                "There's a new project waiting for approval: {project.Name}<br>" +
+                "Warm regards,<br>" +
+                "The CollAction team";
 
             var administrators = await _userManager.GetUsersInRoleAsync("admin");
             foreach (var admin in administrators)
-                await _emailSender.SendEmailAsync(admin.Email, $"New project created - {project.Name}", "Hello");
+                await _emailSender.SendEmailAsync(admin.Email, subject, confirmationEmailAdmin);
             
             return View("ThankYouCreate", new ThankYouCreateProjectViewModel()
             {
@@ -172,10 +191,10 @@ namespace CollAction.Controllers
             }
 
             var project = await _context.Projects
-                                    .Include(p => p.BannerImage)
-                                    .Include(p => p.DescriptionVideoLink)
-                                    .Include(p => p.Tags).ThenInclude(t => t.Tag)
-                                    .SingleOrDefaultAsync(p => p.Id == id);
+                                        .Include(p => p.BannerImage)
+                                        .Include(p => p.DescriptionVideoLink)
+                                        .Include(p => p.Tags).ThenInclude(t => t.Tag)
+                                        .SingleOrDefaultAsync(p => p.Id == id);
             if (project == null)
             {
                 return NotFound();

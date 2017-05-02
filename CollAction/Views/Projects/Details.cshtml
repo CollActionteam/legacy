@@ -45,18 +45,18 @@
                     <div id="project-participation">
                         <ul>
                             <li>
-                                <h4>20 uur</h4>
+                                <h4>@Html.DisplayFor(model => model.RemainingTimeUserFriendly)</h4>
                                 <p>To go</p>
                             </li>
 
                             <li>
-                                <h4>30.000</h4>
+                                <h4>@Html.DisplayFor(model => model.Project.Target)</h4>
                                 <p>Target</p>
                             </li>
 
                             <li>
-                                <h4>15.000</h4>
-                                <p>Deelnemers</p>
+                                <h4>@Html.DisplayFor(model => model.Participants)</h4>
+                                <p>Participants</p>
                             </li>
                         </ul>
                     </div>
@@ -78,11 +78,11 @@
             <div class="col-md-3 col-xs-12" >
                 <div id="project-starter-avatar"></div>
                 <h3>Project Starter</h3>
-                <p>Natalie Portman</p>
+                <p>@Model.Project.Owner.FirstName @Model.Project.Owner.LastName</p>
             </div> 
 
             <div class="col-md-offset-3 col-md-3 col-xs-12" >
-                <div id="project-details-share-buttons">
+                <div id="project-details-share-buttons"></div>
             </div> 
         </div> 
 
@@ -101,42 +101,45 @@
         @{ var image = Model.Project.BannerImage; }
         @if (image != null)
         {
-
             <div class="row">
                 <figure class="project-image">
                     <div class="col-xs-4 caption">
                         <figcaption>
-                            <h5>This is the caption title</h5>
-                            <p>This is where we would put a long image caption</p>
-                           @Html.DisplayNameFor(model => image)
+                            <h5>@Html.DisplayFor(model => image.Name)</h5>
+                            <p>@Html.DisplayFor(model => image.Name)</p>
                         </figcaption>
                     </div> 
                 </figure>
                 <div class="col-xs-8 image">
-                    <!--img src="@Url.Content(image.Filepath)" 
+                    <img src="@Url.Content(image.Filepath)" 
                         width="@image.Width" 
                         height="@image.Height" 
                         class="banner-image" 
-                        alt="Banner image not found.">
-                        <i class="fa fa-arrows-alt marginright"></i>
-                    </img-->
-                </div> 
+                        alt="Banner image not found."/>
+                </div>
             </div> 
-         }
+        }
 
 
-         @if (Model.HasDescriptionVideo) 
-         {
-            <dt>
-                @Localizer["Descriptive Video"]
-            </dt>
-            <dd>
-                <iframe width="560" height="315" src="@Model.DescriptionVideoYouTubeEmbedLink" 
-                        frameborder="0" allowfullscreen></iframe>
-            </dd>
+        @if (Model.HasDescriptionVideo) 
+        {
+             <div class="row">
+                 <div class="col-xs-8">
+                     <p>@Localizer["Descriptive Video"]</p>
+                     <iframe id="ytplayer" type="text/html" width="560" height="315"
+                             src="@Model.DescriptionVideoYouTubeEmbedLink"
+                             frameborder="0"></iframe>
+                 </div>
+             </div>
         }  
     
-
+        <div class="row">
+            <hr />
+            <div class="col-xs-8">
+                <p>Other comments</p>
+                <p>@Html.DisplayFor(model => model.Project.CreatorComments)</p>
+            </div>
+        </div> 
     </div> 
 </div> 
 
