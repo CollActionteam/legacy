@@ -118,34 +118,23 @@ namespace CollAction.Controllers
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var createResult = await _userManager.CreateAsync(user, model.Password);
-                if (!createResult.Succeeded)
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
                 {
-                    AddErrors(createResult);
-                    return View(model);
+                    await _newsletterSubscriptionService.SetSubscriptionAsync(model.Email, model.NewsletterSubscription);
+
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                    await _emailSender.SendEmailAsync(model.Email, _localizer["Confirm your account"],
+                        $"{_localizer["Please confirm your account by clicking this link"]}: <a href='{callbackUrl}'>{_localizer["link"]}</a>");
+                    _logger.LogInformation(3, "User created a new account with password.");
+                    return RedirectToLocal(returnUrl);
                 }
-
-                // Newsletter subscription
-                await _newsletterSubscriptionService.SetSubscriptionAsync(model.Email, model.NewsletterSubscription);
-
-                // Confirmation email
-                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                await _emailSender.SendEmailAsync(model.Email, _localizer["Confirm your account"],
-                    $"{_localizer["Please confirm your account by clicking this link"]}: <a href='{callbackUrl}'>{_localizer["link"]}</a>");
-                _logger.LogInformation(3, "User created a new account with password.");
-
-                // Log in the new user
-                var loginResult = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, lockoutOnFailure: false);
-                if (!loginResult.Succeeded)
-                {
-                    ModelState.AddModelError(string.Empty, _localizer["Newly registered user could not be logged in!"]);
-                    return View(model);
-                }
-                _logger.LogInformation(1, "Newly registered user logged in.");
+                AddErrors(result);
             }
 
-            return RedirectToLocal(returnUrl);
+            // If we got this far, something failed, redisplay form
+            return View(model);
         }
 
         //
