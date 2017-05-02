@@ -51,7 +51,7 @@ namespace CollAction.Controllers
         [HttpGet]
         public async Task<IActionResult> ManageProject(int id)
         {
-            Project project = await _context.Projects.Include(p => p.Tags).ThenInclude(t => t.Tag).FirstOrDefaultAsync(p => p.Id == id);
+            Project project = await _context.Projects.Include(p => p.Tags).ThenInclude(t => t.Tag).Include(p => p.DescriptionVideoLink).FirstOrDefaultAsync(p => p.Id == id);
             if (project == null)
                 return NotFound();
 
@@ -66,6 +66,7 @@ namespace CollAction.Controllers
                 Description = project.Description,
                 CategoryId = project.CategoryId,
                 CreatorComments = project.CreatorComments,
+                DescriptionVideoLink = project.DescriptionVideoLink.Link,
                 End = project.End,
                 Start = project.Start,
                 Target = project.Target,
@@ -85,7 +86,7 @@ namespace CollAction.Controllers
         {
             if (ModelState.IsValid)
             {
-                Project project = await _context.Projects.Where(p => p.Id == model.Id).Include(p => p.Owner).FirstAsync();
+                Project project = await _context.Projects.Where(p => p.Id == model.Id).Include(p => p.Owner).Include(p => p.Tags).ThenInclude(t => t.Tag).Include(p => p.DescriptionVideoLink).FirstAsync();
 
                 bool approved = model.Status == ProjectStatus.Running && project.Status == ProjectStatus.Hidden;
                 bool successfull = model.Status == ProjectStatus.Successful && project.Status == ProjectStatus.Running;
@@ -98,7 +99,7 @@ namespace CollAction.Controllers
                         "<br>" +
                         "The CollAction Team has reviewed your project proposal and is very happy to share that your project has been approved and now live on www.collaction.org!<br>" +
                         "<br>" +
-                        "So feel very welcome to start promoting it!If you have any further questions, feel free to contact the CollAction Team at collactionteam@gmail.com. And don’t forget to tag CollAction in your messages on social media so we can help you spread the word(FB: @collaction.org, Twitter: @collaction_org)!<br>" +
+                        "So feel very welcome to start promoting it! If you have any further questions, feel free to contact the CollAction Team at collactionteam@gmail.com. And don’t forget to tag CollAction in your messages on social media so we can help you spread the word(FB: @collaction.org, Twitter: @collaction_org)!<br>" +
                         "<br>" +
                         "Thanks again for driving the CollAction / crowdacting movement!<br>" +
                         "<br>" +

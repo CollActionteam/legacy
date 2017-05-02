@@ -73,7 +73,7 @@ namespace CollAction.Helpers
                     return new ImageFile
                     {
                         Name = fileName,
-                        Filepath = "\\" + webPath,
+                        Filepath = "/" + webPath,
                         Format = extension,
                         Width = image.Width,
                         Height = image.Height,
@@ -87,6 +87,5 @@ namespace CollAction.Helpers
         {
             return Path.Combine(_webFolder, String.Format("{0}.{1}", fileName, extension));
         }
-
     }
 }

@@ -21,7 +21,7 @@ namespace CollAction.Models
         public bool HasDescriptionVideo { get { return Project.DescriptionVideoLink != null; } }
 
         public string DescriptionVideoYouTubeEmbedLink
-            => HasDescriptionVideo ? "https://www.youtube.com/embed/" + YouTubeId : "";
+            => HasDescriptionVideo ? $"https://www.youtube.com/embed/{YouTubeId}" : "";
 
         private string YouTubeId
         {
@@ -36,24 +36,37 @@ namespace CollAction.Models
         }
 
         public TimeSpan RemainingTime
-            => Project.End - DateTime.UtcNow;
+        {
+            get
+            {
+                TimeSpan remaining = Project.End - DateTime.UtcNow;
+                if (remaining.Ticks < 0)
+                    return new TimeSpan(0);
+                else
+                    return remaining;
+
+            }
+        }
 
         public string RemainingTimeUserFriendly
         {
             get
             {
-                if (RemainingTime.Years() > 1)
-                    return $"{RemainingTime.Years()} years";
-                else if (RemainingTime.Months() > 1)
-                    return $"{RemainingTime.Months()} months";
-                else if (RemainingTime.Weeks() > 1)
-                    return $"{RemainingTime.Weeks()} weeks";
-                else if (RemainingTime.Days > 1)
-                    return $"{RemainingTime.Days} days";
-                else if (RemainingTime.Hours > 1)
-                    return $"{RemainingTime.Hours} hours";
+                TimeSpan remaining = RemainingTime;
+                if (remaining.Years() > 1)
+                    return $"{remaining.Years()} years";
+                else if (remaining.Months() > 1)
+                    return $"{remaining.Months()} months";
+                else if (remaining.Weeks() > 1)
+                    return $"{remaining.Weeks()} weeks";
+                else if (remaining.Days > 1)
+                    return $"{remaining.Days} days";
+                else if (remaining.Hours > 1)
+                    return $"{remaining.Hours} hours";
+                else if (remaining.Minutes > 0)
+                    return $"{remaining.Minutes} minutes";
                 else
-                    return $"{RemainingTime.Minutes} minutes";
+                    return "Done";
             }
         }
 
