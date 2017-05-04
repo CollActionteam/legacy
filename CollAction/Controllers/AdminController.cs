@@ -66,7 +66,7 @@ namespace CollAction.Controllers
                 Description = project.Description,
                 CategoryId = project.CategoryId,
                 CreatorComments = project.CreatorComments,
-                DescriptionVideoLink = project.DescriptionVideoLink.Link,
+                DescriptionVideoLink = project.DescriptionVideoLink?.Link,
                 End = project.End,
                 Start = project.Start,
                 Target = project.Target,
@@ -159,6 +159,7 @@ namespace CollAction.Controllers
                 project.Status = model.Status;
                 project.OwnerId = model.OwnerId;
                 project.DisplayPriority = model.DisplayPriority;
+
                 if (model.HasBannerImageUpload)
                 {
                     var manager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "bannerimages"));
@@ -168,8 +169,11 @@ namespace CollAction.Controllers
                     }
                     project.BannerImage = await manager.UploadFormFile(model.BannerImageUpload, Guid.NewGuid().ToString() /* unique filename */);
                 }
+
                 await project.SetTags(_context, model.Hashtag?.Split(';') ?? new string[0]);
+
                 project.SetDescriptionVideoLink(_context, model.DescriptionVideoLink);
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction("ManageProjectsIndex");
             }
