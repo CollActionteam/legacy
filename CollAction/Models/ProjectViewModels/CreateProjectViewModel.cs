@@ -60,13 +60,13 @@ namespace CollAction.Models
         [Required]
         [DataType(DataType.Date)]
         [Display(Name = "Start date")]
-        [DateWithinMonths(12, ErrorMessage = "Please ensure your project starts within the next 12 months.")]
+        [WithinMonthsAfterToday(12, ErrorMessage = "Please ensure your project starts within the next 12 months.")]
         public DateTime Start { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
         [Display(Name = "Deadline")]
-        [DateWithinMonths(12, OfDateProperty = "Start", ErrorMessage = "The deadline must be within a year of the start date.")]
+        [WithinMonthsAfterDateProperty(12, "Start", ErrorMessage = "The deadline must be within a year of the start date.")]
         public DateTime End { get; set; }
 
         [Display(Name = "Banner image", Prompt = "1024x768px JPEG, GIF, PNG, BMP")]
