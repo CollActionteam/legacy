@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CollAction.Helpers;
 
 namespace CollAction.Models
 {
@@ -19,14 +20,13 @@ namespace CollAction.Models
 
         public bool HasDescriptionVideo { get { return Project.DescriptionVideoLink != null; } }
 
-        public string DescriptionVideoYouTubeEmbedLink {
-            get {
-                return HasDescriptionVideo ? "https://www.youtube.com/embed/" + YouTubeId : "";
-            }
-        }
+        public string DescriptionVideoYouTubeEmbedLink
+            => HasDescriptionVideo ? $"https://www.youtube.com/embed/{YouTubeId}" : "";
 
-        private string YouTubeId {
-            get {
+        private string YouTubeId
+        {
+            get
+            {
                 // Extract the YouTubeId from a link of this form http://www.youtube.com/watch?v=-wtIMTCHWuI
                 Uri uri = new Uri(Project.DescriptionVideoLink.Link);
                 var queryDictionary = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
@@ -35,22 +35,38 @@ namespace CollAction.Models
             }
         }
 
-        public int RemainingDays
-            => Convert.ToInt32(Math.Round((Project.End - Project.Start).TotalDays));
-
-        [Display(Name = "Status")]
-        public string StatusDescription
+        public TimeSpan RemainingTime
         {
             get
             {
-                if (Project.Status == ProjectStatus.Hidden) { return "hidden"; }
-                else if (Project.IsActive) { return String.Format("open, {0} days left", RemainingDays); }
-                else if (Project.IsComingSoon) { return "coming soon"; }
-                else if (Project.IsClosed) { return "closed"; }
-                else if (Project.Status == ProjectStatus.Successful) { return "successful"; }
-                else if (Project.Status == ProjectStatus.Failed) { return "failed"; }
-                else if (Project.Status == ProjectStatus.Deleted) { return "deleted"; }
-                else { return "undefined"; }
+                TimeSpan remaining = Project.End - DateTime.UtcNow;
+                if (remaining.Ticks < 0)
+                    return new TimeSpan(0);
+                else
+                    return remaining;
+
+            }
+        }
+
+        public string RemainingTimeUserFriendly
+        {
+            get
+            {
+                TimeSpan remaining = RemainingTime;
+                if (remaining.Years() > 1)
+                    return $"{remaining.Years()} years";
+                else if (remaining.Months() > 1)
+                    return $"{remaining.Months()} months";
+                else if (remaining.Weeks() > 1)
+                    return $"{remaining.Weeks()} weeks";
+                else if (remaining.Days > 1)
+                    return $"{remaining.Days} days";
+                else if (remaining.Hours > 1)
+                    return $"{remaining.Hours} hours";
+                else if (remaining.Minutes > 0)
+                    return $"{remaining.Minutes} minutes";
+                else
+                    return "Done";
             }
         }
 
@@ -71,6 +87,7 @@ namespace CollAction.Models
                 .Include(p => p.Location)
                 .Include(p => p.BannerImage)
                 .Include(p => p.DescriptionVideoLink)
+                .Include(p => p.Owner)
                 .GroupJoin(context.ProjectParticipants,
                     project => project.Id,
                     participants => participants.ProjectId,

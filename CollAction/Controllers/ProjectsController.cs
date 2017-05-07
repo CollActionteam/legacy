@@ -17,6 +17,8 @@ using Microsoft.AspNetCore.Hosting;
 using CollAction.Helpers;
 using CollAction.Services;
 using System.Text.RegularExpressions;
+using CollAction.Models.ProjectViewModels;
+using System.Linq.Expressions;
 
 namespace CollAction.Controllers
 {
@@ -27,14 +29,16 @@ namespace CollAction.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly IProjectService _service;
+        private readonly IEmailSender _emailSender;
 
-        public ProjectsController(ApplicationDbContext context, IStringLocalizer<ProjectsController> localizer, UserManager<ApplicationUser> userManager, IHostingEnvironment hostingEnvironment, IProjectService service)
+        public ProjectsController(ApplicationDbContext context, IStringLocalizer<ProjectsController> localizer, UserManager<ApplicationUser> userManager, IHostingEnvironment hostingEnvironment, IProjectService service, IEmailSender emailSender)
         {
             _context = context;
             _localizer = localizer;
             _userManager = userManager;
             _hostingEnvironment = hostingEnvironment;
             _service = service;
+            _emailSender = emailSender;
         }
 
         public ViewResult StartInfo()
@@ -58,15 +62,6 @@ namespace CollAction.Controllers
             model.Projects = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted &&
                 (p.Name.Contains(model.SearchText) || p.Description.Contains(model.SearchText) || p.Goal.Contains(model.SearchText)));
             return View(model);
-        }
-
-        public async Task<IActionResult> Index()
-        {
-            return View(new BrowseProjectsViewModel
-            {
-                OwnerId = (await _userManager.GetUserAsync(User))?.Id,
-                Projects = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted)
-            });
         }
 
         // GET: Projects/Details/5
@@ -98,6 +93,8 @@ namespace CollAction.Controllers
         {
             return View(new CreateProjectViewModel
             {
+                Start = DateTime.UtcNow.Date.AddDays(7), // A week from today
+                End = DateTime.UtcNow.Date.AddDays(7).AddMonths(1), // A month after start
                 Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description"),
             });
         }
@@ -150,8 +147,38 @@ namespace CollAction.Controllers
 
             // Only call this once we have a valid Project.Id
             await project.SetTags(_context, createProjectViewModel.Hashtag?.Split(';') ?? new string[0]);
+
+            // Notify admins and creator through e-mail
+            string confirmationEmail = 
+                "Hi!<br>" +
+                "<br>" +
+                "Thanks for submitting a project on www.collaction.org!<br>" +
+                "The CollAction Team will review your project as soon as possible – if it meets all the criteria we’ll publish the project on the website and will let you know, so you can start promoting it! If we have any additional questions or comments, we’ll reach out to you by email.<br>" +
+                "<br>" +
+                "Thanks so much for driving the CollAction / crowdacting movement!<br>" +
+                "<br>" +
+                "Warm regards,<br>" +
+                "The CollAction team";
+            string subject = $"Confirmation email - start project {project.Name}";
+
+            ApplicationUser user = await _userManager.GetUserAsync(User);
+            await _emailSender.SendEmailAsync(user.Email, subject, confirmationEmail);
+
+            string confirmationEmailAdmin =
+                "Hi!<br>" +
+                "<br>" +
+                "There's a new project waiting for approval: {project.Name}<br>" +
+                "Warm regards,<br>" +
+                "The CollAction team";
+
+            var administrators = await _userManager.GetUsersInRoleAsync("admin");
+            foreach (var admin in administrators)
+                await _emailSender.SendEmailAsync(admin.Email, subject, confirmationEmailAdmin);
             
-            return RedirectToAction("Index");
+            return View("ThankYouCreate", new ThankYouCreateProjectViewModel()
+            {
+                Name = project.Name
+            });
         }
 
         // GET: Projects/Edit/5
@@ -164,10 +191,10 @@ namespace CollAction.Controllers
             }
 
             var project = await _context.Projects
-                                    .Include(p => p.BannerImage)
-                                    .Include(p => p.DescriptionVideoLink)
-                                    .Include(p => p.Tags).ThenInclude(t => t.Tag)
-                                    .SingleOrDefaultAsync(p => p.Id == id);
+                                        .Include(p => p.BannerImage)
+                                        .Include(p => p.DescriptionVideoLink)
+                                        .Include(p => p.Tags).ThenInclude(t => t.Tag)
+                                        .SingleOrDefaultAsync(p => p.Id == id);
             if (project == null)
             {
                 return NotFound();
@@ -252,7 +279,10 @@ namespace CollAction.Controllers
             if (editProjectViewModel.HasBannerImageUpload)
             {
                 var manager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "bannerimages"));
-                if (project.BannerImage != null) { manager.DeleteImageFile(project.BannerImage); }
+                if (project.BannerImage != null)
+                {
+                    manager.DeleteImageFile(project.BannerImage);
+                }
                 project.BannerImage = await manager.UploadFormFile(editProjectViewModel.BannerImageUpload, Guid.NewGuid().ToString() /* unique filename */);
             }
 
@@ -262,7 +292,7 @@ namespace CollAction.Controllers
             {
                 _context.Update(project);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Find");
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -316,7 +346,7 @@ namespace CollAction.Controllers
 
             project.Status = ProjectStatus.Deleted;
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("Find");
         }
 
         [Authorize]
@@ -337,9 +367,10 @@ namespace CollAction.Controllers
             {
                 ProjectId = project.Id,
                 ProjectName = project.Name,
+                ProjectProposal = project.Proposal,
                 IsUserCommitted = (await _service.GetParticipant((await _userManager.GetUserAsync(User)).Id, project.Id) != null)
             };
-            
+
             return View(commitProjectViewModel);
         }
 
@@ -364,12 +395,35 @@ namespace CollAction.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> GetTileProjects(int? categoryId, int? locationId)
+        public async Task<JsonResult> GetTileProjects(int? categoryId, string statusId)
         {
-            var displayTileProjectViewModels = await _service.GetTileProjects(Url, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted
-            && (categoryId != null ? p.CategoryId == categoryId : true) && (locationId != null ? p.LocationId == locationId : true));
+            Expression<Func<Project, bool>> projectExpression = (p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted
+            && (categoryId != null ? p.CategoryId == categoryId : true));
+
+            Expression<Func<Project, bool>> statusExpression;
+            switch (statusId)
+            {
+                case "open": statusExpression = (p => p.Status == ProjectStatus.Running && p.Start <= DateTime.UtcNow && p.End >= DateTime.UtcNow); break;
+                case "closed": statusExpression = (p => (p.Status == ProjectStatus.Running && p.End < DateTime.UtcNow) || p.Status == ProjectStatus.Successful || p.Status == ProjectStatus.Failed); break;
+                case "comingSoon": statusExpression = (p => p.Status == ProjectStatus.Running && p.Start > DateTime.UtcNow); break;
+                default: statusExpression = (p => true); break;
+            }
+            
+            var displayTileProjectViewModels = await _service.GetTileProjects(Url,
+                Expression.Lambda<Func<Project, bool>>(Expression.AndAlso(projectExpression.Body, Expression.Invoke(statusExpression, projectExpression.Parameters[0])), projectExpression.Parameters[0]));
             
             return Json(displayTileProjectViewModels);
+        }
+
+        [HttpGet]
+        public JsonResult GetStatuses()
+        {
+            return Json(new List<FindStatusViewModel>
+            {
+                new FindStatusViewModel{Id = "open", Status = "open"},
+                new FindStatusViewModel{Id = "closed",Status = "closed"},
+                new FindStatusViewModel{Id = "comingSoon",Status = "coming soon"}
+            });
         }
     }
 }

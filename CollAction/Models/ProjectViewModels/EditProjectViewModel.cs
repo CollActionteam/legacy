@@ -62,11 +62,13 @@ namespace CollAction.Models
         [Required]
         [Display(Name = "Start date")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [WithinMonthsAfterToday(12, ErrorMessage = "Please ensure your project starts within the next 12 months.")]
         public DateTime Start { get; set; }
 
         [Required]
         [Display(Name = "Deadline")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [WithinMonthsAfterDateProperty(12, "Start", ErrorMessage = "The deadline must be within a year of the start date.")]
         public DateTime End { get; set; }
 
         [Display(Name = "Banner image", Prompt = "1024x768px JPEG, GIF, PNG, BMP")]
@@ -83,9 +85,9 @@ namespace CollAction.Models
         [YouTubeLink]
         public string DescriptionVideoLink { get; set; }
 
-        [Display(Name = "Hashtag", Prompt = "Max 30 characters. e.g. '#tag1;#tag2'")]
+        [Display(Name = "Hashtag", Prompt = "Max 30 characters. e.g. 'tag1;tag2'")]
         [MaxLength(30)]
-        [RegularExpression(@"^#[a-zA-Z_]\w*(;#[a-zA-Z_]+\w*)*$", ErrorMessage = "No spaces, must contain a letter, can contain digits and underscores. Seperate multiple tags with a colon ';'.")]
+        [RegularExpression(@"^[a-zA-Z_0-9]+(;[a-zA-Z_0-9]+)*$", ErrorMessage = "No spaces, must contain a letter, can contain digits and underscores. Seperate multiple tags with a colon ';'.")]
         public string Hashtag { get; set; }
     }
 }

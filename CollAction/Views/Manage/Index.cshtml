@@ -80,7 +80,7 @@
                 <div class="form-group">
                     <label asp-for="NewsletterSubscription" class="control-label"></label>
                     @Html.CheckBoxFor(m => m.NewsletterSubscription, new { onclick = "this.form.submit();" })
-                    <span asp-validation-for="NewsletterSubscription" class="text-danger"></span>
+                    @Html.ValidationMessage("NewsletterSubscription")
                 </div>
             </form>
         </dd>
@@ -230,9 +230,9 @@
                                 @Html.DisplayFor(content => item.End)
                             </td>
                             <td>
-                                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                <a asp-action="Edit" asp-controller="Projects" asp-route-id="@item.Id">Edit</a> |
+                                <a asp-action="Details" asp-controller="Projects" asp-route-id="@item.Id">Details</a> |
+                                <a asp-action="Delete" asp-controller="Projects" asp-route-id="@item.Id">Delete</a>
                             </td>
                         </tr>
                     }
@@ -251,5 +251,5 @@
 </div>
 
 @section Scripts {
-    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    @{ Html.RenderPartial("_ValidationScriptsPartial"); }
 }

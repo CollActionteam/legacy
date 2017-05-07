@@ -1,6 +1,7 @@
 import "./home/index";
 import "./project/index";
 import "./global/index";
+import "./account/index";
 
 import * as jQuery from "jquery";
 import * as injectTapEventPlugin from "react-tap-event-plugin";

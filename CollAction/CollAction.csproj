@@ -7,7 +7,7 @@
     <DisableImplicitFrameworkReference>true</DisableImplicitFrameworkReference>  
     <UserSecretsId>aspnet-CollAction-29a5d7b8-3530-4482-9ed6-572bd6c178fa</UserSecretsId>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
-    <PreBuildEvent>npm install
+    <PreBuildEvent>npm install &amp;&amp; ^
 npm run build</PreBuildEvent>
   </PropertyGroup>
 
@@ -20,7 +20,7 @@ npm run build</PreBuildEvent>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CoreCompat.System.Drawing" Version="1.0.0-beta006" />
+    <PackageReference Include="ImageSharp" Version="1.0.0-alpha7-00031" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="1.1.1" />
@@ -50,5 +50,8 @@ npm run build</PreBuildEvent>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Update="Microsoft.NETCore.App" Version="1.1.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot\js\" />
   </ItemGroup>
 </Project>

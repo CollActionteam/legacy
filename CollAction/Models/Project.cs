@@ -92,7 +92,7 @@ namespace CollAction.Models
         public async Task SetTags(ApplicationDbContext context, params string[] tagNames)
         {
             List<Tag> tags = await context.Tags.Where(tag => tagNames.Contains(tag.Name)).ToListAsync();
-            IEnumerable<string> missingTags = tagNames.Where(tagName => !tags.Any(tag => tag.Name.Equals(tagName, StringComparison.Ordinal)));
+            IEnumerable<string> missingTags = tagNames.Where(tagName => !tags.Any(tag => tag.Name.Equals(tagName, StringComparison.Ordinal))).Distinct();
             if (missingTags.Any())
             {
                 List<Tag> newTags = missingTags.Select(tagName => new Tag() { Name = tagName }).ToList();
@@ -121,10 +121,20 @@ namespace CollAction.Models
             if (DescriptionVideoLink?.Link != videoLink)
             {
                 // Remove the project's previously recorded video link if it exists.
-                if (DescriptionVideoLink != null) { context.VideoLinks.Remove(DescriptionVideoLink); }
+                if (DescriptionVideoLink != null)
+                {
+                    context.VideoLinks.Remove(DescriptionVideoLink);
+                }
 
                 // If a new video link was specified add it to the VideoLinks table.
-                if (videoLink != null) { DescriptionVideoLink = new VideoLink { Link = videoLink, Date = DateTime.UtcNow }; }
+                if (videoLink != null)
+                {
+                    DescriptionVideoLink = new VideoLink
+                    {
+                        Link = videoLink,
+                        Date = DateTime.UtcNow
+                    };
+                }
             }
         }
     }
