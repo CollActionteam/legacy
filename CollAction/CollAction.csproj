@@ -7,7 +7,7 @@
     <DisableImplicitFrameworkReference>true</DisableImplicitFrameworkReference>  
     <UserSecretsId>aspnet-CollAction-29a5d7b8-3530-4482-9ed6-572bd6c178fa</UserSecretsId>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
-    <PreBuildEvent>npm install
+    <PreBuildEvent>npm install &amp;&amp; ^
 npm run build</PreBuildEvent>
   </PropertyGroup>
 
