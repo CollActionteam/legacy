@@ -93,8 +93,8 @@ namespace CollAction.Controllers
         {
             return View(new CreateProjectViewModel
             {
-                Start = DateTime.UtcNow.Date,
-                End = DateTime.UtcNow.Date.AddMonths(1),
+                Start = DateTime.UtcNow.Date.AddDays(7), // A week from today
+                End = DateTime.UtcNow.Date.AddDays(7).AddMonths(1), // A month after start
                 Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description"),
             });
         }
@@ -153,7 +153,7 @@ namespace CollAction.Controllers
                 "Hi!<br>" +
                 "<br>" +
                 "Thanks for submitting a project on www.collaction.org!<br>" +
-                "The CollAction Team will review your project as soon as possible – if it meets all the criteria we’ll publish the project on the website and will let you know, so you can start promoting it!If we have any additional questions or comments, we’ll reach out to your by email.<br>" +
+                "The CollAction Team will review your project as soon as possible – if it meets all the criteria we’ll publish the project on the website and will let you know, so you can start promoting it! If we have any additional questions or comments, we’ll reach out to you by email.<br>" +
                 "<br>" +
                 "Thanks so much for driving the CollAction / crowdacting movement!<br>" +
                 "<br>" +
