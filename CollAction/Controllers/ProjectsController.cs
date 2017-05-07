@@ -393,18 +393,21 @@ namespace CollAction.Controllers
             return Json(await _context.Categories.Where(c => c.Name != "Other").Select(c => new { c.Id, c.Name }).ToListAsync());
         }
 
+
+        public enum StatusIds { Open = 1, Closed, ComingSoon };
+
         [HttpGet]
-        public async Task<JsonResult> GetTileProjects(int? categoryId, string statusId)
+        public async Task<JsonResult> GetTileProjects(int? categoryId, int statusId)
         {
             Expression<Func<Project, bool>> projectExpression = (p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted
             && (categoryId != null ? p.CategoryId == categoryId : true));
-
+            
             Expression<Func<Project, bool>> statusExpression;
             switch (statusId)
             {
-                case "open": statusExpression = (p => p.Status == ProjectStatus.Running && p.Start <= DateTime.UtcNow && p.End >= DateTime.UtcNow); break;
-                case "closed": statusExpression = (p => (p.Status == ProjectStatus.Running && p.End < DateTime.UtcNow) || p.Status == ProjectStatus.Successful || p.Status == ProjectStatus.Failed); break;
-                case "comingSoon": statusExpression = (p => p.Status == ProjectStatus.Running && p.Start > DateTime.UtcNow); break;
+                case (int)StatusIds.Open: statusExpression = (p => p.Status == ProjectStatus.Running && p.Start <= DateTime.UtcNow && p.End >= DateTime.UtcNow); break;
+                case (int)StatusIds.Closed: statusExpression = (p => (p.Status == ProjectStatus.Running && p.End < DateTime.UtcNow) || p.Status == ProjectStatus.Successful || p.Status == ProjectStatus.Failed); break;
+                case (int)StatusIds.ComingSoon: statusExpression = (p => p.Status == ProjectStatus.Running && p.Start > DateTime.UtcNow); break;
                 default: statusExpression = (p => true); break;
             }
             
