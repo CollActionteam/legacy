@@ -1,0 +1,50 @@
+<svg id="Close_Button" data-name="Close Button" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">
+  <metadata><?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
+<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Adobe XMP Core 5.6-c138 79.159824, 2016/09/14-01:09:01        ">
+   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about=""/>
+   </rdf:RDF>
+</x:xmpmeta>
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                           
+<?xpacket end="w"?></metadata>
+<defs>
+    <style>
+      .cls-1 {
+        fill: #23d884;
+        stroke: #eee;
+        stroke-linejoin: round;
+        stroke-width: 1px;
+      }
+
+      .cls-1, .cls-2 {
+        fill-rule: evenodd;
+      }
+
+      .cls-2 {
+        fill: #fefefe;
+      }
+    </style>
+  </defs>
+  <path id="Button_Stroke" data-name="Button Stroke" class="cls-1" d="M7327,111.5a13.5,13.5,0,1,1,13.5,13.5A13.5,13.5,0,0,1,7327,111.5Z" transform="translate(-7326.5 -97.5)"/>
+  <path id="Icon" class="cls-2" d="M7341.57,111.492l2.38-2.381-1.05-1.049-2.39,2.381-2.38-2.381-1.05,1.049,2.38,2.381-2.38,2.381,1.05,1.05,2.38-2.381,2.39,2.381,1.05-1.05-2.38-2.381h0Z" transform="translate(-7326.5 -97.5)"/>
+</svg>

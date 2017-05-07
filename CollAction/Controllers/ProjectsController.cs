@@ -367,9 +367,10 @@ namespace CollAction.Controllers
             {
                 ProjectId = project.Id,
                 ProjectName = project.Name,
+                ProjectProposal = project.Proposal,
                 IsUserCommitted = (await _service.GetParticipant((await _userManager.GetUserAsync(User)).Id, project.Id) != null)
             };
-            
+
             return View(commitProjectViewModel);
         }
 
