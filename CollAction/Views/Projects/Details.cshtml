@@ -137,20 +137,20 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row additional-image-row">
             @*TODO replace with additional image and caption*@
             @if (image != null)
             {
-
-                <div class="col-xs-12 col-md-8 col-md-push-4 project-additional-image">
-                    <img src="@Url.Content(image.Filepath)"
-                         width="@image.Width"
-                         height="@image.Height"
-                         class="banner-image"
-                         alt="Banner image not found." />
-                </div>
                 <figure class="project-image">
-                    <div class="col-xs-12 col-md-4 col-md-pull-8 project-caption">
+                    <div class="col-xs-12 col-md-8 col-md-push-4 image">
+                        <img src="@Url.Content(image.Filepath)"
+                             width="@image.Width"
+                             height="@image.Height"
+                             class="additional-image"
+                             alt="Additional image not found." />
+                    </div>
+
+                    <div class="col-xs-12 col-md-4 col-md-pull-8 caption">
                         <figcaption>
                             <h5>@Html.DisplayFor(model => image.Name)</h5>
                             <p>@Html.DisplayFor(model => image.Name)</p>
