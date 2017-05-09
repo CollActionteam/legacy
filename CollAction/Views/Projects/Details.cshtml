@@ -11,8 +11,8 @@
 <div id="project-details">
     <div class="container-fluid">
         <div class="row">
+            @{ var image = Model.Project.BannerImage; }
             <div class="col-xs-12 dotbackground" id="project-background">
-                @{ var image = Model.Project.BannerImage; }
                 @*@if (image != null)
                     {
                         <img src="@Url.Content(image.Filepath)"
@@ -29,7 +29,7 @@
 
             <div class="col-md-6 col-md-push-6 col-xs-12">
                 <div id="project-info-card">
-                    <div id="project-category">
+                    <div id="project-category" style="background-color: #@Html.DisplayFor(model => model.Project.Category.ColorHex)">
                         @Html.DisplayFor(model => model.Project.Category.Name)
                     </div>
                     <h1>@Html.DisplayFor(model => model.Project.Name)</h1>
@@ -39,7 +39,6 @@
                     </div>
 
                     <div id="more-info">
-                        <p>@Html.DisplayFor(model => model.Project.Description)</p>
                         <p>@Html.DisplayFor(model => model.Project.Proposal)</p>
                     </div>
 
@@ -76,11 +75,11 @@
                     @{
                         if (Model.IsUserCommitted)
                         {
-                            <p>You're participating!</p>
+                            <h4 class="participating">You're participating!</h4>
                         }
                         else
                         {
-                            <a id="take-part-button" asp-action="Commit" asp-route-id="@Model.Project.Id">Take Part</a>
+                            <a class="take-part-button" asp-action="Commit" asp-route-id="@Model.Project.Id">Take Part</a>
                         }
                     }
                 </div>
@@ -88,107 +87,123 @@
             <div class="col-md-6 col-md-pull-6 col-xs-12">
                 <div class="row" id="project-starter-row">
                     <div class="col-md-6 col-md-push-6 col-xs-12">
+                        <h4>Share this project</h4>
                         <div id="project-details-share-buttons"></div>
                     </div>
                     <div class="col-md-6 col-md-pull-6 col-xs-12">
                         <div class="row">
-                            <div class="col-xs-3 col-md-12">
-                                <div id="project-starter-avatar"></div>
-                            </div>
-                            <div class="col-xs-9 col-md-12">
-                                <h3>Project Starter</h3>
-                                <p>@Model.Project.Owner.FirstName @Model.Project.Owner.LastName</p>
-                            </div>
+                            @if (!String.IsNullOrEmpty(Model.Project.Owner.FirstName) && !String.IsNullOrEmpty(Model.Project.Owner.LastName))
+                            {
+                                <div class="col-xs-3 col-md-12">
+                                    <div id="project-starter-avatar"></div>
+                                </div>
+                                <div class="col-xs-9 col-md-12">
+                                    <h3>Project Starter</h3>
+                                    <p>@Model.Project.Owner.FirstName @Model.Project.Owner.LastName</p>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <hr class="hidden-sm hidden-xs" />
+        <div class="row">
+            <div class="col-xs-12 align-sides">
+                <hr class="hidden-sm hidden-xs" />
+            </div>
+        </div>
 
         <div class="row">
-            <div class="col-xs-12 col-md-4">
-                <div class="project-proposal hidden-sm hidden-xs">
-                    <h3>Proposal</h3>
-                    <p>@Html.DisplayFor(model => model.Project.Proposal)</p>
-                </div>
+            <div class="col-xs-12 col-md-4 align-sides description-tags-container">
                 <div class="project-short-description">
                     <h3>Short description:</h3>
                     <p>@Html.DisplayFor(model => model.Project.Description)</p>
                 </div>
+                @if (Model.Project.Tags.Count > 0)
+                {
+                    <div class="project-hashtags">
+                        <h3>Hashtags: </h3>
+                        <p>
+                            @foreach (var t in Model.Project.Tags)
+                            {
+                                <span>@Html.DisplayFor(m => t.Tag.Name)</span>
+                            }
+                       </p>
+                    </div>
+                }
             </div>
-            <div class="col-xs-12 col-md-8">
-                <div class="project-goal">
-                    <h3>Goal / impact</h3>
-                    <p>@Html.DisplayFor(model => model.Project.Goal)</p>
+            <div class="col-xs-12 col-md-8 align-sides">
+                <div class="goal-proposal-container">
+                    <div class="project-goal">
+                        <h3>Goal / impact</h3>
+                        <p>@Html.DisplayFor(model => model.Project.Goal)</p>
+                    </div>
+                    <div class="project-green-proposal">
+                        <p><q>@Html.DisplayFor(model => model.Project.Proposal)</q></p>
+                    </div>
                 </div>
-                <div class="project-green-proposal">
-                    <p>@Html.DisplayFor(model => model.Project.Proposal)</p>
-                </div>
-
-                <hr class="hidden-sm hidden-xs" />
-
-                <div class="project-comments">
-                    <h3>Other comments</h3>
-                    <p>@Html.DisplayFor(model => model.Project.CreatorComments)</p>
-                </div>
-
+                @if (Model.Project.CreatorComments != null)
+                {
+                    <hr class="hidden-sm hidden-xs" />
+                    <div class="comments-container">
+                        <div class="project-comments">
+                            <h3>Other comments</h3>
+                            <p>@Html.DisplayFor(model => model.Project.CreatorComments)</p>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
 
-        <div class="row additional-image-row">
-            @*TODO replace with additional image and caption*@
-            @if (image != null)
-            {
-                <figure class="project-image">
-                    <div class="col-xs-12 col-md-8 col-md-push-4 image">
-                        <img src="@Url.Content(image.Filepath)"
-                             width="@image.Width"
-                             height="@image.Height"
-                             class="additional-image"
-                             alt="Additional image not found." />
-                    </div>
+        @*TODO replace with additional image and caption*@
+        @if (image != null)
+        {
+            <div class="row project-image">
+                <div class="col-xs-12 col-md-8 col-md-push-4 image">
+                    <img src="@Url.Content(image.Filepath)"
+                         width="@image.Width"
+                         height="@image.Height"
+                         class="additional-image img-responsive"
+                         alt="Additional image not found." />
+                </div>
+                <div class="col-xs-12 col-md-4 col-md-pull-8 caption">
+                    <h5>@Html.DisplayFor(model => image.Name)</h5>
+                    <p>@Html.DisplayFor(model => image.Name)</p>
+                </div>
 
-                    <div class="col-xs-12 col-md-4 col-md-pull-8 caption">
-                        <figcaption>
-                            <h5>@Html.DisplayFor(model => image.Name)</h5>
-                            <p>@Html.DisplayFor(model => image.Name)</p>
-                        </figcaption>
-                    </div>
-                </figure>
-            }
-        </div>
+            </div>
+        }
 
         @if (Model.HasDescriptionVideo)
         {
             <div class="row">
-                <div class="col-xs-12 col-md-8 col-md-offset-4">
+                <div class="col-xs-12 col-md-8 col-md-offset-4 video-container">
                     <hr class="hidden-sm hidden-xs" />
-                    <iframe id="ytplayer" type="text/html" width="560" height="315"
-                            src="@Model.DescriptionVideoYouTubeEmbedLink"
-                            frameborder="0"></iframe>
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe id="ytplayer" type="text/html"
+                                src="@Model.DescriptionVideoYouTubeEmbedLink"></iframe>
+                    </div>
                 </div>
             </div>
         }
 
         <div class="row">
-            <div class="col-xs-12 col-md-8 col-md-offset-4">
+            <div class="col-xs-12 col-md-4 col-md-offset-8 bottom-take-part">
                 @{
                     if (Model.IsUserCommitted)
                     {
-                        <p>You're participating!</p>
+                        <h4 class="participating">You're participating!</h4>
                     }
                     else
                     {
-                        <a id="take-part-button" asp-action="Commit" asp-route-id="@Model.Project.Id">Take Part</a>
+                        <a class="take-part-button" asp-action="Commit" asp-route-id="@Model.Project.Id">Take Part</a>
                     }
                 }
             </div>
         </div>
 
         <div class="row">
-            <div class="col-xs-12 col-md-8 col-md-offset-4">
+            <div class="col-xs-12 col-md-8 col-md-offset-4 align-sides">
                 @*TODO add social media share links*@
             </div>
         </div>
