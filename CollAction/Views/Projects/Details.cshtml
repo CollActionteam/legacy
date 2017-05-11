@@ -11,17 +11,14 @@
 <div id="project-details">
     <div class="container-fluid">
         <div class="row">
-            @{ var image = Model.Project.BannerImage; }
-            <div class="col-xs-12 dotbackground" id="project-background">
-                @*@if (image != null)
-                    {
-                        <img src="@Url.Content(image.Filepath)"
-                             width="@image.Width"
-                             height="@image.Height"
-                             class="banner-image"
-                             alt="Banner image not found." />
-                    }*@
+            @{ 
+                var image = Model.Project.BannerImage;
+                string backgroundPath = (image != null) ? "background-image:url('" + @Url.Content(image.Filepath.Replace('\\', '/')) + "')" : null;
+            }
+            <div class="col-xs-12 banner" id="project-background" style=@backgroundPath>
             </div>
+            @*<div class="dotbackground">
+            </div>*@
         </div>
     </div> 
     <div class="container">
@@ -87,17 +84,17 @@
             <div class="col-md-6 col-md-pull-6 col-xs-12">
                 <div class="row" id="project-starter-row">
                     <div class="col-md-6 col-md-push-6 col-xs-12">
-                        <h4>Share this project</h4>
-                        <div id="project-details-share-buttons"></div>
+                        @*<h4>Share this project</h4>
+                        <div id="project-details-share-buttons"></div>*@
                     </div>
-                    <div class="col-md-6 col-md-pull-6 col-xs-12">
+                    <div class="col-md-6 col-md-pull-6 col-xs-12 align-sides">
                         <div class="row">
                             @if (!String.IsNullOrEmpty(Model.Project.Owner.FirstName) && !String.IsNullOrEmpty(Model.Project.Owner.LastName))
                             {
-                                <div class="col-xs-3 col-md-12">
+                                <div class="col-xs-4 col-md-12">
                                     <div id="project-starter-avatar"></div>
                                 </div>
-                                <div class="col-xs-9 col-md-12">
+                                <div class="col-xs-8 col-md-12" id="project-starter-name">
                                     <h3>Project Starter</h3>
                                     <p>@Model.Project.Owner.FirstName @Model.Project.Owner.LastName</p>
                                 </div>
