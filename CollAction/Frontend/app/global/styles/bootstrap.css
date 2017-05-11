@@ -5,8 +5,8 @@
  */
 
 /*!
- * Generated using the Bootstrap Customizer (http://getbootstrap.com/customize/?id=fcf27e4bb7cce80250c602d1c97a1b71)
- * Config saved to config.json and https://gist.github.com/fcf27e4bb7cce80250c602d1c97a1b71
+ * Generated using the Bootstrap Customizer (http://getbootstrap.com/customize/?id=09a44be0086d963c110991af3631ddc3)
+ * Config saved to config.json and https://gist.github.com/09a44be0086d963c110991af3631ddc3
  */
 /*!
  * Bootstrap v3.3.7 (http://getbootstrap.com)
@@ -256,8 +256,8 @@ html {
 }
 
 body {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 14px;
+    font-family: Raleway, sans-serif;
+    font-size: 16px;
     line-height: 1.42857143;
     color: #333333;
     background-color: #ffffff;
@@ -325,8 +325,8 @@ img {
 }
 
 hr {
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin-top: 22px;
+    margin-bottom: 22px;
     border: 0;
     border-top: 1px solid #eeeeee;
 }
@@ -1239,7 +1239,7 @@ hr {
 }
 
 .panel {
-    margin-bottom: 20px;
+    margin-bottom: 22px;
     background-color: #ffffff;
     border: 1px solid transparent;
     border-radius: 4px;
@@ -1265,7 +1265,7 @@ hr {
 .panel-title {
     margin-top: 0;
     margin-bottom: 0;
-    font-size: 16px;
+    font-size: 18px;
     color: inherit;
 }
 
@@ -1483,7 +1483,7 @@ hr {
 }
 
 .panel-group {
-    margin-bottom: 20px;
+    margin-bottom: 22px;
 }
 
     .panel-group .panel {

@@ -8,13 +8,18 @@
   }
 
   #title-row {
-    h1 {
-      font-weight: 700;
-    }
 
     h1, h2 {
       margin:0px;
       padding:0px;
+    }
+
+    h1 {
+      font-weight: 700;
+      font-size: 34px;
+    }
+
+    h2 {
       font-weight: 400;
     }
 
@@ -77,8 +82,6 @@
     background-image: url(/images/front-page.jpg);
     padding: 150px 0px;
     color: $coll-action-green;
-
-    
   }
 
   #project-share {
@@ -105,6 +108,7 @@
       border-radius: 150px;
       width: 150px;
       padding: 65px 0px;
+      font-weight: 700;
     }
   }
 

@@ -1,5 +1,16 @@
 @import "../../colors";
 
+#header-container {
+    position: fixed;
+    background-color: white;
+    width: 100%;
+    z-index: 2;
+}
+
+#index, #project-create-nice {
+    padding-top: 85px;
+}
+
 .heading {
     text-transform: uppercase;
     font-weight: 700;
