@@ -62,11 +62,20 @@
     background-color: #efefef;
   }
 
+  #homepage-share-buttons
+  {
+    margin-bottom: 40px;
+  }
+
   #three-steps,
   #intro-text,
   #project-actions,
   #project-share {
     padding: 50px 0px;
+  }
+
+  #project-share {
+    background-color: #f7f7f7;
   }
 
   #banner-title {
@@ -80,6 +89,8 @@
     h3 {
       text-align: center;
       color: $coll-action-green;
+      font-size: 3em;
+      padding-left: 150px;
     }
 
   }
