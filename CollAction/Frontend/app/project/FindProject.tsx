@@ -36,11 +36,8 @@ export default class FindProject extends React.Component<IFindProjectProps, IFin
 
     // Fetch projects with out filters set
     const getUrl: () => string = () => {
-      if(projectFilter) { 
-        if (projectFilter.categoryId == "0") { // If 'All' (categoryId == 0) is selected only filter on statusId...
-          return `/api/projects/find?statusId=${projectFilter.statusId}`;
-        }
-        return `/api/projects/find?categoryId=${projectFilter.categoryId}&statusId=${projectFilter.statusId}`;
+      if(projectFilter) {
+        return `/api/projects/find?categoryId=${projectFilter.categoryId}&statusId=${this.state.projectFilterState.statusId}`;
       }
       return "/api/projects/find";
     }
