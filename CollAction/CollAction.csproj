@@ -20,11 +20,6 @@ npm run build</PreBuildEvent>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="wwwroot\images\default_banners\Other.jpg" />
-    <Content Include="wwwroot\usercontent\descriptiveimages\.gitignore" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="ImageSharp" Version="1.0.0-alpha7-00031" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.2" />
