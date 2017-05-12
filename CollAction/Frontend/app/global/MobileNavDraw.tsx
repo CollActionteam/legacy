@@ -1,11 +1,15 @@
 import * as React from "react";
 import renderComponentIf from "./renderComponentIf";
 
+interface IMobileNavDrawProps {
+  loginText?: string;
+}
+
 interface IMobileNavDrawState {
   open: boolean;
 }
 
-export default class MobileNavDraw extends React.Component<null, IMobileNavDrawState> {
+export default class MobileNavDraw extends React.Component<IMobileNavDrawProps, IMobileNavDrawState> {
 
   constructor () {
     super();
@@ -32,7 +36,10 @@ export default class MobileNavDraw extends React.Component<null, IMobileNavDrawS
             <li><a href="/find">Find Project</a></li>
             <li><a href="/start">Start Project</a></li>
             <li><a href="/about">About</a></li>
-            <li><a href="/login">Login</a></li>
+            {this.props.loginText == "Logout" ?
+                (<li><button type="button" onClick={() => document.getElementById("logOutBtn").click()}>Logout</button></li>) :
+                (<li><a href="/account/login">Login</a></li>)
+            }
         </ul>
       </div>
     );
@@ -53,7 +60,9 @@ export default class MobileNavDraw extends React.Component<null, IMobileNavDrawS
   }
 }
 
+var loginText = document.getElementById("logOutBtn")? "Logout" : "Login";
+
 renderComponentIf(
-  <MobileNavDraw />,
+  <MobileNavDraw loginText={loginText} />,
   document.getElementById("mobile-nav-draw")
 );
