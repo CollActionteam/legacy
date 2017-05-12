@@ -78,7 +78,7 @@ namespace CollAction.Helpers
                         Width = image.Width,
                         Height = image.Height,
                         Date = DateTime.UtcNow,
-                        Description = description
+                        Description = description ?? string.Empty
                     };
                 }
             }
