@@ -59,7 +59,7 @@ namespace CollAction.Services
             return await _context.ProjectParticipants.SingleOrDefaultAsync(p => p.ProjectId == projectId && p.UserId == userId);
         }
 
-        public async Task<IEnumerable<DisplayTileProjectViewModel>> GetTileProjects(IUrlHelper urlHelper, Expression<Func<Project, bool>> WhereExpression)
+        public async Task<IEnumerable<DisplayTileProjectViewModel>> GetTileProjects(Expression<Func<Project, bool>> WhereExpression)
         {
             return await _context.Projects
                .Where(WhereExpression)
@@ -73,16 +73,12 @@ namespace CollAction.Services
                     CategoryName = p.Category.Name,
                     CategoryColorHex = p.Category.ColorHex,
                     LocationName = p.Location.Name,
-                    BannerImagePath = GetImagePath(urlHelper, p.BannerImage, "https://placeholdit.imgix.net/~text?txtsize=33&txt=Project%20Image"),
+                    BannerImagePath = p.BannerImage == null ? $"/images/default_banners/{p.Category.Name}.jpg" : p.BannerImage.Filepath,
+                    BannerImageDescription = p.BannerImage.Description,
                     Target = p.Target,
                     Participants = p.Participants.Count()
                 })
                .ToListAsync();
-        }
-
-        public string GetImagePath(IUrlHelper url, ImageFile imageFile, string defaultImagePath)
-        {
-            return (imageFile != null) ? url.Content(imageFile.Filepath.Replace('\\', '/')) : defaultImagePath;
         }
     }
 }

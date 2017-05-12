@@ -30,6 +30,12 @@ namespace CollAction.Models
 
         public string BannerImagePath { get; set; }
 
+        public string BannerImageDescription { get; set; }
+
+        public string DescriptiveImagePath { get; set; }
+
+        public string DescriptiveImageDescription { get; set; }
+
         public int Target { get; set; }
 
         public int Participants { get; set; }
@@ -47,7 +53,6 @@ namespace CollAction.Models
         public string StatusText { get; set; }
 
         public string StatusSubText { get; set; }
-
 
         private void setRemainingTime(DateTime projectStart, DateTime projectEnd)
         {

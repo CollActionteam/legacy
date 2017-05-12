@@ -11,14 +11,8 @@
 <div id="project-details">
     <div class="container-fluid">
         <div class="row">
-            @{ 
-                var image = Model.Project.BannerImage;
-                string backgroundPath = (image != null) ? "background-image:url('" + @Url.Content(image.Filepath.Replace('\\', '/')) + "')" : null;
-            }
-            <div class="col-xs-12 banner" id="project-background" style=@backgroundPath>
+            <div class="col-xs-12 banner" id="project-background" style="background-image:url('@Model.BannerImagePath')">
             </div>
-            @*<div class="dotbackground">
-            </div>*@
         </div>
     </div> 
     <div class="container">
@@ -152,20 +146,19 @@
             </div>
         </div>
 
-        @*TODO replace with additional image and caption*@
-        @if (image != null)
+        @if (Model.Project.DescriptiveImage != null)
         {
             <div class="row project-image">
                 <div class="col-xs-12 col-md-8 col-md-push-4 image">
-                    <img src="@Url.Content(image.Filepath)"
-                         width="@image.Width"
-                         height="@image.Height"
+                    <img src="@Model.Project.DescriptiveImage.Filepath"
+                         width="@Model.Project.DescriptiveImage.Width"
+                         height="@Model.Project.DescriptiveImage.Height"
                          class="additional-image img-responsive"
                          alt="Additional image not found." />
                 </div>
                 <div class="col-xs-12 col-md-4 col-md-pull-8 caption">
-                    <h5>@Html.DisplayFor(model => image.Name)</h5>
-                    <p>@Html.DisplayFor(model => image.Name)</p>
+                    <h5>Image</h5>
+                    <p>@Html.DisplayFor(model => model.Project.DescriptiveImage.Description)</p>
                 </div>
 
             </div>

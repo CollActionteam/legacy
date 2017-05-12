@@ -17,8 +17,6 @@ namespace CollAction.Services
 
         Task<ProjectParticipant> GetParticipant(string userId, int projectId);
 
-        Task<IEnumerable<DisplayTileProjectViewModel>> GetTileProjects(IUrlHelper urlHelper, Expression<Func<Project, bool>> WhereExpression);
-
-        string GetImagePath(IUrlHelper url, ImageFile imageFile, string defaultImagePath);
+        Task<IEnumerable<DisplayTileProjectViewModel>> GetTileProjects(Expression<Func<Project, bool>> WhereExpression);
     }
 }

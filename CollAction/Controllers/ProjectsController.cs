@@ -145,7 +145,7 @@ namespace CollAction.Controllers
             if (createProjectViewModel.HasDescriptiveImageUpload)
             {
                 var manager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "descriptiveimages"));
-                project.BannerImage = await manager.UploadFormFile(createProjectViewModel.BannerImageUpload, Guid.NewGuid().ToString(), createProjectViewModel.DescriptiveImageDescription);
+                project.DescriptiveImage = await manager.UploadFormFile(createProjectViewModel.BannerImageUpload, Guid.NewGuid().ToString(), createProjectViewModel.DescriptiveImageDescription);
             }
 
             _context.Add(project);
@@ -412,7 +412,7 @@ namespace CollAction.Controllers
                 default: statusExpression = (p => true); break;
             }
             
-            var projects = await _service.GetTileProjects(Url,
+            var projects = await _service.GetTileProjects(
                 Expression.Lambda<Func<Project, bool>>(Expression.AndAlso(projectExpression.Body, Expression.Invoke(statusExpression, projectExpression.Parameters[0])), projectExpression.Parameters[0]));
             
             return Json(projects);

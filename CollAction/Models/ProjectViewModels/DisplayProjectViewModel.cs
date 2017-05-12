@@ -23,6 +23,9 @@ namespace CollAction.Models
         public string DescriptionVideoYouTubeEmbedLink
             => HasDescriptionVideo ? $"https://www.youtube.com/embed/{YouTubeId}" : "";
 
+        public string BannerImagePath
+            => Project.BannerImage?.Filepath ?? $"/images/default_banners/{Project.Category.Name}.jpg";
+
         private string YouTubeId
         {
             get
@@ -86,6 +89,7 @@ namespace CollAction.Models
                 .Include(p => p.Category)
                 .Include(p => p.Location)
                 .Include(p => p.BannerImage)
+                .Include(p => p.DescriptiveImage)
                 .Include(p => p.DescriptionVideoLink)
                 .Include(p => p.Owner)
                 .Include(p => p.Tags).ThenInclude(t => t.Tag)
