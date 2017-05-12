@@ -53,8 +53,6 @@ export class ProjectFilter extends React.Component<IProjectFilterProps, IProject
       const fetchResult: Response = await fetch(getCategoriesRequest);
       const jsonResponse = await fetchResult.json();
 
-      jsonResponse.splice(0, 0, { id: "0", name: "All" });
-
       this.setState({
         categoriesFetching: false,
         categories: jsonResponse,

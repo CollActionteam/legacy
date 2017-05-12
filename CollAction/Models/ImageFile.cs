@@ -30,5 +30,8 @@ namespace CollAction.Models
 
         [Required]
         public DateTime Date { get; set; }
+
+        [Required]
+        public string Description { get; set; }
     }
 }

@@ -21,12 +21,12 @@ namespace CollAction.Helpers
             _webFolder = webFolder;
         }
 
-        public async Task<ImageFile> UploadFormFile(IFormFile formFile, string fileName)
+        public async Task<ImageFile> UploadFormFile(IFormFile formFile, string fileName, string description)
         {
             if (formFile == null) { return null; }
             string extension = Path.GetExtension(formFile.FileName).ToLower().Substring(1); // Strip the "."
             await SaveFileToFileSystem(formFile, fileName, extension);
-            var imageModel = await CreateImageFileModel(fileName, extension);
+            var imageModel = await CreateImageFileModel(fileName, extension, description);
             _context.ImageFiles.Add(imageModel);
             await _context.SaveChangesAsync(); // need to save to the database to get an ID
             return imageModel;
@@ -60,7 +60,7 @@ namespace CollAction.Helpers
             _context.ImageFiles.Remove(imageFile);
         }
 
-        private async Task<ImageFile> CreateImageFileModel(string fileName, string extension)
+        private async Task<ImageFile> CreateImageFileModel(string fileName, string extension, string description)
         {
             var webPath = GetWebPath(fileName, extension);
             var fullPath = Path.Combine(_webRoot, webPath);
@@ -77,7 +77,8 @@ namespace CollAction.Helpers
                         Format = extension,
                         Width = image.Width,
                         Height = image.Height,
-                        Date = DateTime.Now
+                        Date = DateTime.UtcNow,
+                        Description = description
                     };
                 }
             }

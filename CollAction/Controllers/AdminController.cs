@@ -51,7 +51,7 @@ namespace CollAction.Controllers
         [HttpGet]
         public async Task<IActionResult> ManageProject(int id)
         {
-            Project project = await _context.Projects.Include(p => p.Tags).ThenInclude(t => t.Tag).Include(p => p.DescriptionVideoLink).FirstOrDefaultAsync(p => p.Id == id);
+            Project project = await _context.Projects.Include(p => p.Tags).ThenInclude(t => t.Tag).Include(p => p.DescriptionVideoLink).Include(p => p.BannerImage).Include(p => p.DescriptiveImage).FirstOrDefaultAsync(p => p.Id == id);
             if (project == null)
                 return NotFound();
 
@@ -67,6 +67,8 @@ namespace CollAction.Controllers
                 CategoryId = project.CategoryId,
                 CreatorComments = project.CreatorComments,
                 DescriptionVideoLink = project.DescriptionVideoLink?.Link,
+                BannerImageDescription = project.BannerImage?.Description,
+                DescriptiveImageDescription = project.DescriptiveImage?.Description,
                 End = project.End,
                 Start = project.Start,
                 Target = project.Target,
@@ -94,7 +96,7 @@ namespace CollAction.Controllers
 
                 if (approved)
                 {
-                    string approvalEmail = 
+                    string approvalEmail =
                         "Hi!<br>" +
                         "<br>" +
                         "The CollAction Team has reviewed your project proposal and is very happy to share that your project has been approved and now live on www.collaction.org!<br>" +
@@ -112,7 +114,7 @@ namespace CollAction.Controllers
                 }
                 else if (successfull)
                 {
-                    string successEmail = 
+                    string successEmail =
                         "Hi!<br>" +
                         "<br>" +
                         "The deadline of the project you have started on www.collaction.org has passed. We're very happy to see that the target you have set has been reached! Congratulations! Now it's time to act collectively!<br>" +
@@ -130,7 +132,7 @@ namespace CollAction.Controllers
                 }
                 else if (failed)
                 {
-                    string failedEmail = 
+                    string failedEmail =
                         "Hi!<br>" +
                         "<br>" +
                         "The deadline of the project you have started on www.collaction.org has passed. Unfortunately the target that you have set has not been reached. Great effort though!<br>" +
@@ -167,7 +169,17 @@ namespace CollAction.Controllers
                     {
                         manager.DeleteImageFile(project.BannerImage);
                     }
-                    project.BannerImage = await manager.UploadFormFile(model.BannerImageUpload, Guid.NewGuid().ToString() /* unique filename */);
+                    project.BannerImage = await manager.UploadFormFile(model.BannerImageUpload, Guid.NewGuid().ToString(), model.BannerImageDescription);
+                }
+
+                if (model.HasDescriptiveImageUpload)
+                {
+                    var manager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "descriptiveimages"));
+                    if (project.DescriptiveImage != null)
+                    {
+                        manager.DeleteImageFile(project.DescriptiveImage);
+                    }
+                    project.DescriptiveImage = await manager.UploadFormFile(model.DescriptiveImageUpload, Guid.NewGuid().ToString(), model.DescriptiveImageDescription);
                 }
 
                 await project.SetTags(_context, model.Hashtag?.Split(';') ?? new string[0]);
@@ -178,7 +190,13 @@ namespace CollAction.Controllers
                 return RedirectToAction("ManageProjectsIndex");
             }
             else
+            {
+                model.UserList = new SelectList(await _context.Users.ToListAsync(), "Id", "UserName", null);
+                model.CategoryList = new SelectList(await _context.Categories.ToListAsync(), "Id", "Name", null);
+                model.DisplayPriorityList = new SelectList(Enum.GetValues(typeof(ProjectDisplayPriority)));
+                model.StatusList = new SelectList(Enum.GetValues(typeof(ProjectStatus)));
                 return View(model);
+            }
         }
     }
 }

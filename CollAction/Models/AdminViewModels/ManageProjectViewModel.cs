@@ -57,13 +57,27 @@ namespace CollAction.Models.AdminViewModels
         [WithinMonthsAfterDateProperty(12, "Start", ErrorMessage = "The deadline must be within a year of the start date.")]
         public DateTime End { get; set; }
 
-        [Display(Name = "Banner image", Prompt = "1024x768px JPEG, GIF, PNG, BMP")]
+        [Display(Name = "Banner image description")]
+        public string BannerImageDescription { get; set; }
+
+        [Display(Name = "Banner image", Prompt = "1366x432 JPEG, GIF, PNG, BMP")]
         [FileSize(1024000)] // 1MB
         [FileType("jpg", "jpeg", "gif", "png", "bmp")]
-        [MaxImageDimensions(1024, 768)]
+        [MaxImageDimensions(1366, 432)]
         public IFormFile BannerImageUpload { get; set; }
 
         public bool HasBannerImageUpload { get { return BannerImageUpload != null && BannerImageUpload.Length > 0; } }
+
+        [Display(Name = "Descriptive image description")]
+        public string DescriptiveImageDescription { get; set; }
+
+        [Display(Name = "Description image", Prompt = "777x370 JPEG, GIF, PNG, BMP")]
+        [FileSize(1024000)] // 1MB
+        [FileType("jpg", "jpeg", "gif", "png", "bmp")]
+        [MaxImageDimensions(777, 370)]
+        public IFormFile DescriptiveImageUpload { get; set; }
+
+        public bool HasDescriptiveImageUpload { get { return DescriptiveImageUpload != null && DescriptiveImageUpload.Length > 0; } }
 
         [Display(Name = "YouTube Video Link", Prompt = "Descriptive Video. e.g. http://www.youtube.com/watch?v=-wtIMTCHWuI")]
         [YouTubeLink]
