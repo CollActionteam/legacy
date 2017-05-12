@@ -64,6 +64,10 @@ namespace CollAction.Models
         [ForeignKey("BannerImageFileId")]
         public ImageFile BannerImage { get; set; }
 
+        public int? DescriptiveImageFileId { get; set; }
+        [ForeignKey("DescriptiveImageFileId")]
+        public ImageFile DescriptiveImage { get; set; }
+
         public int? DescriptionVideoLinkId { get; set; }
         [ForeignKey("DescriptionVideoLinkId")]
         public VideoLink DescriptionVideoLink { get; set; }

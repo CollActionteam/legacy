@@ -80,6 +80,13 @@
                 @Html.ValidationMessage("CreatorComments")
             </div>
         </div>
+        <div class="form-group">
+            <label asp-for="BannerImageDescription" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="BannerImageDescription" class="form-control" />
+                @Html.ValidationMessage("BannerImageDescription")
+            </div>
+        </div>
         @if (Model.BannerImageFile != null)
         {
             <div class="form-group">

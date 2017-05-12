@@ -71,6 +71,9 @@ namespace CollAction.Models
         [WithinMonthsAfterDateProperty(12, "Start", ErrorMessage = "The deadline must be within a year of the start date.")]
         public DateTime End { get; set; }
 
+        [Display(Name = "Banner image description")]
+        public string BannerImageDescription { get; set; }
+
         [Display(Name = "Banner image", Prompt = "1024x768px JPEG, GIF, PNG, BMP")]
         [FileSize(1024000)] // 1MB
         [FileType("jpg", "jpeg", "gif", "png", "bmp")]

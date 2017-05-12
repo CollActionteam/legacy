@@ -60,9 +60,24 @@
                         @Html.ValidationMessage("CreatorComments")
                     </div>
                     <div class="form-group">
+                        <label asp-for="BannerImageDescription" class="control-label"></label>
+                        <input asp-for="BannerImageDescription" class="form-control" />
+                        @Html.ValidationMessage("BannerImageDescription")
+                    </div>
+                    <div class="form-group">
                         <label asp-for="BannerImageUpload" class="control-label"></label>
                         <input asp-for="BannerImageUpload" class="form-control" />
                         @Html.ValidationMessage("BannerImageUpload")
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DescriptiveImageDescription" class="control-label"></label>
+                        <input asp-for="DescriptiveImageDescription" class="form-control" />
+                        @Html.ValidationMessage("DescriptiveImageDescription")
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DescriptiveImageUpload" class="control-label"></label>
+                        <input asp-for="DescriptiveImageUpload" class="form-control" />
+                        @Html.ValidationMessage("DescriptiveImageUpload")
                     </div>
                     <div class="form-group">
                         <label asp-for="DescriptionVideoLink" class="control-label"></label>
