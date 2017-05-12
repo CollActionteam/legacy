@@ -1,7 +1,8 @@
 
 #index {
 
-  .banner-link {
+  .banner-link,
+  .project-actions-link {
     @include coll-action-button;
     width: 100%;
     margin-bottom: 20px;
@@ -64,18 +65,22 @@
 
   #homepage-share-buttons
   {
-    margin-bottom: 40px;
+    margin-bottom: 25px;
   }
 
   #three-steps,
-  #intro-text,
-  #project-actions,
-  #project-share {
+  #intro-text {
     padding: 50px 0px;
+  }
+
+  #project-actions {
+    background-color: #fff;
+    padding: 50px 0px 0px 0px;
   }
 
   #project-share {
     background-color: #f7f7f7;
+    padding: 20px 0px 40px 0px;
   }
 
   #banner-title {
@@ -84,13 +89,20 @@
     color: $coll-action-green;
   }
 
-  #project-share {
-
+  #home-share-container {
+    background-color: #fff;
+    border-radius: 9px;
+    border: solid 1px #dadada;
     h3 {
       text-align: center;
       color: $coll-action-green;
-      font-size: 3em;
-      padding-left: 150px;
+      font-size: 2em;
+      margin: 10px 0px 10px 0px;
+    }
+
+    #home-share-buttons-container{
+      padding-left: 20px;
+      padding-right: 20px;
     }
 
   }
@@ -134,6 +146,20 @@
     #title-row {
       h1 {
         font-size: 2.5em;
+      }
+    }
+    
+    #project-share {
+      background-color: #fff;
+      padding-top: 0px;
+
+      #home-share-container {
+        background-color: #fff;
+        border: none;
+        
+        h3 {
+          font-size: 1.7em;
+        }
       }
     }
   }
