@@ -15,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CollAction.Controllers
 {
-    [Authorize(Roles = "admin")]
+    [Authorize]
     public class ManageController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -69,13 +69,13 @@ namespace CollAction.Controllers
             var model = new IndexViewModel
             {
                 HasPassword = await _userManager.HasPasswordAsync(user),
-                PhoneNumber = await _userManager.GetPhoneNumberAsync(user),
+                /*PhoneNumber = await _userManager.GetPhoneNumberAsync(user),
                 TwoFactor = await _userManager.GetTwoFactorEnabledAsync(user),
-                Logins = await _userManager.GetLoginsAsync(user),
+                Logins = await _userManager.GetLoginsAsync(user),*/
                 BrowserRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user),
-                NewsletterSubscription = await _newsletterSubscriptionService.IsSubscribedAsync(user.Email),
-                ProjectsCreated = await _context.Projects.Where(p => p.OwnerId == user.Id).ToListAsync(),
-                ProjectsParticipated = await _context.ProjectParticipants.Where(p => p.UserId == user.Id).Include(p => p.Project).Select(p => p.Project).ToListAsync()
+                NewsletterSubscription = await _newsletterSubscriptionService.IsSubscribedAsync(user.Email)
+                /*ProjectsCreated = await _context.Projects.Where(p => p.OwnerId == user.Id).ToListAsync(),
+                ProjectsParticipated = await _context.ProjectParticipants.Where(p => p.UserId == user.Id).Include(p => p.Project).Select(p => p.Project).ToListAsync()*/
             };
             return View(model);
         }
@@ -93,7 +93,7 @@ namespace CollAction.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
-
+        /*
         //
         // POST: /Manage/RemoveLogin
         [HttpPost]
@@ -232,7 +232,7 @@ namespace CollAction.Controllers
             }
             return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
         }
-
+        */
         //
         // GET: /Manage/ChangePassword
         [HttpGet]
@@ -240,7 +240,7 @@ namespace CollAction.Controllers
         {
             return View();
         }
-
+        
         //
         // POST: /Manage/ChangePassword
         [HttpPost]
@@ -300,7 +300,7 @@ namespace CollAction.Controllers
             }
             return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
         }
-
+        /*
         //GET: /Manage/ManageLogins
         [HttpGet]
         public async Task<IActionResult> ManageLogins(ManageMessageId? message = null)
@@ -356,7 +356,7 @@ namespace CollAction.Controllers
             var message = result.Succeeded ? ManageMessageId.AddLoginSuccess : ManageMessageId.Error;
             return RedirectToAction(nameof(ManageLogins), new { Message = message });
         }
-
+        */
         #region Helpers
 
         private void AddErrors(IdentityResult result)
