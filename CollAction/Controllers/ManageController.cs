@@ -15,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CollAction.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "admin")]
     public class ManageController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;

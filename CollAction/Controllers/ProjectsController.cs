@@ -182,7 +182,7 @@ namespace CollAction.Controllers
         }
 
         // GET: Projects/Edit/5
-        [Authorize]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -232,7 +232,7 @@ namespace CollAction.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(int id, EditProjectViewModel editProjectViewModel)
         {
             if (id != editProjectViewModel.Id)
