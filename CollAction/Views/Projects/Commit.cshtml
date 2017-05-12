@@ -27,7 +27,7 @@
                         <div class="col-xs-12 col-md-8 col-md-offset-2">
                             <h1>You're awesome!</h1>
                             <h2>Thank you for participating!</h2>
-                            <p>@Model.ProjectProposal</p>
+                            <p>@Html.DisplayFor(model => model.ProjectProposal)</p>
                             <input type="submit" value="@Localizer["I participate"]" class="btn btn-default participate-btn" />
                         </div>
                     </div>

@@ -4,6 +4,11 @@
 #project-create-form {
   background-color: #efefef; 
   padding: 50px 0px;
+
+  label.required:after 
+  { 
+      content: "*"; 
+  }
 }
 
 #project-create-nice {

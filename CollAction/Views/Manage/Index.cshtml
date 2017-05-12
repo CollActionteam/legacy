@@ -5,7 +5,7 @@
 @model IndexViewModel
 @{
     ViewData["Title"] = "Manage your account";
-    var sample = Model.ProjectsCreated.FirstOrDefault();
+    //var sample = Model.ProjectsCreated.FirstOrDefault();
 }
 
 <h2>@ViewData["Title"].</h2>
@@ -26,7 +26,7 @@
                 <a asp-controller="Manage" asp-action="SetPassword" class="btn-bracketed">Create</a>
             }
         </dd>
-        <dt>External Logins:</dt>
+        @*<dt>External Logins:</dt>
         <dd>
 
             @Model.Logins.Count <a asp-controller="Manage" asp-action="ManageLogins" class="btn-bracketed">Manage</a>
@@ -37,7 +37,7 @@
                 Phone Numbers can used as a second factor of verification in two-factor authentication.
                 See <a href="http://go.microsoft.com/fwlink/?LinkID=532713">this article</a>
                 for details on setting up this ASP.NET application to support two-factor authentication using SMS.
-            </p>
+            </p>*@
             @*@(Model.PhoneNumber ?? "None")
                 @if (Model.PhoneNumber != null)
                 {
@@ -51,14 +51,14 @@
                 {
                     <a asp-controller="Manage" asp-action="AddPhoneNumber" class="btn-bracketed">Add</a>
                 }*@
-        </dd>
+        @*</dd>
 
         <dt>Two-Factor Authentication:</dt>
         <dd>
             <p>
                 There are no two-factor authentication providers configured. See <a href="http://go.microsoft.com/fwlink/?LinkID=532713">this article</a>
                 for setting up this application to support two-factor authentication.
-            </p>
+            </p>*@
             @*@if (Model.TwoFactor)
                 {
                     <form asp-controller="Manage" asp-action="DisableTwoFactorAuthentication" method="post" class="form-horizontal">
@@ -71,7 +71,7 @@
                         <button type="submit" class="btn-link btn-bracketed">Enable</button> Disabled
                     </form>
                 }*@
-        </dd>
+        @*</dd>*@
 
         <dt>Newsletter Subscription:</dt>
         <dd>
@@ -85,7 +85,7 @@
             </form>
         </dd>
 
-        <dt>Projects You've Subscribed To:</dt>
+        @*<dt>Projects You've Subscribed To:</dt>
 
         <dd>
         @if (Model.ProjectsParticipated.Any())
@@ -246,7 +246,7 @@
                 @Html.ActionLink("Start Project", "StartInfo", "Projects") page.
             </p>
         }
-        </dd>
+        </dd>*@
     </dl>
 </div>
 
