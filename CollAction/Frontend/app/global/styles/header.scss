@@ -5,9 +5,10 @@
     background-color: white;
     width: 100%;
     z-index: 2;
+    height: 85px;
 }
 
-#index, #project-create-nice {
+#header-padding {
     padding-top: 85px;
 }
 
@@ -49,7 +50,7 @@
     margin: 20px 0px;
 
     form {
-        float:right;
+        float: right;
     }
 
     .nav-bar {
@@ -59,6 +60,11 @@
     a {
         color: #111;
         text-decoration: none;
+    }
+
+    .header-logo {
+        padding-left: 0px;
+        padding-right: 0px;
     }
 
     #header-menu {
@@ -82,8 +88,20 @@
         li {
             margin: 30px 20px;
             font-size: 22px;
+
             a {
                 color: $coll-action-green;
+            }
+
+            button {
+                color: $coll-action-green;
+                font-weight: normal;
+                background: none !important;
+                padding: 0 !important;
+                border: none;
+                -webkit-box-shadow: none;
+                box-shadow: none;
+                outline-color: transparent;
             }
         }
 
@@ -101,6 +119,25 @@
         width: 100vw;
     }
 
+    #header-login {
+        text-align: right;
+
+        #logInBtn {
+            background-color: $coll-action-green;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+        }
+
+        #logOutBtn {
+            color: #111;
+            background: none !important;
+            padding: 0 !important;
+            border: none;
+            outline-color: transparent;
+        }
+    }
 }
 
 @media (max-width: 991px) {

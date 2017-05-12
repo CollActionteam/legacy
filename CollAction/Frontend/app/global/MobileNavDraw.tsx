@@ -2,7 +2,7 @@ import * as React from "react";
 import renderComponentIf from "./renderComponentIf";
 
 interface IMobileNavDrawProps {
-    loginText?: string;
+  loginText?: string;
 }
 
 interface IMobileNavDrawState {
@@ -37,8 +37,8 @@ export default class MobileNavDraw extends React.Component<IMobileNavDrawProps, 
             <li><a href="/start">Start Project</a></li>
             <li><a href="/about">About</a></li>
             {this.props.loginText == "Logout" ?
-                (<li onClick={() => document.getElementById("logOutBtn").click()}>Log Out</li>):
-                (<li><a href="/account/login">Log In</a></li>)
+                (<li><button type="button" onClick={() => document.getElementById("logOutBtn").click()}>Logout</button></li>) :
+                (<li><a href="/account/login">Login</a></li>)
             }
         </ul>
       </div>

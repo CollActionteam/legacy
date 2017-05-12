@@ -5,19 +5,13 @@
 @inject UserManager<ApplicationUser> UserManager
 
 
-<ul class="navbar-right">
-    @if (SignInManager.IsSignedIn(User))
-    {
-        <li>
-            <form  asp-area="" asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm">
-                <input type="submit" value="Log off" class="btn btn-default btn-link navbar-btn navbar-link" id="logOutBtn" />
-            </form>
-        </li>
-    }
-    else
-    {
-        <li>
-            <a asp-area="" asp-controller="Account" asp-action="Login" class="btn btn-default">Log in</a>
-        </li>
-    }
-</ul>
+@if (SignInManager.IsSignedIn(User))
+{
+    <form  asp-area="" asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm">
+        <input type="submit" value="Logout" id="logOutBtn" />
+    </form>
+}
+else
+{
+    <a asp-area="" asp-controller="Account" asp-action="Login" id="logInBtn">Login</a>
+}
