@@ -15,7 +15,7 @@ import renderComponentIf from "../global/renderComponentIf";
 const startProjectSteps = [
   {
     name: "Register",
-    text: "Complete the registration form here [hyperlink to form] in full."
+    text: "Complete the Start Project registration form."
   },
   {
     name: "Assessment",
