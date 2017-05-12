@@ -73,13 +73,14 @@
         padding: 30px;
         left: 0px;
         top: -40px;
-        width: 100%;
+        display: inline-block;
 
         ul {
           margin: 0px;
           padding: 0px;
           li {
             list-style: none;
+            white-space: nowrap;
             margin: 10px 0px;
           }
         }

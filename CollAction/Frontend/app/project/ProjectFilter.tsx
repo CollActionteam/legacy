@@ -27,7 +27,7 @@ export class ProjectFilter extends React.Component<IProjectFilterProps, IProject
     const statusList: IDropDownListItem[] = [
       { id: "1", name: "Open" },
       { id: "2", name: "Closed" },
-      { id: "3", name: "Funded" },
+      { id: "3", name: "Coming Soon" },
     ];
 
     this.state = {
@@ -52,6 +52,8 @@ export class ProjectFilter extends React.Component<IProjectFilterProps, IProject
       const getCategoriesRequest: Request = new Request("/api/categories");
       const fetchResult: Response = await fetch(getCategoriesRequest);
       const jsonResponse = await fetchResult.json();
+
+      jsonResponse.splice(0, 0, { id: "0", name: "All" });
 
       this.setState({
         categoriesFetching: false,
