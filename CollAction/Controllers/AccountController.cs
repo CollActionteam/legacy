@@ -136,7 +136,7 @@ namespace CollAction.Controllers
                         $"{_localizer["Please confirm your account by clicking this link"]}: <a href='{callbackUrl}'>{_localizer["link"]}</a>");
                     _logger.LogInformation(3, "User created a new account with password.");
                     return RedirectToLocal(returnUrl);
-                    }
+                }
                 AddErrors(result);
             }
 
