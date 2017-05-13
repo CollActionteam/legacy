@@ -37,7 +37,7 @@ namespace CollAction.Services
             SendGridClient client = new SendGridClient(_authOptions.Value.SendGridKey);
             Response res = await client.SendEmailAsync(gridMessage);
 
-            if (res.StatusCode != HttpStatusCode.OK)
+            if (!(new[] { HttpStatusCode.OK, HttpStatusCode.Accepted }.Contains(res.StatusCode)))
             {
                 string headers = string.Join(", ", res.Headers.Concat(res.Body.Headers).Select(header => $"[Type: {header.Key}:{string.Join(", ", header.Value)}]"));
                 string body = await res.Body.ReadAsStringAsync();
