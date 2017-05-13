@@ -39,6 +39,11 @@
                         @Html.ValidationMessage("Goal")
                     </div>
                     <div class="form-group">
+                        <label asp-for="CreatorComments" class="control-label"></label>
+                        <input asp-for="CreatorComments" class="form-control" />
+                        @Html.ValidationMessage("CreatorComments")
+                    </div>
+                    <div class="form-group">
                         <label asp-for="Status" class="control-label"></label>
                         @Html.DropDownList("Status", Model.StatusList)
                         @Html.ValidationMessage("Status")
