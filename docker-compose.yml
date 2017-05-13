@@ -18,7 +18,7 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - images:/wwwroot/usercontent
+      - images:/app/wwwroot/usercontent
     environment:
       - ASPNETCORE_ENVIRONMENT=Release
       - ASPNETCORE_URLS=http://*:5000
