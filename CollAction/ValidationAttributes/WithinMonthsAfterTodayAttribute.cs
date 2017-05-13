@@ -24,7 +24,7 @@ namespace CollAction.ValidationAttributes
             DateTime startDate = DateTime.UtcNow;
             DateTime endDate = startDate.AddMonths(_months);
             DateTime checkDate = (DateTime)value;
-            if (checkDate <= startDate || checkDate > endDate)
+            if (checkDate < startDate || checkDate > endDate)
             {
                 return new ValidationResult(ErrorMessage);
             }

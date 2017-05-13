@@ -49,7 +49,10 @@ namespace CollAction
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql($"Host={Configuration["DbHost"]};Username={Configuration["DbUser"]};Password={Configuration["DbPassword"]};Database={Configuration["Db"]};Port={Configuration["DbPort"]}"));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>(/*config =>
+                {
+                    config.SignIn.RequireConfirmedEmail = true;
+                }*/)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -68,11 +71,13 @@ namespace CollAction
                     .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                     .AddDataAnnotationsLocalization();
 
+            /*
             services.Configure<MvcOptions>(options =>
             {
                 if (Environment.IsProduction())
                     options.Filters.Add(new RequireHttpsAttribute());
             });
+            */
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
