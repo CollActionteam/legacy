@@ -48,7 +48,6 @@ namespace CollAction.Models.AdminViewModels
         [Required]
         [DataType(DataType.Date)]
         [Display(Name = "Start date")]
-        [WithinMonthsAfterToday(12, ErrorMessage = "Please ensure your project starts within the next 12 months.")]
         public DateTime Start { get; set; }
 
         [Required]
