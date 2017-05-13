@@ -35,6 +35,7 @@ namespace CollAction.Helpers
         private async Task SaveFileToFileSystem(IFormFile formFile, string fileName, string extension)
         {
             var fullPath = Path.Combine(_webRoot, GetWebPath(fileName, extension));
+            Directory.CreateDirectory(Path.Combine(_webRoot, _webFolder));
             using (var output = new FileStream(fullPath, FileMode.Create))
             {
                 await formFile.CopyToAsync(output);
