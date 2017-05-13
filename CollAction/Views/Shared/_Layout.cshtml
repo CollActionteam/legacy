@@ -18,13 +18,15 @@
 </head>
 <body>
     <div id="header-container">
-        <div class="container">
+        <div class="container" id="nav-container">
             <div id="header">
-                <div class="row">
-                    <div class="hidden-md hidden-lg col-xs-2" id="mobile-nav-draw">
-                    </div>
-                    <div class="col-md-3 col-xs-10 header-logo">
-                        @Html.Partial("_Logo")
+                <div class="row nav-row">
+                    <div class="col-md-3 col-xs-12 header-logo">
+                        <div class="hidden-md hidden-lg" id="mobile-nav-draw">
+                        </div>
+                        <div class="logo-link-container">
+                            @Html.Partial("_Logo")
+                        </div>
                     </div>
                     <div class="col-md-7 nav-bar hidden-xs hidden-sm" >
                         <ul id="header-menu">
