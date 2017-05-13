@@ -3,6 +3,8 @@ using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System;
+using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace CollAction.Services
@@ -21,7 +23,7 @@ namespace CollAction.Services
             _logger = loggerFactory.CreateLogger<AuthMessageSender>();
         }
 
-        public Task SendEmailAsync(string email, string subject, string message)
+        public async Task SendEmailAsync(string email, string subject, string message)
         {
             _logger.LogInformation("sending email to {0} with subject {1}", email, subject);
             SendGridMessage gridMessage = new SendGridMessage()
@@ -33,7 +35,16 @@ namespace CollAction.Services
             };
             gridMessage.AddTo(new EmailAddress(email));
             SendGridClient client = new SendGridClient(_authOptions.Value.SendGridKey);
-            return client.SendEmailAsync(gridMessage);
+            Response res = await client.SendEmailAsync(gridMessage);
+
+            if (res.StatusCode != HttpStatusCode.OK)
+            {
+                string headers = string.Join(", ", res.Headers.Concat(res.Body.Headers).Select(header => $"[Type: {header.Key}:{string.Join(", ", header.Value)}]"));
+                string body = await res.Body.ReadAsStringAsync();
+                _logger.LogError("failed to send email to {0} with response {1}, Headers: {2}, Body: {3}", email, res.StatusCode, headers, body);
+            }
+            else
+                _logger.LogInformation("successfully send email to {0}", email);
         }
 
         public Task SendSmsAsync(string number, string message)
