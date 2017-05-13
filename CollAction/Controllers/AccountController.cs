@@ -121,7 +121,14 @@ namespace CollAction.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await _newsletterSubscriptionService.SetSubscriptionAsync(model.Email, model.NewsletterSubscription);
+                    try
+                    {
+                        await _newsletterSubscriptionService.SetSubscriptionAsync(model.Email, model.NewsletterSubscription);
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogError("error subscribing to newsletter: {0}, {1}", e, user.Email);
+                    }
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
@@ -129,7 +136,7 @@ namespace CollAction.Controllers
                         $"{_localizer["Please confirm your account by clicking this link"]}: <a href='{callbackUrl}'>{_localizer["link"]}</a>");
                     _logger.LogInformation(3, "User created a new account with password.");
                     return RedirectToLocal(returnUrl);
-                }
+                    }
                 AddErrors(result);
             }
 

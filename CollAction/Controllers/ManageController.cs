@@ -89,7 +89,14 @@ namespace CollAction.Controllers
             var user = await GetCurrentUserAsync();
             if (user != null)
             {
-                await _newsletterSubscriptionService.SetSubscriptionAsync(user.Email, model.NewsletterSubscription, false);
+                try
+                {
+                    await _newsletterSubscriptionService.SetSubscriptionAsync(user.Email, model.NewsletterSubscription, false);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError("error subscribing to newsletter: {0}, {1}", e, user.Email);
+                }
             }
             return RedirectToAction(nameof(Index));
         }
