@@ -48,7 +48,7 @@ export default class MobileNavDraw extends React.Component<IMobileNavDrawProps, 
   render () {
     const self = this;
     return (
-      <div>
+      <div className="mobile-header">
         <i className="fa fa-bars"
           id="hamburger-icon"
           aria-hidden="true"
