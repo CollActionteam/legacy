@@ -87,6 +87,10 @@ const teamMembers: ITeamMember[] = [
     role: "",
   },
   {
+      name: "Leonie Bewerkt",
+      role: "",
+  },
+  {
     name: "Marc Beermann",
     role: "Developer",
   },
