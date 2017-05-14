@@ -93,8 +93,12 @@
   }
 
   p {
-    color: $coll-action-green;
     font-size: 1.25em;
+    mark {
+      color: $coll-action-green;
+      background: none;
+      font-weight: bold;
+    }
   }
 
   .selected {
@@ -158,6 +162,11 @@
 
   .carousel-text {
     margin-bottom: 50px;
+    mark {
+      color: $coll-action-green;
+      background: none;
+      font-weight: bold;
+    }
   }
 
   .drop-down {

@@ -1,13 +1,13 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-interface CarouselItem {
+interface ICarouselItem {
   name: string;
-  text: string;
+  text: JSX.Element;
 }
 
 interface ICarouselProps {
-  items: CarouselItem[];
+  items: ICarouselItem[];
 }
 
 interface ICarouselState {
@@ -16,30 +16,30 @@ interface ICarouselState {
 
 import renderComponentIf from "../global/renderComponentIf";
 
-const startProjectSteps = [
+const startProjectSteps: Array<ICarouselItem> = [
   {
     name: "Register",
-    text: "Complete the Start Project registration form."
+    text: <div>Complete the Start Project registration form.</div>
   },
   {
     name: "Assessment",
-    text: "CollAction judges if your project meets the criteria on this page. If necessary, CollAction contacts you to discuss/clarify."
+    text: <div>CollAction judges if your project meets <mark>the criteria</mark> on this page. If necessary, CollAction contacts you to discuss/clarify.</div>
   },
   {
     name: "Placement",
-    text: "Upon approval, the project will be placed on collaction.org.",
+    text: <div>Once your idea gets the thumbs up, <mark>it will go live</mark> on collaction.org </div>
   },
   {
     name: "Campaign",
-    text: "Campaign to reach your target."
+    text: <div><mark>Run a campaign</mark> to reach your target.</div>
   },
   {
     name: "Action",
-    text: "When the target is met at the time of the deadline, all supporters will take action."
+    text: <div>If the target is met at the time of the deadline, <mark>all supporters will take action.</mark></div>
   },
   {
     name: "Measuring impact",
-    text: "After the action period, measure how many people took part in the project and share this with the CollAction team. This allows us to project your project, measure the impact of CollAction, and inspire other people to start and support projects."
+    text: <div>After the action period, <mark>measure how many people took part</mark> in the project and <mark>share this with the CollAction team.</mark></div>
   },
 ];
 
@@ -111,7 +111,7 @@ interface IDropDownProps {
   label: string;
   imageSrc: string;
   index: number;
-  text: string;
+  text: JSX.Element;
 }
 
 interface IDropDownState {
