@@ -26,7 +26,7 @@
     border-radius: 250px;
     font-size: 5em;
     color: #fff;
-    padding: 70px 45px 40px 45px
+    padding: 65px 45px 40px 35px
   }
 
   p {
@@ -109,6 +109,13 @@
     color: #fff;
   }
 
+  .image-overlay {
+    position: relative;
+    top: 122px;
+    left: -95px;
+    font-size: 32px;
+    font-weight: bold;
+  }
 }
 
 

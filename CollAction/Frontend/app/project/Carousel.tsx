@@ -4,6 +4,7 @@ import * as ReactDOM from "react-dom";
 interface ICarouselItem {
   name: string;
   text: JSX.Element;
+  imageOverlay?: string;
 }
 
 interface ICarouselProps {
@@ -19,7 +20,8 @@ import renderComponentIf from "../global/renderComponentIf";
 const startProjectSteps: Array<ICarouselItem> = [
   {
     name: "Register",
-    text: <div>Complete the Start Project registration form.</div>
+    text: <div>Complete the <a href="/Projects/Create">Start Project registration form.</a></div>,
+    imageOverlay: "Register",
   },
   {
     name: "Assessment",
@@ -64,6 +66,15 @@ class LandscapeCarousel extends React.Component<ICarouselProps, ICarouselState> 
     this.setState({selected: index});
   }
 
+  renderImageOverlay () {
+    const imageOverlay: string = this.props.items[this.state.selected].imageOverlay;
+    if (!imageOverlay) {
+      return null;
+    }
+
+    return <div className="image-overlay">{ imageOverlay }</div>;
+  }
+
   render () {
     const currentImageSoruce: string = `/images/steps/${this.state.selected + 1}.png`;
     return (
@@ -93,6 +104,7 @@ class LandscapeCarousel extends React.Component<ICarouselProps, ICarouselState> 
                 isSelected={index === this.state.selected}
                 stepCount={index + 1}
                 onClick={() => this.onItemClicked(index)}
+                imageOverlay={item.imageOverlay}
                 itemTitle={item.name} />)}
             </ul>
           </div>
@@ -100,6 +112,8 @@ class LandscapeCarousel extends React.Component<ICarouselProps, ICarouselState> 
           <div className="col-xs-4 landscape-carousel-body">
             <img src={currentImageSoruce} />
           </div>
+
+          {this.renderImageOverlay()}          
         </div>
 
       </div>
