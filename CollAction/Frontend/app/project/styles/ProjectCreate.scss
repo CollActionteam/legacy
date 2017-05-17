@@ -26,7 +26,7 @@
     border-radius: 250px;
     font-size: 5em;
     color: #fff;
-    padding: 70px 45px 40px 45px
+    padding: 65px 45px 40px 35px
   }
 
   p {
@@ -78,6 +78,7 @@
   li {
     cursor: pointer;
     margin: 20px 0px;
+    font-weight: bold;
   }
 
   .coll-action-dot-point {
@@ -89,12 +90,17 @@
     border-radius: 22px;
     font-size: 1.5em;
     text-align: center;
-    padding-top: 4px;
+    padding-top: 1px;
   }
 
   p {
-    color: $coll-action-green;
     font-size: 1.25em;
+    min-height: 120px;
+    mark {
+      color: $coll-action-green;
+      background: none;
+      font-weight: bold;
+    }
   }
 
   .selected {
@@ -103,6 +109,13 @@
     color: #fff;
   }
 
+  .image-overlay {
+    position: relative;
+    top: 122px;
+    left: -95px;
+    font-size: 32px;
+    font-weight: bold;
+  }
 }
 
 
@@ -148,4 +161,38 @@
     color: $coll-action-green;
   }
 
+}
+
+#mobile-carousel {
+  img {
+    margin-bottom: 50px;
+    width: 100%;
+  }
+
+  .carousel-text {
+    margin-bottom: 50px;
+    mark {
+      color: $coll-action-green;
+      background: none;
+      font-weight: bold;
+    }
+  }
+
+  .drop-down {
+    padding: 15px;
+    background-color: $coll-action-green;
+    margin-bottom: 20px;
+    border-radius: 15px;
+    color: #fff;
+    font-size: 18px;
+    
+    i {
+      float: right;
+    }
+
+    span {
+      margin-right: 10px;
+    }
+
+  }
 }
