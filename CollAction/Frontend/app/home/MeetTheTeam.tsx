@@ -36,7 +36,8 @@ const NavigationDots = ({ currentIndex, length}) => {
     const node = this.getDomNode();
   };
 
-  const dots = [...Array(length).keys()].map((index) => {
+
+  const dots = [].map((index) => {
     if (index === currentIndex) {
       return <div className="dot dot-active" key={index} onClick={dotClicked} />;
     }

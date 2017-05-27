@@ -78,8 +78,8 @@
             <div class="col-md-6 col-md-pull-6 col-xs-12">
                 <div class="row" id="project-starter-row">
                     <div class="col-md-6 col-md-push-6 col-xs-12">
-                        @*<h4>Share this project</h4>
-                        <div id="project-details-share-buttons"></div>*@
+                        <h4>Share this project</h4>
+                        <div id="project-details-share-buttons"></div>
                     </div>
                     <div class="col-md-6 col-md-pull-6 col-xs-12 align-sides">
                         <div class="row">
@@ -192,15 +192,17 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-xs-12 col-md-8 col-md-offset-4 align-sides">
-                @*TODO add social media share links*@
-            </div>
-        </div>
-        
     </div> 
 </div> 
 
+<div id="project-share">
+    <div class="container">
+        <div class="row">
+            <div id="project-details-share-buttons-row"></div>
+        </div> 
+    </div> 
+</div>
+        
 <script type="text/javascript">
     const percentComplete = @Html.DisplayFor(model => model.Progress);
     window.onload = function () {

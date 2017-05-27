@@ -1,3 +1,14 @@
+const webpack = require('webpack');
+
+function getPlugins() {
+  const productionPlugins = [
+    new webpack.optimize.UglifyJsPlugin({
+      minimize: true,
+    }),
+  ];
+  return process.env.NODE_ENV === "production" ? productionPlugins : [];
+}
+
 module.exports = {
   entry: './Frontend/app/index.ts',
   output: {
@@ -19,5 +30,6 @@ module.exports = {
         loaders: ["style-loader", "css-loader?-url"],
       }
     ]
-  }
+  },
+  plugins: getPlugins()
 }

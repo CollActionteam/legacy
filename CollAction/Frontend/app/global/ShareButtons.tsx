@@ -95,12 +95,32 @@ class ShareButtons extends React.Component<IShareButtonsProps, IShareButtonsStat
   }
 }
 
+const FullShareButtons = () => {
+  return (
+    <div className="row">
+      <div className="col-xs-12 col-md-8 col-md-offset-2 share-container">
+        <h3 className="share-title">Spread it further</h3>
+        <div className="row">
+          <div className="col-xs-12 col-sm-6 col-sm-offset-3 share-buttons-container">
+            <ShareButtons />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 renderComponentIf(
-  <ShareButtons />,
+  <FullShareButtons />,
   document.getElementById("homepage-share-buttons")
 );
 
 renderComponentIf(
   <ShareButtons />,
   document.getElementById("project-details-share-buttons")
+);
+
+renderComponentIf(
+  <FullShareButtons />,
+  document.getElementById("project-details-share-buttons-row")
 );
