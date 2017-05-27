@@ -1,6 +1,8 @@
 import * as React from "react";
+import * as ReactDOM from "react-dom";
 import { ShareButtons as ReactShareButtons, ShareCounts } from "react-share";
 import renderComponentIf from "./renderComponentIf";
+import registerGlobal from "./registerGlobal";
 import "./share.scss";
 
 const {
@@ -64,28 +66,31 @@ class ShareButtons extends React.Component<IShareButtonsProps, IShareButtonsStat
     );
   }
 
+  getUrl(): string {
+    return this.props.url || window.location.host + window.location.pathname;
+  }
+
   render () {
-    const url: string = window.location.host + window.location.pathname;
     const title: string = this.props.title || window.document.title;
     return (
       <div className="share-buttons">
-        {this.renderShareCounts(url)}
+        {this.renderShareCounts(this.getUrl())}
         <div className="row">
           <div className="col-xs-3 share-count">
             {this.state.count}<br /> Shares
           </div>
           <div className="col-xs-3">
-            <FacebookShareButton title={title} url={url} >
+            <FacebookShareButton title={title} url={this.getUrl()} >
               <i className="fa fa-facebook"></i>
             </FacebookShareButton>
           </div>
           <div className="col-xs-3">
-            <TwitterShareButton url={url} title={title}>
+            <TwitterShareButton url={this.getUrl()} title={title}>
               <i className="fa fa-twitter"></i>
             </TwitterShareButton>
           </div>
           <div className="col-xs-3">
-            <LinkedinShareButton url={url} title={title} description={url}>
+            <LinkedinShareButton url={this.getUrl()} title={title} description={this.getUrl()}>
               <i className="fa fa-linkedin"></i>
             </LinkedinShareButton>
           </div>
@@ -124,3 +129,9 @@ renderComponentIf(
   <FullShareButtons />,
   document.getElementById("project-details-share-buttons-row")
 );
+
+function renderShareWithTitleAndLink(title: string, url: string, element: HTMLElement) {
+  ReactDOM.render(<ShareButtons title={title} url={url} />, element);
+}
+
+registerGlobal("renderShareWithTitleAndLink", renderShareWithTitleAndLink);

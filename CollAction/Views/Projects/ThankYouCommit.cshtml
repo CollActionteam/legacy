@@ -31,7 +31,16 @@
 <div id="project-share">
     <div class="container">
         <div class="row">
-            <div id="project-details-share-buttons-row"></div>
+            <div id="project-details-share-buttons-custom"></div>
         </div> 
     </div> 
 </div>
+
+<script type="text/javascript">
+    const title = @Html.DisplayFor(model => model.Name);
+    const link = @Html.DisplayFor(model => model.Link);
+    const element = document.getElementById("project-details-share-buttons-custom");
+    window.onload = function () {
+        window.CollAction.renderShareWithTitleAndLink(title, link, element);
+    };
+</script>
