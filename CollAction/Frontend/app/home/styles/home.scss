@@ -10,6 +10,8 @@
 
   #title-row {
 
+    margin-top: 150px;
+
     h1, h2 {
       margin:0px;
       padding:0px;
@@ -26,6 +28,10 @@
 
     text-align: center;
     margin-bottom: 50px;
+  }
+
+  #link-row {
+    margin-bottom: 150px;
   }
 
   #intro-text,
@@ -85,7 +91,6 @@
 
   #banner-title {
     background-image: url(/images/front-page.jpg);
-    padding: 150px 0px;
     color: $coll-action-green;
   }
 

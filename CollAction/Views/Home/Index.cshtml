@@ -8,28 +8,30 @@
 
 <div id="index">
     <div id="banner-title" class="banner">
-        <div class="container">
-            <div class="row" id="title-row">
-                <div class="col-xs-12">
-                    <h1>@Localizer["POWER TO THE CROWD"]</h1>
+        <div class="dotbackground">
+            <div class="container">
+                <div class="row" id="title-row">
+                    <div class="col-xs-12">
+                        <h1>@Localizer["POWER TO THE CROWD"]</h1>
+                    </div>
+                </div>
+                <div class="row" id="link-row">
+                    <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-2 col-md-offset-4">
+                        <a class="banner-link" asp-area="" asp-controller="Projects" asp-action="Find">
+                            @Localizer["Find Project"]
+                        </a>
+                    </div>
+                    <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-2 col-md-offset-0">
+                        <a class="banner-link" asp-area="" asp-controller="Projects" asp-action="StartInfo">
+                            @Localizer["Start Project"]
+                        </a>
+                    </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-2 col-md-offset-4">
-                    <a class="banner-link" asp-area="" asp-controller="Projects" asp-action="Find">
-                        @Localizer["Find Project"]
-                    </a>
-                </div>
-                <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-2 col-md-offset-0">
-                    <a class="banner-link" asp-area="" asp-controller="Projects" asp-action="StartInfo">
-                        @Localizer["Start Project"]
-                    </a>
-                </div>
+
+            <div id="down-arrow">
+
             </div>
-        </div>
-
-        <div id="down-arrow">
-
         </div>
 
     </div>
