@@ -1,6 +1,5 @@
 ﻿using CollAction.Data;
 using CollAction.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
@@ -80,5 +79,33 @@ namespace CollAction.Services
                 })
                .ToListAsync();
         }
+
+        public async Task<string> GenerateParticipantsDataExport(int projectId)
+        {
+            Project project = await _context
+                .Projects
+                .Where(p => p.Id == projectId)
+                .Include(p => p.Participants).ThenInclude(p => p.User)
+                .Include(p => p.Owner)
+                .FirstOrDefaultAsync();
+            if (project == null)
+                return null;
+            else
+                return string.Join("\r\n", GetParticipantsCsv(project));
+        }
+
+        private IEnumerable<string> GetParticipantsCsv(Project project)
+        {
+            yield return "first-name;last-name;email";
+            yield return GetParticipantCsvLine(project.Owner);
+            foreach (ProjectParticipant participant in project.Participants)
+                yield return GetParticipantCsvLine(participant.User);
+        }
+
+        private string GetParticipantCsvLine(ApplicationUser user)
+            => $"{EscapeCsv(user.FirstName)};{EscapeCsv(user.LastName)};{EscapeCsv(user.Email)}";
+
+        private string EscapeCsv(string str)
+            => $"\"{str?.Replace("\"", "\"\"")}\"";
     }
 }
