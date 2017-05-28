@@ -41,12 +41,16 @@ namespace CollAction.Services
             };
 
             AmazonSimpleEmailServiceClient client = new AmazonSimpleEmailServiceClient(_authOptions.SesAwsAccessKeyID, _authOptions.SesAwsAccessKey, _authOptions.Region);
-            SendEmailResponse response = await client.SendEmailAsync(emailRequest);
 
-            if (!(new[] { HttpStatusCode.OK, HttpStatusCode.Accepted }.Contains(response.HttpStatusCode)))
-                _logger.LogError("failed to send email to {0} with response {1}, MessageId: {2}, RequestId: {3}, MetaData: {4}", string.Join(", ", emails), response.HttpStatusCode, response.MessageId, response.ResponseMetadata.RequestId, response.ResponseMetadata.Metadata.Select(p => $"{{{p.Key}-{p.Value}}}"));
-            else
+            try
+            {
+                SendEmailResponse response = await client.SendEmailAsync(emailRequest);
                 _logger.LogInformation("successfully send email to {0}", string.Join(", ", emails));
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("failed to send email to {0} with error {1}", string.Join(", ", emails), e);
+            }
         }
 
         public Task SendEmailAsync(string email, string subject, string message)
