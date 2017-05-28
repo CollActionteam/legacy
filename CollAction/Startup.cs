@@ -8,7 +8,6 @@ using Microsoft.Extensions.Logging;
 using CollAction.Data;
 using CollAction.Models;
 using CollAction.Services;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
@@ -17,7 +16,8 @@ using Microsoft.AspNetCore.Identity;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.Slack;
-using System;
+using Amazon;
+using System.Linq;
 
 namespace CollAction
 {
@@ -84,9 +84,10 @@ namespace CollAction
             services.AddTransient<ISmsSender, AuthMessageSender>();
             services.Configure<AuthMessageSenderOptions>(options =>
             {
-                options.FromName = Configuration["FromName"];
                 options.FromAddress = Configuration["FromAddress"];
-                options.SendGridKey = Configuration["SendGridKey"];
+                options.Region = RegionEndpoint.EnumerableAllRegions.First(r => r.SystemName == Configuration["SesRegion"]);
+                options.SesAwsAccessKey = Configuration["SesAwsAccessKey"];
+                options.SesAwsAccessKeyID = Configuration["SesAwsAccessKeyID"];
             });
             services.AddScoped<IProjectService, ProjectService>();
             services.AddTransient<INewsletterSubscriptionService, NewsletterSubscriptionService>();
