@@ -35,7 +35,7 @@ namespace CollAction.Services
                 Destination = new Destination(emails.ToList()),
                 Message = new Message()
                 {
-                    Body = new Body(new Content(message)),
+                    Body = new Body() { Html = new Content(message) },
                     Subject = new Content(subject)
                 }
             };
