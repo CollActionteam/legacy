@@ -37,8 +37,8 @@
 </div>
 
 <script type="text/javascript">
-    const title = @Html.DisplayFor(model => model.Name);
-    const link = @Html.DisplayFor(model => model.Link);
+    const title = "@Html.DisplayFor(model => model.ProjectName)";
+    const link = window.location.hostname + "@Html.DisplayFor(model => model.ProjectLink)";
     const element = document.getElementById("project-details-share-buttons-custom");
     window.onload = function () {
         window.CollAction.renderShareWithTitleAndLink(title, link, element);

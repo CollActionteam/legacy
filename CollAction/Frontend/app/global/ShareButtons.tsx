@@ -1,21 +1,10 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { ShareButtons as ReactShareButtons, ShareCounts } from "react-share";
 import renderComponentIf from "./renderComponentIf";
 import registerGlobal from "./registerGlobal";
 import "./share.scss";
 
-const {
-  FacebookShareButton,
-  TwitterShareButton,
-  LinkedinShareButton,
-} = ReactShareButtons;
-
-const {
-  FacebookShareCount,
-  TwitterShareCount,
-  LinkedinShareCount,
-} = ShareCounts;
+enum States { ERROR, READY, LOADING };
 
 interface IShareButtonsProps {
   title?: string;
@@ -23,76 +12,90 @@ interface IShareButtonsProps {
 }
 
 interface IShareButtonsState {
-  count: number;
+  shareCount?: number;
+  shareCountError?: Error;
+  shareCountState: States;
 }
 
-/**
- * TODO : Currently this component uses the react share library to extract values that have been
- * intended to rendered. To do this we have had to code a little hack to add a number to the total share count
- * that will pull the count from the component and add it to the state. The result of this is that updating the
- * state causes a rerender so we have added our second hack to stop this component looping.
- *
- * Ideally here we should call the API's directly. We can update this post launch.
- */
 class ShareButtons extends React.Component<IShareButtonsProps, IShareButtonsState> {
 
-  constructor (props) {
+  constructor(props) {
     super(props);
-    this.state = { count: 0 };
+    this.state = { shareCountState: States.LOADING };
   }
 
-  shouldComponentUpdate(nextProps: IShareButtonsProps, nextState:IShareButtonsState) {
-    return !(nextState.count === this.state.count);
+  componentDidMount() {
+    this.getShareCount();
   }
 
-  addToShareCount(amount: number) {
-    console.log(amount);
-    this.setState({
-      count: this.state.count + amount,
-    });
+  getTitle() {
+    return this.props.title || document.title;
   }
 
-  renderShareCounts(url: string) {
-    const self = this;
-    return (
-      <div style={{display: "none"}}>
-        <FacebookShareCount url={url}>
-          {share => self.addToShareCount(share)}
-        </FacebookShareCount>
-        <LinkedinShareCount url={url} >
-          {share => self.addToShareCount(share)}
-        </LinkedinShareCount>
-      </div>
-    );
+  getUrl() {
+    return this.props.url || window.location;
   }
 
-  getUrl(): string {
-    return this.props.url || window.location.host + window.location.pathname;
+  async getLinkedInShareCount() {
+    try {
+      const apiLink: string = `https://www.linkedin.com/countserv/count/share?url=${this.getUrl()}&format=json`;
+      const response: Response = await fetch(apiLink);
+      const parsed = await response.json();
+      return parsed.count;
+    } catch (e) {
+      return 0;
+    }
   }
 
-  render () {
-    const title: string = this.props.title || window.document.title;
+  async getFacebookShareCount() {
+    const apiLink: string = `http://graph.facebook.com/?id=${this.getUrl()}`;
+    const response: Response = await fetch(apiLink);
+    const parsed = await response.json();
+    return parsed.share.share_count;
+  }
+
+  async getShareCount() {
+    try {
+      const shareCount: number = await this.getLinkedInShareCount() + await this.getFacebookShareCount();
+      this.setState({ shareCount, shareCountState: States.READY });
+    } catch (e) {
+      this.setState({ shareCountError: e, shareCountState: States.ERROR });
+    }
+  }
+
+  getTwitterUrl () {
+    return encodeURI(`https://twitter.com/intent/tweet?text=${this.getTitle()}&url=${this.getUrl()}`);
+  }
+
+  getFacebookUrl() {
+    return encodeURI(`https://www.facebook.com/sharer/sharer.php?u=${this.getUrl()}`);
+  }
+
+  getLinkedInUrl () {
+    return encodeURI(`http://www.linkedin.com/shareArticle?mini=true&url=${this.getUrl()}L&title=${this.getTitle()}`);
+  }
+
+  render() {
     return (
       <div className="share-buttons">
-        {this.renderShareCounts(this.getUrl())}
         <div className="row">
           <div className="col-xs-3 share-count">
-            {this.state.count}<br /> Shares
+            {this.state.shareCount}<br /> Shares
           </div>
           <div className="col-xs-3">
-            <FacebookShareButton title={title} url={this.getUrl()} >
+            <a href={this.getFacebookUrl()} target="_blank" >
               <i className="fa fa-facebook"></i>
-            </FacebookShareButton>
+            </a>
           </div>
           <div className="col-xs-3">
-            <TwitterShareButton url={this.getUrl()} title={title}>
+            <a href={this.getTwitterUrl()}>
               <i className="fa fa-twitter"></i>
-            </TwitterShareButton>
+            </a>
           </div>
           <div className="col-xs-3">
-            <LinkedinShareButton url={this.getUrl()} title={title} description={this.getUrl()}>
+            <a href={this.getLinkedInUrl()} >
               <i className="fa fa-linkedin"></i>
-            </LinkedinShareButton>
+            </a>
           </div>
         </div>
       </div>

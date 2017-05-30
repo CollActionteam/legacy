@@ -12,5 +12,7 @@ namespace CollAction.Models
         public string ProjectProposal { get; set; }
 
         public bool IsUserCommitted { get; set; } = false;
+
+        public string ProjectLink => $"/Projects/Details/{ProjectId}";
     }
 }
