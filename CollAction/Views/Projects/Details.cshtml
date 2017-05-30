@@ -8,6 +8,15 @@
     ViewData["Title"] = @Model.Project.Name + " Details";
 }
 
+@section Meta {
+    <meta name="description" content="@Model.Project.Description" />
+    <meta property="og:url" content="" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="@Model.Project.Name" />
+    <meta property="og:description" content="@Model.Project.Description" />
+    <meta property="og:image" content="@Model.BannerImagePath" />
+}
+
 <div id="project-details">
     <div class="container-fluid">
         <div class="row">

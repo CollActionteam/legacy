@@ -16,3 +16,30 @@
   }
   
 }
+
+.share-buttons {
+
+  .share-count {
+    color: #3b5998;
+    font-weight: bold;
+  } 
+
+  .social-media-share-buttons {
+    font-size: 20px;
+    padding: 7px 12px;
+    border-radius: 35px;
+    width: 40px;
+    height: 40px;
+    color: #fff;
+    margin: 0px auto;
+  }
+  .social-media-share-button-facebook {
+    background-color: #3b5998;
+  }
+  .social-media-share-button-twitter {
+    background-color: #00aced;
+  }
+  .social-media-share-button-linkedin {
+    background-color: #007bb6;
+  }
+}

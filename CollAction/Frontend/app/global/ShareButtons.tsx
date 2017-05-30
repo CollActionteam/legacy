@@ -2,7 +2,6 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import renderComponentIf from "./renderComponentIf";
 import registerGlobal from "./registerGlobal";
-import "./share.scss";
 
 enum States { ERROR, READY, LOADING };
 
@@ -56,7 +55,7 @@ class ShareButtons extends React.Component<IShareButtonsProps, IShareButtonsStat
 
   async getShareCount() {
     try {
-      const shareCount: number = await this.getLinkedInShareCount() + await this.getFacebookShareCount();
+      const shareCount: number = await this.getFacebookShareCount();
       this.setState({ shareCount, shareCountState: States.READY });
     } catch (e) {
       this.setState({ shareCountError: e, shareCountState: States.ERROR });
@@ -75,6 +74,8 @@ class ShareButtons extends React.Component<IShareButtonsProps, IShareButtonsStat
     return encodeURI(`http://www.linkedin.com/shareArticle?mini=true&url=${this.getUrl()}L&title=${this.getTitle()}`);
   }
 
+
+
   render() {
     return (
       <div className="share-buttons">
@@ -83,18 +84,24 @@ class ShareButtons extends React.Component<IShareButtonsProps, IShareButtonsStat
             {this.state.shareCount}<br /> Shares
           </div>
           <div className="col-xs-3">
-            <a href={this.getFacebookUrl()} target="_blank" >
-              <i className="fa fa-facebook"></i>
+            <a href={this.getFacebookUrl()} target="_blank">
+              <div className="social-media-share-buttons social-media-share-button-facebook">
+                <i className="fa fa-facebook"></i>
+              </div>
             </a>
           </div>
           <div className="col-xs-3">
             <a href={this.getTwitterUrl()}>
-              <i className="fa fa-twitter"></i>
+              <div className="social-media-share-buttons social-media-share-button-twitter">
+                <i className="fa fa-twitter"></i>
+              </div>
             </a>
           </div>
           <div className="col-xs-3">
-            <a href={this.getLinkedInUrl()} >
-              <i className="fa fa-linkedin"></i>
+            <a href={this.getLinkedInUrl()}>
+              <div className="social-media-share-buttons social-media-share-button-linkedin">
+                <i className="fa fa-linkedin"></i>
+              </div>
             </a>
           </div>
         </div>
