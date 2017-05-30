@@ -173,7 +173,7 @@ namespace CollAction.Controllers
             string confirmationEmailAdmin =
                 "Hi!<br>" +
                 "<br>" +
-                "There's a new project waiting for approval: {project.Name}<br>" +
+                $"There's a new project waiting for approval: {project.Name}<br>" +
                 "Warm regards,<br>" +
                 "The CollAction team";
 
