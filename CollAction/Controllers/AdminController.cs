@@ -25,6 +25,7 @@ namespace CollAction.Controllers
             IStringLocalizer<AccountController> localizer,
             IHostingEnvironment hostingEnvironment,
             IEmailSender emailSender,
+            IProjectService projectService,
             ApplicationDbContext context)
         {
             _userManager = userManager;
@@ -32,6 +33,7 @@ namespace CollAction.Controllers
             _context = context;
             _hostingEnvironment = hostingEnvironment;
             _emailSender = emailSender;
+            _projectService = projectService;
         }
 
         private readonly ApplicationDbContext _context;
@@ -39,6 +41,7 @@ namespace CollAction.Controllers
         private readonly IStringLocalizer<AccountController> _localizer;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSender _emailSender;
+        private readonly IProjectService _projectService;
 
         [HttpGet]
         public IActionResult Index()
@@ -76,10 +79,21 @@ namespace CollAction.Controllers
                 Goal = project.Goal,
                 OwnerId = project.OwnerId,
                 Status = project.Status,
-                Proposal = project.Proposal
+                Proposal = project.Proposal,
+                Id = project.Id
             };
 
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ParticipantsDataExport(int id)
+        {
+            string csv = await _projectService.GenerateParticipantsDataExport(id);
+            if (csv != null)
+                return Content(csv, "text/csv");
+            else
+                return NotFound();
         }
 
         [HttpPost]

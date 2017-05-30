@@ -3,7 +3,6 @@
 
 @media only screen and (min-width: 992px) {
   #project-filter {
-    padding: 150px 0px;
     font-size: 2.75em;
 
     .project-filter-control {
@@ -14,15 +13,22 @@
       margin: 15px;
     }
   }
+
+  #find-project {
+    ul {
+      padding: 150px 0px;
+    }
+  }
 }
 
 @media only screen and (max-width: 992px) {
+
   #project-filter {
     font-size: 1.75em;
-    padding: 70px 0px;
     
     ul {
       text-align: center;
+      padding: 70px 0px;
     }
 
     .project-filter-drop-down {
@@ -49,7 +55,6 @@
     ul {
       list-style: none;
       margin: 0px;
-      padding: 0px;
     }
 
     .project-filter-drop-down {

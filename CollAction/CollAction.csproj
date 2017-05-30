@@ -20,6 +20,7 @@ npm run build</PreBuildEvent>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.1.15" />
     <PackageReference Include="ImageSharp" Version="1.0.0-alpha7-00031" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.2" />
@@ -36,7 +37,6 @@ npm run build</PreBuildEvent>
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="1.1.2" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="1.1.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.0" />
-    <PackageReference Include="Sendgrid" Version="9.2.0" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="1.4.1-dev-10147" />
     <PackageReference Include="Serilog.Sinks.Console" Version="2.1.0" />
     <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.1-dev-00767" />

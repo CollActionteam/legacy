@@ -1,8 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Amazon;
+using Amazon.SimpleEmail;
+using Amazon.SimpleEmail.Model;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using SendGrid;
-using SendGrid.Helpers.Mail;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -14,38 +16,41 @@ namespace CollAction.Services
     // For more details see this link http://go.microsoft.com/fwlink/?LinkID=532713
     public class AuthMessageSender : IEmailSender, ISmsSender
     {
-        private readonly IOptions<AuthMessageSenderOptions> _authOptions;
+        private readonly AuthMessageSenderOptions _authOptions;
         private readonly ILogger<AuthMessageSender> _logger;
 
         public AuthMessageSender(IOptions<AuthMessageSenderOptions> authOptions, ILoggerFactory loggerFactory)
         {
-            _authOptions = authOptions;
+            _authOptions = authOptions.Value;
             _logger = loggerFactory.CreateLogger<AuthMessageSender>();
         }
 
-        public async Task SendEmailAsync(string email, string subject, string message)
+        public async Task SendEmailsAsync(IEnumerable<string> emails, string subject, string message)
         {
-            _logger.LogInformation("sending email to {0} with subject {1}", email, subject);
-            SendGridMessage gridMessage = new SendGridMessage()
-            {
-                From = new EmailAddress(_authOptions.Value.FromAddress, _authOptions.Value.FromName),
-                Subject = subject,
-                PlainTextContent = message,
-                HtmlContent = message
-            };
-            gridMessage.AddTo(new EmailAddress(email));
-            SendGridClient client = new SendGridClient(_authOptions.Value.SendGridKey);
-            Response res = await client.SendEmailAsync(gridMessage);
+            _logger.LogInformation("sending email to {0} with subject {1}", string.Join(", ", emails), subject);
 
-            if (!(new[] { HttpStatusCode.OK, HttpStatusCode.Accepted }.Contains(res.StatusCode)))
+            SendEmailRequest emailRequest = new SendEmailRequest()
             {
-                string headers = string.Join(", ", res.Headers.Concat(res.Body.Headers).Select(header => $"[Type: {header.Key}:{string.Join(", ", header.Value)}]"));
-                string body = await res.Body.ReadAsStringAsync();
-                _logger.LogError("failed to send email to {0} with response {1}, Headers: {2}, Body: {3}", email, res.StatusCode, headers, body);
-            }
+                Source = _authOptions.FromAddress,
+                Destination = new Destination(emails.ToList()),
+                Message = new Message()
+                {
+                    Body = new Body(new Content(message)),
+                    Subject = new Content(subject)
+                }
+            };
+
+            AmazonSimpleEmailServiceClient client = new AmazonSimpleEmailServiceClient(_authOptions.SesAwsAccessKeyID, _authOptions.SesAwsAccessKey, _authOptions.Region);
+            SendEmailResponse response = await client.SendEmailAsync(emailRequest);
+
+            if (!(new[] { HttpStatusCode.OK, HttpStatusCode.Accepted }.Contains(response.HttpStatusCode)))
+                _logger.LogError("failed to send email to {0} with response {1}, MessageId: {2}, RequestId: {3}, MetaData: {4}", string.Join(", ", emails), response.HttpStatusCode, response.MessageId, response.ResponseMetadata.RequestId, response.ResponseMetadata.Metadata.Select(p => $"{{{p.Key}-{p.Value}}}"));
             else
-                _logger.LogInformation("successfully send email to {0}", email);
+                _logger.LogInformation("successfully send email to {0}", string.Join(", ", emails));
         }
+
+        public Task SendEmailAsync(string email, string subject, string message)
+            => SendEmailsAsync(new[] { email }, subject, message);
 
         public Task SendSmsAsync(string number, string message)
         {
