@@ -6,6 +6,15 @@
     ViewData["Title"] = Localizer["Home Page"];
 }
 
+@section Meta {
+    <meta name="description" content="Do you want to make the world a better place, but do you sometimes feel that your actions are only a drop in the ocean? Well, not anymore, because we are introducing crowdacting: taking action knowing that you are one of many. We revamp the neighbourhood with a hundred people or switch to renewable energy with thousands at the same time. Find out more about crowdacting, take action collectively with one of the existing projects, or start your own crowdacting project." />
+    <meta property="og:url" content="http://collaction.org" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Collaction" />
+    <meta property="og:description" content="Do you want to make the world a better place, but do you sometimes feel that your actions are only a drop in the ocean? Well, not anymore, because we are introducing crowdacting: taking action knowing that you are one of many. We revamp the neighbourhood with a hundred people or switch to renewable energy with thousands at the same time. Find out more about crowdacting, take action collectively with one of the existing projects, or start your own crowdacting project." />
+    <meta property="og:image" content="http://collaction.org/images/front-page.jpg" />
+}
+
 <div id="index">
     <div id="banner-title" class="banner">
         <div class="dotbackground">
@@ -135,14 +144,7 @@
     <div id="project-share">
         <div class="container">
             <div class="row">
-                <div class="col-xs-12 col-md-8 col-md-offset-2" id="home-share-container">
-                    <h3 id="share-title">Spread it further</h3>
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-6 col-sm-offset-3" id="home-share-buttons-container">
-                            <div id="homepage-share-buttons"></div>
-                        </div>
-                    </div>
-                </div>
+                <div id="homepage-share-buttons"></div>
             </div>
         </div>
     </div>

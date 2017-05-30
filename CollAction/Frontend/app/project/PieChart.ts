@@ -1,6 +1,6 @@
-window["CollAction"] = window["CollAction"] || {};
+import registerGlobal from "../global/registerGlobal";
 
-window["CollAction"].drawPieChart = function (percentComplete: number, canvas: HTMLCanvasElement): void {
+function drawPieChart (percentComplete: number, canvas: HTMLCanvasElement): void {
   var ctx = canvas.getContext("2d");
   var lastend = 4.71239;
   var data = [percentComplete, 100 - percentComplete ]; // If you add more data values make sure you add more colors
@@ -25,3 +25,5 @@ window["CollAction"].drawPieChart = function (percentComplete: number, canvas: H
     lastend += Math.PI * 2 * (data[i] / myTotal);
   }
 }
+
+registerGlobal("drawPieChart", drawPieChart);
