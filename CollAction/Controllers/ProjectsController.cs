@@ -105,57 +105,61 @@ namespace CollAction.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Create(CreateProjectViewModel createProjectViewModel)
+        public async Task<IActionResult> Create(CreateProjectViewModel model)
         {
             // Make sure the project name is unique.
-            if (await _context.Projects.AnyAsync(p => p.Name == createProjectViewModel.Name))
+            if (await _context.Projects.AnyAsync(p => p.Name == model.Name))
             {
                 ModelState.AddModelError("Name", _localizer["A project with the same name already exists."]);
             }
 
+            // If there are image descriptions without corresponding image uploads, warn the user.
+            if (model.BannerImageUpload == null && !string.IsNullOrWhiteSpace(model.BannerImageDescription))
+            {
+                ModelState.AddModelError("BannerImageDescription", _localizer["You can only provide a 'Banner Image Description' if you upload a 'Banner Image'."]);
+            }
+            if (model.DescriptiveImageUpload == null && !string.IsNullOrWhiteSpace(model.DescriptiveImageDescription))
+            {
+                ModelState.AddModelError("DescriptiveImageDescription", _localizer["You can only provide a 'DescriptiveImage Description' if you upload a 'DescriptiveImage'."]);
+            }
+
             if (!ModelState.IsValid) {
-                createProjectViewModel.Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
-                return View(createProjectViewModel);
+                model.Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
+                return View(model);
             }
 
             var project = new Project
             {
                 OwnerId = (await _userManager.GetUserAsync(User)).Id,
-                Name = createProjectViewModel.Name,
-                Description = createProjectViewModel.Description,
-                Goal = createProjectViewModel.Goal,
-                Proposal = createProjectViewModel.Proposal,
-                CreatorComments = createProjectViewModel.CreatorComments,
-                CategoryId = createProjectViewModel.CategoryId,
-                LocationId = createProjectViewModel.LocationId,
-                Target = createProjectViewModel.Target,
-                Start = createProjectViewModel.Start,
-                End = createProjectViewModel.End,
-                BannerImage = null 
+                Name = model.Name,
+                Description = model.Description,
+                Goal = model.Goal,
+                Proposal = model.Proposal,
+                CreatorComments = model.CreatorComments,
+                CategoryId = model.CategoryId,
+                LocationId = model.LocationId,
+                Target = model.Target,
+                Start = model.Start,
+                End = model.End,
+                BannerImage = null
             };
 
-            project.SetDescriptionVideoLink(_context, createProjectViewModel.DescriptionVideoLink);
+            var bannerImageManager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "bannerimages"));
+            project.BannerImage = await bannerImageManager.CreateOrReplaceImageFileIfNeeded(project.BannerImage, model.BannerImageUpload, model.BannerImageDescription);
 
-            if (createProjectViewModel.HasBannerImageUpload)
-            {
-                var manager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "bannerimages"));
-                project.BannerImage = await manager.UploadFormFile(createProjectViewModel.BannerImageUpload, Guid.NewGuid().ToString(), createProjectViewModel.BannerImageDescription);
-            }
-
-            if (createProjectViewModel.HasDescriptiveImageUpload)
-            {
-                var manager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "descriptiveimages"));
-                project.DescriptiveImage = await manager.UploadFormFile(createProjectViewModel.BannerImageUpload, Guid.NewGuid().ToString(), createProjectViewModel.DescriptiveImageDescription);
-            }
+            var descriptiveImageManager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "descriptiveimages"));
+            project.DescriptiveImage = await descriptiveImageManager.CreateOrReplaceImageFileIfNeeded(project.DescriptiveImage, model.DescriptiveImageUpload, model.DescriptiveImageDescription);
 
             _context.Add(project);
             await _context.SaveChangesAsync();
 
+            project.SetDescriptionVideoLink(_context, model.DescriptionVideoLink);
+
             // Only call this once we have a valid Project.Id
-            await project.SetTags(_context, createProjectViewModel.Hashtag?.Split(';') ?? new string[0]);
+            await project.SetTags(_context, model.Hashtag?.Split(';') ?? new string[0]);
 
             // Notify admins and creator through e-mail
-            string confirmationEmail = 
+            string confirmationEmail =
                 "Hi!<br>" +
                 "<br>" +
                 "Thanks for submitting a project on www.collaction.org!<br>" +
@@ -180,7 +184,7 @@ namespace CollAction.Controllers
             var administrators = await _userManager.GetUsersInRoleAsync("admin");
             foreach (var admin in administrators)
                 await _emailSender.SendEmailAsync(admin.Email, subject, confirmationEmailAdmin);
-            
+
             return View("ThankYouCreate", new ThankYouCreateProjectViewModel()
             {
                 Name = project.Name
@@ -235,6 +239,7 @@ namespace CollAction.Controllers
             return View(editProjectViewModel);
         }
         */
+
         // POST: Projects/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -265,9 +270,21 @@ namespace CollAction.Controllers
         //        ModelState.AddModelError("Name", _localizer["A project with the same name already exists."]);
         //    }
 
+        //    // If there are image descriptions without corresponding image uploads, warn the user.
+        //    if (project.BannerImage == null && editProjectViewModel.BannerImageUpload == null && !string.IsNullOrWhiteSpace(editProjectViewModel.BannerImageDescription))
+        //    {
+        //        ModelState.AddModelError("BannerImageDescription", _localizer["You can only provide a 'Banner Image Description' if you upload a 'Banner Image'."]);
+        //    }
+        //    if (project.DescriptiveImage == null && editProjectViewModel.DescriptiveImageUpload == null && !string.IsNullOrWhiteSpace(editProjectViewModel.DescriptiveImageDescription))
+        //    {
+        //        ModelState.AddModelError("DescriptiveImageDescription", _localizer["You can only provide a 'DescriptiveImage Description' if you upload a 'DescriptiveImage'."]);
+        //    }
+
         //    if (!ModelState.IsValid)
         //    {
         //        editProjectViewModel.Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
+        //        editProjectViewModel.BannerImage = project.BannerImage;
+        //        editProjectViewModel.DescriptiveImage = project.DescriptiveImage;
         //        return View(editProjectViewModel);
         //    }
 
@@ -282,17 +299,13 @@ namespace CollAction.Controllers
         //    project.Start = editProjectViewModel.Start;
         //    project.End = editProjectViewModel.End;
 
-        //    project.SetDescriptionVideoLink(_context, editProjectViewModel.DescriptionVideoLink);
+        //    var bannerImageManager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "bannerimages"));
+        //    project.BannerImage = await bannerImageManager.CreateOrReplaceImageFileIfNeeded(project.BannerImage, editProjectViewModel.BannerImageUpload, editProjectViewModel.BannerImageDescription);
 
-        //    if (editProjectViewModel.HasBannerImageUpload)
-        //    {
-        //        var manager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "bannerimages"));
-        //        if (project.BannerImage != null)
-        //        {
-        //            manager.DeleteImageFile(project.BannerImage);
-        //        }
-        //        project.BannerImage = await manager.UploadFormFile(editProjectViewModel.BannerImageUpload, Guid.NewGuid().ToString() /* unique filename */);
-        //    }
+        //    var descriptiveImageManager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "descriptiveimages"));
+        //    project.DescriptiveImage = await descriptiveImageManager.CreateOrReplaceImageFileIfNeeded(project.DescriptiveImage, editProjectViewModel.DescriptiveImageUpload, editProjectViewModel.DescriptiveImageDescription);
+
+        //    project.SetDescriptionVideoLink(_context, editProjectViewModel.DescriptionVideoLink);
 
         //    await project.SetTags(_context, editProjectViewModel.Hashtag?.Split(';') ?? new string[0]);
 

@@ -54,7 +54,13 @@ namespace CollAction.Controllers
         [HttpGet]
         public async Task<IActionResult> ManageProject(int id)
         {
-            Project project = await _context.Projects.Include(p => p.Tags).ThenInclude(t => t.Tag).Include(p => p.DescriptionVideoLink).Include(p => p.BannerImage).Include(p => p.DescriptiveImage).FirstOrDefaultAsync(p => p.Id == id);
+            Project project = await _context.Projects.Include(p => p.Tags)
+                .ThenInclude(t => t.Tag)
+                .Include(p => p.DescriptionVideoLink)
+                .Include(p => p.BannerImage)
+                .Include(p => p.DescriptiveImage)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
             if (project == null)
                 return NotFound();
 
@@ -70,7 +76,9 @@ namespace CollAction.Controllers
                 CategoryId = project.CategoryId,
                 CreatorComments = project.CreatorComments,
                 DescriptionVideoLink = project.DescriptionVideoLink?.Link,
+                BannerImageFile = project.BannerImage,
                 BannerImageDescription = project.BannerImage?.Description,
+                DescriptiveImageFile = project.DescriptiveImage,
                 DescriptiveImageDescription = project.DescriptiveImage?.Description,
                 End = project.End,
                 Start = project.Start,
@@ -100,10 +108,34 @@ namespace CollAction.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ManageProject(ManageProjectViewModel model)
         {
+            Project project = await _context.Projects
+                .Where(p => p.Id == model.Id)
+                .Include(p => p.Owner)
+                .Include(p => p.Tags)
+                .ThenInclude(t => t.Tag)
+                .Include(p => p.DescriptionVideoLink)
+                .Include(p => p.BannerImage)
+                .Include(p => p.DescriptiveImage)
+                .FirstAsync();
+
+            // If the project name changed make sure it is still unique.
+            if (project.Name != model.Name && await _context.Projects.AnyAsync(p => p.Name == model.Name))
+            {
+                ModelState.AddModelError("Name", _localizer["A project with the same name already exists."]);
+            }
+
+            // If there are image descriptions without corresponding image uploads, warn the user.
+            if (project.BannerImage == null && model.BannerImageUpload == null && !string.IsNullOrWhiteSpace(model.BannerImageDescription))
+            {
+                ModelState.AddModelError("BannerImageDescription", _localizer["You can only provide a 'Banner Image Description' if you upload a 'Banner Image'."]);
+            }
+            if (project.DescriptiveImage == null && model.DescriptiveImageUpload == null && !string.IsNullOrWhiteSpace(model.DescriptiveImageDescription))
+            {
+                ModelState.AddModelError("DescriptiveImageDescription", _localizer["You can only provide a 'DescriptiveImage Description' if you upload a 'DescriptiveImage'."]);
+            }
+
             if (ModelState.IsValid)
             {
-                Project project = await _context.Projects.Where(p => p.Id == model.Id).Include(p => p.Owner).Include(p => p.Tags).ThenInclude(t => t.Tag).Include(p => p.DescriptionVideoLink).FirstAsync();
-
                 bool approved = model.Status == ProjectStatus.Running && project.Status == ProjectStatus.Hidden;
                 bool successfull = model.Status == ProjectStatus.Successful && project.Status == ProjectStatus.Running;
                 bool failed = model.Status == ProjectStatus.Failed && project.Status == ProjectStatus.Running;
@@ -176,25 +208,11 @@ namespace CollAction.Controllers
                 project.OwnerId = model.OwnerId;
                 project.DisplayPriority = model.DisplayPriority;
 
-                if (model.HasBannerImageUpload)
-                {
-                    var manager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "bannerimages"));
-                    if (project.BannerImage != null)
-                    {
-                        manager.DeleteImageFile(project.BannerImage);
-                    }
-                    project.BannerImage = await manager.UploadFormFile(model.BannerImageUpload, Guid.NewGuid().ToString(), model.BannerImageDescription);
-                }
+                var bannerImageManager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "bannerimages"));
+                project.BannerImage = await bannerImageManager.CreateOrReplaceImageFileIfNeeded(project.BannerImage, model.BannerImageUpload, model.BannerImageDescription);
 
-                if (model.HasDescriptiveImageUpload)
-                {
-                    var manager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "descriptiveimages"));
-                    if (project.DescriptiveImage != null)
-                    {
-                        manager.DeleteImageFile(project.DescriptiveImage);
-                    }
-                    project.DescriptiveImage = await manager.UploadFormFile(model.DescriptiveImageUpload, Guid.NewGuid().ToString(), model.DescriptiveImageDescription);
-                }
+                var descriptiveImageManager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "descriptiveimages"));
+                project.DescriptiveImage = await descriptiveImageManager.CreateOrReplaceImageFileIfNeeded(project.DescriptiveImage, model.DescriptiveImageUpload, model.DescriptiveImageDescription);
 
                 await project.SetTags(_context, model.Hashtag?.Split(';') ?? new string[0]);
 
@@ -209,6 +227,8 @@ namespace CollAction.Controllers
                 model.CategoryList = new SelectList(await _context.Categories.ToListAsync(), "Id", "Name", null);
                 model.DisplayPriorityList = new SelectList(Enum.GetValues(typeof(ProjectDisplayPriority)));
                 model.StatusList = new SelectList(Enum.GetValues(typeof(ProjectStatus)));
+                model.BannerImageFile = project.BannerImage;
+                model.DescriptiveImageFile = project.DescriptiveImage;
                 return View(model);
             }
         }
