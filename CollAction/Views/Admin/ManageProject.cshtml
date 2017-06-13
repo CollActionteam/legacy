@@ -78,26 +78,54 @@
                         @Html.DropDownList("DisplayPriority", Model.DisplayPriorityList)
                         @Html.ValidationMessage("DisplayPriority")
                     </div>
+
+                    @if (Model.BannerImageFile != null)
+                    {
+                        <div class="form-group">
+                            <label class="control-label">@Localizer["Banner Image"]</label>
+                            <img src="@Url.Content(Model.BannerImageFile.HtmlFilepath)" width="@Model.BannerImageFile.Width" height="@Model.BannerImageFile.Height" class="banner-image" alt=@Localizer["Banner image not found."] />
+                        </div>
+                    }
+
+                    <div class="form-group">
+                        <label class="control-label">
+                            @if (Model.BannerImageFile != null)
+                            { @Localizer["Change Banner Image"] }
+                            else
+                            { @Localizer["Banner Image"] }
+                        </label>
+                        <input asp-for="BannerImageUpload" class="form-control" />
+                        @Html.ValidationMessage("BannerImageUpload")
+                    </div>
                     <div class="form-group">
                         <label asp-for="BannerImageDescription" class="control-label"></label>
                         <input asp-for="BannerImageDescription" class="form-control" />
                         @Html.ValidationMessage("BannerImageDescription")
                     </div>
+
+                    @if (Model.DescriptiveImageFile != null)
+                    {
+                        <div class="form-group">
+                            <label class="control-label">@Localizer["Descriptive Image"]</label>
+                            <img src="@Url.Content(Model.DescriptiveImageFile.HtmlFilepath)" width="@Model.DescriptiveImageFile.Width" height="@Model.DescriptiveImageFile.Height" class="descriptive-image" alt=@Localizer["Descriptive image not found."] />
+                        </div>
+                    }
                     <div class="form-group">
-                        <label asp-for="BannerImageUpload" class="control-label"></label>
-                        <input asp-for="BannerImageUpload" class="form-control" />
-                        @Html.ValidationMessage("BannerImageUpload")
+                        <label class="control-label">
+                            @if (Model.DescriptiveImageFile != null)
+                            { @Localizer["Change Descriptive Image"] }
+                            else
+                            { @Localizer["Descriptive Image"] }
+                        </label>
+                        <input asp-for="DescriptiveImageUpload" class="form-control" />
+                        @Html.ValidationMessage("DescriptiveImageUpload")
                     </div>
                     <div class="form-group">
                         <label asp-for="DescriptiveImageDescription" class="control-label"></label>
                         <input asp-for="DescriptiveImageDescription" class="form-control" />
                         @Html.ValidationMessage("DescriptiveImageDescription")
                     </div>
-                    <div class="form-group">
-                        <label asp-for="DescriptiveImageUpload" class="control-label"></label>
-                        <input asp-for="DescriptiveImageUpload" class="form-control" />
-                        @Html.ValidationMessage("DescriptiveImageUpload")
-                    </div>
+
                     <div class="form-group">
                         <label asp-for="DescriptionVideoLink" class="control-label"></label>
                         <input asp-for="DescriptionVideoLink" class="form-control" />
