@@ -9,7 +9,7 @@ namespace CollAction.Services
     public class NewsletterSubscriptionService : INewsletterSubscriptionService
     {
         private static MailChimpManager manager;
-        private static readonly string newsletterListId = "2141ab4819";
+        private static readonly string newsletterListId = "c57556ceea";
 
         public NewsletterSubscriptionService(IOptions<NewsletterSubscriptionServiceOptions> options)
         {
