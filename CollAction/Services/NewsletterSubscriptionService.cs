@@ -9,11 +9,12 @@ namespace CollAction.Services
     public class NewsletterSubscriptionService : INewsletterSubscriptionService
     {
         private static MailChimpManager manager;
-        private static readonly string newsletterListId = "c57556ceea";
+        private static string newsletterListId;
 
         public NewsletterSubscriptionService(IOptions<NewsletterSubscriptionServiceOptions> options)
         {
             manager = new MailChimpManager(options.Value.MailChimpKey);
+            newsletterListId = options.Value.MailChimpNewsletterListId;
         }
 
         public async Task<bool> IsSubscribedAsync(string email)

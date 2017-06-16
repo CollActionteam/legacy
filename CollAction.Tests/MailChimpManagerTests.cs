@@ -9,12 +9,13 @@ namespace CollAction.Tests
     [TestClass]
     public class MailChimpManagerTests
     {
-        private readonly string newsletterListId = "8eb5be39e0"; // The ID for our "Test List" list on MailChimp.
+        private string newsletterListId; // The ID for our "Test List" list on MailChimp.
 
         private MailChimpManager BuildMailChimpManager()
         {
             IConfiguration configuration = new ConfigurationBuilder().AddUserSecrets<Startup>().Build();
             MailChimpManager manager = new MailChimpManager(configuration["MailChimpKey"]);
+            newsletterListId = configuration["MailChimpTestListId"];
             return manager;
         }
 
