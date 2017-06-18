@@ -94,6 +94,7 @@ namespace CollAction
             services.Configure<NewsletterSubscriptionServiceOptions>(options =>
             {
                 options.MailChimpKey = Configuration["MailChimpKey"];
+                options.MailChimpNewsletterListId = Configuration["MailChimpNewsletterListId"];
             });
         }
 
