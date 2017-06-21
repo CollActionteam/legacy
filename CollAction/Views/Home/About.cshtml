@@ -139,3 +139,21 @@
     </div>
 
 </div>
+
+<script type="text/javascript">
+    var shiftWindowToCorrectForNavBarHeight = function ()
+    {
+        var navBarHeight = document.querySelector('.nav-row').offsetHeight;
+        scrollBy(0, -navBarHeight);
+    };
+
+    window.addEventListener("hashchange", shiftWindowToCorrectForNavBarHeight);
+
+    window.onload = function ()
+    {
+        if (window.location.hash)
+        {
+            shiftWindowToCorrectForNavBarHeight();
+        }
+    };
+</script>
