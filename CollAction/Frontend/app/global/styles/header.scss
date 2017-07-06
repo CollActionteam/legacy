@@ -12,11 +12,6 @@
     padding-top: 85px;
 }
 
-.logo {
-    max-width: 270px;
-    margin-top: -7px;
-}
-
 #header {
     margin: 20px 0px;
 
@@ -124,6 +119,12 @@
             margin-left: 0px;
             margin-right: 0px;
             width: 100%;
+
+            a {
+              margin: 0px auto;
+              max-width: 300px;
+              display: block;
+            }
 
             .nav-row {
                 margin-left: 0px;
