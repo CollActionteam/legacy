@@ -391,9 +391,26 @@ namespace CollAction.Controllers
             {
                 return NotFound();
             }
-            
-            bool success = await _service.AddParticipant((await _userManager.GetUserAsync(User)).Id, commitProjectViewModel.ProjectId);
-            return success ? View("ThankYouCommit", commitProjectViewModel) : View("Error");
+
+            ApplicationUser user = await _userManager.GetUserAsync(User);
+            bool success = await _service.AddParticipant(user.Id, commitProjectViewModel.ProjectId);
+
+            if (success)
+            {
+                string confirmationEmail = 
+                    "Hi!<br><br>" +
+                    "Thank you for participating in a CollAction project!<br><br>" +
+                    "In crowdacting, we only act collectively when we meet the target before the deadline, so please feel very welcome to share this project on social media through the social media buttons on the project page!<br><br>" +
+                    "We’ll keep you updated on the project. Also feel free to Like us on <a href=\"https://www.facebook.com/collaction.org/\">Facebook</a> to stay up to date on everything CollAction!<br><br>" +
+                    "Warm regards,<br>The CollAction team";
+                string subject = "Thank you for participating in a CollAction project!";
+                await _emailSender.SendEmailAsync(user.Email, subject, confirmationEmail);
+                return View("ThankYouCommit", commitProjectViewModel);
+            }
+            else
+            {
+                return View("Error");
+            }
         }
 
         [HttpGet]
