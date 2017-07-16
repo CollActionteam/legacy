@@ -12,42 +12,17 @@
     padding-top: 85px;
 }
 
-.heading {
-    text-transform: uppercase;
-    font-weight: 700;
-    font-size: 2em;
-}
-
-.heading span {
-    font-weight: 400;
-}
-
-.heading .logo {
-    background-image: url(/images/sprites.png);
-    width: 14px;
-    height: 20px;
-    background-position-x: -169px;
-    background-position-y: 0px;
-    display: inline-block;
-    background-size: 148px;
-}
-
-.heading .text {
-    display: inline-block;
-}
-
-#header #NavigationBar a {
-    font-weight: 700;
-}
-
-
 #header {
+    margin: 20px 0px;
+
+    #NavigationBar a {
+        font-weight: 700;
+    }
+
     #hamburger-icon {
         font-size: 22px;
         margin: 7px;
     }
-
-    margin: 20px 0px;
 
     form {
         float: right;
@@ -59,12 +34,6 @@
 
     a {
         color: #111;
-        text-decoration: none;
-    }
-
-    .header-logo {
-        padding-left: 0px;
-        padding-right: 0px;
     }
 
     #header-menu {
@@ -142,12 +111,6 @@
 }
 
 @media (max-width: 991px) {
-    .header-logo {
-        text-align: center;
-        .text {
-            margin-left: -17px;
-        }
-    }
 
     #header-container {
         #nav-container {
@@ -157,13 +120,16 @@
             margin-right: 0px;
             width: 100%;
 
+            a {
+              margin: 0px auto;
+              max-width: 300px;
+              display: block;
+              padding-left: 45px;
+            }
+
             .nav-row {
                 margin-left: 0px;
                 margin-right: 0px;
-
-                .logo-link-container {
-                    display: inline-block;
-                }
 
                 #mobile-nav-draw {
                     text-align: left;
