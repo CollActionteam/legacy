@@ -60,6 +60,11 @@
         width: 100%;
         display: inline-block;
         letter-spacing: 0.09em;
+
+        &.disable-commit {
+            pointer-events: none;
+            background-color: #75dabd;
+        }
     }
 
     .participating {

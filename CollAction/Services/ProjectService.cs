@@ -35,6 +35,12 @@ namespace CollAction.Services
 
         public async Task<bool> AddParticipant(string userId, int projectId)
         {
+            Project project = await GetProjectById(projectId);
+            if (project == null || !project.IsActive)
+            {
+                return false;
+            }
+
             var participant = new ProjectParticipant
             {
                 UserId = userId,
