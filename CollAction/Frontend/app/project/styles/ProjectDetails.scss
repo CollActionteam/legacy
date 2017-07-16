@@ -140,6 +140,7 @@
 
             ul {
                 padding-left: 20px;
+
                 li {
                     list-style: none;
                     display: inline-block;
@@ -245,6 +246,13 @@
 
     .bottom-take-part {
         padding-top: 50px;
+    }
+
+    .project-dates {
+        span {
+            font-size: 1em;
+            font-weight: normal;
+        }
     }
 }
 

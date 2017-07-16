@@ -119,6 +119,10 @@
                     <h3>Short description:</h3>
                     <p>@Html.DisplayFor(model => model.Project.Description)</p>
                 </div>
+                <div class="project-dates">
+                    <h3>Start date: <span>@Html.DisplayFor(model => model.Start)</span></h3>
+                    <h3>End date: <span>@Html.DisplayFor(model => model.End)</span></h3>
+                </div>
                 @if (Model.Project.Tags.Count > 0)
                 {
                     <div class="project-hashtags">
