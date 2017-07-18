@@ -2,3 +2,6 @@ CollAction is the world's first official crowdacting platform that aims to solve
 Copyright (C) 2017, Stichting CollAction
 
 ![build status](https://travis-ci.org/CollActionteam/CollAction.svg?branch=master)
+
+We're using BrowserStack for our front-end testing!
+https://bstacksupport.zendesk.com/attachments/token/gHp0kgBbzGuzQTCtIM5dvjMlv/?name=Logo.eps
