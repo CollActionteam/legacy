@@ -5,5 +5,4 @@ Copyright (C) 2017, Stichting CollAction
 
 We're using BrowserStack for our front-end testing!
 
-[Logo Kopie.pdf](https://github.com/CollActionteam/CollAction/files/1154520/Logo.Kopie.pdf)
-https://www.browserstack.com
+[https://www.browserstack.com](https://bstacksupport.zendesk.com/attachments/token/cpafMa8RUtwGNsKwZEUuzZLAI/?name=Logo-01.svg)
