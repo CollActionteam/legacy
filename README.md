@@ -4,4 +4,6 @@ Copyright (C) 2017, Stichting CollAction
 ![build status](https://travis-ci.org/CollActionteam/CollAction.svg?branch=master)
 
 We're using BrowserStack for our front-end testing!
-https://bstacksupport.zendesk.com/attachments/token/gHp0kgBbzGuzQTCtIM5dvjMlv/?name=Logo.eps
+
+[Logo Kopie.pdf](https://github.com/CollActionteam/CollAction/files/1154520/Logo.Kopie.pdf)
+https://www.browserstack.com
