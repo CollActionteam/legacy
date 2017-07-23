@@ -115,7 +115,7 @@ namespace CollAction.Migrations
 
                     b.Property<int>("Height");
 
-                    b.Property<string>("HtmlFilepath")
+                    b.Property<string>("Filepath")
                         .IsRequired()
                         .HasMaxLength(256);
 

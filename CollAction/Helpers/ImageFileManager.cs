@@ -122,13 +122,12 @@ namespace CollAction.Helpers
 
         private string GetImageFileAbsolutePath(ImageFile imageFile)
         {
-            string relativePath = TrimInitialHtmlFilePathDirectorySeparator(imageFile.HtmlFilepath);
-            relativePath = ConvertHtmlToPlatformSpecificFilepath(relativePath);
+            string relativePath = TrimInitialFilePathDirectorySeparator(imageFile.Filepath);
             string result = Path.Combine(_webRoot, relativePath);
             return result;
         }
 
-        private string TrimInitialHtmlFilePathDirectorySeparator(string filepath)
+        private string TrimInitialFilePathDirectorySeparator(string filepath)
         {
             return filepath.TrimStart(new char[] { '/' });
         }
@@ -147,7 +146,7 @@ namespace CollAction.Helpers
         {
             string webPath = GetWebPath(filename, extension);
             string absolutePath = Path.Combine(_webRoot, webPath);
-            string htmlFilepath = ConvertPlatformSpecificToHtmlFilepath(Path.DirectorySeparatorChar + webPath);
+            string filepath = '/' + webPath;
             using (var input = File.OpenRead(absolutePath))
             {
                 using (MemoryStream ms = new MemoryStream())
@@ -157,7 +156,7 @@ namespace CollAction.Helpers
                     return new ImageFile
                     {
                         Name = filename,
-                        HtmlFilepath = htmlFilepath,
+                        Filepath = filepath,
                         Format = extension,
                         Width = image.Width,
                         Height = image.Height,
@@ -166,16 +165,6 @@ namespace CollAction.Helpers
                     };
                 }
             }
-        }
-
-        private string ConvertPlatformSpecificToHtmlFilepath(String platformSpecificFilepath)
-        {
-            return Path.DirectorySeparatorChar == '\\' ? platformSpecificFilepath.Replace('\\', '/') : platformSpecificFilepath;
-        }
-
-        private string ConvertHtmlToPlatformSpecificFilepath(String htmlFilepath)
-        {
-            return Path.DirectorySeparatorChar == '\\' ? htmlFilepath.Replace('/', '\\') : htmlFilepath;
         }
 
         private string GetWebPath(string fileName, string extension)
