@@ -18,6 +18,8 @@ using Serilog.Events;
 using Serilog.Sinks.Slack;
 using Amazon;
 using System.Linq;
+using Microsoft.AspNetCore.Rewrite;
+using CollAction.RewriteHttps;
 
 namespace CollAction
 {
@@ -71,14 +73,6 @@ namespace CollAction
                     .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                     .AddDataAnnotationsLocalization();
 
-            /*
-            services.Configure<MvcOptions>(options =>
-            {
-                if (Environment.IsProduction())
-                    options.Filters.Add(new RequireHttpsAttribute());
-            });
-            */
-
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
@@ -106,6 +100,11 @@ namespace CollAction
                 new CultureInfo("en-US"),
                 new CultureInfo("nl-NL")
             };
+
+            if (env.IsProduction())
+            {
+                app.UseRewriter(new RewriteOptions().AddRewriteHttpsProxyRule());
+            }
             
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
