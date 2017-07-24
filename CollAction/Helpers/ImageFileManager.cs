@@ -33,7 +33,7 @@ namespace CollAction.Helpers
 
             if (ShouldUpdateImageFileDescription(outputImageFile, imageDescription))
             {
-                SetImageFileDescription(outputImageFile, imageDescription);
+                outputImageFile.Description = imageDescription ?? "";
             }
 
             await _context.SaveChangesAsync(); // Need to save to the database to get an ID for the new ImageFile.
@@ -170,11 +170,6 @@ namespace CollAction.Helpers
         private string GetWebPath(string fileName, string extension)
         {
             return Path.Combine(_webFolder, String.Format("{0}.{1}", fileName, extension));
-        }
-
-        private void SetImageFileDescription(ImageFile imageFile, string description)
-        {
-            imageFile.Description = description;
         }
     }
 }
