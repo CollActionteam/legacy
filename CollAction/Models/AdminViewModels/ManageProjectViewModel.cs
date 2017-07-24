@@ -65,8 +65,7 @@ namespace CollAction.Models.AdminViewModels
         [FileType("jpg", "jpeg", "gif", "png", "bmp")]
         [MaxImageDimensions(1366, 432)]
         public IFormFile BannerImageUpload { get; set; }
-
-        public bool HasBannerImageUpload { get { return BannerImageUpload != null && BannerImageUpload.Length > 0; } }
+        public ImageFile BannerImageFile { get; set; }
 
         [Display(Name = "Descriptive image description")]
         public string DescriptiveImageDescription { get; set; }
@@ -76,8 +75,7 @@ namespace CollAction.Models.AdminViewModels
         [FileType("jpg", "jpeg", "gif", "png", "bmp")]
         [MaxImageDimensions(777, 370)]
         public IFormFile DescriptiveImageUpload { get; set; }
-
-        public bool HasDescriptiveImageUpload { get { return DescriptiveImageUpload != null && DescriptiveImageUpload.Length > 0; } }
+        public ImageFile DescriptiveImageFile { get; set; }
 
         [Display(Name = "YouTube Video Link", Prompt = "Descriptive Video. e.g. http://www.youtube.com/watch?v=-wtIMTCHWuI")]
         [YouTubeLink]

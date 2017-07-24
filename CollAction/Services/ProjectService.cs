@@ -72,7 +72,7 @@ namespace CollAction.Services
                     CategoryName = p.Category.Name,
                     CategoryColorHex = p.Category.ColorHex,
                     LocationName = p.Location.Name,
-                    BannerImagePath = p.BannerImage == null ? $"/images/default_banners/{p.Category.Name}.jpg" : p.BannerImage.Filepath,
+                    BannerImagePath = p.BannerImage != null ? p.BannerImage.Filepath : $"/images/default_banners/{p.Category.Name}.jpg",
                     BannerImageDescription = p.BannerImage.Description,
                     Target = p.Target,
                     Participants = p.Participants.Count()

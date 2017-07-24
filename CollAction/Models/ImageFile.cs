@@ -16,7 +16,7 @@ namespace CollAction.Models
 
         [Required]
         [MaxLength(256)]
-        public string Filepath { get; set; }
+        public string Filepath { get; set; } // With the forward slash DirectorySeparatorChar.
 
         [Required]
         [MaxLength(16)]
