@@ -44,7 +44,7 @@ namespace CollAction.Models
         {
             get
             {
-                return Math.Min(Participants * 100 / Target, 100);
+                return Participants * 100 / Target;
             }
         }
 

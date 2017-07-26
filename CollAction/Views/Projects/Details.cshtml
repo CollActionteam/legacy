@@ -213,7 +213,7 @@
 </div>
 
 <script type="text/javascript">
-    const percentComplete = @Html.DisplayFor(model => model.Progress);
+    const percentComplete = Math.min(100, @Html.DisplayFor(model => model.Progress));
     window.onload = function () {
         const element = document.getElementById("project-pie-chart");
         window.CollAction.drawPieChart(percentComplete, element);
