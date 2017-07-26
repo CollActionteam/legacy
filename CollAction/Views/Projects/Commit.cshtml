@@ -15,6 +15,10 @@
             {
                 <h1>You're already participating!</h1>
             }
+            else if (!Model.IsActive)
+            {
+                <h1>This project is not open at this time.</h1>
+            }
             else
             {
                 @using (Html.BeginForm("Commit", "Projects", FormMethod.Post))

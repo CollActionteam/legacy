@@ -37,6 +37,26 @@ namespace CollAction.Models
                 return queryDictionary.Count == 1 && queryDictionary.TryGetValue("v", out youTubeId) ? youTubeId.ToString() : "";
             }
         }
+        
+        [DataType(DataType.Date)]
+        [Display(Name = "Start date")]
+        public DateTime Start 
+        {
+            get
+            {
+                return Project.End;
+            }
+        }
+
+        [DataType(DataType.Date)]
+        [Display(Name = "End date")]
+        public DateTime End 
+        {
+            get
+            {
+                return Project.End;
+            }
+        }
 
         public TimeSpan RemainingTime
         {
