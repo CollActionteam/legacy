@@ -35,6 +35,12 @@ namespace CollAction.Services
 
         public async Task<bool> AddParticipant(string userId, int projectId)
         {
+            Project project = await GetProjectById(projectId);
+            if (project == null || !project.IsActive)
+            {
+                return false;
+            }
+
             var participant = new ProjectParticipant
             {
                 UserId = userId,
@@ -72,7 +78,7 @@ namespace CollAction.Services
                     CategoryName = p.Category.Name,
                     CategoryColorHex = p.Category.ColorHex,
                     LocationName = p.Location.Name,
-                    BannerImagePath = p.BannerImage == null ? $"/images/default_banners/{p.Category.Name}.jpg" : p.BannerImage.Filepath,
+                    BannerImagePath = p.BannerImage != null ? p.BannerImage.Filepath : $"/images/default_banners/{p.Category.Name}.jpg",
                     BannerImageDescription = p.BannerImage.Description,
                     Target = p.Target,
                     Participants = p.Participants.Count()

@@ -25,6 +25,13 @@
         </div>
     </div> 
     <div class="container">
+        @{
+            string disableCommit = "";
+            if (!Model.Project.IsActive)
+            {
+                disableCommit = "disable-commit";
+            }
+        }
         <div class="row" id="project-details-row">
 
             <div class="col-md-6 col-md-push-6 col-xs-12">
@@ -79,7 +86,7 @@
                         }
                         else
                         {
-                            <a class="take-part-button" asp-action="Commit" asp-route-id="@Model.Project.Id">Take Part</a>
+                            <a class="take-part-button @disableCommit" asp-action="Commit" asp-route-id="@Model.Project.Id">Take Part</a>
                         }
                     }
                 </div>
@@ -118,6 +125,10 @@
                 <div class="project-short-description">
                     <h3>Short description:</h3>
                     <p>@Html.DisplayFor(model => model.Project.Description)</p>
+                </div>
+                <div class="project-dates">
+                    <h3>Start date: <span>@Html.DisplayFor(model => model.Start)</span></h3>
+                    <h3>End date: <span>@Html.DisplayFor(model => model.End)</span></h3>
                 </div>
                 @if (Model.Project.Tags.Count > 0)
                 {
@@ -195,7 +206,7 @@
                     }
                     else
                     {
-                        <a class="take-part-button" asp-action="Commit" asp-route-id="@Model.Project.Id">Take Part</a>
+                        <a class="take-part-button @disableCommit" asp-action="Commit" asp-route-id="@Model.Project.Id">Take Part</a>
                     }
                 }
             </div>
@@ -213,7 +224,7 @@
 </div>
 
 <script type="text/javascript">
-    const percentComplete = @Html.DisplayFor(model => model.Progress);
+    const percentComplete = Math.min(100, @Html.DisplayFor(model => model.Progress));
     window.onload = function () {
         const element = document.getElementById("project-pie-chart");
         window.CollAction.drawPieChart(percentComplete, element);

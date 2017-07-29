@@ -112,7 +112,7 @@ class ShareButtons extends React.Component<IShareButtonsProps, IShareButtonsStat
 
 const FullShareButtons = () => {
   return (
-    <div className="row">
+    <div className="container">
       <div className="col-xs-12 col-md-8 col-md-offset-2 share-container">
         <h3 className="share-title">Spread it further</h3>
         <div className="row">

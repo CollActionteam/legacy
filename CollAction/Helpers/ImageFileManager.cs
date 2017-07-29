@@ -21,39 +21,120 @@ namespace CollAction.Helpers
             _webFolder = webFolder;
         }
 
-        public async Task<ImageFile> UploadFormFile(IFormFile formFile, string fileName, string description)
+        public async Task<ImageFile> CreateOrReplaceImageFileIfNeeded(ImageFile imageFile, IFormFile fileToUpload, string imageDescription)
         {
-            if (formFile == null) { return null; }
-            string extension = Path.GetExtension(formFile.FileName).ToLower().Substring(1); // Strip the "."
-            await SaveFileToFileSystem(formFile, fileName, extension);
-            var imageModel = await CreateImageFileModel(fileName, extension, description);
-            _context.ImageFiles.Add(imageModel);
-            await _context.SaveChangesAsync(); // need to save to the database to get an ID
-            return imageModel;
+            ImageFile outputImageFile = imageFile;
+
+            if (ShouldCreateOrReplaceImageFile(imageFile, fileToUpload))
+            {
+                DeleteImageFileIfExists(imageFile);
+                outputImageFile = await CreateImageFileWithUniqueName(fileToUpload);
+            }
+
+            if (ShouldUpdateImageFileDescription(outputImageFile, imageDescription))
+            {
+                outputImageFile.Description = imageDescription ?? "";
+            }
+
+            await _context.SaveChangesAsync(); // Need to save to the database to get an ID for the new ImageFile.
+
+            return outputImageFile;
         }
 
-        private async Task SaveFileToFileSystem(IFormFile formFile, string fileName, string extension)
+        private bool ShouldCreateOrReplaceImageFile(ImageFile imageFile, IFormFile formFileToUpload)
         {
-            var fullPath = Path.Combine(_webRoot, GetWebPath(fileName, extension));
-            Directory.CreateDirectory(Path.Combine(_webRoot, _webFolder));
-            using (var output = new FileStream(fullPath, FileMode.Create))
+            return ShouldCreateImageFile(imageFile, formFileToUpload) || ShouldReplaceImageFile(imageFile, formFileToUpload);
+        }
+
+        private bool ShouldCreateImageFile(ImageFile imageFile, IFormFile formFileToUpload)
+        {
+            return imageFile == null && formFileToUpload != null;
+        }
+
+        private bool ShouldReplaceImageFile(ImageFile imageFile, IFormFile formFileToUpload)
+        {
+            return imageFile != null && formFileToUpload != null;
+        }
+
+        private bool ShouldUpdateImageFileDescription(ImageFile imageFile, string imageDescription)
+        {
+            string nonNullImageDescription = imageDescription != null ? imageDescription : "";
+            return imageFile != null && imageFile.Description != nonNullImageDescription;
+        }
+
+        private async Task<ImageFile> CreateImageFileWithUniqueName(IFormFile formFileToUpload)
+        {
+            string filename = GetUniqueFileName();
+            string extension = GetFormFileExtension(formFileToUpload);
+            await SaveFormFileToFileSystem(formFileToUpload, filename, extension);
+            ImageFile imageFile = await CreateImageFile(filename, extension);
+            SaveImageFileToModel(imageFile);
+            return imageFile;
+        }
+
+        private string GetUniqueFileName()
+        {
+            return Guid.NewGuid().ToString();
+        }
+
+        private string GetFormFileExtension(IFormFile formFile)
+        {
+            return Path.GetExtension(formFile.FileName).ToLower().Substring(1); // Strip the "."
+        }
+
+        private async Task<ImageFile> ReplaceImageFile(ImageFile imageFile, IFormFile formFileToUpload)
+        {
+            DeleteImageFileIfExists(imageFile);
+            return await CreateImageFileWithUniqueName(formFileToUpload);
+        }
+
+        private void DeleteImageFileIfExists(ImageFile imageFile)
+        {
+            if (imageFile == null)
+            {
+                return;
+            }
+
+            DeleteImageFileFromFileSystem(imageFile);
+            DeleteImageFileFromModel(imageFile);
+        }
+
+        private async Task SaveFormFileToFileSystem(IFormFile formFile, string filename, string extension)
+        {
+            var webPath = GetWebPath(filename, extension);
+            var absolutePath = Path.Combine(_webRoot, webPath);
+            Directory.CreateDirectory(Path.GetDirectoryName(absolutePath));
+            using (var output = new FileStream(absolutePath, FileMode.Create))
             {
                 await formFile.CopyToAsync(output);
             }
         }
 
-        public void DeleteImageFile(ImageFile imageFile)
-        {
-            if (imageFile == null) { return; }
-            DeleteImageFileFromFileSystem(imageFile);
-            DeleteImageFileFromModel(imageFile);
-        }
-
         private void DeleteImageFileFromFileSystem(ImageFile imageFile)
         {
-            var fullPath = Path.Combine(_webRoot, imageFile.Filepath.TrimStart(new char[] { '\\' }));
-            var fileInfo = new FileInfo(fullPath);
-            if (fileInfo != null) { fileInfo.Delete(); }
+            var absolutePath = GetImageFileAbsolutePath(imageFile);
+            var fileInfo = new FileInfo(absolutePath);
+            if (fileInfo != null)
+            {
+                fileInfo.Delete();
+            }
+        }
+
+        private string GetImageFileAbsolutePath(ImageFile imageFile)
+        {
+            string relativePath = TrimInitialFilePathDirectorySeparator(imageFile.Filepath);
+            string result = Path.Combine(_webRoot, relativePath);
+            return result;
+        }
+
+        private string TrimInitialFilePathDirectorySeparator(string filepath)
+        {
+            return filepath.TrimStart(new char[] { '/' });
+        }
+
+        private void SaveImageFileToModel(ImageFile imageFile)
+        {
+            _context.ImageFiles.Add(imageFile);
         }
 
         private void DeleteImageFileFromModel(ImageFile imageFile)
@@ -61,11 +142,12 @@ namespace CollAction.Helpers
             _context.ImageFiles.Remove(imageFile);
         }
 
-        private async Task<ImageFile> CreateImageFileModel(string fileName, string extension, string description)
+        private async Task<ImageFile> CreateImageFile(string filename, string extension)
         {
-            var webPath = GetWebPath(fileName, extension);
-            var fullPath = Path.Combine(_webRoot, webPath);
-            using (var input = File.OpenRead(fullPath))
+            string webPath = GetWebPath(filename, extension);
+            string absolutePath = Path.Combine(_webRoot, webPath);
+            string filepath = '/' + webPath;
+            using (var input = File.OpenRead(absolutePath))
             {
                 using (MemoryStream ms = new MemoryStream())
                 {
@@ -73,13 +155,13 @@ namespace CollAction.Helpers
                     Image image = Image.Load(ms.ToArray());
                     return new ImageFile
                     {
-                        Name = fileName,
-                        Filepath = "/" + webPath,
+                        Name = filename,
+                        Filepath = filepath,
                         Format = extension,
                         Width = image.Width,
                         Height = image.Height,
                         Date = DateTime.UtcNow,
-                        Description = description ?? string.Empty
+                        Description = string.Empty
                     };
                 }
             }
