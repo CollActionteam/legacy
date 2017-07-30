@@ -32,6 +32,9 @@ npm run build</PreBuildEvent>
     <Content Include="wwwroot\images\team\Maria Gomez.png" />
     <Content Include="wwwroot\images\team\Martijn de Haan.png" />
     <Content Include="wwwroot\images\team\Melchior Jong.png" />
+    <Content Include="wwwroot\images\team\Rolien Sandelowsky.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
     <Content Include="wwwroot\images\team\Mina Yao.jpg">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>

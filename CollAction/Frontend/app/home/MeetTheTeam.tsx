@@ -108,6 +108,10 @@ const teamMembers: ITeamMember[] = [
     role: "Developer",
   },
   {
+      name: "Rolien Sandelowsky",
+      role: "",
+  },
+  {
     name: "Ron van den Akker",
     role: "",
   },
