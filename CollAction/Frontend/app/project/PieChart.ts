@@ -1,6 +1,7 @@
 import registerGlobal from "../global/registerGlobal";
 
 function drawPieChart (percentComplete: number, canvas: HTMLCanvasElement): void {
+  console.log('hit');
   var ctx = canvas.getContext("2d");
   var lastend = 4.71239;
   var data = [percentComplete, 100 - percentComplete ]; // If you add more data values make sure you add more colors

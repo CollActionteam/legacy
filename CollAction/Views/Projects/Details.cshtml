@@ -225,8 +225,15 @@
 
 <script type="text/javascript">
     const percentComplete = Math.min(100, @Html.DisplayFor(model => model.Progress));
-    window.onload = function () {
+    function initDrawPieChart() {
+        console.log('on load called');
         const element = document.getElementById("project-pie-chart");
         window.CollAction.drawPieChart(percentComplete, element);
     };
+
+    if(window.addEventListener){
+        window.addEventListener('load', initDrawPieChart);
+    } else {
+        window.attachEvent('onload', initDrawPieChart);
+    }
 </script>
