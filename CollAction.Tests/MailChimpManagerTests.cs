@@ -16,7 +16,6 @@ namespace CollAction.Tests
             IConfiguration configuration = new ConfigurationBuilder().AddUserSecrets<Startup>().Build();
             newsletterTestListId = configuration["MailChimpTestListId"];
             MailChimpManager manager = new MailChimpManager(configuration["MailChimpKey"]);
-            newsletterListId = configuration["MailChimpTestListId"];
             return manager;
         }
 
