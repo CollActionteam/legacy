@@ -44,7 +44,7 @@ namespace CollAction.Models
         {
             get
             {
-                return Project.End;
+                return Project.Start;
             }
         }
 
