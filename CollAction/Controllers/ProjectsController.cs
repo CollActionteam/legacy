@@ -457,6 +457,7 @@ namespace CollAction.Controllers
                     .Categories
                     .Where(c => c.Name != "Other")
                     .Select(c => new CategoryViewModel { Id = c.Id, Name = c.Name })
+                    .OrderBy(c => c.Name)
                     .ToListAsync()));
 
         [HttpGet]
