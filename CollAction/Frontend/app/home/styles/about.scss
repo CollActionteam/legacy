@@ -30,7 +30,6 @@
       }
     }
 
-
     a {
       color: #666;
       cursor: hand;
@@ -61,6 +60,13 @@
     padding: 50px 0px;
   }
 
+  a.fragment {
+    display: block;
+    position: relative;
+    top: -85px;
+    visibility: hidden;
+  }
+
   #about-us {
     background-color: $coll-action-green;
     color: #fff;
@@ -72,7 +78,6 @@
   }
 
   #meet-the-team {
-
     #meet-the-team-widget {
       text-align: center;
     }
