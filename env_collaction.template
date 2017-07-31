@@ -12,3 +12,4 @@ AdminEmail=your@email
 ImportLocationData=0
 MailChimpKey=
 SlackHook=
+HtstDuration=30.00:00

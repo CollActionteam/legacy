@@ -20,6 +20,8 @@ using Amazon;
 using System.Linq;
 using Microsoft.AspNetCore.Rewrite;
 using CollAction.RewriteHttps;
+using Joonasw.AspNetCore.SecurityHeaders;
+using System;
 
 namespace CollAction
 {
@@ -104,6 +106,7 @@ namespace CollAction
             if (env.IsProduction())
             {
                 app.UseRewriter(new RewriteOptions().AddRewriteHttpsProxyRule());
+                app.UseHsts(new HstsOptions(TimeSpan.Parse(Configuration["HtstDuration"], CultureInfo.InvariantCulture)));
             }
             
             app.UseRequestLocalization(new RequestLocalizationOptions
