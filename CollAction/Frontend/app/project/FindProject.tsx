@@ -2,7 +2,6 @@ import { ProjectFilter, IProjectFilter } from "./ProjectFilter";
 import ProjectList from "./ProjectList";
 import * as React from "react";
 import { IProject } from "./ProjectList";
-import fetch from "whatwg-fetch";
 
 interface IFindProjectProps {
   controller: boolean;
@@ -37,11 +36,11 @@ export default class FindProject extends React.Component<IFindProjectProps, IFin
 
     // Fetch projects with out filters set
     const getUrl: () => string = () => {
-      if (projectFilter) {
+      if(projectFilter) {
         return `/api/projects/find?categoryId=${projectFilter.categoryId}&statusId=${projectFilter.statusId}`;
       }
       return "/api/projects/find";
-    };
+    }
 
     try {
       const searchProjectRequest: Request = new Request(getUrl());
