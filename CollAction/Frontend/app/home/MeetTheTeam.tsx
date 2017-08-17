@@ -15,7 +15,7 @@ interface IMeetTheTeamState {
 }
 
 const TeamMemberThumb = ({ teamMember }) => {
-  const imageSrc = `/images/team/${teamMember.name}.jpg`;
+  const imageSrc = `/images/team/${teamMember.name}.png`;
   return (
     <div className="team-member">
       <div className="team-member-image-container">
@@ -72,10 +72,6 @@ export default class MeetTheTeam extends React.Component<IMeetTheTeamProps, IMee
 
 const teamMembers: ITeamMember[] = [
   {
-    name: "Brankele Frank",
-    role: "",
-  },
-  {
     name: "Daniela Becker",
     role: "",
   },
@@ -88,7 +84,7 @@ const teamMembers: ITeamMember[] = [
     role: "",
   },
   {
-      name: "Leonie Bewerkt",
+      name: "Leonie Blom",
       role: "",
   },
   {
@@ -112,6 +108,10 @@ const teamMembers: ITeamMember[] = [
     role: "Developer",
   },
   {
+      name: "Rolien Sandelowsky",
+      role: "",
+  },
+  {
     name: "Ron van den Akker",
     role: "",
   },
@@ -128,9 +128,13 @@ const teamMembers: ITeamMember[] = [
     role: "Developer",
   },
   {
-    name: "Vivian Vos",
-    role: "",
+      name: "Vivian Vos",
+      role: "",
   },
+  {
+      name: "Brian Russell",
+      role: "",
+  }
 ];
 
 renderComponentIf(
