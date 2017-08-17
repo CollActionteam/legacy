@@ -14,7 +14,8 @@ window["jQuery"] = jQuery;
 // http://stackoverflow.com/a/34015469/988941 
 injectTapEventPlugin();
 
-// Only display once the page has loaded
-window.onload = () => {
+function displayBodyOnLoad() {
   document.getElementById("body").style.display = "block";
 }
+
+window.addEventListener("load", displayBodyOnLoad);
