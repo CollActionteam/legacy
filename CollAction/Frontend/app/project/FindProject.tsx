@@ -2,7 +2,6 @@ import { ProjectFilter, IProjectFilter } from "./ProjectFilter";
 import ProjectList from "./ProjectList";
 import * as React from "react";
 import { IProject } from "./ProjectList";
-import fetch from "whatwg-fetch";
 
 interface IFindProjectProps {
   controller: boolean;
