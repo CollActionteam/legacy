@@ -4,6 +4,8 @@ import "./global/index";
 import "./account/index";
 import "./admin/index";
 
+import "whatwg-fetch";
+
 import * as jQuery from "jquery";
 import * as injectTapEventPlugin from "react-tap-event-plugin";
 
