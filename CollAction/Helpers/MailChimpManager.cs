@@ -8,11 +8,36 @@ using Newtonsoft.Json;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net;
+using System.IO;
 
 namespace CollAction.Helpers
 {
     public class MailChimpManager
     {
+        private class MailChimpErrorResponse
+        {
+            public string type { get; set; }
+            public string title { get; set; }
+            public int status { get; set; }
+            public string detail { get; set; }
+            public string instance { get; set; }
+            public string[] errors { get; set; }
+
+            public override string ToString()
+            {
+                StringBuilder errorResponse = new StringBuilder();
+                errorResponse.AppendFormat("ERROR RESPONSE...\r", type);
+                errorResponse.AppendFormat("type: {0}\r", type);
+                errorResponse.AppendFormat("title: {0}\r", title);
+                errorResponse.AppendFormat("status: {0}\r", status);
+                errorResponse.AppendFormat("detail: {0}\r", detail);
+                errorResponse.AppendFormat("instance: {0}\r", instance);
+                errorResponse.AppendFormat("errors: {0}\r", string.Join(", ", errors ?? new string[0]));
+                errorResponse.AppendFormat("\r");
+                return errorResponse.ToString();
+            }
+        }
+
         public enum SubscriptionStatus { NotFound, Pending, Subscribed, Unknown };
 
         public struct ListMemberInfo { public string status; }
@@ -35,11 +60,15 @@ namespace CollAction.Helpers
                 using (HttpResponseMessage response = await client.GetAsync(GetListMemberUri(listId, email) + "?fields=status"))
                 {
 
-                    if (response.StatusCode == HttpStatusCode.NotFound) { return SubscriptionStatus.NotFound; }
+                    if (response.StatusCode == HttpStatusCode.NotFound)
+                    {
+                        return SubscriptionStatus.NotFound;
+                    }
 
                     if (response.StatusCode != HttpStatusCode.OK)
                     {
-                        throw new Exception("Failed to add or update MailChimp list member. Status code: " + response.StatusCode);
+                        string errorResponse = await GetMailChimpErrorResponse(response);
+                        throw new Exception("Failed to get MailChimp list member status. Status code: " + response.StatusCode + " -> \r" + errorResponse);
                     }
 
                     ListMemberInfo info = JsonConvert.DeserializeObject<ListMemberInfo>(await response.Content.ReadAsStringAsync());
@@ -63,7 +92,8 @@ namespace CollAction.Helpers
 
                     if (response.StatusCode != HttpStatusCode.OK)
                     {
-                        throw new Exception("Failed to add or update MailChimp list member. Status code: " + response.StatusCode);
+                        string errorResponse = await GetMailChimpErrorResponse(response);
+                        throw new Exception("Failed to add or update MailChimp list member. Status code: " + response.StatusCode + " -> \r" + errorResponse);
                     }
                 }
             }
@@ -78,7 +108,8 @@ namespace CollAction.Helpers
 
                     if (response.StatusCode != HttpStatusCode.NoContent && response.StatusCode != HttpStatusCode.NotFound)
                     {
-                        throw new Exception("Failed to delete MailChimp list member. Status code: " + response.StatusCode);
+                        string errorResponse = await GetMailChimpErrorResponse(response);
+                        throw new Exception("Failed to delete MailChimp list member. Status code: " + response.StatusCode + " -> \r" + errorResponse);
                     }
                 }
             }
@@ -119,6 +150,11 @@ namespace CollAction.Helpers
                 }
                 return builder.ToString();
             }
+        }
+
+        private async Task<string> GetMailChimpErrorResponse(HttpResponseMessage response)
+        {
+            return JsonConvert.DeserializeObject<MailChimpErrorResponse>(await response.Content.ReadAsStringAsync()).ToString();
         }
     }
 }
