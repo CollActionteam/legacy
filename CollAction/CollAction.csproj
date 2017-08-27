@@ -7,8 +7,6 @@
     <DisableImplicitFrameworkReference>true</DisableImplicitFrameworkReference>  
     <UserSecretsId>aspnet-CollAction-29a5d7b8-3530-4482-9ed6-572bd6c178fa</UserSecretsId>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
-    <PreBuildEvent>npm install &amp;&amp; ^
-npm run build</PreBuildEvent>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -20,7 +18,7 @@ npm run build</PreBuildEvent>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="wwwroot\images\team\Brian Russell.png" />
+    <!--Content Include="wwwroot\images\team\Brian Russell.png" />
     <Content Include="wwwroot\images\team\Daniela Becker.png" />
     <Content Include="wwwroot\images\team\Edoardo Felici.png" />
     <Content Include="wwwroot\images\team\Joost Riphagen.png" />
@@ -36,10 +34,8 @@ npm run build</PreBuildEvent>
     <Content Include="wwwroot\images\team\Spencer Heijnen.png" />
     <Content Include="wwwroot\images\team\Stewart Matheson.png" />
     <Content Include="wwwroot\images\team\Tim Stokman.png" />
-    <Content Include="wwwroot\images\team\Vivian Vos.png" />
-  </ItemGroup>
+    <Content Include="wwwroot\images\team\Vivian Vos.png" /-->
 
-  <ItemGroup>
     <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.1.15" />
     <PackageReference Include="ImageSharp" Version="1.0.0-alpha7-00031" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />

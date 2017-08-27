@@ -19,9 +19,11 @@ services:
       - "5000:5000"
     volumes:
       - images:/app/wwwroot/usercontent
+      - "./CollAction:/app"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Release
+      - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://*:5000
+    command: run
 
   db:
     image: postgres

@@ -1,7 +1,8 @@
-﻿FROM microsoft/aspnetcore:1.1.1
+﻿FROM microsoft/dotnet:1.1.2-sdk
 ARG source
+COPY . /app
 WORKDIR /app
-EXPOSE 80
-COPY ${source:-bin/netcoreapp1.1/publish} .
+RUN dotnet restore
 VOLUME ["/app/wwwroot/usercontent/"]
-ENTRYPOINT ["dotnet", "CollAction.dll"]
+ENTRYPOINT [ "dotnet" ]
+CMD [ "CollAction.dll" ]
