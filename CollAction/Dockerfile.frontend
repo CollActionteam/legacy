@@ -1,0 +1,5 @@
+FROM node
+COPY . /app
+WORKDIR /app
+ENTRYPOINT [ "npm" ]
+CMD [ "run", "watch" ]
