@@ -93,7 +93,10 @@ namespace CollAction.Helpers
                     if (response.StatusCode != HttpStatusCode.OK)
                     {
                         string errorResponse = await GetMailChimpErrorResponse(response);
-                        throw new Exception("Failed to add or update MailChimp list member. Status code: " + response.StatusCode + " -> \r" + errorResponse);
+                        string httpRequestHeader = client.DefaultRequestHeaders.ToString();
+                        string httpRequestBaseAddress = client.BaseAddress.ToString();
+                        string diagnostics = string.Format("{0}httpRequestHeader: {1}\rhttpRequestBaseAddress:{2}", errorResponse, httpRequestHeader, httpRequestBaseAddress);
+                        throw new Exception("Failed to add or update MailChimp list member. Status code: " + response.StatusCode + " -> \r" + diagnostics);
                     }
                 }
             }
