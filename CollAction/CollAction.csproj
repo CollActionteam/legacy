@@ -14,25 +14,8 @@
     <OutputPath>bin\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <!--Content Include="wwwroot\images\team\Brian Russell.png" />
-    <Content Include="wwwroot\images\team\Daniela Becker.png" />
-    <Content Include="wwwroot\images\team\Edoardo Felici.png" />
-    <Content Include="wwwroot\images\team\Joost Riphagen.png" />
-    <Content Include="wwwroot\images\team\Leonie Blom.png" />
-    <Content Include="wwwroot\images\team\Marc Beermann.png" />
-    <Content Include="wwwroot\images\team\Maria Gomez.png" />
-    <Content Include="wwwroot\images\team\Martijn de Haan.png" />
-    <Content Include="wwwroot\images\team\Melchior Jong.png" />
-    <Content Include="wwwroot\images\team\Rolien Sandelowsky.png">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="wwwroot\images\team\Ron van den Akker.png" />
-    <Content Include="wwwroot\images\team\Spencer Heijnen.png" />
-    <Content Include="wwwroot\images\team\Stewart Matheson.png" />
-    <Content Include="wwwroot\images\team\Tim Stokman.png" />
-    <Content Include="wwwroot\images\team\Vivian Vos.png" /-->
-    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.1.15" />
-    <PackageReference Include="ImageSharp" Version="1.0.0-alpha7-00031" />
+    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.2" />
+    <PackageReference Include="ImageSharp" Version="1.0.0-alpha9-00194" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="1.1.2" />
