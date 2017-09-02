@@ -29,10 +29,8 @@ namespace CollAction.ValidationAttributes
                     imageStream.CopyTo(ms);
                     try
                     {
-                        using (Image image = Image.Load(ms.ToArray()))
-                        {
-                            return image.Width <= _maxWidth && image.Height <= _maxHeight;
-                        }
+                        Image<Rgba32> image = Image.Load(ms.ToArray());
+                        return image.Width <= _maxWidth && image.Height <= _maxHeight;
                     }
                     catch (NotSupportedException)
                     {

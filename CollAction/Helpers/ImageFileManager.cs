@@ -152,7 +152,7 @@ namespace CollAction.Helpers
                 using (MemoryStream ms = new MemoryStream())
                 {
                     await input.CopyToAsync(ms);
-                    Image image = Image.Load(ms.ToArray());
+                    Image<Rgba32> image = Image.Load(ms.ToArray());
                     return new ImageFile
                     {
                         Name = filename,
