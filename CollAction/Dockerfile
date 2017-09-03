@@ -2,9 +2,9 @@
 ARG source
 COPY . /app
 RUN mkdir -p /root/.config/NuGet
-COPY ./NuGet.Config /root/.config/NuGet/NuGet.Config
 WORKDIR /app
-RUN dotnet restore
+RUN dotnet restore --configfile NuGet.Config
+RUN dotnet build
 VOLUME ["/app/wwwroot/usercontent/"]
 ENTRYPOINT [ "dotnet" ]
 CMD [ "CollAction.dll" ]
