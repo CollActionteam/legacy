@@ -40,16 +40,18 @@ namespace CollAction.Models
         
         [DataType(DataType.Date)]
         [Display(Name = "Start date")]
+        [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
         public DateTime Start 
         {
             get
             {
-                return Project.End;
+                return Project.Start;
             }
         }
 
         [DataType(DataType.Date)]
         [Display(Name = "End date")]
+        [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
         public DateTime End 
         {
             get

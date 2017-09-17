@@ -4,6 +4,8 @@ import "./global/index";
 import "./account/index";
 import "./admin/index";
 
+import "whatwg-fetch";
+
 import * as jQuery from "jquery";
 import * as injectTapEventPlugin from "react-tap-event-plugin";
 
@@ -14,7 +16,8 @@ window["jQuery"] = jQuery;
 // http://stackoverflow.com/a/34015469/988941 
 injectTapEventPlugin();
 
-// Only display once the page has loaded
-window.onload = () => {
+function displayBodyOnLoad() {
   document.getElementById("body").style.display = "block";
 }
+
+window.addEventListener("load", displayBodyOnLoad);

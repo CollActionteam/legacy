@@ -4,9 +4,10 @@
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8+wp8+wpa81;</PackageTargetFallback>
-    <DisableImplicitFrameworkReference>true</DisableImplicitFrameworkReference>  
+    <DisableImplicitFrameworkReference>true</DisableImplicitFrameworkReference>
     <UserSecretsId>aspnet-CollAction-29a5d7b8-3530-4482-9ed6-572bd6c178fa</UserSecretsId>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
     <PreBuildEvent>npm install &amp;&amp; ^
 npm run build</PreBuildEvent>
   </PropertyGroup>
@@ -20,35 +21,9 @@ npm run build</PreBuildEvent>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="wwwroot\images\team\Brian Russell.png" />
-    <Content Include="wwwroot\images\team\Daniela Becker.png" />
-    <Content Include="wwwroot\images\team\Edoardo Felici.png" />
-    <Content Include="wwwroot\images\team\Joost Riphagen.png" />
-    <Content Include="wwwroot\images\team\Leonie Blom.png" />
-    <Content Include="wwwroot\images\team\Marc Beermann.jpg">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="wwwroot\images\team\Marc Beermann.png" />
-    <Content Include="wwwroot\images\team\Maria Gomez.png" />
-    <Content Include="wwwroot\images\team\Martijn de Haan.png" />
-    <Content Include="wwwroot\images\team\Melchior Jong.png" />
-    <Content Include="wwwroot\images\team\Rolien Sandelowsky.png">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="wwwroot\images\team\Mina Yao.jpg">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="wwwroot\images\team\Ron van den Akker.png" />
-    <Content Include="wwwroot\images\team\Spencer Heijnen.png" />
-    <Content Include="wwwroot\images\team\Stewart Matheson.png" />
-    <Content Include="wwwroot\images\team\Tim Stokman.png" />
-    <Content Include="wwwroot\images\team\Vivian Vos.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.1.15" />
-    <PackageReference Include="ImageSharp" Version="1.0.0-alpha7-00031" />
     <PackageReference Include="Joonasw.AspNetCore.SecurityHeaders" Version="1.1.2" />
+    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.2" />
+    <PackageReference Include="ImageSharp" Version="1.0.0-alpha9-00194" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="1.1.2" />
@@ -70,14 +45,12 @@ npm run build</PreBuildEvent>
     <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.1-dev-00767" />
     <PackageReference Include="Serilog.Sinks.Slack" Version="1.2.56" />
     <PackageReference Include="Serilog.Sinks.Trace" Version="2.1.0" />
+    <PackageReference Update="Microsoft.NETCore.App" Version="1.1.2" />
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.0.0-msbuild3-final" />
     <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="1.0.0-msbuild3-final" />
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.0-msbuild3-final" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Update="Microsoft.NETCore.App" Version="1.1.0" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="wwwroot\js\" />
