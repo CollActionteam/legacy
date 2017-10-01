@@ -41,6 +41,17 @@ namespace CollAction.Helpers
             return outputImageFile;
         }
 
+        public void DeleteImageFileIfExists(ImageFile imageFile)
+        {
+            if (imageFile == null)
+            {
+                return;
+            }
+
+            DeleteImageFileFromFileSystem(imageFile);
+            DeleteImageFileFromModel(imageFile);
+        }
+
         private bool ShouldCreateOrReplaceImageFile(ImageFile imageFile, IFormFile formFileToUpload)
         {
             return ShouldCreateImageFile(imageFile, formFileToUpload) || ShouldReplaceImageFile(imageFile, formFileToUpload);
@@ -86,17 +97,6 @@ namespace CollAction.Helpers
         {
             DeleteImageFileIfExists(imageFile);
             return await CreateImageFileWithUniqueName(formFileToUpload);
-        }
-
-        private void DeleteImageFileIfExists(ImageFile imageFile)
-        {
-            if (imageFile == null)
-            {
-                return;
-            }
-
-            DeleteImageFileFromFileSystem(imageFile);
-            DeleteImageFileFromModel(imageFile);
         }
 
         private async Task SaveFormFileToFileSystem(IFormFile formFile, string filename, string extension)
