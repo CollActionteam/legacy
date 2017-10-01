@@ -108,7 +108,7 @@ namespace CollAction.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteDescriptiveImage(int id)
         {
-            var fileManager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "bannerimages"));
+            var fileManager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "descriptiveimages"));
             Project project = await _context.Projects.Include(p => p.DescriptiveImage).FirstAsync(p => p.Id == id);
             fileManager.DeleteImageFileIfExists(project.DescriptiveImage);
             project.DescriptiveImageFileId = null;
