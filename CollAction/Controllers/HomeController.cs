@@ -53,7 +53,11 @@ namespace CollAction.Controllers
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("user-agent: *");
             sb.Append("Sitemap: https://");
-            sb.AppendLine(Url.ActionContext.HttpContext.Request.Host + Url.Action("Sitemap"));
+            sb.Append(Url.ActionContext.HttpContext.Request.Host);
+            sb.AppendLine(Url.Action("Sitemap"));
+            sb.AppendLine("Disallow: /Admin/");
+            sb.AppendLine("Disallow: /Account/");
+            sb.AppendLine("Disallow: /Manage/");
             return Content(sb.ToString(), "text/plain", Encoding.UTF8);
         }
 

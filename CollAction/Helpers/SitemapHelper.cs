@@ -14,7 +14,7 @@ namespace CollAction.Helpers
     {
         private static XNamespace _urlsetNamespace = "http://www.sitemaps.org/schemas/sitemap/0.9";
         private static XNamespace _imageNamespace = "http://www.google.com/schemas/sitemap-image/1.1";
-        private static XNamespace _videoNamespace = "http://www.google.com/schemas/sitemap-video/1.1";
+        private const string _protocol = "https://";
         private readonly ApplicationDbContext _context;
         private readonly IUrlHelper _urlHelper;
 
@@ -29,11 +29,11 @@ namespace CollAction.Helpers
             HostString host = _urlHelper.ActionContext.HttpContext.Request.Host;
             object[] homepageUrls = new[]
             {
-                new XElement(_urlsetNamespace + "url", new XElement(_urlsetNamespace + "loc", "https://" + host + _urlHelper.Action("Index", "Home"))),
-                new XElement(_urlsetNamespace + "url", new XElement(_urlsetNamespace + "loc", "https://" + host + _urlHelper.Action("About", "Home"))),
-                new XElement(_urlsetNamespace + "url", new XElement(_urlsetNamespace + "loc", "https://" + host + _urlHelper.Action("Contact", "Home"))),
-                new XElement(_urlsetNamespace + "url", new XElement(_urlsetNamespace + "loc", "https://" + host + _urlHelper.Action("FAQ", "Home"))),
-                new XElement(_urlsetNamespace + "url", new XElement(_urlsetNamespace + "loc", "https://" + host + _urlHelper.Action("Find", "Projects")))
+                new XElement(_urlsetNamespace + "url", new XElement(_urlsetNamespace + "loc", _protocol + host + _urlHelper.Action("Index", "Home"))),
+                new XElement(_urlsetNamespace + "url", new XElement(_urlsetNamespace + "loc", _protocol + host + _urlHelper.Action("About", "Home"))),
+                new XElement(_urlsetNamespace + "url", new XElement(_urlsetNamespace + "loc", _protocol + host + _urlHelper.Action("Contact", "Home"))),
+                new XElement(_urlsetNamespace + "url", new XElement(_urlsetNamespace + "loc", _protocol + host + _urlHelper.Action("FAQ", "Home"))),
+                new XElement(_urlsetNamespace + "url", new XElement(_urlsetNamespace + "loc", _protocol + host + _urlHelper.Action("Find", "Projects")))
             };
 
             object[] projectUrls = await _context.Projects
@@ -45,7 +45,6 @@ namespace CollAction.Helpers
                 .Concat(projectUrls)
                 .Concat(new[]
                 {
-                    new XAttribute(XNamespace.Xmlns + "video", _videoNamespace),
                     new XAttribute(XNamespace.Xmlns + "image", _imageNamespace)
                 }).ToArray();
 
@@ -59,13 +58,13 @@ namespace CollAction.Helpers
             HostString host = _urlHelper.ActionContext.HttpContext.Request.Host;
             List<XElement> projectElements = new List<XElement>(3)
             {
-                new XElement(_urlsetNamespace + "loc", "https://" + host + _urlHelper.Action("Details", "Projects", new { id = project.Id }))
+                new XElement(_urlsetNamespace + "loc", _protocol + host + _urlHelper.Action("Details", "Projects", new { id = project.Id }))
             };
             if (project.BannerImageFileId != null)
             {
                 projectElements.Add(new XElement(_imageNamespace + "image", new[]
                 {
-                    new XElement(_imageNamespace + "loc", "https://" + host + _urlHelper.Content(project.BannerImage.Filepath)),
+                    new XElement(_imageNamespace + "loc", _protocol + host + _urlHelper.Content(project.BannerImage.Filepath)),
                     new XElement(_imageNamespace + "caption", project.BannerImage.Description)
                 }));
             }
