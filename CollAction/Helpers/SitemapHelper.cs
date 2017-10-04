@@ -37,6 +37,7 @@ namespace CollAction.Helpers
             };
 
             object[] projectUrls = await _context.Projects
+                .Where(p => p.Status != ProjectStatus.Deleted && p.Status != ProjectStatus.Hidden)
                 .Include(p => p.BannerImage)
                 .Select(project => GetSitemapProjectEntry(project))
                 .ToArrayAsync();
