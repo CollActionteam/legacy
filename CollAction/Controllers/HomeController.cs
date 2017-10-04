@@ -51,7 +51,7 @@ namespace CollAction.Controllers
         public ContentResult Robots()
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine("user-agent: *");
+            sb.AppendLine("User-agent: *");
             sb.Append("Sitemap: https://");
             sb.Append(Url.ActionContext.HttpContext.Request.Host);
             sb.AppendLine(Url.Action("Sitemap"));
