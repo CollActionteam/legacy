@@ -28,6 +28,7 @@
     "webpack": "^1.14.0"
   },
   "dependencies": {
+    "react-onclickoutside": "^6.4.0",
     "whatwg-fetch": "^2.0.3"
   }
 }
