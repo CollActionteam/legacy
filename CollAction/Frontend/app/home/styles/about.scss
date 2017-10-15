@@ -122,16 +122,9 @@
     }
   }
 
-  #criteria:before { 
-    display: block; 
-    content: " "; 
-    margin-top: -90px; 
-    height: 90px; 
-    visibility: hidden; 
-  }
-
-  // #criteria:target {
-  //   padding-top: 90px;
-  //   margin-top: -90px;
-  // } 
+  #criteria:target {
+    padding-top: 90px;
+    margin-top: -90px;
+    display: block;
+  } 
 }
