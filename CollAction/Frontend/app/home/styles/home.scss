@@ -4,6 +4,7 @@
   .banner-link,
   .project-actions-link {
     @include coll-action-button;
+    text-transform: none; // rewrite uppercase in coll-action-button
     width: 100%;
     margin-bottom: 20px;
   }
