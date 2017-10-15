@@ -37,10 +37,6 @@
 
   #intro-text,
   #three-steps {
-    h3 {
-      color: $coll-action-green;
-    }
-
     a {
       font-weight: bold;
       color: $coll-action-green;
@@ -49,11 +45,21 @@
 
   #intro-text {
     text-align: center;
+
+    .intro-question {
+      font-size: 25px;
+      font-weight: bold;
+      color: $coll-action-green;      
+    }
   }
 
   #three-steps {
     text-align: center;
     background-color: $background-gray;
+
+    h3 {
+      color: $coll-action-green;
+    }
   }
 
   #join-a-project {
