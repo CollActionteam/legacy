@@ -5,7 +5,7 @@
 <div id="footer">
   <div class="container">
 
-    <div class="row">
+    <div class="logo row">
       <div class="col-xs-12">
         @Html.Partial("_Logo")
       </div>
@@ -17,21 +17,21 @@
         <br />Would you like to get an occasional update on CollAction and crowdacting? Sign up for our newsletter (to your right)!
       </div>
 
-      <ul class="col-md-2 col-xs-12">
+      <ul class="nav-list col-md-2 col-xs-12">
           <li><a asp-controller="Home" asp-action="Index">@Localizer["Home"]</a></li>
           <li><a asp-controller="Projects" asp-action="Find">@Localizer["Find Project"]</a></li>
           <li><a asp-controller="Projects" asp-action="Create">@Localizer["Start Project"]</a></li>
           <li><a asp-controller="Home" asp-action="About" asp-fragment="about-collaction-fragment">@Localizer["About Us"]</a></li>
       </ul>
 
-      <ul class="col-md-2 col-xs-12">
+      <ul class="nav-list col-md-2 col-xs-12">
           <li><a asp-controller="Account" asp-action="Login">@Localizer["Login"]</a></li>
           <li><a asp-controller="Account" asp-action="Register">@Localizer["Sign Up"]</a></li>
           <li><a asp-controller="Home" asp-action="About" asp-fragment="about-us-fragment">@Localizer["Mission"]</a></li>
           <li><a asp-controller="Home" asp-action="About" asp-fragment="meet-the-team-fragment">@Localizer["Team"]</a></li>
       </ul>
 
-      <ul class="col-md-1 col-xs-12">
+      <ul class="nav-list col-md-1 col-xs-12">
           <li><a asp-controller="Home" asp-action="About" asp-fragment="jobs-fragment">@Localizer["Jobs"]</a></li>
           <li><a asp-controller="Home" asp-action="About" asp-fragment="partners-fragment">@Localizer["Partners"]</a></li>
           <li><a asp-controller="Home" asp-action="About" asp-fragment="press-fragment">@Localizer["Press"]</a></li>
@@ -40,15 +40,15 @@
 
 
       <div class="col-md-3 col-xs-12">
-        <h5>@Localizer["Follow Us"]</h5>
+        <h5 class="header">@Localizer["Follow Us"]</h5>
         <ul class="social-list">
-          <li><a target="_blank" href="https://www.facebook.com/collaction.org/"><i class="fa fa-facebook marginright"></i></a></li>
-          <li><a target="_blank" class="twitter-follow-button" href="https://twitter.com/CollAction_org"><i class="fa fa-twitter marginright"></i></a></li>
-          <li><a target="_blank" href="https://www.linkedin.com/company-beta/15079855/"><i class="fa fa-linkedin marginright"></i></a></li>
-          <li><a target="_blank" href="https://www.youtube.com/channel/UCC2SBF4mbeKXrHqnMuN6Iew/"><i class="fa fa-youtube marginright"></i></a></li>
+          <li><a target="_blank" href="https://www.facebook.com/collaction.org/"><div><i class="fa fa-facebook"></i></div></a></li>
+          <li><a target="_blank" class="twitter-follow-button" href="https://twitter.com/CollAction_org"><div><i class="fa fa-twitter"></i></div></a></li>
+          <li><a target="_blank" href="https://www.linkedin.com/company-beta/15079855/"><div><i class="fa fa-linkedin"></i></div></a></li>
+          <li><a target="_blank" href="https://www.youtube.com/channel/UCC2SBF4mbeKXrHqnMuN6Iew/"><div><i class="fa fa-youtube"></i></div></a></li>
         </ul>
 
-        <h5>@Localizer["Newsletter"]</h5>
+        <h5 class="header">@Localizer["Newsletter"]</h5>
 
         <!-- Begin MailChimp Signup Form -->
         <div id="mc_embed_signup">
@@ -58,7 +58,7 @@
               <div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
               <div class="mc-field-group">
                 <label for="mce-EMAIL">Email Address  <span class="asterisk">*</span></label>
-                <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL">
+                <input type="email" placeholder="E-mail" value="" name="EMAIL" class="required email" id="mce-EMAIL">
               </div>
               <div id="mce-responses" class="clear">
                 <div class="response" id="mce-error-response" style="display:none"></div>
