@@ -106,6 +106,30 @@ namespace CollAction.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteDescriptiveImage(int id)
+        {
+            var fileManager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "descriptiveimages"));
+            Project project = await _context.Projects.Include(p => p.DescriptiveImage).FirstAsync(p => p.Id == id);
+            fileManager.DeleteImageFileIfExists(project.DescriptiveImage);
+            project.DescriptiveImageFileId = null;
+            await _context.SaveChangesAsync();
+            return RedirectToAction("ManageProject", new { id = id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteBannerImage(int id)
+        {
+            var fileManager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "bannerimages"));
+            Project project = await _context.Projects.Include(p => p.BannerImage).FirstAsync(p => p.Id == id);
+            fileManager.DeleteImageFileIfExists(project.BannerImage);
+            project.BannerImageFileId = null;
+            await _context.SaveChangesAsync();
+            return RedirectToAction("ManageProject", new { id = id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ManageProject(ManageProjectViewModel model)
         {
             Project project = await _context.Projects

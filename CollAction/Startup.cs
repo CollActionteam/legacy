@@ -147,7 +147,6 @@ namespace CollAction
 
             app.UseMvc(routes =>
             {
-
                 routes.MapRoute("find",
                      "find",
                      new { controller = "Projects", action = "Find" }
@@ -172,6 +171,14 @@ namespace CollAction
                      "contact",
                      new { controller = "Home", action = "Contact" }
                  );
+
+                routes.MapRoute("robots.txt",
+                    "robots.txt",
+                    new { controller = "Home", action = "Robots" });
+
+                routes.MapRoute("sitemap.xml",
+                    "sitemap.xml",
+                    new { controller = "Home", action = "Sitemap" });
 
                 routes.MapRoute("getCategories",
                      "api/categories",

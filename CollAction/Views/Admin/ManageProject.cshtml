@@ -140,6 +140,18 @@
                         <input type="submit" value="Update" class="btn btn-default" />
                     </div>
                 </form>
+                <form asp-action="DeleteDescriptiveImage" enctype="multipart/form-data">
+                    <input type="hidden" asp-for="Id" />
+                    <div class="form-group">
+                        <input type="submit" value="Delete descriptive image" class="btn btn-default" />
+                    </div>
+                </form>
+                <form asp-action="DeleteBannerImage" enctype="multipart/form-data">
+                    <input type="hidden" asp-for="Id" />
+                    <div class="form-group">
+                        <input type="submit" value="Delete banner image" class="btn btn-default" />
+                    </div>
+                </form>
             </div>
         </div>
     </div>
