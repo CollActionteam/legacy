@@ -1,4 +1,4 @@
-﻿using ImageSharp;
+﻿using SixLabors.ImageSharp;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;

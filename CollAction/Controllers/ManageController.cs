@@ -1,17 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using CollAction.Models;
-using CollAction.Models.ManageViewModels;
 using CollAction.Services;
 using Microsoft.Extensions.Localization;
 using CollAction.Data;
-using Microsoft.EntityFrameworkCore;
+using CollAction.Models.ManageViewModels;
+using System.Text.Encodings.Web;
+using Microsoft.AspNetCore.Authentication;
 
 namespace CollAction.Controllers
 {
@@ -28,14 +29,14 @@ namespace CollAction.Controllers
         private readonly ApplicationDbContext _context;
 
         public ManageController(
-        UserManager<ApplicationUser> userManager,
-        SignInManager<ApplicationUser> signInManager,
-        IEmailSender emailSender,
-        ISmsSender smsSender,
-        INewsletterSubscriptionService newsletterSubscriptionService,
-        ILoggerFactory loggerFactory,
-        IStringLocalizer<ManageController> localizer,
-        ApplicationDbContext context)
+          UserManager<ApplicationUser> userManager,
+          SignInManager<ApplicationUser> signInManager,
+          IEmailSender emailSender,
+          ISmsSender smsSender,
+          INewsletterSubscriptionService newsletterSubscriptionService,
+          ILoggerFactory loggerFactory,
+          IStringLocalizer<ManageController> localizer,
+          ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -47,37 +48,89 @@ namespace CollAction.Controllers
             _context = context;
         }
 
+        [TempData]
+        public string StatusMessage { get; set; }
+
         //
         // GET: /Manage/Index
         [HttpGet]
-        public async Task<IActionResult> Index(ManageMessageId? message = null)
+        public async Task<IActionResult> Index()
         {
-            ViewData["StatusMessage"] =
-                message == ManageMessageId.ChangePasswordSuccess ? _localizer["Your password has been changed."]
-                : message == ManageMessageId.SetPasswordSuccess ? _localizer["Your password has been set."]
-                : message == ManageMessageId.SetTwoFactorSuccess ? _localizer["Your two-factor authentication provider has been set."]
-                : message == ManageMessageId.Error ? _localizer["An error has occurred."]
-                : message == ManageMessageId.AddPhoneSuccess ? _localizer["Your phone number was added."]
-                : message == ManageMessageId.RemovePhoneSuccess ? _localizer["Your phone number was removed."]
-                : "";
-
             var user = await GetCurrentUserAsync();
             if (user == null)
             {
-                return View("Error");
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
+
             var model = new IndexViewModel
             {
-                HasPassword = await _userManager.HasPasswordAsync(user),
-                /*PhoneNumber = await _userManager.GetPhoneNumberAsync(user),
-                TwoFactor = await _userManager.GetTwoFactorEnabledAsync(user),
-                Logins = await _userManager.GetLoginsAsync(user),*/
-                BrowserRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user),
+                Username = user.UserName,
+                Email = user.Email,
+                IsEmailConfirmed = user.EmailConfirmed,
+                StatusMessage = StatusMessage,
                 NewsletterSubscription = await _newsletterSubscriptionService.IsSubscribedAsync(user.Email)
-                /*ProjectsCreated = await _context.Projects.Where(p => p.OwnerId == user.Id).ToListAsync(),
-                ProjectsParticipated = await _context.ProjectParticipants.Where(p => p.UserId == user.Id).Include(p => p.Project).Select(p => p.Project).ToListAsync()*/
             };
             return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Index(IndexViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            var email = user.Email;
+            if (model.Email != email)
+            {
+                var setEmailResult = await _userManager.SetEmailAsync(user, model.Email);
+                if (!setEmailResult.Succeeded)
+                {
+                    throw new ApplicationException($"Unexpected error occurred setting email for user with ID '{user.Id}'.");
+                }
+            }
+
+            StatusMessage = _localizer["Your profile has been updated"];
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SendVerificationEmail(IndexViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            string code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            string callbackUrl = Url.Action(action: nameof(AccountController.ConfirmEmail),
+                controller: "Account",
+                values: new { user.Id, code },
+                protocol: Request.Scheme);
+                
+            string email = user.Email;
+            await _emailSender.SendEmailAsync(
+                email,
+                _localizer["Confirm your account"],
+                $"{_localizer["Please confirm your account by clicking this link"]}: <a href='{callbackUrl}'>{_localizer["link"]}</a>");
+
+            StatusMessage = "Verification email sent. Please check your email.";
+            return RedirectToAction(nameof(Index));
         }
 
         //
@@ -92,6 +145,7 @@ namespace CollAction.Controllers
                 try
                 {
                     await _newsletterSubscriptionService.SetSubscriptionAsync(user.Email, model.NewsletterSubscription, false);
+                    StatusMessage = _localizer["Successfully subscribed to newsletter"];
                 }
                 catch (Exception e)
                 {
@@ -100,7 +154,7 @@ namespace CollAction.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
-        /*
+
         //
         // POST: /Manage/RemoveLogin
         [HttpPost]
@@ -121,125 +175,7 @@ namespace CollAction.Controllers
             return RedirectToAction(nameof(ManageLogins), new { Message = message });
         }
 
-        //
-        // GET: /Manage/AddPhoneNumber
-        public IActionResult AddPhoneNumber()
-        {
-            return View();
-        }
 
-        //
-        // POST: /Manage/AddPhoneNumber
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddPhoneNumber(AddPhoneNumberViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            // Generate the token and send it
-            var user = await GetCurrentUserAsync();
-            if (user == null)
-            {
-                return View("Error");
-            }
-            var code = await _userManager.GenerateChangePhoneNumberTokenAsync(user, model.PhoneNumber);
-            await _smsSender.SendSmsAsync(model.PhoneNumber, _localizer["Your security code is: "] + code);
-            return RedirectToAction(nameof(VerifyPhoneNumber), new { PhoneNumber = model.PhoneNumber });
-        }
-
-        //
-        // POST: /Manage/EnableTwoFactorAuthentication
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EnableTwoFactorAuthentication()
-        {
-            var user = await GetCurrentUserAsync();
-            if (user != null)
-            {
-                await _userManager.SetTwoFactorEnabledAsync(user, true);
-                await _signInManager.SignInAsync(user, isPersistent: false);
-                _logger.LogInformation(1, "User enabled two-factor authentication.");
-            }
-            return RedirectToAction(nameof(Index), "Manage");
-        }
-
-        //
-        // POST: /Manage/DisableTwoFactorAuthentication
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DisableTwoFactorAuthentication()
-        {
-            var user = await GetCurrentUserAsync();
-            if (user != null)
-            {
-                await _userManager.SetTwoFactorEnabledAsync(user, false);
-                await _signInManager.SignInAsync(user, isPersistent: false);
-                _logger.LogInformation(2, "User disabled two-factor authentication.");
-            }
-            return RedirectToAction(nameof(Index), "Manage");
-        }
-
-        //
-        // GET: /Manage/VerifyPhoneNumber
-        [HttpGet]
-        public async Task<IActionResult> VerifyPhoneNumber(string phoneNumber)
-        {
-            var user = await GetCurrentUserAsync();
-            if (user == null)
-            {
-                return View("Error");
-            }
-            var code = await _userManager.GenerateChangePhoneNumberTokenAsync(user, phoneNumber);
-            // Send an SMS to verify the phone number
-            return phoneNumber == null ? View("Error") : View(new VerifyPhoneNumberViewModel { PhoneNumber = phoneNumber });
-        }
-
-        //
-        // POST: /Manage/VerifyPhoneNumber
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> VerifyPhoneNumber(VerifyPhoneNumberViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            var user = await GetCurrentUserAsync();
-            if (user != null)
-            {
-                var result = await _userManager.ChangePhoneNumberAsync(user, model.PhoneNumber, model.Code);
-                if (result.Succeeded)
-                {
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction(nameof(Index), new { Message = ManageMessageId.AddPhoneSuccess });
-                }
-            }
-            // If we got this far, something failed, redisplay the form
-            ModelState.AddModelError(string.Empty, _localizer["Failed to verify phone number"]);
-            return View(model);
-        }
-
-        //
-        // POST: /Manage/RemovePhoneNumber
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RemovePhoneNumber()
-        {
-            var user = await GetCurrentUserAsync();
-            if (user != null)
-            {
-                var result = await _userManager.SetPhoneNumberAsync(user, null);
-                if (result.Succeeded)
-                {
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction(nameof(Index), new { Message = ManageMessageId.RemovePhoneSuccess });
-                }
-            }
-            return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
-        }
-        */
         //
         // GET: /Manage/ChangePassword
         [HttpGet]
@@ -247,7 +183,7 @@ namespace CollAction.Controllers
         {
             return View();
         }
-        
+
         //
         // POST: /Manage/ChangePassword
         [HttpPost]
@@ -307,7 +243,7 @@ namespace CollAction.Controllers
             }
             return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
         }
-        /*
+
         //GET: /Manage/ManageLogins
         [HttpGet]
         public async Task<IActionResult> ManageLogins(ManageMessageId? message = null)
@@ -323,12 +259,12 @@ namespace CollAction.Controllers
                 return View("Error");
             }
             var userLogins = await _userManager.GetLoginsAsync(user);
-            var otherLogins = _signInManager.GetExternalAuthenticationSchemes().Where(auth => userLogins.All(ul => auth.AuthenticationScheme != ul.LoginProvider)).ToList();
+            //var otherLogins = _signInManager.GetExternalAuthenticationSchemes().Where(auth => userLogins.All(ul => auth.AuthenticationScheme != ul.LoginProvider)).ToList();
             ViewData["ShowRemoveButton"] = user.PasswordHash != null || userLogins.Count > 1;
             return View(new ManageLoginsViewModel
             {
                 CurrentLogins = userLogins,
-                OtherLogins = otherLogins
+                //OtherLogins = otherLogins
             });
         }
 
@@ -336,15 +272,17 @@ namespace CollAction.Controllers
         // POST: /Manage/LinkLogin
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult LinkLogin(string provider)
+        public async Task<IActionResult> LinkLogin(string provider)
         {
+            // Clear the existing external cookie to ensure a clean login process
+            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+
             // Request a redirect to the external login provider to link a login for the current user
-            var redirectUrl = Url.Action("LinkLoginCallback", "Manage");
+            var redirectUrl = Url.Action(nameof(LinkLoginCallback), "Manage");
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl, _userManager.GetUserId(User));
             return Challenge(properties, provider);
         }
 
-        //
         // GET: /Manage/LinkLoginCallback
         [HttpGet]
         public async Task<ActionResult> LinkLoginCallback()
@@ -360,10 +298,16 @@ namespace CollAction.Controllers
                 return RedirectToAction(nameof(ManageLogins), new { Message = ManageMessageId.Error });
             }
             var result = await _userManager.AddLoginAsync(user, info);
-            var message = result.Succeeded ? ManageMessageId.AddLoginSuccess : ManageMessageId.Error;
+            var message = ManageMessageId.Error;
+            if (result.Succeeded)
+            {
+                message = ManageMessageId.AddLoginSuccess;
+                // Clear the existing external cookie to ensure a clean login process
+                await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+            }
             return RedirectToAction(nameof(ManageLogins), new { Message = message });
         }
-        */
+
         #region Helpers
 
         private void AddErrors(IdentityResult result)
