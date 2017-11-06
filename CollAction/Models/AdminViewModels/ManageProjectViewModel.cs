@@ -58,6 +58,7 @@ namespace CollAction.Models.AdminViewModels
         public DateTime End { get; set; }
 
         [Display(Name = "Banner image description")]
+        [MaxLength(50)]
         public string BannerImageDescription { get; set; }
 
         [Display(Name = "Banner image", Prompt = "1366x432 JPEG, GIF, PNG, BMP")]
@@ -68,6 +69,7 @@ namespace CollAction.Models.AdminViewModels
         public ImageFile BannerImageFile { get; set; }
 
         [Display(Name = "Descriptive image description")]
+        [MaxLength(50)]
         public string DescriptiveImageDescription { get; set; }
 
         [Display(Name = "Description image", Prompt = "777x370 JPEG, GIF, PNG, BMP")]
