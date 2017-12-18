@@ -25,7 +25,7 @@ const startProjectSteps: Array<ICarouselItem> = [
   },
   {
     name: "Beoordeling",
-    text: <div>Freonen en CollAction beoordelen of je project voldoet aan de <mark>criteria</mark>. Indien nodig, neemt CollAction contact met je op om het te bespreken/verduidelijken.</div>
+    text: <div>Freonen en CollAction beoordelen of je project voldoet aan de <a href="/About#faq-criteria">criteria</a>. Indien nodig, neemt CollAction contact met je op om het te bespreken/verduidelijken.</div>
   },
   {
     name: "Plaatsing",
