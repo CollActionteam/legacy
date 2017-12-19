@@ -452,7 +452,7 @@ namespace CollAction.Controllers
 
         [HttpGet]
         public async Task<JsonResult> GetCategories()
-            => Json(new[] { new CategoryViewModel() { Id = -1, Name = "All Projects" } }.Concat(
+            => Json(new[] { new CategoryViewModel() { Id = -1, Name = "All" } }.Concat(
                 await _context
                     .Categories
                     .Where(c => c.Name != "Other")
