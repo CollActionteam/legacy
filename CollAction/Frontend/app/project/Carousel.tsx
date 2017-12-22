@@ -76,7 +76,7 @@ class LandscapeCarousel extends React.Component<ICarouselProps, ICarouselState> 
   }
 
   render () {
-    const currentImageSoruce: string = `/images/steps/${this.state.selected + 1}.png`;
+    const currentImageSoruce: string = `/images/steps/friesland/${this.state.selected + 1}.png`;
     return (
       <div>
 
