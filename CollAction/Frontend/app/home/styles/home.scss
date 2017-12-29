@@ -3,7 +3,7 @@
 
   .banner-link,
   .project-actions-link {
-    @include coll-action-button;
+    @include friesland-action-button;
     width: 100%;
     margin-bottom: 20px;
   }
@@ -37,12 +37,12 @@
   #intro-text,
   #three-steps {
     h3 {
-      color: $coll-action-green;
+      color: $friesland-blue;
     }
 
     a {
       font-weight: bold;
-      color: $coll-action-green;
+      color: $friesland-blue;
     }
   }
 
@@ -61,7 +61,7 @@
       font-size: 42px;
       text-transform: uppercase;
       letter-spacing: 10px;
-      color: $coll-action-green;
+      color: $friesland-blue;
     }
   }
 
@@ -91,7 +91,7 @@
 
   #banner-title {
     background-image: url(/images/front-page.jpg);
-    color: $coll-action-green;
+    color: $friesland-blue;
   }
 
 
