@@ -1,11 +1,30 @@
 
 #index {
 
-  .banner-link,
+  .banner-link {
+    background-color: #fff;    
+    color: #e20612;
+    padding: 10px 50px;
+    border: none;
+    border-radius: 20px;
+    font-size: 1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 20px;
+
+    a {
+      text-decoration: none;
+    }
+  }
+
   .project-actions-link {
     @include friesland-action-button;
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 20px;    
   }
 
   #title-row {
@@ -91,7 +110,7 @@
 
   #banner-title {
     background-image: url(/images/friesland/front-page.png);
-    color: $friesland-blue;
+    color: #fff;
   }
 
 
