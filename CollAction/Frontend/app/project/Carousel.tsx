@@ -19,29 +19,29 @@ import renderComponentIf from "../global/renderComponentIf";
 
 const startProjectSteps: Array<ICarouselItem> = [
   {
-    name: "Register",
-    text: <div>Complete the <a href="/Projects/Create">Start Project registration form.</a></div>,
-    imageOverlay: "Register",
+    name: "Aanmelden",
+    text: <div>Vul het <a target="_blank" href="/Projects/Create">Start Project formuler</a> in.</div>,
+    imageOverlay: "Aanmelden",
   },
   {
-    name: "Assessment",
-    text: <div>CollAction judges if your project meets <mark>the criteria</mark> on this page. If necessary, CollAction contacts you to discuss/clarify.</div>
+    name: "Beoordeling",
+    text: <div>Freonen en CollAction beoordelen of je project voldoet aan de <a href="/About#faq-criteria">criteria</a>. Indien nodig, neemt CollAction contact met je op om het te bespreken/verduidelijken.</div>
   },
   {
-    name: "Placement",
-    text: <div>Once your idea gets the thumbs up, <mark>it will go live</mark> on collaction.org </div>
+    name: "Plaatsing",
+    text: <div>Het project wordt bij goedkeuring <mark>geplaatst</mark> op freonen.collaction.org.</div>
   },
   {
-    name: "Campaign",
-    text: <div><mark>Run a campaign</mark> to reach your target.</div>
+    name: "Campagne",
+    text: <div><mark>Voer campagne</mark> om jouw target te bereiken.</div>
   },
   {
-    name: "Action",
-    text: <div>If the target is met at the time of the deadline, <mark>all supporters will take action.</mark></div>
+    name: "Actie",
+    text: <div>Wanneer het target is bereikt voor de deadline, <mark>komen alle supporters in actie</mark>.</div>
   },
   {
-    name: "Measuring impact",
-    text: <div>After the action period, <mark>measure how many people took part</mark> in the project and <mark>share this with the CollAction team.</mark></div>
+    name: "Impactmeting",
+    text: <div><mark>Meet</mark> na de actieperiode hoeveel mensen uiteindelijk hebben gehandeld en <mark>deel dit met Freonen</mark>.</div>
   },
 ];
 
@@ -76,23 +76,23 @@ class LandscapeCarousel extends React.Component<ICarouselProps, ICarouselState> 
   }
 
   render () {
-    const currentImageSoruce: string = `/images/steps/${this.state.selected + 1}.png`;
+    const currentImageSoruce: string = `/images/steps/friesland/${this.state.selected + 1}.png`;
     return (
       <div>
 
         <div className="row">
             <div className="col-xs-12">
-                <h1>Starting a Project</h1>
-                <h4>(Is Super Easy)</h4>
+                <h1>Een project starten</h1>
+                <h4>(is simpel)</h4>
             </div>
         </div>
 
         <div className="row">
           <div className="col-md-4 col-md-offset-2 col-xs-12 landscape-carousel-select">
-            <p>In 6 easy Steps</p>
+            <p>In 6 stappen:</p>
           </div>
 
-          <div className="col-xs-4 landscape-carousel-body">
+          <div className="col-md-6 col-xs-4 landscape-carousel-body">
             <p>{this.props.items[this.state.selected].text}</p>
           </div>
         </div>

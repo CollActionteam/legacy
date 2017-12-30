@@ -20,11 +20,11 @@
   padding: 50px 0px;
 
   h1 {
-    color: $coll-action-green;
+    color: $friesland-blue;
   }
   
   #nice-circle {
-    background-color: $coll-action-green;
+    background-color: $friesland-blue;
     width: 250px; 
     height: 250px; 
     border-radius: 250px;
@@ -39,14 +39,14 @@
   }
 
   a {
-    color: $coll-action-green;
+    color: $friesland-blue;
   }
 
 }
 
 #project-registration-button {
   a {
-    @include coll-action-button;
+    @include friesland-action-button;
     margin: 50px 0px;
   }
 }
@@ -56,7 +56,7 @@
 
   h1 {
     text-align: center;
-    color: $coll-action-green;
+    color: $friesland-blue;
     text-transform: uppercase;
     font-size: 4em;
     letter-spacing: 10px;
@@ -86,7 +86,8 @@
   }
 
   .coll-action-dot-point {
-    background-color: #23D884;
+    background-color: $friesland-blue;
+    color: white;
     height: 40px;
     width: 40px;
     margin-right: 10px;
@@ -101,14 +102,14 @@
     font-size: 1.25em;
     min-height: 120px;
     mark {
-      color: $coll-action-green;
+      color: $friesland-blue;
       background: none;
       font-weight: bold;
     }
   }
 
   .selected {
-    background-color: #23D884;
+    background-color: $friesland-blue;
     border-radius: 22px;
     color: #fff;
   }
@@ -137,7 +138,7 @@
   }
 
   #nice-button {
-    background-color: $coll-action-green;
+    background-color: $friesland-blue;
     color: #fff;
     width: 300px;
     height: 300px;
@@ -149,7 +150,7 @@
   }
 
   h2 {
-    color: $coll-action-green;
+    color: $friesland-blue;
   }
 
   p {
@@ -162,7 +163,7 @@
 
   h1 {
     font-size: 4em;
-    color: $coll-action-green;
+    color: $friesland-blue;
   }
 
 }
@@ -176,7 +177,7 @@
   .carousel-text {
     margin-bottom: 50px;
     mark {
-      color: $coll-action-green;
+      color: $friesland-blue;
       background: none;
       font-weight: bold;
     }
@@ -184,7 +185,7 @@
 
   .drop-down {
     padding: 15px;
-    background-color: $coll-action-green;
+    background-color: $friesland-blue;
     margin-bottom: 20px;
     border-radius: 15px;
     color: #fff;
