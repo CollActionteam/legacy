@@ -20,8 +20,7 @@ import renderComponentIf from "../global/renderComponentIf";
 const startProjectSteps: Array<ICarouselItem> = [
   {
     name: "Aanmelden",
-    text: <div>Vul het <a target="_blank" href="/Projects/Create">Start Project formuler</a> in.</div>,
-    imageOverlay: "Aanmelden",
+    text: <div>Vul het <a target="_blank" href="/Projects/Create">Start Project formuler</a> in.</div>
   },
   {
     name: "Beoordeling",
