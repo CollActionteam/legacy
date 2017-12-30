@@ -17,30 +17,28 @@
 
 <div id="index">
     <div id="banner-title" class="banner">
-        <div class="dotbackground">
-            <div class="container">
-                <div class="row" id="title-row">
-                    <div class="col-xs-12">
-                        <h1>@Localizer["POWER TO THE CROWD"]</h1>
-                    </div>
-                </div>
-                <div class="row" id="link-row">
-                    <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-2 col-md-offset-4">
-                        <a class="banner-link" asp-area="" asp-controller="Projects" asp-action="Find">
-                            @Localizer["Find Project"]
-                        </a>
-                    </div>
-                    <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-2 col-md-offset-0">
-                        <a class="banner-link" asp-area="" asp-controller="Projects" asp-action="StartInfo">
-                            @Localizer["Start Project"]
-                        </a>
-                    </div>
+        <div class="container">
+            <div class="row" id="title-row">
+                <div class="col-xs-12">
+                    <h1>@Localizer["Samen naar een fossielvrij Friesland"]</h1>
                 </div>
             </div>
-
-            <div id="down-arrow">
-
+            <div class="row" id="link-row">
+                <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-2 col-md-offset-4">
+                    <a class="banner-link" asp-area="" asp-controller="Projects" asp-action="Find">
+                        @Localizer["Vind project"]
+                    </a>
+                </div>
+                <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-2 col-md-offset-0">
+                    <a class="banner-link" asp-area="" asp-controller="Projects" asp-action="StartInfo">
+                        @Localizer["Start project"]
+                    </a>
+                </div>
             </div>
+        </div>
+
+        <div id="down-arrow">
+
         </div>
 
     </div>
@@ -50,10 +48,10 @@
             <div class="row">
                 <div class="col-xs-12">
                     <h3>
-                        Do you want to make the world a better place, but do you sometimes feel that your actions are only a drop in the ocean?
+                        Wil je iets goeds doen voor de wereld, maar heb je soms het gevoel dat jouw acties maar een druppel op een gloeiende plaat zijn?
                     </h3>
                     <p>
-                        Well, not anymore, because we are introducing crowdacting: taking action knowing that you are one of many. We revamp the neighbourhood with a hundred people or switch to renewable energy with thousands at the same time. <a href="/About">Find out more about crowdacting</a>, take action collectively with one of the existing projects, or <a href="/Start">start your own crowdacting project</a>. 
+                        Dat hoeft nu niet meer, want met ‘crowdacting’ komen we samen in actie. We stappen met zijn allen over op groene stroom en laten allemaal de (benzine)auto wat vaker staan. <a href="/About">Leer hier meer over Freonen en crowdacting</a>, kom collectief in actie met <a href="/Find">één van de bestaande projecten</a>, of <a href="/Start">start een eigen crowdactingproject</a>.
                     </p>
                 </div>
             </div>
@@ -64,36 +62,30 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-12">
-                    <h2>@Localizer["Crowdacting in 3 steps"]</h2>
+                    <h2>@Localizer["Crowdacting in 3 stappen"]</h2>
                 </div>
 
                 <div class="col-xs-12 col-md-4">
-                    <object class="three-step-image" type="image/svg+xml" data="/images/step1.svg">
-                        Your browser does not support SVG
-                    </object>
-                    <h3>@Localizer["Proposal"]</h3>
+                    <img class="three-step-image" src="/images/friesland/step1.png">
+                    <h3>@Localizer["Voorstel"]</h3>
                     <p>
-                        @Localizer["Someone proposes a collective action and sets a target number of participants and a deadline"]
+                        @Localizer["Iemand stelt een collectieve actie voor – met target aantal deelnemers en deadline"]
                     </p>
                 </div>
 
                 <div class="col-xs-12 col-md-4">
-                    <object class="three-step-image" type="image/svg+xml" data="/images/step2.svg">
-                        Your browser does not support SVG
-                    </object>
+                    <img class="three-step-image" src="/images/friesland/step2.png">
                     <h3>@Localizer["Crowd"]</h3>
                     <p>
-                        @Localizer["Supporters pledge to join if the target is met before the deadline"]
+                        @Localizer["Supporters zeggen toe mee te doen als het target vóór de deadline wordt bereikt"]
                     </p>
                 </div>
 
                 <div class="col-xs-12 col-md-4">
-                    <object class="three-step-image" type="image/svg+xml" data="/images/step3.svg">
-                        Your browser does not support SVG
-                    </object>
-                    <h3>@Localizer["Act"]</h3>
+                    <img class="three-step-image" src="/images/friesland/step3.png">
+                    <h3>@Localizer["Actie"]</h3>
                     <p>
-                        @Localizer["When the target number of supporters is met, we all act!"]
+                        @Localizer["Wanneer het target aantal supporters is bereikt, komt iedereen in actie!"]
                     </p>
                 </div>
 
@@ -106,12 +98,12 @@
             <div class="row project-action-buttons">
                 <div class="col-xs-12 col-sm-8 col-sm-offset-2">
                     <a class="project-actions-link" asp-area="" asp-controller="Projects" asp-action="StartInfo">
-                        @Localizer["Starting a Project"]
+                        @Localizer["Start project"]
                     </a>
                 </div>
                 <div class="col-xs-12 col-sm-8 col-sm-offset-2">
                     <a class="project-actions-link" asp-area="" asp-controller="Projects" asp-action="Find">
-                        @Localizer["Browse Projects"]
+                        @Localizer["Bekijken projecten"]
                     </a>
                 </div>
             </div>
@@ -122,7 +114,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-12">
-                    <h3>Join A Project</h3>
+                    <h3>Doe mee!</h3>
                 </div>
             </div>
 

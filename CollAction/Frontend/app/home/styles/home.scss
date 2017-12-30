@@ -1,11 +1,30 @@
 
 #index {
 
-  .banner-link,
-  .project-actions-link {
-    @include coll-action-button;
+  .banner-link {
+    background-color: #fff;    
+    color: #e20612;
+    padding: 10px 50px;
+    border: none;
+    border-radius: 20px;
+    font-size: 1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    display: inline-block;
     width: 100%;
     margin-bottom: 20px;
+
+    a {
+      text-decoration: none;
+    }
+  }
+
+  .project-actions-link {
+    @include friesland-action-button;
+    width: 100%;
+    margin-bottom: 20px;    
   }
 
   #title-row {
@@ -37,12 +56,12 @@
   #intro-text,
   #three-steps {
     h3 {
-      color: $coll-action-green;
+      color: $friesland-blue;
     }
 
     a {
       font-weight: bold;
-      color: $coll-action-green;
+      color: $friesland-blue;
     }
   }
 
@@ -58,10 +77,10 @@
   #join-a-project {
     h3 {
       text-align: center;
-      font-size: 4em;
+      font-size: 42px;
       text-transform: uppercase;
       letter-spacing: 10px;
-      color: $coll-action-green;
+      color: $friesland-blue;
     }
   }
 
@@ -90,8 +109,8 @@
   }
 
   #banner-title {
-    background-image: url(/images/front-page.jpg);
-    color: $coll-action-green;
+    background-image: url(/images/friesland/front-page.png);
+    color: #fff;
   }
 
 
@@ -116,7 +135,7 @@
   #index {
     #title-row {
       h1 {
-        font-size: 5em;
+        font-size: 64px;
       }
     }
   }
@@ -131,7 +150,7 @@
 
     #title-row {
       h1 {
-        font-size: 2.5em;
+        font-size: 42px;
       }
     }
     
@@ -144,7 +163,7 @@
         border: none;
         
         h3 {
-          font-size: 1.7em;
+          font-size: 42px;
         }
       }
     }
