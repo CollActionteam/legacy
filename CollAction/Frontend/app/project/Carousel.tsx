@@ -76,7 +76,7 @@ class LandscapeCarousel extends React.Component<ICarouselProps, ICarouselState> 
   }
 
   render () {
-    const currentImageSoruce: string = `/images/steps/friesland/${this.state.selected + 1}.png`;
+    const currentImageSoruce: string = `/images/friesland/steps/${this.state.selected + 1}.png`;
     return (
       <div>
 
@@ -182,7 +182,7 @@ class DropDownWithImage extends React.Component<IDropDownProps, IDropDownState> 
 class MobileCarousel extends React.Component<ICarouselProps, ICarouselState> {
 
   imageNameForIndex (index) {
-    return `/images/steps/${index + 1}.png`;
+    return `/images/friesland/steps/${index + 1}.png`;
   }
 
   render () {
