@@ -136,7 +136,6 @@ namespace CollAction.Data
             if (!(await Categories.AnyAsync()))
             {
                 Categories.AddRange(new[] {
-                    new Category() { Name = "Friesland", ColorHex = "0168B3", Description = "Friesland", File = "" },
                     new Category() { Name = "Environment", ColorHex = "E88424", Description = "Environment", File = "" },
                     new Category() { Name = "Community", ColorHex = "7B2164", Description = "Community", File = "" },
                     new Category() { Name = "Consumption", ColorHex = "9D1D20", Description = "Consumption", File = "" },
