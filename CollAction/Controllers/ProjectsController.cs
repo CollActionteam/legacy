@@ -136,10 +136,9 @@ namespace CollAction.Controllers
                 Goal = model.Goal,
                 Proposal = model.Proposal,
                 CreatorComments = model.CreatorComments,
-                CategoryId = _context
+                CategoryId = (await _context
                     .Categories
-                    .FirstOrDefault(c => c.Name == "Friesland")
-                    .Id,
+                    .SingleAsync(c => c.Name == "Friesland")).Id,
                 LocationId = model.LocationId,
                 Target = model.Target,
                 Start = model.Start,
