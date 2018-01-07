@@ -291,8 +291,8 @@ namespace CollAction.Controllers
                 // Send an email with this link
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                await _emailSender.SendEmailAsync(model.Email, "Reset Password",
-                   $"{_localizer["Please reset your password by clicking here"]}: <a href='{callbackUrl}'>{_localizer["link"]}</a>");
+                await _emailSender.SendEmailAsync(model.Email, "Wachtwoord opnieuw instellen",         // Reset Password
+                  $"Klik <a href='{callbackUrl}'>hier</a> om je wachtwoord opnieuw in te stellen.");   // Please reset your password by clicking here.
                 return View("ForgotPasswordConfirmation");
             }
 

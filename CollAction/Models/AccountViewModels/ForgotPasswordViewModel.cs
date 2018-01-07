@@ -8,8 +8,10 @@ namespace CollAction.Models.AccountViewModels
 {
     public class ForgotPasswordViewModel
     {
+        // Email
         [Required]
         [EmailAddress]
+        [Display(Name = "E-mail")]
         public string Email { get; set; }
     }
 }
