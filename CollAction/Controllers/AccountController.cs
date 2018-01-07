@@ -132,8 +132,8 @@ namespace CollAction.Controllers
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                    await _emailSender.SendEmailAsync(model.Email, _localizer["Confirm your account"],
-                        $"{_localizer["Please confirm your account by clicking this link"]}: <a href='{callbackUrl}'>{_localizer["link"]}</a>");
+                    await _emailSender.SendEmailAsync(model.Email, "Bevestig je account",               // Confirm your account
+                        $"Bevestig je account door deze <a href='{callbackUrl}'>link</a> te klikken");  // Please confirm your account by clicking this link 
                     _logger.LogInformation(3, "User created a new account with password.");
                     return RedirectToLocal(returnUrl);
                 }

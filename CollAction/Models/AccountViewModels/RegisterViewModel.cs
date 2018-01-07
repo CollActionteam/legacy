@@ -16,12 +16,14 @@ namespace CollAction.Models.AccountViewModels
 
         // Confirm email
         [Display(Name = "Bevestig e-mail")]
-        [Compare("Email", ErrorMessage = "The email and confirmation email do not match.")]
+        // The email and confirmation email do not match. 
+        [Compare("Email", ErrorMessage = "Je e-mail en bevestigingsmail komen niet overeen.")]
         public string ConfirmEmail { get; set; }
 
         // Password
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+        // The {0} must be at least {2} and at max {1} characters long.
+        [StringLength(100, ErrorMessage = "Het {0} moet minimaal {2} en maximaal {1} tekens bevatten.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Wachtwoord")]
         public string Password { get; set; }
@@ -29,7 +31,8 @@ namespace CollAction.Models.AccountViewModels
         // Confirm password
         [DataType(DataType.Password)]
         [Display(Name = "Bevestig wachtwoord")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        // The password and confirmation password do not match.
+        [Compare("Password", ErrorMessage = "Wachtwoord en bevesting wachtwoord komen niet overeen.")]
         public string ConfirmPassword { get; set; }
 
         // First name
@@ -41,7 +44,7 @@ namespace CollAction.Models.AccountViewModels
         public string LastName { get; set; }
 
         // I would like to receive an update from CollAction every once in a while - don't worry, we like spam as little as you do! 🙂
-        [Display(Name = "Ik ontvang graag af en toe een update van CollAction (geen zorgen, wij houden net zo weinig van spam als jij! 🙂")]
+        [Display(Name = "Ik ontvang graag af en toe een update van CollAction - geen zorgen, wij houden net zo weinig van spam als jij! 🙂")]
         public bool NewsletterSubscription { get; set; }
     }
 }
