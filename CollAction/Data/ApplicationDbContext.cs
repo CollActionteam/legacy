@@ -133,21 +133,22 @@ namespace CollAction.Data
         private async Task CreateCategories()
         {
             // Initialize categories
-            if (!(await Categories.AnyAsync()))
-            {
-                Categories.AddRange(new[] {
-                    new Category() { Name = "Friesland", ColorHex = "0168B3", Description = "Friesland", File = "" },
-                    new Category() { Name = "Environment", ColorHex = "E88424", Description = "Environment", File = "" },
-                    new Category() { Name = "Community", ColorHex = "7B2164", Description = "Community", File = "" },
-                    new Category() { Name = "Consumption", ColorHex = "9D1D20", Description = "Consumption", File = "" },
-                    new Category() { Name = "Well-being", ColorHex = "3762AE", Description = "Well-being", File = "" },
-                    new Category() { Name = "Governance", ColorHex = "29ABE2", Description = "Governance", File = "" },
-                    new Category() { Name = "Health", ColorHex = "EB078C", Description = "Health", File = "" },
-                    new Category() { Name = "Other", ColorHex = "007D43", Description = "Other", File = "" },
-                });
-                await SaveChangesAsync();
-                DetachAll();
-            }
+            string[] currentCategories = await Categories.Select(c => c.Name).ToArrayAsync();
+            Category[] necessaryCategories = new[] {
+                new Category() { Name = "Friesland", ColorHex = "0168B3", Description = "Friesland", File = "" },
+                new Category() { Name = "Environment", ColorHex = "E88424", Description = "Environment", File = "" },
+                new Category() { Name = "Community", ColorHex = "7B2164", Description = "Community", File = "" },
+                new Category() { Name = "Consumption", ColorHex = "9D1D20", Description = "Consumption", File = "" },
+                new Category() { Name = "Well-being", ColorHex = "3762AE", Description = "Well-being", File = "" },
+                new Category() { Name = "Governance", ColorHex = "29ABE2", Description = "Governance", File = "" },
+                new Category() { Name = "Health", ColorHex = "EB078C", Description = "Health", File = "" },
+                new Category() { Name = "Other", ColorHex = "007D43", Description = "Other", File = "" },
+            };
+
+            Categories.AddRange(necessaryCategories.Where(c => !currentCategories.Contains(c.Name)));
+            
+            await SaveChangesAsync();
+            DetachAll();
         }
 
         public void DetachAll()
