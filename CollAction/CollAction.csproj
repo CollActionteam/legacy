@@ -8,8 +8,7 @@
     <UserSecretsId>aspnet-CollAction-29a5d7b8-3530-4482-9ed6-572bd6c178fa</UserSecretsId>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
-    <PreBuildEvent>npm install &amp;&amp; ^
-npm run build</PreBuildEvent>
+    <PreBuildEvent>npm install &amp;&amp; npm run build</PreBuildEvent>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
