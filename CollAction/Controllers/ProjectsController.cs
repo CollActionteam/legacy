@@ -422,13 +422,20 @@ namespace CollAction.Controllers
 
             if (success)
             {
+                    //"Hi!<br><br>" +
+                    //"Thank you for participating in a CollAction project!<br><br>" +
+                    //"In crowdacting, we only act collectively when we meet the target before the deadline, so please feel very welcome to share this project on social media through the social media buttons on the project page!<br><br>" +
+                    //"We’ll keep you updated on the project. Also feel free to Like us on <a href=\"https://www.facebook.com/collaction.org/\">Facebook</a> to stay up to date on everything CollAction!<br><br>" +
+                    //"Warm regards,<br>The CollAction team";
                 string confirmationEmail = 
                     "Hi!<br><br>" +
-                    "Thank you for participating in a CollAction project!<br><br>" +
-                    "In crowdacting, we only act collectively when we meet the target before the deadline, so please feel very welcome to share this project on social media through the social media buttons on the project page!<br><br>" +
-                    "We’ll keep you updated on the project. Also feel free to Like us on <a href=\"https://www.facebook.com/collaction.org/\">Facebook</a> to stay up to date on everything CollAction!<br><br>" +
-                    "Warm regards,<br>The CollAction team";
-                string subject = "Thank you for participating in a CollAction project!";
+                    "Dank voor je deelname aan een Freonen crowdacting project!<br><br>" +
+                    "Bij crowdacting komen we alleen collectief in actie als het target wordt gehaald voor de deadline, dus deel dit project vooral met je netwerk met de buttons op de project pagina!<br><br>" +
+                    "We houden je op de hoogte van het project via de mail. Als je op de hoogte wil blijven van alles Freonen, like @freonen dan op Facebook. Wil je meer leren over CollAction en crowdacting, like dan ook @collaction.org!<br><br>" +
+                    "Warme groet,<br>Het FreonenTeam";
+
+                // Thank you for participating in a CollAction project!
+                string subject = "Dank voor je deelname aan een Freonen crowdacting project!";
                 await _emailSender.SendEmailAsync(user.Email, subject, confirmationEmail);
                 return View("ThankYouCommit", commitProjectViewModel);
             }
