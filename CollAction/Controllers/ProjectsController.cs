@@ -159,17 +159,28 @@ namespace CollAction.Controllers
             await project.SetTags(_context, model.Hashtag?.Split(';') ?? new string[0]);
 
             // Notify admins and creator through e-mail
+            //"Hi!<br>" +
+            //"<br>" +
+            //"Thanks for submitting a project on www.collaction.org!<br>" +
+            //"The CollAction Team will review your project as soon as possible – if it meets all the criteria we’ll publish the project on the website and will let you know, so you can start promoting it! If we have any additional questions or comments, we’ll reach out to you by email.<br>" +
+            //"<br>" +
+            //"Thanks so much for driving the CollAction / crowdacting movement!<br>" +
+            //"<br>" +
+            //"Warm regards,<br>" +
+            //"The CollAction team";
             string confirmationEmail =
                 "Hi!<br>" +
                 "<br>" +
-                "Thanks for submitting a project on www.collaction.org!<br>" +
-                "The CollAction Team will review your project as soon as possible – if it meets all the criteria we’ll publish the project on the website and will let you know, so you can start promoting it! If we have any additional questions or comments, we’ll reach out to you by email.<br>" +
+                "Dank voor het insturen van een project op www.freonen.collaction.org!<br>" +
+                "Het Freonen/CollAction team gaat er zorgvuldig naar kijken. Als het in lijn is met de criteria zullen we het online zetten – we laten het weten wanneer dit gebeurt.  Als we nog aanvullende vragen of opmerkingen hebben, komen we bij je terug via email.<br>" +
                 "<br>" +
-                "Thanks so much for driving the CollAction / crowdacting movement!<br>" +
+                "Nogmaals dank voor je aanmelding!<br>" +
                 "<br>" +
-                "Warm regards,<br>" +
-                "The CollAction team";
-            string subject = $"Confirmation email - start project {project.Name}";
+                "Warme groet,<br>" +
+                "Het Freonen team";
+
+            //Confirmation email - start project {project.Name}
+            string subject = $"Dank voor het insturen van een project {project.Name}";
 
             ApplicationUser user = await _userManager.GetUserAsync(User);
             await _emailSender.SendEmailAsync(user.Email, subject, confirmationEmail);
