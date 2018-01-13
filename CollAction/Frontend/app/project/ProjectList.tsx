@@ -8,6 +8,7 @@ export interface IProject {
   categoryColorHex: string;
   locationName: string;
   remainingTime: number;
+  remainingTimeText: string;
   bannerImagePath: string;
   target: number;
   participants: number;
@@ -29,7 +30,7 @@ class ProjectThumb extends React.Component<IProject, null> {
       <div className="col-xs-12 col-md-4 project-thumb-container">
         <div className="project-thumb">
           <div className="project-thumb-image" style={projectImageStyle} >
-            <div className="category-name" style={{backgroundColor: "#" + this.props.categoryColorHex}}>
+            <div className="category-name" style={{ backgroundColor: "#0168b3" }}>
               {this.props.categoryName}
             </div>
           </div>
@@ -44,19 +45,19 @@ class ProjectThumb extends React.Component<IProject, null> {
           <div className="project-thumb-stats">
             <div>
               <div className="value">{this.props.remainingTime}</div>
-              <div className="label">to go</div>
+              <div className="label">{this.props.remainingTimeText}</div>
             </div>
             <div>
               <div className="value">{this.props.participants}</div>
-              <div className="label">Participants</div>
+              <div className="label">Toezeggingen</div>
             </div>
             <div>
               <div className="value">{this.props.target}</div>
-              <div className="label" >Target</div>
+              <div className="label">Target</div>
             </div>
           </div>
           <div className="project-thumb-button">
-            <a href={link} style={{backgroundColor: "#" + this.props.categoryColorHex}}>Read More</a>
+            <a href={link} style={{ backgroundColor: "#0168b3" }}>Lees meer</a>
           </div>
         </div>
       </div>

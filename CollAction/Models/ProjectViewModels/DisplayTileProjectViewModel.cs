@@ -11,6 +11,7 @@ namespace CollAction.Models
         {
             _localizer = localizer;
             setRemainingTime(projectStart, projectEnd);
+            setRemainingTimeText(projectStart, projectEnd);
             setStatusTexts(projectStatus, IsActive, isComingSoon, isClosed);
         }
 
@@ -26,7 +27,9 @@ namespace CollAction.Models
 
         public string LocationName { get; set; }
 
-        public string RemainingTime { get; set; }
+        public int RemainingTime { get; set; }
+
+        public string RemainingTimeText { get; set; }
 
         public string BannerImagePath { get; set; }
 
@@ -57,11 +60,20 @@ namespace CollAction.Models
         private void setRemainingTime(DateTime projectStart, DateTime projectEnd)
         {
             TimeSpan remainingTime = (DateTime.UtcNow >= projectEnd || projectEnd <= projectStart) ? TimeSpan.Zero : projectEnd - (DateTime.UtcNow > projectStart ? DateTime.UtcNow : projectStart);
-            
-            if (remainingTime.TotalDays < 1)
-                RemainingTime = String.Format("{0} {1}", remainingTime.Hours, remainingTime.Hours == 1 ? _localizer["hour"] : _localizer["hours"]);
+            RemainingTime = remainingTime.TotalDays < 1 ? remainingTime.Hours : remainingTime.Days;
+        }
+
+        private void setRemainingTimeText(DateTime projectStart, DateTime projectEnd)
+        {
+            TimeSpan remainingTime = (DateTime.UtcNow >= projectEnd || projectEnd <= projectStart) ? TimeSpan.Zero : projectEnd - (DateTime.UtcNow > projectStart ? DateTime.UtcNow : projectStart);
+            if (Math.Floor(remainingTime.TotalDays) < 1)
+            {
+                RemainingTimeText = Math.Floor(remainingTime.TotalHours) < 1 ? "Uur nog" : "Uren nog";
+            }
             else
-                RemainingTime = String.Format("{0} {1}", remainingTime.Days, remainingTime.Days == 1 ? _localizer["day"] : _localizer["days"]);
+            {
+                RemainingTimeText = Math.Floor(remainingTime.TotalDays) == 1 ? "Dag nog" : "Dagen nog";
+            }
         }
 
         private void setStatusTexts(ProjectStatus projectStatus, bool IsActive, bool isComingSoon, bool isClosed)
