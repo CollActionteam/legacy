@@ -16,7 +16,7 @@ echo "Building $DOCKER_REPO"
 docker build -t $DOCKER_REPO CollAction
 
 echo "Pushing $DOCKER_REPO"
-docker login -p=$DOCKER_PASSWORD -u=$DOCKER_USERNAME
+echo $DOCKER_PASSWORD | docker login -u=$DOCKER_USERNAME --password-stdin
 docker push $DOCKER_REPO
 
 echo "Pushed $DOCKER_REPO"
