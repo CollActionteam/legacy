@@ -180,17 +180,22 @@ namespace CollAction.Controllers
                 "Het Freonen team";
 
             //Confirmation email - start project {project.Name}
-            string subject = $"Dank voor het insturen van een project {project.Name}";
+            string subject = $"Dank voor het insturen van een project: {project.Name}";
 
             ApplicationUser user = await _userManager.GetUserAsync(User);
             await _emailSender.SendEmailAsync(user.Email, subject, confirmationEmail);
 
+            //"Hi!<br>" +
+            //"<br>" +
+            //$"There's a new project waiting for approval: {project.Name}<br>" +
+            //"Warm regards,<br>" +
+            //"The CollAction team";
             string confirmationEmailAdmin =
                 "Hi!<br>" +
                 "<br>" +
-                $"There's a new project waiting for approval: {project.Name}<br>" +
-                "Warm regards,<br>" +
-                "The CollAction team";
+                $"Er is een nieuw project aangemaakt: {project.Name}. Ga naar het CollAction management dashboard om het te checken en goed (of af) te keuren. Daar vind je ook de contactgegevens van de projectstarter.<br>" +
+                "Vriendelijke groet,<br>" +
+                "Het CollAction team";
 
             var administrators = await _userManager.GetUsersInRoleAsync("admin");
             foreach (var admin in administrators)
