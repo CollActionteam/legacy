@@ -13,5 +13,6 @@ script:
   - dotnet build CollAction -c Release
   - dotnet publish CollAction -c Release
 after_success:
+  - chmod +x scripts/docker-push.sh
   - scripts/docker-push.sh
   
