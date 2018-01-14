@@ -60,10 +60,10 @@
         width: 100%;
         display: inline-block;
         letter-spacing: 0.09em;
+        background-color: $friesland-blue;
 
         &.disable-commit {
             pointer-events: none;
-            background-color: #75dabd;
         }
     }
 
@@ -225,7 +225,7 @@
     #more-info,
     .project-short-description,
     .project-goal,
-    .project-green-proposal,
+    .project-proposal,
     .project-comments,
     .caption {
         word-wrap: break-word;
@@ -244,9 +244,9 @@
         padding-right: 15px;
     }
 
-    .project-green-proposal {
+    .project-proposal {
         font-style: italic;
-        color: $coll-action-green;
+        color: $friesland-blue;
     }
 
     .bottom-take-part {
