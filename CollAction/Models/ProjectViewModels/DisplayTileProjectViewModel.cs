@@ -68,11 +68,11 @@ namespace CollAction.Models
             TimeSpan remainingTime = (DateTime.UtcNow >= projectEnd || projectEnd <= projectStart) ? TimeSpan.Zero : projectEnd - (DateTime.UtcNow > projectStart ? DateTime.UtcNow : projectStart);
             if (Math.Floor(remainingTime.TotalDays) < 1)
             {
-                RemainingTimeText = Math.Floor(remainingTime.TotalHours) < 1 ? "Uur nog" : "Uren nog";
+                RemainingTimeText = remainingTime.TotalHours < 1 && remainingTime.TotalHours != 0 ? "Uur te gaan" : "Uren te gaan";
             }
             else
             {
-                RemainingTimeText = Math.Floor(remainingTime.TotalDays) == 1 ? "Dag nog" : "Dagen nog";
+                RemainingTimeText = Math.Floor(remainingTime.TotalDays) == 1 ? "Dag te gaan" : "Dagen te gaan";
             }
         }
 

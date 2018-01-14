@@ -30,7 +30,7 @@ class ProjectThumb extends React.Component<IProject, null> {
       <div className="col-xs-12 col-md-4 project-thumb-container">
         <div className="project-thumb">
           <div className="project-thumb-image" style={projectImageStyle} >
-            <div className="category-name" style={{ backgroundColor: "#0168b3" }}>
+            <div className="category-name" style={{ backgroundColor: "#" + this.props.categoryColorHex }}>
               {this.props.categoryName}
             </div>
           </div>
