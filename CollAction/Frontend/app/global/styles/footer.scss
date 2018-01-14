@@ -1,4 +1,5 @@
 @import "../../colors";
+@import "logos";
 
 #footer {
     background-color: #f7f7f7;
@@ -12,7 +13,9 @@
       margin-top: 0px;
     }
 
-    #logos > div {
+
+    #logos, 
+    #logos-landscape {
         text-align: center;
         margin-bottom: 30px;
     }
@@ -91,3 +94,26 @@
     }    
 }
 
+@media (min-width: 991px) {
+    #footer {
+        #logos {
+            display: none;
+        }
+    }
+}
+
+@media (max-width: 991px) {
+    #footer {
+        #logos-landscape {
+            display: none;
+        }
+
+        #logos > div {
+            margin-bottom: 30px;
+
+            &:last-child {
+                margin-bottom: 0px;
+            }
+        }
+    }
+}
