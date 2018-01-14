@@ -12,8 +12,6 @@ script:
   - dotnet restore CollAction
   - dotnet build CollAction -c Release
   - dotnet publish CollAction -c Release
-  - docker build -t $DOCKER_REPO CollAction
 after_success:
-  - if [[ "$TRAVIS_BRANCH" != "master" ]]; then echo "Docker pushes are only done for the master branch. Current branch is $TRAVIS_BRANCH"; exit 0; fi
-  - docker login -p=$DOCKER_PASSWORD -u=$DOCKER_USERNAME
-  - docker push $DOCKER_REPO
+  - scripts/docker-push.sh
+  
