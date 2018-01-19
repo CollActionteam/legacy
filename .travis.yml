@@ -9,6 +9,7 @@ before_install:
 services:
   - docker
 script:
+  - export NODE_ENV=Production
   - dotnet restore CollAction
   - dotnet build CollAction -c Release
   - dotnet publish CollAction -c Release
