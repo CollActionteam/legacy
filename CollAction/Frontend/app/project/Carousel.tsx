@@ -20,7 +20,8 @@ import renderComponentIf from "../global/renderComponentIf";
 const startProjectSteps: Array<ICarouselItem> = [
   {
     name: "Aanmelden",
-    text: <div>Vul het <a target="_blank" href="/Projects/Create">Start Project formuler</a> in.</div>
+    text: <div>Vul het <a target="_blank" href="/Projects/Create">Start Project formuler</a> in.</div>,
+    imageOverlay: "Aanmelden",
   },
   {
     name: "Beoordeling",
@@ -108,11 +109,11 @@ class LandscapeCarousel extends React.Component<ICarouselProps, ICarouselState> 
             </ul>
           </div>
 
-          <div className="col-xs-4 landscape-carousel-body">
+          <div className="col-xs-6 landscape-carousel-body">
             <img src={currentImageSoruce} />
+            {this.renderImageOverlay()}          
           </div>
 
-          {this.renderImageOverlay()}          
         </div>
 
       </div>
