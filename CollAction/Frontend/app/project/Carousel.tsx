@@ -25,7 +25,7 @@ const startProjectSteps: Array<ICarouselItem> = [
   },
   {
     name: "Beoordeling",
-    text: <div>Freonen en CollAction beoordelen of je project voldoet aan de <a href="/About#faq-criteria">criteria</a>. Indien nodig, neemt CollAction contact met je op om het te bespreken/verduidelijken.</div>
+    text: <div>Freonen en CollAction beoordelen of je project voldoet aan de <a href="/About#faq-criteria">criteria</a>. Indien nodig, neemt CollAction contact met je op om het te bespreken.</div>
   },
   {
     name: "Plaatsing",
@@ -53,7 +53,7 @@ const Item = (props) => {
        {props.itemTitle}
     </li>
   );
-}
+};
 
 class LandscapeCarousel extends React.Component<ICarouselProps, ICarouselState> {
 
@@ -88,17 +88,17 @@ class LandscapeCarousel extends React.Component<ICarouselProps, ICarouselState> 
         </div>
 
         <div className="row">
-          <div className="col-md-4 col-md-offset-2 col-xs-12 landscape-carousel-select">
+          <div className="col-md-4 col-md-offset-2 col-xs-6 landscape-carousel-select">
             <p>In 6 stappen:</p>
           </div>
 
-          <div className="col-md-6 col-xs-4 landscape-carousel-body">
+          <div className="col-xs-6 landscape-carousel-body">
             <p>{this.props.items[this.state.selected].text}</p>
           </div>
         </div>
 
         <div className="row">
-          <div className="col-md-4 col-md-offset-2 col-xs-12 landscape-carousel-select">
+          <div className="col-md-4 col-md-offset-2 col-xs-6 landscape-carousel-select">
             <ul>
               {this.props.items.map((item, index) => <Item key={index + 1}
                 isSelected={index === this.state.selected}
