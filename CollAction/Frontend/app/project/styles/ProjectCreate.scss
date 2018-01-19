@@ -40,6 +40,7 @@
 
   a {
     color: $friesland-blue;
+    font-weight: bold;
   }
 
 }
@@ -85,6 +86,11 @@
     font-weight: bold;
   }
 
+  a {
+    color: $friesland-blue;
+    font-weight: bold;
+  }
+
   .coll-action-dot-point {
     background-color: $friesland-blue;
     color: white;
@@ -101,10 +107,10 @@
   p {
     font-size: 1.25em;
     min-height: 120px;
+
     mark {
       color: $friesland-blue;
       background: none;
-      font-weight: bold;
     }
   }
 
