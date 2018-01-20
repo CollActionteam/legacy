@@ -57,7 +57,7 @@ class ProjectThumb extends React.Component<IProject, null> {
             </div>
           </div>
           <div className="project-thumb-button">
-            <a href={link} style={{ backgroundColor: "#0168b3" }}>Lees meer</a>
+            <a href={link} style={{ backgroundColor: "#" + this.props.categoryColorHex }}>Lees meer</a>
           </div>
         </div>
       </div>
