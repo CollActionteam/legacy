@@ -1,5 +1,3 @@
 wwwroot/js/bundle.js
 node_modules
 log*
-
-Views/Projects/Participate.cshtml
