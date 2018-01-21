@@ -3,11 +3,12 @@
 .banner {
   background-size: 100%;
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: center top;
 }
 
 @media (max-width: 991px) {
   .banner {
     background-size: 230%;
+    background-position-y: center;
   }
 }
