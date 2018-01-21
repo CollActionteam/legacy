@@ -9,7 +9,7 @@ namespace CollAction.Models.AccountViewModels
     public class ForgotPasswordViewModel
     {
         // Email
-        [Required]
+        [Required(ErrorMessage = "Het E-mailveld is verplicht.")]
         [EmailAddress]
         [Display(Name = "E-mail")]
         public string Email { get; set; }

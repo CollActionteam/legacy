@@ -9,7 +9,7 @@ namespace CollAction.Models.AccountViewModels
     public class RegisterViewModel
     {
         // Email
-        [Required]
+        [Required(ErrorMessage = "Het E-mailveld is verplicht.")]
         [EmailAddress]
         [Display(Name = "E-mail")]
         public string Email { get; set; }
@@ -21,7 +21,7 @@ namespace CollAction.Models.AccountViewModels
         public string ConfirmEmail { get; set; }
 
         // Password
-        [Required]
+        [Required(ErrorMessage = "Het wachtwoordveld is verplicht.")]
         // The {0} must be at least {2} and at max {1} characters long.
         [StringLength(100, ErrorMessage = "Het {0} moet minimaal {2} en maximaal {1} tekens bevatten.", MinimumLength = 6)]
         [DataType(DataType.Password)]
