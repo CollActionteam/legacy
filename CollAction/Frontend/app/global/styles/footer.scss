@@ -1,17 +1,21 @@
 @import "../../colors";
+@import "logos";
 
 #footer {
     background-color: #f7f7f7;
-    padding: 50px 0px;
+    padding: 20px 0px;
     text-decoration: none;
     font-size: .85em;
     line-height: 2.5em;
+    border-top: 1px solid #e6e6e6;
 
     ul {
       margin-top: 0px;
     }
 
-    #logos > div {
+
+    #logos, 
+    #logos-landscape {
         text-align: center;
         margin-bottom: 30px;
     }
@@ -82,5 +86,34 @@
         color: inherit; 
         text-decoration: inherit; 
     }
+
+    .remarks {
+        a {
+            text-decoration: underline
+        }
+    }    
 }
 
+@media (min-width: 991px) {
+    #footer {
+        #logos {
+            display: none;
+        }
+    }
+}
+
+@media (max-width: 991px) {
+    #footer {
+        #logos-landscape {
+            display: none;
+        }
+
+        #logos > div {
+            margin-bottom: 30px;
+
+            &:last-child {
+                margin-bottom: 0px;
+            }
+        }
+    }
+}
