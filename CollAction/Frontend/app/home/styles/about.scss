@@ -60,6 +60,11 @@
     padding: 50px 0px;
   }
 
+  a {
+    color: $friesland-blue;
+    font-weight: bold;
+  }
+
   a.fragment {
     display: block;
     position: relative;
@@ -68,12 +73,13 @@
   }
 
   #about-us {
-    background-color: $coll-action-green;
+    background-color: $friesland-blue;
     color: #fff;
   }
 
   #meet-the-team,
-  #partners {
+  #partners,
+  #contact {
     background-color: $background-gray;
   }
 

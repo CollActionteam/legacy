@@ -20,7 +20,8 @@ import renderComponentIf from "../global/renderComponentIf";
 const startProjectSteps: Array<ICarouselItem> = [
   {
     name: "Aanmelden",
-    text: <div>Vul het <a target="_blank" href="/Projects/Create">Start Project formuler</a> in.</div>
+    text: <div>Vul het <a target="_blank" href="/Projects/Create">Start Project formuler</a> in.</div>,
+    imageOverlay: "Aanmelden",
   },
   {
     name: "Beoordeling",
@@ -52,7 +53,7 @@ const Item = (props) => {
        {props.itemTitle}
     </li>
   );
-}
+};
 
 class LandscapeCarousel extends React.Component<ICarouselProps, ICarouselState> {
 
@@ -87,17 +88,17 @@ class LandscapeCarousel extends React.Component<ICarouselProps, ICarouselState> 
         </div>
 
         <div className="row">
-          <div className="col-md-4 col-md-offset-2 col-xs-12 landscape-carousel-select">
+          <div className="col-md-4 col-md-offset-2 col-xs-6 landscape-carousel-select">
             <p>In 6 stappen:</p>
           </div>
 
-          <div className="col-md-6 col-xs-4 landscape-carousel-body">
+          <div className="col-xs-6 landscape-carousel-body">
             <p>{this.props.items[this.state.selected].text}</p>
           </div>
         </div>
 
         <div className="row">
-          <div className="col-md-4 col-md-offset-2 col-xs-12 landscape-carousel-select">
+          <div className="col-md-4 col-md-offset-2 col-xs-6 landscape-carousel-select">
             <ul>
               {this.props.items.map((item, index) => <Item key={index + 1}
                 isSelected={index === this.state.selected}
@@ -108,11 +109,11 @@ class LandscapeCarousel extends React.Component<ICarouselProps, ICarouselState> 
             </ul>
           </div>
 
-          <div className="col-xs-4 landscape-carousel-body">
+          <div className="col-xs-6 landscape-carousel-body">
             <img src={currentImageSoruce} />
+            {this.renderImageOverlay()}          
           </div>
 
-          {this.renderImageOverlay()}          
         </div>
 
       </div>
