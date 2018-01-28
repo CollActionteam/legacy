@@ -120,17 +120,17 @@ namespace CollAction.Controllers
             // Make sure the project name is unique.
             if (await _context.Projects.AnyAsync(p => p.Name == model.Name))
             {
-                ModelState.AddModelError("Name", _localizer["A project with the same name already exists."]);
+                ModelState.AddModelError("Name", _localizer["Een project met deze naam bestaat al. Kies ajb een nieuwe naam."]);
             }
 
             // If there are image descriptions without corresponding image uploads, warn the user.
             if (model.BannerImageUpload == null && !string.IsNullOrWhiteSpace(model.BannerImageDescription))
             {
-                ModelState.AddModelError("BannerImageDescription", _localizer["You can only provide a 'Banner Image Description' if you upload a 'Banner Image'."]);
+                ModelState.AddModelError("BannerImageDescription", _localizer["Je kunt deze beschrijving alleen toevoegen als je een banner afbeelding toevoegt."]);
             }
             if (model.DescriptiveImageUpload == null && !string.IsNullOrWhiteSpace(model.DescriptiveImageDescription))
             {
-                ModelState.AddModelError("DescriptiveImageDescription", _localizer["You can only provide a 'DescriptiveImage Description' if you upload a 'DescriptiveImage'."]);
+                ModelState.AddModelError("DescriptiveImageDescription", _localizer["Je kunt deze beschrijving alleen toevoegen als je een afbeelding toevoegt."]);
             }
 
             if (!ModelState.IsValid) {
@@ -146,7 +146,9 @@ namespace CollAction.Controllers
                 Goal = model.Goal,
                 Proposal = model.Proposal,
                 CreatorComments = model.CreatorComments,
-                CategoryId = model.CategoryId,
+                CategoryId = (await _context
+                    .Categories
+                    .SingleAsync(c => c.Name == "Friesland")).Id,
                 LocationId = model.LocationId,
                 Target = model.Target,
                 Start = model.Start,
