@@ -9,7 +9,7 @@ namespace CollAction.Models.AccountViewModels
     public class RegisterViewModel
     {
         // Email
-        [Required(ErrorMessage = "Het E-mailveld is verplicht.")]
+        [Required(ErrorMessage = "Het e-mailveld is verplicht.")]
         [EmailAddress]
         [Display(Name = "E-mail")]
         public string Email { get; set; }
