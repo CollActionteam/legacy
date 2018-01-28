@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - CollAction</title>
+    <title>@ViewData["Title"]</title>
 
     <!-- Google Tag Manager -->
     <script>
@@ -28,7 +28,7 @@
     @RenderSection("styles", required: false)
     @RenderSection("Meta", required: false)
 </head>
-<body id="body">
+<body id="body" class="embedded-body">
     <!-- Google Tag Manager (noscript) -->
     <noscript>
         <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NTCKFKM"
@@ -36,35 +36,7 @@
     </noscript>
     <!-- End Google Tag Manager (noscript) -->
 
-    <div id="header-container">
-        <div class="container" id="nav-container">
-            <div id="header">
-                <div class="row nav-row">
-                    <div class="col-md-3 col-xs-12 header-logo">
-                        <div class="hidden-md hidden-lg" id="mobile-nav-draw"></div>
-                        @Html.Partial("_Logo")
-                    </div>
-                    <div class="col-md-7 nav-bar hidden-xs hidden-sm" >
-                        <ul id="header-menu">
-                            <li><a asp-area="" asp-controller="Projects" asp-action="Find">Vind Project</a></li>
-                            <li><a asp-area="" asp-controller="Projects" asp-action="StartInfo">Start Project</a></li>
-                            <li><a asp-area="" asp-controller="Home" asp-action="About">Over</a></li>
-                            @if (User.IsInRole("admin"))
-                            {
-                                <li><a asp-area="" asp-controller="Admin" asp-action="Index">Admin Dashboard</a></li>
-                            }
-                        </ul>
-                    </div>
-                    <div class="col-md-2 nav-bar hidden-xs hidden-sm" id="header-login">
-                        @await Html.PartialAsync("_LoginPartial")
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="header-padding"></div>
     @RenderBody()
-    @Html.Partial("_Footer")
 
     <environment names="Development">
         <script src="~/js/bundle.js?@DateTime.Now.Ticks.ToString()"></script>

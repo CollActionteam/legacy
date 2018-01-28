@@ -77,7 +77,7 @@ namespace CollAction.Models
         [Display(Name = "Banner afbeelding", Prompt = "1366x432 JPEG, GIF, PNG, BMP")]
         [FileSize(1024000)] // 1MB
         [FileType("jpg", "jpeg", "gif", "png", "bmp")]
-        [MaxImageDimensions(1366, 432)]
+        [MaxImageDimensions(2732, 864)]
         public IFormFile BannerImageUpload { get; set; }
 
         [Display(Name = "Beschrijving extra afbeelding")]
@@ -87,7 +87,7 @@ namespace CollAction.Models
         [Display(Name = "Extra afbeelding", Prompt = "777x370 JPEG, GIF, PNG, BMP")]
         [FileSize(1024000)] // 1MB
         [FileType("jpg", "jpeg", "gif", "png", "bmp")]
-        [MaxImageDimensions(777, 370)]
+        [MaxImageDimensions(1088, 518)]
         public IFormFile DescriptiveImageUpload { get; set; }
 
         [Display(Name = "YouTube Video Link", Prompt = "YouTube link naar een relevant filmpje. Bv. \"https://www.youtube.com/watch?v=xnIJo91Gero\"")]

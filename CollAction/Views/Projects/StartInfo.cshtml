@@ -11,18 +11,22 @@
     <div class="container">
         <div class="row">
             <div class="col-md-3 hidden-xs">
-                <div id="nice-circle">
-                    Nice!
-                </div>
+                <a href="/Projects/Create">
+                    <div id="nice-circle">
+                        Moai!
+                    </div>
+                </a>
             </div>
             <div class="col-md-9 col-xs-12">
-                <h1>Start Project</h1>
+                <h1>Een project beginnen</h1>
                 <p>
-                    Would you like to do something about a social or environmental problem? Would you like to lead the crowdacting movement? Start a project on CollAction! 
-                    
-                    There are <a href="/about#faq" target="_blank">a few criteria that your project needs to meet</a> – so please check those first. We’ll wait while you read it…
-
-                    …All good? Then <a href="/Projects/Create">start your project!</a>
+                    Wil jij een Friesland en de wereld socialer en duurzamer maken? Wil jij de crowdacting beweging leiden? 
+                    Start hier dan een project! Er zijn wel een aantal voorwaarden waar jouw project aan moet voldoen – 
+                    die vind je bij de <a href="/about#faq-criteria">veelgestelde vragen op deze pagina</a>. 
+                    Wij wachten wel even terwijl je leest…
+                </p>
+                <p>
+                    …Helemaal goed? <a href="/Projects/Create">Start je project dan hier</a>!
                 </p>
             </div>
         </div>
@@ -43,8 +47,8 @@
 <div id="project-registration-button">
     <div class="container">
         <div class="row">
-            <div class="col-xs-12">
-                @Html.ActionLink("GO TO THE REGISTRATION FORM", "Create", "Projects", null, new { @class = "btn btn-success" })
+            <div class="col-md-4 col-md-offset-2 col-xs-12">
+                @Html.ActionLink("START PROJECT!", "Create", "Projects", null, new { @class = "btn btn-success" })
             </div>
         </div>
     </div>
