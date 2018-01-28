@@ -87,6 +87,16 @@ namespace CollAction.Controllers
             return View(displayProject);
         }
 
+        public async Task<IActionResult> Embed()
+        {
+            var model = new FindProjectViewModel
+            {
+                OwnerId = null,
+                Projects = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted)
+            };
+            return View(model);
+        }
+
         // GET: Projects/Create
         [Authorize]
         public async Task<IActionResult> Create()
