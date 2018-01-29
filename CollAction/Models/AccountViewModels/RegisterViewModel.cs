@@ -10,7 +10,7 @@ namespace CollAction.Models.AccountViewModels
     {
         // Email
         [Required(ErrorMessage = "Het e-mailveld is verplicht.")]
-        [EmailAddress]
+        [EmailAddress(ErrorMessage = "Het e-mailveld is geen geldig e-mailadres.")]
         [Display(Name = "E-mail")]
         public string Email { get; set; }
 

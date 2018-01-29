@@ -8,8 +8,8 @@ namespace CollAction.Models.AccountViewModels
 {
     public class LoginViewModel
     {
-        [Required]
-        [EmailAddress]
+        [Required(ErrorMessage = "Het E-mailveld is verplicht.")]
+        [EmailAddress(ErrorMessage = "Het e-mailveld is geen geldig e-mailadres.")]
         public string Email { get; set; }
 
         [Required]
