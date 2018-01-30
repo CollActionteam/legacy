@@ -2,6 +2,6 @@
 ARG source
 WORKDIR /app
 EXPOSE 80
-COPY ${source:-bin/netcoreapp2.0/publish} .
+COPY ${source:-bin/netcoreapp/publish} .
 VOLUME ["/app/wwwroot/usercontent/"]
 ENTRYPOINT ["dotnet", "CollAction.dll"]
