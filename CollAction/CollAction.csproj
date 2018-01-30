@@ -6,6 +6,7 @@
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
     <PreBuildEvent>npm install &amp;&amp; ^
+npm install --save bluebird &amp;&amp; ^
 npm run build</PreBuildEvent>
   </PropertyGroup>
 
