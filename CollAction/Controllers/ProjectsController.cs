@@ -442,10 +442,10 @@ namespace CollAction.Controllers
         [HttpGet]
         public async Task<JsonResult> GetTileProjects(int? categoryId, int? statusId)
         {
-            Expression<Func<Project, bool>> projectExpression = (p => 
-                p.Status != ProjectStatus.Hidden && 
-                p.Status != ProjectStatus.Deleted && 
-                ((categoryId != null && categoryId >= 0) ? p.CategoryId == categoryId : true));
+            Expression<Func<Project, bool>> projectExpression = (p =>
+                p.Status != ProjectStatus.Hidden &&
+                p.Status != ProjectStatus.Deleted &&
+                p.Category.Name.Equals("Friesland"));
 
             Expression<Func<Project, bool>> statusExpression;
             switch (statusId)
