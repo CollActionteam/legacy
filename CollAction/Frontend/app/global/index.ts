@@ -6,6 +6,7 @@ import "./styles/header.scss";
 import "./styles/footer.scss";
 import "./styles/banner.scss";
 import "./styles/share-buttons.scss";
+import "./styles/embed.scss";
 
 import "./MobileNavDraw";
 import "./ShareButtons";

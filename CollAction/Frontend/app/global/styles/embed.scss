@@ -1,0 +1,18 @@
+.embedded-body {
+    background-color: transparent;
+
+    .container {
+        margin-right: 0;
+        margin-left: 0;
+        padding-right: 0;
+        padding-left: 0;
+    }
+
+    #project-list {
+        padding: 0;
+
+        .project-thumb-container {
+            padding: 20px;
+        }
+    }
+}
