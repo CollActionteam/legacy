@@ -88,7 +88,8 @@ namespace CollAction.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, _localizer["Invalid login attempt."]);
+                    //Invalid login attempt.
+                    ModelState.AddModelError(string.Empty, _localizer["Je e-mail en wachtwoord komen niet overeen. Heb je al een account?"]);
                     return View(model);
                 }
             }

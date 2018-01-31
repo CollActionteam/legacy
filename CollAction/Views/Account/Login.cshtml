@@ -17,7 +17,8 @@
         <div class="row">
             <div class="col-xs-12">
                 <h1>@ViewData["Title"]</h1>
-                <h4>(use a local account to log in)</h4>
+                @*(use a local account to log in)*@
+                <h4>(Log in met je account - of maak er 1 aan via "Nieuwe gebruiker?")</h4>
             </div>
         </div>
     </div>
@@ -53,11 +54,13 @@
                     </div>
 
                     <p>
-                        <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">Register as a new user?</a>
+                        @*Register as a new user?*@
+                        <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">Nieuwe gebruiker?</a>
                     </p>
 
                     <p>
-                        <a asp-action="ForgotPassword">Forgot your password?</a>
+                        @*Forgot your password?*@
+                        <a asp-action="ForgotPassword">Wachtwoord vergeten?</a>
                     </p>
                 </form>
             </div>
