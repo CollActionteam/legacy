@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace CollAction.Models
 {

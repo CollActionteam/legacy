@@ -1,6 +1,6 @@
 ﻿using CollAction.Data;
 using CollAction.Models;
-using ImageSharp;
+using SixLabors.ImageSharp;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
