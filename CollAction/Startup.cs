@@ -136,7 +136,7 @@ namespace CollAction
                 .WriteTo.Console(LogEventLevel.Information);
 
             if (!string.IsNullOrEmpty(Configuration["SlackHook"]))
-                configuration.WriteTo.Slack(Configuration["SlackHook"]);
+                configuration.WriteTo.Slack(Configuration["SlackHook"], restrictedToMinimumLevel: LogEventLevel.Error);
 
             if (env.IsDevelopment())
                 configuration.WriteTo.Trace();
