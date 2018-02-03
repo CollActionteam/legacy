@@ -3,10 +3,16 @@
 @inject IViewLocalizer Localizer
 
 @{
-    ViewData["Title"] = "Login Failure";
+    ViewData["Title"] = Localizer["Kon niet inloggen"];
 }
 
-<header>
-    <h2>@ViewData["Title"].</h2>
-    <p class="text-danger">Unsuccessful login with service.</p>
-</header>
+<div id="login-starting">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h1>@ViewData["Title"]</h1>
+                <h4>Kon niet inloggen met service.</h4>
+            </div>
+        </div>
+    </div>
+</div>
