@@ -99,30 +99,13 @@ export class ProjectFilter extends React.Component<IProjectFilterProps, IProject
 
     return (
       <div id="project-filter" className="banner">
-        <div className="dotbackground">
-          <div className="container">
-            <div className="row">
-
+         <div className="container">
+            <div className="row" id="title-row">
               <div className="col-xs-12">
-                <ul>
-                  <li className= "project-filter-control  hidden-xs">
-                    Show me
-                  </li>
-                  <li className= "project-filter-control">
-                    { categoriesDropDown }
-                  </li>
-                  <li className= "project-filter-control hidden-xs">
-                    projects which are
-                  </li>
-                  <li className= "project-filter-control">
-                    { statusDropDown }
-                  </li>
-                </ul>
+                <h1>Al onze projecten</h1>
               </div>
-
             </div>
-          </div>
-        </div>
+         </div>
       </div>
     );
   }
