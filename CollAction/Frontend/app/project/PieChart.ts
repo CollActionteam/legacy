@@ -5,7 +5,7 @@ function drawPieChart (percentComplete: number, canvas: HTMLCanvasElement): void
   var lastend = 4.71239;
   var data = [percentComplete, 100 - percentComplete ]; // If you add more data values make sure you add more colors
   var myTotal = 0; // Automatically calculated so don't touch
-  var myColor = ['#9bd8bc', '#23d844' ]; // Colors of each slice
+  var myColor = ['#e20612', '#f29297' ]; // Colors of each slice
 
   ctx.canvas.width = 100;
   ctx.canvas.height = 100;
