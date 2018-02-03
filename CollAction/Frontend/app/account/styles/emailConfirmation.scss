@@ -1,7 +1,7 @@
 @import "../../mixins";
 @import "../../colors";
 
-#forgot-password-starting {
+#email-confirmation-starting {
   padding: 50px 0px;
 
   @media (max-width: 767px) {
@@ -17,7 +17,7 @@
     h4 {
       color: gray;
       text-align: center;
-      font-size: 0.75em;
+      font-size: .75em;
       text-transform: uppercase;
       letter-spacing: 10px;
       margin: 0px;
@@ -45,7 +45,7 @@
   }
 }
 
-#forgot-password-form {
+#email-confirmation-content {
     background-color: #efefef;
     padding: 50px 0px;
 

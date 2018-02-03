@@ -6,7 +6,14 @@ function getPlugins() {
       minimize: true,
     }),
   ];
-  return process.env.NODE_ENV === "production" ? productionPlugins : [];
+
+  const compatibilityPlugins = [
+    new webpack.ProvidePlugin({
+      'Promise': 'bluebird', // Provide a Promise polyfill for older or less suportive browsers like IE9-11.
+    }),
+  ];
+
+  return compatibilityPlugins.concat(process.env.NODE_ENV === "production" ? productionPlugins : []);
 }
 
 module.exports = {
