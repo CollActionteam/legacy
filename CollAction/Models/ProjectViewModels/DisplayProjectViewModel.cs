@@ -69,7 +69,6 @@ namespace CollAction.Models
                     return new TimeSpan(0);
                 else
                     return remaining;
-
             }
         }
 
@@ -79,19 +78,19 @@ namespace CollAction.Models
             {
                 TimeSpan remaining = RemainingTime;
                 if (remaining.Years() > 1)
-                    return $"{remaining.Years()} years";
+                    return $"{remaining.Years()} jaren";
                 else if (remaining.Months() > 1)
-                    return $"{remaining.Months()} months";
+                    return $"{remaining.Months()} maanden";
                 else if (remaining.Weeks() > 1)
-                    return $"{remaining.Weeks()} weeks";
+                    return $"{remaining.Weeks()} weken";
                 else if (remaining.Days > 1)
-                    return $"{remaining.Days} days";
+                    return $"{remaining.Days} dagen";
                 else if (remaining.Hours > 1)
-                    return $"{remaining.Hours} hours";
+                    return $"{remaining.Hours} uren";
                 else if (remaining.Minutes > 0)
-                    return $"{remaining.Minutes} minutes";
+                    return $"{remaining.Minutes} minuten";
                 else
-                    return "Done";
+                    return "Gesloten";
             }
         }
 

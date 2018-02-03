@@ -171,27 +171,43 @@ namespace CollAction.Controllers
             await project.SetTags(_context, model.Hashtag?.Split(';') ?? new string[0]);
 
             // Notify admins and creator through e-mail
+            //"Hi!<br>" +
+            //"<br>" +
+            //"Thanks for submitting a project on www.collaction.org!<br>" +
+            //"The CollAction Team will review your project as soon as possible â€“ if it meets all the criteria weâ€™ll publish the project on the website and will let you know, so you can start promoting it! If we have any additional questions or comments, weâ€™ll reach out to you by email.<br>" +
+            //"<br>" +
+            //"Thanks so much for driving the CollAction / crowdacting movement!<br>" +
+            //"<br>" +
+            //"Warm regards,<br>" +
+            //"The CollAction team";
             string confirmationEmail =
                 "Hi!<br>" +
                 "<br>" +
-                "Thanks for submitting a project on www.collaction.org!<br>" +
-                "The CollAction Team will review your project as soon as possible – if it meets all the criteria we’ll publish the project on the website and will let you know, so you can start promoting it! If we have any additional questions or comments, we’ll reach out to you by email.<br>" +
+                "Dank voor het insturen van een project op www.freonen.collaction.org!<br>" +
+                "Het Freonen/CollAction team gaat er zorgvuldig naar kijken. Als het in lijn is met de criteria zullen we het online zetten â€“ we laten het weten wanneer dit gebeurt.  Als we nog aanvullende vragen of opmerkingen hebben, komen we bij je terug via email.<br>" +
                 "<br>" +
-                "Thanks so much for driving the CollAction / crowdacting movement!<br>" +
+                "Nogmaals dank voor je aanmelding!<br>" +
                 "<br>" +
-                "Warm regards,<br>" +
-                "The CollAction team";
-            string subject = $"Confirmation email - start project {project.Name}";
+                "Warme groet,<br>" +
+                "Het Freonen team";
+
+            //Confirmation email - start project {project.Name}
+            string subject = $"Dank voor het insturen van een project: {project.Name}";
 
             ApplicationUser user = await _userManager.GetUserAsync(User);
             await _emailSender.SendEmailAsync(user.Email, subject, confirmationEmail);
 
+            //"Hi!<br>" +
+            //"<br>" +
+            //$"There's a new project waiting for approval: {project.Name}<br>" +
+            //"Warm regards,<br>" +
+            //"The CollAction team";
             string confirmationEmailAdmin =
                 "Hi!<br>" +
                 "<br>" +
-                $"There's a new project waiting for approval: {project.Name}<br>" +
-                "Warm regards,<br>" +
-                "The CollAction team";
+                $"Er is een nieuw project aangemaakt: {project.Name}. Ga naar het CollAction management dashboard om het te checken en goed (of af) te keuren. Daar vind je ook de contactgegevens van de projectstarter.<br>" +
+                "Vriendelijke groet,<br>" +
+                "Het CollAction team";
 
             var administrators = await _userManager.GetUsersInRoleAsync("admin");
             foreach (var admin in administrators)
@@ -423,12 +439,13 @@ namespace CollAction.Controllers
 
             if (success)
             {
-                //"Hi!<br><br>" +
-                //"Thank you for participating in a CollAction project!<br><br>" +
-                //"In crowdacting, we only act collectively when we meet the target before the deadline, so please feel very welcome to share this project on social media through the social media buttons on the project page!<br><br>" +
-                //"We’ll keep you updated on the project. Also feel free to Like us on <a href=\"https://www.facebook.com/collaction.org/\">Facebook</a> to stay up to date on everything CollAction!<br><br>" +
-                //"Warm regards,<br>The CollAction team";
-                string confirmationEmail =
+                    //"Hi!<br><br>" +
+                    //"Thank you for participating in a CollAction project!<br><br>" +
+                    //"In crowdacting, we only act collectively when we meet the target before the deadline, so please feel very welcome to share this project on social media through the social media buttons on the project page!<br><br>" +
+                    //"Weâ€™ll keep you updated on the project. Also feel free to Like us on <a href=\"https://www.facebook.com/collaction.org/\">Facebook</a> to stay up to date on everything CollAction!<br><br>" +
+                    //"Warm regards,<br>The CollAction team";
+                string confirmationEmail = 
+
                     "Hi!<br><br>" +
                     "Dank voor je deelname aan een Freonen crowdacting project!<br><br>" +
                     "Bij crowdacting komen we alleen collectief in actie als het target wordt gehaald voor de deadline, dus deel dit project vooral met je netwerk met de buttons op de project pagina!<br><br>" +
@@ -449,10 +466,10 @@ namespace CollAction.Controllers
         [HttpGet]
         public async Task<JsonResult> GetTileProjects(int? categoryId, int? statusId)
         {
-            Expression<Func<Project, bool>> projectExpression = (p => 
-                p.Status != ProjectStatus.Hidden && 
-                p.Status != ProjectStatus.Deleted && 
-                ((categoryId != null && categoryId >= 0) ? p.CategoryId == categoryId : true));
+            Expression<Func<Project, bool>> projectExpression = (p =>
+                p.Status != ProjectStatus.Hidden &&
+                p.Status != ProjectStatus.Deleted &&
+                p.Category.Name.Equals("Friesland"));
 
             Expression<Func<Project, bool>> statusExpression;
             switch (statusId)

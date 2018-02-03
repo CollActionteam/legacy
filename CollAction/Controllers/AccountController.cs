@@ -88,7 +88,8 @@ namespace CollAction.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, _localizer["Invalid login attempt."]);
+                    //Invalid login attempt.
+                    ModelState.AddModelError(string.Empty, _localizer["Je e-mail en wachtwoord komen niet overeen. Heb je al een account?"]);
                     return View(model);
                 }
             }
@@ -394,10 +395,11 @@ namespace CollAction.Controllers
                 return View("Error");
             }
 
-            var message = _localizer["Your security code is: "] + code;
+            //Your security code is:
+            var message = "Je security code is: " +  code;
             if (model.SelectedProvider == "Email")
             {
-                await _emailSender.SendEmailAsync(await _userManager.GetEmailAsync(user), "Security Code", message);
+                await _emailSender.SendEmailAsync(await _userManager.GetEmailAsync(user), "Security code", message);
             }
             else if (model.SelectedProvider == "Phone")
             {
