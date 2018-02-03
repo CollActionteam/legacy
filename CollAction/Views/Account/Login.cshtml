@@ -9,7 +9,7 @@
 @model LoginViewModel
 
 @{
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = Localizer["Log in"];
 }
 
 <div id="login-starting">
@@ -62,6 +62,17 @@
                         @*Forgot your password?*@
                         <a asp-action="ForgotPassword">Wachtwoord vergeten?</a>
                     </p>
+                </form>
+
+                <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+                    @{ var loginProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList(); }
+
+                    @foreach (var provider in loginProviders)
+                    {
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-default" name="provider" value="@provider.Name" title="Log in met je @provider.DisplayName account" />
+                        </div>
+                    }
                 </form>
             </div>
         </div>
