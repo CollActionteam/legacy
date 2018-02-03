@@ -8,18 +8,25 @@ namespace CollAction.Models.AccountViewModels
 {
     public class ResetPasswordViewModel
     {
-        [Required]
-        [EmailAddress]
+        // Email
+        [Required(ErrorMessage = "Het E-mailveld is verplicht.")]
+        [EmailAddress(ErrorMessage = "Het e-mailveld is geen geldig e-mailadres.")]
+        [Display(Name = "E-mail")]
         public string Email { get; set; }
 
-        [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+        // Password
+        [Required(ErrorMessage = "Het wachtwoordveld is verplicht.")]
+        // The {0} must be at least {2} and at max {1} characters long.
+        [StringLength(100, ErrorMessage = "Het {0} moet minimaal {2} en maximaal {1} tekens bevatten.", MinimumLength = 6)]
         [DataType(DataType.Password)]
+        [Display(Name = "Wachtwoord")]
         public string Password { get; set; }
 
+        // Confirm password
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        [Display(Name = "Bevestig wachtwoord")]
+        // The password and confirmation password do not match.
+        [Compare("Password", ErrorMessage = "Wachtwoord en bevesting wachtwoord komen niet overeen.")]
         public string ConfirmPassword { get; set; }
 
         public string Code { get; set; }

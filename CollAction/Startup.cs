@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +19,7 @@ using Amazon;
 using System.Linq;
 using Microsoft.AspNetCore.Rewrite;
 using CollAction.RewriteHttps;
+using System.Security.Claims;
 
 namespace CollAction
 {
@@ -66,6 +66,23 @@ namespace CollAction
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredLength = 8;
             });
+
+            services.AddAuthentication()
+                    .AddFacebook(options =>
+                    {
+                        options.AppId = Configuration["Authentication:Facebook:AppId"];
+                        options.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+                        options.Scope.Add("email");
+                    }).AddGoogle(options =>
+                    {
+                        options.ClientId = Configuration["Authentication:Google:ClientId"];
+                        options.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+                        options.Scope.Add("email");
+                    }).AddTwitter(options =>
+                    {
+                        options.ConsumerKey = Configuration["Authentication:Twitter:ConsumerKey"];
+                        options.ConsumerSecret = Configuration["Authentication:Twitter:ConsumerSecret"];
+                    });
 
             services.AddLocalization(options => options.ResourcesPath = "Resources");
 
@@ -117,9 +134,9 @@ namespace CollAction
             LoggerConfiguration configuration = new LoggerConfiguration()
                 .WriteTo.RollingFile("log-{Date}.txt", LogEventLevel.Information)
                 .WriteTo.Console(LogEventLevel.Information);
-            
+
             if (!string.IsNullOrEmpty(Configuration["SlackHook"]))
-                configuration.WriteTo.Slack(Configuration["SlackHook"], null, null, null, null, null, LogEventLevel.Error);
+                configuration.WriteTo.Slack(Configuration["SlackHook"], restrictedToMinimumLevel: LogEventLevel.Error);
 
             if (env.IsDevelopment())
                 configuration.WriteTo.Trace();
@@ -139,11 +156,9 @@ namespace CollAction
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            app.UseAuthentication();
+
             app.UseStaticFiles();
-
-            app.UseIdentity();
-
-            // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
 
             app.UseMvc(routes =>
             {
@@ -200,9 +215,9 @@ namespace CollAction
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            using (var userManager = app.ApplicationServices.GetService<UserManager<ApplicationUser>>())
-            using (var roleManager = app.ApplicationServices.GetService<RoleManager<IdentityRole>>())
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            using (var userManager = serviceScope.ServiceProvider.GetService<UserManager<ApplicationUser>>())
+            using (var roleManager = serviceScope.ServiceProvider.GetService<RoleManager<IdentityRole>>())
             using (var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
             {
                 context.Database.Migrate();

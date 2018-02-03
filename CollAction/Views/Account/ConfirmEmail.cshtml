@@ -2,12 +2,32 @@
 @inject IViewLocalizer Localizer
 
 @{
-    ViewData["Title"] = "Confirm Email";
+    ViewData["Title"] = "E-mailbevestiging"; /*Email confirmation*/
 }
 
-<h2>@ViewData["Title"].</h2>
-<div>
-    <p>
-        Thank you for confirming your email. Please <a asp-controller="Account" asp-action="Login">Click here to Log in</a>.
-    </p>
+<div id="email-confirmation-starting">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                @*Email confirmation*@
+                <h1>E-mailbevestiging</h1>
+
+                @*(Thank you for confirming your email)*@
+                <h4>(Dank voor het bevestigen van je email!)</h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="email-confirmation-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-6 col-md-offset-3">
+                <p>
+                    @*Please Click here to Log in.*@
+                    <a asp-controller="Account" asp-action="Login">Klik hier om in te loggen</a>.
+                </p>
+            </div>
+        </div>
+    </div>
 </div>

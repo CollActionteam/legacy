@@ -16,14 +16,9 @@
         })(window, document, 'script', 'dataLayer', 'GTM-NTCKFKM');
     </script>
     <!-- End Google Tag Manager -->
-    <environment names="Development">
-        <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
-    </environment>
-    <environment names="Staging,Production">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-              asp-fallback-href="~/lib/font-awesome/css/font-awesome.css"
-              asp-fallback-test-class="fa" asp-fallback-test-property="display" asp-fallback-test-value="inline-block" />
-    </environment>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+            asp-fallback-href="~/lib/font-awesome/css/font-awesome.css"
+            asp-fallback-test-class="fa" asp-fallback-test-property="display" asp-fallback-test-value="inline-block" />
     <link href="https://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet">
 
     <style>
@@ -51,9 +46,9 @@
                     </div>
                     <div class="col-md-7 nav-bar hidden-xs hidden-sm" >
                         <ul id="header-menu">
-                            <li><a asp-area="" asp-controller="Projects" asp-action="Find">Find Project</a></li>
+                            <li><a asp-area="" asp-controller="Projects" asp-action="Find">Vind Project</a></li>
                             <li><a asp-area="" asp-controller="Projects" asp-action="StartInfo">Start Project</a></li>
-                            <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
+                            <li><a asp-area="" asp-controller="Home" asp-action="About">Over</a></li>
                             @if (User.IsInRole("admin"))
                             {
                                 <li><a asp-area="" asp-controller="Admin" asp-action="Index">Admin Dashboard</a></li>

@@ -8,15 +8,19 @@ namespace CollAction.Models.AccountViewModels
 {
     public class LoginViewModel
     {
-        [Required]
-        [EmailAddress]
+        [Required(ErrorMessage = "Het E-mailveld is verplicht.")]
+        [EmailAddress(ErrorMessage = "Het e-mailveld is geen geldig e-mailadres.")]
+        [Display(Name = "E-mail")]
         public string Email { get; set; }
 
+        // Password
         [Required]
         [DataType(DataType.Password)]
+        [Display(Name = "Wachtwoord")]
         public string Password { get; set; }
 
-        [Display(Name = "Remember me?")]
+        // Remember me?
+        [Display(Name = "Onthoud gegevens?")]
         public bool RememberMe { get; set; }
     }
 }

@@ -87,6 +87,16 @@ namespace CollAction.Controllers
             return View(displayProject);
         }
 
+        public async Task<IActionResult> Embed()
+        {
+            var model = new FindProjectViewModel
+            {
+                OwnerId = null,
+                Projects = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted)
+            };
+            return View(model);
+        }
+
         // GET: Projects/Create
         [Authorize]
         public async Task<IActionResult> Create()
@@ -95,7 +105,7 @@ namespace CollAction.Controllers
             {
                 Start = DateTime.UtcNow.Date.AddDays(7), // A week from today
                 End = DateTime.UtcNow.Date.AddDays(7).AddMonths(1), // A month after start
-                Categories = new SelectList(await _context.Categories.OrderBy(c => c.Name).ToListAsync(), "Id", "Description"),
+                Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description"),
             });
         }
 
@@ -110,17 +120,17 @@ namespace CollAction.Controllers
             // Make sure the project name is unique.
             if (await _context.Projects.AnyAsync(p => p.Name == model.Name))
             {
-                ModelState.AddModelError("Name", _localizer["A project with the same name already exists."]);
+                ModelState.AddModelError("Name", _localizer["Een project met deze naam bestaat al. Kies ajb een nieuwe naam."]);
             }
 
             // If there are image descriptions without corresponding image uploads, warn the user.
             if (model.BannerImageUpload == null && !string.IsNullOrWhiteSpace(model.BannerImageDescription))
             {
-                ModelState.AddModelError("BannerImageDescription", _localizer["You can only provide a 'Banner Image Description' if you upload a 'Banner Image'."]);
+                ModelState.AddModelError("BannerImageDescription", _localizer["Je kunt deze beschrijving alleen toevoegen als je een banner afbeelding toevoegt."]);
             }
             if (model.DescriptiveImageUpload == null && !string.IsNullOrWhiteSpace(model.DescriptiveImageDescription))
             {
-                ModelState.AddModelError("DescriptiveImageDescription", _localizer["You can only provide a 'DescriptiveImage Description' if you upload a 'DescriptiveImage'."]);
+                ModelState.AddModelError("DescriptiveImageDescription", _localizer["Je kunt deze beschrijving alleen toevoegen als je een afbeelding toevoegt."]);
             }
 
             if (!ModelState.IsValid) {
@@ -136,7 +146,9 @@ namespace CollAction.Controllers
                 Goal = model.Goal,
                 Proposal = model.Proposal,
                 CreatorComments = model.CreatorComments,
-                CategoryId = model.CategoryId,
+                CategoryId = (await _context
+                    .Categories
+                    .SingleAsync(c => c.Name == "Friesland")).Id,
                 LocationId = model.LocationId,
                 Target = model.Target,
                 Start = model.Start,
@@ -159,27 +171,43 @@ namespace CollAction.Controllers
             await project.SetTags(_context, model.Hashtag?.Split(';') ?? new string[0]);
 
             // Notify admins and creator through e-mail
+            //"Hi!<br>" +
+            //"<br>" +
+            //"Thanks for submitting a project on www.collaction.org!<br>" +
+            //"The CollAction Team will review your project as soon as possible – if it meets all the criteria we’ll publish the project on the website and will let you know, so you can start promoting it! If we have any additional questions or comments, we’ll reach out to you by email.<br>" +
+            //"<br>" +
+            //"Thanks so much for driving the CollAction / crowdacting movement!<br>" +
+            //"<br>" +
+            //"Warm regards,<br>" +
+            //"The CollAction team";
             string confirmationEmail =
                 "Hi!<br>" +
                 "<br>" +
-                "Thanks for submitting a project on www.collaction.org!<br>" +
-                "The CollAction Team will review your project as soon as possible – if it meets all the criteria we’ll publish the project on the website and will let you know, so you can start promoting it! If we have any additional questions or comments, we’ll reach out to you by email.<br>" +
+                "Dank voor het insturen van een project op www.freonen.collaction.org!<br>" +
+                "Het Freonen/CollAction team gaat er zorgvuldig naar kijken. Als het in lijn is met de criteria zullen we het online zetten – we laten het weten wanneer dit gebeurt.  Als we nog aanvullende vragen of opmerkingen hebben, komen we bij je terug via email.<br>" +
                 "<br>" +
-                "Thanks so much for driving the CollAction / crowdacting movement!<br>" +
+                "Nogmaals dank voor je aanmelding!<br>" +
                 "<br>" +
-                "Warm regards,<br>" +
-                "The CollAction team";
-            string subject = $"Confirmation email - start project {project.Name}";
+                "Warme groet,<br>" +
+                "Het Freonen team";
+
+            //Confirmation email - start project {project.Name}
+            string subject = $"Dank voor het insturen van een project: {project.Name}";
 
             ApplicationUser user = await _userManager.GetUserAsync(User);
             await _emailSender.SendEmailAsync(user.Email, subject, confirmationEmail);
 
+            //"Hi!<br>" +
+            //"<br>" +
+            //$"There's a new project waiting for approval: {project.Name}<br>" +
+            //"Warm regards,<br>" +
+            //"The CollAction team";
             string confirmationEmailAdmin =
                 "Hi!<br>" +
                 "<br>" +
-                $"There's a new project waiting for approval: {project.Name}<br>" +
-                "Warm regards,<br>" +
-                "The CollAction team";
+                $"Er is een nieuw project aangemaakt: {project.Name}. Ga naar het CollAction management dashboard om het te checken en goed (of af) te keuren. Daar vind je ook de contactgegevens van de projectstarter.<br>" +
+                "Vriendelijke groet,<br>" +
+                "Het CollAction team";
 
             var administrators = await _userManager.GetUsersInRoleAsync("admin");
             foreach (var admin in administrators)
@@ -411,13 +439,21 @@ namespace CollAction.Controllers
 
             if (success)
             {
+                    //"Hi!<br><br>" +
+                    //"Thank you for participating in a CollAction project!<br><br>" +
+                    //"In crowdacting, we only act collectively when we meet the target before the deadline, so please feel very welcome to share this project on social media through the social media buttons on the project page!<br><br>" +
+                    //"We’ll keep you updated on the project. Also feel free to Like us on <a href=\"https://www.facebook.com/collaction.org/\">Facebook</a> to stay up to date on everything CollAction!<br><br>" +
+                    //"Warm regards,<br>The CollAction team";
                 string confirmationEmail = 
+
                     "Hi!<br><br>" +
-                    "Thank you for participating in a CollAction project!<br><br>" +
-                    "In crowdacting, we only act collectively when we meet the target before the deadline, so please feel very welcome to share this project on social media through the social media buttons on the project page!<br><br>" +
-                    "We’ll keep you updated on the project. Also feel free to Like us on <a href=\"https://www.facebook.com/collaction.org/\">Facebook</a> to stay up to date on everything CollAction!<br><br>" +
-                    "Warm regards,<br>The CollAction team";
-                string subject = "Thank you for participating in a CollAction project!";
+                    "Dank voor je deelname aan een Freonen crowdacting project!<br><br>" +
+                    "Bij crowdacting komen we alleen collectief in actie als het target wordt gehaald voor de deadline, dus deel dit project vooral met je netwerk met de buttons op de project pagina!<br><br>" +
+                    "We houden je op de hoogte van het project via de mail. Als je op de hoogte wil blijven van alles Freonen, like @freonen dan op Facebook. Wil je meer leren over CollAction en crowdacting, like dan ook @collaction.org!<br><br>" +
+                    "Warme groet,<br>Het FreonenTeam";
+
+                // Thank you for participating in a CollAction project!
+                string subject = "Dank voor je deelname aan een Freonen crowdacting project!";
                 await _emailSender.SendEmailAsync(user.Email, subject, confirmationEmail);
                 return View("ThankYouCommit", commitProjectViewModel);
             }
@@ -430,10 +466,10 @@ namespace CollAction.Controllers
         [HttpGet]
         public async Task<JsonResult> GetTileProjects(int? categoryId, int? statusId)
         {
-            Expression<Func<Project, bool>> projectExpression = (p => 
-                p.Status != ProjectStatus.Hidden && 
-                p.Status != ProjectStatus.Deleted && 
-                ((categoryId != null && categoryId >= 0) ? p.CategoryId == categoryId : true));
+            Expression<Func<Project, bool>> projectExpression = (p =>
+                p.Status != ProjectStatus.Hidden &&
+                p.Status != ProjectStatus.Deleted &&
+                p.Category.Name.Equals("Friesland"));
 
             Expression<Func<Project, bool>> statusExpression;
             switch (statusId)

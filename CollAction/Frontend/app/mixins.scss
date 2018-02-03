@@ -25,3 +25,7 @@
     }
 }
 
+@mixin friesland-action-button {
+    @include coll-action-button;
+    background-color: $friesland-blue;    
+}

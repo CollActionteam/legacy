@@ -5,7 +5,8 @@
 @model CollAction.Models.CommitProjectViewModel
 
 @{
-    ViewData["Title"] = Localizer["Thank You"];
+    // Thank You!
+    ViewData["Title"] = "Dankjewel!";
 }
 
 <div id="thank-you-commit-container">
@@ -13,25 +14,30 @@
         <div id="thank-you-commit-box" class="col-xs-12 col-md-6 col-md-offset-3">
             <div id="close-button-container">
                 <a id="close-button" asp-action="Details" asp-route-id="@Model.ProjectId">
-                    <object id="close-button-img" type="image/svg+xml" data="/images/close-button.svg">
-                        Close
+                    <object id="close-button-img" type="image/svg+xml" data="/images/close-button-friesland-blue.svg">
+                        @*Close*@
+                        Sluiten
                     </object>
                 </a>
             </div>
             <div id="thank-you-text">
-                <h1>Awesome!</h1>
-                <h2>Thank you for participating</h2>
-                <p>Many thanks in making this world a better place, by supporting <b>@Html.DisplayFor(model => model.ProjectName)</b>!</p>
+                <h1>Wat goed!</h1> @*Wat goed!*@
+                <h2>Dank voor je deelname aan dit project!</h2> @*Thank you for participating*@
+
+                @*In crowdacting, we only act collectively when we meet the target before the deadline, so please feel very welcome to share this project through the sharing buttons below!*@
+                <p>Bij crowdacting komen we alleen collectief in actie als het target wordt gehaald voor de deadline, dus deel dit project vooral met je netwerk met de buttons hieronder!</p>
+
+                @*We’ll keep you updated on the project. Also feel free to Like us on <a href="https://www.facebook.com/freonen/">Facebook</a> to stay up to date on everything CollAction!*@
+                <p>We houden je op de hoogte van het project. Like Freonen op <a href="https://www.facebook.com/freonen/">Facebook</a> als je het leuk vindt wat we doen – dan hoor je meer over deze en andere mooie projecten!</p>
             </div>
         </div>
     </div>
 </div>
 
-
 <div id="project-share">
     <div class="container">
         <div class="row">
-            <div id="project-details-share-buttons-custom"></div>
+            <div id="project-details-share-buttons"></div>
         </div> 
     </div> 
 </div>

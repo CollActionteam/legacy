@@ -1,94 +1,45 @@
 @import '../../mixins';
 @import "../../colors";
 
+#find-project {
+  width: 100%;
+}
+
 @media only screen and (min-width: 992px) {
-  #project-filter {
-    font-size: 2.75em;
+  #banner-title {
+    background-image: url(/images/friesland/find-projects.jpg);
+    background-size: 100%;
+    background-position-y: center;
+    color: #fff;
+    padding-top: 200px;
+    padding-bottom: 200px;
 
-    .project-filter-control {
-      display: inline-block;
-    }
-
-    .project-filter-drop-down {
-      margin: 15px;
-    }
-  }
-
-  #find-project {
-    ul {
-      padding: 150px 0px;
+    #title-row {
+      h1 {
+        margin: 0px;
+        padding: 0px;
+        font-weight: 700;
+        font-size: 64px;
+        text-align: center;
+      }
     }
   }
 }
 
 @media only screen and (max-width: 992px) {
-
-  #project-filter {
-    font-size: 1.75em;
-    
-    ul {
-      text-align: center;
-      padding: 70px 0px;
-    }
-
-    .project-filter-drop-down {
-      width: 256px;
-      margin: 15px 15px 15px 0px;
-      text-align: center;
-
-      i {
-        float: right;
-        margin-top: 8px;
-      }
-    }
-  }
-}
-
-#find-project {
-  width: 100%;
-
-  #project-filter {
-    color: #eee;
-    background-image: url(/images/find-projects.jpg);
+  #banner-title {
+    background-image: url(/images/friesland/find-projects.jpg);
     background-size: 100%;
+    background-position-y: center;
+    color: #fff;
 
-    ul {
-      list-style: none;
-      margin: 0px;
-    }
-
-    .project-filter-drop-down {
-      cursor: pointer;
-      display: inline-block;
-      border: 3px solid #eee;
-      padding: 0px 25px;
-      border-radius: 35px;
-      user-select: none;
-      position: relative;
-
-      i {
-        font-size: 0.75em;
-        margin-left: 5px;
-      }
-
-      .drop-down-options {
-        @include card;
-        position: absolute;
-        z-index: 1;
-        padding: 30px;
-        left: 0px;
-        top: -40px;
-        display: inline-block;
-
-        ul {
-          margin: 0px;
-          padding: 0px;
-          li {
-            list-style: none;
-            white-space: nowrap;
-            margin: 10px 0px;
-          }
-        }
+    #title-row {
+      h1 {
+        margin-top: 20px;
+        padding: 0px;
+        font-weight: 700;
+        font-size: 42px;
+        text-align: center;
       }
     }
   }
@@ -105,6 +56,7 @@
       border: 1px solid #ccc;
       border-radius: 10px;
       padding: 0px !important;
+      background-color: white;
 
       .project-thumb-image {
         border-top-left-radius: 10px;
@@ -188,10 +140,15 @@
 }
 
 @media (max-width: 991px) {
-  #project-list {
-    padding: 10px 0;
-    .project-thumb-container {
-      padding: 10px 5px 10px 5px;
+    #join-a-project {
+      display: block;
+    }
+
+    #project-list {
+      padding: 10px 0;
+
+      .project-thumb-container {
+        padding: 10px 5px 10px 5px;
+      }
     }
   }
-}
