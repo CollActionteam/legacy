@@ -71,6 +71,7 @@ namespace CollAction.Models
         public DateTime End { get; set; }
 
         [Display(Name = "Banner image description")]
+        [MaxLength(50)]
         public string BannerImageDescription { get; set; }
 
         [Display(Name = "Banner image", Prompt = "2732x864 JPEG, GIF, PNG, BMP")]
@@ -80,6 +81,7 @@ namespace CollAction.Models
         public IFormFile BannerImageUpload { get; set; }
 
         [Display(Name = "Descriptive image description")]
+        [MaxLength(50)]
         public string DescriptiveImageDescription { get; set; }
 
         [Display(Name = "Description image", Prompt = "1088x518 JPEG, GIF, PNG, BMP")]
