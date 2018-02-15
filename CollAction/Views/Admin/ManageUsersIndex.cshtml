@@ -36,12 +36,12 @@
     </tbody>
 </table>
 
-@if (Model.CurrentPage > 0)
+@if (Model.HasPrevious)
 {
     <a asp-action="ManageUsersIndex" asp-route-page="@Model.PreviousPage">Previous</a>
 }
 
-@if (Model.CurrentPage < Model.NumberPages - 1)
+@if (Model.HasNext)
 {
     <a asp-action="ManageUsersIndex" asp-route-page="@Model.NextPage">Next</a>
 }
