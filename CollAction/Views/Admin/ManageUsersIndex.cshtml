@@ -1,0 +1,47 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using CollAction.Models.AdminViewModels
+
+@inject IViewLocalizer Localizer
+@model ManageUsersIndexViewModel
+
+@{
+    ViewData["Title"] = "Manage Users";
+}
+
+<h2>@ViewData["Title"].</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Users.First().Email)
+            </th>
+            <th>
+                Manage
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (ApplicationUser user in Model.Users)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(content => user.Email)
+                </td>
+                <td>
+                    <a asp-action="ManageUser" asp-route-userId="@user.Id">Manage</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (Model.CurrentPage > 0)
+{
+    <a asp-action="ManageUsersIndex" asp-route-page="@Model.PreviousPage">Previous</a>
+}
+
+@if (Model.CurrentPage < Model.NumberPages - 1)
+{
+    <a asp-action="ManageUsersIndex" asp-route-page="@Model.NextPage">Next</a>
+}
