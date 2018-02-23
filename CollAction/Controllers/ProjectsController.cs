@@ -87,13 +87,17 @@ namespace CollAction.Controllers
             return View(displayProject);
         }
 
-        public async Task<IActionResult> Embed()
+        public async Task<IActionResult> Embed(int? projectId)
         {
+            var projects = projectId.HasValue ? await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted && p.Id == projectId.Value)
+                                              : await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted);
+
             var model = new FindProjectViewModel
             {
                 OwnerId = null,
-                Projects = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted)
+                Projects = projects
             };
+
             return View(model);
         }
 
