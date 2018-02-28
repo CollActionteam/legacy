@@ -92,6 +92,11 @@ namespace CollAction.Controllers
             var projects = projectId.HasValue ? await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted && p.Id == projectId.Value)
                                               : await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted);
 
+            if (projectId.HasValue && !projects.Any())
+            {
+                return NotFound();
+            }
+
             var model = new FindProjectViewModel
             {
                 OwnerId = null,
