@@ -7,7 +7,49 @@
 @{
     Layout = "_EmbeddedLayout";
     ViewData["Title"] = Localizer["Projecten"];
-    var defaultDisplayModel = FindProjectViewModel.DefaultDisplayProjectViewModel;
 }
 
-<div id="projects-container"></div>
+
+<div id="find-project">
+    <div id="project-list">
+        <div className="container">
+            @foreach (var project in Model.Projects)
+            {
+                <div className="col-xs-12 col-md-4 project-thumb-container">
+                    <div className="project-thumb">
+                        <div className="project-thumb-image" style="url(@project.BannerImagePath)">
+                            <div className="category-name" style="background-color: #@project.Project.Category.ColorHex">
+                                @project.Project.Category.Name
+                            </div>
+                        </div>
+                        <div className="project-thumb-body">
+                            <strong>@project.Project.Name</strong>
+                            <p>@project.Project.Proposal</p>
+                        </div>
+                        <div className="project-thumb-about">
+                            <div>@project.Project.Location?.Name</div>
+                            <div>@project.Progress</div>
+                        </div>
+                        <div className="project-thumb-stats">
+                            <div>
+                                <div className="value">@project.RemainingTime</div>
+                                <div className="label">@project.RemainingTimeUserFriendly</div>
+                            </div>
+                            <div>
+                                <div className="value">@project.Participants</div>
+                                <div className="label">Toezeggingen</div>
+                            </div>
+                            <div>
+                                <div className="value">@project.Project.Target</div>
+                                <div className="label">Target</div>
+                            </div>
+                        </div>
+                        <div className="project-thumb-button">
+                            <a href="@Url.Action("Details", "Projects", new { id = project.Project.Id })" style="background-color: #@project.Project.Category.ColorHex">Lees meer</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

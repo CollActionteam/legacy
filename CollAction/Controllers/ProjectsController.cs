@@ -90,7 +90,7 @@ namespace CollAction.Controllers
         public async Task<IActionResult> Embed(int? projectId)
         {
             var projects = projectId.HasValue ? await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted && p.Id == projectId.Value)
-                                              : await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted);
+                                              : await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted && p.Category.Name == "Friesland");
 
             if (projectId.HasValue && !projects.Any())
             {
