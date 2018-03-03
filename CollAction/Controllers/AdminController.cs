@@ -48,6 +48,66 @@ namespace CollAction.Controllers
             => View();
 
         [HttpGet]
+        public async Task<IActionResult> ManageUsersIndex(int page = 0)
+        {
+            if (page < 0)
+                throw new ApplicationException($"invalid page size: {page}");
+
+            const int pageSize = 20;
+
+            ManageUsersIndexViewModel model = new ManageUsersIndexViewModel()
+            {
+                Users = await _context.Users.Skip(pageSize * page).Take(pageSize).ToListAsync(),
+                NumberPages = 1 + await _context.Users.CountAsync() / pageSize,
+                CurrentPage = page
+            };
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ManageUser(string userId)
+        {
+            ApplicationUser user = await _context.Users.FindAsync(userId);
+
+            if (user == null)
+                throw new ApplicationException($"unable to find user: {userId}");
+
+            ManageUserViewModel model = new ManageUserViewModel()
+            {
+                Id = userId,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                RepresentsNumberParticipants = user.RepresentsNumberParticipants
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ManageUser(ManageUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                ApplicationUser user = await _context.Users.FindAsync(model.Id);
+
+                if (user == null)
+                    throw new ApplicationException($"unable to find user: {model.Id}");
+
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.RepresentsNumberParticipants = model.RepresentsNumberParticipants;
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(ManageUsersIndex));
+            }
+            else
+            {
+                return View(model);
+            }
+        }
+
+        [HttpGet]
         public async Task<IActionResult> ManageProjectsIndex()
             => View(await _context.Projects.Include(p => p.Tags).ThenInclude(t => t.Tag).ToListAsync());
 
