@@ -4,6 +4,7 @@ import * as React from "react";
 import { IProject } from "./ProjectList";
 
 interface IFindProjectProps {
+  projectId?: string;
   controller: boolean;
 }
 
@@ -36,7 +37,12 @@ export default class FindProject extends React.Component<IFindProjectProps, IFin
 
     // Fetch projects with out filters set
     const getUrl: () => string = () => {
-      return "/api/projects/find";
+      let url = "/api/projects/find";
+      if (this.props.projectId) {
+        url += "?projectId=" + this.props.projectId;
+      }
+
+      return url;
     };
 
     try {
