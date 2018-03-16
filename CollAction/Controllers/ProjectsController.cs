@@ -87,23 +87,9 @@ namespace CollAction.Controllers
             return View(displayProject);
         }
 
-        public async Task<IActionResult> Embed(int? projectId)
+        public IActionResult Embed()
         {
-            var projects = projectId.HasValue ? await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted && p.Id == projectId.Value)
-                                              : await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted && p.Category.Name == "Friesland");
-
-            if (projectId.HasValue && !projects.Any())
-            {
-                return NotFound();
-            }
-
-            var model = new FindProjectViewModel
-            {
-                OwnerId = null,
-                Projects = projects
-            };
-
-            return View(model);
+            return View();
         }
 
         // GET: Projects/Create
@@ -473,21 +459,25 @@ namespace CollAction.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> GetTileProjects(int? categoryId, int? statusId)
+        public async Task<JsonResult> GetTileProjects(int? projectId)
         {
-            Expression<Func<Project, bool>> projectExpression = (p =>
-                p.Status != ProjectStatus.Hidden &&
-                p.Status != ProjectStatus.Deleted &&
-                p.Category.Name.Equals("Friesland"));
-
-            Expression<Func<Project, bool>> statusExpression;
-            switch (statusId)
+            Expression<Func<Project, bool>> projectExpression;
+            if (projectId.HasValue)
             {
-                case (int)ProjectExternalStatus.Open: statusExpression = (p => p.Status == ProjectStatus.Running && p.Start <= DateTime.UtcNow && p.End >= DateTime.UtcNow); break;
-                case (int)ProjectExternalStatus.Closed: statusExpression = (p => (p.Status == ProjectStatus.Running && p.End < DateTime.UtcNow) || p.Status == ProjectStatus.Successful || p.Status == ProjectStatus.Failed); break;
-                case (int)ProjectExternalStatus.ComingSoon: statusExpression = (p => p.Status == ProjectStatus.Running && p.Start > DateTime.UtcNow); break;
-                default: statusExpression = (p => true); break;
+                projectExpression = (p =>
+                    p.Status != ProjectStatus.Hidden &&
+                    p.Status != ProjectStatus.Deleted &&
+                    p.Id == projectId.Value);
             }
+            else 
+            {
+                projectExpression = (p =>
+                    p.Status != ProjectStatus.Hidden &&
+                    p.Status != ProjectStatus.Deleted &&
+                    p.Category.Name.Equals("Friesland"));
+            }
+
+            Expression<Func<Project, bool>> statusExpression = (p => true);
             
             var projects = await _service.GetTileProjects(
                 Expression.Lambda<Func<Project, bool>>(Expression.AndAlso(projectExpression.Body, Expression.Invoke(statusExpression, projectExpression.Parameters[0])), projectExpression.Parameters[0]));
