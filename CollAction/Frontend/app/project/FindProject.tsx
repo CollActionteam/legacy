@@ -37,9 +37,13 @@ export default class FindProject extends React.Component<IFindProjectProps, IFin
 
     // Fetch projects with out filters set
     const getUrl: () => string = () => {
-      let url = "/api/projects/find";
+      let url = "/api/projects";
+
       if (this.props.projectId) {
-        url += "?projectId=" + this.props.projectId;
+        url += "/get?projectId=" + this.props.projectId;
+      }
+      else {
+        url += "/find";
       }
 
       return url;

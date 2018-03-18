@@ -458,30 +458,39 @@ namespace CollAction.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<JsonResult> GetTileProjects(int? projectId)
+        public async Task<JsonResult> GetTileProjects(int? categoryId, int? statusId)
         {
-            Expression<Func<Project, bool>> projectExpression;
-            if (projectId.HasValue)
-            {
-                projectExpression = (p =>
-                    p.Status != ProjectStatus.Hidden &&
-                    p.Status != ProjectStatus.Deleted &&
-                    p.Id == projectId.Value);
-            }
-            else 
-            {
-                projectExpression = (p =>
-                    p.Status != ProjectStatus.Hidden &&
-                    p.Status != ProjectStatus.Deleted &&
-                    p.Category.Name.Equals("Friesland"));
-            }
+            Expression<Func<Project, bool>> projectExpression = (p =>
+                p.Status != ProjectStatus.Hidden &&
+                p.Status != ProjectStatus.Deleted &&
+                p.Category.Name.Equals("Friesland"));
 
-            Expression<Func<Project, bool>> statusExpression = (p => true);
+            Expression<Func<Project, bool>> statusExpression;
+            switch (statusId)
+            {
+                case (int)ProjectExternalStatus.Open: statusExpression = (p => p.Status == ProjectStatus.Running && p.Start <= DateTime.UtcNow && p.End >= DateTime.UtcNow); break;
+                case (int)ProjectExternalStatus.Closed: statusExpression = (p => (p.Status == ProjectStatus.Running && p.End < DateTime.UtcNow) || p.Status == ProjectStatus.Successful || p.Status == ProjectStatus.Failed); break;
+                case (int)ProjectExternalStatus.ComingSoon: statusExpression = (p => p.Status == ProjectStatus.Running && p.Start > DateTime.UtcNow); break;
+                default: statusExpression = (p => true); break;
+            }
             
             var projects = await _service.GetTileProjects(
                 Expression.Lambda<Func<Project, bool>>(Expression.AndAlso(projectExpression.Body, Expression.Invoke(statusExpression, projectExpression.Parameters[0])), projectExpression.Parameters[0]));
             
+            return Json(projects);
+        }        
+
+        [HttpGet]
+        public async Task<JsonResult> GetTileProject(int projectId)
+        {
+            Expression<Func<Project, bool>> projectExpression= (p =>
+                p.Status != ProjectStatus.Hidden &&
+                p.Status != ProjectStatus.Deleted &&
+                p.Id == projectId);
+
+            Expression<Func<Project, bool>> statusExpression = (p => true);
+            
+            var projects = await _service.GetTileProjects(projectExpression);            
             return Json(projects);
         }
 
