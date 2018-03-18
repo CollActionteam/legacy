@@ -4,7 +4,7 @@ import * as React from "react";
 import { IProject } from "./ProjectList";
 
 interface IFindProjectProps {
-  projectId?: string;
+  projectId?: number;
   controller: boolean;
 }
 
