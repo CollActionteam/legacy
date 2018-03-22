@@ -246,3 +246,8 @@ ModelManifest.xml
 
 # Vscode
 **/*.vscode
+
+# DS_Store
+.DS_Store
+CollAction.Tests/.DS_Store
+CollAction/.DS_Store

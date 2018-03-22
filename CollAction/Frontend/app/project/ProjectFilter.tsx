@@ -25,7 +25,7 @@ export class ProjectFilter extends React.Component<IProjectFilterProps, IProject
     super(props);
 
     const statusList: IDropDownListItem[] = [
-      { id: "1", name: "Open" },
+      { id: "1", name: "Open & Closed" },
       { id: "2", name: "Closed" },
       { id: "3", name: "Coming Soon" },
     ];
