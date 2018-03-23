@@ -14,8 +14,7 @@
     }
 
 
-    #logos, 
-    #logos-landscape {
+    #logos {
         text-align: center;
         margin-bottom: 30px;
     }
@@ -94,20 +93,8 @@
     }    
 }
 
-@media (min-width: 991px) {
-    #footer {
-        #logos {
-            display: none;
-        }
-    }
-}
-
 @media (max-width: 991px) {
     #footer {
-        #logos-landscape {
-            display: none;
-        }
-
         #logos > div {
             margin-bottom: 30px;
 
