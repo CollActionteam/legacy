@@ -21,6 +21,17 @@
         letter-spacing: 10px;
         margin: 0px;
     }
+
+    @media (max-width: 991px) {
+        h1 {
+            font-size: 1.5em;
+        }
+
+        h4 {
+            font-size: 1em;
+            letter-spacing: normal;
+        }
+    }
 }
 
 #login-form {
@@ -30,4 +41,46 @@
     .row {
         margin-bottom: 50px;
     }
+
+    .btn-socialmedia-login {
+        @include friesland-action-button;
+        text-transform: none;
+        width: 100%;
+        
+        &.facebook {
+            background-color: #1b579d;
+        }
+
+        &.twitter {
+            background-color: #00acf5;
+        }
+
+        &.google {
+            background-color: #e3411f;
+        }
+    }
+
+    .seperator {        
+        width: 100%;
+        text-align: center;
+
+        p {
+            background: #333;
+            height: 1px;
+            margin-top: 10px;
+
+            span {
+                background: #efefef;
+                padding-left: 10px; 
+                padding-right: 10px;
+                position:relative; 
+                top: -10px;
+            }
+        }
+    }
+
+    .btn-login {
+        width: 100%;
+    }
+
 }
