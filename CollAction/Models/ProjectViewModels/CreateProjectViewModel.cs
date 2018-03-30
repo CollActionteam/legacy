@@ -34,17 +34,20 @@ namespace CollAction.Models
 
         [Required(ErrorMessage = "Give a succinct description of the issues your project is designed to address")]
         [Display(Name = "Short description", Prompt = "E.g Reduce plastic waste and save our oceans!")]
-        [MaxLength(1000)]
+        [MaxLength(10000)]
         public string Description { get; set; }
+        //public string DescriptionHtml { get; set; }
 
         [Required(ErrorMessage = "Describe what you hope to have achieved upon successful completion of your project")]
         [Display(Name = "Goal/Impact", Prompt = "Max 1000 characters")]
-        [MaxLength(1000)]
+        [MaxLength(10000)]
         public string Goal { get; set; }
+        //public string GoalHtml { get; set; }
 
         [Display(Name = "Other comments", Prompt = "e.g. Background, process, FAQs, about the initiator")]
-        [MaxLength(2000)]
+        [MaxLength(20000)]
         public string CreatorComments { get; set; }
+        //public string CreatorCommentsHtml { get; set; }
 
         [Required]
         [Display(Name = "Category")]

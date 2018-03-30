@@ -12,9 +12,10 @@ using System;
 namespace CollAction.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180329165220_ProjectRichText2")]
+    partial class ProjectRichText2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -331,10 +332,10 @@ namespace CollAction.Migrations
                     b.Property<int>("CategoryId");
 
                     b.Property<string>("CreatorComments")
-                        .HasMaxLength(20000);
+                        .HasMaxLength(2000);
 
                     b.Property<string>("CreatorCommentsHtml")
-                        .HasMaxLength(20000);
+                        .HasMaxLength(2000);
 
                     b.Property<string>("Description")
                         .IsRequired()

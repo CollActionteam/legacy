@@ -19,6 +19,11 @@ npm run build</PreBuildEvent>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Frontend\app\global\RichTextEditor.tsx" />
+    <None Remove="Frontend\app\global\styles\RichTextEditor.tsx" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.6.1" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.1" PrivateAssets="All" />
@@ -38,5 +43,8 @@ npm run build</PreBuildEvent>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="wwwroot\js\" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="Frontend\app\global\RichTextEditor.tsx" />
   </ItemGroup>
 </Project>

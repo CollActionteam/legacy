@@ -19,6 +19,7 @@ using CollAction.Services;
 using System.Text.RegularExpressions;
 using CollAction.Models.ProjectViewModels;
 using System.Linq.Expressions;
+using Newtonsoft.Json;
 
 namespace CollAction.Controllers
 {
@@ -127,15 +128,21 @@ namespace CollAction.Controllers
                 model.Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
                 return View(model);
             }
+            Delta description = Delta.JsonStringToDelta(model.Description);
+            Delta goal = Delta.JsonStringToDelta(model.Goal);
+            Delta creatorComments = Delta.JsonStringToDelta(model.CreatorComments);
 
             var project = new Project
             {
                 OwnerId = (await _userManager.GetUserAsync(User)).Id,
                 Name = model.Name,
-                Description = model.Description,
-                Goal = model.Goal,
+                Description = Delta.DeltaToJsonString(description),
+                DescriptionHtml = Delta.DeltaToHTML(description),
+                Goal = Delta.DeltaToJsonString(goal),
+                GoalHtml = Delta.DeltaToHTML(goal),
                 Proposal = model.Proposal,
-                CreatorComments = model.CreatorComments,
+                CreatorComments = Delta.DeltaToJsonString(creatorComments),
+                CreatorCommentsHtml = Delta.DeltaToHTML(creatorComments),
                 CategoryId = model.CategoryId,
                 LocationId = model.LocationId,
                 Target = model.Target,
