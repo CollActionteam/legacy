@@ -2,12 +2,9 @@
 
 @inject IViewLocalizer Localizer
 
-@model FindProjectViewModel
-
 @{
     Layout = "_EmbeddedLayout";
     ViewData["Title"] = Localizer["Projecten"];
-    var defaultDisplayModel = FindProjectViewModel.DefaultDisplayProjectViewModel;
 }
 
-<div id="projects-container"></div>
+<div id="embedded-projects-container"><div>

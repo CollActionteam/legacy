@@ -21,3 +21,13 @@ renderComponentIf(
   <FindProject controller={false} />,
   document.getElementById("projects-container")
 );
+
+renderComponentIf(
+  <FindProject controller={false} projectId={getQueryString("projectId") } />,
+  document.getElementById("embedded-projects-container")
+);
+
+function getQueryString(key: string): number {
+  let value = decodeURIComponent(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURIComponent(key).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
+  return parseInt(value);
+}
