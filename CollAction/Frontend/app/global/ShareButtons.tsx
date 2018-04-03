@@ -71,7 +71,7 @@ class ShareButtons extends React.Component<IShareButtonsProps, IShareButtonsStat
   }
 
   getLinkedInUrl () {
-    return encodeURI(`http://www.linkedin.com/shareArticle?mini=true&url=${this.getUrl()}L&title=${this.getTitle()}`);
+    return encodeURI(`http://www.linkedin.com/shareArticle?mini=true&url=${this.getUrl()}&title=${this.getTitle()}`);
   }
 
 
