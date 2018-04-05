@@ -7,12 +7,12 @@ namespace CollAction.Models
     {
         private readonly IStringLocalizer _localizer;
 
-        public DisplayTileProjectViewModel(IStringLocalizer localizer, DateTime projectStart, DateTime projectEnd, ProjectStatus projectStatus, bool IsActive, bool isComingSoon, bool isClosed)
+        public DisplayTileProjectViewModel(IStringLocalizer localizer, DateTime projectStart, DateTime projectEnd, ProjectStatus projectStatus, bool isActive, bool isComingSoon, bool isClosed)
         {
             _localizer = localizer;
-            setRemainingTime(projectStart, projectEnd);
-            setRemainingTimeText(projectStart, projectEnd);
-            setStatusTexts(projectStatus, IsActive, isComingSoon, isClosed);
+            SetRemainingTime(projectStart, projectEnd);
+            SetRemainingTimeText(projectStart, projectEnd);
+            SetStatusTexts(projectStatus, isActive, isComingSoon, isClosed);
         }
 
         public int ProjectId { get; set; }
@@ -57,13 +57,13 @@ namespace CollAction.Models
 
         public string StatusSubText { get; set; }
 
-        private void setRemainingTime(DateTime projectStart, DateTime projectEnd)
+        private void SetRemainingTime(DateTime projectStart, DateTime projectEnd)
         {
             TimeSpan remainingTime = (DateTime.UtcNow >= projectEnd || projectEnd <= projectStart) ? TimeSpan.Zero : projectEnd - (DateTime.UtcNow > projectStart ? DateTime.UtcNow : projectStart);
             RemainingTime = remainingTime.TotalDays < 1 ? remainingTime.Hours : remainingTime.Days;
         }
 
-        private void setRemainingTimeText(DateTime projectStart, DateTime projectEnd)
+        private void SetRemainingTimeText(DateTime projectStart, DateTime projectEnd)
         {
             TimeSpan remainingTime = (DateTime.UtcNow >= projectEnd || projectEnd <= projectStart) ? TimeSpan.Zero : projectEnd - (DateTime.UtcNow > projectStart ? DateTime.UtcNow : projectStart);
             if (Math.Floor(remainingTime.TotalDays) < 1)
@@ -76,7 +76,7 @@ namespace CollAction.Models
             }
         }
 
-        private void setStatusTexts(ProjectStatus projectStatus, bool IsActive, bool isComingSoon, bool isClosed)
+        private void SetStatusTexts(ProjectStatus projectStatus, bool IsActive, bool isComingSoon, bool isClosed)
         {
             if (IsActive)
             {

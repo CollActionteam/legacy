@@ -205,6 +205,11 @@ namespace CollAction
                      new { controller = "Projects", action = "GetTileProjects" }
                  );
 
+                routes.MapRoute("GetTileProject",
+                     "api/projects/get",
+                     new { controller = "Projects", action = "GetTileProject" }
+                 );
+
                 routes.MapRoute("GetStatuses",
                      "api/status",
                      new { controller = "Projects", action = "GetStatuses" }

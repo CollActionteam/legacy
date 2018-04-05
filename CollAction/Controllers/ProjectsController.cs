@@ -87,14 +87,9 @@ namespace CollAction.Controllers
             return View(displayProject);
         }
 
-        public async Task<IActionResult> Embed()
+        public IActionResult Embed()
         {
-            var model = new FindProjectViewModel
-            {
-                OwnerId = null,
-                Projects = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted)
-            };
-            return View(model);
+            return View();
         }
 
         // GET: Projects/Create
@@ -463,7 +458,6 @@ namespace CollAction.Controllers
             }
         }
 
-        [HttpGet]
         public async Task<JsonResult> GetTileProjects(int? categoryId, int? statusId)
         {
             Expression<Func<Project, bool>> projectExpression = (p =>
@@ -483,6 +477,20 @@ namespace CollAction.Controllers
             var projects = await _service.GetTileProjects(
                 Expression.Lambda<Func<Project, bool>>(Expression.AndAlso(projectExpression.Body, Expression.Invoke(statusExpression, projectExpression.Parameters[0])), projectExpression.Parameters[0]));
             
+            return Json(projects);
+        }        
+
+        [HttpGet]
+        public async Task<JsonResult> GetTileProject(int projectId)
+        {
+            Expression<Func<Project, bool>> projectExpression= (p =>
+                p.Status != ProjectStatus.Hidden &&
+                p.Status != ProjectStatus.Deleted &&
+                p.Id == projectId);
+
+            Expression<Func<Project, bool>> statusExpression = (p => true);
+            
+            var projects = await _service.GetTileProjects(projectExpression);            
             return Json(projects);
         }
 
