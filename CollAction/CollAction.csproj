@@ -19,6 +19,7 @@ npm run build</PreBuildEvent>
   </PropertyGroup>
 
   <ItemGroup>
+
     <Compile Remove="Migrations\20180311210544_UpdatingExistingEndDates.cs" />
     <Compile Remove="Migrations\20180311210544_UpdatingExistingEndDates.Designer.cs" />
   </ItemGroup>

@@ -121,6 +121,7 @@ namespace CollAction
             if (env.IsProduction())
             {
                 app.UseRewriter(new RewriteOptions().AddRewriteHttpsProxyRule());
+                app.UseHsts(new HstsOptions(TimeSpan.Parse(Configuration["HtstDuration"], CultureInfo.InvariantCulture)));
             }
             
             app.UseRequestLocalization(new RequestLocalizationOptions
