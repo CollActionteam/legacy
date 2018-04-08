@@ -1,4 +1,5 @@
 import * as React from "react";
+import onClickOutside from "react-onclickoutside";
 
 const Options = ({ list, onSelected }) => {
   return (
@@ -25,7 +26,7 @@ export interface IDropDownListItem {
   name: string;
 }
 
-export default class DropDown extends React.Component<IDropdownProps, IDropdownState> {
+class DropDown extends React.Component<IDropdownProps, IDropdownState> {
   constructor (props) {
     super(props);
     this.state = { currentlySelected: null, open: false };
@@ -38,7 +39,17 @@ export default class DropDown extends React.Component<IDropdownProps, IDropdownS
   }
 
   onClick(...args) {
-    this.setState({open: !this.state.open});
+    this.setState({
+      open: !this.state.open,
+    });
+  }
+
+  handleClickOutside = () => {
+    if (this.state.open) {
+      this.setState({
+        open: false,
+      });
+    }
   }
 
   onSelected (option: IDropDownListItem) {
@@ -61,3 +72,5 @@ export default class DropDown extends React.Component<IDropdownProps, IDropdownS
     );
   }
 }
+
+export default onClickOutside(DropDown);

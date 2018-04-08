@@ -1,6 +1,10 @@
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Options;
+@using CollAction.Services;
 
 @inject IViewLocalizer Localizer
+
+@inject IOptions<NewsletterSubscriptionServiceOptions> NewsletterSubscriptionServiceOptions
 
 <div id="footer">
   <div class="container">
@@ -52,7 +56,7 @@
 
         <!-- Begin MailChimp Signup Form -->
         <div id="mc_embed_signup">
-          <form action="//collaction.us14.list-manage.com/subscribe/post?u=48e9b2f8f522cf59b9d5ffa8d&amp;id=2141ab4819" method="post"
+          <form action="//collaction.us14.list-manage.com/subscribe/post?u=48e9b2f8f522cf59b9d5ffa8d&amp;id=@NewsletterSubscriptionServiceOptions.Value.MailChimpNewsletterListId" method="post"
             id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
             <div id="mc_embed_signup_scroll">
               <div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
@@ -66,7 +70,7 @@
               </div>
               <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
               <div style="position: absolute; left: -5000px;" aria-hidden="true">
-                <input type="text" place-holder="E-Mail" name="b_48e9b2f8f522cf59b9d5ffa8d_2141ab4819" tabindex="-1" value="">
+                <input type="text" place-holder="E-Mail" name="b_48e9b2f8f522cf59b9d5ffa8d_@NewsletterSubscriptionServiceOptions.Value.MailChimpNewsletterListId" tabindex="-1" value="">
               </div>
               <div class="clear">
                 <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button">

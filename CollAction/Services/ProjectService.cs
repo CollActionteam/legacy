@@ -81,7 +81,7 @@ namespace CollAction.Services
                     BannerImagePath = p.BannerImage != null ? p.BannerImage.Filepath : $"/images/default_banners/{p.Category.Name}.jpg",
                     BannerImageDescription = p.BannerImage.Description,
                     Target = p.Target,
-                    Participants = p.Participants.Count()
+                    Participants = p.Participants.Sum(participant => participant.User.RepresentsNumberParticipants)
                 })
                .ToListAsync();
         }

@@ -28,6 +28,8 @@
     "webpack": "^1.14.0"
   },
   "dependencies": {
+    "bluebird": "^3.5.1",
+    "react-onclickoutside": "^6.4.0",
     "whatwg-fetch": "^2.0.3"
   }
 }

@@ -21,17 +21,17 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="Description" class="control-label required"></label>
-                        <input asp-for="Description" class="form-control" />
+                        <textarea asp-for="Description" class="form-control" rows="10"></textarea>
                         @Html.ValidationMessage("Description")
                     </div>
                     <div class="form-group">
                         <label asp-for="Proposal" class="control-label required"></label>
-                        <input asp-for="Proposal" class="form-control" />
+                        <textarea asp-for="Proposal" class="form-control" rows="5"></textarea>
                         @Html.ValidationMessage("Proposal")
                     </div>
                     <div class="form-group">
                         <label asp-for="Goal" class="control-label required"></label>
-                        <input asp-for="Goal" class="form-control" />
+                        <textarea asp-for="Goal" class="form-control" rows="10"></textarea>
                         @Html.ValidationMessage("Goal")
                     </div>
                     <div class="form-group">
@@ -56,7 +56,7 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="CreatorComments" class="control-label"></label>
-                        <input asp-for="CreatorComments" class="form-control" />
+                        <textarea asp-for="CreatorComments" class="form-control" rows="20"></textarea>
                         @Html.ValidationMessage("CreatorComments")
                     </div>
                     <div class="form-group">

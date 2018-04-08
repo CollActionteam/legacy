@@ -105,9 +105,6 @@ export class ProjectFilter extends React.Component<IProjectFilterProps, IProject
 
               <div className="col-xs-12">
                 <ul>
-                  <li className= "project-filter-control hidden-sm hidden-md hidden-lg">
-                    Filter Projects By
-                  </li>
                   <li className= "project-filter-control  hidden-xs">
                     Show me
                   </li>

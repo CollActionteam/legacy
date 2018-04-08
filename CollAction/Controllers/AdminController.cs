@@ -48,6 +48,66 @@ namespace CollAction.Controllers
             => View();
 
         [HttpGet]
+        public async Task<IActionResult> ManageUsersIndex(int page = 0)
+        {
+            if (page < 0)
+                throw new ApplicationException($"invalid page size: {page}");
+
+            const int pageSize = 20;
+
+            ManageUsersIndexViewModel model = new ManageUsersIndexViewModel()
+            {
+                Users = await _context.Users.Skip(pageSize * page).Take(pageSize).ToListAsync(),
+                NumberPages = 1 + await _context.Users.CountAsync() / pageSize,
+                CurrentPage = page
+            };
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ManageUser(string userId)
+        {
+            ApplicationUser user = await _context.Users.FindAsync(userId);
+
+            if (user == null)
+                throw new ApplicationException($"unable to find user: {userId}");
+
+            ManageUserViewModel model = new ManageUserViewModel()
+            {
+                Id = userId,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                RepresentsNumberParticipants = user.RepresentsNumberParticipants
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ManageUser(ManageUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                ApplicationUser user = await _context.Users.FindAsync(model.Id);
+
+                if (user == null)
+                    throw new ApplicationException($"unable to find user: {model.Id}");
+
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.RepresentsNumberParticipants = model.RepresentsNumberParticipants;
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(ManageUsersIndex));
+            }
+            else
+            {
+                return View(model);
+            }
+        }
+
+        [HttpGet]
         public async Task<IActionResult> ManageProjectsIndex()
             => View(await _context.Projects.Include(p => p.Tags).ThenInclude(t => t.Tag).ToListAsync());
 
@@ -102,6 +162,30 @@ namespace CollAction.Controllers
                 return Content(csv, "text/csv");
             else
                 return NotFound();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteDescriptiveImage(int id)
+        {
+            var fileManager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "descriptiveimages"));
+            Project project = await _context.Projects.Include(p => p.DescriptiveImage).FirstAsync(p => p.Id == id);
+            fileManager.DeleteImageFileIfExists(project.DescriptiveImage);
+            project.DescriptiveImageFileId = null;
+            await _context.SaveChangesAsync();
+            return RedirectToAction("ManageProject", new { id = id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteBannerImage(int id)
+        {
+            var fileManager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "bannerimages"));
+            Project project = await _context.Projects.Include(p => p.BannerImage).FirstAsync(p => p.Id == id);
+            fileManager.DeleteImageFileIfExists(project.BannerImage);
+            project.BannerImageFileId = null;
+            await _context.SaveChangesAsync();
+            return RedirectToAction("ManageProject", new { id = id });
         }
 
         [HttpPost]
@@ -203,7 +287,7 @@ namespace CollAction.Controllers
                 project.CategoryId = model.CategoryId;
                 project.Target = model.Target;
                 project.Start = model.Start;
-                project.End = model.End;
+                project.End = model.End.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
                 project.Status = model.Status;
                 project.OwnerId = model.OwnerId;
                 project.DisplayPriority = model.DisplayPriority;

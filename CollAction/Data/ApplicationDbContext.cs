@@ -66,7 +66,8 @@ namespace CollAction.Data
                                       .HasForeignKey(l => l.Level2Id)
                                       .OnDelete(DeleteBehavior.SetNull);
             builder.Entity<LocationLevel2>().HasOne(l => l.Location);
-            }
+            builder.Entity<ApplicationUser>().Property(u => u.RepresentsNumberParticipants).HasDefaultValue(1);
+        }
 
         /// <summary>
         /// Seed the database with initialisation data here
@@ -113,6 +114,7 @@ namespace CollAction.Data
                     UserName = adminEmail,
                     Email = adminEmail,
                     EmailConfirmed = true,
+                    RepresentsNumberParticipants = 1
                 };
                 IdentityResult result = await userManager.CreateAsync(admin, adminPassword);
                 if (!result.Succeeded)

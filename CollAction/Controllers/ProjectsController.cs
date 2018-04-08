@@ -140,7 +140,7 @@ namespace CollAction.Controllers
                 LocationId = model.LocationId,
                 Target = model.Target,
                 Start = model.Start,
-                End = model.End,
+                End = model.End.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
                 BannerImage = null
             };
 
@@ -452,7 +452,7 @@ namespace CollAction.Controllers
 
         [HttpGet]
         public async Task<JsonResult> GetCategories()
-            => Json(new[] { new CategoryViewModel() { Id = -1, Name = "All Projects" } }.Concat(
+            => Json(new[] { new CategoryViewModel() { Id = -1, Name = "All" } }.Concat(
                 await _context
                     .Categories
                     .Where(c => c.Name != "Other")
