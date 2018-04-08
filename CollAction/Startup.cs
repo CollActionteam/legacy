@@ -120,6 +120,7 @@ namespace CollAction
 
             if (env.IsProduction())
             {
+                app.UseSecurityHeaders();
                 app.UseRewriter(new RewriteOptions().AddRewriteHttpsProxyRule());
             }
             
