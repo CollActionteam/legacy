@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CollAction.Helpers;
+using System.Net;
 
 namespace CollAction.Models
 {
@@ -25,6 +26,8 @@ namespace CollAction.Models
 
         public string BannerImagePath
             => Project.BannerImage?.Filepath ?? $"/images/default_banners/{Project.Category.Name}.jpg";
+
+        public string ProjectNameUrl => WebUtility.UrlEncode(Project.Name);
 
         private string YouTubeId
         {
