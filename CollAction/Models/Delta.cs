@@ -120,7 +120,7 @@ namespace CollAction.Models
                 Uri uri = new Uri(insert);
                 return uri.AbsoluteUri;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return String.Empty;
             }
