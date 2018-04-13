@@ -291,7 +291,7 @@ namespace CollAction.Controllers
                 project.CategoryId = model.CategoryId;
                 project.Target = model.Target;
                 project.Start = model.Start;
-                project.End = model.End;
+                project.End = model.End.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
                 project.Status = model.Status;
                 project.OwnerId = model.OwnerId;
                 project.DisplayPriority = model.DisplayPriority;
