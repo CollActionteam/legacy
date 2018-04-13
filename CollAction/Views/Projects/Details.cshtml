@@ -124,7 +124,7 @@
             <div class="col-xs-12 col-md-4 align-sides description-tags-container">
                 <div class="project-short-description">
                     <h3>Short description:</h3>
-                    <div>@Html.Raw(Model.Project.DescriptionHtml)</div>
+                    <div>@Html.Raw(Model.Project.Description)</div>
                 </div>
                 <div class="project-dates">
                     <h3>Start date: <span>@Html.DisplayFor(model => model.Start)</span></h3>
@@ -147,19 +147,19 @@
                 <div class="goal-proposal-container">
                     <div class="project-goal">
                         <h3>Goal / impact</h3>
-                        <div>@Html.Raw(Model.Project.GoalHtml)</div>
+                        <div>@Html.Raw(Model.Project.Goal)</div>
                     </div>
                     <div class="project-green-proposal">
                         <p><q>@Html.DisplayFor(model => model.Project.Proposal)</q></p>
                     </div>
                 </div>
-                @if (!String.IsNullOrEmpty(Model.Project.CreatorCommentsHtml))
+                @if (!String.IsNullOrEmpty(Model.Project.CreatorComments))
                 {
                     <hr class="hidden-sm hidden-xs" />
                     <div class="comments-container">
                         <div class="project-comments">
                             <h3>Other comments</h3>
-                            <div>@Html.Raw(Model.Project.CreatorCommentsHtml)</div>
+                            <div>@Html.Raw(Model.Project.CreatorComments)</div>
                         </div>
                     </div>
                 }

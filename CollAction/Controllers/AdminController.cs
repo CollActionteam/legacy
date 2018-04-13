@@ -280,14 +280,12 @@ namespace CollAction.Controllers
                     await _emailSender.SendEmailAsync(project.Owner.Email, subject, failedEmail);
                 }
 
+                project.Description = InputSanitizer.Sanitize(model.Description);
+                project.Goal =  InputSanitizer.Sanitize(model.Goal);
+                project.CreatorComments = InputSanitizer.Sanitize(model.CreatorComments);
+                
                 project.Name = model.Name;
-                project.Description = model.Description;
-                project.DescriptionHtml = Delta.DeltaToHTML(Delta.JsonStringToDelta(model.Description));
-                project.Goal = model.Goal;
-                project.GoalHtml = Delta.DeltaToHTML(Delta.JsonStringToDelta(model.Goal));
                 project.Proposal = model.Proposal;
-                project.CreatorComments = model.CreatorComments;
-                project.CreatorCommentsHtml = Delta.DeltaToHTML(Delta.JsonStringToDelta(model.CreatorComments));
                 project.CategoryId = model.CategoryId;
                 project.Target = model.Target;
                 project.Start = model.Start;

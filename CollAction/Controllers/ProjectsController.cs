@@ -128,21 +128,17 @@ namespace CollAction.Controllers
                 model.Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
                 return View(model);
             }
-            Delta description = Delta.JsonStringToDelta(model.Description);
-            Delta goal = Delta.JsonStringToDelta(model.Goal);
-            Delta creatorComments = Delta.JsonStringToDelta(model.CreatorComments);
+
+            // TODO: check incoming HTML for invalid tags
 
             var project = new Project
             {
                 OwnerId = (await _userManager.GetUserAsync(User)).Id,
                 Name = model.Name,
-                Description = Delta.DeltaToJsonString(description),
-                DescriptionHtml = Delta.DeltaToHTML(description),
-                Goal = Delta.DeltaToJsonString(goal),
-                GoalHtml = Delta.DeltaToHTML(goal),
-                Proposal = model.Proposal,
-                CreatorComments = Delta.DeltaToJsonString(creatorComments),
-                CreatorCommentsHtml = Delta.DeltaToHTML(creatorComments),
+                Description = InputSanitizer.Sanitize(model.Description),
+                Proposal = InputSanitizer.Sanitize(model.Proposal),
+                Goal = InputSanitizer.Sanitize(model.Goal),
+                CreatorComments = model.CreatorComments,
                 CategoryId = model.CategoryId,
                 LocationId = model.LocationId,
                 Target = model.Target,
@@ -170,7 +166,7 @@ namespace CollAction.Controllers
                 "Hi!<br>" +
                 "<br>" +
                 "Thanks for submitting a project on www.collaction.org!<br>" +
-                "The CollAction Team will review your project as soon as possible – if it meets all the criteria we’ll publish the project on the website and will let you know, so you can start promoting it! If we have any additional questions or comments, we’ll reach out to you by email.<br>" +
+                "The CollAction Team will review your project as soon as possible ï¿½ if it meets all the criteria weï¿½ll publish the project on the website and will let you know, so you can start promoting it! If we have any additional questions or comments, weï¿½ll reach out to you by email.<br>" +
                 "<br>" +
                 "Thanks so much for driving the CollAction / crowdacting movement!<br>" +
                 "<br>" +
@@ -422,7 +418,7 @@ namespace CollAction.Controllers
                     "Hi!<br><br>" +
                     "Thank you for participating in a CollAction project!<br><br>" +
                     "In crowdacting, we only act collectively when we meet the target before the deadline, so please feel very welcome to share this project on social media through the social media buttons on the project page!<br><br>" +
-                    "We’ll keep you updated on the project. Also feel free to Like us on <a href=\"https://www.facebook.com/collaction.org/\">Facebook</a> to stay up to date on everything CollAction!<br><br>" +
+                    "Weï¿½ll keep you updated on the project. Also feel free to Like us on <a href=\"https://www.facebook.com/collaction.org/\">Facebook</a> to stay up to date on everything CollAction!<br><br>" +
                     "Warm regards,<br>The CollAction team";
                 string subject = "Thank you for participating in a CollAction project!";
                 await _emailSender.SendEmailAsync(user.Email, subject, confirmationEmail);
