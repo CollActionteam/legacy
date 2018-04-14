@@ -40,7 +40,4 @@ npm run build</PreBuildEvent>
   <ItemGroup>
     <Folder Include="wwwroot\js\" />
   </ItemGroup>
-  <ItemGroup>
-    <TypeScriptCompile Include="Frontend\app\global\RichTextEditor.tsx" />
-  </ItemGroup>
 </Project>
