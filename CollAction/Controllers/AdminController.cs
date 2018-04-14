@@ -280,12 +280,11 @@ namespace CollAction.Controllers
                     await _emailSender.SendEmailAsync(project.Owner.Email, subject, failedEmail);
                 }
 
-                project.Description = InputSanitizer.Sanitize(model.Description);
-                project.Goal =  InputSanitizer.Sanitize(model.Goal);
-                project.CreatorComments = InputSanitizer.Sanitize(model.CreatorComments);
-                
                 project.Name = model.Name;
+                project.Description = model.Description;
                 project.Proposal = model.Proposal;
+                project.Goal = model.Goal;
+                project.CreatorComments = model.CreatorComments;                
                 project.CategoryId = model.CategoryId;
                 project.Target = model.Target;
                 project.Start = model.Start;

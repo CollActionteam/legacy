@@ -133,9 +133,9 @@ namespace CollAction.Controllers
             {
                 OwnerId = (await _userManager.GetUserAsync(User)).Id,
                 Name = model.Name,
-                Description = InputSanitizer.Sanitize(model.Description),
-                Proposal = InputSanitizer.Sanitize(model.Proposal),
-                Goal = InputSanitizer.Sanitize(model.Goal),
+                Description = model.Description,
+                Proposal = model.Proposal,
+                Goal = model.Goal,
                 CreatorComments = model.CreatorComments,
                 CategoryId = model.CategoryId,
                 LocationId = model.LocationId,
