@@ -8,13 +8,14 @@ namespace CollAction.Helpers
         {
             var saniziter = new HtmlSanitizer(
                 allowedTags: new[] { "p", "br", "strong", "em", "i", "u", "a", "ol", "ul", "li" },
-                allowedAttributes: new[] { "href", "target" },
-                allowedCssClasses: new string[] {},
-                allowedCssProperties: new string[] {}                    
+                allowedSchemes: new string[] { "http", "https"},
+                allowedAttributes: new[] { "target" },
+                uriAttributes: new[] { "href" },
+                allowedCssProperties: new string[] {},
+                allowedCssClasses: new string[] {}
             );
 
             return saniziter.Sanitize(input);
-
         }
     }
 }
