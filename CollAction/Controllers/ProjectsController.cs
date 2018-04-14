@@ -129,8 +129,6 @@ namespace CollAction.Controllers
                 return View(model);
             }
 
-            // TODO: check incoming HTML for invalid tags
-
             var project = new Project
             {
                 OwnerId = (await _userManager.GetUserAsync(User)).Id,
