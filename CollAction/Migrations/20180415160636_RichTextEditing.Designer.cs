@@ -12,8 +12,8 @@ using System;
 namespace CollAction.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180413150754_RemoveProjectsHtml")]
-    partial class RemoveProjectsHtml
+    [Migration("20180415160636_RichTextEditing")]
+    partial class RichTextEditing
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
