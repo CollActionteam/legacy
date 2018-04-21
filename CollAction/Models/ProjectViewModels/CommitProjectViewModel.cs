@@ -15,6 +15,6 @@ namespace CollAction.Models
 
         public bool IsActive { get; set; }
 
-        public string ProjectLink => $"/Projects/Details/{ProjectId}";
+        public string ProjectLink => $"/Projects/{ProjectName}/Details";
     }
 }
