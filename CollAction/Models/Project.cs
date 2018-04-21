@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace CollAction.Models
@@ -93,6 +94,8 @@ namespace CollAction.Models
         public string HashTags
             => string.Join(";", Tags?.Select(tag => tag.Tag.Name) ?? Enumerable.Empty<string>());
 
+        [NotMapped]
+        public string ProjectNameUrl => WebUtility.UrlEncode(Name);
         public async Task SetTags(ApplicationDbContext context, params string[] tagNames)
         {
             List<Tag> tags = await context.Tags.Where(tag => tagNames.Contains(tag.Name)).ToListAsync();

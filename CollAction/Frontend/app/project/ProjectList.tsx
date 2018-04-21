@@ -3,6 +3,7 @@ import * as React from "react";
 export interface IProject {
   projectId: string,
   projectName: string;
+  projectNameUrl: string;
   projectProposal: string;
   categoryName: string;
   categoryColorHex: string;
@@ -23,7 +24,7 @@ class ProjectThumb extends React.Component<IProject, null> {
       backgroundImage: `url(${this.props.bannerImagePath})`,
     };
 
-    const link = `/Projects/Details/${this.props.projectId}`;
+    const link = `/projects/${this.props.projectNameUrl}/details`;
 
     return (
       <div className="col-xs-12 col-md-4 project-thumb-container">
