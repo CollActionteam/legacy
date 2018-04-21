@@ -225,12 +225,20 @@
     #more-info,
     .project-short-description,
     .project-goal,
-    .project-green-proposal,
     .project-comments,
     .caption {
         word-wrap: break-word;
+
+        p {
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
     }
 
+    .project-green-proposal {
+        word-wrap: break-word;
+    }
+    
     .video-container {
         padding-left: 0px;
         padding-right: 0px;

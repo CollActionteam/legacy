@@ -6,6 +6,8 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
+using System.Text;
 
 namespace CollAction.Models
 {
@@ -46,18 +48,18 @@ namespace CollAction.Models
         public DateTime End { get; set; }
 
         [Required]
-        [MaxLength(1000)]
+        [MaxLength(10000)]
         public string Description { get; set; }
 
         [Required]
-        [MaxLength(1000)]
+        [MaxLength(10000)]
         public string Goal { get; set; }
-        
+
         [Required]
         [MaxLength(300)]
         public string Proposal { get; set; }
 
-        [MaxLength(2000)]
+        [MaxLength(20000)]
         public string CreatorComments { get; set; }
 
         public int? BannerImageFileId { get; set; }

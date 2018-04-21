@@ -19,6 +19,7 @@ using CollAction.Services;
 using System.Text.RegularExpressions;
 using CollAction.Models.ProjectViewModels;
 using System.Linq.Expressions;
+using Newtonsoft.Json;
 
 namespace CollAction.Controllers
 {
@@ -133,8 +134,8 @@ namespace CollAction.Controllers
                 OwnerId = (await _userManager.GetUserAsync(User)).Id,
                 Name = model.Name,
                 Description = model.Description,
-                Goal = model.Goal,
                 Proposal = model.Proposal,
+                Goal = model.Goal,
                 CreatorComments = model.CreatorComments,
                 CategoryId = model.CategoryId,
                 LocationId = model.LocationId,
@@ -163,7 +164,7 @@ namespace CollAction.Controllers
                 "Hi!<br>" +
                 "<br>" +
                 "Thanks for submitting a project on www.collaction.org!<br>" +
-                "The CollAction Team will review your project as soon as possible – if it meets all the criteria we’ll publish the project on the website and will let you know, so you can start promoting it! If we have any additional questions or comments, we’ll reach out to you by email.<br>" +
+                "The CollAction Team will review your project as soon as possible - if it meets all the criteria we'll publish the project on the website and will let you know, so you can start promoting it! If we have any additional questions or comments, we'll reach out to you by email.<br>" +
                 "<br>" +
                 "Thanks so much for driving the CollAction / crowdacting movement!<br>" +
                 "<br>" +
@@ -415,7 +416,7 @@ namespace CollAction.Controllers
                     "Hi!<br><br>" +
                     "Thank you for participating in a CollAction project!<br><br>" +
                     "In crowdacting, we only act collectively when we meet the target before the deadline, so please feel very welcome to share this project on social media through the social media buttons on the project page!<br><br>" +
-                    "We’ll keep you updated on the project. Also feel free to Like us on <a href=\"https://www.facebook.com/collaction.org/\">Facebook</a> to stay up to date on everything CollAction!<br><br>" +
+                    "We'll keep you updated on the project. Also feel free to Like us on <a href=\"https://www.facebook.com/collaction.org/\">Facebook</a> to stay up to date on everything CollAction!<br><br>" +
                     "Warm regards,<br>The CollAction team";
                 string subject = "Thank you for participating in a CollAction project!";
                 await _emailSender.SendEmailAsync(user.Email, subject, confirmationEmail);

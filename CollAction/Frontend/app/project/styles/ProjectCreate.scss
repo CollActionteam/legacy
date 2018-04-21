@@ -13,6 +13,24 @@
     resize: none;
     overflow: auto;
   }
+
+  #create-project-description {
+    .quill {
+      height: 200px;
+    }
+  }
+
+  #create-project-goal {
+    .quill {
+      height: 200px;
+    }
+  }
+
+  #create-project-creatorcomments {
+    .quill {
+      height: 400px;
+    }
+  }
 }
 
 #project-create-nice {
