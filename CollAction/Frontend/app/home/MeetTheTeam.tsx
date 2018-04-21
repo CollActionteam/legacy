@@ -25,7 +25,7 @@ const TeamMemberThumb = ({ teamMember }) => {
         {teamMember.name}
       </div>
       <div>
-        Team Member
+        {teamMember.role}
       </div>
     </div>
   );
@@ -84,8 +84,8 @@ const teamMembers: ITeamMember[] = [
     role: "",
   },
   {
-      name: "Leonie Blom",
-      role: "",
+    name: "Leonie Blom",
+    role: "",
   },
   {
     name: "Marc Beermann",
@@ -108,8 +108,8 @@ const teamMembers: ITeamMember[] = [
     role: "Developer",
   },
   {
-      name: "Rolien Sandelowsky",
-      role: "",
+    name: "Rolien Sandelowsky",
+    role: "",
   },
   {
     name: "Ron van den Akker",
@@ -128,12 +128,16 @@ const teamMembers: ITeamMember[] = [
     role: "Developer",
   },
   {
-      name: "Vivian Vos",
-      role: "",
+    name: "Vivian Vos",
+    role: "",
   },
   {
-      name: "Brian Russell",
-      role: "",
+    name: "Brian Russell",
+    role: "",
+  },
+  {
+    name: "Luuk Boschker",
+    role: "Developer"
   }
 ];
 
