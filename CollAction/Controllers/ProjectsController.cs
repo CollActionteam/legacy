@@ -91,7 +91,8 @@ namespace CollAction.Controllers
                 return NotFound();
             }
             string validUrlForProjectName = WebUtility.UrlEncode(project.Name);
-            if(String.IsNullOrEmpty(validUrlForProjectName)){
+            if(String.IsNullOrEmpty(validUrlForProjectName))
+            {
                 return NotFound();
             }
             return LocalRedirect("~/projects/"+validUrlForProjectName+"/details");
@@ -196,7 +197,8 @@ namespace CollAction.Controllers
                 await _emailSender.SendEmailAsync(admin.Email, subject, confirmationEmailAdmin);
 
             string validUrlForProjectName = WebUtility.UrlEncode(project.Name);
-            if(String.IsNullOrEmpty(validUrlForProjectName)){
+            if(String.IsNullOrEmpty(validUrlForProjectName))
+            {
                 return NotFound();
             }
             return LocalRedirect("~/projects/"+validUrlForProjectName+"/thankyou");
