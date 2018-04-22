@@ -8,12 +8,12 @@ namespace CollAction.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql("UPDATE public.\"Projects\" SET \"End\" = \"End\" + interval '23 hours' + interval '59 minutes' + interval '59 seconds';");
+            migrationBuilder.Sql("UPDATE public.\"Projects\" SET \"End\" = \"End\" + interval '23 hours 59 minutes 59 seconds' WHERE \"End\"::time <> interval '23 hours 59 minutes 59 seconds';");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql("UPDATE public.\"Projects\" SET \"End\" = \"End\" - interval '23 hours' - interval '59 minutes' - interval '59 seconds';");
+            migrationBuilder.Sql("UPDATE public.\"Projects\" SET \"End\" = \"End\" - interval '23 hours 59 minutes 59 seconds' WHERE \"End\"::time = interval '23 hours 59 minutes 59 seconds';");
         }
     }
 }
