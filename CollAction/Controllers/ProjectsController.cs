@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -19,7 +20,6 @@ using CollAction.Services;
 using System.Text.RegularExpressions;
 using CollAction.Models.ProjectViewModels;
 using System.Linq.Expressions;
-using Newtonsoft.Json;
 
 namespace CollAction.Controllers
 {
@@ -65,15 +65,9 @@ namespace CollAction.Controllers
             return View(model);
         }
 
-        // GET: Projects/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string name)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            List<DisplayProjectViewModel> items = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Id == id && p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted);
+            List<DisplayProjectViewModel> items = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Name == name && p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted);
             if (items.Count == 0)
             {
                 return NotFound();
@@ -86,6 +80,22 @@ namespace CollAction.Controllers
             }
 
             return View(displayProject);
+        }
+
+        // GET: Projects/Details/5
+        public async Task<IActionResult> DetailsById(int? id)
+        {
+            var project =  await _service.GetProjectById(id); 
+            if (project == null)
+            {
+                return NotFound();
+            }
+            string validUrlForProjectName = WebUtility.UrlEncode(project.Name);
+            if(String.IsNullOrEmpty(validUrlForProjectName))
+            {
+                return NotFound();
+            }
+            return LocalRedirect("~/projects/"+validUrlForProjectName+"/details");
         }
 
         // GET: Projects/Create
@@ -134,8 +144,8 @@ namespace CollAction.Controllers
                 OwnerId = (await _userManager.GetUserAsync(User)).Id,
                 Name = model.Name,
                 Description = model.Description,
-                Proposal = model.Proposal,
                 Goal = model.Goal,
+                Proposal = model.Proposal,
                 CreatorComments = model.CreatorComments,
                 CategoryId = model.CategoryId,
                 LocationId = model.LocationId,
@@ -186,9 +196,21 @@ namespace CollAction.Controllers
             foreach (var admin in administrators)
                 await _emailSender.SendEmailAsync(admin.Email, subject, confirmationEmailAdmin);
 
-            return View("ThankYouCreate", new ThankYouCreateProjectViewModel()
+            string validUrlForProjectName = WebUtility.UrlEncode(project.Name);
+            if(String.IsNullOrEmpty(validUrlForProjectName))
             {
-                Name = project.Name
+                return NotFound();
+            }
+            
+            return LocalRedirect("~/Projects/Create/"+validUrlForProjectName+"/thankyou");
+        }
+
+        [Authorize]
+        public IActionResult ThankYouCreate(string name)
+        {
+            return View(new ThankYouCreateProjectViewModel
+            {
+                Name = name
             });
         }
 
@@ -372,14 +394,9 @@ namespace CollAction.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Commit(int? id)
+        public async Task<IActionResult> Commit(string name)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var project =  await _service.GetProjectById(id); 
+            var project =  await _service.GetProjectByName(name); 
             if (project == null)
             {
                 return NotFound();
@@ -400,13 +417,8 @@ namespace CollAction.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Commit(int id, CommitProjectViewModel commitProjectViewModel)
+        public async Task<IActionResult> Commit(CommitProjectViewModel commitProjectViewModel)
         {
-            if (id != commitProjectViewModel.ProjectId)
-            {
-                return NotFound();
-            }
-
             ApplicationUser user = await _userManager.GetUserAsync(User);
             bool success = await _service.AddParticipant(user.Id, commitProjectViewModel.ProjectId);
 
@@ -420,12 +432,19 @@ namespace CollAction.Controllers
                     "Warm regards,<br>The CollAction team";
                 string subject = "Thank you for participating in a CollAction project!";
                 await _emailSender.SendEmailAsync(user.Email, subject, confirmationEmail);
-                return View("ThankYouCommit", commitProjectViewModel);
+                string validUrlForProjectName = WebUtility.UrlEncode(commitProjectViewModel.ProjectName);
+                return RedirectToAction("ThankYouCommit","Projects",commitProjectViewModel);
             }
             else
             {
                 return View("Error");
             }
+        }
+
+        [Authorize]
+        public IActionResult ThankYouCommit(CommitProjectViewModel model)
+        {
+            return View("ThankYouCommit", model);
         }
 
         [HttpGet]

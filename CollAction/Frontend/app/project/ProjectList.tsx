@@ -1,7 +1,7 @@
 import * as React from "react";
 
 export interface IProject {
-  projectId: string,
+  projectId: string;
   projectName: string;
   projectProposal: string;
   categoryName: string;
@@ -23,7 +23,7 @@ class ProjectThumb extends React.Component<IProject, null> {
       backgroundImage: `url(${this.props.bannerImagePath})`,
     };
 
-    const link = `/Projects/Details/${this.props.projectId}`;
+    const link = `/projects/${encodeURI(this.props.projectName)}/details`;
 
     return (
       <div className="col-xs-12 col-md-4 project-thumb-container">
@@ -72,4 +72,4 @@ export default ({ projectList }) => {
       </div>
     </div>
   );
-}
+};
