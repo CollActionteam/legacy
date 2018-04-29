@@ -201,7 +201,8 @@ namespace CollAction.Controllers
             {
                 return NotFound();
             }
-            return LocalRedirect("~/projects/"+validUrlForProjectName+"/thankyou");
+            
+            return LocalRedirect("~/Projects/Create/"+validUrlForProjectName+"/thankyou");
         }
 
         [Authorize]
@@ -431,12 +432,19 @@ namespace CollAction.Controllers
                     "Warm regards,<br>The CollAction team";
                 string subject = "Thank you for participating in a CollAction project!";
                 await _emailSender.SendEmailAsync(user.Email, subject, confirmationEmail);
-                return View("ThankYouCommit", commitProjectViewModel);
+                string validUrlForProjectName = WebUtility.UrlEncode(commitProjectViewModel.ProjectName);
+                return RedirectToAction("ThankYouCommit","Projects",commitProjectViewModel);
             }
             else
             {
                 return View("Error");
             }
+        }
+
+        [Authorize]
+        public IActionResult ThankYouCommit(CommitProjectViewModel model)
+        {
+            return View("ThankYouCommit", model);
         }
 
         [HttpGet]
