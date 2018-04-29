@@ -4,6 +4,7 @@ import renderComponentIf from "../global/renderComponentIf";
 interface ITeamMember {
   name: string;
   role: string;
+  photo: string;
 }
 
 interface IMeetTheTeamProps {
@@ -15,7 +16,7 @@ interface IMeetTheTeamState {
 }
 
 const TeamMemberThumb = ({ teamMember }) => {
-  const imageSrc = `/images/team/${teamMember.name}.png`;
+  const imageSrc = `/images/team/${teamMember.photo}`;
   return (
     <div className="team-member">
       <div className="team-member-image-container">
@@ -72,72 +73,85 @@ export default class MeetTheTeam extends React.Component<IMeetTheTeamProps, IMee
 
 const teamMembers: ITeamMember[] = [
   {
+    name: "Abhinay Kondamreddy",
+    role: "",
+    photo: "NoPhoto.png"
+  },
+  {
+    name: "Christa Brouwer",
+    role: "",
+    photo: "NoPhoto.png"
+  },
+  {
     name: "Daniela Becker",
     role: "",
+    photo: "Daniela Becker.png"
+  },
+  {
+    name: "Dominik Guz",
+    role: "",
+    photo: "NoPhoto.png"
   },
   {
     name: "Edoardo Felici",
     role: "",
+    photo: "Edoardo Felici.png"
   },
   {
-    name: "Joost Riphagen",
+    name: "Luuk Boschker",
     role: "",
+    photo: "Luuk Boschker.png"
+
   },
   {
-    name: "Leonie Blom",
+    name: "Laura Wennekes",
     role: "",
-  },
-  {
-    name: "Marc Beermann",
-    role: "Developer",
-  },
-  {
-    name: "Maria Gomez",
-    role: "",
+    photo: "NoPhoto.png"
   },
   {
     name: "Martijn de Haan",
     role: "",
+    photo: "Martijn de Haan.png"
   },
   {
     name: "Melchior Jong",
     role: "",
+    photo: "Melchior Jong.png"
   },
   {
     name: "Mina Yao",
-    role: "Developer",
+    role: "",
+    photo: "NoPhoto.png"
   },
   {
-    name: "Rolien Sandelowsky",
+    name: "Nikie van Thiel",
     role: "",
+    photo: "NoPhoto.png"
   },
   {
     name: "Ron van den Akker",
     role: "",
+    photo: "Ron van den Akker.png"
   },
   {
     name: "Spencer Heijnen",
     role: "",
-  },
-  {
-    name: "Stewart Matheson",
-    role: "Developer",
+    photo: "Spencer Heijnen.png"
   },
   {
     name: "Tim Stokman",
-    role: "Developer",
+    role: "",
+    photo: "Tim Stokman.png"
   },
   {
     name: "Vivian Vos",
     role: "",
+    photo: "Vivian Vos.png"
   },
   {
     name: "Brian Russell",
     role: "",
-  },
-  {
-    name: "Luuk Boschker",
-    role: "Developer"
+    photo: "NoPhoto.png"
   }
 ];
 
