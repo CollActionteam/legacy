@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace CollAction.Services
@@ -24,6 +25,11 @@ namespace CollAction.Services
         public async Task<Project> GetProjectById(int? id)
         {
             return await _context.Projects.SingleOrDefaultAsync(p => p.Id == id);
+        }
+
+        public async Task<Project> GetProjectByName(string name)
+        {
+            return await _context.Projects.SingleOrDefaultAsync(p => p.Name == name);
         }
 
         public async Task<IEnumerable<Project>> GetProjects(Expression<Func<Project, bool>> WhereExpression)
