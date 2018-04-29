@@ -412,13 +412,15 @@ namespace CollAction.Controllers
 
             if (success)
             {
+                var projUrl = this.Url.Action("Project", "Details", commitProjectViewModel.ProjectId); 
                 string confirmationEmail = 
-                    "Hi!<br><br>" +
+                    String.Format("Hi {0} !<br><br>",user.NormalizedUserName) +
                     "Thank you for participating in a CollAction project!<br><br>" +
-                    "In crowdacting, we only act collectively when we meet the target before the deadline, so please feel very welcome to share this project on social media through the social media buttons on the project page!<br><br>" +
+                    "In crowdacting, we only act collectively when we meet the target before the deadline, so please feel very welcome to share this project on social media through the social media buttons on the <a href=\"\">project page</a>!<br><br>" +
                     "We'll keep you updated on the project. Also feel free to Like us on <a href=\"https://www.facebook.com/collaction.org/\">Facebook</a> to stay up to date on everything CollAction!<br><br>" +
-                    "Warm regards,<br>The CollAction team";
-                string subject = "Thank you for participating in a CollAction project!";
+                    "Warm regards,<br>The CollAction team" +
+                    "PS: Did you know you can start your own project on <a href=\"https://collaction.org/start\">www.collaction.org/start</a> ?";
+                string subject = String.Format("Thank you for participating in the \"{0}\" project on CollAction.org",commitProjectViewModel.ProjectName);
                 await _emailSender.SendEmailAsync(user.Email, subject, confirmationEmail);
                 return View("ThankYouCommit", commitProjectViewModel);
             }
