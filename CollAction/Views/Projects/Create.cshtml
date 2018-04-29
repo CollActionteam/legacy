@@ -21,7 +21,8 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="Description" class="control-label required"></label>
-                        <textarea asp-for="Description" class="form-control" rows="10"></textarea>
+                        <div id="create-project-description"></div>
+                        @Html.HiddenFor(m => m.Description)
                         @Html.ValidationMessage("Description")
                     </div>
                     <div class="form-group">
@@ -31,7 +32,8 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="Goal" class="control-label required"></label>
-                        <textarea asp-for="Goal" class="form-control" rows="10"></textarea>
+                        <div id="create-project-goal"></div>
+                        @Html.HiddenFor(m => m.Goal)
                         @Html.ValidationMessage("Goal")
                     </div>
                     <div class="form-group">
@@ -51,7 +53,8 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="CreatorComments" class="control-label"></label>
-                        <textarea asp-for="CreatorComments" class="form-control" rows="20"></textarea>
+                        <div id="create-project-creatorcomments"></div>
+                        @Html.HiddenFor(m => m.CreatorComments)
                         @Html.ValidationMessage("CreatorComments")
                     </div>
                     <div class="form-group">

@@ -17,7 +17,7 @@ function getPlugins() {
 }
 
 module.exports = {
-  entry: [ 'whatwg-fetch', './Frontend/app/index.ts' ],
+  entry: [ 'whatwg-fetch', 'quill', './Frontend/app/index.ts' ],
   output: {
     path: './wwwroot/js',
     filename: 'bundle.js',
