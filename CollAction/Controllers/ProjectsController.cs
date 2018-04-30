@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -19,7 +20,6 @@ using CollAction.Services;
 using System.Text.RegularExpressions;
 using CollAction.Models.ProjectViewModels;
 using System.Linq.Expressions;
-using Newtonsoft.Json;
 
 namespace CollAction.Controllers
 {
@@ -65,15 +65,9 @@ namespace CollAction.Controllers
             return View(model);
         }
 
-        // GET: Projects/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string name)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            List<DisplayProjectViewModel> items = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Id == id && p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted);
+            List<DisplayProjectViewModel> items = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Name == name && p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted);
             if (items.Count == 0)
             {
                 return NotFound();
@@ -86,6 +80,22 @@ namespace CollAction.Controllers
             }
 
             return View(displayProject);
+        }
+
+        // GET: Projects/Details/5
+        public async Task<IActionResult> DetailsById(int? id)
+        {
+            var project =  await _service.GetProjectById(id); 
+            if (project == null)
+            {
+                return NotFound();
+            }
+            string validUrlForProjectName = WebUtility.UrlEncode(project.Name);
+            if(String.IsNullOrEmpty(validUrlForProjectName))
+            {
+                return NotFound();
+            }
+            return LocalRedirect("~/projects/"+validUrlForProjectName+"/details");
         }
 
         // GET: Projects/Create
@@ -134,8 +144,8 @@ namespace CollAction.Controllers
                 OwnerId = (await _userManager.GetUserAsync(User)).Id,
                 Name = model.Name,
                 Description = model.Description,
-                Proposal = model.Proposal,
                 Goal = model.Goal,
+                Proposal = model.Proposal,
                 CreatorComments = model.CreatorComments,
                 CategoryId = model.CategoryId,
                 LocationId = model.LocationId,
@@ -186,9 +196,21 @@ namespace CollAction.Controllers
             foreach (var admin in administrators)
                 await _emailSender.SendEmailAsync(admin.Email, subject, confirmationEmailAdmin);
 
-            return View("ThankYouCreate", new ThankYouCreateProjectViewModel()
+            string validUrlForProjectName = WebUtility.UrlEncode(project.Name);
+            if(String.IsNullOrEmpty(validUrlForProjectName))
             {
-                Name = project.Name
+                return NotFound();
+            }
+            
+            return LocalRedirect("~/Projects/Create/"+validUrlForProjectName+"/thankyou");
+        }
+
+        [Authorize]
+        public IActionResult ThankYouCreate(string name)
+        {
+            return View(new ThankYouCreateProjectViewModel
+            {
+                Name = WebUtility.UrlDecode(name)
             });
         }
 
@@ -372,14 +394,9 @@ namespace CollAction.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Commit(int? id)
+        public async Task<IActionResult> Commit(string name)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var project =  await _service.GetProjectById(id); 
+            var project =  await _service.GetProjectByName(name); 
             if (project == null)
             {
                 return NotFound();
@@ -400,31 +417,51 @@ namespace CollAction.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Commit(int id, CommitProjectViewModel commitProjectViewModel)
+        public async Task<IActionResult> Commit(CommitProjectViewModel commitProjectViewModel)
         {
-            if (id != commitProjectViewModel.ProjectId)
-            {
-                return NotFound();
-            }
-
             ApplicationUser user = await _userManager.GetUserAsync(User);
             bool success = await _service.AddParticipant(user.Id, commitProjectViewModel.ProjectId);
 
             if (success)
             {
+                var projUrl = this.Url.Action("Project", "Details", commitProjectViewModel.ProjectId); 
                 string confirmationEmail = 
-                    "Hi!<br><br>" +
+                    String.Format("Hi {0} !<br><br>",user.NormalizedUserName) +
                     "Thank you for participating in a CollAction project!<br><br>" +
-                    "In crowdacting, we only act collectively when we meet the target before the deadline, so please feel very welcome to share this project on social media through the social media buttons on the project page!<br><br>" +
+                    "In crowdacting, we only act collectively when we meet the target before the deadline, so please feel very welcome to share this project on social media through the social media buttons on the <a href=\"\">project page</a>!<br><br>" +
                     "We'll keep you updated on the project. Also feel free to Like us on <a href=\"https://www.facebook.com/collaction.org/\">Facebook</a> to stay up to date on everything CollAction!<br><br>" +
-                    "Warm regards,<br>The CollAction team";
-                string subject = "Thank you for participating in a CollAction project!";
+                    "Warm regards,<br>The CollAction team" +
+                    "PS: Did you know you can start your own project on <a href=\"https://collaction.org/start\">www.collaction.org/start</a> ?";
+                string subject = String.Format("Thank you for participating in the \"{0}\" project on CollAction.org",commitProjectViewModel.ProjectName);
                 await _emailSender.SendEmailAsync(user.Email, subject, confirmationEmail);
-                return View("ThankYouCommit", commitProjectViewModel);
+                string validUrlForProjectName = WebUtility.UrlEncode(commitProjectViewModel.ProjectName);
+                return LocalRedirect("~/projects/"+validUrlForProjectName+"/thankyou");
             }
             else
             {
                 return View("Error");
+            }
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> ThankYouCommit(string name)
+        {
+            var proj = await _service.GetProjectByName(WebUtility.UrlDecode(name));
+            if(proj!=null)
+            {
+                CommitProjectViewModel model = new CommitProjectViewModel()
+                {
+                    ProjectId = proj.Id,
+                    ProjectName = proj.Name,
+                    ProjectProposal = proj.Proposal,
+                    IsActive = proj.IsActive
+                };
+                return View("ThankYouCommit", model);
+            }
+            else
+            {
+                return BadRequest();
             }
         }
 
