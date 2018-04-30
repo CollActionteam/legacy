@@ -445,17 +445,13 @@ namespace CollAction.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> ThankYouCommit(string name)
+        public IActionResult ThankYouCommit(string name)
         {
-            var proj = await _service.GetProjectByName(WebUtility.UrlDecode(name));
-            if(proj!=null)
+            if(name!=null)
             {
                 CommitProjectViewModel model = new CommitProjectViewModel()
                 {
-                    ProjectId = proj.Id,
-                    ProjectName = proj.Name,
-                    ProjectProposal = proj.Proposal,
-                    IsActive = proj.IsActive
+                    ProjectName = WebUtility.UrlDecode(name)
                 };
                 return View("ThankYouCommit", model);
             }
