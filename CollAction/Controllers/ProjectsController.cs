@@ -180,7 +180,7 @@ namespace CollAction.Controllers
                 "<br>" +
                 "Warm regards,<br>" +
                 "The CollAction team";
-            string subject = $"Confirmation email - start project {project.Name}";
+            string subject = $"Thank you for participating in the \"{project.Name}\" project on CollAction.org";
 
             ApplicationUser user = await _userManager.GetUserAsync(User);
             await _emailSender.SendEmailAsync(user.Email, subject, confirmationEmail);
