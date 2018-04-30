@@ -210,7 +210,7 @@ namespace CollAction.Controllers
         {
             return View(new ThankYouCreateProjectViewModel
             {
-                Name = name
+                Name = WebUtility.UrlDecode(name)
             });
         }
 
@@ -435,7 +435,7 @@ namespace CollAction.Controllers
                 string subject = String.Format("Thank you for participating in the \"{0}\" project on CollAction.org",commitProjectViewModel.ProjectName);
                 await _emailSender.SendEmailAsync(user.Email, subject, confirmationEmail);
                 string validUrlForProjectName = WebUtility.UrlEncode(commitProjectViewModel.ProjectName);
-                return RedirectToAction("ThankYouCommit","Projects",commitProjectViewModel);
+                return LocalRedirect("~/projects/"+validUrlForProjectName+"/thankyou");
             }
             else
             {
@@ -444,9 +444,25 @@ namespace CollAction.Controllers
         }
 
         [Authorize]
-        public IActionResult ThankYouCommit(CommitProjectViewModel model)
+        [HttpGet]
+        public async Task<IActionResult> ThankYouCommit(string name)
         {
-            return View("ThankYouCommit", model);
+            var proj = await _service.GetProjectByName(WebUtility.UrlDecode(name));
+            if(proj!=null)
+            {
+                CommitProjectViewModel model = new CommitProjectViewModel()
+                {
+                    ProjectId = proj.Id,
+                    ProjectName = proj.Name,
+                    ProjectProposal = proj.Proposal,
+                    IsActive = proj.IsActive
+                };
+                return View("ThankYouCommit", model);
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         [HttpGet]
