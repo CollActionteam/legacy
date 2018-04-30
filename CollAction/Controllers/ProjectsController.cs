@@ -67,7 +67,7 @@ namespace CollAction.Controllers
 
         public async Task<IActionResult> Details(string name)
         {
-            List<DisplayProjectViewModel> items = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Name == name && p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted);
+            List<DisplayProjectViewModel> items = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Name == WebUtility.UrlDecode(name) && p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted);
             if (items.Count == 0)
             {
                 return NotFound();
@@ -396,7 +396,7 @@ namespace CollAction.Controllers
         [Authorize]
         public async Task<IActionResult> Commit(string name)
         {
-            var project =  await _service.GetProjectByName(name); 
+            var project =  await _service.GetProjectByName(WebUtility.UrlDecode(name)); 
             if (project == null)
             {
                 return NotFound();
