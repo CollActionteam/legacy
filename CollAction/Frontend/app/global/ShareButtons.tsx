@@ -80,24 +80,21 @@ class ShareButtons extends React.Component<IShareButtonsProps, IShareButtonsStat
     return (
       <div className="share-buttons">
         <div className="row">
-          <div className="col-xs-3 share-count">
-            {this.state.shareCount}<br /> Shares
-          </div>
-          <div className="col-xs-3">
+          <div className="col-xs-4">
             <a href={this.getFacebookUrl()} target="_blank">
               <div className="social-media-share-buttons social-media-share-button-facebook">
                 <i className="fa fa-facebook"></i>
               </div>
             </a>
           </div>
-          <div className="col-xs-3">
+          <div className="col-xs-4">
             <a href={this.getTwitterUrl()}>
               <div className="social-media-share-buttons social-media-share-button-twitter">
                 <i className="fa fa-twitter"></i>
               </div>
             </a>
           </div>
-          <div className="col-xs-3">
+          <div className="col-xs-4">
             <a href={this.getLinkedInUrl()}>
               <div className="social-media-share-buttons social-media-share-button-linkedin">
                 <i className="fa fa-linkedin"></i>

@@ -104,6 +104,19 @@ namespace CollAction.Models
             }                    
         }
 
+        public ProjectExternalStatus ExternalStatus
+        {
+            get
+            {
+                if (Project.Status == ProjectStatus.Running && Project.Start <= DateTime.UtcNow && Project.End >= DateTime.UtcNow)
+                    return ProjectExternalStatus.Open;
+                else if (Project.Status == ProjectStatus.Running && Project.Start > DateTime.UtcNow)
+                    return ProjectExternalStatus.ComingSoon;
+                else
+                    return ProjectExternalStatus.Closed;
+            }
+        }
+
         public static async Task<List<DisplayProjectViewModel>> GetViewModelsWhere(ApplicationDbContext context, Expression<Func<Project, bool>> WhereExpression)
         {
             return await context.Projects

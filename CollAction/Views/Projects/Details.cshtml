@@ -27,9 +27,19 @@
     <div class="container">
         @{
             string disableCommit = "";
+            string commitText = "Take Part";
             if (!Model.Project.IsActive)
             {
                 disableCommit = "disable-commit";
+            }
+            if (Model.ExternalStatus == ProjectExternalStatus.ComingSoon)
+            {
+                commitText = "Coming soon";
+            }
+            else if (Model.ExternalStatus ==  ProjectExternalStatus.Closed)
+            {
+                commitText = "Project is finished";
+
             }
         }
         <div class="row" id="project-details-row">
@@ -86,7 +96,7 @@
                         }
                         else
                         {
-                            <a class="take-part-button @disableCommit" asp-action="Commit" asp-route-id="@Model.Project.Id">Take Part</a>
+                            <a class="take-part-button @disableCommit" asp-action="Commit" asp-route-id="@Model.Project.Id">@commitText</a>
                         }
                     }
                 </div>
@@ -206,7 +216,7 @@
                     }
                     else
                     {
-                        <a class="take-part-button @disableCommit" asp-action="Commit" asp-route-id="@Model.Project.Id">Take Part</a>
+                        <a class="take-part-button @disableCommit" asp-action="Commit" asp-route-id="@Model.Project.Id">@commitText</a>
                     }
                 }
             </div>
