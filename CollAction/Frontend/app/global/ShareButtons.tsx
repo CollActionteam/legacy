@@ -14,98 +14,138 @@ interface IShareButtonsState {
   shareCount?: number;
   shareCountError?: Error;
   shareCountState: States;
+    width: number;
+    height: number;
+
 }
 
 class ShareButtons extends React.Component<IShareButtonsProps, IShareButtonsState> {
 
-  constructor(props) {
-    super(props);
-    this.state = { shareCountState: States.LOADING };
-  }
-
-  componentDidMount() {
-    this.getShareCount();
-  }
-
-  getTitle() {
-    return this.props.title || document.title;
-  }
-
-  getUrl() {
-    return this.props.url || window.location;
-  }
-
-  async getLinkedInShareCount() {
-    try {
-      const apiLink: string = `https://www.linkedin.com/countserv/count/share?url=${this.getUrl()}&format=json`;
-      const response: Response = await fetch(apiLink);
-      const parsed = await response.json();
-      return parsed.count;
-    } catch (e) {
-      return 0;
+    constructor(props) {
+        super(props);
+        this.state = { shareCountState: States.LOADING, width: 0, height: 0 };
+        this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     }
-  }
 
-  async getFacebookShareCount() {
-    const apiLink: string = `http://graph.facebook.com/?id=${this.getUrl()}`;
-    const response: Response = await fetch(apiLink);
-    const parsed = await response.json();
-    return parsed.share.share_count;
-  }
-
-  async getShareCount() {
-    try {
-      const shareCount: number = await this.getFacebookShareCount();
-      this.setState({ shareCount, shareCountState: States.READY });
-    } catch (e) {
-      this.setState({ shareCountError: e, shareCountState: States.ERROR });
+    componentDidMount() {
+        this.updateWindowDimensions();
+        window.addEventListener('resize', this.updateWindowDimensions);
+        this.getShareCount();
     }
-  }
 
-  getTwitterUrl () {
-    return encodeURI(`https://twitter.com/intent/tweet?text=${this.getTitle()}&url=${this.getUrl()}`);
-  }
+    componentWillMount() {
+        window.removeEventListener('resize', this.updateWindowDimensions);
 
-  getFacebookUrl() {
-    return encodeURI(`https://www.facebook.com/sharer/sharer.php?u=${this.getUrl()}`);
-  }
+    }
 
-  getLinkedInUrl () {
-    return encodeURI(`http://www.linkedin.com/shareArticle?mini=true&url=${this.getUrl()}&title=${this.getTitle()}`);
-  }
+    updateWindowDimensions() {
+        this.setState({ width: window.innerWidth, height: window.innerHeight });
+    }
 
 
+    getTitle() {
+        return this.props.title || document.title;
+    }
+
+    getUrl() {
+        return this.props.url || window.location;
+    }
+
+
+    async getLinkedInShareCount() {
+        try {
+            const apiLink: string = `https://www.linkedin.com/countserv/count/share?url=${this.getUrl()}&format=json`;
+            const response: Response = await fetch(apiLink);
+            const parsed = await response.json();
+            return parsed.count;
+        } catch (e) {
+            return 0;
+        }
+    }
+
+    async getFacebookShareCount() {
+        const apiLink: string = `http://graph.facebook.com/?id=${this.getUrl()}`;
+        const response: Response = await fetch(apiLink);
+        const parsed = await response.json();
+        return parsed.share.share_count;
+    }
+
+    async getShareCount() {
+        try {
+            const shareCount: number = await this.getFacebookShareCount();
+            this.setState({ shareCount, shareCountState: States.READY });
+        } catch (e) {
+            this.setState({ shareCountError: e, shareCountState: States.ERROR });
+        }
+    }
+
+    getTwitterUrl() {
+        return encodeURI(`https://twitter.com/intent/tweet?text=${this.getTitle()}&url=${this.getUrl()}`);
+    }
+
+    getFacebookUrl() {
+        return encodeURI(`https://www.facebook.com/sharer/sharer.php?u=${this.getUrl()}`);
+    }
+
+    getLinkedInUrl() {
+        return encodeURI(`http://www.linkedin.com/shareArticle?mini=true&url=${this.getUrl()}&title=${this.getTitle()}`);
+    }
+
+    getWhatsAppUrl() {
+        return encodeURI(`whatsapp://send>text=${this.getUrl()} ${this.getTitle()}`);
+    }
+
+    getShareButtonColWidth() {
+        if (this.state.width < 600) {
+            return "col-xs-2";
+        }
+        return "col-xs-3";
+    }
+
+    getShareLabelColWidth() {
+        if (this.state.width < 600) {
+            return "col-xs-4 share-count";
+        }
+        return "col-xs-3 share-count";
+    }
 
   render() {
-    return (
-      <div className="share-buttons">
-        <div className="row">
-          <div className="col-xs-3 share-count">
-            {this.state.shareCount}<br /> Shares
-          </div>
-          <div className="col-xs-3">
-            <a href={this.getFacebookUrl()} target="_blank">
-              <div className="social-media-share-buttons social-media-share-button-facebook">
-                <i className="fa fa-facebook"></i>
+      return (
+          <div className="share-buttons">
+              <div className="row">
+                  <div className={this.getShareLabelColWidth()}>
+                      {this.state.shareCount}<br /> Shares
+                  </div>
+                  <div className={this.getShareButtonColWidth()}>
+                      <a href={this.getFacebookUrl()} target="_blank">
+                          <div className="social-media-share-buttons social-media-share-button-facebook">
+                              <i className="fa fa-facebook"></i>
+                          </div>
+                      </a>
+                  </div>
+                  <div className={this.getShareButtonColWidth()}>
+                      <a href={this.getTwitterUrl()}>
+                          <div className="social-media-share-buttons social-media-share-button-twitter">
+                              <i className="fa fa-twitter"></i>
+                          </div>
+                      </a>
+                  </div>
+                  <div className={this.getShareButtonColWidth()}>
+                      <a href={this.getLinkedInUrl()}>
+                          <div className="social-media-share-buttons social-media-share-button-linkedin">
+                              <i className="fa fa-linkedin"></i>
+                          </div>
+                      </a>
+                  </div>
+                  <div className={this.getShareButtonColWidth()}>
+                      <a href={this.getWhatsAppUrl()}>
+                          <div className="social-media-share-buttons social-media-share-button-whatsapp">
+                              <i className="fa fa-whatsapp"></i>
+                          </div>
+                      </a>
+                  </div>
               </div>
-            </a>
           </div>
-          <div className="col-xs-3">
-            <a href={this.getTwitterUrl()}>
-              <div className="social-media-share-buttons social-media-share-button-twitter">
-                <i className="fa fa-twitter"></i>
-              </div>
-            </a>
-          </div>
-          <div className="col-xs-3">
-            <a href={this.getLinkedInUrl()}>
-              <div className="social-media-share-buttons social-media-share-button-linkedin">
-                <i className="fa fa-linkedin"></i>
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
     );
   }
 }
@@ -124,6 +164,9 @@ const FullShareButtons = () => {
     </div>
   );
 };
+
+
+
 
 renderComponentIf(
   <FullShareButtons />,
