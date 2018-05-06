@@ -18,8 +18,9 @@ using Serilog.Sinks.Slack;
 using Amazon;
 using System.Linq;
 using Microsoft.AspNetCore.Rewrite;
-using CollAction.RewriteHttps;
-using System.Security.Claims;
+using Microsoft.AspNetCore.HttpOverrides;
+using NetEscapades.AspNetCore.SecurityHeaders;
+using NetEscapades.AspNetCore.SecurityHeaders.Infrastructure;
 
 namespace CollAction
 {
