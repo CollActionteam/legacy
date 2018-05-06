@@ -13,8 +13,12 @@ interface ICollActionEditorState {
 }
 
 export default class RichTextEditor extends React.Component<ICollActionEditorProps, ICollActionEditorState> {
+
+  private HREF_REGEX = /href=\"(?!http:\/\/|https:\/\/)([^\"]*)(\")/ig;
+
   constructor() {
     super();
+
     this.state = {
       content: ""
     };
@@ -42,12 +46,25 @@ export default class RichTextEditor extends React.Component<ICollActionEditorPro
   }
 
   handleChange(value) {
+    value = this.fixLinks(value);
+
     this.setState({ content: value });
 
     const input = document.getElementById(this.props.formInputId) as HTMLInputElement;
     if (input) {
       input.value = this.state.content;
     }
+  }
+
+  private fixLinks(value: string): string {
+    let link;
+
+    while ((link = this.HREF_REGEX.exec(value)) !== null) {
+      let url = link[1];
+      value = value.replace(url, "http://" + url);
+    }
+
+    return value;
   }
 
   render() {
