@@ -17,9 +17,10 @@ using Serilog.Events;
 using Serilog.Sinks.Slack;
 using Amazon;
 using System.Linq;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Rewrite;
-using CollAction.RewriteHttps;
-using System.Security.Claims;
+using NetEscapades.AspNetCore.SecurityHeaders;
+using NetEscapades.AspNetCore.SecurityHeaders.Infrastructure;
 
 namespace CollAction
 {
@@ -120,9 +121,30 @@ namespace CollAction
 
             if (env.IsProduction())
             {
-                app.UseRewriter(new RewriteOptions().AddRewriteHttpsProxyRule());
+                // Ensure our middleware handles proxied https, see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-Proto
+                app.UseForwardedHeaders(new ForwardedHeadersOptions()
+                {
+                    ForwardedHeaders = ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedHost
+                });
+
+                app.UseSecurityHeaders(new HeaderPolicyCollection() // See https://www.owasp.org/index.php/OWASP_Secure_Headers_Project
+                    .AddStrictTransportSecurityMaxAgeIncludeSubDomains() // Add a HSTS header, making sure browsers connect to collaction + subdomains with https from now on
+                    .AddXssProtectionEnabled() // Enable browser xss protection
+                    .AddContentTypeOptionsNoSniff() // Ensure the browser doesn't guess/sniff content-types
+                    .AddReferrerPolicyStrictOriginWhenCrossOrigin() // Send a full URL when performing a same-origin request, only send the origin of the document to a-priori as-much-secure destination (HTTPS->HTTPS), and send no header to a less secure destination (HTTPS->HTTP) 
+                    .AddContentSecurityPolicy(cspBuilder =>
+                    {
+                        cspBuilder.AddBlockAllMixedContent(); // Block mixed http/https content
+                        cspBuilder.AddUpgradeInsecureRequests(); // Upgrade all http requests to https
+                        cspBuilder.AddObjectSrc().Self(); // Only allow plugins/objects from our own site
+                        cspBuilder.AddFormAction().Self(); // Only allow form actions to our own site
+                        cspBuilder.AddScriptSrc().Self().Sources.Add("https://ajax.aspnetcdn.com"); // Only allow scripts from our own site and the aspnetcdn site
+                    })
+                );
+
+                app.UseRewriter(new RewriteOptions().AddRedirectToHttpsPermanent());
             }
-            
+
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
                 DefaultRequestCulture = new RequestCulture("en-US"),
