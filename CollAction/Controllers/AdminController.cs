@@ -232,7 +232,7 @@ namespace CollAction.Controllers
                         "<br>" +
                         "The CollAction Team has reviewed your project proposal and is very happy to share that your project has been approved and now live on www.collaction.org!<br>" +
                         "<br>" +
-                        "So feel very welcome to start promoting it! If you have any further questions, feel free to contact the CollAction Team at collactionteam@gmail.com. And don’t forget to tag CollAction in your messages on social media so we can help you spread the word(FB: @collaction.org, Twitter: @collaction_org)!<br>" +
+                        "So feel very welcome to start promoting it! If you have any further questions, feel free to contact the CollAction Team at collactionteam@gmail.com. And don’t forget to tag CollAction in your messages on social media so we can help you spread the word ( FB: @<a href='https://www.facebook.com/collaction.org/'>collaction.org</a>, Twitter: @collaction_org)!<br>" +
                         "<br>" +
                         "Thanks again for driving the CollAction / crowdacting movement!<br>" +
                         "<br>" +
@@ -250,7 +250,7 @@ namespace CollAction.Controllers
                         "<br>" +
                         "The deadline of the project you have started on www.collaction.org has passed. We're very happy to see that the target you have set has been reached! Congratulations! Now it's time to act collectively!<br>" +
                         "<br>" +
-                        "The CollAction Team might reach out to you with more specifics (this is an automated message). If you have any further questions yourself, feel free to contact the CollAction Team at collactionteam@gmail.com. And don’t forget to tag CollAction in your messages on social media so we can help you spread the word on your achievement (FB: @collaction.org, Twitter: @collaction_org)!<br>" +
+                        "The CollAction Team might reach out to you with more specifics (this is an automated message). If you have any further questions yourself, feel free to contact the CollAction Team at collactionteam@gmail.com. And don’t forget to tag CollAction in your messages on social media so we can help you spread the word on your achievement ( FB: @<a href='https://www.facebook.com/collaction.org/'>collaction.org</a>, Twitter: @collaction_org)!<br>" +
                         "<br>" +
                         "Thanks again for driving the CollAction / crowdacting movement!<br>" +
                         "<br>" +
