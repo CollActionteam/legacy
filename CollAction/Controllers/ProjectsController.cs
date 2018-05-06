@@ -419,7 +419,7 @@ namespace CollAction.Controllers
                 string confirmationEmail =
                     $"Hi {userDescription}!<br><br>" +
                     "Thank you for participating in a CollAction project!<br><br>" +
-                    "In crowdacting, we only act collectively when we meet the target before the deadline, so please feel very welcome to share this project on social media through the social media buttons on the <a href="+projUrl+">project page</a>!<br><br>" +
+                    "In crowdacting, we only act collectively when we meet the target before the deadline, so please feel very welcome to share this project on social media through the social media buttons on the <a href="+projectUrl+">project page</a>!<br><br>" +
                     "We'll keep you updated on the project. Also feel free to Like us on <a href=\"https://www.facebook.com/collaction.org/\">Facebook</a> to stay up to date on everything CollAction!<br><br>" +
                     "Warm regards,<br>The CollAction team<br><br>" +
                     "PS: Did you know you can start your own project on <a href=\"https://collaction.org/start\">www.collaction.org/start</a> ?<br><br>"+
@@ -431,7 +431,7 @@ namespace CollAction.Controllers
                     "<a href=\"http://www.linkedin.com/shareArticle?mini=true&url="+projectUrl+"&title="+WebUtility.UrlEncode(commitProjectViewModel.ProjectName)+"\" target=\"_blank\">"+
                     "<img style='width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;' src="+systemUrl+"/images/social/linkedin.png alt='LinkedIn' />"+
                     "</a>"+
-                    "<a href=\"https://twitter.com/intent/tweet?text="+WebUtility.UrlEncode(commitProjectViewModel.ProjectName)+"&url="+projUrl+"\" target=\"_blank\">"+
+                    "<a href=\"https://twitter.com/intent/tweet?text="+WebUtility.UrlEncode(commitProjectViewModel.ProjectName)+"&url="+projectUrl+"\" target=\"_blank\">"+
                     "<img style='width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;' src="+systemUrl+"/images/social/twitter.png alt='Twitter' />"+
                     "</a>"+
                     "</div>"+
