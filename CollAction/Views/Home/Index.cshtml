@@ -1,6 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using CollAction.Services;
 
 @inject IViewLocalizer Localizer
+@inject IFestivalService FestivalService
 
 @{
     ViewData["Title"] = Localizer["Home Page"];
@@ -16,6 +18,32 @@
 }
 
 <div id="index">
+    @if (FestivalService.CtasVisible)
+    {
+        <div id="festival-banner">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <p>Our Make The World Great Again Crowdacting Festival is coming up! <a class="btn" asp-controller="Home" asp-action="CrowdActingFestival">Read more</a></p>
+                    </div>                
+                </div>
+            </div>
+        </div>
+        <div id="festival-banner-mobile">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <p>Our Make The World Great Again Crowdacting Festival is coming up!</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <a class="btn" asp-controller="Home" asp-action="CrowdActingFestival">Read more</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
     <div id="banner-title" class="banner">
         <div class="dotbackground">
             <div class="container">
