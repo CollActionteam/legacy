@@ -5,6 +5,7 @@
 @inject IViewLocalizer Localizer
 
 @inject IOptions<NewsletterSubscriptionServiceOptions> NewsletterSubscriptionServiceOptions
+@inject IFestivalService FestivalService;
 
 <div id="footer">
   <div class="container">
@@ -26,6 +27,10 @@
           <li><a asp-controller="Projects" asp-action="Find">@Localizer["Find Project"]</a></li>
           <li><a asp-controller="Projects" asp-action="Create">@Localizer["Start Project"]</a></li>
           <li><a asp-controller="Home" asp-action="About" asp-fragment="about-collaction-fragment">@Localizer["About Us"]</a></li>
+          @if (FestivalService.CtasVisible) 
+          {
+            <li><a asp-controller="Home" asp-action="CrowdActingFestival">@Localizer["Festival"]</a></li>
+          }
       </ul>
 
       <ul class="col-md-2 col-xs-12">
