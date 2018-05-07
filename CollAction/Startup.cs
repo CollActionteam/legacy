@@ -177,6 +177,11 @@ namespace CollAction
                      new { controller = "Home", action = "About" }
                  );
 
+                routes.MapRoute("crowdactingfestival",
+                     "crowdactingfestival",
+                     new { controller = "Home", action = "CrowdActingFestival" }
+                 );
+
                 routes.MapRoute("faq",
                      "faq",
                      new { controller = "Home", action = "FAQ" }
