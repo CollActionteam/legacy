@@ -20,6 +20,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Rewrite;
 using CollAction.RewriteHttps;
 using System.Security.Claims;
+using System;
 
 namespace CollAction
 {
@@ -106,6 +107,12 @@ namespace CollAction
             {
                 options.MailChimpKey = Configuration["MailChimpKey"];
                 options.MailChimpNewsletterListId = Configuration["MailChimpNewsletterListId"];
+            });
+            services.AddTransient<IFestivalService, FestivalService>();
+            services.Configure<FestivalServiceOptions>(options => 
+            {
+                // Note: use yyyy-MM-dd HH:mm:ss notation. Don't specify to use the default value (2018-05-27 23:59:59)
+                options.FestivalEndDate = Configuration.GetValue<DateTime?>("FestivalEndDate");
             });
         }
 
