@@ -138,7 +138,10 @@ namespace CollAction
                         cspBuilder.AddUpgradeInsecureRequests(); // Upgrade all http requests to https
                         cspBuilder.AddObjectSrc().Self(); // Only allow plugins/objects from our own site
                         cspBuilder.AddFormAction().Self(); // Only allow form actions to our own site
-                        cspBuilder.AddScriptSrc().Self().Sources.Add("https://ajax.aspnetcdn.com"); // Only allow scripts from our own site and the aspnetcdn site
+                        cspBuilder.AddScriptSrc().Self() // Only allow scripts from our own site, the aspnetcdn site and google analytics
+                                  .Sources.AddRange(new[] { "https://ajax.aspnetcdn.com",
+                                                            "https://www.googletagmanager.com",
+                                                            "https://www.google-analytics.com" });
                     })
                 );
 
