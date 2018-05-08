@@ -47,7 +47,7 @@ class ShareButtons extends React.Component<IShareButtonsProps, IShareButtonsStat
   }
 
   async getFacebookShareCount() {
-    const apiLink: string = `http://graph.facebook.com/?id=${this.getUrl()}`;
+    const apiLink: string = `https://graph.facebook.com/?id=${this.getUrl()}`;
     const response: Response = await fetch(apiLink);
     const parsed = await response.json();
     return parsed.share.share_count;
@@ -71,7 +71,7 @@ class ShareButtons extends React.Component<IShareButtonsProps, IShareButtonsStat
   }
 
   getLinkedInUrl () {
-    return encodeURI(`http://www.linkedin.com/shareArticle?mini=true&url=${this.getUrl()}&title=${this.getTitle()}`);
+    return encodeURI(`https://www.linkedin.com/shareArticle?mini=true&url=${this.getUrl()}&title=${this.getTitle()}`);
   }
 
 
