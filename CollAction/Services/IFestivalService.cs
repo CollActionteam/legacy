@@ -2,6 +2,6 @@ namespace CollAction.Services
 {
     public interface IFestivalService
     {
-        bool CtasVisible { get; }
+        bool CallToActionsVisible { get; }
     }
 }

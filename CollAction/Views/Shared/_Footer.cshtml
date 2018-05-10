@@ -27,7 +27,7 @@
           <li><a asp-controller="Projects" asp-action="Find">@Localizer["Find Project"]</a></li>
           <li><a asp-controller="Projects" asp-action="Create">@Localizer["Start Project"]</a></li>
           <li><a asp-controller="Home" asp-action="About" asp-fragment="about-collaction-fragment">@Localizer["About Us"]</a></li>
-          @if (FestivalService.CtasVisible) 
+          @if (FestivalService.CallToActionsVisible) 
           {
             <li><a asp-controller="Home" asp-action="CrowdActingFestival">@Localizer["Festival"]</a></li>
           }

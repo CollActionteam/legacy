@@ -12,6 +12,6 @@ namespace CollAction.Services
             _festivalOptions = festivalOptions.Value;
         }
 
-        public bool CtasVisible => _festivalOptions.FestivalEndDate.HasValue && _festivalOptions.FestivalEndDate >= DateTime.Now;
+        public bool CallToActionsVisible => _festivalOptions.FestivalEndDate.HasValue && _festivalOptions.FestivalEndDate >= DateTime.Now;
     }
 }
