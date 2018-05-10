@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Rewrite;
 using NetEscapades.AspNetCore.SecurityHeaders;
 using NetEscapades.AspNetCore.SecurityHeaders.Infrastructure;
+using System;
 
 namespace CollAction
 {
@@ -107,6 +108,12 @@ namespace CollAction
             {
                 options.MailChimpKey = Configuration["MailChimpKey"];
                 options.MailChimpNewsletterListId = Configuration["MailChimpNewsletterListId"];
+            });
+            services.AddTransient<IFestivalService, FestivalService>();
+            services.Configure<FestivalServiceOptions>(options => 
+            {
+                // Note: use yyyy-MM-dd HH:mm:ss notation. Don't specify to use the default value (2018-05-27 23:59:59)
+                options.FestivalEndDate = Configuration.GetValue<DateTime?>("FestivalEndDate");
             });
         }
 
@@ -200,6 +207,11 @@ namespace CollAction
                 routes.MapRoute("about",
                      "about",
                      new { controller = "Home", action = "About" }
+                 );
+
+                routes.MapRoute("crowdactingfestival",
+                     "crowdactingfestival",
+                     new { controller = "Home", action = "CrowdActingFestival" }
                  );
 
                 routes.MapRoute("faq",

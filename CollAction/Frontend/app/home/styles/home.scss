@@ -7,6 +7,46 @@
     width: 100%;
     margin-bottom: 20px;
   }
+  
+  #festival-banner,
+  #festival-banner-mobile {
+    background-color: $coll-action-green;
+    color: white;
+    text-align: center;
+
+    a {
+      color: white;
+      border: 1px solid white;
+      border-radius: 20px;
+      padding: 5px 10px;
+      display: inline-block;
+      text-decoration: none;
+    }
+  }
+
+  #festival-banner {
+    a {
+      margin-left: 20px;
+    }
+  }
+
+  #festival-banner-mobile {
+    a {
+      margin-bottom: 16px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    #festival-banner {
+      display: none;
+    }
+  }
+
+  @media (min-width: 768px) {
+    #festival-banner-mobile {
+      display: none;
+    }
+  }  
 
   #title-row {
 

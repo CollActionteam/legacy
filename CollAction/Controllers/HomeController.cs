@@ -32,6 +32,12 @@ namespace CollAction.Controllers
             return View();
         }
 
+        public IActionResult CrowdActingFestival()
+        {
+            ViewData["Title"] = _localizer["Make The World Great Again Festival"];
+            return View();
+        }
+
         public IActionResult Contact()
         {
             return View();
