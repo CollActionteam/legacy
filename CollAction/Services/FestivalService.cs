@@ -6,13 +6,12 @@ namespace CollAction.Services
     public class FestivalService : IFestivalService
     {
         private readonly FestivalServiceOptions _festivalOptions;
-        private readonly DateTime DefaultEndDate = new DateTime(2018, 5, 27, 23, 59, 59);
 
         public FestivalService(IOptions<FestivalServiceOptions> festivalOptions)
         {
             _festivalOptions = festivalOptions.Value;
         }
 
-        public bool CtasVisible => DateTime.Now < (_festivalOptions.FestivalEndDate ?? DefaultEndDate);
+        public bool CtasVisible => _festivalOptions.FestivalEndDate.HasValue && _festivalOptions.FestivalEndDate >= DateTime.Now;
     }
 }
