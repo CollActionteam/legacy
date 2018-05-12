@@ -139,12 +139,14 @@ namespace CollAction
                     .AddXssProtectionEnabled() // Enable browser xss protection
                     .AddContentTypeOptionsNoSniff() // Ensure the browser doesn't guess/sniff content-types
                     .AddReferrerPolicyStrictOriginWhenCrossOrigin() // Send a full URL when performing a same-origin request, only send the origin of the document to a-priori as-much-secure destination (HTTPS->HTTPS), and send no header to a less secure destination (HTTPS->HTTP) 
+                    .AddFrameOptionsDeny() // No framing allowed (put us inside a frame tag)
                     .AddContentSecurityPolicy(cspBuilder =>
                     {
                         cspBuilder.AddBlockAllMixedContent(); // Block mixed http/https content
                         cspBuilder.AddUpgradeInsecureRequests(); // Upgrade all http requests to https
                         cspBuilder.AddObjectSrc().Self(); // Only allow plugins/objects from our own site
                         cspBuilder.AddFormAction().Self(); // Only allow form actions to our own site
+                        cspBuilder.AddFrameAncestors().None(); // No framing allowed here (put us inside a frame tag)
                         cspBuilder.AddScriptSrc().Self() // Only allow scripts from our own site, the aspnetcdn site and google analytics
                                   .Sources.AddRange(new[] { "https://ajax.aspnetcdn.com",
                                                             "https://www.googletagmanager.com",
