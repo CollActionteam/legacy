@@ -138,6 +138,15 @@ namespace CollAction
                         cspBuilder.AddUpgradeInsecureRequests(); // Upgrade all http requests to https
                         cspBuilder.AddObjectSrc().Self(); // Only allow plugins/objects from our own site
                         cspBuilder.AddFormAction().Self(); // Only allow form actions to our own site
+                        cspBuilder.AddFrameAncestors() // 
+                                  .Sources.AddRange(new[] { "http://fossylfrijfryslan.frl",
+                                                            "https://fossylfrijfryslan.frl",
+                                                            "http://freonen.nl",
+                                                            "https://freonen.nl",
+                                                            "http://*.fossylfrijfryslan.frl",
+                                                            "https://*.fossylfrijfryslan.frl",
+                                                            "http://*.freonen.nl",
+                                                            "https://*.freonen.nl" });
                         cspBuilder.AddScriptSrc().Self() // Only allow scripts from our own site, the aspnetcdn site and google analytics
                                   .Sources.AddRange(new[] { "https://ajax.aspnetcdn.com",
                                                             "https://www.googletagmanager.com",
