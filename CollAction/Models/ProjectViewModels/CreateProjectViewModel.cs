@@ -34,16 +34,16 @@ namespace CollAction.Models
 
         [Required(ErrorMessage = "Geef een korte beschrijving van de actie die je voorstelt te ondernemen en het probleem dat je probeert op te lossen.")]
         [Display(Name = "Korte beschrijving", Prompt = "Bv. \"In januari doen we allemaal XYZ, omdat…\"")]
-        [MaxLength(1000)]
+        [MaxLength(10000)]
         public string Description { get; set; }
 
         [Required(ErrorMessage = "Beschrijf wat de impact is van je actie - waarom is deze actie nemen belangrijk?")]
         [Display(Name = "Doel/Impact", Prompt = "Max 1000 tekens")]
-        [MaxLength(1000)]
+        [MaxLength(10000)]
         public string Goal { get; set; }
 
         [Display(Name = "Andere opmerkingen", Prompt = "Bv. meer achtergrond, hoe gaat het project in zijn werk, FAQs, over de initatiefnemer.")]
-        [MaxLength(2000)]
+        [MaxLength(20000)]
         public string CreatorComments { get; set; }
 
         [Required]

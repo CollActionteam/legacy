@@ -19,6 +19,7 @@ npm run build</PreBuildEvent>
 
   <ItemGroup>
     <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.6.1" />
+    <PackageReference Include="HtmlSanitizer" Version="4.0.185" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.1" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.2" PrivateAssets="All" />
