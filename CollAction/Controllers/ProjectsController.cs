@@ -11,15 +11,11 @@ using CollAction.Models;
 using Microsoft.Extensions.Localization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using System.Data.SqlClient;
-using Npgsql;
 using Microsoft.AspNetCore.Hosting;
 using CollAction.Helpers;
 using CollAction.Services;
-using System.Text.RegularExpressions;
 using CollAction.Models.ProjectViewModels;
 using System.Linq.Expressions;
-using Newtonsoft.Json;
 
 namespace CollAction.Controllers
 {
@@ -47,7 +43,6 @@ namespace CollAction.Controllers
             return View();
         }
 
-        // GET: Project/Find
         public async Task<IActionResult> Find(FindProjectViewModel model)
         {
             if (model.SearchText == null)
@@ -65,7 +60,6 @@ namespace CollAction.Controllers
             return View(model);
         }
 
-        // GET: Projects/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -88,7 +82,6 @@ namespace CollAction.Controllers
             return View(displayProject);
         }
 
-        // GET: Projects/Create
         [Authorize]
         public async Task<IActionResult> Create()
         {
@@ -100,9 +93,6 @@ namespace CollAction.Controllers
             });
         }
 
-        // POST: Projects/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
@@ -152,12 +142,15 @@ namespace CollAction.Controllers
             project.DescriptiveImage = await descriptiveImageManager.CreateOrReplaceImageFileIfNeeded(project.DescriptiveImage, model.DescriptiveImageUpload, model.DescriptiveImageDescription);
 
             _context.Add(project);
+
+            // Save the main project
             await _context.SaveChangesAsync();
 
+            // Save project related items (now that we've got a project id)
             project.SetDescriptionVideoLink(_context, model.DescriptionVideoLink);
-
-            // Only call this once we have a valid Project.Id
             await project.SetTags(_context, model.Hashtag?.Split(';') ?? new string[0]);
+
+            await _context.SaveChangesAsync();
 
             // Notify admins and creator through e-mail
             string confirmationEmail =
@@ -192,144 +185,6 @@ namespace CollAction.Controllers
             });
         }
 
-        // GET: Projects/Edit/5
-        /*
-        [Authorize]
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var project = await _context.Projects
-                                        .Include(p => p.BannerImage)
-                                        .Include(p => p.DescriptionVideoLink)
-                                        .Include(p => p.Tags).ThenInclude(t => t.Tag)
-                                        .SingleOrDefaultAsync(p => p.Id == id);
-            if (project == null)
-            {
-                return NotFound();
-            }
-
-            if (_userManager.GetUserId(User) != project.OwnerId)
-            {
-                return Forbid();
-            }
-
-            var editProjectViewModel = new EditProjectViewModel
-            {
-                Id = project.Id,
-                Name = project.Name,
-                Description = project.Description,
-                Goal = project.Goal,
-                Proposal = project.Proposal,
-                CreatorComments = project.CreatorComments,
-                CategoryId = project.CategoryId,
-                Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description", project.CategoryId),
-                LocationId = project.LocationId,
-                Target = project.Target,
-                Start = project.Start,
-                End = project.End,
-                DescriptionVideoLink = project.DescriptionVideoLink?.Link,
-                BannerImageFile = project.BannerImage,
-                BannerImageDescription = project.BannerImage?.Description,
-                Hashtag = project.HashTags
-            };
-
-            return View(editProjectViewModel);
-        }
-        */
-
-        // POST: Projects/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //[Authorize]
-        //public async Task<IActionResult> Edit(int id, EditProjectViewModel editProjectViewModel)
-        //{
-        //    if (id != editProjectViewModel.Id)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var project = await _context.Projects.Include(p => p.BannerImage).Include(p => p.DescriptionVideoLink).SingleOrDefaultAsync(m => m.Id == id);
-        //    if (project == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    if (_userManager.GetUserId(User) != project.OwnerId)
-        //    {
-        //        return Forbid();
-        //    }
-
-        //    // If the project name changed make sure it is still unique.
-        //    if (project.Name != editProjectViewModel.Name && await _context.Projects.AnyAsync(p => p.Name == editProjectViewModel.Name))
-        //    {
-        //        ModelState.AddModelError("Name", _localizer["A project with the same name already exists."]);
-        //    }
-
-        //    // If there are image descriptions without corresponding image uploads, warn the user.
-        //    if (project.BannerImage == null && editProjectViewModel.BannerImageUpload == null && !string.IsNullOrWhiteSpace(editProjectViewModel.BannerImageDescription))
-        //    {
-        //        ModelState.AddModelError("BannerImageDescription", _localizer["You can only provide a 'Banner Image Description' if you upload a 'Banner Image'."]);
-        //    }
-        //    if (project.DescriptiveImage == null && editProjectViewModel.DescriptiveImageUpload == null && !string.IsNullOrWhiteSpace(editProjectViewModel.DescriptiveImageDescription))
-        //    {
-        //        ModelState.AddModelError("DescriptiveImageDescription", _localizer["You can only provide a 'DescriptiveImage Description' if you upload a 'DescriptiveImage'."]);
-        //    }
-
-        //    if (!ModelState.IsValid)
-        //    {
-        //        editProjectViewModel.Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
-        //        editProjectViewModel.BannerImage = project.BannerImage;
-        //        editProjectViewModel.DescriptiveImage = project.DescriptiveImage;
-        //        return View(editProjectViewModel);
-        //    }
-
-        //    project.Name = editProjectViewModel.Name;
-        //    project.Description = editProjectViewModel.Description;
-        //    project.Goal = editProjectViewModel.Goal;
-        //    project.Proposal = editProjectViewModel.Proposal;
-        //    project.CreatorComments = editProjectViewModel.CreatorComments;
-        //    project.CategoryId = editProjectViewModel.CategoryId;
-        //    project.LocationId = editProjectViewModel.LocationId;
-        //    project.Target = editProjectViewModel.Target;
-        //    project.Start = editProjectViewModel.Start;
-        //    project.End = editProjectViewModel.End;
-
-        //    var bannerImageManager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "bannerimages"));
-        //    project.BannerImage = await bannerImageManager.CreateOrReplaceImageFileIfNeeded(project.BannerImage, editProjectViewModel.BannerImageUpload, editProjectViewModel.BannerImageDescription);
-
-        //    var descriptiveImageManager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "descriptiveimages"));
-        //    project.DescriptiveImage = await descriptiveImageManager.CreateOrReplaceImageFileIfNeeded(project.DescriptiveImage, editProjectViewModel.DescriptiveImageUpload, editProjectViewModel.DescriptiveImageDescription);
-
-        //    project.SetDescriptionVideoLink(_context, editProjectViewModel.DescriptionVideoLink);
-
-        //    await project.SetTags(_context, editProjectViewModel.Hashtag?.Split(';') ?? new string[0]);
-
-        //    try
-        //    {
-        //        _context.Update(project);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction("Find");
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!(await _context.Projects.AnyAsync(e => e.Id == id)))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-        //}
-
-        // GET: Projects/Delete/5
         [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -353,7 +208,6 @@ namespace CollAction.Controllers
             return View(project);
         }
 
-        // POST: Projects/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Authorize]
