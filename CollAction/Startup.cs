@@ -129,10 +129,14 @@ namespace CollAction
             if (env.IsProduction())
             {
                 // Ensure our middleware handles proxied https, see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-Proto
-                app.UseForwardedHeaders(new ForwardedHeadersOptions()
+                var forwardedHeaderOptions = new ForwardedHeadersOptions()
                 {
-                    ForwardedHeaders = ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedHost
-                });
+                    ForwardedHeaders = ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedHost,
+                    ForwardLimit = 3
+                };
+                forwardedHeaderOptions.KnownProxies.Clear();
+                forwardedHeaderOptions.KnownNetworks.Clear();
+                app.UseForwardedHeaders(forwardedHeaderOptions);
 
                 app.UseSecurityHeaders(new HeaderPolicyCollection() // See https://www.owasp.org/index.php/OWASP_Secure_Headers_Project
                     .AddStrictTransportSecurityMaxAgeIncludeSubDomains() // Add a HSTS header, making sure browsers connect to collaction + subdomains with https from now on
