@@ -425,6 +425,7 @@ namespace CollAction.Controllers
                     "PS: Did you know you can start your own project on <a href=\"https://collaction.org/start\">www.collaction.org/start</a> ?<br><br>"+
                     "<span style='#share-buttons img {}'>"+
                     "<div id='share-buttons'>"+
+                    "<p>Multiply your impact and share the project with the buttons below 🙂</p>"+
                     "<a href=https://www.facebook.com/sharer/sharer.php?u="+projectUrl+">"+
                     "<img style='width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;' src="+systemUrl+"/images/social/facebook.png alt='Facebook' />"+
                     "</a>"+
