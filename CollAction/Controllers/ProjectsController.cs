@@ -413,7 +413,7 @@ namespace CollAction.Controllers
 
             if (success)
             {
-                string projectUrl = this.Url.Action("Details", "Projects", new { name=commitProjectViewModel.ProjectName}, HttpContext.Request.Scheme); 
+                string projectUrl = this.Url.Action("Details", "Projects", new { name = commitProjectViewModel.ProjectName }, HttpContext.Request.Scheme); 
                 var systemUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.PathBase}";
                 var userDescription = user?.FirstName ?? "";
                 string confirmationEmail =
