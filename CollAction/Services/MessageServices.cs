@@ -31,7 +31,7 @@ namespace CollAction.Services
 
             SendEmailRequest emailRequest = new SendEmailRequest()
             {
-                Source = _authOptions.FromAddress,
+                Source = String.Format("Team CollAction <{0}>",_authOptions.FromAddress),
                 Destination = new Destination(emails.ToList()),
                 Message = new Message()
                 {
