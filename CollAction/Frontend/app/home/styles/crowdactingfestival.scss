@@ -12,7 +12,7 @@
   }
 
   #intro,
-  #banner,
+  #program,
   #about-festival {
     padding: 50px 0px;
     ul {      
@@ -21,10 +21,16 @@
     }
   }
 
-  #banner,
+  #intro,
   #partners {
     background-color: #7EC4A5;
     color: #fff;
+  }
+
+  #program {
+    img {
+      padding-top: 50px;
+    }
   }
 
   #partners {
@@ -33,7 +39,7 @@
     }    
   }
 
-  #banner,
+  #program,
   #partners {
     img {
       width: 100%;
