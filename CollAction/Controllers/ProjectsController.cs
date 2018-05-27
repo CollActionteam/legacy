@@ -20,6 +20,7 @@ using System.Text.RegularExpressions;
 using CollAction.Models.ProjectViewModels;
 using System.Linq.Expressions;
 using Newtonsoft.Json;
+using System.Net;
 
 namespace CollAction.Controllers
 {
@@ -66,14 +67,24 @@ namespace CollAction.Controllers
         }
 
         // GET: Projects/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> DetailsById(int? id)
         {
-            if (id == null)
+            var project =  await _service.GetProjectById(id); 
+            if (project == null)
             {
                 return NotFound();
             }
-
-            List<DisplayProjectViewModel> items = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Id == id && p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted);
+            string validUrlForProjectName = WebUtility.UrlEncode(project.Name);
+            if(String.IsNullOrEmpty(validUrlForProjectName))
+            {
+                return NotFound();
+            }
+            return LocalRedirect("~/projects/"+validUrlForProjectName+"/details");
+        }
+        
+        public async Task<IActionResult> Details(string name)
+        {
+            List<DisplayProjectViewModel> items = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Name == WebUtility.UrlDecode(name) && p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted);
             if (items.Count == 0)
             {
                 return NotFound();
@@ -186,11 +197,22 @@ namespace CollAction.Controllers
             foreach (var admin in administrators)
                 await _emailSender.SendEmailAsync(admin.Email, subject, confirmationEmailAdmin);
 
-            return View("ThankYouCreate", new ThankYouCreateProjectViewModel()
-            {
-                Name = project.Name
-            });
+            string validUrlForProjectName = WebUtility.UrlEncode(project.Name);
+            if(String.IsNullOrEmpty(validUrlForProjectName))
+             {
+                return NotFound();
+            }
+            return LocalRedirect("~/Projects/Create/"+validUrlForProjectName+"/thankyou");
         }
+
+        [Authorize]
+        public IActionResult ThankYouCreate(string name)
+        {
+            return View(new ThankYouCreateProjectViewModel
+            {
+                Name = WebUtility.UrlDecode(name)
+             });
+         }
 
         // GET: Projects/Edit/5
         /*
@@ -372,14 +394,9 @@ namespace CollAction.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Commit(int? id)
+        public async Task<IActionResult> Commit(string name)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var project =  await _service.GetProjectById(id); 
+            var project =  await _service.GetProjectByName(WebUtility.UrlDecode(name)); 
             if (project == null)
             {
                 return NotFound();
@@ -400,13 +417,8 @@ namespace CollAction.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Commit(int id, CommitProjectViewModel commitProjectViewModel)
+        public async Task<IActionResult> Commit(CommitProjectViewModel commitProjectViewModel)
         {
-            if (id != commitProjectViewModel.ProjectId)
-            {
-                return NotFound();
-            }
-
             ApplicationUser user = await _userManager.GetUserAsync(User);
             bool success = await _service.AddParticipant(user.Id, commitProjectViewModel.ProjectId);
 
@@ -425,6 +437,24 @@ namespace CollAction.Controllers
             else
             {
                 return View("Error");
+            }
+        }
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult ThankYouCommit(string name)
+        {
+            if(name!=null)
+            {
+                CommitProjectViewModel model = new CommitProjectViewModel()
+                {
+                    ProjectName = WebUtility.UrlDecode(name)
+                };
+                return View("ThankYouCommit", model);
+            }
+            else
+            {
+                return BadRequest();
             }
         }
 
