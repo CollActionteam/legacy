@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Net;
 
 namespace CollAction.Models
 {
@@ -15,6 +16,6 @@ namespace CollAction.Models
 
         public bool IsActive { get; set; }
 
-        public string ProjectLink => $"/Projects/Details/{ProjectId}";
+        public string ProjectLink => $"/Projects/{WebUtility.UrlEncode(ProjectName)}/Details";
     }
 }
