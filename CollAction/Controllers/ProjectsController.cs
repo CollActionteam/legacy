@@ -16,7 +16,7 @@ using CollAction.Helpers;
 using CollAction.Services;
 using CollAction.Models.ProjectViewModels;
 using System.Linq.Expressions;
-using System.Net;
+using Newtonsoft.Json;
 
 namespace CollAction.Controllers
 {
@@ -69,13 +69,13 @@ namespace CollAction.Controllers
             {
                 return NotFound();
             }
-            string validUriPartForProjectName = WebUtility.UrlEncode(project.Name);
+            string validUriPartForProjectName = Uri.EscapeDataString(project.Name);
             return LocalRedirect($"~/projects/{validUriPartForProjectName}/details");
         }
         
         public async Task<IActionResult> Details(string name)
         {
-            List<DisplayProjectViewModel> items = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Name == WebUtility.UrlDecode(name) && p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted);
+            List<DisplayProjectViewModel> items = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Name == name && p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted);
             if (items.Count == 0)
             {
                 return NotFound();
@@ -208,7 +208,7 @@ namespace CollAction.Controllers
             foreach (var admin in administrators)
                 await _emailSender.SendEmailAsync(admin.Email, subject, confirmationEmailAdmin);
 
-            string validUriPartForProjectName = WebUtility.UrlEncode(project.Name);
+            string validUriPartForProjectName = Uri.EscapeDataString(project.Name);
             return LocalRedirect($"~/Projects/Create/{validUriPartForProjectName}/thankyou");
         }
 
@@ -217,7 +217,7 @@ namespace CollAction.Controllers
         {
             return View(new ThankYouCreateProjectViewModel
             {
-                Name = WebUtility.UrlDecode(name)
+                Name = name
              });
          }
 
@@ -265,7 +265,7 @@ namespace CollAction.Controllers
         [Authorize]
         public async Task<IActionResult> Commit(string name)
         {
-            var project =  await _projectService.GetProjectByName(WebUtility.UrlDecode(name)); 
+            var project =  await _projectService.GetProjectByName(name); 
             if (project == null)
             {
                 return NotFound();
@@ -325,7 +325,7 @@ namespace CollAction.Controllers
             {
                 CommitProjectViewModel model = new CommitProjectViewModel()
                 {
-                    ProjectName = WebUtility.UrlDecode(name)
+                    ProjectName = name
                 };
                 return View("ThankYouCommit", model);
             }
