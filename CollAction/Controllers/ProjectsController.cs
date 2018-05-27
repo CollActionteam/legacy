@@ -74,12 +74,8 @@ namespace CollAction.Controllers
             {
                 return NotFound();
             }
-            string validUrlForProjectName = WebUtility.UrlEncode(project.Name);
-            if(String.IsNullOrEmpty(validUrlForProjectName))
-            {
-                return NotFound();
-            }
-            return LocalRedirect("~/projects/"+validUrlForProjectName+"/details");
+            string validUriPartForProjectName = WebUtility.UrlEncode(project.Name);
+            return LocalRedirect($"~/projects/{validUriPartForProjectName}/details");
         }
         
         public async Task<IActionResult> Details(string name)
@@ -197,12 +193,8 @@ namespace CollAction.Controllers
             foreach (var admin in administrators)
                 await _emailSender.SendEmailAsync(admin.Email, subject, confirmationEmailAdmin);
 
-            string validUrlForProjectName = WebUtility.UrlEncode(project.Name);
-            if(String.IsNullOrEmpty(validUrlForProjectName))
-             {
-                return NotFound();
-            }
-            return LocalRedirect("~/Projects/Create/"+validUrlForProjectName+"/thankyou");
+            string validUriPartForProjectName = WebUtility.UrlEncode(project.Name);
+            return LocalRedirect($"~/Projects/Create/{validUriPartForProjectName}/thankyou");
         }
 
         [Authorize]
