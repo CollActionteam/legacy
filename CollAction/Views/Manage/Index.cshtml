@@ -7,198 +7,85 @@
     ViewData["Title"] = "Manage your account";
 }
 
-<h2>@ViewData["Title"].</h2>
-<p class="text-success">Model.StatusMessage</p>
+<div id="manage-index">
+    <div class="container">
+        <h2>@ViewData["Title"].</h2>
+        <p class="text-success">@Model.StatusMessage</p>
 
-<div>
-    <h4>Change your account settings</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>Password:</dt>
-        <dd>
-            <a asp-controller="Manage" asp-action="ChangePassword" class="btn-bracketed">Change</a>
-        </dd>
+        <dl>
+            <dt>Password:</dt>
+            <dd>
+                <form asp-controller="Manage" asp-action="ChangePassword" method="get">
+                    <input type="submit" value="Change Password" />
+                </form>
+            </dd>
 
-        <dt>Newsletter Subscription:</dt>
-        <dd>
-            <form asp-controller="Manage" asp-action="NewsletterSubscription" method="post" class="form-horizontal">
-                <div asp-validation-summary="All" class="text-danger"></div>
-                <div class="form-group">
+            <dt>Newsletter Subscription:</dt>
+            <dd>
+                <form asp-controller="Manage" asp-action="NewsletterSubscription" method="post" class="form-horizontal">
+                    <div asp-validation-summary="All" class="text-danger"></div>
                     <label asp-for="NewsletterSubscription" class="control-label"></label>
                     @Html.CheckBoxFor(m => m.NewsletterSubscription, new { onclick = "this.form.submit();" })
                     @Html.ValidationMessage("NewsletterSubscription")
-                </div>
-            </form>
-        </dd>
-        @*<dt>External Logins:</dt>
-        <dd>
+                </form>
+            </dd>
+            <dt>Delete Account</dt>
+            <dd>
+                <form asp-controller="Account" asp-action="Delete" method="post">
+                    <input type="submit" value="Delete" />
+                </form>
+            </dd>
 
-            @Model.Logins.Count <a asp-controller="Manage" asp-action="ManageLogins" class="btn-bracketed">Manage</a>
-        </dd>
+            <dt>Projects You've Subscribed To:</dt>
 
-        <dt>Projects You've Subscribed To:</dt>
-
-        <dd>
-        @if (Model.ProjectsParticipated.Any())
-        {
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => sample.Name)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => sample.Description)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => sample.Goal)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => sample.Category)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => sample.Location)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => sample.Target)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => sample.Start)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => sample.End)
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
+            <dd>
+            @if (Model.ProjectsParticipated.Any())
+            {
+                <ul>
                     @foreach (var item in @Model.ProjectsParticipated)
                     {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(content => item.Name)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(content => item.Description)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(content => item.Goal)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(content => item.Category)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(content => item.Location)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(content => item.Target)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(content => item.Start)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(content => item.End)
-                            </td>
-                            <td>
-                                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                            </td>
-                        </tr>
+                        <li>
+                            <a asp-action="Details" asp-controller="Projects" asp-route-id="@item.Id">@item.Name</a>
+                        </li>
                     }
-                </tbody>
-            </table>
-        }
-        else
-        {
-            <p>
-                You are not currently participating in any projects. Subscribe by
-                browsing the @Html.ActionLink("Project List", "Index", "Projects")
-                or by using the @Html.ActionLink("Find Project", "Find", "Projects") page.
-            </p>
-        }
-        </dd>
+                </ul>
+            }
+            else
+            {
+                <p>
+                    You are not currently participating in any projects. 
+                </p>
+            }
+            </dd>
 
-        <dt>Projects You've Created:</dt>
+            <dt>Projects You've Created:</dt>
 
-        <dd>
-        @if (Model.ProjectsCreated.Any())
-        {
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => sample.Name)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => sample.Description)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => sample.Goal)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => sample.Category)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => sample.Location)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => sample.Target)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => sample.Start)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => sample.End)
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
+            <dd>
+            @if (Model.ProjectsCreated.Any())
+            {
+                <ul>
                     @foreach (var item in @Model.ProjectsCreated)
                     {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(content => item.Name)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(content => item.Description)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(content => item.Goal)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(content => item.Category)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(content => item.Location)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(content => item.Target)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(content => item.Start)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(content => item.End)
-                            </td>
-                            <td>
-                                <a asp-action="Edit" asp-controller="Projects" asp-route-id="@item.Id">Edit</a> |
-                                <a asp-action="Details" asp-controller="Projects" asp-route-id="@item.Id">Details</a> |
-                                <a asp-action="Delete" asp-controller="Projects" asp-route-id="@item.Id">Delete</a>
-                            </td>
-                        </tr>
+                        <li>
+                            <a asp-action="Details" asp-controller="Projects" asp-route-id="@item.Id">@item.Name</a>
+                        </li>
                     }
-                </tbody>
-            </table>
-        }
-        else
-        {
-            <p>
-                You have not yet created any projects. Create a project by using the
-                @Html.ActionLink("Start Project", "StartInfo", "Projects") page.
-            </p>
-        }
-        </dd>*@
-    </dl>
+                </ul>
+            }
+            else
+            {
+                <p>
+                    You have not yet created any projects.
+                </p>
+            }
+        </dd>
+
+            @*<dt>External Logins:</dt>
+            <dd>
+                @Model.Logins.Count <a asp-controller="Manage" asp-action="ManageLogins" class="btn-bracketed">Manage</a>
+            </dd>*@
+        </dl>
+    </div>
 </div>
 
 @section Scripts {
