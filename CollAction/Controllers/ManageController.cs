@@ -52,8 +52,6 @@ namespace CollAction.Controllers
         [TempData]
         public string StatusMessage { get; set; }
 
-        //
-        // GET: /Manage/Index
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -104,7 +102,7 @@ namespace CollAction.Controllers
                 }
             }
 
-            StatusMessage = _localizer["Your profile has been updated"];
+            StatusMessage = _localizer["Je profiel is geupdatet"];
             return RedirectToAction(nameof(Index));
         }
 
@@ -139,8 +137,6 @@ namespace CollAction.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        //
-        // POST: /Manage/NewsletterSubscription
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> NewsletterSubscription(IndexViewModel model)
@@ -152,9 +148,9 @@ namespace CollAction.Controllers
                 {
                     await _newsletterSubscriptionService.SetSubscriptionAsync(user.Email, model.NewsletterSubscription, false);
                     if (model.NewsletterSubscription)
-                        StatusMessage = _localizer["Successfully subscribed to newsletter"];
+                        StatusMessage = _localizer["U bent nu ingeschreven voor de nieuwsbrief"];
                     else
-                        StatusMessage = _localizer["Successfully unsubscribed to newsletter"];
+                        StatusMessage = _localizer["U bent niet meer ingeschreven voor de nieuwsbrief"];
                 }
                 catch (Exception e)
                 {

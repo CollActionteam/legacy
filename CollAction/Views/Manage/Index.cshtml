@@ -4,7 +4,7 @@
 
 @model IndexViewModel
 @{
-    ViewData["Title"] = "Manage your account";
+    ViewData["Title"] = "Beheer jouw account";
 }
 
 <div id="manage-index">
@@ -13,14 +13,14 @@
         <p class="text-success">@Model.StatusMessage</p>
 
         <dl>
-            <dt>Password:</dt>
+            <dt>Wachtwoord:</dt>
             <dd>
                 <form asp-controller="Manage" asp-action="ChangePassword" method="get">
-                    <input type="submit" value="Change Password" />
+                    <input type="submit" value="Verander wachtwoord" />
                 </form>
             </dd>
 
-            <dt>Newsletter Subscription:</dt>
+            <dt>Nieuwsbrief:</dt>
             <dd>
                 <form asp-controller="Manage" asp-action="NewsletterSubscription" method="post" class="form-horizontal">
                     <div asp-validation-summary="All" class="text-danger"></div>
@@ -29,14 +29,14 @@
                     @Html.ValidationMessage("NewsletterSubscription")
                 </form>
             </dd>
-            <dt>Delete Account</dt>
+            <dt>Verwijder account (Waarschuwing: Je verwijderd je gegevens permanent hiermee!)</dt>
             <dd>
                 <form asp-controller="Account" asp-action="Delete" method="post">
-                    <input type="submit" value="Delete" />
+                    <input type="submit" value="Verwijder" />
                 </form>
             </dd>
 
-            <dt>Projects You've Subscribed To:</dt>
+            <dt>Projecten waar je aan mee doet:</dt>
 
             <dd>
             @if (Model.ProjectsParticipated.Any())
@@ -53,12 +53,12 @@
             else
             {
                 <p>
-                    You are not currently participating in any projects. 
+                    Je doet op dit moment aan geen enkel project mee.
                 </p>
             }
             </dd>
 
-            <dt>Projects You've Created:</dt>
+            <dt>Projecten die je hebt aangemaakt:</dt>
 
             <dd>
             @if (Model.ProjectsCreated.Any())
@@ -75,7 +75,7 @@
             else
             {
                 <p>
-                    You have not yet created any projects.
+                    Je hebt geen projecten aangemaakt.
                 </p>
             }
         </dd>
