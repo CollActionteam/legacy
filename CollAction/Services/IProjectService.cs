@@ -17,7 +17,9 @@ namespace CollAction.Services
 
         Task<ProjectParticipant> GetParticipant(string userId, int projectId);
 
-        Task<IEnumerable<DisplayTileProjectViewModel>> GetTileProjects(Expression<Func<Project, bool>> WhereExpression);
+        Task<IEnumerable<DisplayTileProjectViewModel>> GetTileProjectViewModels(Expression<Func<Project, bool>> filter);
+
+        Task<IEnumerable<DisplayProjectViewModel>> GetProjectDisplayViewModels(Expression<Func<Project, bool>> filter);
 
         Task<string> GenerateParticipantsDataExport(int projectId);
     }

@@ -7,7 +7,7 @@ namespace CollAction.Models
     {
         public string OwnerId { get; set; }
 
-        public List<DisplayProjectViewModel> Projects { get; set; }
+        public IEnumerable<DisplayProjectViewModel> Projects { get; set; }
 
         [Display(Name = "Search Text")]
         [Required(ErrorMessage = "Please enter a search term")]
