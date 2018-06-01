@@ -1,22 +1,20 @@
 #! /bin/bash
-if [ -z "$TRAVIS_PULL_REQUEST" ] && [ "$TRAVIS_PULL_REQUEST" == "true" ]; then 
-    # Don't push if it's a pull request
-    echo "Skipping deploy because it's a pull request";
-    exit 0;
-fi
-
-if [ "$TRAVIS_BRANCH" != "$DEPLOY_BRANCH" ]; then
-    # Don't push if it's not the correct branch
-    echo "Skipping deploy because branch is not '$DEPLOY_BRANCH'"
+if [ -z "$TRAVIS_PULL_REQUEST" ] || [ "$TRAVIS_PULL_REQUEST" == "false" ]; then 
+    # Don't push if it's not a pull request
+    echo "Skip pushing to ECR because it's not a pull request";
     exit 0;
 fi
 
 # Build and push
-echo "Building $DOCKER_REPO"
-docker build -t $DOCKER_REPO CollAction
+echo "Building CollAction image for $ECR_REPO:$TRAVIS_PULL_REQUEST"
+docker build -t $ECR_REPO:$TRAVIS_PULL_REQUEST CollAction
 
-echo "Pushing $DOCKER_REPO"
-echo $DOCKER_PASSWORD | docker login -u=$DOCKER_USERNAME --password-stdin
-docker push $DOCKER_REPO
+# Log in to Amazon ECR.
+# This uses the environment variables AWS_ACCESS_KEY_ID and AWS_ACCESS_SECRET_KEY which are set in the .travis.yml env.secure section. 
+echo "Logging on to ECR"
+eval $(aws ecr get-login --no-include-email --region eu-central-1)
 
-echo "Pushed $DOCKER_REPO"
+echo "Pushing image $ECR_REPO:$TRAVIS_PULL_REQUEST"
+docker push $ECR_REPO:$TRAVIS_PULL_REQUEST
+
+echo "Done!"

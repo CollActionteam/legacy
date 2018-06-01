@@ -4,15 +4,16 @@ mono: none
 dist: trusty
 sudo: required
 before_install:
-  - sudo apt-get update
-  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
+- sudo apt-get update
+- sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce awscli
 services:
-  - docker
+- docker
 script:
   - dotnet restore CollAction
   - dotnet build CollAction -c Release
   - dotnet publish CollAction -c Release
 after_success:
-  - chmod +x scripts/docker-push.sh
-  - scripts/docker-push.sh
-  
+- chmod +x scripts/docker-push.sh
+- scripts/docker-push.sh
+env:
+  secure: SYUsZg+85o8Y8ucytrsTie9UXHV0v4+MSfOzXIovqjFynBH56mEO6JXnI4R6l3nPyc4Lkw4x39x3z78az//K1vMYLY1aDFy20UHHwwgIrS6Q6b/Rva22buK9uXljsCodhIhZjqe+1NrKo3W8F9jtXmw//1lz+jJr/JpPplLnEY6XUDSJpfuPOmx7eZcBoXh0cpnmPGMYusVdbC4ha98b+AmoGmJjt7UL91xeXLNXPW0T5MUe9dDE4MM/49hpVjdeVzr68FpWEKdx21zQknF/grBG+IsyI82OYf9URAfAeMPrErA4GaGD6B1v7o05SzFYljdXe6IwTcqR++Ogelym6ZoDyf6rVHlrS+Se5GmEOuszsXY/vMK0XuMOJgpV7N9piyK4pW6mAcJVUrB7S+3B5oWnFF6vp8RtnHthgLgRMRgYXPlPg0FKejnKxD8OY6v76Zmiqu04KTfmT6fq3mrmE737MmBQzpGGODmX2KlLh0u6WGnsIRBBbFiVsjCBz0li6LtTcdNcWpKWx+5xXLDcI3N6yX/dG6rLVKelm2rBGjLwzp8gmVCf/rCnkUM6S9EzLlfJtn0HXBoKJ8boXJWmCMsOQfPWRmmFgZ/iQmPQCTjhMlsxkfj7gZId+B5GtG/w8uiFm3a3KFtoVft1Iy5TylMQLxVcYjxz2eSJlA0/aTE=
