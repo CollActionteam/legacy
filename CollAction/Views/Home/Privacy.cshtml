@@ -1,4 +1,12 @@
-﻿<div id="privacy-policy">
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+
+@{
+    ViewData["Title"] = Localizer["Privacy Policy"];
+}
+
+<div id="privacy-policy">
     <div class="container">
         <h2>Privacy and Cookie Policy CollAction</h2>
         <p>

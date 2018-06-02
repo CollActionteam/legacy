@@ -75,7 +75,14 @@
 
     a {
         color: inherit; 
-        text-decoration: underline; 
+        text-decoration: inherit; 
+    }
+
+    #footer-remarks
+    {
+        a {
+            text-decoration: underline;
+        }
     }
 }
 
