@@ -43,7 +43,6 @@ namespace CollAction.Controllers
             return View();
         }
 
-        // GET: Project/Find
         public async Task<IActionResult> Find(FindProjectViewModel model)
         {
             if (model.SearchText == null)
@@ -61,7 +60,6 @@ namespace CollAction.Controllers
             return View(model);
         }
 
-        // GET: Projects/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -84,7 +82,6 @@ namespace CollAction.Controllers
             return View(displayProject);
         }
 
-        // GET: Projects/Create
         [Authorize]
         public async Task<IActionResult> Create()
         {
@@ -96,9 +93,6 @@ namespace CollAction.Controllers
             });
         }
 
-        // POST: Projects/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
@@ -148,12 +142,15 @@ namespace CollAction.Controllers
             project.DescriptiveImage = await descriptiveImageManager.CreateOrReplaceImageFileIfNeeded(project.DescriptiveImage, model.DescriptiveImageUpload, model.DescriptiveImageDescription);
 
             _context.Add(project);
+
+            // Save the main project
             await _context.SaveChangesAsync();
 
+            // Save project related items (now that we've got a project id)
             project.SetDescriptionVideoLink(_context, model.DescriptionVideoLink);
-
-            // Only call this once we have a valid Project.Id
             await project.SetTags(_context, model.Hashtag?.Split(';') ?? new string[0]);
+
+            await _context.SaveChangesAsync();
 
             // Notify admins and creator through e-mail
             string confirmationEmail =
@@ -211,7 +208,6 @@ namespace CollAction.Controllers
             return View(project);
         }
 
-        // POST: Projects/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Authorize]
