@@ -117,7 +117,6 @@ namespace CollAction.Models
             {
                 context.ProjectTags.RemoveRange(redundantTags);
                 context.ProjectTags.AddRange(newProjectTags);
-                await context.SaveChangesAsync();
             }
         }
 
