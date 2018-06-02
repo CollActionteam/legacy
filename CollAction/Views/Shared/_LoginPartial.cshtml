@@ -7,7 +7,11 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <form  asp-area="" asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm">
+    <a asp-area="" asp-controller="Manage" asp-action="Index">Account</a>
+    @:&nbsp; 
+    @:&nbsp;
+    @:&nbsp;
+    <form asp-area="" asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm">
         <input type="submit" value="Logout" id="logOutBtn" />
     </form>
 }

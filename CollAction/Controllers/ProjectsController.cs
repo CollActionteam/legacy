@@ -25,16 +25,16 @@ namespace CollAction.Controllers
         private readonly IStringLocalizer<ProjectsController> _localizer;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IHostingEnvironment _hostingEnvironment;
-        private readonly IProjectService _service;
+        private readonly IProjectService _projectService;
         private readonly IEmailSender _emailSender;
 
-        public ProjectsController(ApplicationDbContext context, IStringLocalizer<ProjectsController> localizer, UserManager<ApplicationUser> userManager, IHostingEnvironment hostingEnvironment, IProjectService service, IEmailSender emailSender)
+        public ProjectsController(ApplicationDbContext context, IStringLocalizer<ProjectsController> localizer, UserManager<ApplicationUser> userManager, IHostingEnvironment hostingEnvironment, IProjectService projectService, IEmailSender emailSender)
         {
             _context = context;
             _localizer = localizer;
             _userManager = userManager;
             _hostingEnvironment = hostingEnvironment;
-            _service = service;
+            _projectService = projectService;
             _emailSender = emailSender;
         }
 
@@ -50,12 +50,12 @@ namespace CollAction.Controllers
                 return View(new FindProjectViewModel
                 {
                     OwnerId = (await _userManager.GetUserAsync(User))?.Id,
-                    Projects = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted)
+                    Projects = await _projectService.GetProjectDisplayViewModels(p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted)
                 });
             }
 
             model.OwnerId = (await _userManager.GetUserAsync(User))?.Id;
-            model.Projects = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted &&
+            model.Projects = await _projectService.GetProjectDisplayViewModels(p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted &&
                 (p.Name.Contains(model.SearchText) || p.Description.Contains(model.SearchText) || p.Goal.Contains(model.SearchText)));
             return View(model);
         }
@@ -67,14 +67,14 @@ namespace CollAction.Controllers
                 return NotFound();
             }
 
-            List<DisplayProjectViewModel> items = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Id == id && p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted);
-            if (items.Count == 0)
+            IEnumerable<DisplayProjectViewModel> items = await _projectService.GetProjectDisplayViewModels(p => p.Id == id && p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted);
+            if (items.Count() == 0)
             {
                 return NotFound();
             }
             DisplayProjectViewModel displayProject = items.First();
             string userId = (await _userManager.GetUserAsync(User))?.Id;
-            if (userId != null && (await _service.GetParticipant(userId, displayProject.Project.Id) != null))
+            if (userId != null && (await _projectService.GetParticipant(userId, displayProject.Project.Id) != null))
             {
                 displayProject.IsUserCommitted = true;
             }
@@ -254,7 +254,7 @@ namespace CollAction.Controllers
                 return NotFound();
             }
 
-            var project =  await _service.GetProjectById(id); 
+            var project =  await _projectService.GetProjectById(id); 
             if (project == null)
             {
                 return NotFound();
@@ -265,7 +265,7 @@ namespace CollAction.Controllers
                 ProjectId = project.Id,
                 ProjectName = project.Name,
                 ProjectProposal = project.Proposal,
-                IsUserCommitted = (await _service.GetParticipant((await _userManager.GetUserAsync(User)).Id, project.Id) != null),
+                IsUserCommitted = (await _projectService.GetParticipant((await _userManager.GetUserAsync(User)).Id, project.Id) != null),
                 IsActive = project.IsActive
             };
 
@@ -283,7 +283,7 @@ namespace CollAction.Controllers
             }
 
             ApplicationUser user = await _userManager.GetUserAsync(User);
-            bool success = await _service.AddParticipant(user.Id, commitProjectViewModel.ProjectId);
+            bool success = await _projectService.AddParticipant(user.Id, commitProjectViewModel.ProjectId);
 
             if (success)
             {
@@ -327,7 +327,7 @@ namespace CollAction.Controllers
                 default: statusExpression = (p => true); break;
             }
             
-            var projects = await _service.GetTileProjects(
+            var projects = await _projectService.GetTileProjectViewModels(
                 Expression.Lambda<Func<Project, bool>>(Expression.AndAlso(projectExpression.Body, Expression.Invoke(statusExpression, projectExpression.Parameters[0])), projectExpression.Parameters[0]));
             
             return Json(projects);
@@ -342,8 +342,8 @@ namespace CollAction.Controllers
                 p.Id == projectId);
 
             Expression<Func<Project, bool>> statusExpression = (p => true);
-            
-            var projects = await _service.GetTileProjects(projectExpression);            
+
+            var projects = await _projectService.GetTileProjectViewModels(projectExpression);
             return Json(projects);
         }
 
