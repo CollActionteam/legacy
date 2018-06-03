@@ -1,0 +1,48 @@
+@import '../colors';
+@import '../mixins';
+
+#festival-page {
+
+  h1 {
+    font-size: 20px;
+  }
+
+  h2 {
+    font-size: 26px;
+  }
+
+  #intro,
+  #program,
+  #about-festival {
+    padding: 50px 0px;
+    ul {      
+      list-style: none;
+      padding-left: 0;
+    }
+  }
+
+  #intro,
+  #partners {
+    background-color: #7EC4A5;
+    color: #fff;
+  }
+
+  #program {
+    img {
+      padding-top: 50px;
+    }
+  }
+
+  #partners {
+    h1 {
+      text-align: center;
+    }    
+  }
+
+  #program,
+  #partners {
+    img {
+      width: 100%;
+    }
+  }
+}

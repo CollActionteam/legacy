@@ -326,6 +326,8 @@ namespace CollAction.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int>("AnonymousUserParticipants");
+
                     b.Property<int?>("BannerImageFileId");
 
                     b.Property<int>("CategoryId");
@@ -357,8 +359,7 @@ namespace CollAction.Migrations
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.Property<string>("OwnerId")
-                        .IsRequired();
+                    b.Property<string>("OwnerId");
 
                     b.Property<string>("Proposal")
                         .IsRequired()
@@ -656,7 +657,7 @@ namespace CollAction.Migrations
                     b.HasOne("CollAction.Models.ApplicationUser", "Owner")
                         .WithMany("Projects")
                         .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("CollAction.Models.ProjectParticipant", b =>
