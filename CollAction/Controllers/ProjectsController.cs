@@ -76,7 +76,7 @@ namespace CollAction.Controllers
         public async Task<IActionResult> Details(string name)
         {
             IEnumerable<DisplayProjectViewModel> items = await _projectService.GetProjectDisplayViewModels(p =>  p.Name == name  && p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted);
-            if (items.Count == 0)
+            if (items.Count() == 0)
             {
                 return NotFound();
             }
