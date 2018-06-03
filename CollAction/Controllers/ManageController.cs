@@ -13,6 +13,7 @@ using CollAction.Data;
 using CollAction.Models.ManageViewModels;
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.EntityFrameworkCore;
 
 namespace CollAction.Controllers
 {
@@ -68,7 +69,12 @@ namespace CollAction.Controllers
                 Email = user.Email,
                 IsEmailConfirmed = user.EmailConfirmed,
                 StatusMessage = StatusMessage,
-                NewsletterSubscription = await _newsletterSubscriptionService.IsSubscribedAsync(user.Email)
+                NewsletterSubscription = await _newsletterSubscriptionService.IsSubscribedAsync(user.Email),
+                ProjectsParticipated = (await _context.ProjectParticipants
+                                                      .Where(part => part.UserId == user.Id)
+                                                      .Include(part => part.Project)
+                                                      .ToListAsync()).Select(part => part.Project),
+                ProjectsCreated = await _context.Projects.Where(proj => proj.OwnerId == user.Id).ToListAsync()
             };
             return View(model);
         }
@@ -145,7 +151,10 @@ namespace CollAction.Controllers
                 try
                 {
                     await _newsletterSubscriptionService.SetSubscriptionAsync(user.Email, model.NewsletterSubscription, false);
-                    StatusMessage = _localizer["Successfully subscribed to newsletter"];
+                    if (model.NewsletterSubscription)
+                        StatusMessage = _localizer["Successfully subscribed to newsletter"];
+                    else
+                        StatusMessage = _localizer["Successfully unsubscribed to newsletter"];
                 }
                 catch (Exception e)
                 {

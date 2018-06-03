@@ -28,6 +28,9 @@ export default class FindProject extends React.Component<IFindProjectProps, IFin
   }
 
   componentDidMount() {
+    if (this.props.controller === false) {
+      this.fetchProjects();
+    }
   }
 
   async fetchProjects(projectFilter: IProjectFilter = null) {
