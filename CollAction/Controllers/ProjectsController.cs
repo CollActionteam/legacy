@@ -291,7 +291,7 @@ namespace CollAction.Controllers
                     "</a>"+
                     "</div>"+
                     "</span>";
-                string subject = $"Thank you for participating in the \"{commitProjectViewModel.ProjectName}\" project on CollAction.org";
+                string subject = $"Thank you for participating in the \"{commitProjectViewModel.ProjectName}\" project on CollAction";
                 await _emailSender.SendEmailAsync(user.Email, subject, confirmationEmail);
                 return View("ThankYouCommit", commitProjectViewModel);
             }
