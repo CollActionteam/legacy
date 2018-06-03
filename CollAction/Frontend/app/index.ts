@@ -3,6 +3,7 @@ import "./project/index";
 import "./global/index";
 import "./account/index";
 import "./admin/index";
+import "./manage/index";
 
 import "whatwg-fetch";
 import "quill";

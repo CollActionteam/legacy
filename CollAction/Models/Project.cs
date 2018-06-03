@@ -33,7 +33,6 @@ namespace CollAction.Models
         [ForeignKey("LocationId")]
         public Location Location { get; set; }
 
-        [Required]
         public string OwnerId { get; set; }
         [ForeignKey("OwnerId")]
         public ApplicationUser Owner { get; set; }
@@ -90,6 +89,7 @@ namespace CollAction.Models
 
         public List<ProjectTag> Tags { get; set; }
         public List<ProjectParticipant> Participants { get; set; }
+        public int AnonymousUserParticipants { get; set; }
         
         [NotMapped]
         public string HashTags
