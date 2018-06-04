@@ -70,7 +70,7 @@ namespace CollAction.Controllers
                 return NotFound();
             }
             string validUriPartForProjectName = Uri.EscapeDataString(project.Name);
-            return LocalRedirect($"~/projects/{validUriPartForProjectName}/details");
+            return LocalRedirect($"~/Projects/{validUriPartForProjectName}/details");
         }
         
         public async Task<IActionResult> Details(string name)
