@@ -12,6 +12,10 @@ using Microsoft.Extensions.Localization;
 using CollAction.Data;
 using Microsoft.AspNetCore.Authentication;
 using System.Text.Encodings.Web;
+using Microsoft.EntityFrameworkCore.Storage;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace CollAction.Controllers
 {
@@ -92,6 +96,28 @@ namespace CollAction.Controllers
 
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete()
+        {
+            ApplicationUser user = await _userManager.GetUserAsync(HttpContext.User);
+            List<Project> projects =
+                await _context.ProjectParticipants
+                              .Include(p => p.Project)
+                              .Where(p => p.UserId == user.Id && p.Project.End < DateTime.UtcNow)
+                              .Select(p => p.Project)
+                              .ToListAsync();
+
+            foreach (Project p in projects)
+                p.AnonymousUserParticipants += 1;
+
+            await _context.SaveChangesAsync();
+            await _userManager.DeleteAsync(user);
+            await _signInManager.SignOutAsync();
+
+            return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
         [HttpGet]

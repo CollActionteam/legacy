@@ -221,69 +221,71 @@ namespace CollAction.Controllers
 
             if (ModelState.IsValid)
             {
-                bool approved = model.Status == ProjectStatus.Running && project.Status == ProjectStatus.Hidden;
-                bool successfull = model.Status == ProjectStatus.Successful && project.Status == ProjectStatus.Running;
-                bool failed = model.Status == ProjectStatus.Failed && project.Status == ProjectStatus.Running;
-
-                if (approved)
+                if (project.Owner != null)
                 {
-                    //"Hi!<br>" +
-                    //"<br>" +
-                    //"The CollAction Team has reviewed your project proposal and is very happy to share that your project has been approved and now live on www.collaction.org!<br>" +
-                    //"<br>" +
-                    //"So feel very welcome to start promoting it! If you have any further questions, feel free to contact the CollAction Team at collactionteam@gmail.com. And don’t forget to tag CollAction in your messages on social media so we can help you spread the word(FB: @collaction.org, Twitter: @collaction_org)!<br>" +
-                    //"<br>" +
-                    //"Thanks again for driving the CollAction / crowdacting movement!<br>" +
-                    //"<br>" +
-                    //"Warm regards,<br>" +
-                    //"The CollAction team<br>";
+                    bool approved = model.Status == ProjectStatus.Running && project.Status == ProjectStatus.Hidden;
+                    bool successfull = model.Status == ProjectStatus.Successful && project.Status == ProjectStatus.Running;
+                    bool failed = model.Status == ProjectStatus.Failed && project.Status == ProjectStatus.Running;
 
-                    string approvalEmail =
-                        "Hi!<br>" +
-                        "<br>" +
-                        "Het Freonen team heeft je projectvoorstel bekeken en goedgekeurd! Het staat nu live op www.freonen.collaction.org<br>" +
-                        "<br>" +
-                        "Heel veel succes met de promotie van het project! Als er nog vragen zijn, kun je een mailtje sturen naar info@freonen.nl. En vergeet ons niet te taggen op social media zodat we je kunnen helpen het woord te verspreiden (FB: @freonen, Twitter: @freonen)!<br>" +
-                        "<br>" +
-                        "Dank voor je inzet voor een nog mooiere wereld!<br>" +
-                        "<br>" +
-                        "Warme groet,<br>" +
-                        "Het Freonen team<br>";
-
-                    string subject = $"Approval - {project.Name}";
-
-                    await _emailSender.SendEmailAsync(project.Owner.Email, subject, approvalEmail);
-                }
-                else if (successfull)
-                {
+                    if (approved)
+                    {
                         //"Hi!<br>" +
                         //"<br>" +
-                        //"The deadline of the project you have started on www.collaction.org has passed. We're very happy to see that the target you have set has been reached! Congratulations! Now it's time to act collectively!<br>" +
+                        //"The CollAction Team has reviewed your project proposal and is very happy to share that your project has been approved and now live on www.collaction.org!<br>" +
                         //"<br>" +
-                        //"The CollAction Team might reach out to you with more specifics (this is an automated message). If you have any further questions yourself, feel free to contact the CollAction Team at collactionteam@gmail.com. And don’t forget to tag CollAction in your messages on social media so we can help you spread the word on your achievement (FB: @collaction.org, Twitter: @collaction_org)!<br>" +
+                        //"So feel very welcome to start promoting it! If you have any further questions, feel free to contact the CollAction Team at collactionteam@gmail.com. And don’t forget to tag CollAction in your messages on social media so we can help you spread the word(FB: @collaction.org, Twitter: @collaction_org)!<br>" +
                         //"<br>" +
                         //"Thanks again for driving the CollAction / crowdacting movement!<br>" +
                         //"<br>" +
                         //"Warm regards,<br>" +
                         //"The CollAction team<br>";
-                    string successEmail =
-                        "Hi!<br>" +
-                        "<br>" +
-                        "De deadline voor je project op freonen.collaction.org is verstreken en we zijn blij om te zien dat je target is gehaald. Gefeliciteerd! Het is nu dus tijd om samen in actie te komen!<br>" +
-                        "<br>" +
-                        "Het Freonen team komt misschien nog bij je terug om de details te bespreken (dit is een automatisch bericht), maar als je in de tussentijd nog vragen hebt, neem dan vooral contact op via info @freonen.nl.En vergeet ons niet te taggen op social media zodat we je kunnen helpen het woord te verspreiden(FB: @freonen, Twitter: @freonen)!<br>" +
-                        "<br>" +
-                        "Dank voor je inzet voor een nog mooiere en duurzamere wereld!<br>" +
-                        "<br>" +
-                        "Warme groet,<br>" +
-                        "Het Freonen team<br>";
 
-                    string subject = $"Success - {project.Name}";
+                        string approvalEmail =
+                            "Hi!<br>" +
+                            "<br>" +
+                            "Het Freonen team heeft je projectvoorstel bekeken en goedgekeurd! Het staat nu live op www.freonen.collaction.org<br>" +
+                            "<br>" +
+                            "Heel veel succes met de promotie van het project! Als er nog vragen zijn, kun je een mailtje sturen naar info@freonen.nl. En vergeet ons niet te taggen op social media zodat we je kunnen helpen het woord te verspreiden (FB: @freonen, Twitter: @freonen)!<br>" +
+                            "<br>" +
+                            "Dank voor je inzet voor een nog mooiere wereld!<br>" +
+                            "<br>" +
+                            "Warme groet,<br>" +
+                            "Het Freonen team<br>";
 
-                    await _emailSender.SendEmailAsync(project.Owner.Email, subject, successEmail);
-                }
-                else if (failed)
-                {
+                            string subject = $"Approval - {project.Name}";
+
+                        await _emailSender.SendEmailAsync(project.Owner.Email, subject, approvalEmail);
+                    }
+                    else if (successfull)
+                    {
+                            //"Hi!<br>" +
+                            //"<br>" +
+                            //"The deadline of the project you have started on www.collaction.org has passed. We're very happy to see that the target you have set has been reached! Congratulations! Now it's time to act collectively!<br>" +
+                            //"<br>" +
+                            //"The CollAction Team might reach out to you with more specifics (this is an automated message). If you have any further questions yourself, feel free to contact the CollAction Team at collactionteam@gmail.com. And don’t forget to tag CollAction in your messages on social media so we can help you spread the word on your achievement (FB: @collaction.org, Twitter: @collaction_org)!<br>" +
+                            //"<br>" +
+                            //"Thanks again for driving the CollAction / crowdacting movement!<br>" +
+                            //"<br>" +
+                            //"Warm regards,<br>" +
+                            //"The CollAction team<br>";
+                        string successEmail =
+                            "Hi!<br>" +
+                            "<br>" +
+                            "De deadline voor je project op freonen.collaction.org is verstreken en we zijn blij om te zien dat je target is gehaald. Gefeliciteerd! Het is nu dus tijd om samen in actie te komen!<br>" +
+                            "<br>" +
+                            "Het Freonen team komt misschien nog bij je terug om de details te bespreken (dit is een automatisch bericht), maar als je in de tussentijd nog vragen hebt, neem dan vooral contact op via info @freonen.nl.En vergeet ons niet te taggen op social media zodat we je kunnen helpen het woord te verspreiden(FB: @freonen, Twitter: @freonen)!<br>" +
+                            "<br>" +
+                            "Dank voor je inzet voor een nog mooiere en duurzamere wereld!<br>" +
+                            "<br>" +
+                            "Warme groet,<br>" +
+                            "Het Freonen team<br>";
+
+                            string subject = $"Success - {project.Name}";
+
+                        await _emailSender.SendEmailAsync(project.Owner.Email, subject, successEmail);
+                    }
+                    else if (failed)
+                    {
                         //"Hi!<br>" +
                         //"<br>" +
                         //"The deadline of the project you have started on www.collaction.org has passed. Unfortunately the target that you have set has not been reached. Great effort though!<br>" +
@@ -294,21 +296,22 @@ namespace CollAction.Controllers
                         //"<br>" +
                         //"Warm regards,<br>" +
                         //"The CollAction team<br>";
-                    string failedEmail =
-                        "Hi!<br>" +
-                        "<br>" +
-                        "De deadline voor je project op freonen.collaction.org is verstreken. Helaas is het target dat je hebt gesteld niet gehaald. Dit betekent volgens het crowdacting concept dat de deelnemers niet in actie hoeven te komen (maar dat mag natuurlijk wel!)<br>" +
-                        "<br>" +
-                        "Het Freonen team komt misschien nog bij je terug om de details te bespreken (dit is een automatisch bericht), maar als je in de tussentijd nog vragen hebt, neem dan vooral contact op via info @freonen.nl.<br>" +
-                        "<br>" +
-                        "Dank voor je inzet voor een nog mooiere en duurzamere wereld!<br>" +
-                        "<br>" +
-                        "Warme groet,<br>" +
-                        "Het Freonen team<br>"; ;
+                        string failedEmail =
+                            "Hi!<br>" +
+                            "<br>" +
+                            "De deadline voor je project op freonen.collaction.org is verstreken. Helaas is het target dat je hebt gesteld niet gehaald. Dit betekent volgens het crowdacting concept dat de deelnemers niet in actie hoeven te komen (maar dat mag natuurlijk wel!)<br>" +
+                            "<br>" +
+                            "Het Freonen team komt misschien nog bij je terug om de details te bespreken (dit is een automatisch bericht), maar als je in de tussentijd nog vragen hebt, neem dan vooral contact op via info @freonen.nl.<br>" +
+                            "<br>" +
+                            "Dank voor je inzet voor een nog mooiere en duurzamere wereld!<br>" +
+                            "<br>" +
+                            "Warme groet,<br>" +
+                            "Het Freonen team<br>"; ;
 
-                    string subject = $"Failed - {project.Name}";
+                        string subject = $"Failed - {project.Name}";
 
-                    await _emailSender.SendEmailAsync(project.Owner.Email, subject, failedEmail);
+                        await _emailSender.SendEmailAsync(project.Owner.Email, subject, failedEmail);
+                    }
                 }
 
                 project.Name = model.Name;

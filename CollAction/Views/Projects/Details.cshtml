@@ -99,7 +99,7 @@
                     </div>
                     <div class="col-md-6 col-md-pull-6 col-xs-12 align-sides">
                         <div class="row">
-                            @if (!String.IsNullOrEmpty(Model.Project.Owner.FirstName) && !String.IsNullOrEmpty(Model.Project.Owner.LastName))
+                            @if (!String.IsNullOrEmpty(Model.Project.Owner?.FirstName) && !String.IsNullOrEmpty(Model.Project.Owner?.LastName))
                             {
                                 <div class="col-xs-3 col-md-12">
                                     <div id="project-starter-avatar"></div>

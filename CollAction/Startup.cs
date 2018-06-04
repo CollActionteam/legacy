@@ -194,6 +194,8 @@ namespace CollAction
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            app.UseStatusCodePages();
+
             app.UseAuthentication();
 
             app.UseStaticFiles();

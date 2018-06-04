@@ -26,6 +26,8 @@ class ProjectThumb extends React.Component<IProject, null> {
 
     const link = `/Projects/Details/${this.props.projectId}`;
 
+    const target = window.top !== window.self ? "_blank" : "_self";
+
     return (
       <div className="col-xs-12 col-md-4 project-thumb-container">
         <div className="project-thumb">
@@ -57,7 +59,7 @@ class ProjectThumb extends React.Component<IProject, null> {
             </div>
           </div>
           <div className="project-thumb-button">
-            <a href={link} style={{ backgroundColor: "#" + this.props.categoryColorHex }}>Lees meer</a>
+            <a href={link} target={target} style={{ backgroundColor: "#" + this.props.categoryColorHex }}>Lees meer</a>
           </div>
         </div>
       </div>
