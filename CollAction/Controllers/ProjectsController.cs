@@ -435,7 +435,7 @@ namespace CollAction.Controllers
         [HttpGet]
         public IActionResult ThankYouCommit(string name)
         {
-            if(name!=null)
+            if(name != null)
             {
                 CommitProjectViewModel model = new CommitProjectViewModel()
                 {
