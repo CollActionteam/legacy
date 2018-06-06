@@ -1,7 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import renderComponentIf from "./renderComponentIf";
-import registerGlobal from "./registerGlobal";
 
 enum States { ERROR, READY, LOADING };
 
@@ -74,8 +73,6 @@ class ShareButtons extends React.Component<IShareButtonsProps, IShareButtonsStat
     return encodeURI(`https://www.linkedin.com/shareArticle?mini=true&url=${this.getUrl()}&title=${this.getTitle()}`);
   }
 
-
-
   render() {
     return (
       <div className="share-buttons">
@@ -140,8 +137,8 @@ renderComponentIf(
   document.getElementById("project-details-share-buttons-row")
 );
 
-function renderShareWithTitleAndLink(title: string, url: string, element: HTMLElement) {
-  ReactDOM.render(<ShareButtons title={title} url={url} />, element);
-}
-
-registerGlobal("renderShareWithTitleAndLink", renderShareWithTitleAndLink);
+renderComponentIf(
+  <ShareButtons title={document.getElementById("project-details-share-buttons-custom") && document.getElementById("project-details-share-buttons-custom").dataset.title}
+                url={document.getElementById("project-details-share-buttons-custom") && document.getElementById("project-details-share-buttons-custom").dataset.url} />,
+  document.getElementById("project-details-share-buttons-custom")
+);
