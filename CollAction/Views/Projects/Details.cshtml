@@ -41,7 +41,7 @@
                     </div>
                     <h1>@Html.DisplayFor(model => model.Project.Name)</h1>
                     <div id="project-progress">
-                        <div id="project-pie-chart" data-percent-complete="@Math.Min(100, Model.Progress)" />
+                        <span id="project-pie-chart" data-percent-complete="@Math.Min(100, Model.Progress)" />
                         <h2>@Html.DisplayFor(model => model.Progress)%</h2>
                     </div>
 
