@@ -142,19 +142,52 @@ namespace CollAction
                         cspBuilder.AddUpgradeInsecureRequests(); // Upgrade all http requests to https
                         cspBuilder.AddObjectSrc().Self(); // Only allow plugins/objects from our own site
                         cspBuilder.AddFormAction().Self(); // Only allow form actions to our own site
-                        cspBuilder.AddFrameAncestors() // 
-                                  .Sources.AddRange(new[] { "http://fossylfrijfryslan.frl",
-                                                            "https://fossylfrijfryslan.frl",
-                                                            "http://freonen.nl",
-                                                            "https://freonen.nl",
-                                                            "http://*.fossylfrijfryslan.frl",
-                                                            "https://*.fossylfrijfryslan.frl",
-                                                            "http://*.freonen.nl",
-                                                            "https://*.freonen.nl" });
-                        cspBuilder.AddScriptSrc().Self() // Only allow scripts from our own site, the aspnetcdn site and google analytics
-                                  .Sources.AddRange(new[] { "https://ajax.aspnetcdn.com",
-                                                            "https://www.googletagmanager.com",
-                                                            "https://www.google-analytics.com" }); 
+                        cspBuilder.AddConnectSrc().Self() // Only allow API calls to self, and the websites we use for the share buttons
+                                                  .Sources.AddRange(new[]
+                                                                    {
+                                                                        "https://www.linkedin.com/",
+                                                                        "https://linkedin.com/",
+                                                                        "https://www.twitter.com/",
+                                                                        "https://twitter.com/",
+                                                                        "https://www.facebook.com/",
+                                                                        "https://facebook.com/",
+                                                                        "https://graph.facebook.com/"
+                                                                    });
+                        cspBuilder.AddImgSrc().Self(); // Only allow self-hosted images
+                        cspBuilder.AddStyleSrc().Self() // Only allow style/css from these sources (note: css injection can actually be dangerous)
+                                                .UnsafeInline() // Unfortunately this is necessary, the backend passess some things that are directly passed into css style attributes, especially on the project page. TODO: We should try to get rid of this.
+                                                .Sources.AddRange(new[]
+                                                                  {
+                                                                      "https://maxcdn.bootstrapcdn.com/",
+                                                                      "https://fonts.googleapis.com/"
+                                                                  });
+                        cspBuilder.AddFontSrc().Self() // Only allow fonts from these sources
+                                               .Sources.AddRange(new[]
+                                                                {
+                                                                    "https://maxcdn.bootstrapcdn.com/",
+                                                                    "https://fonts.googleapis.com/"
+                                                                });
+                        cspBuilder.AddMediaSrc().Self(); // Only allow self-hosted videos
+                        cspBuilder.AddFrameAncestors() // Only allow us to be framed by the freonen/fossylfrijfryslan project
+                                  .Sources.AddRange(new[] 
+                                                    {
+                                                        "http://fossylfrijfryslan.frl",
+                                                        "https://fossylfrijfryslan.frl",
+                                                        "http://freonen.nl",
+                                                        "https://freonen.nl",
+                                                        "http://*.fossylfrijfryslan.frl",
+                                                        "https://*.fossylfrijfryslan.frl",
+                                                        "http://*.freonen.nl",
+                                                        "https://*.freonen.nl"
+                                                    });
+                        cspBuilder.AddScriptSrc() // Only allow scripts from our own site, the aspnetcdn site and google analytics
+                                  .Self()
+                                  .Sources.AddRange(new[] 
+                                                    {
+                                                        "https://ajax.aspnetcdn.com",
+                                                        "https://www.googletagmanager.com",
+                                                        "https://www.google-analytics.com"
+                                                    });
                     })
                 );
 
