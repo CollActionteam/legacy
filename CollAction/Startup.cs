@@ -153,7 +153,11 @@ namespace CollAction
                                                                         "https://facebook.com/",
                                                                         "https://graph.facebook.com/"
                                                                     });
-                        cspBuilder.AddImgSrc().Self(); // Only allow self-hosted images
+                        cspBuilder.AddImgSrc().Self() // Only allow self-hosted images, or google analytics (for tracking images)
+                                              .Sources.AddRange(new[]
+                                                                {
+                                                                    "https://www.google-analytics.com"
+                                                                });
                         cspBuilder.AddStyleSrc().Self() // Only allow style/css from these sources (note: css injection can actually be dangerous)
                                                 .UnsafeInline() // Unfortunately this is necessary, the backend passess some things that are directly passed into css style attributes, especially on the project page. TODO: We should try to get rid of this.
                                                 .Sources.AddRange(new[]
@@ -165,7 +169,8 @@ namespace CollAction
                                                .Sources.AddRange(new[]
                                                                 {
                                                                     "https://maxcdn.bootstrapcdn.com/",
-                                                                    "https://fonts.googleapis.com/"
+                                                                    "https://fonts.googleapis.com/",
+                                                                    "https://fonts.gstatic.com"
                                                                 });
                         cspBuilder.AddMediaSrc().Self(); // Only allow self-hosted videos
                         cspBuilder.AddFrameAncestors() // Only allow us to be framed by the freonen/fossylfrijfryslan project
