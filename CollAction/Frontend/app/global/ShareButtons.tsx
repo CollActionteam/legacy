@@ -27,11 +27,17 @@ class ShareButtons extends React.Component<IShareButtonsProps, IShareButtonsStat
   }
 
   getTitle() {
-    return this.props.title || document.title;
+    if (this.props.title)
+      return encodeURIComponent(this.props.title);
+    else
+      return encodeURIComponent(document.title);
   }
 
   getUrl() {
-    return this.props.url || window.location;
+    if (this.props.url)
+      return encodeURIComponent(this.props.url);
+    else
+      return encodeURIComponent(String(window.location));
   }
 
   async getLinkedInShareCount() {
@@ -62,15 +68,15 @@ class ShareButtons extends React.Component<IShareButtonsProps, IShareButtonsStat
   }
 
   getTwitterUrl () {
-    return encodeURI(`https://twitter.com/intent/tweet?text=${this.getTitle()}&url=${this.getUrl()}`);
+    return `https://twitter.com/intent/tweet?text=${this.getTitle()}&url=${this.getUrl()}`;
   }
 
   getFacebookUrl() {
-    return encodeURI(`https://www.facebook.com/sharer/sharer.php?u=${this.getUrl()}`);
+    return `https://www.facebook.com/sharer/sharer.php?u=${this.getUrl()}`;
   }
 
   getLinkedInUrl () {
-    return encodeURI(`https://www.linkedin.com/shareArticle?mini=true&url=${this.getUrl()}&title=${this.getTitle()}`);
+    return `https://www.linkedin.com/shareArticle?mini=true&url=${this.getUrl()}&title=${this.getTitle()}&source=${encodeURIComponent(window.location.origin)}`;
   }
 
   render() {
