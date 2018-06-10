@@ -37,7 +37,7 @@
 <div id="project-share">
     <div class="container">
         <div class="row">
-            <div id="project-details-share-buttons-custom" data-title="@Html.DisplayFor(model => model.ProjectName)" data-link="@Context.Request.Host@Html.DisplayFor(model => model.ProjectLink)"></div>
+            <div id="project-details-share-buttons-custom" data-title="@Html.DisplayFor(model => model.ProjectName)" data-link="@Context.Request.Scheme://@Context.Request.Host@Html.DisplayFor(model => model.ProjectLink)"></div>
         </div> 
     </div> 
 </div>
