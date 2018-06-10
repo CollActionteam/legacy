@@ -139,6 +139,6 @@ renderComponentIf(
 
 renderComponentIf(
   <ShareButtons title={document.getElementById("project-details-share-buttons-custom") && document.getElementById("project-details-share-buttons-custom").dataset.title}
-                url={document.getElementById("project-details-share-buttons-custom") && document.getElementById("project-details-share-buttons-custom").dataset.url} />,
+                url={document.getElementById("project-details-share-buttons-custom") && document.getElementById("project-details-share-buttons-custom").dataset.link} />,
   document.getElementById("project-details-share-buttons-custom")
 );
