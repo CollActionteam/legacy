@@ -6,7 +6,7 @@ if [ -z "$TRAVIS_PULL_REQUEST" ] || [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
 fi
 
 shopt -s nocasematch
-CA_REGEX='(CA[[:digit:]]+)'
+CA_REGEX='(CA-[[:digit:]]+)'
 
 if ! [[ "$TRAVIS_PULL_REQUEST_BRANCH" =~ $CA_REGEX ]]; then
 	echo "Skip puashing to ECR because branch $TRAVIS_PULL_REQUEST_BRANCH doesn't contain a CA number."
