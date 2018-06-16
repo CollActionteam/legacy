@@ -5,6 +5,7 @@ if [ -z "$TRAVIS_PULL_REQUEST" ] || [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
     exit 0;
 fi
 
+# Extract CA-number from branch name
 shopt -s nocasematch
 CA_REGEX='(CA-[[:digit:]]+)'
 
@@ -16,7 +17,7 @@ fi
 # Use the CA-number as image tag
 TAG=${BASH_REMATCH[1]}
 
-# Build and push
+# Build 
 echo "Building CollAction image for $ECR_REPO:$TAG"
 docker build -t $ECR_REPO:$TAG CollAction
 
@@ -25,6 +26,7 @@ docker build -t $ECR_REPO:$TAG CollAction
 echo "Logging on to ECR"
 eval $(aws ecr get-login --no-include-email --region eu-central-1)
 
+# Push image to ECR
 echo "Pushing image $ECR_REPO:$TAG"
 docker push $ECR_REPO:$TAG
 
