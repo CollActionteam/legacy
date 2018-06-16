@@ -1,22 +1,33 @@
 #! /bin/bash
-if [ -z "$TRAVIS_PULL_REQUEST" ] && [ "$TRAVIS_PULL_REQUEST" == "true" ]; then 
-    # Don't push if it's a pull request
-    echo "Skipping deploy because it's a pull request";
+if [ -z "$TRAVIS_PULL_REQUEST" ] || [ "$TRAVIS_PULL_REQUEST" == "false" ]; then 
+    # Don't push if it's not a pull request
+    echo "Skip pushing to ECR because it's not a pull request";
     exit 0;
 fi
 
-if [ "$TRAVIS_BRANCH" != "$DEPLOY_BRANCH" ]; then
-    # Don't push if it's not the correct branch
-    echo "Skipping deploy because branch is not '$DEPLOY_BRANCH'"
+# Extract CA-number from branch name
+shopt -s nocasematch
+CA_REGEX='(CA-[[:digit:]]+)'
+
+if ! [[ "$TRAVIS_PULL_REQUEST_BRANCH" =~ $CA_REGEX ]]; then
+	echo "Skip pushing to ECR because branch '$TRAVIS_PULL_REQUEST_BRANCH' doesn't contain a task number in the format 'CA-n'."
     exit 0;
 fi
 
-# Build and push
-echo "Building $DOCKER_REPO"
-docker build -t $DOCKER_REPO CollAction
+# Use the CA-number as image tag
+TAG=${BASH_REMATCH[1]}
 
-echo "Pushing $DOCKER_REPO"
-echo $DOCKER_PASSWORD | docker login -u=$DOCKER_USERNAME --password-stdin
-docker push $DOCKER_REPO
+# Build 
+echo "Building CollAction image for $ECR_REPO:$TAG"
+docker build -t $ECR_REPO:$TAG CollAction
 
-echo "Pushed $DOCKER_REPO"
+# Log in to Amazon ECR.
+# This uses the environment variables AWS_ACCESS_KEY_ID and AWS_ACCESS_SECRET_KEY which are set in the .travis.yml env.secure section. 
+echo "Logging on to ECR"
+eval $(aws ecr get-login --no-include-email --region eu-central-1)
+
+# Push image to ECR
+echo "Pushing image $ECR_REPO:$TAG"
+docker push $ECR_REPO:$TAG
+
+echo "Done!"
