@@ -1,45 +1,60 @@
 @import "../../colors";
 
 .share-container {
-  background-color: #fff;
-  border-radius: 9px;
-  border: solid 1px #dadada;
-  h3 {
-    text-align: center;
-    color: $coll-action-green;
-    font-size: 2em;
-    margin: 10px 0px 10px 0px;
-  }
+    background-color: #fff;
+    border-radius: 9px;
+    border: solid 1px #dadada;
+    h3 {
+        text-align: center;
+        color: $coll-action-green;
+        font-size: 2em;
+        margin: 10px 0px 10px 0px;
+    }
 
-  .share-buttons-container {
-    padding: 20px;
-  }
-  
+    .share-buttons-container {
+        padding: 20px;
+    }  
 }
 
 .share-buttons {
+    .share-count {
+        color: #3b5998;
+        font-weight: bold;
+        margin-right: 10px;
+        float: left;
+    }
 
-  .share-count {
-    color: #3b5998;
-    font-weight: bold;
-  } 
+    .social-media-share-buttons {
+        font-size: 20px;
+        padding: 7px 12px;
+        border-radius: 35px;
+        width: 40px;
+        height: 40px;
+        margin: 0px auto;
+        float: left;
+        margin-right: 5px;
+        color: #fff;
+    }
 
-  .social-media-share-buttons {
-    font-size: 20px;
-    padding: 7px 12px;
-    border-radius: 35px;
-    width: 40px;
-    height: 40px;
-    color: #fff;
-    margin: 0px auto;
-  }
-  .social-media-share-button-facebook {
-    background-color: #3b5998;
-  }
-  .social-media-share-button-twitter {
-    background-color: #00aced;
-  }
-  .social-media-share-button-linkedin {
-    background-color: #007bb6;
-  }
+    .social-media-share-button-facebook {
+        background-color: #3b5998;
+    }
+
+    .social-media-share-button-twitter {
+        background-color: #00aced;
+    }
+
+    .social-media-share-button-linkedin {
+        background-color: #007bb6;
+    }
+
+    .social-media-share-button-whatsapp {
+        background-color: #25D366;
+    }
+}
+
+@media only screen and (min-width: 600px) {
+    .social-media-share-button-whatsapp {
+        display: none;
+    }
 }

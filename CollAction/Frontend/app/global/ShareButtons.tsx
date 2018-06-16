@@ -1,5 +1,4 @@
 import * as React from "react";
-import * as ReactDOM from "react-dom";
 import renderComponentIf from "./renderComponentIf";
 
 enum States { ERROR, READY, LOADING };
@@ -27,17 +26,21 @@ class ShareButtons extends React.Component<IShareButtonsProps, IShareButtonsStat
   }
 
   getTitle() {
-    if (this.props.title)
+    if (this.props.title) {
       return encodeURIComponent(this.props.title);
-    else
+    }
+    else {
       return encodeURIComponent(document.title);
+    }
   }
 
   getUrl() {
-    if (this.props.url)
+    if (this.props.url) {
       return encodeURIComponent(this.props.url);
-    else
+    }
+    else {
       return encodeURIComponent(String(window.location));
+    }
   }
 
   async getLinkedInShareCount() {
@@ -67,7 +70,7 @@ class ShareButtons extends React.Component<IShareButtonsProps, IShareButtonsStat
     }
   }
 
-  getTwitterUrl () {
+  getTwitterUrl() {
     return `https://twitter.com/intent/tweet?text=${this.getTitle()}&url=${this.getUrl()}`;
   }
 
@@ -75,39 +78,40 @@ class ShareButtons extends React.Component<IShareButtonsProps, IShareButtonsStat
     return `https://www.facebook.com/sharer/sharer.php?u=${this.getUrl()}`;
   }
 
-  getLinkedInUrl () {
+  getLinkedInUrl() {
     return `https://www.linkedin.com/shareArticle?mini=true&url=${this.getUrl()}&title=${this.getTitle()}&source=${encodeURIComponent(window.location.origin)}`;
+  }
+
+  getWhatsAppUrl() {
+    return `whatsapp://send>text=${this.getUrl()} ${this.getTitle()}`;
   }
 
   render() {
     return (
       <div className="share-buttons">
-        <div className="row">
-          <div className="col-xs-3 share-count">
-            {this.state.shareCount}<br /> Shares
-          </div>
-          <div className="col-xs-3">
-            <a href={this.getFacebookUrl()} target="_blank">
-              <div className="social-media-share-buttons social-media-share-button-facebook">
-                <i className="fa fa-facebook"></i>
-              </div>
-            </a>
-          </div>
-          <div className="col-xs-3">
-            <a href={this.getTwitterUrl()}>
-              <div className="social-media-share-buttons social-media-share-button-twitter">
-                <i className="fa fa-twitter"></i>
-              </div>
-            </a>
-          </div>
-          <div className="col-xs-3">
-            <a href={this.getLinkedInUrl()}>
-              <div className="social-media-share-buttons social-media-share-button-linkedin">
-                <i className="fa fa-linkedin"></i>
-              </div>
-            </a>
-          </div>
+        <div className="share-count">
+          <span>{ this.state.shareCount } <br/> Shares</span>
         </div>
+        <a href={this.getFacebookUrl()} target="_blank">
+          <div className="social-media-share-buttons social-media-share-button-facebook">
+            <i className="fa fa-facebook"></i>
+          </div>
+        </a>
+        <a href={this.getTwitterUrl()}>
+          <div className="social-media-share-buttons social-media-share-button-twitter">
+            <i className="fa fa-twitter"></i>
+          </div>
+        </a>
+        <a href={this.getLinkedInUrl()}>
+          <div className="social-media-share-buttons social-media-share-button-linkedin">
+            <i className="fa fa-linkedin"></i>
+          </div>
+        </a>
+        <a href={this.getWhatsAppUrl()}>
+          <div className="social-media-share-buttons social-media-share-button-whatsapp">
+            <i className="fa fa-whatsapp"></i>
+          </div>
+        </a>
       </div>
     );
   }
@@ -116,7 +120,7 @@ class ShareButtons extends React.Component<IShareButtonsProps, IShareButtonsStat
 const FullShareButtons = () => {
   return (
     <div className="container">
-      <div className="col-xs-12 col-md-8 col-md-offset-2 share-container">
+      <div className="col-xs-12 share-container">
         <h3 className="share-title">Spread it further</h3>
         <div className="row">
           <div className="col-xs-12 col-sm-6 col-sm-offset-3 share-buttons-container">
@@ -125,7 +129,7 @@ const FullShareButtons = () => {
         </div>
       </div>
     </div>
-  );
+    );
 };
 
 renderComponentIf(
@@ -144,7 +148,9 @@ renderComponentIf(
 );
 
 renderComponentIf(
-  <ShareButtons title={document.getElementById("project-details-share-buttons-custom") && document.getElementById("project-details-share-buttons-custom").dataset.title}
-                url={document.getElementById("project-details-share-buttons-custom") && document.getElementById("project-details-share-buttons-custom").dataset.link} />,
+  <ShareButtons
+    title={document.getElementById("project-details-share-buttons-custom") && document.getElementById("project-details-share-buttons-custom").dataset.title}
+    url={document.getElementById("project-details-share-buttons-custom") && document.getElementById("project-details-share-buttons-custom").dataset.link} 
+  />,
   document.getElementById("project-details-share-buttons-custom")
 );
