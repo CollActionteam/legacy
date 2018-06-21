@@ -161,13 +161,6 @@ namespace CollAction.Controllers
                         _logger.LogError("error subscribing to newsletter: {0}, {1}", e, user.Email);
                     }
 
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.Action(nameof(ConfirmEmail), "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                    await _emailSender.SendEmailAsync(
-                        model.Email, 
-                        _localizer["Bevestig je account"],
-                        $"Bevestig je account door deze <a href='{callbackUrl}'>link</a> te klikken");
-
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
                     return RedirectToLocal(returnUrl);
@@ -321,9 +314,9 @@ namespace CollAction.Controllers
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
-                if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+                if (user == null)
                 {
-                    // Don't reveal that the user does not exist or is not confirmed
+                    // Don't reveal that the user does not exist
                     return View("ForgotPasswordConfirmation");
                 }
 
