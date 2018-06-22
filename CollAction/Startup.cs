@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Rewrite;
 using NetEscapades.AspNetCore.SecurityHeaders;
 using NetEscapades.AspNetCore.SecurityHeaders.Infrastructure;
 using System;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 
 namespace CollAction
 {
@@ -115,6 +116,9 @@ namespace CollAction
                 // Note: use yyyy-MM-dd HH:mm:ss notation. Don't specify to use the default value (2018-05-27 23:59:59)
                 options.FestivalEndDate = Configuration.GetValue<DateTime?>("FestivalEndDate");
             });
+
+            services.AddDataProtection()
+                    .Services.Configure<KeyManagementOptions>(options => options.XmlRepository = new DataProtectionRepository(services.BuildServiceProvider()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

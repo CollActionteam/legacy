@@ -37,6 +37,7 @@ namespace CollAction.Data
         public DbSet<ImageFile> ImageFiles { get; set; }
         public DbSet<VideoLink> VideoLinks { get; set; }
         public DbSet<Job> Jobs { get; set; }
+        public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 
         /// <summary>
         /// Configure the model (foreign keys, relations, primary keys, etc)
