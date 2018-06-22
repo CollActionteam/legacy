@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.HttpOverrides;
 using NetEscapades.AspNetCore.SecurityHeaders;
 using NetEscapades.AspNetCore.SecurityHeaders.Infrastructure;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 
 namespace CollAction
 {
@@ -108,6 +109,9 @@ namespace CollAction
                 options.MailChimpKey = Configuration["MailChimpKey"];
                 options.MailChimpNewsletterListId = Configuration["MailChimpNewsletterListId"];
             });
+
+            services.AddDataProtection()
+                    .Services.Configure<KeyManagementOptions>(options => options.XmlRepository = new DataProtectionRepository(services.BuildServiceProvider()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
