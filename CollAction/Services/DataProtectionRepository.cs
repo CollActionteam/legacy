@@ -1,39 +1,46 @@
 ﻿using CollAction.Data;
 using CollAction.Models;
 using Microsoft.AspNetCore.DataProtection.Repositories;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 
 namespace CollAction.Services
 {
     public sealed class DataProtectionRepository : IXmlRepository
     {
-        private readonly IServiceProvider _provider;
+        private readonly DbContextOptions<ApplicationDbContext> _options;
 
-        public DataProtectionRepository(IServiceProvider provider)
+        // Unfortunuatly we can't dependency-inject the context safely here, due to the way dataprotection repositories are configured (see startup)
+        // So, we're injecting the dbcontext options, and initialize the context ourselves
+        public DataProtectionRepository(DbContextOptions<ApplicationDbContext> options)
         {
-            _provider = provider;
+            _options = options;
         }
 
         public IReadOnlyCollection<XElement> GetAllElements()
-            => _provider.GetService<ApplicationDbContext>()
-                        .DataProtectionKeys
-                        .Select(key => XElement.Parse(key.KeyDataXml))
-                        .ToArray();
+        {
+            using (var context = new ApplicationDbContext(_options))
+            {
+                return context.DataProtectionKeys
+                              .Select(key => XElement.Parse(key.KeyDataXml))
+                              .ToArray();
+            }
+        }
 
         public void StoreElement(XElement element, string friendlyName)
         {
-            ApplicationDbContext context = _provider.GetService<ApplicationDbContext>();
-            context.DataProtectionKeys.Add(new DataProtectionKey()
+            using (var context = new ApplicationDbContext(_options))
             {
-                FriendlyName = friendlyName,
-                KeyDataXml = element.ToString(SaveOptions.DisableFormatting)
-            });
+                context.DataProtectionKeys.Add(new DataProtectionKey()
+                {
+                    FriendlyName = friendlyName,
+                    KeyDataXml = element.ToString(SaveOptions.DisableFormatting)
+                });
 
-            context.SaveChanges();
+                context.SaveChanges();
+            }
         }
     }
 }
