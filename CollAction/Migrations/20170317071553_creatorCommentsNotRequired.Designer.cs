@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using CollAction.Data;
 using CollAction.Models;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace CollAction.Migrations
 {
