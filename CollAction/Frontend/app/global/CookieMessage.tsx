@@ -2,50 +2,30 @@ import * as React from "react";
 import renderComponentIf from "./renderComponentIf";
 
 interface ICookieMessageProps {
+    showBanner: boolean;
+    cookieString: string;
 }
 
 interface ICookieMessageState {
-    accepted: Date;
+    showBanner: boolean;
 }
 
 export default class CookieMessage extends React.Component<ICookieMessageProps, ICookieMessageState> {
     constructor(props) {
         super(props);
-        this.state = { accepted: null };
+        this.state = { showBanner: false };
     }
 
     componentDidMount() {
         this.setState({
-            accepted: this.getCookiesAcceptedDate()
+            showBanner: this.props.showBanner
         });
     }
 
-    getCookiesAcceptedDate(): Date {
-        let cookieAccepted = document.cookie
-            .split(";")
-            .filter(function(item) {
-                return item.indexOf("cookiesAccepted=") >= 0;
-            })
-            .map(function(item) {
-                return item.split("=")[1];
-            });
-
-        if (cookieAccepted.length === 0) {
-            return null;
-        }
-
-        let acceptedOn = new Date(cookieAccepted[0]);
-        if (isNaN(acceptedOn.getTime())) {
-            return null;
-        }
-
-        return acceptedOn;
-    }
-
     accept() {
-        document.cookie = "cookiesAccepted=" + new Date() + "; expires=Sun, 15 Jun 2177 23:59:59 GMT";
+        document.cookie = this.props.cookieString;
         this.setState({
-            accepted: new Date()
+            showBanner: false
         });
     };
 
@@ -67,7 +47,7 @@ export default class CookieMessage extends React.Component<ICookieMessageProps, 
     }
 
     render() {
-        if (this.state.accepted === null) {
+        if (this.state.showBanner === true) {
             return this.renderMessage();
         }
         else {
@@ -77,6 +57,9 @@ export default class CookieMessage extends React.Component<ICookieMessageProps, 
 }
 
 renderComponentIf(
-    <CookieMessage />,
+    <CookieMessage
+        showBanner={ document.getElementById("cookie-message") && document.getElementById("cookie-message").dataset.showBanner === "True" }
+        cookieString= { document.getElementById("cookie-message") && document.getElementById("cookie-message").dataset.cookieString }
+    />,
     document.getElementById("cookie-message")
 );

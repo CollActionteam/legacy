@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -114,6 +115,12 @@ namespace CollAction
             {
                 // Note: use yyyy-MM-dd HH:mm:ss notation. Don't specify to use the default value (2018-05-27 23:59:59)
                 options.FestivalEndDate = Configuration.GetValue<DateTime?>("FestivalEndDate");
+            });
+
+            services.Configure<CookiePolicyOptions>(options => 
+            {
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
             });
         }
 
@@ -230,6 +237,8 @@ namespace CollAction
             }
 
             app.UseStatusCodePages();
+            
+            app.UseCookiePolicy();
 
             app.UseAuthentication();
 
