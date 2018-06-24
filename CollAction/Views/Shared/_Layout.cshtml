@@ -35,7 +35,7 @@
                 <div class="row nav-row">
                     <div class="col-md-3 col-xs-12 header-logo">
                         <div class="hidden-md hidden-lg" id="mobile-nav-draw"></div>
-                        @Html.Partial("_Logo")
+                        <partial name="_logo" />
                     </div>
                     <div class="col-md-7 nav-bar hidden-xs hidden-sm" >
                         <ul id="header-menu">
@@ -57,7 +57,7 @@
     </div>
     <div id="header-padding"></div>
     @RenderBody()
-    @Html.Partial("_Footer")
+    <partial name="_Footer" />
 
     <environment names="Development">
         <script src="~/js/bundle.js?@DateTime.Now.Ticks.ToString()"></script>
