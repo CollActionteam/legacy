@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace CollAction.ValidationAttributes
 {
