@@ -4,14 +4,20 @@ mono: none
 dist: trusty
 sudo: required
 before_install:
-  - sudo apt-get update
-  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
+- sudo apt-get update
+- sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
 services:
-  - docker
+- docker
 script:
-  - dotnet restore CollAction
-  - dotnet publish CollAction -c Release -o bin/netcoreapp/publish
+- dotnet restore CollAction
+- dotnet build CollAction -c Release
+- dotnet publish CollAction -c Release -o bin/netcoreapp/publish
 after_success:
-  - chmod +x scripts/docker-push.sh
-  - scripts/docker-push.sh
-  
+- pip install --user awscli # install xurrent version of aws cli w/o sudo
+- export PATH=$PATH:$HOME/.local/bin # put aws in the path
+- chmod +x scripts/docker-push.sh
+- scripts/docker-push.sh
+env:
+  global:
+  - secure: GTLIxr2KVmI4L5TPwbK2YumLyy65ZbXRVwM3BhIX82h+wMB+/jXbN7aWqTPQPhB1D75QJ2PQOP/HDhpMN7CN/9ntOyvF9pZKA/pFj/ZXGuJZcQdax5UU7BHn6CBZ9C2MhSTu4EJBRLMLdC4H4MkRWAL9PinLj0aWgRIwjoNv+R2bmyZepKAEQ8vLH6qUE/fVc/eFtly0/NhlzGxW6KrGhZlRZd5dJLnZ9dXUnUbsTT7Or1Yd/DcJ5EORVFiQvesERO55gdx3WUMkNYpjKiGPlIhK0dRiBjqpZQmGh1SKn+vgDKapeV0Aq7hyiimK/MRzdurviSieqlaKk47F0A//4BpxgdU4XKZK4k092fIx04UCNC8FJAbFOy/3sqm21TH6vzh3k5WhyUHje+LWm1wITSjr/gJirirzQ2DHZaAykhiNoXDR/UyU8MIoM1MaGUi4kYmIFvyYzG+C98LpC6olYEgyPUt0a1nIov/isX2E9dmS1snrtrXiHe7T82ZbL5HBsbKN0IvubiARjzHL561ChCVDxTkR8PQtrO6hjXbvtegDRq5Qoxha5z7X3nr1kcTzOd2hVpTD4NAmM88KKv6XzCDlRptv9UOoy1l6nNFrw/xZDtWdDIN0Z+fJhoJVTcKI2k39DmkljTCIgqeNQfk/ZnwFQrC9aqutva6wVUmJwc0=
+  - secure: eBWrtiCAFWJrHcz6i1YDZqWlOdhj8pEEKG51h/SEKAT0q08bRgBcePschpTfLiA+OnYcBeiZbbhjFB4EHMvNDEMk8YQA88An8MVoS7v8vU2p9yd8gCW7iTEVY++r5OOF9CXdBzwjxoTOyO4+WGIZA1u7oNeL0FingwR+KvZl8rGhVdrJUmtK88CEP2Y8abE6aYY9TZwBWP7Ej8hsE3Qa3J2f4h7N11oRZAuu/Kzh75raX2/wgxxQEcfqk1TcTM7y43rG2eikbBjwi+RvD0BPAmOTD0aAlwlFdkM3ZxJxgw+/JsdhAx0JOeblFminQfZT6Hiu7fVdolpywOJ4YVxvMYYi34cFTkVEdNV7ARImSWq6ylEL7TWbQkwz44VRYX6WO8vvMu6pzz6eAReKbWTdu/8vk4hWl5kJlfsV/QLDukABnBVgvFnFzfCfoNQ4rDN3uEdbJa2Rwg8uYZtMzgVyQ31Ai96ytw1DYavrlFfVtgr7yegMP6fdGEC4kCRT+JxP8lxaGNToowpsR47Cp08om9h70I4fFkuROhTxpAtJiW/4l9rdfZ+lahjLJeuCz8+JMYmbq6AX0DMTnCRQ98t8hYnLqPZoLqOzhs6lzkkpN63ad817M5AA5PfvVqmPeYytnzqGmjjNrC9tIkrfHwBuOyjdsoqZ9Yset4kKxyP4eVE=
