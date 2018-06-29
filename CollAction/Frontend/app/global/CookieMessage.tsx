@@ -20,26 +20,12 @@ export default class CookieMessage extends React.Component<ICookieMessageProps, 
         this.setState({
             showBanner: !this.props.canTrack
         });
-
-        if (this.props.canTrack === true) {
-            this.giveCookieConsent();
-        }
     }
 
     accept() {
         document.cookie = this.props.cookieString;
-        this.giveCookieConsent();
-        this.setState({
-            showBanner: false
-        });
+        location.reload();
     };
-
-    giveCookieConsent() {
-        let dataLayer = window["dataLayer"];
-        if (dataLayer) {
-            dataLayer.push({"event": "cookie_consent_given"});
-        }
-    }
 
     renderMessage() {
         return (
