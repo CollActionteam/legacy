@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Http.Features
 
 @inject IViewLocalizer Localizer
 
@@ -6,6 +7,8 @@
 
 @{
     ViewData["Title"] = Localizer["Thank You"];
+    var consentFeature = Context.Features.Get<ITrackingConsentFeature>();
+    var canTrack = consentFeature?.CanTrack ?? false;
 }
 
 <div id="thank-you-commit-container">
@@ -27,10 +30,13 @@
     </div>
 </div>
 
-<div id="project-share">
-    <div class="container">
-        <div class="row">
-            <div id="project-details-share-buttons-custom" data-title="@Html.DisplayFor(model => model.ProjectName)" data-link="@Context.Request.Scheme://@Context.Request.Host@Html.DisplayFor(model => model.ProjectLink)"></div>
+@if (canTrack)
+{
+    <div id="project-share">
+        <div class="container">
+            <div class="row">
+                <div id="project-details-share-buttons-custom" data-title="@Html.DisplayFor(model => model.ProjectName)" data-link="@Context.Request.Scheme://@Context.Request.Host@Html.DisplayFor(model => model.ProjectLink)"></div>
+            </div> 
         </div> 
-    </div> 
-</div>
+    </div>
+}
