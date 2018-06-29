@@ -2,7 +2,7 @@
 
 @{
     var consentFeature = Context.Features.Get<ITrackingConsentFeature>();
-    var showBanner = !consentFeature?.CanTrack ?? false;
+    var canTrack = consentFeature?.CanTrack ?? false;
     var cookieString = consentFeature?.CreateConsentCookie();
 }
-<div id="cookie-message" data-show-banner="@showBanner" data-cookie-string="@cookieString"></div>
+<div id="cookie-message" data-can-track="@canTrack" data-cookie-string="@cookieString"></div>

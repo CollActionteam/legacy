@@ -2,7 +2,7 @@ import * as React from "react";
 import renderComponentIf from "./renderComponentIf";
 
 interface ICookieMessageProps {
-    showBanner: boolean;
+    canTrack: boolean;
     cookieString: string;
 }
 
@@ -18,16 +18,28 @@ export default class CookieMessage extends React.Component<ICookieMessageProps, 
 
     componentDidMount() {
         this.setState({
-            showBanner: this.props.showBanner
+            showBanner: !this.props.canTrack
         });
+
+        if (this.props.canTrack === true) {
+            this.giveCookieConsent();
+        }
     }
 
     accept() {
         document.cookie = this.props.cookieString;
+        this.giveCookieConsent();
         this.setState({
             showBanner: false
         });
     };
+
+    giveCookieConsent() {
+        let dataLayer = window["dataLayer"];
+        if (dataLayer) {
+            dataLayer.push({"event": "cookie_consent_given"});
+        }
+    }
 
     renderMessage() {
         return (
@@ -58,7 +70,7 @@ export default class CookieMessage extends React.Component<ICookieMessageProps, 
 
 renderComponentIf(
     <CookieMessage
-        showBanner={ document.getElementById("cookie-message") && document.getElementById("cookie-message").dataset.showBanner === "True" }
+        canTrack={ document.getElementById("cookie-message") && document.getElementById("cookie-message").dataset.canTrack === "True" }
         cookieString= { document.getElementById("cookie-message") && document.getElementById("cookie-message").dataset.cookieString }
     />,
     document.getElementById("cookie-message")
