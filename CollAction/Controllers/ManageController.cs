@@ -23,7 +23,6 @@ namespace CollAction.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
-        private readonly ISmsSender _smsSender;
         private readonly INewsletterSubscriptionService _newsletterSubscriptionService;
         private readonly ILogger _logger;
         private readonly IStringLocalizer<ManageController> _localizer;
@@ -33,7 +32,6 @@ namespace CollAction.Controllers
           UserManager<ApplicationUser> userManager,
           SignInManager<ApplicationUser> signInManager,
           IEmailSender emailSender,
-          ISmsSender smsSender,
           INewsletterSubscriptionService newsletterSubscriptionService,
           ILoggerFactory loggerFactory,
           IStringLocalizer<ManageController> localizer,
@@ -42,7 +40,6 @@ namespace CollAction.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
-            _smsSender = smsSender;
             _newsletterSubscriptionService = newsletterSubscriptionService;
             _logger = loggerFactory.CreateLogger<ManageController>();
             _localizer = localizer;
@@ -112,18 +109,11 @@ namespace CollAction.Controllers
             var user = await GetCurrentUserAsync();
             if (user != null)
             {
-                try
-                {
-                    await _newsletterSubscriptionService.SetSubscriptionAsync(user.Email, model.NewsletterSubscription, false);
-                    if (model.NewsletterSubscription)
-                        StatusMessage = _localizer["Successfully subscribed to newsletter"];
-                    else
-                        StatusMessage = _localizer["Successfully unsubscribed to newsletter"];
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError("error subscribing to newsletter: {0}, {1}", e, user.Email);
-                }
+                _newsletterSubscriptionService.SetSubscription(user.Email, model.NewsletterSubscription, false);
+                if (model.NewsletterSubscription)
+                    StatusMessage = _localizer["Successfully subscribed to newsletter"];
+                else
+                    StatusMessage = _localizer["Successfully unsubscribed to newsletter"];
             }
             return RedirectToAction(nameof(Index));
         }
@@ -162,30 +152,6 @@ namespace CollAction.Controllers
         public IActionResult SetPassword()
         {
             return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SetPassword(SetPasswordViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            var user = await GetCurrentUserAsync();
-            if (user != null)
-            {
-                var result = await _userManager.AddPasswordAsync(user, model.NewPassword);
-                if (result.Succeeded)
-                {
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction(nameof(Index), new { Message = ManageMessageId.SetPasswordSuccess });
-                }
-                AddErrors(result);
-                return View(model);
-            }
-            return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
         }
 
         #region Helpers

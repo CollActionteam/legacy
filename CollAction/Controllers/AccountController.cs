@@ -23,7 +23,6 @@ namespace CollAction.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
-        private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
         private readonly IStringLocalizer<AccountController> _localizer;
         private readonly INewsletterSubscriptionService _newsletterSubscriptionService;
@@ -33,7 +32,6 @@ namespace CollAction.Controllers
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
-            ISmsSender smsSender,
             ILoggerFactory loggerFactory,
             IStringLocalizer<AccountController> localizer,
             INewsletterSubscriptionService newsletterSubscriptionService,
@@ -42,7 +40,6 @@ namespace CollAction.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
-            _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
             _localizer = localizer;
             _newsletterSubscriptionService = newsletterSubscriptionService;
@@ -143,15 +140,7 @@ namespace CollAction.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    try
-                    {
-                        await _newsletterSubscriptionService.SetSubscriptionAsync(model.Email, model.NewsletterSubscription);
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.LogError("error subscribing to newsletter: {0}, {1}", e, user.Email);
-                    }
-
+                    _newsletterSubscriptionService.SetSubscription(model.Email, model.NewsletterSubscription);
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
                     return RedirectToLocal(returnUrl);
@@ -236,15 +225,7 @@ namespace CollAction.Controllers
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
-                    try
-                    {
-                        await _newsletterSubscriptionService.SetSubscriptionAsync(model.Email, model.NewsletterSubscription);
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.LogError("error subscribing to newsletter: {0}, {1}", e, user.Email);
-                    }
-
+                    _newsletterSubscriptionService.SetSubscription(model.Email, model.NewsletterSubscription);
                     result = await _userManager.AddLoginAsync(user, info);
                     if (result.Succeeded)
                     {
