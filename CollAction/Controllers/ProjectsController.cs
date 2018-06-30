@@ -39,26 +39,10 @@ namespace CollAction.Controllers
         }
 
         public ViewResult StartInfo()
-        {
-            return View();
-        }
+            => View();
 
-        public async Task<IActionResult> Find(FindProjectViewModel model)
-        {
-            if (model.SearchText == null)
-            {
-                return View(new FindProjectViewModel
-                {
-                    OwnerId = (await _userManager.GetUserAsync(User))?.Id,
-                    Projects = await _projectService.GetProjectDisplayViewModels(p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted)
-                });
-            }
-
-            model.OwnerId = (await _userManager.GetUserAsync(User))?.Id;
-            model.Projects = await _projectService.GetProjectDisplayViewModels(p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted &&
-                (p.Name.Contains(model.SearchText) || p.Description.Contains(model.SearchText) || p.Goal.Contains(model.SearchText)));
-            return View(model);
-        }
+        public IActionResult Find()
+            => View();
 
         public async Task<IActionResult> Details(int? id)
         {
@@ -74,10 +58,7 @@ namespace CollAction.Controllers
             }
             DisplayProjectViewModel displayProject = items.First();
             string userId = (await _userManager.GetUserAsync(User))?.Id;
-            if (userId != null && (await _projectService.GetParticipant(userId, displayProject.Project.Id) != null))
-            {
-                displayProject.IsUserCommitted = true;
-            }
+            displayProject.IsUserCommitted = userId != null && (await _projectService.GetParticipant(userId, displayProject.Project.Id) != null);
 
             return View(displayProject);
         }
@@ -196,7 +177,7 @@ namespace CollAction.Controllers
                 "Vriendelijke groet,<br>" +
                 "Het CollAction team";
 
-            var administrators = await _userManager.GetUsersInRoleAsync("admin");
+            var administrators = await _userManager.GetUsersInRoleAsync(Constants.AdminRole);
             foreach (var admin in administrators)
                 await _emailSender.SendEmailAsync(admin.Email, subject, confirmationEmailAdmin);
 
@@ -254,7 +235,7 @@ namespace CollAction.Controllers
                 return NotFound();
             }
 
-            var project =  await _projectService.GetProjectById(id); 
+            Project project =  await _projectService.GetProjectById(id.Value); 
             if (project == null)
             {
                 return NotFound();
@@ -311,7 +292,8 @@ namespace CollAction.Controllers
             }
         }
 
-        public async Task<JsonResult> GetTileProjects(int? categoryId, int? statusId)
+        [HttpGet]
+        public async Task<JsonResult> FindProjects(int? categoryId, int? statusId)
         {
             Expression<Func<Project, bool>> projectExpression = (p =>
                 p.Status != ProjectStatus.Hidden &&
@@ -326,25 +308,119 @@ namespace CollAction.Controllers
                 case (int)ProjectExternalStatus.ComingSoon: statusExpression = (p => p.Status == ProjectStatus.Running && p.Start > DateTime.UtcNow); break;
                 default: statusExpression = (p => true); break;
             }
-            
-            var projects = await _projectService.GetTileProjectViewModels(
+
+            var projects = await _projectService.FindProjects(
                 Expression.Lambda<Func<Project, bool>>(Expression.AndAlso(projectExpression.Body, Expression.Invoke(statusExpression, projectExpression.Parameters[0])), projectExpression.Parameters[0]));
-            
+
             return Json(projects);
-        }        
+        }
 
         [HttpGet]
-        public async Task<JsonResult> GetTileProject(int projectId)
+        [Authorize]
+        public async Task<IActionResult> SendProjectEmail(int id)
         {
-            Expression<Func<Project, bool>> projectExpression= (p =>
-                p.Status != ProjectStatus.Hidden &&
-                p.Status != ProjectStatus.Deleted &&
-                p.Id == projectId);
+            Project project = await _projectService.GetProjectById(id);
+            ApplicationUser user = await _userManager.GetUserAsync(User);
 
-            Expression<Func<Project, bool>> statusExpression = (p => true);
+            SendProjectEmail model = new SendProjectEmail()
+            {
+                ProjectId = project.Id,
+                Project = project,
+                EmailsAllowedToSend = _projectService.NumberEmailsAllowedToSend(project),
+                SendEmailsUntil = _projectService.CanSendEmailsUntil(project)
+            };
 
-            var projects = await _projectService.GetTileProjectViewModels(projectExpression);
-            return Json(projects);
+            if (model.Project.OwnerId != user.Id)
+                return Unauthorized();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SendProjectEmailPerform([Bind("ProjectId", "Subject", "Message")]SendProjectEmail model)
+        {
+            model.Project = await _projectService.GetProjectById(model.ProjectId);
+            ApplicationUser user = await _userManager.GetUserAsync(User);
+            if (model.Project.OwnerId != user.Id)
+                return Unauthorized();
+
+            await _projectService.SendProjectEmail(model.Project, model.Subject, model.Message, Request, Url);
+            return RedirectToAction(nameof(ManageController.Index), "Manage");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ChangeSubscriptionFromToken(ChangeSubscriptionFromTokenViewModel unsubscribeViewmodel)
+        {
+            ProjectParticipant participant = await _context
+                .ProjectParticipants
+                .Include(p => p.Project)
+                .FirstAsync(p => p.ProjectId == unsubscribeViewmodel.ProjectId && p.UserId == unsubscribeViewmodel.UserId);
+
+            if (participant != null && participant.UnsubscribeToken == new Guid(unsubscribeViewmodel.UnsubscribeToken))
+                return View(participant);
+            else
+                return Unauthorized();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeSubscriptionFromTokenPerform(ChangeSubscriptionFromTokenViewModel unsubscribeViewmodel)
+        {
+            ProjectParticipant participant = await _context
+                .ProjectParticipants
+                .Include(p => p.Project)
+                .FirstAsync(p => p.ProjectId == unsubscribeViewmodel.ProjectId && p.UserId == unsubscribeViewmodel.UserId);
+
+            if (participant != null && participant.UnsubscribeToken == new Guid(unsubscribeViewmodel.UnsubscribeToken))
+            {
+                participant.SubscribedToProjectEmails = !participant.SubscribedToProjectEmails;
+                await _context.SaveChangesAsync();
+
+                return View(nameof(ChangeSubscriptionFromToken), participant);
+            }
+            else
+                return Unauthorized();
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> ChangeSubscriptionFromAccount(int id)
+        {
+            ApplicationUser user = await _userManager.GetUserAsync(User);
+            ProjectParticipant participant = await _context
+                .ProjectParticipants
+                .Include(p => p.Project)
+                .FirstAsync(p => p.ProjectId == id && p.UserId == user.Id);
+
+            if (participant != null)
+                return View(participant);
+            else
+                return Unauthorized();
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeSubscriptionFromAccountPerform(int id)
+        {
+            ApplicationUser user = await _userManager.GetUserAsync(User);
+
+            ProjectParticipant participant = await _context
+                .ProjectParticipants
+                .Include(p => p.Project)
+                .FirstAsync(p => p.ProjectId == id && p.UserId == user.Id);
+
+            if (participant != null)
+            {
+                participant.SubscribedToProjectEmails = !participant.SubscribedToProjectEmails;
+                await _context.SaveChangesAsync();
+
+                return View(nameof(ChangeSubscriptionFromAccount), participant);
+            }
+            else
+                return Unauthorized();
         }
 
         [HttpGet]

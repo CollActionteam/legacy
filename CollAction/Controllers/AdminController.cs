@@ -18,7 +18,7 @@ using Newtonsoft.Json;
 
 namespace CollAction.Controllers
 {
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = Constants.AdminRole)]
     public class AdminController: Controller
     {
         public AdminController(
