@@ -140,8 +140,8 @@ namespace CollAction
                     {
                         cspBuilder.AddBlockAllMixedContent(); // Block mixed http/https content
                         cspBuilder.AddUpgradeInsecureRequests(); // Upgrade all http requests to https
-                        cspBuilder.AddObjectSrc().Self(); // Only allow plugins/objects from our own site
-                        cspBuilder.AddFormAction().Self() // Only allow form actions to our own site, or mailinator, or social media logins
+                        cspBuilder.AddObjectSrc().Self().Sources.AddRange(Configuration["CspObjectSrc"]?.Split(";") ?? new string[0]); // Only allow plugins/objects from our own site, or configured sources
+                        cspBuilder.AddFormAction().Self() // Only allow form actions to our own site, or mailinator, or social media logins, or configured sources
                                                   .Sources.AddRange(new[]
                                                                     {
                                                                         "https://collaction.us14.list-manage.com/",
@@ -149,8 +149,8 @@ namespace CollAction
                                                                         "https://accounts.google.com/",
                                                                         "https://api.twitter.com/",
                                                                         "https://www.twitter.com/"
-                                                                    });
-                        cspBuilder.AddConnectSrc().Self() // Only allow API calls to self, and the websites we use for the share buttons
+                                                                    }.Concat(Configuration["CspFormAction"]?.Split(";") ?? new string[0]));
+                        cspBuilder.AddConnectSrc().Self() // Only allow API calls to self, and the websites we use for the share buttons, or configured sources
                                                   .Sources.AddRange(new[]
                                                                     {
                                                                         "https://www.linkedin.com/",
@@ -160,29 +160,30 @@ namespace CollAction
                                                                         "https://www.facebook.com/",
                                                                         "https://facebook.com/",
                                                                         "https://graph.facebook.com/"
-                                                                    });
-                        cspBuilder.AddImgSrc().Self() // Only allow self-hosted images, or google analytics (for tracking images)
+                                                                    }.Concat(Configuration["CspConnectSrc"]?.Split(";") ?? new string[0]));
+                        cspBuilder.AddImgSrc().Self() // Only allow self-hosted images, or google analytics (for tracking images), or configured sources
                                               .Sources.AddRange(new[]
                                                                 {
                                                                     "https://www.google-analytics.com"
-                                                                });
-                        cspBuilder.AddStyleSrc().Self() // Only allow style/css from these sources (note: css injection can actually be dangerous)
+                                                                }.Concat(Configuration["CspImgSrc"]?.Split(";") ?? new string[0]));
+                        cspBuilder.AddStyleSrc().Self() // Only allow style/css from these sources (note: css injection can actually be dangerous), or configured sources
                                                 .UnsafeInline() // Unfortunately this is necessary, the backend passess some things that are directly passed into css style attributes, especially on the project page. TODO: We should try to get rid of this.
                                                 .Sources.AddRange(new[]
                                                                   {
                                                                       "https://maxcdn.bootstrapcdn.com/",
                                                                       "https://fonts.googleapis.com/"
-                                                                  });
-                        cspBuilder.AddFontSrc().Self() // Only allow fonts from these sources
+                                                                  }.Concat(Configuration["CspStyleSrc"]?.Split(";") ?? new string[0]));
+                        cspBuilder.AddFontSrc().Self() // Only allow fonts from these sources, or configured sources
                                                .Sources.AddRange(new[]
                                                                 {
                                                                     "https://maxcdn.bootstrapcdn.com/",
                                                                     "https://fonts.googleapis.com/",
                                                                     "https://fonts.gstatic.com"
-                                                                });
-                        cspBuilder.AddMediaSrc().Self(); // Only allow self-hosted videos
-                        cspBuilder.AddFrameAncestors() // Only allow us to be framed by the freonen/fossylfrijfryslan project
-                                  .Sources.AddRange(new[] 
+                                                                }.Concat(Configuration["CspFontSrc"]?.Split(";") ?? new string[0]));
+                        cspBuilder.AddMediaSrc().Self()
+                                                .Sources.AddRange(Configuration["CspMediaSrc"]?.Split(";") ?? new string[0]); // Only allow self-hosted videos, or configured sources
+                        cspBuilder.AddFrameAncestors() // Only allow us to be framed by the freonen/fossylfrijfryslan project, or configured sources
+                                  .Sources.AddRange(new[]
                                                     {
                                                         "http://fossylfrijfryslan.frl",
                                                         "https://fossylfrijfryslan.frl",
@@ -192,8 +193,8 @@ namespace CollAction
                                                         "https://*.fossylfrijfryslan.frl",
                                                         "http://*.freonen.nl",
                                                         "https://*.freonen.nl"
-                                                    });
-                        cspBuilder.AddScriptSrc() // Only allow scripts from our own site, the aspnetcdn site and google analytics
+                                                    }.Concat(Configuration["CspFrameAncestors"]?.Split(";") ?? new string[0]));
+                        cspBuilder.AddScriptSrc() // Only allow scripts from our own site, the aspnetcdn site and google analytics, or configured sources
                                   .Self()
                                   .Sources.AddRange(new[]
                                                     {
@@ -201,7 +202,7 @@ namespace CollAction
                                                         "https://www.googletagmanager.com",
                                                         "https://www.google-analytics.com",
                                                         "sha256-EHA5HNhe/+uz3ph6Fw34N85vHxX87fsJ5cH4KbZKIgU="
-                                                    });
+                                                    }.Concat(Configuration["CspScriptSrc"]?.Split(";") ?? new string[0]));
                     })
                 );
 
