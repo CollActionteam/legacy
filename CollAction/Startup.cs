@@ -141,7 +141,15 @@ namespace CollAction
                         cspBuilder.AddBlockAllMixedContent(); // Block mixed http/https content
                         cspBuilder.AddUpgradeInsecureRequests(); // Upgrade all http requests to https
                         cspBuilder.AddObjectSrc().Self(); // Only allow plugins/objects from our own site
-                        cspBuilder.AddFormAction().Self(); // Only allow form actions to our own site
+                        cspBuilder.AddFormAction().Self() // Only allow form actions to our own site, or mailinator, or social media logins
+                                                  .Sources.AddRange(new[]
+                                                                    {
+                                                                        "https://collaction.us14.list-manage.com/",
+                                                                        "https://www.facebook.com/",
+                                                                        "https://accounts.google.com/",
+                                                                        "https://api.twitter.com/",
+                                                                        "https://www.twitter.com/"
+                                                                    });
                         cspBuilder.AddConnectSrc().Self() // Only allow API calls to self, and the websites we use for the share buttons
                                                   .Sources.AddRange(new[]
                                                                     {
@@ -187,11 +195,12 @@ namespace CollAction
                                                     });
                         cspBuilder.AddScriptSrc() // Only allow scripts from our own site, the aspnetcdn site and google analytics
                                   .Self()
-                                  .Sources.AddRange(new[] 
+                                  .Sources.AddRange(new[]
                                                     {
                                                         "https://ajax.aspnetcdn.com",
                                                         "https://www.googletagmanager.com",
-                                                        "https://www.google-analytics.com"
+                                                        "https://www.google-analytics.com",
+                                                        "sha256-EHA5HNhe/+uz3ph6Fw34N85vHxX87fsJ5cH4KbZKIgU="
                                                     });
                     })
                 );
