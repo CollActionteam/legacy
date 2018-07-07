@@ -7,7 +7,7 @@
 
 @{
     var consentFeature = Context.Features.Get<ITrackingConsentFeature>();
-    var canTrack = consentFeature?.CanTrack ?? false;
+    var canTrack = consentFeature.CanTrack;
 
     ViewData["Title"] = @Model.Project.Name + " Details";
 }

@@ -8,7 +8,7 @@
 @{
     ViewData["Title"] = Localizer["Thank You"];
     var consentFeature = Context.Features.Get<ITrackingConsentFeature>();
-    var canTrack = consentFeature?.CanTrack ?? false;
+    var canTrack = consentFeature.CanTrack;
 }
 
 <div id="thank-you-commit-container">

@@ -8,7 +8,7 @@
 @{
     ViewData["Title"] = Localizer["Home Page"];
     var consentFeature = Context.Features.Get<ITrackingConsentFeature>();
-    var canTrack = consentFeature?.CanTrack ?? false;
+    var canTrack = consentFeature.CanTrack;
 }
 
 @section Meta {
