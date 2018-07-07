@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CollAction.ValidationAttributes;
+using System.ComponentModel.DataAnnotations;
 
 namespace CollAction.Models.AccountViewModels
 {
@@ -17,5 +18,8 @@ namespace CollAction.Models.AccountViewModels
 
         [Display(Name = "Ik ontvang graag af en toe een update van CollAction - geen zorgen, wij houden net zo weinig van spam als jij! 🙂")]
         public bool NewsletterSubscription { get; internal set; }
+
+        [MustBeTrue(ErrorMessage = "Lees en accepteer aub ons privacy policy")]
+        public bool AgreedPrivacyPolicy { get; set; }
     }
 }

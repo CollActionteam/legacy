@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using CollAction.ValidationAttributes;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CollAction.Models.AccountViewModels
 {
@@ -46,5 +43,8 @@ namespace CollAction.Models.AccountViewModels
         // I would like to receive an update from CollAction every once in a while - don't worry, we like spam as little as you do! 🙂
         [Display(Name = "Ik ontvang graag af en toe een update van CollAction - geen zorgen, wij houden net zo weinig van spam als jij! 🙂")]
         public bool NewsletterSubscription { get; set; }
+
+        [MustBeTrue(ErrorMessage = "Lees en accepteer aub ons privacy policy")]
+        public bool AgreedPrivacyPolicy { get; set; }
     }
 }
