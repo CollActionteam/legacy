@@ -65,7 +65,6 @@ namespace CollAction.Controllers
             {
                 Username = user.UserName,
                 Email = user.Email,
-                IsEmailConfirmed = user.EmailConfirmed,
                 StatusMessage = StatusMessage,
                 NewsletterSubscription = await _newsletterSubscriptionService.IsSubscribedAsync(user.Email),
                 ProjectsParticipated = (await _context.ProjectParticipants
@@ -103,37 +102,6 @@ namespace CollAction.Controllers
             }
 
             StatusMessage = _localizer["Je profiel is geupdatet"];
-            return RedirectToAction(nameof(Index));
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SendVerificationEmail(IndexViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-            }
-
-            string code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            string callbackUrl = Url.Action(action: nameof(AccountController.ConfirmEmail),
-                controller: "Account",
-                values: new { user.Id, code },
-                protocol: Request.Scheme);
-                
-            string email = user.Email;
-            await _emailSender.SendEmailAsync(
-                email,
-                _localizer["Confirm your account"],
-                $"{_localizer["Please confirm your account by clicking this link"]}: <a href='{callbackUrl}'>{_localizer["link"]}</a>");
-
-            StatusMessage = "Verification email sent. Please check your email.";
             return RedirectToAction(nameof(Index));
         }
 

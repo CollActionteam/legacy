@@ -52,12 +52,9 @@ namespace CollAction
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql($"Host={Configuration["DbHost"]};Username={Configuration["DbUser"]};Password={Configuration["DbPassword"]};Database={Configuration["Db"]};Port={Configuration["DbPort"]}"));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>(/*config =>
-                {
-                    config.SignIn.RequireConfirmedEmail = true;
-                }*/)
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                    .AddEntityFrameworkStores<ApplicationDbContext>()
+                    .AddDefaultTokenProviders();
 
             services.Configure<IdentityOptions>(options =>
             {
