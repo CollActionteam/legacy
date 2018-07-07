@@ -112,7 +112,8 @@ namespace CollAction
                 // Note: use yyyy-MM-dd HH:mm:ss notation. Don't specify to use the default value (2018-05-27 23:59:59)
                 options.FestivalEndDate = Configuration.GetValue<DateTime?>("FestivalEndDate");
             });
-            services.AddApplicationInsightsTelemetry(Configuration);
+            if (Environment.IsProduction())
+                services.AddApplicationInsightsTelemetry(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
