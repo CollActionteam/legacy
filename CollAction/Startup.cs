@@ -196,7 +196,7 @@ namespace CollAction
                                                         "https://ajax.aspnetcdn.com",
                                                         "https://www.googletagmanager.com",
                                                         "https://www.google-analytics.com",
-                                                        "sha256-EHA5HNhe/+uz3ph6Fw34N85vHxX87fsJ5cH4KbZKIgU="
+                                                        "'sha256-EHA5HNhe/+uz3ph6Fw34N85vHxX87fsJ5cH4KbZKIgU='"
                                                     }.Concat(Configuration["CspScriptSrc"]?.Split(";") ?? new string[0]));
                     })
                 );
