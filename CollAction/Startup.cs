@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.HttpOverrides;
 using NetEscapades.AspNetCore.SecurityHeaders;
 using NetEscapades.AspNetCore.SecurityHeaders.Infrastructure;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 
 namespace CollAction
 {
@@ -48,16 +49,15 @@ namespace CollAction
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string connectionString = $"Host={Configuration["DbHost"]};Username={Configuration["DbUser"]};Password={Configuration["DbPassword"]};Database={Configuration["Db"]};Port={Configuration["DbPort"]}";
+
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql($"Host={Configuration["DbHost"]};Username={Configuration["DbUser"]};Password={Configuration["DbPassword"]};Database={Configuration["Db"]};Port={Configuration["DbPort"]}"));
+                options.UseNpgsql(connectionString));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>(/*config =>
-                {
-                    config.SignIn.RequireConfirmedEmail = true;
-                }*/)
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                    .AddEntityFrameworkStores<ApplicationDbContext>()
+                    .AddDefaultTokenProviders();
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -108,6 +108,10 @@ namespace CollAction
                 options.MailChimpKey = Configuration["MailChimpKey"];
                 options.MailChimpNewsletterListId = Configuration["MailChimpNewsletterListId"];
             });
+
+            services.AddDataProtection()
+                    .Services.Configure<KeyManagementOptions>(options => options.XmlRepository = new DataProtectionRepository(new DbContextOptionsBuilder<ApplicationDbContext>().UseNpgsql(connectionString).Options));
+
             if (Environment.IsProduction())
                 services.AddApplicationInsightsTelemetry(Configuration);
         }
