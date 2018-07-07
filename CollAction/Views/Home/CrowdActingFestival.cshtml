@@ -1,12 +1,25 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Http.Features
 
 @inject IViewLocalizer Localizer
 
+@{
+    var consentFeature = Context.Features.Get<ITrackingConsentFeature>();
+    var canTrack = consentFeature.CanTrack;
+}
+
 <div id="festival-page">
 
-    <div class="embed-responsive embed-responsive-16by9">
-        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/Zvugem-tKyI?theme=dark&amp;rel=0&amp;wmode=transparent" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-    </div>
+    @if (canTrack)
+    {
+        <div class="embed-responsive embed-responsive-16by9">
+            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/Zvugem-tKyI?theme=dark&amp;rel=0&amp;wmode=transparent" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+        </div>        
+    }
+    else
+    {
+        <div class="seperator"></div>
+    }
 
     <a id="intro-fragment" class="fragment"></a>
     <div id="intro">
