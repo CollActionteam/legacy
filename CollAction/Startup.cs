@@ -55,12 +55,9 @@ namespace CollAction
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(connectionString));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>(/*config =>
-                {
-                    config.SignIn.RequireConfirmedEmail = true;
-                }*/)
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                    .AddEntityFrameworkStores<ApplicationDbContext>()
+                    .AddDefaultTokenProviders();
 
             services.Configure<IdentityOptions>(options =>
             {

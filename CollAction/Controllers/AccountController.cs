@@ -11,8 +11,6 @@ using CollAction.Services;
 using Microsoft.Extensions.Localization;
 using CollAction.Data;
 using Microsoft.AspNetCore.Authentication;
-using System.Text.Encodings.Web;
-using Microsoft.EntityFrameworkCore.Storage;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -51,8 +49,6 @@ namespace CollAction.Controllers
             _context = context;
         }
 
-        //
-        // GET: /Account/Login
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> Login(string returnUrl = null)
@@ -64,8 +60,6 @@ namespace CollAction.Controllers
             return View();
         }
 
-        //
-        // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -138,8 +132,6 @@ namespace CollAction.Controllers
             return View();
         }
 
-        //
-        // POST: /Account/Register
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -161,13 +153,6 @@ namespace CollAction.Controllers
                         _logger.LogError("error subscribing to newsletter: {0}, {1}", e, user.Email);
                     }
 
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.Action(nameof(ConfirmEmail), "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                    await _emailSender.SendEmailAsync(
-                        model.Email, 
-                        _localizer["Bevestig je account"],
-                        $"Bevestig je account door deze <a href='{callbackUrl}'>link</a> te klikken");
-
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
                     return RedirectToLocal(returnUrl);
@@ -179,8 +164,6 @@ namespace CollAction.Controllers
             return View(model);
         }
 
-        //
-        // POST: /Account/Logout
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LogOff()
@@ -190,8 +173,6 @@ namespace CollAction.Controllers
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
-        //
-        // POST: /Account/ExternalLogin
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -203,8 +184,6 @@ namespace CollAction.Controllers
             return Challenge(properties, provider);
         }
 
-        //
-        // GET: /Account/ExternalLoginCallback
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
@@ -241,8 +220,6 @@ namespace CollAction.Controllers
             }
         }
 
-        //
-        // POST: /Account/ExternalLoginConfirmation
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -284,26 +261,6 @@ namespace CollAction.Controllers
             return View(nameof(ExternalLogin), model);
         }
 
-        // GET: /Account/ConfirmEmail
-        [HttpGet]
-        [AllowAnonymous]
-        public async Task<IActionResult> ConfirmEmail(string userId, string code)
-        {
-            if (userId == null || code == null)
-            {
-                return RedirectToAction(nameof(HomeController.Index), "Home");
-            }
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
-            {
-                throw new ApplicationException($"Unable to load user with ID '{userId}'.");
-            }
-            var result = await _userManager.ConfirmEmailAsync(user, code);
-            return View(result.Succeeded ? "ConfirmEmail" : "Error");
-        }
-
-        //
-        // GET: /Account/ForgotPassword
         [HttpGet]
         [AllowAnonymous]
         public IActionResult ForgotPassword()
@@ -311,8 +268,6 @@ namespace CollAction.Controllers
             return View();
         }
 
-        //
-        // POST: /Account/ForgotPassword
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -321,9 +276,9 @@ namespace CollAction.Controllers
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
-                if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+                if (user == null)
                 {
-                    // Don't reveal that the user does not exist or is not confirmed
+                    // Don't reveal that the user does not exist
                     return View("ForgotPasswordConfirmation");
                 }
 
@@ -344,8 +299,6 @@ namespace CollAction.Controllers
             return View(model);
         }
 
-        //
-        // GET: /Account/ForgotPasswordConfirmation
         [HttpGet]
         [AllowAnonymous]
         public IActionResult ForgotPasswordConfirmation()
@@ -353,8 +306,6 @@ namespace CollAction.Controllers
             return View();
         }
 
-        //
-        // GET: /Account/ResetPassword
         [HttpGet]
         [AllowAnonymous]
         public IActionResult ResetPassword(string code = null)
@@ -367,8 +318,6 @@ namespace CollAction.Controllers
             return View(model);
         }
 
-        //
-        // POST: /Account/ResetPassword
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -393,8 +342,6 @@ namespace CollAction.Controllers
             return View();
         }
 
-        //
-        // GET: /Account/ResetPasswordConfirmation
         [HttpGet]
         [AllowAnonymous]
         public IActionResult ResetPasswordConfirmation()
