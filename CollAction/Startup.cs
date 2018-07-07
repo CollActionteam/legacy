@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Rewrite;
 using NetEscapades.AspNetCore.SecurityHeaders;
 using NetEscapades.AspNetCore.SecurityHeaders.Infrastructure;
 using System;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 
 namespace CollAction
 {
@@ -49,9 +50,11 @@ namespace CollAction
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string connectionString = $"Host={Configuration["DbHost"]};Username={Configuration["DbUser"]};Password={Configuration["DbPassword"]};Database={Configuration["Db"]};Port={Configuration["DbPort"]}";
+
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql($"Host={Configuration["DbHost"]};Username={Configuration["DbUser"]};Password={Configuration["DbPassword"]};Database={Configuration["Db"]};Port={Configuration["DbPort"]}"));
+                options.UseNpgsql(connectionString));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -112,6 +115,10 @@ namespace CollAction
                 // Note: use yyyy-MM-dd HH:mm:ss notation. Don't specify to use the default value (2018-05-27 23:59:59)
                 options.FestivalEndDate = Configuration.GetValue<DateTime?>("FestivalEndDate");
             });
+
+            services.AddDataProtection()
+                    .Services.Configure<KeyManagementOptions>(options => options.XmlRepository = new DataProtectionRepository(new DbContextOptionsBuilder<ApplicationDbContext>().UseNpgsql(connectionString).Options));
+
             if (Environment.IsProduction())
                 services.AddApplicationInsightsTelemetry(Configuration);
         }
