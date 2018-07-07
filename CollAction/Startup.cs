@@ -135,7 +135,7 @@ namespace CollAction
                 forwardedHeaderOptions.KnownNetworks.Clear();
                 app.UseForwardedHeaders(forwardedHeaderOptions);
 
-                if (Configuration["CspDisable"] != "1")
+                if (!Configuration.GetValue<bool>("CspDisable"))
                 {
                     app.UseSecurityHeaders(new HeaderPolicyCollection() // See https://www.owasp.org/index.php/OWASP_Secure_Headers_Project
                        .AddStrictTransportSecurityMaxAgeIncludeSubDomains() // Add a HSTS header, making sure browsers connect to collaction + subdomains with https from now on
