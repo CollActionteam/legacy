@@ -17,9 +17,11 @@ using Serilog.Events;
 using Serilog.Sinks.Slack;
 using Amazon;
 using System.Linq;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Rewrite;
-using CollAction.RewriteHttps;
-using System.Security.Claims;
+using NetEscapades.AspNetCore.SecurityHeaders;
+using NetEscapades.AspNetCore.SecurityHeaders.Infrastructure;
+using System;
 
 namespace CollAction
 {
@@ -51,12 +53,9 @@ namespace CollAction
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql($"Host={Configuration["DbHost"]};Username={Configuration["DbUser"]};Password={Configuration["DbPassword"]};Database={Configuration["Db"]};Port={Configuration["DbPort"]}"));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>(/*config =>
-                {
-                    config.SignIn.RequireConfirmedEmail = true;
-                }*/)
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                    .AddEntityFrameworkStores<ApplicationDbContext>()
+                    .AddDefaultTokenProviders();
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -107,6 +106,12 @@ namespace CollAction
                 options.MailChimpKey = Configuration["MailChimpKey"];
                 options.MailChimpNewsletterListId = Configuration["MailChimpNewsletterListId"];
             });
+            services.AddTransient<IFestivalService, FestivalService>();
+            services.Configure<FestivalServiceOptions>(options => 
+            {
+                // Note: use yyyy-MM-dd HH:mm:ss notation. Don't specify to use the default value (2018-05-27 23:59:59)
+                options.FestivalEndDate = Configuration.GetValue<DateTime?>("FestivalEndDate");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -120,9 +125,74 @@ namespace CollAction
 
             if (env.IsProduction())
             {
-                app.UseRewriter(new RewriteOptions().AddRewriteHttpsProxyRule());
+                // Ensure our middleware handles proxied https, see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-Proto
+                var forwardedHeaderOptions = new ForwardedHeadersOptions()
+                {
+                    ForwardedHeaders = ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedHost,
+                    ForwardLimit = 3
+                };
+                forwardedHeaderOptions.KnownProxies.Clear();
+                forwardedHeaderOptions.KnownNetworks.Clear();
+                app.UseForwardedHeaders(forwardedHeaderOptions);
+
+                app.UseSecurityHeaders(new HeaderPolicyCollection() // See https://www.owasp.org/index.php/OWASP_Secure_Headers_Project
+                    .AddStrictTransportSecurityMaxAgeIncludeSubDomains() // Add a HSTS header, making sure browsers connect to collaction + subdomains with https from now on
+                    .AddXssProtectionEnabled() // Enable browser xss protection
+                    .AddContentTypeOptionsNoSniff() // Ensure the browser doesn't guess/sniff content-types
+                    .AddReferrerPolicyStrictOriginWhenCrossOrigin() // Send a full URL when performing a same-origin request, only send the origin of the document to a-priori as-much-secure destination (HTTPS->HTTPS), and send no header to a less secure destination (HTTPS->HTTP) 
+                    .AddFrameOptionsDeny() // No framing allowed (put us inside a frame tag)
+                    .AddContentSecurityPolicy(cspBuilder =>
+                    {
+                        cspBuilder.AddBlockAllMixedContent(); // Block mixed http/https content
+                        cspBuilder.AddUpgradeInsecureRequests(); // Upgrade all http requests to https
+                        cspBuilder.AddObjectSrc().Self(); // Only allow plugins/objects from our own site
+                        cspBuilder.AddFormAction().Self(); // Only allow form actions to our own site
+                        cspBuilder.AddConnectSrc().Self() // Only allow API calls to self, and the websites we use for the share buttons
+                                                  .Sources.AddRange(new[]
+                                                                    {
+                                                                        "https://www.linkedin.com/",
+                                                                        "https://linkedin.com/",
+                                                                        "https://www.twitter.com/",
+                                                                        "https://twitter.com/",
+                                                                        "https://www.facebook.com/",
+                                                                        "https://facebook.com/",
+                                                                        "https://graph.facebook.com/"
+                                                                    });
+                        cspBuilder.AddImgSrc().Self() // Only allow self-hosted images, or google analytics (for tracking images)
+                                              .Sources.AddRange(new[]
+                                                                {
+                                                                    "https://www.google-analytics.com"
+                                                                });
+                        cspBuilder.AddStyleSrc().Self() // Only allow style/css from these sources (note: css injection can actually be dangerous)
+                                                .UnsafeInline() // Unfortunately this is necessary, the backend passess some things that are directly passed into the css, especially on the project page. TODO: We should try to get rid of this.
+                                                .Sources.AddRange(new[]
+                                                                  {
+                                                                      "https://maxcdn.bootstrapcdn.com/",
+                                                                      "https://fonts.googleapis.com/"
+                                                                  });
+                        cspBuilder.AddFontSrc().Self() // Only allow fonts from these sources
+                                               .Sources.AddRange(new[]
+                                                                {
+                                                                    "https://maxcdn.bootstrapcdn.com/",
+                                                                    "https://fonts.googleapis.com/",
+                                                                    "https://fonts.gstatic.com"
+                                                                });
+                        cspBuilder.AddMediaSrc().Self(); // Only allow self-hosted videos
+                        cspBuilder.AddFrameAncestors().None(); // No framing allowed here (put us inside a frame tag)
+                        cspBuilder.AddScriptSrc() // Only allow scripts from our own site, the aspnetcdn site and google analytics
+                                  .Self()
+                                  .Sources.AddRange(new[] 
+                                                    {
+                                                        "https://ajax.aspnetcdn.com",
+                                                        "https://www.googletagmanager.com",
+                                                        "https://www.google-analytics.com"
+                                                    });
+                    })
+                );
+
+                app.UseRewriter(new RewriteOptions().AddRedirectToHttpsPermanent());
             }
-            
+
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
                 DefaultRequestCulture = new RequestCulture("en-US"),
@@ -156,6 +226,8 @@ namespace CollAction
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            app.UseStatusCodePages();
+
             app.UseAuthentication();
 
             app.UseStaticFiles();
@@ -175,6 +247,11 @@ namespace CollAction
                 routes.MapRoute("about",
                      "about",
                      new { controller = "Home", action = "About" }
+                 );
+
+                routes.MapRoute("crowdactingfestival",
+                     "crowdactingfestival",
+                     new { controller = "Home", action = "CrowdActingFestival" }
                  );
 
                 routes.MapRoute("faq",

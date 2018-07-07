@@ -50,7 +50,7 @@
                     </div>
                     <h1>@Html.DisplayFor(model => model.Project.Name)</h1>
                     <div id="project-progress">
-                        <canvas id="project-pie-chart"></canvas>
+                        <span id="project-pie-chart" data-percent-complete="@Math.Min(100, Model.Progress)" />
                         <h2>@Html.DisplayFor(model => model.Progress)%</h2>
                     </div>
 
@@ -108,7 +108,7 @@
                     </div>
                     <div class="col-md-6 col-md-pull-6 col-xs-12 align-sides">
                         <div class="row">
-                            @if (!String.IsNullOrEmpty(Model.Project.Owner.FirstName) && !String.IsNullOrEmpty(Model.Project.Owner.LastName))
+                            @if (!String.IsNullOrEmpty(Model.Project.Owner?.FirstName) && !String.IsNullOrEmpty(Model.Project.Owner?.LastName))
                             {
                                 <div class="col-xs-3 col-md-12">
                                     <div id="project-starter-avatar"></div>
@@ -231,17 +231,3 @@
         </div> 
     </div> 
 </div>
-
-<script type="text/javascript">
-    const percentComplete = Math.min(100, @Html.DisplayFor(model => model.Progress));
-    function initDrawPieChart() {
-        const element = document.getElementById("project-pie-chart");
-        window.CollAction.drawPieChart(percentComplete, element);
-    };
-
-    if(window.addEventListener){
-        window.addEventListener('load', initDrawPieChart);
-    } else {
-        window.attachEvent('onload', initDrawPieChart);
-    }
-</script>

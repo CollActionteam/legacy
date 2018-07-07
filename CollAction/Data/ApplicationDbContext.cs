@@ -46,20 +46,35 @@ namespace CollAction.Data
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<Tag>().HasAlternateKey(t => t.Name);
-            builder.Entity<Project>().HasIndex(p => p.Name).HasName("IX_Projects_Name").IsUnique();
-            builder.Entity<Project>().Property(p => p.DisplayPriority).HasDefaultValue(ProjectDisplayPriority.Medium);
-            builder.Entity<ProjectParticipant>().HasKey("UserId", "ProjectId");
-            builder.Entity<ProjectTag>().HasKey("TagId", "ProjectId");
-            builder.Entity<Location>().HasOne(l => l.Country)
-                                      .WithMany(c => c.Locations)
-                                      .HasForeignKey(l => l.CountryId)
-                                      .OnDelete(DeleteBehavior.SetNull);
-            builder.Entity<LocationCountry>().HasOne(c => c.Location);
-            builder.Entity<Location>().HasOne(l => l.Level1)
-                                      .WithMany(l => l.Locations)
-                                      .HasForeignKey(l => l.Level1Id)
-                                      .OnDelete(DeleteBehavior.SetNull);
+            builder.Entity<Tag>()
+                   .HasAlternateKey(t => t.Name);
+            builder.Entity<Project>()
+                   .HasIndex(p => p.Name)
+                   .HasName("IX_Projects_Name").IsUnique();
+            builder.Entity<Project>()
+                   .Property(p => p.DisplayPriority)
+                   .HasDefaultValue(ProjectDisplayPriority.Medium);
+            builder.Entity<ApplicationUser>()
+                   .HasMany(p => p.Projects)
+                   .WithOne(proj => proj.Owner)
+                   .HasForeignKey(proj => proj.OwnerId)
+                   .OnDelete(DeleteBehavior.SetNull);
+            builder.Entity<ProjectParticipant>()
+                   .HasKey("UserId", "ProjectId");
+            builder.Entity<ProjectTag>()
+                   .HasKey("TagId", "ProjectId");
+            builder.Entity<Location>()
+                   .HasOne(l => l.Country)
+                   .WithMany(c => c.Locations)
+                   .HasForeignKey(l => l.CountryId)
+                   .OnDelete(DeleteBehavior.SetNull);
+            builder.Entity<LocationCountry>()
+                   .HasOne(c => c.Location);
+            builder.Entity<Location>()
+                   .HasOne(l => l.Level1)
+                   .WithMany(l => l.Locations)
+                   .HasForeignKey(l => l.Level1Id)
+                   .OnDelete(DeleteBehavior.SetNull);
             builder.Entity<LocationLevel1>().HasOne(l => l.Location);
             builder.Entity<Location>().HasOne(l => l.Level2)
                                       .WithMany(l => l.Locations)

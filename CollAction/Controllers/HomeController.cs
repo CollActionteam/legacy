@@ -26,9 +26,20 @@ namespace CollAction.Controllers
             return View();
         }
 
+        public IActionResult Privacy()
+        {
+            return View();
+        }
+
         public IActionResult About()
         {
             ViewData["Title"] = _localizer["About CollAction"];
+            return View();
+        }
+
+        public IActionResult CrowdActingFestival()
+        {
+            ViewData["Title"] = _localizer["Make The World Great Again Festival"];
             return View();
         }
 
