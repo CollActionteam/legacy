@@ -14,6 +14,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace CollAction.Controllers
 {
@@ -46,6 +47,66 @@ namespace CollAction.Controllers
         [HttpGet]
         public IActionResult Index()
             => View();
+
+        [HttpGet]
+        public async Task<IActionResult> ManageUsersIndex(int page = 0)
+        {
+            if (page < 0)
+                throw new ApplicationException($"invalid page size: {page}");
+
+            const int pageSize = 20;
+
+            ManageUsersIndexViewModel model = new ManageUsersIndexViewModel()
+            {
+                Users = await _context.Users.Skip(pageSize * page).Take(pageSize).ToListAsync(),
+                NumberPages = 1 + await _context.Users.CountAsync() / pageSize,
+                CurrentPage = page
+            };
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ManageUser(string userId)
+        {
+            ApplicationUser user = await _context.Users.FindAsync(userId);
+
+            if (user == null)
+                throw new ApplicationException($"unable to find user: {userId}");
+
+            ManageUserViewModel model = new ManageUserViewModel()
+            {
+                Id = userId,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                RepresentsNumberParticipants = user.RepresentsNumberParticipants
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ManageUser(ManageUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                ApplicationUser user = await _context.Users.FindAsync(model.Id);
+
+                if (user == null)
+                    throw new ApplicationException($"unable to find user: {model.Id}");
+
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.RepresentsNumberParticipants = model.RepresentsNumberParticipants;
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(ManageUsersIndex));
+            }
+            else
+            {
+                return View(model);
+            }
+        }
 
         [HttpGet]
         public async Task<IActionResult> ManageProjectsIndex()
@@ -106,6 +167,30 @@ namespace CollAction.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteDescriptiveImage(int id)
+        {
+            var fileManager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "descriptiveimages"));
+            Project project = await _context.Projects.Include(p => p.DescriptiveImage).FirstAsync(p => p.Id == id);
+            fileManager.DeleteImageFileIfExists(project.DescriptiveImage);
+            project.DescriptiveImageFileId = null;
+            await _context.SaveChangesAsync();
+            return RedirectToAction("ManageProject", new { id = id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteBannerImage(int id)
+        {
+            var fileManager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "bannerimages"));
+            Project project = await _context.Projects.Include(p => p.BannerImage).FirstAsync(p => p.Id == id);
+            fileManager.DeleteImageFileIfExists(project.BannerImage);
+            project.BannerImageFileId = null;
+            await _context.SaveChangesAsync();
+            return RedirectToAction("ManageProject", new { id = id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ManageProject(ManageProjectViewModel model)
         {
             Project project = await _context.Projects
@@ -136,74 +221,77 @@ namespace CollAction.Controllers
 
             if (ModelState.IsValid)
             {
-                bool approved = model.Status == ProjectStatus.Running && project.Status == ProjectStatus.Hidden;
-                bool successfull = model.Status == ProjectStatus.Successful && project.Status == ProjectStatus.Running;
-                bool failed = model.Status == ProjectStatus.Failed && project.Status == ProjectStatus.Running;
-
-                if (approved)
+                if (project.Owner != null)
                 {
-                    string approvalEmail =
-                        "Hi!<br>" +
-                        "<br>" +
-                        "The CollAction Team has reviewed your project proposal and is very happy to share that your project has been approved and now live on www.collaction.org!<br>" +
-                        "<br>" +
-                        "So feel very welcome to start promoting it! If you have any further questions, feel free to contact the CollAction Team at collactionteam@gmail.com. And don’t forget to tag CollAction in your messages on social media so we can help you spread the word(FB: @collaction.org, Twitter: @collaction_org)!<br>" +
-                        "<br>" +
-                        "Thanks again for driving the CollAction / crowdacting movement!<br>" +
-                        "<br>" +
-                        "Warm regards,<br>" +
-                        "The CollAction team<br>";
+                    bool approved = model.Status == ProjectStatus.Running && project.Status == ProjectStatus.Hidden;
+                    bool successfull = model.Status == ProjectStatus.Successful && project.Status == ProjectStatus.Running;
+                    bool failed = model.Status == ProjectStatus.Failed && project.Status == ProjectStatus.Running;
 
-                    string subject = $"Approval - {project.Name}";
+                    if (approved)
+                    {
+                        string approvalEmail =
+                            "Hi!<br>" +
+                            "<br>" +
+                            "The CollAction Team has reviewed your project proposal and is very happy to share that your project has been approved and now live on www.collaction.org!<br>" +
+                            "<br>" +
+                            "So feel very welcome to start promoting it! If you have any further questions, feel free to contact the CollAction Team at collactionteam@gmail.com. And don’t forget to tag CollAction in your messages on social media so we can help you spread the word (FB: <a href='https://www.facebook.com/collaction.org/'>@collaction.org</a>, Twitter: @collaction_org)!<br>" +
+                            "<br>" +
+                            "Thanks again for driving the CollAction / crowdacting movement!<br>" +
+                            "<br>" +
+                            "Warm regards,<br>" +
+                            "The CollAction team<br>";
 
-                    await _emailSender.SendEmailAsync(project.Owner.Email, subject, approvalEmail);
-                }
-                else if (successfull)
-                {
-                    string successEmail =
-                        "Hi!<br>" +
-                        "<br>" +
-                        "The deadline of the project you have started on www.collaction.org has passed. We're very happy to see that the target you have set has been reached! Congratulations! Now it's time to act collectively!<br>" +
-                        "<br>" +
-                        "The CollAction Team might reach out to you with more specifics (this is an automated message). If you have any further questions yourself, feel free to contact the CollAction Team at collactionteam@gmail.com. And don’t forget to tag CollAction in your messages on social media so we can help you spread the word on your achievement (FB: @collaction.org, Twitter: @collaction_org)!<br>" +
-                        "<br>" +
-                        "Thanks again for driving the CollAction / crowdacting movement!<br>" +
-                        "<br>" +
-                        "Warm regards,<br>" +
-                        "The CollAction team<br>";
+                        string subject = $"Approval - {project.Name}";
 
-                    string subject = $"Success - {project.Name}";
+                        await _emailSender.SendEmailAsync(project.Owner.Email, subject, approvalEmail);
+                    }
+                    else if (successfull)
+                    {
+                        string successEmail =
+                            "Hi!<br>" +
+                            "<br>" +
+                            "The deadline of the project you have started on www.collaction.org has passed. We're very happy to see that the target you have set has been reached! Congratulations! Now it's time to act collectively!<br>" +
+                            "<br>" +
+                            "The CollAction Team might reach out to you with more specifics (this is an automated message). If you have any further questions yourself, feel free to contact the CollAction Team at collactionteam@gmail.com. And don’t forget to tag CollAction in your messages on social media so we can help you spread the word on your achievement (FB: <a href='https://www.facebook.com/collaction.org/'>@collaction.org</a>, Twitter: @collaction_org)!<br>" +
+                            "<br>" +
+                            "Thanks again for driving the CollAction / crowdacting movement!<br>" +
+                            "<br>" +
+                            "Warm regards,<br>" +
+                            "The CollAction team<br>";
 
-                    await _emailSender.SendEmailAsync(project.Owner.Email, subject, successEmail);
-                }
-                else if (failed)
-                {
-                    string failedEmail =
-                        "Hi!<br>" +
-                        "<br>" +
-                        "The deadline of the project you have started on www.collaction.org has passed. Unfortunately the target that you have set has not been reached. Great effort though!<br>" +
-                        "<br>" +
-                        "The CollAction Team might reach out to you with more specifics (this is an automated message). If you have any further questions yourself, feel free to contact the CollAction Team at collactionteam@gmail.com.<br>" +
-                        "<br>" +
-                        "Thanks again for driving the CollAction / crowdacting movement and better luck next time!<br>" +
-                        "<br>" +
-                        "Warm regards,<br>" +
-                        "The CollAction team<br>";
+                        string subject = $"Success - {project.Name}";
 
-                    string subject = $"Failed - {project.Name}";
+                        await _emailSender.SendEmailAsync(project.Owner.Email, subject, successEmail);
+                    }
+                    else if (failed)
+                    {
+                        string failedEmail =
+                            "Hi!<br>" +
+                            "<br>" +
+                            "The deadline of the project you have started on www.collaction.org has passed. Unfortunately the target that you have set has not been reached. Great effort though!<br>" +
+                            "<br>" +
+                            "The CollAction Team might reach out to you with more specifics (this is an automated message). If you have any further questions yourself, feel free to contact the CollAction Team at collactionteam@gmail.com.<br>" +
+                            "<br>" +
+                            "Thanks again for driving the CollAction / crowdacting movement and better luck next time!<br>" +
+                            "<br>" +
+                            "Warm regards,<br>" +
+                            "The CollAction team<br>";
 
-                    await _emailSender.SendEmailAsync(project.Owner.Email, subject, failedEmail);
+                        string subject = $"Failed - {project.Name}";
+
+                        await _emailSender.SendEmailAsync(project.Owner.Email, subject, failedEmail);
+                    }
                 }
 
                 project.Name = model.Name;
                 project.Description = model.Description;
-                project.Goal = model.Goal;
                 project.Proposal = model.Proposal;
-                project.CreatorComments = model.CreatorComments;
+                project.Goal = model.Goal;
+                project.CreatorComments = model.CreatorComments;                
                 project.CategoryId = model.CategoryId;
                 project.Target = model.Target;
                 project.Start = model.Start;
-                project.End = model.End;
+                project.End = model.End.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
                 project.Status = model.Status;
                 project.OwnerId = model.OwnerId;
                 project.DisplayPriority = model.DisplayPriority;

@@ -1,7 +1,7 @@
-﻿FROM microsoft/aspnetcore:1.1.2
+﻿FROM microsoft/dotnet:2.1-aspnetcore-runtime
 ARG source
 WORKDIR /app
 EXPOSE 80
-COPY ${source:-bin/netcoreapp1.1/publish} .
+COPY ${source:-bin/netcoreapp/publish} .
 VOLUME ["/app/wwwroot/usercontent/"]
 ENTRYPOINT ["dotnet", "CollAction.dll"]

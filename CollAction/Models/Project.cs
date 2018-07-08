@@ -6,6 +6,8 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
+using System.Text;
 
 namespace CollAction.Models
 {
@@ -31,7 +33,6 @@ namespace CollAction.Models
         [ForeignKey("LocationId")]
         public Location Location { get; set; }
 
-        [Required]
         public string OwnerId { get; set; }
         [ForeignKey("OwnerId")]
         public ApplicationUser Owner { get; set; }
@@ -46,18 +47,18 @@ namespace CollAction.Models
         public DateTime End { get; set; }
 
         [Required]
-        [MaxLength(1000)]
+        [MaxLength(10000)]
         public string Description { get; set; }
 
         [Required]
-        [MaxLength(1000)]
+        [MaxLength(10000)]
         public string Goal { get; set; }
-        
+
         [Required]
         [MaxLength(300)]
         public string Proposal { get; set; }
 
-        [MaxLength(2000)]
+        [MaxLength(20000)]
         public string CreatorComments { get; set; }
 
         public int? BannerImageFileId { get; set; }
@@ -88,6 +89,7 @@ namespace CollAction.Models
 
         public List<ProjectTag> Tags { get; set; }
         public List<ProjectParticipant> Participants { get; set; }
+        public int AnonymousUserParticipants { get; set; }
         
         [NotMapped]
         public string HashTags

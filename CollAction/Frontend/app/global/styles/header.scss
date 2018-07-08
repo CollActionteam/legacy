@@ -111,7 +111,6 @@
 }
 
 @media (max-width: 991px) {
-
     #header-container {
         #nav-container {
             padding-left: 0px;
@@ -147,5 +146,26 @@
             }
         }
     }
+}
+
+@media (max-width: 767px) {
+  #header-container {
+    #nav-container {
+      .nav-row {
+        .mobile-header {
+          padding-left: 0px;
+          height: 45px;
+          width: 45px;
+
+          #hamburger-icon {
+            margin-left: 0px;
+            margin-right: 0px;
+            margin-top: 7px;
+            margin-bottom: 0px;
+          }
+        }
+      }
+    }
+  }
 }
 

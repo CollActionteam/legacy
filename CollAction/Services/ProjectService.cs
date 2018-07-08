@@ -64,10 +64,10 @@ namespace CollAction.Services
             return await _context.ProjectParticipants.SingleOrDefaultAsync(p => p.ProjectId == projectId && p.UserId == userId);
         }
 
-        public async Task<IEnumerable<DisplayTileProjectViewModel>> GetTileProjects(Expression<Func<Project, bool>> WhereExpression)
+        public async Task<IEnumerable<DisplayTileProjectViewModel>> GetTileProjectViewModels(Expression<Func<Project, bool>> filter)
         {
             return await _context.Projects
-               .Where(WhereExpression)
+               .Where(filter)
                .OrderBy(p => p.DisplayPriority)
                .Select(p =>
                 new DisplayTileProjectViewModel(_localizer, p.Start, p.End, p.Status, p.IsActive, p.IsComingSoon, p.IsClosed)
@@ -81,9 +81,31 @@ namespace CollAction.Services
                     BannerImagePath = p.BannerImage != null ? p.BannerImage.Filepath : $"/images/default_banners/{p.Category.Name}.jpg",
                     BannerImageDescription = p.BannerImage.Description,
                     Target = p.Target,
-                    Participants = p.Participants.Count()
+                    Participants = p.Participants.Sum(participant => participant.User.RepresentsNumberParticipants) + p.AnonymousUserParticipants
                 })
                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<DisplayProjectViewModel>> GetProjectDisplayViewModels(Expression<Func<Project, bool>> filter)
+        {
+            return await _context.Projects
+                .Where(filter)
+                .Include(p => p.Category)
+                .Include(p => p.Location)
+                .Include(p => p.BannerImage)
+                .Include(p => p.DescriptiveImage)
+                .Include(p => p.DescriptionVideoLink)
+                .Include(p => p.Owner)
+                .Include(p => p.Tags).ThenInclude(t => t.Tag)
+                .GroupJoin(_context.ProjectParticipants,
+                    project => project.Id,
+                    participants => participants.ProjectId,
+                    (project, participantsGroup) => new DisplayProjectViewModel
+                    {
+                        Project = project,
+                        Participants = participantsGroup.Sum(p => p.User.RepresentsNumberParticipants) + project.AnonymousUserParticipants
+                    })
+                .ToListAsync();
         }
 
         public async Task<string> GenerateParticipantsDataExport(int projectId)
@@ -109,7 +131,7 @@ namespace CollAction.Services
         }
 
         private string GetParticipantCsvLine(ApplicationUser user)
-            => $"{EscapeCsv(user.FirstName)};{EscapeCsv(user.LastName)};{EscapeCsv(user.Email)}";
+            => $"{EscapeCsv(user?.FirstName)};{EscapeCsv(user?.LastName)};{EscapeCsv(user?.Email)}";
 
         private string EscapeCsv(string str)
             => $"\"{str?.Replace("\"", "\"\"")}\"";
