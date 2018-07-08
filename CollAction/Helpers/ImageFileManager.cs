@@ -1,10 +1,11 @@
 ﻿using CollAction.Data;
 using CollAction.Models;
-using ImageSharp;
+using SixLabors.ImageSharp;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace CollAction.Helpers
 {
@@ -39,6 +40,17 @@ namespace CollAction.Helpers
             await _context.SaveChangesAsync(); // Need to save to the database to get an ID for the new ImageFile.
 
             return outputImageFile;
+        }
+
+        public void DeleteImageFileIfExists(ImageFile imageFile)
+        {
+            if (imageFile == null)
+            {
+                return;
+            }
+
+            DeleteImageFileFromFileSystem(imageFile);
+            DeleteImageFileFromModel(imageFile);
         }
 
         private bool ShouldCreateOrReplaceImageFile(ImageFile imageFile, IFormFile formFileToUpload)
@@ -86,17 +98,6 @@ namespace CollAction.Helpers
         {
             DeleteImageFileIfExists(imageFile);
             return await CreateImageFileWithUniqueName(formFileToUpload);
-        }
-
-        private void DeleteImageFileIfExists(ImageFile imageFile)
-        {
-            if (imageFile == null)
-            {
-                return;
-            }
-
-            DeleteImageFileFromFileSystem(imageFile);
-            DeleteImageFileFromModel(imageFile);
         }
 
         private async Task SaveFormFileToFileSystem(IFormFile formFile, string filename, string extension)

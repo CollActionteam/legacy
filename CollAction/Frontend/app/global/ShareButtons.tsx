@@ -1,7 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import renderComponentIf from "./renderComponentIf";
-import registerGlobal from "./registerGlobal";
 
 enum States { ERROR, READY, LOADING };
 
@@ -28,11 +27,17 @@ class ShareButtons extends React.Component<IShareButtonsProps, IShareButtonsStat
   }
 
   getTitle() {
-    return this.props.title || document.title;
+    if (this.props.title)
+      return encodeURIComponent(this.props.title);
+    else
+      return encodeURIComponent(document.title);
   }
 
   getUrl() {
-    return this.props.url || window.location;
+    if (this.props.url)
+      return encodeURIComponent(this.props.url);
+    else
+      return encodeURIComponent(String(window.location));
   }
 
   async getLinkedInShareCount() {
@@ -47,7 +52,7 @@ class ShareButtons extends React.Component<IShareButtonsProps, IShareButtonsStat
   }
 
   async getFacebookShareCount() {
-    const apiLink: string = `http://graph.facebook.com/?id=${this.getUrl()}`;
+    const apiLink: string = `https://graph.facebook.com/?id=${this.getUrl()}`;
     const response: Response = await fetch(apiLink);
     const parsed = await response.json();
     return parsed.share.share_count;
@@ -63,41 +68,36 @@ class ShareButtons extends React.Component<IShareButtonsProps, IShareButtonsStat
   }
 
   getTwitterUrl () {
-    return encodeURI(`https://twitter.com/intent/tweet?text=${this.getTitle()}&url=${this.getUrl()}`);
+    return `https://twitter.com/intent/tweet?text=${this.getTitle()}&url=${this.getUrl()}`;
   }
 
   getFacebookUrl() {
-    return encodeURI(`https://www.facebook.com/sharer/sharer.php?u=${this.getUrl()}`);
+    return `https://www.facebook.com/sharer/sharer.php?u=${this.getUrl()}`;
   }
 
   getLinkedInUrl () {
-    return encodeURI(`http://www.linkedin.com/shareArticle?mini=true&url=${this.getUrl()}L&title=${this.getTitle()}`);
+    return `https://www.linkedin.com/shareArticle?mini=true&url=${this.getUrl()}&title=${this.getTitle()}&source=${encodeURIComponent(window.location.origin)}`;
   }
-
-
 
   render() {
     return (
       <div className="share-buttons">
         <div className="row">
-          <div className="col-xs-3 share-count">
-            {this.state.shareCount}<br /> Shares
-          </div>
-          <div className="col-xs-3">
+          <div className="col-xs-4">
             <a href={this.getFacebookUrl()} target="_blank">
               <div className="social-media-share-buttons social-media-share-button-facebook">
                 <i className="fa fa-facebook"></i>
               </div>
             </a>
           </div>
-          <div className="col-xs-3">
+          <div className="col-xs-4">
             <a href={this.getTwitterUrl()}>
               <div className="social-media-share-buttons social-media-share-button-twitter">
                 <i className="fa fa-twitter"></i>
               </div>
             </a>
           </div>
-          <div className="col-xs-3">
+          <div className="col-xs-4">
             <a href={this.getLinkedInUrl()}>
               <div className="social-media-share-buttons social-media-share-button-linkedin">
                 <i className="fa fa-linkedin"></i>
@@ -140,8 +140,8 @@ renderComponentIf(
   document.getElementById("project-details-share-buttons-row")
 );
 
-function renderShareWithTitleAndLink(title: string, url: string, element: HTMLElement) {
-  ReactDOM.render(<ShareButtons title={title} url={url} />, element);
-}
-
-registerGlobal("renderShareWithTitleAndLink", renderShareWithTitleAndLink);
+renderComponentIf(
+  <ShareButtons title={document.getElementById("project-details-share-buttons-custom") && document.getElementById("project-details-share-buttons-custom").dataset.title}
+                url={document.getElementById("project-details-share-buttons-custom") && document.getElementById("project-details-share-buttons-custom").dataset.link} />,
+  document.getElementById("project-details-share-buttons-custom")
+);

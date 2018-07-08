@@ -21,17 +21,19 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="Description" class="control-label required"></label>
-                        <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+                        <div id="create-project-description"></div>
+                        @Html.HiddenFor(m => m.Description)
                         @Html.ValidationMessage("Description")
                     </div>
                     <div class="form-group">
                         <label asp-for="Proposal" class="control-label required"></label>
-                        <textarea asp-for="Proposal" class="form-control" rows="3"></textarea>
+                        <textarea asp-for="Proposal" class="form-control" rows="5"></textarea>
                         @Html.ValidationMessage("Proposal")
                     </div>
                     <div class="form-group">
                         <label asp-for="Goal" class="control-label required"></label>
-                        <textarea asp-for="Goal" class="form-control" rows="7"></textarea>
+                        <div id="create-project-goal"></div>
+                        @Html.HiddenFor(m => m.Goal)
                         @Html.ValidationMessage("Goal")
                     </div>
                     <div class="form-group">
@@ -56,7 +58,8 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="CreatorComments" class="control-label"></label>
-                        <textarea asp-for="CreatorComments" class="form-control" rows="3"></textarea>
+                        <div id="create-project-creatorcomments"></div>
+                        @Html.HiddenFor(m => m.CreatorComments)
                         @Html.ValidationMessage("CreatorComments")
                     </div>
                     <div class="form-group">
@@ -99,5 +102,5 @@
 </div>
 
 @section Scripts {
-     @{Html.RenderPartial("_ValidationScriptsPartial");}
+     <partial name="_ValidationScriptsPartial" />
  }

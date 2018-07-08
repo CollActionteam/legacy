@@ -1,0 +1,48 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using CollAction.Models.AdminViewModels
+
+@inject IViewLocalizer Localizer
+
+@model ManageUserViewModel
+
+@{
+    ViewData["Title"] = Localizer["Manage User"];
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div id="user-manage-form">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3 col-xs-12">
+                <form asp-action="ManageUser" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+                    <div class="form-group">
+                        <label asp-for="Email" class="control-label"></label>
+                        <input asp-for="Email" class="form-control" />
+                        @Html.ValidationMessage("Email")
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="FirstName" class="control-label"></label>
+                        <input asp-for="FirstName" class="form-control" />
+                        @Html.ValidationMessage("FirstName")
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="LastName" class="control-label"></label>
+                        <input asp-for="LastName" class="form-control" />
+                        @Html.ValidationMessage("LastName")
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="RepresentsNumberParticipants" class="control-label"></label>
+                        <input asp-for="RepresentsNumberParticipants" class="form-control" />
+                        @Html.ValidationMessage("RepresentsNumberParticipants")
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Update" class="btn btn-default" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
