@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.ApplicationInsights.AspNetCore
+@inject JavaScriptSnippet snippet
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -20,6 +22,7 @@
 
     @RenderSection("styles", required: false)
     @RenderSection("Meta", required: false)
+    @Html.Raw(snippet.FullScript)
 </head>
 <body id="body">
     <!-- Google Tag Manager (noscript) -->
@@ -37,7 +40,7 @@
                         <div class="hidden-md hidden-lg" id="mobile-nav-draw"></div>
                         <partial name="_Logo" />
                     </div>
-                    <div class="col-md-7 nav-bar hidden-xs hidden-sm" >
+                    <div class="col-md-7 nav-bar hidden-xs hidden-sm">
                         <ul id="header-menu">
                             <li><a asp-area="" asp-controller="Projects" asp-action="Find">Vind Project</a></li>
                             <li><a asp-area="" asp-controller="Projects" asp-action="StartInfo">Start Project</a></li>
