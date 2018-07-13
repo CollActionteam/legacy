@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 if [ "$TRAVIS_BRANCH" == "master" ]; then
     ECS_SERVICENAME="CollActionAcceptance"
 elif [ "$TRAVIS_BRANCH" == "Friesland" ]; then
