@@ -1,11 +1,14 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @using CollAction.Services;
+@using Microsoft.AspNetCore.Http.Features
 
 @inject IViewLocalizer Localizer
 @inject IFestivalService FestivalService
 
 @{
     ViewData["Title"] = Localizer["Home Page"];
+    var consentFeature = Context.Features.Get<ITrackingConsentFeature>();
+    var canTrack = consentFeature.CanTrack;
 }
 
 @section Meta {
@@ -169,11 +172,14 @@
         </div>
     </div>
 
-    <div id="project-share">
-        <div class="container">
-            <div class="row">
-                <div id="homepage-share-buttons"></div>
+    @if (canTrack)
+    {
+        <div id="project-share">
+            <div class="container">
+                <div class="row">
+                    <div id="homepage-share-buttons"></div>
+                </div>
             </div>
         </div>
-    </div>
+    }
 </div>

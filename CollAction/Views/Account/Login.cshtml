@@ -2,6 +2,7 @@
 @using System.Collections.Generic
 @using Microsoft.AspNetCore.Http
 @using Microsoft.AspNetCore.Http.Authentication
+@using Microsoft.AspNetCore.Http.Features
 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject IViewLocalizer Localizer
@@ -10,6 +11,8 @@
 
 @{
     ViewData["Title"] = Localizer["Log in"];
+    var consentFeature = Context.Features.Get<ITrackingConsentFeature>();
+    var canTrack = consentFeature.CanTrack;
 }
 
 <div id="login-starting">
@@ -26,28 +29,31 @@
 <div id="login-form">
     <div class="container">
         <div class="row">
-            <div class="col-xs-12 col-md-6 col-md-offset-3">
-                <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
-                    @{ var loginProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList(); }
+            @if (canTrack)
+            {
+                <div class="col-xs-12 col-md-6 col-md-offset-3">
+                    <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+                        @{ var loginProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList(); }
 
-                    @foreach (var provider in loginProviders)
-                    {
-                        var providerClass = @provider.Name?.ToLower();
-                        var providerName = @provider.Name?.ToUpper();
+                        @foreach (var provider in loginProviders)
+                        {
+                            var providerClass = @provider.Name?.ToLower();
+                            var providerName = @provider.Name?.ToUpper();
 
-                        <div class="form-group">
-                            <button type="submit" class="btn-socialmedia-login @providerClass" name="provider" value="@provider.Name">
-                                <i class="fa fa-@providerClass"></i>&nbsp;&nbsp;LOGIN with @providerName
-                            </button>
-                        </div>
-                    }
-                </form>
-            </div>
-            <div class="col-xs-12 col-md-6 col-md-offset-3">
-                <div class="seperator">
-                    <p><span>or</span></p>
+                            <div class="form-group">
+                                <button type="submit" class="btn-socialmedia-login @providerClass" name="provider" value="@provider.Name">
+                                    <i class="fa fa-@providerClass"></i>&nbsp;&nbsp;LOGIN with @providerName
+                                </button>
+                            </div>
+                        }
+                    </form>
                 </div>
-            </div>            
+                <div class="col-xs-12 col-md-6 col-md-offset-3">
+                    <div class="seperator">
+                        <p><span>or</span></p>
+                    </div>
+                </div>            
+            }
             <div class="col-xs-12 col-md-6 col-md-offset-3">
                 <form asp-controller="Account" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
                     <div asp-validation-summary="All" class="text-danger"></div>
@@ -73,6 +79,15 @@
                     <div class="form-group">
                         <input type="submit" value="Log in" class="btn btn-login" />
                     </div>
+
+                    @if (!canTrack)
+                    {
+                        <div class="form-group">
+                            <span>
+                                Looking for social login options? Please accept our cookie policy so we can offer them to you.
+                            </span>
+                        </div>
+                    }
 
                     <p>
                         <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">Register as a new user?</a>
