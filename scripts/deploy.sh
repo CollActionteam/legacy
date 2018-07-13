@@ -1,7 +1,7 @@
 #!/bin/sh
-if [[ "$TRAVIS_BRANCH" == "master" ]]; then
+if [ "$TRAVIS_BRANCH" == "master" ]; then
     ECS_SERVICENAME="CollActionAcceptance"
-elif [[ "$TRAVIS_BRANCH" == "Friesland" ]]; then
+elif [ "$TRAVIS_BRANCH" == "Friesland" ]; then
     ECS_SERVICENAME="CollActionFreonenAcceptance"
 else
     echo "Not deploying branch '$TRAVIS_BRANCH' because it's not master or Friesland"
