@@ -24,6 +24,7 @@ using NetEscapades.AspNetCore.SecurityHeaders;
 using NetEscapades.AspNetCore.SecurityHeaders.Infrastructure;
 using System;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 
 namespace CollAction
 {
@@ -126,8 +127,7 @@ namespace CollAction
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            if (Environment.IsProduction())
-                services.AddApplicationInsightsTelemetry(Configuration);
+            services.AddApplicationInsightsTelemetry(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
