@@ -147,13 +147,13 @@ namespace CollAction.Services
         }
 
         public bool CanSendProjectEmail(Project project)
-            => project.NumberProjectEmailsSend < _projectEmailOptions.MaxNumberProjectEmails && project.End + _projectEmailOptions.MaxTimeProjectEmails > DateTime.UtcNow;
+            => project.NumberProjectEmailsSend < _projectEmailOptions.MaxNumberProjectEmails && project.End + _projectEmailOptions.TimeEmailAllowedAfterProjectEnd > DateTime.UtcNow;
 
         public int NumberEmailsAllowedToSend(Project project)
             => _projectEmailOptions.MaxNumberProjectEmails - project.NumberProjectEmailsSend;
 
         public DateTime CanSendEmailsUntil(Project project)
-            => project.End + _projectEmailOptions.MaxTimeProjectEmails;
+            => project.End + _projectEmailOptions.TimeEmailAllowedAfterProjectEnd;
 
         public async Task SendProjectEmail(Project project, string subject, string message, HttpRequest request, IUrlHelper helper)
         {
