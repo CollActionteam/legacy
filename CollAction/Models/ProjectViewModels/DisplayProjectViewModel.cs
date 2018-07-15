@@ -106,7 +106,7 @@ namespace CollAction.Models
 
         public static async Task<List<DisplayProjectViewModel>> GetViewModelsWhere(ApplicationDbContext context, Expression<Func<Project, bool>> WhereExpression)
         {
-            return await context.Projects
+            var list = await context.Projects
                 .Where(WhereExpression)
                 .Include(p => p.Category)
                 .Include(p => p.Location)
@@ -124,6 +124,8 @@ namespace CollAction.Models
                         Participants = participantsGroup.Count()
                     })
                 .ToListAsync();
+
+                return list;
         }
     }
 }

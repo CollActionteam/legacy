@@ -20,6 +20,7 @@ using System.Text.RegularExpressions;
 using CollAction.Models.ProjectViewModels;
 using System.Linq.Expressions;
 using Newtonsoft.Json;
+using System.Globalization;
 
 namespace CollAction.Controllers
 {
@@ -78,8 +79,8 @@ namespace CollAction.Controllers
         }
         
         public async Task<IActionResult> Details(string name)
-        {
-            List<DisplayProjectViewModel> items = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Name == name && p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted);
+        {   //     //p => p.Name.CompareTo(name) >= 0
+            List<DisplayProjectViewModel> items = await DisplayProjectViewModel.GetViewModelsWhere(_context, p=> (string.Compare(p.Name, name, CultureInfo.InvariantCulture, CompareOptions.IgnoreCase) == 0)   && p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted);
             if (items.Count == 0)
             {
                 return NotFound();
