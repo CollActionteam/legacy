@@ -148,7 +148,7 @@ namespace CollAction.Controllers
             string subject = $"Thank you for participating in the \"{project.Name}\" project on CollAction";
 
             ApplicationUser user = await _userManager.GetUserAsync(User);
-            await _emailSender.SendEmailAsync(user.Email, subject, confirmationEmail);
+            _emailSender.SendEmail(user.Email, subject, confirmationEmail);
 
             string confirmationEmailAdmin =
                 "Hi!<br>" +
@@ -159,7 +159,7 @@ namespace CollAction.Controllers
 
             var administrators = await _userManager.GetUsersInRoleAsync(Constants.AdminRole);
             foreach (var admin in administrators)
-                await _emailSender.SendEmailAsync(admin.Email, subject, confirmationEmailAdmin);
+                _emailSender.SendEmail(admin.Email, subject, confirmationEmailAdmin);
 
             return View("ThankYouCreate", new ThankYouCreateProjectViewModel()
             {
@@ -273,7 +273,7 @@ namespace CollAction.Controllers
                     "</div>"+
                     "</span>";
                 string subject = $"Thank you for participating in the \"{commitProjectViewModel.ProjectName}\" project on CollAction";
-                await _emailSender.SendEmailAsync(user.Email, subject, confirmationEmail);
+                _emailSender.SendEmail(user.Email, subject, confirmationEmail);
                 return View("ThankYouCommit", commitProjectViewModel);
             }
             else

@@ -174,7 +174,7 @@ namespace CollAction.Services
                     string userMessage = $"{HttpUtility.HtmlEncode(message)}<br><a href=\"{unsubscribeLink}\">Unsubscribe</a>";
                     userMessage.Replace("{firstname}", participant.User.FirstName);
                     userMessage.Replace("{lastname}", participant.User.LastName);
-                    await _emailSender.SendEmailAsync(participant.User.Email, subject, userMessage);
+                    _emailSender.SendEmail(participant.User.Email, subject, userMessage);
                 }
 
                 IList<ApplicationUser> adminUsers = await _userManager.GetUsersInRoleAsync(Constants.AdminRole);
@@ -183,7 +183,7 @@ namespace CollAction.Services
                     string adminMessage = HttpUtility.HtmlEncode(message);
                     adminMessage.Replace("{firstname}", admin.FirstName);
                     adminMessage.Replace("{lastname}", admin.LastName);
-                    await _emailSender.SendEmailAsync(admin.Email, subject, adminMessage);
+                    _emailSender.SendEmail(admin.Email, subject, adminMessage);
                 }
 
                 project.NumberProjectEmailsSend += 1;
