@@ -44,7 +44,7 @@ namespace CollAction.Models.AccountViewModels
         [Display(Name = "Ik ontvang graag af en toe een update van CollAction - geen zorgen, wij houden net zo weinig van spam als jij! 🙂")]
         public bool NewsletterSubscription { get; set; }
 
-        [MustBeTrue(ErrorMessage = "Lees en accepteer aub ons privacy policy")]
+        [MustBeTrue(ErrorMessage = "Lees en accepteer aub onze privacy policy")]
         public bool AgreedPrivacyPolicy { get; set; }
     }
 }
