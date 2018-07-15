@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Http.Features
 
 @inject IViewLocalizer Localizer
 
@@ -6,6 +7,8 @@
 
 @{
     ViewData["Title"] = Localizer["Thank You"];
+    var consentFeature = Context.Features.Get<ITrackingConsentFeature>();
+    var canTrack = consentFeature.CanTrack;
 }
 
 <div id="thank-you-commit-container">
@@ -21,26 +24,19 @@
             <div id="thank-you-text">
                 <h1>Awesome!</h1>
                 <h2>Thank you for participating</h2>
-                <p>Many thanks in making this world a better place, by supporting <b>@Html.DisplayFor(model => model.ProjectName)</b>!</p>
+                <p>Many thanks for making this world a better place, by supporting <b>@Html.DisplayFor(model => model.ProjectName)</b>!</p>
             </div>
         </div>
     </div>
 </div>
 
-
-<div id="project-share">
-    <div class="container">
-        <div class="row">
-            <div id="project-details-share-buttons-custom"></div>
+@if (canTrack)
+{
+    <div id="project-share">
+        <div class="container">
+            <div class="row">
+                <div id="project-details-share-buttons-custom" data-title="@Html.DisplayFor(model => model.ProjectName)" data-link="@Context.Request.Scheme://@Context.Request.Host@Html.DisplayFor(model => model.ProjectLink)"></div>
+            </div> 
         </div> 
-    </div> 
-</div>
-
-<script type="text/javascript">
-    const title = "@Html.DisplayFor(model => model.ProjectName)";
-    const link = window.location.hostname + "@Html.DisplayFor(model => model.ProjectLink)";
-    const element = document.getElementById("project-details-share-buttons-custom");
-    window.onload = function () {
-        window.CollAction.renderShareWithTitleAndLink(title, link, element);
-    };
-</script>
+    </div>
+}
