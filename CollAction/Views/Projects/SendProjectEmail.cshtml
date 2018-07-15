@@ -8,7 +8,7 @@
     <div class="container">
         <h2>@ViewData["Title"]</h2>
         <p>
-            You have already send @Model.Project.NumberProjectEmailsSend e-mails, and can still send @Model.EmailsAllowedToSend emails up until @Model.SendEmailsUntil. No HTML is allowed, {firstname} and {lastname} will be substituted with the user's first and last name.
+            You have already sent @Model.Project.NumberProjectEmailsSend e-mails, and can still send @Model.EmailsAllowedToSend emails up until @Model.SendEmailsUntil. No HTML is allowed, {firstname} and {lastname} will be substituted with the user's first and last name.
         </p>
         <form asp-controller="Projects" asp-action="SendProjectEmailPerform" method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
