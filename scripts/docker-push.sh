@@ -1,6 +1,6 @@
 #! /bin/bash
-if [ "$TRAVIS_PULL_REQUEST" == "true" ]; then 
-    echo "Building pull request '$TRAVIS_PULL_REQUEST_BRANCH'";
+if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then 
+    echo "Building branch '$TRAVIS_PULL_REQUEST_BRANCH' for pull request '$TRAVIS_PULL_REQUEST'";
 
     # Extract CA-number from branch name
     shopt -s nocasematch
