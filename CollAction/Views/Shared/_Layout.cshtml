@@ -1,13 +1,23 @@
-﻿@using Microsoft.ApplicationInsights.AspNetCore
+﻿﻿@using Microsoft.ApplicationInsights.AspNetCore
+@using Microsoft.AspNetCore.Http.Features
+
 @inject JavaScriptSnippet snippet
+
+@{
+    var consentFeature = Context.Features.Get<ITrackingConsentFeature>();
+    var canTrack = consentFeature.CanTrack;
+}
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - CollAction</title>
-    <script src="~/lib/google/tagmanager.js">
-    </script>
+    @if (canTrack) 
+    {
+        <script src="~/lib/google/tagmanager.js">
+        </script>
+    }
     <environment names="Development">
         <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
     </environment>
@@ -25,12 +35,15 @@
     @Html.Raw(snippet.FullScript)
 </head>
 <body id="body">
-    <!-- Google Tag Manager (noscript) -->
-    <noscript>
-        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NTCKFKM"
-                height="0" width="0" style="display:none;visibility:hidden"></iframe>
-    </noscript>
-    <!-- End Google Tag Manager (noscript) -->
+    @if (canTrack) 
+    {
+        <!-- Google Tag Manager (noscript) -->
+        <noscript>
+            <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NTCKFKM"
+                    height="0" width="0" style="display:none;visibility:hidden"></iframe>
+        </noscript>
+        <!-- End Google Tag Manager (noscript) -->
+    }
 
     <div id="header-container">
         <div class="container" id="nav-container">
@@ -58,7 +71,8 @@
             </div>
         </div>
     </div>
-    <div id="header-padding"></div>
+    <div id="header-padding"></div>   
+    <partial name="_CookieConsentPartial" /> 
     @RenderBody()
     <partial name="_Footer" />
 

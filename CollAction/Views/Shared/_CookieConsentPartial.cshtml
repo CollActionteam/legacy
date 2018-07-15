@@ -1,0 +1,8 @@
+@using Microsoft.AspNetCore.Http.Features
+
+@{
+    var consentFeature = Context.Features.Get<ITrackingConsentFeature>();
+    var canTrack = consentFeature.CanTrack;
+    var cookieString = consentFeature.CreateConsentCookie();
+}
+<div id="cookie-message" data-can-track="@canTrack" data-cookie-string="@cookieString"></div>
