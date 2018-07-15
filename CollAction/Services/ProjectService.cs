@@ -1,8 +1,8 @@
 ﻿using CollAction.Data;
 using CollAction.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
@@ -20,14 +20,16 @@ namespace CollAction.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly ProjectEmailOptions _projectEmailOptions;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger<ProjectService> _logger;
         private readonly IStringLocalizer<ProjectService> _stringLocalizer;
 
-        public ProjectService(ApplicationDbContext context, IEmailSender emailSender, IOptions<ProjectEmailOptions> projectEmailOptions, ILogger<ProjectService> logger, IStringLocalizer<ProjectService> stringLocalizer)
+        public ProjectService(ApplicationDbContext context, IEmailSender emailSender, IOptions<ProjectEmailOptions> projectEmailOptions, ILogger<ProjectService> logger, IStringLocalizer<ProjectService> stringLocalizer, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _projectEmailOptions = projectEmailOptions.Value;
+            _userManager = userManager;
             _emailSender = emailSender;
             _logger = logger;
             _stringLocalizer = stringLocalizer;
@@ -173,6 +175,15 @@ namespace CollAction.Services
                     userMessage.Replace("{firstname}", participant.User.FirstName);
                     userMessage.Replace("{lastname}", participant.User.LastName);
                     await _emailSender.SendEmailAsync(participant.User.Email, subject, userMessage);
+                }
+
+                IList<ApplicationUser> adminUsers = await _userManager.GetUsersInRoleAsync(Constants.AdminRole);
+                foreach (ApplicationUser admin in adminUsers)
+                {
+                    string adminMessage = HttpUtility.HtmlEncode(message);
+                    adminMessage.Replace("{firstname}", admin.FirstName);
+                    adminMessage.Replace("{lastname}", admin.LastName);
+                    await _emailSender.SendEmailAsync(admin.Email, subject, adminMessage);
                 }
 
                 project.NumberProjectEmailsSend += 1;
