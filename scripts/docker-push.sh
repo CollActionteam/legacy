@@ -1,6 +1,6 @@
 #! /bin/bash
-if [ "$TRAVIS_PULL_REQUEST" == "true" ]; then 
-    echo "Building pull request '$TRAVIS_PULL_REQUEST_BRANCH'";
+if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then 
+    echo "Building branch '$TRAVIS_PULL_REQUEST_BRANCH' for pull request '$TRAVIS_PULL_REQUEST'";
 
     # Extract CA-number from branch name
     shopt -s nocasematch
@@ -25,15 +25,15 @@ fi
 
 # Build 
 echo "Building CollAction image for $ECR_REPO:$TAG"
-docker build -t $ECR_REPO:$TAG CollAction
+# docker build -t $ECR_REPO:$TAG CollAction
 
-# Log in to Amazon ECR.
-# This uses the environment variables AWS_ACCESS_KEY_ID and AWS_ACCESS_SECRET_KEY which are set in the .travis.yml env.secure section. 
-echo "Logging on to ECR"
-eval $(aws ecr get-login --no-include-email --region eu-central-1)
+# # Log in to Amazon ECR.
+# # This uses the environment variables AWS_ACCESS_KEY_ID and AWS_ACCESS_SECRET_KEY which are set in the .travis.yml env.secure section. 
+# echo "Logging on to ECR"
+# eval $(aws ecr get-login --no-include-email --region eu-central-1)
 
-# Push image to ECR
-echo "Pushing image $ECR_REPO:$TAG"
-docker push $ECR_REPO:$TAG
+# # Push image to ECR
+# echo "Pushing image $ECR_REPO:$TAG"
+# docker push $ECR_REPO:$TAG
 
-echo "Done!"
+# echo "Done!"
