@@ -1,4 +1,9 @@
 #!/bin/bash
+if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then 
+    echo "No deployment for pull requests"
+    exit 0
+fi
+
 if [ "$TRAVIS_BRANCH" == "master" ]; then
     ECS_SERVICENAME="CollActionAcceptance"
 elif [ "$TRAVIS_BRANCH" == "Friesland" ]; then
