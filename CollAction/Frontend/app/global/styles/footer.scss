@@ -3,12 +3,30 @@
 #footer {
     background-color: #f7f7f7;
     padding: 50px 0px;
-    text-decoration: none;
-    font-size: .85em;
+    font-size: 12px;
     line-height: 2.5em;
 
+    .logo {
+        margin-bottom: 12.5px;
+    }
+
+    .intro {
+        font-weight: 500;
+        line-height: 22px;
+        letter-spacing: 0.2px;
+    }
+
+    .nav-list li {
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
     ul {
-      margin-top: 0px;
+        margin-top: 0px;
+    }
+
+    .header {
+        font-weight: 600;
     }
 
     .social-list {
@@ -26,12 +44,17 @@
             font-size: 1.5em;
             border-radius: 1em;
             margin-right: 5px;
-            padding-left: 9px;
-            padding-top: 3px;
-        }
 
-        i {
-            margin-right: 5px;
+            div {
+                margin: auto;
+                margin-top: 2px;
+                width: 50%;
+                
+                .fa-facebook,
+                .fa-linkedin {
+                    margin-left: 2px;
+                }
+            }
         }
     }
 
@@ -44,13 +67,23 @@
     }
 
     input[type=email] {
+        width: 250px;
         border: none;
         outline: none;
-        background-color: #efefef;
+        background-color: #e6e6e6;
         -webkit-border-radius: 2em;
         -moz-border-radius: 2em;
         border-radius: 2em;
-        padding: 0px 15px;
+        padding: 0px 30px 0px 15px;
+    }
+
+    .email-icon {
+        position: relative;
+        z-index: 1;
+        left: -25px;
+        top: 1px;
+        width: 0px;
+        color: #7d7d7d;
     }
 
     li {
