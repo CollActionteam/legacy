@@ -163,7 +163,7 @@ namespace CollAction.Controllers
             string subject = $"Dank voor het insturen van een project: {project.Name}";
 
             ApplicationUser user = await _userManager.GetUserAsync(User);
-            await _emailSender.SendEmailAsync(user.Email, subject, confirmationEmail);
+            _emailSender.SendEmail(user.Email, subject, confirmationEmail);
 
             //"Hi!<br>" +
             //"<br>" +
@@ -179,7 +179,7 @@ namespace CollAction.Controllers
 
             var administrators = await _userManager.GetUsersInRoleAsync(Constants.AdminRole);
             foreach (var admin in administrators)
-                await _emailSender.SendEmailAsync(admin.Email, subject, confirmationEmailAdmin);
+                _emailSender.SendEmail(admin.Email, subject, confirmationEmailAdmin);
 
             return View("ThankYouCreate", new ThankYouCreateProjectViewModel()
             {
@@ -283,7 +283,7 @@ namespace CollAction.Controllers
 
                 // Thank you for participating in a CollAction project!
                 string subject = "Dank voor je deelname aan een Freonen crowdacting project!";
-                await _emailSender.SendEmailAsync(user.Email, subject, confirmationEmail);
+                _emailSender.SendEmail(user.Email, subject, confirmationEmail);
                 return View("ThankYouCommit", commitProjectViewModel);
             }
             else

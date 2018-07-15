@@ -271,7 +271,7 @@ namespace CollAction.Controllers
                     controller: "Account",
                     values: new { user.Id, code },
                     protocol: Request.Scheme);
-                await _emailSender.SendEmailAsync(model.Email, "Wachtwoord opnieuw instellen",
+                _emailSender.SendEmail(model.Email, "Wachtwoord opnieuw instellen",
                    $"Klik <a href='{callbackUrl}'>hier</a> om je wachtwoord opnieuw in te stellen.");   // Please reset your password by clicking here.
                 return View(nameof(ForgotPasswordConfirmation));
             }

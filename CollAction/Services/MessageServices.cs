@@ -20,7 +20,7 @@ namespace CollAction.Services
             _logger = loggerFactory.CreateLogger<AuthMessageSender>();
         }
 
-        public Task SendEmailsAsync(IEnumerable<string> emails, string subject, string message)
+        public void SendEmails(IEnumerable<string> emails, string subject, string message)
         {
             SendEmailRequest emailRequest = new SendEmailRequest()
             {
@@ -36,12 +36,10 @@ namespace CollAction.Services
             string job = BackgroundJob.Enqueue(() => SendEmail(emailRequest, emails));
 
             _logger.LogInformation("sending email to {0} with subject {1} with hangfire job {2}", string.Join(", ", emails), subject, job);
-
-            return Task.CompletedTask;
         }
 
-        public Task SendEmailAsync(string email, string subject, string message)
-            => SendEmailsAsync(new[] { email }, subject, message);
+        public void SendEmail(string email, string subject, string message)
+            => SendEmails(new[] { email }, subject, message);
 
         public async Task SendEmail(SendEmailRequest request, IEnumerable<string> emails)
         {
