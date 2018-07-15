@@ -11,15 +11,12 @@ using CollAction.Models;
 using Microsoft.Extensions.Localization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using System.Data.SqlClient;
-using Npgsql;
 using Microsoft.AspNetCore.Hosting;
 using CollAction.Helpers;
 using CollAction.Services;
-using System.Text.RegularExpressions;
 using CollAction.Models.ProjectViewModels;
 using System.Linq.Expressions;
-using Newtonsoft.Json;
+using System.Net;
 
 namespace CollAction.Controllers
 {
@@ -29,16 +26,16 @@ namespace CollAction.Controllers
         private readonly IStringLocalizer<ProjectsController> _localizer;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IHostingEnvironment _hostingEnvironment;
-        private readonly IProjectService _service;
+        private readonly IProjectService _projectService;
         private readonly IEmailSender _emailSender;
 
-        public ProjectsController(ApplicationDbContext context, IStringLocalizer<ProjectsController> localizer, UserManager<ApplicationUser> userManager, IHostingEnvironment hostingEnvironment, IProjectService service, IEmailSender emailSender)
+        public ProjectsController(ApplicationDbContext context, IStringLocalizer<ProjectsController> localizer, UserManager<ApplicationUser> userManager, IHostingEnvironment hostingEnvironment, IProjectService projectService, IEmailSender emailSender)
         {
             _context = context;
             _localizer = localizer;
             _userManager = userManager;
             _hostingEnvironment = hostingEnvironment;
-            _service = service;
+            _projectService = projectService;
             _emailSender = emailSender;
         }
 
@@ -47,7 +44,6 @@ namespace CollAction.Controllers
             return View();
         }
 
-        // GET: Project/Find
         public async Task<IActionResult> Find(FindProjectViewModel model)
         {
             if (model.SearchText == null)
@@ -55,12 +51,12 @@ namespace CollAction.Controllers
                 return View(new FindProjectViewModel
                 {
                     OwnerId = (await _userManager.GetUserAsync(User))?.Id,
-                    Projects = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted)
+                    Projects = await _projectService.GetProjectDisplayViewModels(p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted)
                 });
             }
 
             model.OwnerId = (await _userManager.GetUserAsync(User))?.Id;
-            model.Projects = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted &&
+            model.Projects = await _projectService.GetProjectDisplayViewModels(p => p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted &&
                 (p.Name.Contains(model.SearchText) || p.Description.Contains(model.SearchText) || p.Goal.Contains(model.SearchText)));
             return View(model);
         }
@@ -68,7 +64,7 @@ namespace CollAction.Controllers
         // GET: Projects/Details/5
         public async Task<IActionResult> DetailsById(int? id)
         {
-            var project =  await _service.GetProjectById(id); 
+            var project =  await _projectService.GetProjectById(id); 
             if (project == null)
             {
                 return NotFound();
@@ -79,14 +75,14 @@ namespace CollAction.Controllers
         
         public async Task<IActionResult> Details(string name)
         {
-            List<DisplayProjectViewModel> items = await DisplayProjectViewModel.GetViewModelsWhere(_context, p => p.Name == name && p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted);
-            if (items.Count == 0)
+            IEnumerable<DisplayProjectViewModel> items = await _projectService.GetProjectDisplayViewModels(p => p.Name == name && p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted);
+            if (items.Count() == 0)
             {
                 return NotFound();
             }
             DisplayProjectViewModel displayProject = items.First();
             string userId = (await _userManager.GetUserAsync(User))?.Id;
-            if (userId != null && (await _service.GetParticipant(userId, displayProject.Project.Id) != null))
+            if (userId != null && (await _projectService.GetParticipant(userId, displayProject.Project.Id) != null))
             {
                 displayProject.IsUserCommitted = true;
             }
@@ -94,7 +90,6 @@ namespace CollAction.Controllers
             return View(displayProject);
         }
 
-        // GET: Projects/Create
         [Authorize]
         public async Task<IActionResult> Create()
         {
@@ -106,9 +101,6 @@ namespace CollAction.Controllers
             });
         }
 
-        // POST: Projects/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
@@ -158,12 +150,15 @@ namespace CollAction.Controllers
             project.DescriptiveImage = await descriptiveImageManager.CreateOrReplaceImageFileIfNeeded(project.DescriptiveImage, model.DescriptiveImageUpload, model.DescriptiveImageDescription);
 
             _context.Add(project);
+
+            // Save the main project
             await _context.SaveChangesAsync();
 
+            // Save project related items (now that we've got a project id)
             project.SetDescriptionVideoLink(_context, model.DescriptionVideoLink);
-
-            // Only call this once we have a valid Project.Id
             await project.SetTags(_context, model.Hashtag?.Split(';') ?? new string[0]);
+
+            await _context.SaveChangesAsync();
 
             // Notify admins and creator through e-mail
             string confirmationEmail =
@@ -176,7 +171,7 @@ namespace CollAction.Controllers
                 "<br>" +
                 "Warm regards,<br>" +
                 "The CollAction team";
-            string subject = $"Confirmation email - start project {project.Name}";
+            string subject = $"Thank you for participating in the \"{project.Name}\" project on CollAction";
 
             ApplicationUser user = await _userManager.GetUserAsync(User);
             await _emailSender.SendEmailAsync(user.Email, subject, confirmationEmail);
@@ -196,153 +191,6 @@ namespace CollAction.Controllers
             return LocalRedirect($"~/Projects/Create/{validUriPartForProjectName}/thankyou");
         }
 
-        [Authorize]
-        public IActionResult ThankYouCreate(string name)
-        {
-            return View(new ThankYouCreateProjectViewModel
-            {
-                Name = name
-             });
-         }
-
-        // GET: Projects/Edit/5
-        /*
-        [Authorize]
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var project = await _context.Projects
-                                        .Include(p => p.BannerImage)
-                                        .Include(p => p.DescriptionVideoLink)
-                                        .Include(p => p.Tags).ThenInclude(t => t.Tag)
-                                        .SingleOrDefaultAsync(p => p.Id == id);
-            if (project == null)
-            {
-                return NotFound();
-            }
-
-            if (_userManager.GetUserId(User) != project.OwnerId)
-            {
-                return Forbid();
-            }
-
-            var editProjectViewModel = new EditProjectViewModel
-            {
-                Id = project.Id,
-                Name = project.Name,
-                Description = project.Description,
-                Goal = project.Goal,
-                Proposal = project.Proposal,
-                CreatorComments = project.CreatorComments,
-                CategoryId = project.CategoryId,
-                Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description", project.CategoryId),
-                LocationId = project.LocationId,
-                Target = project.Target,
-                Start = project.Start,
-                End = project.End,
-                DescriptionVideoLink = project.DescriptionVideoLink?.Link,
-                BannerImageFile = project.BannerImage,
-                BannerImageDescription = project.BannerImage?.Description,
-                Hashtag = project.HashTags
-            };
-
-            return View(editProjectViewModel);
-        }
-        */
-
-        // POST: Projects/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //[Authorize]
-        //public async Task<IActionResult> Edit(int id, EditProjectViewModel editProjectViewModel)
-        //{
-        //    if (id != editProjectViewModel.Id)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var project = await _context.Projects.Include(p => p.BannerImage).Include(p => p.DescriptionVideoLink).SingleOrDefaultAsync(m => m.Id == id);
-        //    if (project == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    if (_userManager.GetUserId(User) != project.OwnerId)
-        //    {
-        //        return Forbid();
-        //    }
-
-        //    // If the project name changed make sure it is still unique.
-        //    if (project.Name != editProjectViewModel.Name && await _context.Projects.AnyAsync(p => p.Name == editProjectViewModel.Name))
-        //    {
-        //        ModelState.AddModelError("Name", _localizer["A project with the same name already exists."]);
-        //    }
-
-        //    // If there are image descriptions without corresponding image uploads, warn the user.
-        //    if (project.BannerImage == null && editProjectViewModel.BannerImageUpload == null && !string.IsNullOrWhiteSpace(editProjectViewModel.BannerImageDescription))
-        //    {
-        //        ModelState.AddModelError("BannerImageDescription", _localizer["You can only provide a 'Banner Image Description' if you upload a 'Banner Image'."]);
-        //    }
-        //    if (project.DescriptiveImage == null && editProjectViewModel.DescriptiveImageUpload == null && !string.IsNullOrWhiteSpace(editProjectViewModel.DescriptiveImageDescription))
-        //    {
-        //        ModelState.AddModelError("DescriptiveImageDescription", _localizer["You can only provide a 'DescriptiveImage Description' if you upload a 'DescriptiveImage'."]);
-        //    }
-
-        //    if (!ModelState.IsValid)
-        //    {
-        //        editProjectViewModel.Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description");
-        //        editProjectViewModel.BannerImage = project.BannerImage;
-        //        editProjectViewModel.DescriptiveImage = project.DescriptiveImage;
-        //        return View(editProjectViewModel);
-        //    }
-
-        //    project.Name = editProjectViewModel.Name;
-        //    project.Description = editProjectViewModel.Description;
-        //    project.Goal = editProjectViewModel.Goal;
-        //    project.Proposal = editProjectViewModel.Proposal;
-        //    project.CreatorComments = editProjectViewModel.CreatorComments;
-        //    project.CategoryId = editProjectViewModel.CategoryId;
-        //    project.LocationId = editProjectViewModel.LocationId;
-        //    project.Target = editProjectViewModel.Target;
-        //    project.Start = editProjectViewModel.Start;
-        //    project.End = editProjectViewModel.End;
-
-        //    var bannerImageManager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "bannerimages"));
-        //    project.BannerImage = await bannerImageManager.CreateOrReplaceImageFileIfNeeded(project.BannerImage, editProjectViewModel.BannerImageUpload, editProjectViewModel.BannerImageDescription);
-
-        //    var descriptiveImageManager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "descriptiveimages"));
-        //    project.DescriptiveImage = await descriptiveImageManager.CreateOrReplaceImageFileIfNeeded(project.DescriptiveImage, editProjectViewModel.DescriptiveImageUpload, editProjectViewModel.DescriptiveImageDescription);
-
-        //    project.SetDescriptionVideoLink(_context, editProjectViewModel.DescriptionVideoLink);
-
-        //    await project.SetTags(_context, editProjectViewModel.Hashtag?.Split(';') ?? new string[0]);
-
-        //    try
-        //    {
-        //        _context.Update(project);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction("Find");
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!(await _context.Projects.AnyAsync(e => e.Id == id)))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-        //}
-
-        // GET: Projects/Delete/5
         [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -366,7 +214,6 @@ namespace CollAction.Controllers
             return View(project);
         }
 
-        // POST: Projects/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Authorize]
@@ -387,7 +234,7 @@ namespace CollAction.Controllers
         [Authorize]
         public async Task<IActionResult> Commit(string name)
         {
-            var project =  await _service.GetProjectByName(name); 
+            var project =  await _projectService.GetProjectByName(name); 
             if (project == null)
             {
                 return NotFound();
@@ -398,7 +245,7 @@ namespace CollAction.Controllers
                 ProjectId = project.Id,
                 ProjectName = project.Name,
                 ProjectProposal = project.Proposal,
-                IsUserCommitted = (await _service.GetParticipant((await _userManager.GetUserAsync(User)).Id, project.Id) != null),
+                IsUserCommitted = (await _projectService.GetParticipant((await _userManager.GetUserAsync(User)).Id, project.Id) != null),
                 IsActive = project.IsActive
             };
 
@@ -411,17 +258,35 @@ namespace CollAction.Controllers
         public async Task<IActionResult> Commit(CommitProjectViewModel commitProjectViewModel)
         {
             ApplicationUser user = await _userManager.GetUserAsync(User);
-            bool success = await _service.AddParticipant(user.Id, commitProjectViewModel.ProjectId);
+            bool success = await _projectService.AddParticipant(user.Id, commitProjectViewModel.ProjectId);
 
             if (success)
             {
-                string confirmationEmail = 
-                    "Hi!<br><br>" +
+                string projectUrl = this.Url.Action("Details", "Projects", new { id = commitProjectViewModel.ProjectId }, HttpContext.Request.Scheme); 
+                var systemUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.PathBase}";
+                var userDescription = user?.FirstName ?? "";
+                string confirmationEmail =
+                    $"Hi {userDescription}!<br><br>" +
                     "Thank you for participating in a CollAction project!<br><br>" +
-                    "In crowdacting, we only act collectively when we meet the target before the deadline, so please feel very welcome to share this project on social media through the social media buttons on the project page!<br><br>" +
+                    "In crowdacting, we only act collectively when we meet the target before the deadline, so please feel very welcome to share this project on social media through the social media buttons below and on the <a href="+projectUrl+">project page</a>!<br><br>" +
                     "We'll keep you updated on the project. Also feel free to Like us on <a href=\"https://www.facebook.com/collaction.org/\">Facebook</a> to stay up to date on everything CollAction!<br><br>" +
-                    "Warm regards,<br>The CollAction team";
-                string subject = "Thank you for participating in a CollAction project!";
+                    "Warm regards,<br>The CollAction team<br><br>" +
+                    "PS: Did you know you can start your own project on <a href=\"https://collaction.org/start\">www.collaction.org/start</a> ?<br><br>"+
+                    "<span style='#share-buttons img {}'>"+
+                    "<div id='share-buttons'>"+
+                    "<p>Multiply your impact and share the project with the buttons below 🙂</p>"+
+                    "<a href=https://www.facebook.com/sharer/sharer.php?u="+projectUrl+">"+
+                    "<img style='width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;' src="+systemUrl+"/images/social/facebook.png alt='Facebook' />"+
+                    "</a>"+
+                    "<a href=\"http://www.linkedin.com/shareArticle?mini=true&url="+projectUrl+"&title="+WebUtility.UrlEncode(commitProjectViewModel.ProjectName)+"\" target=\"_blank\">"+
+                    "<img style='width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;' src="+systemUrl+"/images/social/linkedin.png alt='LinkedIn' />"+
+                    "</a>"+
+                    "<a href=\"https://twitter.com/intent/tweet?text="+WebUtility.UrlEncode(commitProjectViewModel.ProjectName)+"&url="+projectUrl+"\" target=\"_blank\">"+
+                    "<img style='width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;' src="+systemUrl+"/images/social/twitter.png alt='Twitter' />"+
+                    "</a>"+
+                    "</div>"+
+                    "</span>";
+                string subject = $"Thank you for participating in the \"{commitProjectViewModel.ProjectName}\" project on CollAction";
                 await _emailSender.SendEmailAsync(user.Email, subject, confirmationEmail);
                 return View("ThankYouCommit", commitProjectViewModel);
             }
@@ -466,7 +331,7 @@ namespace CollAction.Controllers
                 default: statusExpression = (p => true); break;
             }
             
-            var projects = await _service.GetTileProjects(
+            var projects = await _projectService.GetTileProjectViewModels(
                 Expression.Lambda<Func<Project, bool>>(Expression.AndAlso(projectExpression.Body, Expression.Invoke(statusExpression, projectExpression.Parameters[0])), projectExpression.Parameters[0]));
             
             return Json(projects);

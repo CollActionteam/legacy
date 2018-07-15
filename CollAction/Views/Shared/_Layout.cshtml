@@ -1,28 +1,28 @@
-﻿<!DOCTYPE html>
+﻿﻿@using Microsoft.ApplicationInsights.AspNetCore
+@using Microsoft.AspNetCore.Http.Features
+
+@inject JavaScriptSnippet snippet
+
+@{
+    var consentFeature = Context.Features.Get<ITrackingConsentFeature>();
+    var canTrack = consentFeature.CanTrack;
+}
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - CollAction</title>
-
-    <!-- Google Tag Manager -->
-    <script>
-        (function (w, d, s, l, i) {
-            w[l] = w[l] || []; w[l].push(
-                { 'gtm.start': new Date().getTime(), event: 'gtm.js' }
-            ); var f = d.getElementsByTagName(s)[0],
-                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
-                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
-        })(window, document, 'script', 'dataLayer', 'GTM-NTCKFKM');
-    </script>
-    <!-- End Google Tag Manager -->
+    @if (canTrack) 
+    {
+        <script src="~/lib/google/tagmanager.js">
+        </script>
+    }
     <environment names="Development">
         <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
     </environment>
     <environment names="Staging,Production">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-              asp-fallback-href="~/lib/font-awesome/css/font-awesome.css"
-              asp-fallback-test-class="fa" asp-fallback-test-property="display" asp-fallback-test-value="inline-block" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     </environment>
     <link href="https://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet">
 
@@ -32,14 +32,18 @@
 
     @RenderSection("styles", required: false)
     @RenderSection("Meta", required: false)
+    @Html.Raw(snippet.FullScript)
 </head>
 <body id="body">
-    <!-- Google Tag Manager (noscript) -->
-    <noscript>
-        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NTCKFKM"
-                height="0" width="0" style="display:none;visibility:hidden"></iframe>
-    </noscript>
-    <!-- End Google Tag Manager (noscript) -->
+    @if (canTrack) 
+    {
+        <!-- Google Tag Manager (noscript) -->
+        <noscript>
+            <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NTCKFKM"
+                    height="0" width="0" style="display:none;visibility:hidden"></iframe>
+        </noscript>
+        <!-- End Google Tag Manager (noscript) -->
+    }
 
     <div id="header-container">
         <div class="container" id="nav-container">
@@ -47,9 +51,9 @@
                 <div class="row nav-row">
                     <div class="col-md-3 col-xs-12 header-logo">
                         <div class="hidden-md hidden-lg" id="mobile-nav-draw"></div>
-                        @Html.Partial("_Logo")
+                        <partial name="_logo" />
                     </div>
-                    <div class="col-md-7 nav-bar hidden-xs hidden-sm" >
+                    <div class="col-md-7 nav-bar hidden-xs hidden-sm">
                         <ul id="header-menu">
                             <li><a asp-area="" asp-controller="Projects" asp-action="Find">Find Project</a></li>
                             <li><a asp-area="" asp-controller="Projects" asp-action="StartInfo">Start Project</a></li>
@@ -67,9 +71,10 @@
             </div>
         </div>
     </div>
-    <div id="header-padding"></div>
+    <div id="header-padding"></div>   
+    <partial name="_CookieConsentPartial" /> 
     @RenderBody()
-    @Html.Partial("_Footer")
+    <partial name="_Footer" />
 
     <environment names="Development">
         <script src="~/js/bundle.js?@DateTime.Now.Ticks.ToString()"></script>
