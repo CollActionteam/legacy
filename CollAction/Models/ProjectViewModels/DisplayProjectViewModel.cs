@@ -104,26 +104,17 @@ namespace CollAction.Models
             }                    
         }
 
-        public static async Task<List<DisplayProjectViewModel>> GetViewModelsWhere(ApplicationDbContext context, Expression<Func<Project, bool>> WhereExpression)
+        public ProjectExternalStatus ExternalStatus
         {
-            return await context.Projects
-                .Where(WhereExpression)
-                .Include(p => p.Category)
-                .Include(p => p.Location)
-                .Include(p => p.BannerImage)
-                .Include(p => p.DescriptiveImage)
-                .Include(p => p.DescriptionVideoLink)
-                .Include(p => p.Owner)
-                .Include(p => p.Tags).ThenInclude(t => t.Tag)
-                .GroupJoin(context.ProjectParticipants,
-                    project => project.Id,
-                    participants => participants.ProjectId,
-                    (project, participantsGroup) => new DisplayProjectViewModel
-                    {
-                        Project = project,
-                        Participants = participantsGroup.Count()
-                    })
-                .ToListAsync();
+            get
+            {
+                if (Project.Status == ProjectStatus.Running && Project.Start <= DateTime.UtcNow && Project.End >= DateTime.UtcNow)
+                    return ProjectExternalStatus.Open;
+                else if (Project.Status == ProjectStatus.Running && Project.Start > DateTime.UtcNow)
+                    return ProjectExternalStatus.ComingSoon;
+                else
+                    return ProjectExternalStatus.Closed;
+            }
         }
     }
 }
