@@ -169,6 +169,7 @@ namespace CollAction
                                                                        {
                                                                            "https://collaction.us14.list-manage.com/",
                                                                            "https://www.facebook.com/",
+                                                                           "https://m.facebook.com",
                                                                            "https://accounts.google.com/",
                                                                            "https://api.twitter.com/",
                                                                            "https://www.twitter.com/"
