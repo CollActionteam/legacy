@@ -61,14 +61,21 @@ namespace CollAction.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> Details(int? id)
+        // GET: Projects/Details/5
+        public async Task<IActionResult> DetailsById(int? id)
         {
-            if (id == null)
+            var project =  await _projectService.GetProjectById(id); 
+            if (project == null)
             {
                 return NotFound();
             }
-
-            IEnumerable<DisplayProjectViewModel> items = await _projectService.GetProjectDisplayViewModels(p => p.Id == id && p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted);
+            string validUriPartForProjectName = Uri.EscapeDataString(project.Name);
+            return LocalRedirect($"~/Projects/{validUriPartForProjectName}/details");
+        }
+        
+        public async Task<IActionResult> Details(string name)
+        {
+            IEnumerable<DisplayProjectViewModel> items = await _projectService.GetProjectDisplayViewModels(p => p.Name == name && p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted);
             if (items.Count() == 0)
             {
                 return NotFound();
@@ -180,10 +187,8 @@ namespace CollAction.Controllers
             foreach (var admin in administrators)
                 await _emailSender.SendEmailAsync(admin.Email, subject, confirmationEmailAdmin);
 
-            return View("ThankYouCreate", new ThankYouCreateProjectViewModel()
-            {
-                Name = project.Name
-            });
+            string validUriPartForProjectName = Uri.EscapeDataString(project.Name);
+            return LocalRedirect($"~/Projects/Create/{validUriPartForProjectName}/thankyou");
         }
 
         [Authorize]
@@ -227,14 +232,9 @@ namespace CollAction.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Commit(int? id)
+        public async Task<IActionResult> Commit(string name)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var project =  await _projectService.GetProjectById(id); 
+            var project =  await _projectService.GetProjectByName(name); 
             if (project == null)
             {
                 return NotFound();
@@ -255,13 +255,8 @@ namespace CollAction.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Commit(int id, CommitProjectViewModel commitProjectViewModel)
+        public async Task<IActionResult> Commit(CommitProjectViewModel commitProjectViewModel)
         {
-            if (id != commitProjectViewModel.ProjectId)
-            {
-                return NotFound();
-            }
-
             ApplicationUser user = await _userManager.GetUserAsync(User);
             bool success = await _projectService.AddParticipant(user.Id, commitProjectViewModel.ProjectId);
 
@@ -298,6 +293,24 @@ namespace CollAction.Controllers
             else
             {
                 return View("Error");
+            }
+        }
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult ThankYouCommit(string name)
+        {
+            if(name != null)
+            {
+                CommitProjectViewModel model = new CommitProjectViewModel()
+                {
+                    ProjectName = name
+                };
+                return View("ThankYouCommit", model);
+            }
+            else
+            {
+                return BadRequest();
             }
         }
 
