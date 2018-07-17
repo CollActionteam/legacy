@@ -202,13 +202,14 @@ namespace CollAction
                                                            "http://*.freonen.nl",
                                                            "https://*.freonen.nl"
                                                        }.Concat(Configuration["CspFrameAncestors"]?.Split(";") ?? new string[0]));
-                           cspBuilder.AddScriptSrc() // Only allow scripts from our own site, the aspnetcdn site and google analytics, or configured sources
+                           cspBuilder.AddScriptSrc() // Only allow scripts from our own site, the aspnetcdn site and google analytics, app insights or configured sources
                                      .Self()
                                      .Sources.AddRange(new[]
                                                        {
                                                            "https://ajax.aspnetcdn.com",
                                                            "https://www.googletagmanager.com",
                                                            "https://www.google-analytics.com",
+                                                           "*.msecnd.net",
                                                            "'sha256-EHA5HNhe/+uz3ph6Fw34N85vHxX87fsJ5cH4KbZKIgU='"
                                                        }.Concat(Configuration["CspScriptSrc"]?.Split(";") ?? new string[0]));
                        })
