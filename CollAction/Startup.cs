@@ -174,7 +174,7 @@ namespace CollAction
                                                                            "https://api.twitter.com/",
                                                                            "https://www.twitter.com/"
                                                                        }.Concat(Configuration["CspFormAction"]?.Split(";") ?? new string[0]));
-                           cspBuilder.AddConnectSrc().Self() // Only allow API calls to self, and the websites we use for the share buttons, or configured sources
+                           cspBuilder.AddConnectSrc().Self() // Only allow API calls to self, and the websites we use for the share buttons, app insights or configured sources
                                                      .Sources.AddRange(new[]
                                                                        {
                                                                            "https://www.linkedin.com/",
@@ -183,7 +183,8 @@ namespace CollAction
                                                                            "https://twitter.com/",
                                                                            "https://www.facebook.com/",
                                                                            "https://facebook.com/",
-                                                                           "https://graph.facebook.com/"
+                                                                           "https://graph.facebook.com/",
+                                                                           "https://dc.services.visualstudio.com/"
                                                                        }.Concat(Configuration["CspConnectSrc"]?.Split(";") ?? new string[0]));
                            cspBuilder.AddImgSrc().Self() // Only allow self-hosted images, or google analytics (for tracking images), or configured sources
                                                  .Sources.AddRange(new[]
