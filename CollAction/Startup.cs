@@ -208,13 +208,14 @@ namespace CollAction
                            cspBuilder.AddMediaSrc().Self()
                                                    .Sources.AddRange(Configuration["CspMediaSrc"]?.Split(";") ?? new string[0]); // Only allow self-hosted videos, or configured sources
                            cspBuilder.AddFrameAncestors().None(); // No framing allowed here (put us inside a frame tag)
-                           cspBuilder.AddScriptSrc() // Only allow scripts from our own site, the aspnetcdn site and google analytics
+                           cspBuilder.AddScriptSrc() // Only allow scripts from our own site, the aspnetcdn site, app insights and google analytics
                                      .Self()
                                      .Sources.AddRange(new[]
                                                        {
                                                            "https://ajax.aspnetcdn.com",
                                                            "https://www.googletagmanager.com",
                                                            "https://www.google-analytics.com",
+                                                           "*.msecnd.net",
                                                            "'sha256-EHA5HNhe/+uz3ph6Fw34N85vHxX87fsJ5cH4KbZKIgU='"
                                                        }.Concat(Configuration["CspScriptSrc"]?.Split(";") ?? new string[0]));
                         })
