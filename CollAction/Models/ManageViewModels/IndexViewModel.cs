@@ -10,7 +10,6 @@ namespace CollAction.Models.ManageViewModels
         public bool NewsletterSubscription { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
-        public bool IsEmailConfirmed { get; set; }
         public string StatusMessage { get; set; }
         public IEnumerable<Project> ProjectsParticipated { get; set; }
         public IEnumerable<Project> ProjectsCreated { get; set; }

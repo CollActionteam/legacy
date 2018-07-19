@@ -67,7 +67,13 @@
                     </div>
 
                     <div class="form-group">
-                        <input type="submit" value="Registreer" class="btn btn-default" /> @*Register*@
+                        <label class="control-label" for="AgreedPrivacyPolicy">Ik heb de <a href="/Home/Privacy" target="_blank">privacy policy</a> gelezen en ik accepteer deze</label>
+                        @Html.CheckBoxFor(m => m.AgreedPrivacyPolicy)
+                        @Html.ValidationMessageFor(m => m.AgreedPrivacyPolicy)
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" value="Registreer" class="btn btn-default" />
                     </div>
                 </form>
             </div>
@@ -76,5 +82,5 @@
 </div> 
 
 @section Scripts {
-    @{ Html.RenderPartial("_ValidationScriptsPartial"); }
+    <partial name="_ValidationScriptsPartial" />
 }
