@@ -218,7 +218,7 @@ namespace CollAction.Controllers
             return View(new ThankYouCreateProjectViewModel
             {
                 Name = name
-             });
+            });
          }
 
         // GET: Projects/Delete/5
@@ -309,7 +309,7 @@ namespace CollAction.Controllers
                 // Thank you for participating in a CollAction project!
                 string subject = "Dank voor je deelname aan een Freonen crowdacting project!";
                 await _emailSender.SendEmailAsync(user.Email, subject, confirmationEmail);
-                return View("ThankYouCommit", commitProjectViewModel);
+                return View(nameof(ThankYouCommit), commitProjectViewModel);
             }
             else
             {
@@ -321,13 +321,13 @@ namespace CollAction.Controllers
         [HttpGet]
         public IActionResult ThankYouCommit(string name)
         {
-            if(name != null)
+            if (name != null)
             {
                 CommitProjectViewModel model = new CommitProjectViewModel()
                 {
                     ProjectName = name
                 };
-                return View("ThankYouCommit", model);
+                return View(nameof(ThankYouCommit), model);
             }
             else
             {
