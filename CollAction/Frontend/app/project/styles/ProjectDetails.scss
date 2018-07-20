@@ -1,56 +1,51 @@
 @import "../../colors";
 @import "../../mixins";
 
-@media (max-width: 767px) {
-    #project-details {
-        font-size: 100% !important;
-    }
-
-    #project-participation {
-        ul {
-            padding-left: 5px !important;
-        }
-    }
-
-    #project-starter-avatar {
-        background-color: #ff8142;
-        border-radius: 250px;
-        height: 75px !important;
-        width: 75px !important;
-    }
-
-    #project-starter-name {
-        font-size: 1em !important;
-        h3 {
-            font-size: 1em !important;
-        }
-    }
-}
-
-@media (max-width: 991px) {
-  .align-sides {
-      padding-left: 25px !important;
-      padding-right: 25px !important;
-  }
-
-  #project-info-card {
-    padding: 20px !important;
-    margin: -100px 0px 0px 0px !important;
-  }
-}
-
-@media (min-width: 991px) {
-
-  #project-starter-row {
-    .col-md-3 {
-      margin-top: -300px !important;
-    }
-  }
-}
-
 #project-details {
-    padding-bottom: 50px;
+    @media (max-width: 767px) {
+        font-size: 100% !important;
 
+        #project-participation {
+            ul {
+                padding-left: 5px !important;
+            }
+        }
+
+        #project-starter-avatar {
+            background-color: #ff8142;
+            border-radius: 250px;
+            height: 75px !important;
+            width: 75px !important;
+        }
+
+        #project-starter-name {
+            font-size: 1em !important;
+            h3 {
+                font-size: 1em !important;
+            }
+        }
+    }
+
+    @media (max-width: 991px) {
+        .align-sides {
+            padding-left: 25px !important;
+            padding-right: 25px !important;
+        }
+
+        #project-info-card {
+            padding: 20px !important;
+            margin: -100px 0px 0px 0px !important;
+        }
+    }
+
+    @media (min-width: 991px) {
+        #project-starter-row {
+            .col-md-3 {
+            margin-top: -300px !important;
+            }
+        }
+    }
+    
     hr {
         border-top-width: 2px;
     }
@@ -267,21 +262,23 @@
             font-weight: normal;
         }
     }
-}
 
-#project-share {
-    background-color: #f7f7f7;
-    padding: 20px 0px 40px 0px;
-}
+    #project-share {
+        margin-top: 40px;
+        background-color: #f7f7f7;
+        padding: 20px 0px 20px 0px;
 
-@media (min-width: 992px) {
-    #project-background {
-        padding: 150px 0px;
     }
-}
 
-@media (max-width: 992px) {
-    #project-background {
-        padding: 70px 0px;
+    @media (min-width: 992px) {
+        #project-background {
+            padding: 150px 0px;
+        }
+    }
+
+    @media (max-width: 992px) {
+        #project-background {
+            padding: 70px 0px;
+        }
     }
 }
