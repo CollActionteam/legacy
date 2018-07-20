@@ -62,7 +62,7 @@ namespace CollAction.Controllers
         }
 
         // GET: Projects/Details/5
-        public async Task<IActionResult> DetailsById(int? id)
+        public async Task<IActionResult> DetailsById(int id)
         {
             var project =  await _projectService.GetProjectById(id); 
             if (project == null)

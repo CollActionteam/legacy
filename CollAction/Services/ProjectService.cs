@@ -21,7 +21,7 @@ namespace CollAction.Services
             _localizer = localizer;
         }
 
-        public async Task<Project> GetProjectById(int id)
+        public async Task<Project> GetProjectById(int? id)
         {
             return await _context.Projects.SingleOrDefaultAsync(p => p.Id == id);
         }
