@@ -1,0 +1,106 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+
+@model CreateProjectViewModel
+
+@{
+    ViewData["Title"] = Localizer["Create"];
+}
+
+<div id="project-create-form">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3 col-xs-12">
+                <form asp-action="Create" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label required"></label>
+                        <input asp-for="Name" class="form-control" />
+                        @Html.ValidationMessage("Name")
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label required"></label>
+                        <div id="create-project-description"></div>
+                        @Html.HiddenFor(m => m.Description)
+                        @Html.ValidationMessage("Description")
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Proposal" class="control-label required"></label>
+                        <textarea asp-for="Proposal" class="form-control" rows="5"></textarea>
+                        @Html.ValidationMessage("Proposal")
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Goal" class="control-label required"></label>
+                        <div id="create-project-goal"></div>
+                        @Html.HiddenFor(m => m.Goal)
+                        @Html.ValidationMessage("Goal")
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="CategoryId" class="control-label required"></label>
+                        @Html.DropDownList("CategoryId", Model.Categories)
+                        @Html.ValidationMessage("CategoryId")
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Target" class="control-label required"></label>
+                        <input asp-for="Target" class="form-control" />
+                        @Html.ValidationMessage("Target")
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Start" class="control-label required"></label>
+                        <input asp-for="Start" class="form-control" />
+                        @Html.ValidationMessage("Start")
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="End" class="control-label required"></label>
+                        <input asp-for="End" class="form-control" />
+                        @Html.ValidationMessage("End")
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="CreatorComments" class="control-label"></label>
+                        <div id="create-project-creatorcomments"></div>
+                        @Html.HiddenFor(m => m.CreatorComments)
+                        @Html.ValidationMessage("CreatorComments")
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="BannerImageDescription" class="control-label"></label>
+                        <input asp-for="BannerImageDescription" class="form-control" />
+                        @Html.ValidationMessage("BannerImageDescription")
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="BannerImageUpload" class="control-label"></label>
+                        <input asp-for="BannerImageUpload" class="form-control" />
+                        @Html.ValidationMessage("BannerImageUpload")
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DescriptiveImageDescription" class="control-label"></label>
+                        <input asp-for="DescriptiveImageDescription" class="form-control" />
+                        @Html.ValidationMessage("DescriptiveImageDescription")
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DescriptiveImageUpload" class="control-label"></label>
+                        <input asp-for="DescriptiveImageUpload" class="form-control" />
+                        @Html.ValidationMessage("DescriptiveImageUpload")
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DescriptionVideoLink" class="control-label"></label>
+                        <input asp-for="DescriptionVideoLink" class="form-control" />
+                        @Html.ValidationMessage("DescriptionVideoLink")
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Hashtag" class="control-label"></label>
+                        <input asp-for="Hashtag" class="form-control" />
+                        @Html.ValidationMessage("Hashtag")
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-default" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+     <partial name="_ValidationScriptsPartial" />
+ }

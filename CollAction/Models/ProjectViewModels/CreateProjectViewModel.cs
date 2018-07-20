@@ -11,15 +11,11 @@ namespace CollAction.Models
 {
     public class CreateProjectViewModel
     {
-        public SelectList Categories;
-        public SelectList Locations;
+        public SelectList Categories { get; set; }
+        public SelectList Locations { get; set; }
 
-        public CreateProjectViewModel() { }
-
-        public CreateProjectViewModel(SelectList categories, SelectList locations)
+        public CreateProjectViewModel() 
         {
-            this.Categories = categories;
-            this.Locations = locations; 
         }
 
         [Required(ErrorMessage = "You must provide a unique name for your project.")]
@@ -27,10 +23,23 @@ namespace CollAction.Models
         [MaxLength(50)]
         public string Name { get; set; }
 
+        [Required]
+        [Display(Name = "Category")]
+        public int CategoryId { get; set; }
+
+        [Required(ErrorMessage = "Please specify the target number of collaborators required for your project to be deemed a success")]
+        [DataType(DataType.Text)] // Force this to text rather than .Int to prevent browsers displaying spin buttons (up down arrows) by default.
+        [Range(1, 1000000, ErrorMessage = "You can choose up to a maximum of one million participants as your target number.")]
+        public int Target { get; set; }
+
         [Required(ErrorMessage = "Describe your proposal.")]
         [Display(Prompt = "e.g. \"If X people commit to doing Y, we'll all do it together!\"")]
         [MaxLength(300)]
         public string Proposal { get; set; }
+
+        public string ProjectStarterFirstName { get; set; }
+
+        public string ProjectStarterLastName { get; set; }        
 
         [Required(ErrorMessage = "Give a succinct description of the issues your project is designed to address")]
         [Display(Name = "Short description", Prompt = "E.g Reduce plastic waste and save our oceans!")]
@@ -49,17 +58,8 @@ namespace CollAction.Models
         [SecureRichText]
         public string CreatorComments { get; set; }
 
-        [Required]
-        [Display(Name = "Category")]
-        public int CategoryId { get; set; }
-
         [Display(Name = "Location")]
         public int? LocationId { get; set; }
-
-        [Required(ErrorMessage = "Please specify the target number of collaborators required for your project to be deemed a success")]
-        [DataType(DataType.Text)] // Force this to text rather than .Int to prevent browsers displaying spin buttons (up down arrows) by default.
-        [Range(1, 1000000, ErrorMessage = "You can choose up to a maximum of one million participants as your target number.")]
-        public int Target { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
@@ -97,7 +97,7 @@ namespace CollAction.Models
         [YouTubeLink]
         public string DescriptionVideoLink { get; set; }
 
-        [Display(Name = "Hashtag", Prompt = "Max 30 characters. Please enter without #-sign. E.g. 'tag1;tag2'.")]
+        [Display(Name = "Hashtag", Prompt = "No #, seperate with ; E.g. 'tag1;tag2'")]
         [MaxLength(30)]
         [RegularExpression(@"^[a-zA-Z_0-9]+(;[a-zA-Z_0-9]+)*$", ErrorMessage = "No spaces or #, must contain a letter, can contain digits and underscores. Seperate multiple tags with a colon ';'.")]
         public string Hashtag { get; set; }
