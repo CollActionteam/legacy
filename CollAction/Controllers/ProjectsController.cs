@@ -73,7 +73,7 @@ namespace CollAction.Controllers
             return LocalRedirect($"~/Projects/{validUriPartForProjectName}/details");
         }
         
-        public async Task<IActionResult> Details(string name)
+        public async Task<IActionResult> Details(int id, string name)
         {
             IEnumerable<DisplayProjectViewModel> items = await _projectService.GetProjectDisplayViewModels(p =>  p.Name == name  && p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted);
             if (items.Count() == 0)
@@ -309,7 +309,7 @@ namespace CollAction.Controllers
                 // Thank you for participating in a CollAction project!
                 string subject = "Dank voor je deelname aan een Freonen crowdacting project!";
                 await _emailSender.SendEmailAsync(user.Email, subject, confirmationEmail);
-                return View(nameof(ThankYouCommit), commitProjectViewModel);
+                return LocalRedirect($"~/Projects/{commitProjectViewModel.ProjectId}/{Uri.EscapeDataString(commitProjectViewModel.ProjectName)}/thankyou");   //View(nameof(ThankYouCommit), commitProjectViewModel);
             }
             else
             {

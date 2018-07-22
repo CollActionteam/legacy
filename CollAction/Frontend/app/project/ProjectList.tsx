@@ -24,7 +24,7 @@ class ProjectThumb extends React.Component<IProject, null> {
       backgroundImage: `url(${this.props.bannerImagePath})`,
     };
 
-    const link = `/projects/${encodeURIComponent(this.props.projectName)}/details`;
+    const link = `/projects/${this.props.projectId}/${encodeURIComponent(this.props.projectName)}/details`;
 
     const target = window.top !== window.self ? "_blank" : "_self";
 
