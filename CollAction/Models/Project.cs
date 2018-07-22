@@ -6,8 +6,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Text.RegularExpressions;
-using System.Text;
 
 namespace CollAction.Models
 {
@@ -21,7 +19,6 @@ namespace CollAction.Models
         [MaxLength(50)]
         public string Name { get; set; }
 
-        [Required]
         public ProjectStatus Status { get; set; }
 
         [Required]
@@ -37,13 +34,12 @@ namespace CollAction.Models
         [ForeignKey("OwnerId")]
         public ApplicationUser Owner { get; set; }
 
-        [Required]
         public int Target { get; set; }
 
-        [Required]
+        public int NumberProjectEmailsSend { get; set; }
+
         public DateTime Start { get; set; }
         
-        [Required]
         public DateTime End { get; set; }
 
         [Required]
@@ -86,6 +82,16 @@ namespace CollAction.Models
         [NotMapped]
         public bool IsClosed
             => Status == ProjectStatus.Running && End < DateTime.UtcNow;
+
+        [NotMapped]
+        public TimeSpan RemainingTime
+        {
+            get
+            {
+                DateTime now = DateTime.UtcNow;
+                return now >= End ? TimeSpan.Zero : End - (now > Start ? now : Start);
+            }
+        }
 
         public List<ProjectTag> Tags { get; set; }
         public List<ProjectParticipant> Participants { get; set; }

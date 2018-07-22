@@ -14,8 +14,6 @@ export interface IProject {
   participants: number;
   progressPercent: number;
   status: string;
-  statusText: string;
-  statusStubText: string;
 }
 
 class ProjectThumb extends React.Component<IProject, null> {
