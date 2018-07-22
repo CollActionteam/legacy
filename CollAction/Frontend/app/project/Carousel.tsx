@@ -25,7 +25,7 @@ const startProjectSteps: Array<ICarouselItem> = [
   },
   {
     name: "Assessment",
-    text: <div>CollAction judges if your project meets <mark>the criteria</mark> on this page. If necessary, CollAction contacts you to discuss/clarify.</div>
+    text: <div>CollAction judges if your project meets <mark>the criteria</mark> on <a href="/about#criteria" target="_blank">this page</a>. If necessary, CollAction contacts you to discuss/clarify.</div>
   },
   {
     name: "Placement",

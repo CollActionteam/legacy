@@ -67,6 +67,12 @@
                     </div>
 
                     <div class="form-group">
+                        <label class="control-label" for="AgreedPrivacyPolicy">I've read and agreed to our <a href="/Home/Privacy" target="_blank">privacy policy</a></label>
+                        @Html.CheckBoxFor(m => m.AgreedPrivacyPolicy)
+                        @Html.ValidationMessageFor(m => m.AgreedPrivacyPolicy)
+                    </div>
+
+                    <div class="form-group">
                         <input type="submit" value="Register" class="btn btn-default" />
                     </div>
                 </form>

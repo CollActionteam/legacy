@@ -121,4 +121,10 @@
       background-color: $coll-action-green;
     }
   }
+
+  #criteria:target {
+    padding-top: 90px;
+    margin-top: -90px;
+    display: block;
+  } 
 }

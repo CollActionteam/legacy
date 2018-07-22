@@ -4,6 +4,7 @@
   .banner-link,
   .project-actions-link {
     @include coll-action-button;
+    text-transform: none; // rewrite uppercase in coll-action-button
     width: 100%;
     margin-bottom: 20px;
   }
@@ -76,10 +77,6 @@
 
   #intro-text,
   #three-steps {
-    h3 {
-      color: $coll-action-green;
-    }
-
     a {
       font-weight: bold;
       color: $coll-action-green;
@@ -88,19 +85,44 @@
 
   #intro-text {
     text-align: center;
+
+    .intro-question {
+      font-size: 25px;
+      font-weight: bold;
+      color: $coll-action-green;      
+    }
+
+    .intro-paragraph {
+      font-size: 18px;
+      line-height: 34px;
+    }
   }
 
   #three-steps {
     text-align: center;
     background-color: $background-gray;
+
+    .three-step-image {
+      height: 72px;
+    }
+
+    .heading {
+      font-size: 36px;
+      font-weight: 600; // semibold
+      color: $coll-action-green;
+    }
+
+    .explanation {
+      font-size: 18px;
+      line-height: 30px;
+    }
   }
 
   #join-a-project {
     h3 {
       text-align: center;
-      font-size: 4em;
+      font-size: 69px;
       text-transform: uppercase;
-      letter-spacing: 10px;
       color: $coll-action-green;
     }
   }
