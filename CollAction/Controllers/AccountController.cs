@@ -119,8 +119,6 @@ namespace CollAction.Controllers
             return View();
         }
 
-        //
-        // GET: /Account/Register
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Register(string returnUrl = null)
