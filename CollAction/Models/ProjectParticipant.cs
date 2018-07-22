@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CollAction.Models
@@ -14,5 +15,9 @@ namespace CollAction.Models
         public int ProjectId { get; set; }
         [ForeignKey("ProjectId")]
         public Project Project { get; set; }
+
+        public bool SubscribedToProjectEmails { get; set; }
+
+        public Guid UnsubscribeToken { get; set; }
     }
 }

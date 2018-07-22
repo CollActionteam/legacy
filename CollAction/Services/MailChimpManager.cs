@@ -10,7 +10,7 @@ using System.Net.Http.Headers;
 using System.Net;
 using System.IO;
 
-namespace CollAction.Helpers
+namespace CollAction.Services
 {
     public class MailChimpManager
     {

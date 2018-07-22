@@ -22,8 +22,11 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Rewrite;
 using NetEscapades.AspNetCore.SecurityHeaders;
 using NetEscapades.AspNetCore.SecurityHeaders.Infrastructure;
-using System;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using Hangfire;
+using Hangfire.PostgreSql;
+using CollAction.Helpers;
+using Hangfire.Dashboard;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
 
 namespace CollAction
@@ -62,15 +65,6 @@ namespace CollAction
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddDefaultTokenProviders();
 
-            services.Configure<IdentityOptions>(options =>
-            {
-                options.Password.RequireDigit = false;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequiredLength = 8;
-            });
-
             services.AddAuthentication()
                     .AddFacebook(options =>
                     {
@@ -94,9 +88,19 @@ namespace CollAction
                     .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                     .AddDataAnnotationsLocalization();
 
+            services.AddHangfire(config => config.UsePostgreSqlStorage(connectionString));
+
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
-            services.AddTransient<ISmsSender, AuthMessageSender>();
+            services.AddScoped<IProjectService, ProjectService>();
+            services.AddTransient<INewsletterSubscriptionService, NewsletterSubscriptionService>();
+            services.AddTransient<IFestivalService, FestivalService>();
+
+            services.AddDataProtection()
+                    .Services.Configure<KeyManagementOptions>(options => options.XmlRepository = new DataProtectionRepository(new DbContextOptionsBuilder<ApplicationDbContext>().UseNpgsql(connectionString).Options));
+
+            services.AddApplicationInsightsTelemetry(Configuration);
+
             services.Configure<AuthMessageSenderOptions>(options =>
             {
                 options.FromAddress = Configuration["FromAddress"];
@@ -104,30 +108,17 @@ namespace CollAction
                 options.SesAwsAccessKey = Configuration["SesAwsAccessKey"];
                 options.SesAwsAccessKeyID = Configuration["SesAwsAccessKeyID"];
             });
-            services.AddScoped<IProjectService, ProjectService>();
-            services.AddTransient<INewsletterSubscriptionService, NewsletterSubscriptionService>();
-            services.Configure<NewsletterSubscriptionServiceOptions>(options =>
+            services.Configure<NewsletterSubscriptionServiceOptions>(Configuration);
+            services.Configure<FestivalServiceOptions>(Configuration);
+            services.Configure<ProjectEmailOptions>(Configuration);
+            services.Configure<IdentityOptions>(options =>
             {
-                options.MailChimpKey = Configuration["MailChimpKey"];
-                options.MailChimpNewsletterListId = Configuration["MailChimpNewsletterListId"];
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 8;
             });
-            services.AddTransient<IFestivalService, FestivalService>();
-            services.Configure<FestivalServiceOptions>(options =>
-            {
-                // Note: use yyyy-MM-dd HH:mm:ss notation. Don't specify to use the default value (2018-05-27 23:59:59)
-                options.FestivalEndDate = Configuration.GetValue<DateTime?>("FestivalEndDate");
-            });
-
-            services.AddDataProtection()
-                    .Services.Configure<KeyManagementOptions>(options => options.XmlRepository = new DataProtectionRepository(new DbContextOptionsBuilder<ApplicationDbContext>().UseNpgsql(connectionString).Options));
-
-            services.Configure<CookiePolicyOptions>(options => 
-            {
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
-
-            services.AddApplicationInsightsTelemetry(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -264,6 +255,14 @@ namespace CollAction
 
             app.UseStaticFiles();
 
+            app.UseHangfireDashboard(options: new DashboardOptions()
+            {
+                Authorization = new IDashboardAuthorizationFilter[] {
+                    new HangfireAdminAuthorizationFilter()
+                }
+            });
+            app.UseHangfireServer();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute("find",
@@ -304,14 +303,14 @@ namespace CollAction
                     "sitemap.xml",
                     new { controller = "Home", action = "Sitemap" });
 
-                routes.MapRoute("getCategories",
+                routes.MapRoute("GetCategories",
                      "api/categories",
                      new { controller = "Projects", action = "GetCategories" }
                  );
 
-                routes.MapRoute("GetTileProjects",
+                routes.MapRoute("FindProjects",
                      "api/projects/find",
-                     new { controller = "Projects", action = "GetTileProjects" }
+                     new { controller = "Projects", action = "FindProjects" }
                  );
 
                 routes.MapRoute("GetStatuses",
