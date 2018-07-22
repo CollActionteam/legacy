@@ -160,11 +160,12 @@ namespace CollAction
                                                                        {
                                                                            "https://collaction.us14.list-manage.com/",
                                                                            "https://www.facebook.com/",
+                                                                           "https://m.facebook.com",
                                                                            "https://accounts.google.com/",
                                                                            "https://api.twitter.com/",
                                                                            "https://www.twitter.com/"
                                                                        }.Concat(Configuration["CspFormAction"]?.Split(";") ?? new string[0]));
-                           cspBuilder.AddConnectSrc().Self() // Only allow API calls to self, and the websites we use for the share buttons, or configured sources
+                           cspBuilder.AddConnectSrc().Self() // Only allow API calls to self, and the websites we use for the share buttons, app insights or configured sources
                                                      .Sources.AddRange(new[]
                                                                        {
                                                                            "https://www.linkedin.com/",
@@ -173,7 +174,8 @@ namespace CollAction
                                                                            "https://twitter.com/",
                                                                            "https://www.facebook.com/",
                                                                            "https://facebook.com/",
-                                                                           "https://graph.facebook.com/"
+                                                                           "https://graph.facebook.com/",
+                                                                           "https://dc.services.visualstudio.com/"
                                                                        }.Concat(Configuration["CspConnectSrc"]?.Split(";") ?? new string[0]));
                            cspBuilder.AddImgSrc().Self() // Only allow self-hosted images, or google analytics (for tracking images), or configured sources
                                                  .Sources.AddRange(new[]
@@ -198,13 +200,14 @@ namespace CollAction
                            cspBuilder.AddMediaSrc().Self()
                                                    .Sources.AddRange(Configuration["CspMediaSrc"]?.Split(";") ?? new string[0]); // Only allow self-hosted videos, or configured sources
                            cspBuilder.AddFrameAncestors().None(); // No framing allowed here (put us inside a frame tag)
-                           cspBuilder.AddScriptSrc() // Only allow scripts from our own site, the aspnetcdn site and google analytics
+                           cspBuilder.AddScriptSrc() // Only allow scripts from our own site, the aspnetcdn site, app insights and google analytics
                                      .Self()
                                      .Sources.AddRange(new[]
                                                        {
                                                            "https://ajax.aspnetcdn.com",
                                                            "https://www.googletagmanager.com",
                                                            "https://www.google-analytics.com",
+                                                           "*.msecnd.net",
                                                            "'sha256-EHA5HNhe/+uz3ph6Fw34N85vHxX87fsJ5cH4KbZKIgU='"
                                                        }.Concat(Configuration["CspScriptSrc"]?.Split(";") ?? new string[0]));
                         })
