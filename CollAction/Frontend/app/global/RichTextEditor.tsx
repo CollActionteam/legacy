@@ -82,21 +82,28 @@ export default class RichTextEditor extends React.Component<ICollActionEditorPro
 
 renderComponentIf(
   <RichTextEditor
+    formInputId="Message"
+    hint="Hallo {firstname}!, Hier is onze project update..." />,
+  document.getElementById("project-email-message")
+);
+
+renderComponentIf(
+  <RichTextEditor
     formInputId="Description"
-    hint="E.g Reduce plastic waste and save our oceans!" />,
+    hint="E.g Reduceer plastic afval en red onze oceanen!" />,
   document.getElementById("create-project-description")
 );
 
 renderComponentIf(
   <RichTextEditor
     formInputId="Goal"
-    hint="Max 1000 characters" />,
+    hint="Max 1000 karakters" />,
   document.getElementById("create-project-goal")
 );
 
 renderComponentIf(
   <RichTextEditor
     formInputId="CreatorComments"
-    hint="E.g Background, process, FAQs, about the initiator" />,
+    hint="E.g Achtergrond, process, FAQs, over de initiatiefnemer" />,
   document.getElementById("create-project-creatorcomments")
 );

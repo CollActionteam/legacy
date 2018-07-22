@@ -1,5 +1,11 @@
 ﻿@using CollAction.Models.ProjectViewModels
+@using CollAction.Services
+@using Microsoft.Extensions.Options
+@using System.Globalization
+
 @model SendProjectEmail
+@inject IOptions<ProjectEmailOptions> EmailOptions
+
 @{
     ViewData["Title"] = $"Stuur project e-mail voor '{Model.Project.Name}'";
 }
@@ -8,7 +14,14 @@
     <div class="container">
         <h2>@ViewData["Title"]</h2>
         <p>
-            Je hebt al @Model.Project.NumberProjectEmailsSend e-mails verstuurd, en je kan nog @Model.EmailsAllowedToSend emails versturen tot @Model.SendEmailsUntil. Geen HTML toegestaan, {firstname} en {lastname} zullen vervangen worden door de voor- en achternaam van de gebruiker.
+            Hallo project starter!
+        </p>
+        <p>
+            Je kan @EmailOptions.Value.MaxNumberProjectEmails e-mails in totaal versturen (gedurende en tot en met @EmailOptions.Value.TimeEmailAllowedAfterProjectEnd.TotalDays dagen nadat het project eindigt). Je hebt al @Model.Project.NumberProjectEmailsSend e-mails verstuurt en je kan nog @Model.EmailsAllowedToSend e-mails versturen tot en met @Model.SendEmailsUntil.ToString("D t", new CultureInfo("nl-NL")) in de UTC (London) tijdzone. Om het bericht persoonlijk te laten klinken kan je {firstname} en {lastname} gebruiken in je bericht, deze zullen worden vervangen door de voor- en achternaam van de gebruiker.
+        </p>
+        <p>
+            Met vriendelijke groet,<br/>
+            Het CollAction Team
         </p>
         <form asp-controller="Projects" asp-action="SendProjectEmailPerform" method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
@@ -21,7 +34,8 @@
 
             <div class="form-group">
                 <label asp-for="Message" class="control-label"></label>
-                <textarea asp-for="Message" class="form-control" rows="10"></textarea>
+                <div id="project-email-message"></div>
+                @Html.HiddenFor(m => m.Message)
                 @Html.ValidationMessage("Message")
             </div>
 

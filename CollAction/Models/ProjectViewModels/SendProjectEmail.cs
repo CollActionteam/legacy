@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CollAction.ValidationAttributes;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace CollAction.Models.ProjectViewModels
@@ -8,6 +9,7 @@ namespace CollAction.Models.ProjectViewModels
         public int ProjectId { get; set; }
         [Display(Name = "Onderwerp")]
         public string Subject { get; set; }
+        [SecureRichText]
         [Display(Name = "Bericht")]
         public string Message { get; set; }
         public Project Project { get; set; }

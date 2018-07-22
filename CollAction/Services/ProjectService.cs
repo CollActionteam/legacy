@@ -147,7 +147,15 @@ namespace CollAction.Services
         }
 
         public bool CanSendProjectEmail(Project project)
-            => project.NumberProjectEmailsSend < _projectEmailOptions.MaxNumberProjectEmails && project.End + _projectEmailOptions.TimeEmailAllowedAfterProjectEnd > DateTime.UtcNow;
+        {
+            DateTime now = DateTime.UtcNow;
+            return project.NumberProjectEmailsSend < _projectEmailOptions.MaxNumberProjectEmails && 
+                   project.End + _projectEmailOptions.TimeEmailAllowedAfterProjectEnd > now && 
+                   project.Status != ProjectStatus.Deleted && 
+                   project.Status != ProjectStatus.Hidden &&
+                   project.Status != ProjectStatus.Failed &&
+                   now >= project.Start;
+        }
 
         public int NumberEmailsAllowedToSend(Project project)
             => _projectEmailOptions.MaxNumberProjectEmails - project.NumberProjectEmailsSend;
@@ -171,20 +179,16 @@ namespace CollAction.Services
                 foreach (ProjectParticipant participant in participants)
                 {
                     string unsubscribeLink = $"{baseUrl}{helper.Action("ChangeSubscriptionFromToken", "Projects", new { UserId = participant.UserId, ProjectId = project.Id, UnsubscribeToken = participant.UnsubscribeToken })}";
-                    string userMessage = $"{HttpUtility.HtmlEncode(message)}<br><a href=\"{unsubscribeLink}\">Schrijf je uit</a>";
-                    userMessage.Replace("{firstname}", participant.User.FirstName);
-                    userMessage.Replace("{lastname}", participant.User.LastName);
-                    _emailSender.SendEmail(participant.User.Email, subject, userMessage);
+                    _emailSender.SendEmail(participant.User.Email, subject, FormatEmailMessage(message, participant.User, unsubscribeLink));
                 }
 
                 IList<ApplicationUser> adminUsers = await _userManager.GetUsersInRoleAsync(Constants.AdminRole);
                 foreach (ApplicationUser admin in adminUsers)
                 {
-                    string adminMessage = HttpUtility.HtmlEncode(message);
-                    adminMessage.Replace("{firstname}", admin.FirstName);
-                    adminMessage.Replace("{lastname}", admin.LastName);
-                    _emailSender.SendEmail(admin.Email, subject, adminMessage);
+                    _emailSender.SendEmail(admin.Email, subject, FormatEmailMessage(message, admin, null));
                 }
+
+                _emailSender.SendEmail(project.Owner.Email, subject, FormatEmailMessage(message, project.Owner, null));
 
                 project.NumberProjectEmailsSend += 1;
                 await _context.SaveChangesAsync();
@@ -193,6 +197,26 @@ namespace CollAction.Services
             }
             else
                 throw new InvalidOperationException("unable to send project e-mails, limit exceeded");
+        }
+
+        private string FormatEmailMessage(string message, ApplicationUser user, string unsubscribeLink)
+        {
+            if (!string.IsNullOrEmpty(unsubscribeLink))
+                message = message + $"<br><a href=\"{unsubscribeLink}\">Schrijf je uit</a>";
+
+            if (string.IsNullOrEmpty(user.FirstName))
+                message = message.Replace(" {firstname}", string.Empty)
+                                 .Replace("{firstname}", string.Empty);
+            else
+                message = message.Replace("{firstname}", user.FirstName);
+
+            if (string.IsNullOrEmpty(user.LastName))
+                message = message.Replace(" {lastname}", string.Empty)
+                                 .Replace("{lastname}", string.Empty);
+            else
+                message = message.Replace("{lastname}", user.LastName);
+
+            return message;
         }
 
         private IEnumerable<string> GetParticipantsCsv(Project project)
