@@ -68,7 +68,7 @@ namespace CollAction.Controllers
                                                       .Where(part => part.UserId == user.Id)
                                                       .Include(part => part.Project)
                                                       .ToListAsync()).Select(part => part.Project),
-                ProjectsCreated = await _context.Projects.Where(proj => proj.OwnerId == user.Id).ToListAsync()
+                ProjectsCreated = await _context.Projects.Where(proj => proj.OwnerId == user.Id && proj.Status != ProjectStatus.Deleted).ToListAsync()
             };
             return View(model);
         }

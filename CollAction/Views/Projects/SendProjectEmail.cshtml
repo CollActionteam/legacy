@@ -1,5 +1,10 @@
 ﻿@using CollAction.Models.ProjectViewModels
+@using CollAction.Services
+@using Microsoft.Extensions.Options
+
 @model SendProjectEmail
+@inject IOptions<ProjectEmailOptions> EmailOptions
+
 @{
     ViewData["Title"] = $"Send project e-mail for '{Model.Project.Name}'";
 }
@@ -8,7 +13,14 @@
     <div class="container">
         <h2>@ViewData["Title"]</h2>
         <p>
-            You have already sent @Model.Project.NumberProjectEmailsSend e-mails, and can still send @Model.EmailsAllowedToSend emails up until @Model.SendEmailsUntil. No HTML is allowed, {firstname} and {lastname} will be substituted with the user's first and last name.
+            Hi project starter!
+        </p>
+        <p>
+            You can send @EmailOptions.Value.MaxNumberProjectEmails e-mails in total (during and up to @EmailOptions.Value.TimeEmailAllowedAfterProjectEnd.TotalDays days after the project ends). You have already sent @Model.Project.NumberProjectEmailsSend e-mails, and can still send @Model.EmailsAllowedToSend emails up until @Model.SendEmailsUntil.ToLongDateString() @Model.SendEmailsUntil.ToShortTimeString() in the UTC (London) timezone. To personalize they message, you can add {firstname} and {lastname} to your message, these will be substituted with the user's first and last name.
+        </p>
+        <p>
+            Warm regards,<br/>
+            The CollAction Team
         </p>
         <form asp-controller="Projects" asp-action="SendProjectEmailPerform" method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
@@ -21,7 +33,8 @@
 
             <div class="form-group">
                 <label asp-for="Message" class="control-label"></label>
-                <textarea asp-for="Message" class="form-control" rows="10"></textarea>
+                <div id="project-email-message"></div>
+                @Html.HiddenFor(m => m.Message)
                 @Html.ValidationMessage("Message")
             </div>
 

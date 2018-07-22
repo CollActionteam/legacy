@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CollAction.ValidationAttributes;
+using System;
 
 namespace CollAction.Models.ProjectViewModels
 {
@@ -6,6 +7,7 @@ namespace CollAction.Models.ProjectViewModels
     {
         public int ProjectId { get; set; }
         public string Subject { get; set; }
+        [SecureRichText]
         public string Message { get; set; }
         public Project Project { get; set; }
         public int EmailsAllowedToSend { get; set; }

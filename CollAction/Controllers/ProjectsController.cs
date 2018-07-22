@@ -331,6 +331,9 @@ namespace CollAction.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SendProjectEmailPerform([Bind("ProjectId", "Subject", "Message")]SendProjectEmail model)
         {
+            if (!ModelState.IsValid)
+                return RedirectToAction(nameof(SendProjectEmail), new { id = model.ProjectId });
+
             model.Project = await _projectService.GetProjectById(model.ProjectId);
             ApplicationUser user = await _userManager.GetUserAsync(User);
             if (model.Project.OwnerId != user.Id)
