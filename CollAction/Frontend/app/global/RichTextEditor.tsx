@@ -16,8 +16,8 @@ export default class RichTextEditor extends React.Component<ICollActionEditorPro
 
   private HREF_REGEX = /href=\"(?!http:\/\/|https:\/\/)([^\"]*)(\")/ig;
 
-  constructor() {
-    super();
+  constructor(props: ICollActionEditorProps) {
+    super(props);
 
     this.state = {
       content: ""

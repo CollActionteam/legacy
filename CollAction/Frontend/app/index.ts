@@ -9,14 +9,16 @@ import "whatwg-fetch";
 import "quill";
 
 import * as jQuery from "jquery";
-import * as injectTapEventPlugin from "react-tap-event-plugin";
+import * as Promise from "bluebird";
 
 // Let's Load jQuery in the window for the asp validations
 window["jQuery"] = jQuery;
 
-// Needed for onTouchTap.
-// http://stackoverflow.com/a/34015469/988941 
-injectTapEventPlugin();
+// Configure
+Promise.config({
+    longStackTraces: true,
+    warnings: true // note, run node with --trace-warnings to see full stack traces for warnings
+});
 
 function displayBodyOnLoad() {
   document.getElementById("body").style.display = "block";
