@@ -6,7 +6,6 @@ import "./admin/index";
 import "./manage/index";
 
 import "whatwg-fetch";
-import "quill";
 
 import * as jQuery from "jquery";
 import * as Promise from "bluebird";
