@@ -1,5 +1,4 @@
 @using Microsoft.AspNetCore.Mvc.Localization
-@using Microsoft.AspNetCore.Http.Features
 
 @inject IViewLocalizer Localizer
 
@@ -10,23 +9,21 @@
 }
 
 <div id="project-create">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-xs-12 banner" id="project-background">
-                <div id="banner-upload-card">
-                    <div id="create-project-upload-banner-image">
+    <form name="Project" asp-action="Create" enctype="multipart/form-data">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xs-12 banner" id="project-background">
+                    <div id="banner-upload-card">
+                        <div id="create-project-upload-banner-image"></div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div> 
-    <div class="container">
-        <form name="Project" asp-action="Create" enctype="multipart/form-data">
-            <input asp-for="BannerImageUpload" class="form-control" style="display: none;" />
+        </div> 
+        <div class="container">
             <div class="row" id="project-details-row">
                 <div class="col-md-6 col-md-push-6 col-xs-12">
                     <div id="project-info-card">
-                        @{ /* <div id="project-category" style="background-color: #@Html.DisplayFor(model => model.Project.Category.ColorHex)"> */ }
+                        @{ /* <div id="project-category" style="background-color: #@Html.DisplayFor(model => model.Project.Category.ColorHex)"></div> */ }
                         <div>
                             <h3><label asp-for="Name" class="control-label required"></label></h3>
                             <input asp-for="Name" class="form-control" />
@@ -135,6 +132,6 @@
                     </div>
                 </div>
             </div>
-        </form>
-    </div> 
+        </div> 
+    </form>    
 </div> 

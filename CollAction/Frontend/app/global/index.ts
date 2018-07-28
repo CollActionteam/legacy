@@ -14,4 +14,4 @@ import "./MobileNavDraw";
 import "./ShareButtons";
 import "./RichTextEditor";
 import "./CookieMessage";
-import "./UploadImage";
+import "./UploadBanner";

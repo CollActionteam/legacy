@@ -57,49 +57,38 @@
         border-radius: 20px;
         margin-top: 15px;
         background-color: #fff;
-        padding: 20px 20px 30px 20px;
+        padding: 20px;
         width: 325px;
+        text-align: center;
 
         .dropzone {
             border: 1px dashed #8a8a8a;
             border-radius: 10px;
-            text-align: center;
-            margin-bottom: -10px;
+        }
 
-            p.invalid {
+        h3 {
+            color: $coll-action-green;
+            text-decoration: underline;
+        }
+
+        p {
+            color: #8a8a8a;
+            font-size: 0.7em;
+
+            &.invalid {
                 color: #A00;
-            };
-        }
-
-        .dropzone,
-        .preview {
-            h3 {
-                color: $coll-action-green;
-                text-decoration: underline;
-            }
-
-            p {
-                color: #8a8a8a;
-                font-size: 0.7em;
             }
         }
-
-        .preview {
-            text-align: center;
-            
-            p {
-                margin-bottom: 20px;
-            }
-
-            a.btn {
-                background-color: #8a8a8a;
-                color: #fff;
-                padding: 10px 50px;
-                border: none;
-                border-radius: 20px;
-                font-size: 1em;
-                text-decoration-line: none;
-            }
+        
+        input[type="button"] {
+            background-color: #8a8a8a;
+            color: #fff;
+            margin-top:20px;
+            padding: 10px 50px;
+            border: none;
+            border-radius: 20px;
+            font-size: 1em;
+            text-decoration-line: none;
         }
     }
 
