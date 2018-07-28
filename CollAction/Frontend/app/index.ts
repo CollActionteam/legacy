@@ -1,9 +1,9 @@
-import "./home/index";
-import "./project/index";
-import "./global/index";
-import "./account/index";
-import "./admin/index";
-import "./manage/index";
+import "./home";
+import "./project";
+import "./global";
+import "./account";
+import "./admin";
+import "./manage";
 
 import "whatwg-fetch";
 
