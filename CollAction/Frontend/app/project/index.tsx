@@ -11,6 +11,8 @@ import "./styles/ProjectThankYouCommit.scss";
 import "./PieChart";
 import "./Carousel";
 
+import "./UploadBanner";
+
 import renderComponentIf from "../global/renderComponentIf";
 
 renderComponentIf(

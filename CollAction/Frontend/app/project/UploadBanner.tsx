@@ -1,6 +1,6 @@
 import * as React from "react";
 import DropZone from "react-dropzone";
-import renderComponentIf from "./renderComponentIf";
+import renderComponentIf from "../global/renderComponentIf";
 
 interface IUploadBannerProps {
 }
