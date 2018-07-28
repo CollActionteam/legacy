@@ -1,96 +1,40 @@
 import * as React from "react";
+import UploadImage from "./UploadImage";
 import DropZone from "react-dropzone";
 import renderComponentIf from "../global/renderComponentIf";
 
-interface IUploadBannerProps {
-}
-
-interface IUploadBannerState {
-    invalid: boolean;
-    preview: boolean;
-}
-
-export default class UploadBanner extends React.Component<IUploadBannerProps, IUploadBannerState> {
+export default class UploadBanner extends UploadImage {
     constructor(props: {}) {
         super(props);
 
-        this.state = {
-            invalid: false,
-            preview: false
-        };
-
-        this.loadBannerImage = this.loadBannerImage.bind(this);
-        this.previewBanner = this.previewBanner.bind(this);
+        this.onDrop = this.onDrop.bind(this);
+        this.previewImage = this.previewImage.bind(this);
         this.onRejected = this.onRejected.bind(this);
+        this.getFileInputElement = this.getFileInputElement.bind(this);
         this.removeBanner = this.removeBanner.bind(this);
     }
 
-    loadBannerImage(accepted: File[], rejected: File[], event: any) {
-        if (this.state.preview) {
-            // On Safari and Chrome, setBannerImageUploadInput triggers this this function again.
-            // On Firefox it does not... so, if preview is already in progress, we can stop.
-            return;
-        }
-
-        if (accepted.length !== 1) {
-            this.setState({ invalid: true });
-            return;
-        }
-
-        let that = this;
-        this.setState({ preview: true});
-
-        if (event.dataTransfer) {
-            // onDrop was triggered from drag and drop event.
-            // Add the files from the event to the BannerImageUpload input element.
-            let files = event.dataTransfer.files;
-            setTimeout(function() {
-                // Schedule this for the next event loop.
-                // Otherwise, on Chrome and Safari it will trigger onDrop in the same event loop and we won't have the correct state.
-                that.setBannerImageUploadInput(files);
-            });
-        }
-
-        // Note: when the user clicked or tapped on the dropzone and selected a file,
-        // then the files will already be in the file input element.
-
-        let reader = new FileReader();
-        let file = accepted[0];
-        reader.onload = function() {
-            that.previewBanner(file.type, reader.result);
-        };
-        reader.onabort = this.onRejected;
-        reader.onerror = this.onRejected;
-
-        reader.readAsDataURL(file);
+    onDrop(accepted: File[], rejected: File[], event: any) {
+        super.loadImage(accepted, rejected, event);
     }
 
-    setBannerImageUploadInput(files: FileList) {
-        let inputElement = document.getElementsByName("BannerImageUpload")[0] as HTMLInputElement;
-        inputElement.files = files;
-    }
-
-    previewBanner(type: string, image: any) {
+    previewImage(type: string, image: any) {
         let background = document.getElementById("project-background");
         background.style.backgroundImage = "url(data:" + type + ";" + image + ")";
     }
 
     onRejected() {
-        this.setState({ invalid: true, preview: false });
+        super.rejectImage();
+    }
+
+    getFileInputElement(): HTMLInputElement {
+        return document.getElementsByName("BannerImageUpload")[0] as HTMLInputElement;
     }
 
     removeBanner() {
+        super.resetImage();
         let background = document.getElementById("project-background");
         background.style.backgroundImage = null;
-
-        this.resetBannerImageUploadInput();
-
-        this.setState({ preview: false });
-    }
-
-    resetBannerImageUploadInput() {
-        let inputElement = document.getElementsByName("BannerImageUpload")[0] as HTMLInputElement;
-        inputElement.value = "";
     }
 
     render() {
@@ -104,7 +48,7 @@ export default class UploadBanner extends React.Component<IUploadBannerProps, IU
                         maxSize={1024000}
                         multiple={false}
                         disablePreview={true}
-                        onDrop={this.loadBannerImage}
+                        onDrop={this.onDrop}
                         onDropRejected={this.onRejected}
                         rejectClassName="invalid">
                         <h3>Upload banner image</h3>
