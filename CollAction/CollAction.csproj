@@ -5,17 +5,6 @@
     <UserSecretsId>aspnet-CollAction-29a5d7b8-3530-4482-9ed6-572bd6c178fa</UserSecretsId>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
-    <PreBuildEvent>npm install &amp;&amp; ^
-npm install --save bluebird &amp;&amp; ^
-npm run build</PreBuildEvent>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>bin\</OutputPath>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>bin\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -37,8 +26,5 @@ npm run build</PreBuildEvent>
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.1.0-preview1-final" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="wwwroot\js\" />
   </ItemGroup>
 </Project>
