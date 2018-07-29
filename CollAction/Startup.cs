@@ -192,7 +192,7 @@ namespace CollAction
                            cspBuilder.AddFontSrc().Self() // Only allow fonts from these sources, or configured sources
                                                   .Sources.AddRange(new[]
                                                                    {
-                                                                       "https://maxcdn.bootstrapcdn.com/",
+                                                                       "https://maxcdn.bootstrapcdn.com/", 
                                                                        "https://fonts.googleapis.com/",
                                                                        "https://fonts.gstatic.com"
                                                                    }.Concat(Configuration["CspFontSrc"]?.Split(";") ?? new string[0]));
