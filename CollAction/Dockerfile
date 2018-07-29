@@ -10,9 +10,6 @@ RUN apt-get update && apt-get install -y nodejs build-essential
 RUN dotnet restore CollAction/CollAction.csproj
 COPY . .
 WORKDIR /src/CollAction
-RUN npm install
-RUN npm install --save bluebird
-RUN npm run build
 RUN dotnet build CollAction.csproj -c Release -o /app
 
 FROM build AS publish
