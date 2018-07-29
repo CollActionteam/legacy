@@ -11,9 +11,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollAction", "CollAction\Co
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4AD6D0E9-47B4-4714-BF39-6743118BE31C}"
 	ProjectSection(SolutionItems) = preProject
+		.dockerignore = .dockerignore
+		.gitignore = .gitignore
 		.travis.yml = .travis.yml
-		build.ps1 = build.ps1
-		build.sh = build.sh
+		scripts\docker-push.sh = scripts\docker-push.sh
 		LICENSE = LICENSE
 		NuGet.config = NuGet.config
 		README.md = README.md
