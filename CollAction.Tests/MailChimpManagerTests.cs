@@ -1,8 +1,7 @@
-using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using CollAction.Helpers;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using CollAction.Services;
 
 namespace CollAction.Tests
 {

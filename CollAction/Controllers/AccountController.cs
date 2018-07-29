@@ -11,8 +11,6 @@ using CollAction.Services;
 using Microsoft.Extensions.Localization;
 using CollAction.Data;
 using Microsoft.AspNetCore.Authentication;
-using System.Text.Encodings.Web;
-using Microsoft.EntityFrameworkCore.Storage;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -25,7 +23,6 @@ namespace CollAction.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
-        private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
         private readonly IStringLocalizer<AccountController> _localizer;
         private readonly INewsletterSubscriptionService _newsletterSubscriptionService;
@@ -35,7 +32,6 @@ namespace CollAction.Controllers
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
-            ISmsSender smsSender,
             ILoggerFactory loggerFactory,
             IStringLocalizer<AccountController> localizer,
             INewsletterSubscriptionService newsletterSubscriptionService,
@@ -44,15 +40,12 @@ namespace CollAction.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
-            _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
             _localizer = localizer;
             _newsletterSubscriptionService = newsletterSubscriptionService;
             _context = context;
         }
 
-        //
-        // GET: /Account/Login
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> Login(string returnUrl = null)
@@ -64,8 +57,6 @@ namespace CollAction.Controllers
             return View();
         }
 
-        //
-        // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -128,8 +119,6 @@ namespace CollAction.Controllers
             return View();
         }
 
-        //
-        // GET: /Account/Register
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Register(string returnUrl = null)
@@ -138,8 +127,6 @@ namespace CollAction.Controllers
             return View();
         }
 
-        //
-        // POST: /Account/Register
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -152,22 +139,7 @@ namespace CollAction.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    try
-                    {
-                        await _newsletterSubscriptionService.SetSubscriptionAsync(model.Email, model.NewsletterSubscription);
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.LogError("error subscribing to newsletter: {0}, {1}", e, user.Email);
-                    }
-
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.Action(nameof(ConfirmEmail), "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                    await _emailSender.SendEmailAsync(
-                        model.Email, 
-                        _localizer["Bevestig je account"],
-                        $"Bevestig je account door deze <a href='{callbackUrl}'>link</a> te klikken");
-
+                    _newsletterSubscriptionService.SetSubscription(model.Email, model.NewsletterSubscription);
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
                     return RedirectToLocal(returnUrl);
@@ -179,8 +151,6 @@ namespace CollAction.Controllers
             return View(model);
         }
 
-        //
-        // POST: /Account/Logout
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LogOff()
@@ -190,8 +160,6 @@ namespace CollAction.Controllers
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
-        //
-        // POST: /Account/ExternalLogin
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -203,8 +171,6 @@ namespace CollAction.Controllers
             return Challenge(properties, provider);
         }
 
-        //
-        // GET: /Account/ExternalLoginCallback
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
@@ -241,8 +207,6 @@ namespace CollAction.Controllers
             }
         }
 
-        //
-        // POST: /Account/ExternalLoginConfirmation
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -260,15 +224,7 @@ namespace CollAction.Controllers
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
-                    try
-                    {
-                        await _newsletterSubscriptionService.SetSubscriptionAsync(model.Email, model.NewsletterSubscription);
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.LogError("error subscribing to newsletter: {0}, {1}", e, user.Email);
-                    }
-
+                    _newsletterSubscriptionService.SetSubscription(model.Email, model.NewsletterSubscription);
                     result = await _userManager.AddLoginAsync(user, info);
                     if (result.Succeeded)
                     {
@@ -284,26 +240,6 @@ namespace CollAction.Controllers
             return View(nameof(ExternalLogin), model);
         }
 
-        // GET: /Account/ConfirmEmail
-        [HttpGet]
-        [AllowAnonymous]
-        public async Task<IActionResult> ConfirmEmail(string userId, string code)
-        {
-            if (userId == null || code == null)
-            {
-                return RedirectToAction(nameof(HomeController.Index), "Home");
-            }
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
-            {
-                throw new ApplicationException($"Unable to load user with ID '{userId}'.");
-            }
-            var result = await _userManager.ConfirmEmailAsync(user, code);
-            return View(result.Succeeded ? "ConfirmEmail" : "Error");
-        }
-
-        //
-        // GET: /Account/ForgotPassword
         [HttpGet]
         [AllowAnonymous]
         public IActionResult ForgotPassword()
@@ -311,8 +247,6 @@ namespace CollAction.Controllers
             return View();
         }
 
-        //
-        // POST: /Account/ForgotPassword
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -321,9 +255,9 @@ namespace CollAction.Controllers
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
-                if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+                if (user == null)
                 {
-                    // Don't reveal that the user does not exist or is not confirmed
+                    // Don't reveal that the user does not exist
                     return View("ForgotPasswordConfirmation");
                 }
 
@@ -335,7 +269,7 @@ namespace CollAction.Controllers
                     controller: "Account",
                     values: new { user.Id, code },
                     protocol: Request.Scheme);
-                await _emailSender.SendEmailAsync(model.Email, "Wachtwoord opnieuw instellen",
+                _emailSender.SendEmail(model.Email, "Wachtwoord opnieuw instellen",
                    $"Klik <a href='{callbackUrl}'>hier</a> om je wachtwoord opnieuw in te stellen.");   // Please reset your password by clicking here.
                 return View(nameof(ForgotPasswordConfirmation));
             }
@@ -344,8 +278,6 @@ namespace CollAction.Controllers
             return View(model);
         }
 
-        //
-        // GET: /Account/ForgotPasswordConfirmation
         [HttpGet]
         [AllowAnonymous]
         public IActionResult ForgotPasswordConfirmation()
@@ -353,8 +285,6 @@ namespace CollAction.Controllers
             return View();
         }
 
-        //
-        // GET: /Account/ResetPassword
         [HttpGet]
         [AllowAnonymous]
         public IActionResult ResetPassword(string code = null)
@@ -367,8 +297,6 @@ namespace CollAction.Controllers
             return View(model);
         }
 
-        //
-        // POST: /Account/ResetPassword
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -393,8 +321,6 @@ namespace CollAction.Controllers
             return View();
         }
 
-        //
-        // GET: /Account/ResetPasswordConfirmation
         [HttpGet]
         [AllowAnonymous]
         public IActionResult ResetPasswordConfirmation()

@@ -37,6 +37,7 @@ namespace CollAction.Data
         public DbSet<ImageFile> ImageFiles { get; set; }
         public DbSet<VideoLink> VideoLinks { get; set; }
         public DbSet<Job> Jobs { get; set; }
+        public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 
         /// <summary>
         /// Configure the model (foreign keys, relations, primary keys, etc)
@@ -108,11 +109,10 @@ namespace CollAction.Data
         private async Task CreateAdminRoleAndUser(IConfigurationRoot configuration, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             // Create admin role if not exists
-            string adminRoleName = "admin";
-            IdentityRole adminRole = await roleManager.FindByNameAsync(adminRoleName);
+            IdentityRole adminRole = await roleManager.FindByNameAsync(Constants.AdminRole);
             if (adminRole == null)
             {
-                adminRole = new IdentityRole(adminRoleName) { NormalizedName = adminRoleName };
+                adminRole = new IdentityRole(Constants.AdminRole) { NormalizedName = Constants.AdminRole };
                 IdentityResult result = await roleManager.CreateAsync(adminRole);
                 if (!result.Succeeded)
                     throw new InvalidOperationException($"Error creating role.{Environment.NewLine}{string.Join(Environment.NewLine, result.Errors.Select(e => $"{e.Code}: {e.Description}"))}");
@@ -137,9 +137,9 @@ namespace CollAction.Data
             }
 
             // Assign admin role if not assigned
-            if (!(await userManager.IsInRoleAsync(admin, adminRoleName)))
+            if (!(await userManager.IsInRoleAsync(admin, Constants.AdminRole)))
             {
-                IdentityResult result = await userManager.AddToRoleAsync(admin, adminRoleName);
+                IdentityResult result = await userManager.AddToRoleAsync(admin, Constants.AdminRole);
                 if (!result.Succeeded)
                     throw new InvalidOperationException($"Error assigning admin role.{Environment.NewLine}{string.Join(Environment.NewLine, result.Errors.Select(e => $"{e.Code}: {e.Description}"))}");
             }

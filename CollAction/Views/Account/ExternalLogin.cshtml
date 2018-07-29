@@ -48,6 +48,11 @@
                         @Html.CheckBoxFor(m => m.NewsletterSubscription)
                         @Html.ValidationMessage("NewsletterSubscription")
                     </div>
+                    <div class="form-group">
+                        <label class="control-label" for="AgreedPrivacyPolicy">Ik heb de <a href="/Home/Privacy" target="_blank">privacy policy</a> gelezen en ik accepteer deze</label>
+                        @Html.CheckBoxFor(m => m.AgreedPrivacyPolicy)
+                        @Html.ValidationMessage("AgreedPrivacyPolicy")
+                    </div>
                     <button type="submit" class="btn btn-default">Register</button>
                 </form>
             </div>
@@ -56,5 +61,5 @@
 </div>
 
 @section Scripts {
-    @await Html.PartialAsync("_ValidationScriptsPartial")
+    <partial name="_ValidationScriptsPartial" />
 }
