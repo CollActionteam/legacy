@@ -17,7 +17,7 @@ namespace CollAction.Migrations
                 name: "SubscribedToProjectEmails",
                 table: "ProjectParticipants",
                 nullable: false,
-                defaultValue: false);
+                defaultValue: true);
 
             migrationBuilder.AddColumn<Guid>(
                 name: "UnsubscribeToken",
