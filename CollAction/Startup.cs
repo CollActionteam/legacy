@@ -28,6 +28,7 @@ using Hangfire.PostgreSql;
 using CollAction.Helpers;
 using Hangfire.Dashboard;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
+using Microsoft.AspNetCore.ResponseCompression;
 
 namespace CollAction
 {
@@ -119,6 +120,25 @@ namespace CollAction
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredLength = 8;
             });
+            
+            services.Configure<GzipCompressionProviderOptions>(options => options.Level = System.IO.Compression.CompressionLevel.Optimal);
+            services.AddResponseCompression(options =>
+            {
+                options.EnableForHttps = true;
+                options.MimeTypes = new[]
+                {
+                    "text/plain",
+                    "text/css",
+                    "application/javascript",
+                    "text/html",
+                    "application/xml",
+                    "text/xml",
+                    "application/json",
+                    "text/json",
+                    "image/svg+xml"
+                };
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -249,6 +269,8 @@ namespace CollAction
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            app.UseResponseCompression();
 
             app.UseStatusCodePages();
             
