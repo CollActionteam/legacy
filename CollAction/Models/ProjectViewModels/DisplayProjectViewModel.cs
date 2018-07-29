@@ -87,7 +87,7 @@ namespace CollAction.Models
                 else if (remaining.Days > 1)
                     return $"{remaining.Days} days";
                 else if (remaining.TotalHours >= 24)
-                    return $"{remaining.Days} day and {remaining.Hours} hours";
+                    return $"{(int)remaining.TotalHours} hours";
                 else if (remaining.Hours > 1)
                     return $"{remaining.Hours} hours";
                 else if (remaining.Minutes > 0)
