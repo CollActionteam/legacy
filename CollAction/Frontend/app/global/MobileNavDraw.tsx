@@ -42,6 +42,7 @@ export default class MobileNavDraw extends React.Component<IMobileNavDrawProps, 
 
   renderMenu () {
     const self = this;
+
     return(
       <div id="draw-menu">
         <div id="draw-menu-close-button" onClick={() => self.close()}>
