@@ -2,7 +2,6 @@ import * as React from "react";
 import renderComponentIf from "./renderComponentIf";
 
 interface IMobileNavDrawProps {
-  loginText?: string;
   isLoggedIn: boolean;
 }
 
@@ -11,7 +10,7 @@ interface IMobileNavDrawState {
 }
 
 function AccountManageNav(props) {
-  if (!!props.isLoggedIn) {
+  if (props.isLoggedIn) {
     return <li><a href="/manage">Account</a></li>;
   }else {
     return null;
@@ -19,7 +18,7 @@ function AccountManageNav(props) {
  }
 
  function LoginStateNav(props) {
-  if (!!props.isLoggedIn) {
+  if (props.isLoggedIn) {
     return <li><button type="button" onClick={() => document.getElementById("logOutBtn").click()}>Logout</button></li>;
   }else {
     return <li><a href="/account/login">Login</a></li>;
@@ -78,7 +77,6 @@ export default class MobileNavDraw extends React.Component<IMobileNavDrawProps, 
 renderComponentIf(
   <MobileNavDraw
     isLoggedIn={document.getElementById("logOutBtn") ? true : false}
-    loginText={document.getElementById("logOutBtn") ? "Logout" : "Login"}
   />,
   document.getElementById("mobile-nav-draw")
 );
