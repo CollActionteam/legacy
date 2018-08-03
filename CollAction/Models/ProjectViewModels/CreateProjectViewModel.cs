@@ -82,14 +82,13 @@ namespace CollAction.Models
         [FileType("jpg", "jpeg", "gif", "png", "bmp")]
         public IFormFile BannerImageUpload { get; set; }
 
-        [Display(Name = "Descriptive image description")]
+        [Display(Name = "Image description")]
         [MaxLength(50)]
         public string DescriptiveImageDescription { get; set; }
 
         [Display(Name = "Description image", Prompt = "1088x518 JPEG, GIF, PNG, BMP")]
         [FileSize(1024000)] // 1MB
         [FileType("jpg", "jpeg", "gif", "png", "bmp")]
-        [MaxImageDimensions(1088, 518)]
         public IFormFile DescriptiveImageUpload { get; set; }
 
         [Display(Name = "YouTube Video Link", Prompt = "Descriptive Video. e.g. http://www.youtube.com/watch?v=-wtIMTCHWuI")]

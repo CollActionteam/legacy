@@ -110,12 +110,12 @@
                         <input asp-for="CreatorComments" type="hidden" />
                         @Html.ValidationMessage("CreatorComments")
                     </div>
+                </div>
 
-                    <div id="project-image">
-                        <h3><label asp-for="DescriptiveImageUpload" class="control-label"></label></h3>
-                        <input asp-for="DescriptiveImageUpload" />
-                        @Html.ValidationMessage("BannerImageUpload")
+                <div id="create-project-upload-descriptive-image"></div>
 
+                <div class="col-xs-12 col-md-7 col-md-offset-5">                
+                    <div id="project-image-description">
                         <h3><label asp-for="DescriptiveImageDescription" class="control-label"></label></h3>
                         <input name="DescriptiveImageDescription" class="form-control" />
                         @Html.ValidationMessage("DescriptiveImageDescription")

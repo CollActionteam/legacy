@@ -3,7 +3,7 @@ import UploadImage from "./UploadImage";
 import DropZone from "react-dropzone";
 import renderComponentIf from "../global/renderComponentIf";
 
-export default class UploadBanner extends UploadImage {
+export default class UploadDescriptiveImage extends UploadImage {
     constructor(props: {}) {
         super(props);
 
@@ -19,8 +19,8 @@ export default class UploadBanner extends UploadImage {
     }
 
     previewImage(type: string, image: any) {
-        let background = document.getElementById("project-background");
-        background.style.backgroundImage = "url(data:" + type + ";" + image + ")";
+        let background = document.getElementById("preview") as HTMLImageElement;
+        background.src = "data:" + type + ";" + image;
     }
 
     onRejected() {
@@ -28,21 +28,21 @@ export default class UploadBanner extends UploadImage {
     }
 
     getFileInputElement(): HTMLInputElement {
-        return document.getElementsByName("BannerImageUpload")[0] as HTMLInputElement;
+        return document.getElementsByName("DescriptiveImageUpload")[0] as HTMLInputElement;
     }
 
     removeBanner() {
         super.resetImage();
-        let background = document.getElementById("project-background");
-        background.style.backgroundImage = null;
+        let background = document.getElementById("preview") as HTMLImageElement;
+        background.src = null;
     }
 
     render() {
         return (
-            <div id="banner-image">
-                <div style={{display: this.state.preview ? "none" : "block"}}>
+            <div id="project-image">
+                <div className="col-xs-12 col-md-7 col-md-offset-5" style={{display: this.state.preview ? "none" : "block"}}>
                     <DropZone
-                        name="BannerImageUpload"
+                        name="DescriptiveImageUpload"
                         className="dropzone"
                         accept="image/jpeg, image/png, image/gif, image/bmp"
                         maxSize={1024000}
@@ -51,13 +51,21 @@ export default class UploadBanner extends UploadImage {
                         onDrop={this.onDrop}
                         onDropRejected={this.onRejected}
                         rejectClassName="invalid">
-                        <h3>Upload banner image</h3>
+                        <h3>Upload descriptive image</h3>
                         <p className={this.state.invalid ? "invalid" : ""}>Drop or tap. Use jpg, png, gif or bmp. Max. 1 MB</p>
                     </DropZone>
                 </div>
                 <div style={{display: this.state.preview ? "block" : "none"}}>
-                    <p>Try and change your browser size, or rotate your device, to see if the image is suitable.</p>
-                    <input type="button" value="Remove banner" onClick={this.removeBanner}></input>
+                    <div className="col-xs-12 col-md-2">
+                        <div className="image-control">
+                            <p>The image description will appear here.</p>
+                            <p>Try and change your browser size, or rotate your device, to see if the image is suitable.</p>
+                            <input type="button" value="Remove" onClick={this.removeBanner}></input>
+                        </div>
+                    </div>
+                    <div className="col-xs-12 col-md-10">
+                        <img id="preview" className="pull-right"></img>
+                    </div>
                 </div>
             </div>
         );
@@ -65,6 +73,6 @@ export default class UploadBanner extends UploadImage {
 }
 
 renderComponentIf(
-    <UploadBanner></UploadBanner>,
-    document.getElementById("create-project-upload-banner-image")
+    <UploadDescriptiveImage></UploadDescriptiveImage>,
+    document.getElementById("create-project-upload-descriptive-image")
 );
