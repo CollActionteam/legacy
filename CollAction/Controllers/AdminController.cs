@@ -18,7 +18,7 @@ using Newtonsoft.Json;
 
 namespace CollAction.Controllers
 {
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = Constants.AdminRole)]
     public class AdminController: Controller
     {
         public AdminController(
@@ -243,7 +243,7 @@ namespace CollAction.Controllers
 
                         string subject = $"Approval - {project.Name}";
 
-                        await _emailSender.SendEmailAsync(project.Owner.Email, subject, approvalEmail);
+                        _emailSender.SendEmail(project.Owner.Email, subject, approvalEmail);
                     }
                     else if (successfull)
                     {
@@ -261,7 +261,7 @@ namespace CollAction.Controllers
 
                         string subject = $"Success - {project.Name}";
 
-                        await _emailSender.SendEmailAsync(project.Owner.Email, subject, successEmail);
+                        _emailSender.SendEmail(project.Owner.Email, subject, successEmail);
                     }
                     else if (failed)
                     {
@@ -279,7 +279,7 @@ namespace CollAction.Controllers
 
                         string subject = $"Failed - {project.Name}";
 
-                        await _emailSender.SendEmailAsync(project.Owner.Email, subject, failedEmail);
+                        _emailSender.SendEmail(project.Owner.Email, subject, failedEmail);
                     }
                 }
 

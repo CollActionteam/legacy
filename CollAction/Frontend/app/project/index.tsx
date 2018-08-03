@@ -7,6 +7,7 @@ import "./styles/SimpleProjectCreate.scss";
 import "./styles/ProjectCreate.scss";
 import "./styles/ProjectCommit.scss";
 import "./styles/ProjectThankYouCommit.scss";
+import "./styles/ProjectSendEmail.scss";
 
 import "./PieChart";
 import "./Carousel";
