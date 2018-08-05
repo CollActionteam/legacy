@@ -178,7 +178,7 @@ namespace CollAction.Controllers
                 _emailSender.SendEmail(admin.Email, subject, confirmationEmailAdmin);
 
             string validUriPartForProjectName = Uri.EscapeDataString(project.Name);
-            return LocalRedirect($"~/Projects/Create/{validUriPartForProjectName}/thankyou");
+            return LocalRedirect($"~/Projects/Create/{project.Id}/{validUriPartForProjectName}/thankyou");
         }
 
         [Authorize]
@@ -293,12 +293,13 @@ namespace CollAction.Controllers
 
         [Authorize]
         [HttpGet]
-        public IActionResult ThankYouCommit(string name)
+        public IActionResult ThankYouCommit(int id, string name)
         {
             if (name != null)
             {
                 CommitProjectViewModel model = new CommitProjectViewModel()
                 {
+                    ProjectId = id,
                     ProjectName = name
                 };
                 return View(nameof(ThankYouCommit), model);
