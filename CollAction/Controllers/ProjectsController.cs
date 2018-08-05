@@ -233,7 +233,7 @@ namespace CollAction.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Commit(int id)
+        public async Task<IActionResult> Commit(int? id)
         {
             if (id == null)
             {
@@ -283,7 +283,7 @@ namespace CollAction.Controllers
 
                 // Thank you for participating in a CollAction project!
                 string subject = "Dank voor je deelname aan een Freonen crowdacting project!";
-                await _emailSender.SendEmailAsync(user.Email, subject, confirmationEmail);
+                _emailSender.SendEmail(user.Email, subject, confirmationEmail);
                 return LocalRedirect($"~/Projects/{commitProjectViewModel.ProjectId}/{Uri.EscapeDataString(commitProjectViewModel.ProjectName)}/thankyou");
             }
             else
