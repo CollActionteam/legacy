@@ -16,6 +16,6 @@ namespace CollAction.Models
 
         public bool IsActive { get; set; }
 
-        public string ProjectLink => $"/Projects/{Uri.EscapeDataString(ProjectName)}/Details";
+        public string ProjectLink => $"/Projects/{ProjectId}/{Uri.EscapeDataString(ProjectName)}/Details";
     }
 }
