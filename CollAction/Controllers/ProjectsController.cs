@@ -62,20 +62,9 @@ namespace CollAction.Controllers
         }
 
         // GET: Projects/Details/5
-        public async Task<IActionResult> DetailsById(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var project =  await _projectService.GetProjectById(id); 
-            if (project == null)
-            {
-                return NotFound();
-            }
-            string validUriPartForProjectName = Uri.EscapeDataString(project.Name);
-            return LocalRedirect($"~/Projects/{validUriPartForProjectName}/details");
-        }
-        
-        public async Task<IActionResult> Details(int id, string name)
-        {
-            IEnumerable<DisplayProjectViewModel> items = await _projectService.GetProjectDisplayViewModels(p =>  p.Name == name  && p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted);
+            IEnumerable<DisplayProjectViewModel> items = await _projectService.GetProjectDisplayViewModels(p => p.Id == id && p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted);
             if (items.Count() == 0)
             {
                 return NotFound();
@@ -263,9 +252,9 @@ namespace CollAction.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Commit(string name)
+        public async Task<IActionResult> Commit(int id)
         {
-            var project =  await _projectService.GetProjectByName(name); 
+            var project =  await _projectService.GetProjectById(id); 
             if (project == null)
             {
                 return NotFound();
@@ -309,7 +298,7 @@ namespace CollAction.Controllers
                 // Thank you for participating in a CollAction project!
                 string subject = "Dank voor je deelname aan een Freonen crowdacting project!";
                 await _emailSender.SendEmailAsync(user.Email, subject, confirmationEmail);
-                return LocalRedirect($"~/Projects/{commitProjectViewModel.ProjectId}/{Uri.EscapeDataString(commitProjectViewModel.ProjectName)}/thankyou");   //View(nameof(ThankYouCommit), commitProjectViewModel);
+                return LocalRedirect($"~/Projects/{commitProjectViewModel.ProjectId}/{Uri.EscapeDataString(commitProjectViewModel.ProjectName)}/thankyou");
             }
             else
             {

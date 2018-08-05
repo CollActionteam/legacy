@@ -10,8 +10,6 @@ namespace CollAction.Services
     public interface IProjectService
     {
         Task<Project> GetProjectById(int? id);
-        
-        Task<Project> GetProjectByName(string name);
 
         Task<IEnumerable<Project>> GetProjects(Expression<Func<Project, bool>> WhereExpression);
 
