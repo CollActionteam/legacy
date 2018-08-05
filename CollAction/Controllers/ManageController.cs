@@ -104,7 +104,7 @@ namespace CollAction.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> NewsletterSubscription(IndexViewModel model)
+        public async Task<IActionResult> NewsletterSubscription([Bind("NewsletterSubscription")]IndexViewModel model)
         {
             var user = await GetCurrentUserAsync();
             if (user != null)
