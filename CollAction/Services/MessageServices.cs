@@ -1,20 +1,15 @@
-﻿using Amazon;
-using Amazon.SimpleEmail;
+﻿using Amazon.SimpleEmail;
 using Amazon.SimpleEmail.Model;
+using Hangfire;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace CollAction.Services
 {
-    // This class is used by the application to send Email and SMS
-    // when you turn on two-factor authentication in ASP.NET Identity.
-    // For more details see this link http://go.microsoft.com/fwlink/?LinkID=532713
-    public class AuthMessageSender : IEmailSender, ISmsSender
+    public class AuthMessageSender : IEmailSender
     {
         private readonly AuthMessageSenderOptions _authOptions;
         private readonly ILogger<AuthMessageSender> _logger;
@@ -25,10 +20,8 @@ namespace CollAction.Services
             _logger = loggerFactory.CreateLogger<AuthMessageSender>();
         }
 
-        public async Task SendEmailsAsync(IEnumerable<string> emails, string subject, string message)
+        public void SendEmails(IEnumerable<string> emails, string subject, string message)
         {
-            _logger.LogInformation("sending email to {0} with subject {1}", string.Join(", ", emails), subject);
-
             SendEmailRequest emailRequest = new SendEmailRequest()
             {
                 Source = _authOptions.FromAddress,
@@ -40,26 +33,21 @@ namespace CollAction.Services
                 }
             };
 
-            AmazonSimpleEmailServiceClient client = new AmazonSimpleEmailServiceClient(_authOptions.SesAwsAccessKeyID, _authOptions.SesAwsAccessKey, _authOptions.Region);
+            string job = BackgroundJob.Enqueue(() => SendEmail(emailRequest, emails));
 
-            try
-            {
-                SendEmailResponse response = await client.SendEmailAsync(emailRequest);
-                _logger.LogInformation("successfully send email to {0}", string.Join(", ", emails));
-            }
-            catch (Exception e)
-            {
-                _logger.LogError("failed to send email to {0} with error {1}", string.Join(", ", emails), e);
-            }
+            _logger.LogInformation("sending email to {0} with subject {1} with hangfire job {2}", string.Join(", ", emails), subject, job);
         }
 
-        public Task SendEmailAsync(string email, string subject, string message)
-            => SendEmailsAsync(new[] { email }, subject, message);
+        public void SendEmail(string email, string subject, string message)
+            => SendEmails(new[] { email }, subject, message);
 
-        public Task SendSmsAsync(string number, string message)
+        public async Task SendEmail(SendEmailRequest request, IEnumerable<string> emails)
         {
-            throw new NotImplementedException();
-            // Plug in your SMS service here to send a text message.
+            using (AmazonSimpleEmailServiceClient client = new AmazonSimpleEmailServiceClient(_authOptions.SesAwsAccessKeyID, _authOptions.SesAwsAccessKey, _authOptions.Region))
+            {
+                SendEmailResponse response = await client.SendEmailAsync(request);
+                _logger.LogInformation("successfully send email to {0}", string.Join(", ", emails));
+            }
         }
     }
 }

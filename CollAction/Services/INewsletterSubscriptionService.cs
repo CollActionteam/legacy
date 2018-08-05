@@ -5,7 +5,7 @@ namespace CollAction.Services
 {
     public interface INewsletterSubscriptionService
     {
-        Task SetSubscriptionAsync(string email, bool wantsSubscription, bool requireEmailConfirmationIfSubscribing = true);
+        void SetSubscription(string email, bool wantsSubscription, bool requireEmailConfirmationIfSubscribing = true);
         Task<bool> IsSubscribedAsync(string email);
     }
 }

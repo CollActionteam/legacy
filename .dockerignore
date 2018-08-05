@@ -1,0 +1,14 @@
+.dockerignore
+.env
+.git
+.gitignore
+.vs
+.vscode
+docker-compose.yml
+docker-compose.*.yml
+CollAction/bin
+CollAction/obj
+CollAction/node_modules
+CollAction/*.txt
+CollAction/wwwroot/usercontent
+CollAction/CollAction.csproj.user
