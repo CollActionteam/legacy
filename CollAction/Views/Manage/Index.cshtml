@@ -9,95 +9,152 @@
     ViewData["Title"] = "Manage your account";
 }
 
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
 <div id="manage-index">
+    
+    
     <div class="container">
+
         <h2>@ViewData["Title"].</h2>
         <p class="text-success">@Model.StatusMessage</p>
+        </br>
 
-        <dl>
-            <dt>Password:</dt>
-            <dd>
-                <form asp-controller="Manage" asp-action="ChangePassword" method="get">
-                    <input type="submit" value="Change Password" />
-                </form>
-            </dd>
+        <div class="row">
+            <div class="container">
 
-            <dt>Newsletter Subscription:</dt>
-            <dd>
-                <form asp-controller="Manage" asp-action="NewsletterSubscription" method="post" class="form-horizontal">
-                    <div asp-validation-summary="All" class="text-danger"></div>
-                    <label asp-for="NewsletterSubscription" class="control-label"></label>
-                    @Html.CheckBoxFor(m => m.NewsletterSubscription, new { onclick = "this.form.submit();" })
-                    @Html.ValidationMessage("NewsletterSubscription")
-                </form>
-            </dd>
-            <dt>Delete Account (Warning: This will permanently delete your data!)</dt>
-            <dd>
-                <form asp-controller="Account" asp-action="Delete" method="post">
-                    <input type="submit" value="Delete" />
-                </form>
-            </dd>
+                <div class="panel panel-default">
+                        <div class="panel-heading"><dt>Password</dt></div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <form asp-controller="Manage" asp-action="ChangePassword" method="get">
+                                        <input class="symetric_buttons" type="submit" value="Change Password" />
+                                    </form>
+                                    </div>
+                                <div class="col-md-9"></div>
+                            </div>
+                        </div>
+                </div>
 
-            <dt>Projects You've Subscribed To:</dt>
+            </div>
+        </div>
 
-            <dd>
-            @if (Model.ProjectsParticipated.Any())
-            {
-                <ul>
-                    @foreach (var item in @Model.ProjectsParticipated)
-                    {
-                        <li>
-                            <a asp-action="Details" asp-controller="Projects" asp-route-id="@item.Id">@item.Name</a> - <a asp-action="ChangeSubscriptionFromAccount" asp-controller="Projects" asp-route-id="@item.Id">Change e-mail subscription</a>
-                        </li>
-                    }
-                </ul>
-            }
-            else
-            {
-                <p>
-                    You are not currently participating in any projects. 
-                </p>
-            }
-            </dd>
+        <br/><br/>
 
-            <dt>Projects You've Created:</dt>
+        <div class="row">
+            <div class="container">
+                <div class="panel panel-default">
+                        <div class="panel-heading"><dt>Newsletter Subscription:</dt></div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                        <form asp-controller="Manage" asp-action="NewsletterSubscription" method="post" class="form-horizontal">
+                                            <div asp-validation-summary="All" class="text-danger"></div>
+                                            <label asp-for="NewsletterSubscription" class="control-label"></label>
+                                            @Html.CheckBoxFor(m => m.NewsletterSubscription, new { onclick = "this.form.submit();"})
+                                            <div class="row">@Html.ValidationMessage("NewsletterSubscription")</div>
+                                        </form>
+                                    </div>
+                                <div class="col-md-9"></div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
 
-            <dd>
-            @if (Model.ProjectsCreated.Any())
-            {
-                <ul>
-                    @foreach (var item in @Model.ProjectsCreated)
-                    {
-                        <li>
-                            @if (item.Status != ProjectStatus.Deleted && item.Status != ProjectStatus.Hidden)
-                            {
-                                <a asp-action="Details" asp-controller="Projects" asp-route-id="@item.Id">@item.Name</a>
-                            } else
-                            {
-                                <span>@item.Name</span>
-                            }
+        <br/><br/>
 
-                            @if (ProjectService.CanSendProjectEmail(item))
-                            {
-                               <span> - </span><a asp-action="SendProjectEmail" asp-controller="Projects" asp-route-id="@item.Id">Send project e-mail for @item.Name</a>
-                            }
-                        </li>
-                    }
-                </ul>
-            }
-            else
-            {
-                <p>
-                    You have not yet created any projects.
-                </p>
-            }
-        </dd>
+        <div class="row">
+            <div class="container">
+                <div class="panel panel-default">
+                        <div class="panel-heading"><dt>Delete Account</dt></div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="alert alert-warning" role="alert">Warning: This will permanently delete your data!</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                        <form asp-controller="Account" asp-action="Delete" method="post">
+                                            <input class="symetric_buttons" type="submit" value="Delete" />
+                                        </form>
+                                    </div>
+                                <div class="col-md-9"></div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+        <br/>
 
-            @*<dt>External Logins:</dt>
-            <dd>
-                @Model.Logins.Count <a asp-controller="Manage" asp-action="ManageLogins" class="btn-bracketed">Manage</a>
-            </dd>*@
-        </dl>
+        <div class="row">
+
+            <div class="panel panel-default">
+                    <div class="panel-heading"><dt>Projects You've Subscribed To:</dt></div>
+                    <div class="panel-body">
+                        @if (Model.ProjectsParticipated.Any())
+                        {
+                            <ul class="list-group">
+                                @foreach (var item in @Model.ProjectsParticipated)
+                                {
+                                    <li class="list-group-item">
+                                        <a asp-action="Details" asp-controller="Projects" asp-route-id="@item.Id">@item.Name</a> - <a asp-action="ChangeSubscriptionFromAccount" asp-controller="Projects" asp-route-id="@item.Id">Change e-mail subscription</a>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <p>
+                                You are not currently participating in any projects. 
+                            </p>
+                        }
+                    </div>
+            </div>
+
+        </div>
+        <br/>
+
+        <div class="row">
+
+            <div class="panel panel-default">
+                    <div class="panel-heading"><dt>Projects You've Created:</dt></div>
+                    <div class="panel-body">
+                        @if (Model.ProjectsCreated.Any())
+                        {
+                            <ul class="list-group">
+                                @foreach (var item in @Model.ProjectsCreated)
+                                {
+                                    <li class="list-group-item">
+                                        @if (item.Status != ProjectStatus.Deleted && item.Status != ProjectStatus.Hidden)
+                                        {
+                                            <a asp-action="Details" asp-controller="Projects" asp-route-id="@item.Id">@item.Name</a>
+                                        } else
+                                        {
+                                            <span>@item.Name</span>
+                                        }
+
+                                        @if (ProjectService.CanSendProjectEmail(item))
+                                        {
+                                        <span> - </span><a asp-action="SendProjectEmail" asp-controller="Projects" asp-route-id="@item.Id">Send project e-mail for @item.Name</a>
+                                        }
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <p>
+                                You have not yet created any projects.
+                            </p>
+                        }
+                    </div>
+            </div> 
+        </div>
+        <br/>
+
     </div>
 </div>
 
