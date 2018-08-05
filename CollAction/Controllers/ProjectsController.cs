@@ -45,7 +45,6 @@ namespace CollAction.Controllers
         public IActionResult Find()
             => View();
 
-        // GET: Projects/Details/5
         public async Task<IActionResult> Details(int id)
         {
             IEnumerable<DisplayProjectViewModel> items = await _projectService.GetProjectDisplayViewModels(p => p.Id == id && p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted);

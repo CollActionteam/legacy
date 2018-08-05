@@ -60,7 +60,7 @@ namespace CollAction.Helpers
             HostString host = _urlHelper.ActionContext.HttpContext.Request.Host;
             List<XElement> projectElements = new List<XElement>(3)
             {
-                new XElement(_urlsetNamespace + "loc", _protocol + host + _urlHelper.Action("Details", "Projects", new { name = project.Id}) )
+                new XElement(_urlsetNamespace + "loc", _protocol + host + _urlHelper.Action("Details", "Projects", new { id = project.Id}) )
             };
             if (project.BannerImageFileId != null)
             {
