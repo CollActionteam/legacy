@@ -3,18 +3,20 @@ using Hangfire;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace CollAction.Services
+namespace CollAction.Services.Newsletter
 {
     public class NewsletterSubscriptionService : INewsletterSubscriptionService
     {
         private readonly MailChimpManager _manager;
         private readonly string _newsletterListId;
+        private readonly IBackgroundJobClient _jobClient;
         private readonly ILogger<NewsletterSubscriptionService> _logger;
 
-        public NewsletterSubscriptionService(IOptions<NewsletterSubscriptionServiceOptions> options, ILogger<NewsletterSubscriptionService> logger)
+        public NewsletterSubscriptionService(IOptions<NewsletterSubscriptionServiceOptions> options, IBackgroundJobClient jobClient, ILogger<NewsletterSubscriptionService> logger)
         {
             _manager = new MailChimpManager(options.Value.MailChimpKey);
             _newsletterListId = options.Value.MailChimpNewsletterListId;
+            _jobClient = jobClient;
             _logger = logger;
         }
 
@@ -26,8 +28,8 @@ namespace CollAction.Services
 
         public void SetSubscription(string email, bool wantsSubscription, bool requireEmailConfirmationIfSubscribing)
         {
-            string job = wantsSubscription ? BackgroundJob.Enqueue(() => _manager.AddOrUpdateListMemberAsync(_newsletterListId, email, requireEmailConfirmationIfSubscribing)) :
-                                             BackgroundJob.Enqueue(() => _manager.DeleteListMemberAsync(_newsletterListId, email));
+            string job = wantsSubscription ? _jobClient.Enqueue(() => _manager.AddOrUpdateListMemberAsync(_newsletterListId, email, requireEmailConfirmationIfSubscribing)) :
+                                             _jobClient.Enqueue(() => _manager.DeleteListMemberAsync(_newsletterListId, email));
             _logger.LogInformation("changed maillist subscription for {0} setting it to {1} with require email confirmation to {2} and hangfire job {3}", email, wantsSubscription, requireEmailConfirmationIfSubscribing, job);
         }
     }

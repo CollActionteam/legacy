@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using CollAction.Data;
 using CollAction.Models;
-using CollAction.Services;
 using Microsoft.AspNetCore.Mvc.Razor;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
@@ -15,7 +14,6 @@ using Microsoft.AspNetCore.Identity;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.Slack;
-using Amazon;
 using System.Linq;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -26,6 +24,11 @@ using Hangfire;
 using Hangfire.PostgreSql;
 using CollAction.Helpers;
 using Hangfire.Dashboard;
+using CollAction.Services.Email;
+using CollAction.Services.Project;
+using CollAction.Services.Newsletter;
+using CollAction.Services.DataProtection;
+using CollAction.Services.Image;
 
 namespace CollAction
 {
@@ -91,6 +94,7 @@ namespace CollAction
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddScoped<IProjectService, ProjectService>();
+            services.AddScoped<IImageService, ImageService>();
             services.AddTransient<INewsletterSubscriptionService, NewsletterSubscriptionService>();
 
             services.AddDataProtection()
@@ -98,13 +102,8 @@ namespace CollAction
 
             services.AddApplicationInsightsTelemetry(Configuration);
 
-            services.Configure<AuthMessageSenderOptions>(options =>
-            {
-                options.FromAddress = Configuration["FromAddress"];
-                options.Region = RegionEndpoint.EnumerableAllRegions.First(r => r.SystemName == Configuration["SesRegion"]);
-                options.SesAwsAccessKey = Configuration["SesAwsAccessKey"];
-                options.SesAwsAccessKeyID = Configuration["SesAwsAccessKeyID"];
-            });
+            services.Configure<AuthMessageSenderOptions>(Configuration);
+            services.Configure<ImageServiceOptions>(Configuration);
             services.Configure<NewsletterSubscriptionServiceOptions>(Configuration);
             services.Configure<ProjectEmailOptions>(Configuration);
             services.Configure<IdentityOptions>(options =>
@@ -332,10 +331,15 @@ namespace CollAction
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             using (var userManager = serviceScope.ServiceProvider.GetService<UserManager<ApplicationUser>>())
             using (var roleManager = serviceScope.ServiceProvider.GetService<RoleManager<IdentityRole>>())
+            using (var imageService = serviceScope.ServiceProvider.GetService<IImageService>())
             using (var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
             {
-                context.Database.Migrate();
-                Task.Run(() => context.Seed(Configuration, userManager, roleManager)).Wait();
+                Task.Run(async () =>
+                {
+                    await context.Database.MigrateAsync();
+                    await context.Seed(Configuration, userManager, roleManager);
+                    await imageService.MigrationToS3(); // TODO: Remove after it's run
+                }).Wait();
             }
         }
     }

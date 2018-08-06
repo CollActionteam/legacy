@@ -4,15 +4,17 @@ using CollAction.Data;
 using CollAction.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace CollAction.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180808045949_S3Images")]
+    partial class S3Images
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -126,9 +128,6 @@ namespace CollAction.Migrations
                     b.Property<DateTime>("Date");
 
                     b.Property<string>("Description")
-                        .IsRequired();
-
-                    b.Property<string>("Filepath")
                         .IsRequired();
 
                     b.Property<int>("Height");

@@ -1,5 +1,7 @@
 @using Microsoft.AspNetCore.Mvc.Localization
+@using CollAction.Services.Image
 
+@inject IImageService ImageService
 @inject IViewLocalizer Localizer
 
 @model EditProjectViewModel
@@ -92,7 +94,7 @@
             <div class="form-group">
                 <label class="col-md-2 control-label">Banner Image</label>
                 <div class="col-md-10">
-                    <img src="@Url.Content(Model.BannerImageFile.Filepath)" width="@Model.BannerImageFile.Width" height="@Model.BannerImageFile.Height" class="banner-image" alt="Banner image not found." />
+                    <img src="ImageService.GetUrl(Model.BannerImageFile)" width="@Model.BannerImageFile.Width" height="@Model.BannerImageFile.Height" class="banner-image" alt="Banner image not found." />
                 </div>
             </div>
         }
