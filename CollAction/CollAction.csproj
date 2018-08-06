@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AWSSDK.S3" Version="3.3.20.2" />
     <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.6.11" />
     <PackageReference Include="Hangfire.AspNetCore" Version="1.6.19" />
     <PackageReference Include="Hangfire.PostgreSql" Version="1.4.8.2" />

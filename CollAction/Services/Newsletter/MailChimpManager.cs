@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.Text;
@@ -8,9 +6,8 @@ using Newtonsoft.Json;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net;
-using System.IO;
 
-namespace CollAction.Services
+namespace CollAction.Services.Newsletter
 {
     public class MailChimpManager
     {
@@ -59,7 +56,6 @@ namespace CollAction.Services
             {
                 using (HttpResponseMessage response = await client.GetAsync(GetListMemberUri(listId, email) + "?fields=status"))
                 {
-
                     if (response.StatusCode == HttpStatusCode.NotFound)
                     {
                         return SubscriptionStatus.NotFound;
@@ -89,7 +85,6 @@ namespace CollAction.Services
                 StringContent content = new StringContent(GetAddOrUpdateListMemberParametersJSON(email, usePendingStatusIfNew), Encoding.UTF8, "application/json");
                 using (HttpResponseMessage response = await client.PutAsync(GetListMemberUri(listId, email), content))
                 {
-
                     if (response.StatusCode != HttpStatusCode.OK)
                     {
                         string errorResponse = await GetMailChimpErrorResponse(response);
@@ -108,7 +103,6 @@ namespace CollAction.Services
             {
                 using (HttpResponseMessage response = await client.DeleteAsync(GetListMemberUri(listId, email)))
                 {
-
                     if (response.StatusCode != HttpStatusCode.NoContent && response.StatusCode != HttpStatusCode.NotFound)
                     {
                         string errorResponse = await GetMailChimpErrorResponse(response);

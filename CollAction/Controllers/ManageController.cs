@@ -5,15 +5,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using CollAction.Models;
-using CollAction.Services;
 using Microsoft.Extensions.Localization;
 using CollAction.Data;
 using CollAction.Models.ManageViewModels;
-using System.Text.Encodings.Web;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
+using CollAction.Services.Email;
+using CollAction.Services.Newsletter;
 
 namespace CollAction.Controllers
 {
