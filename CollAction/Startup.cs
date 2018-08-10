@@ -174,7 +174,8 @@ namespace CollAction
                            cspBuilder.AddImgSrc().Self() // Only allow self-hosted images, or google analytics (for tracking images), or configured sources
                                                  .Sources.AddRange(new[]
                                                                    {
-                                                                       "https://www.google-analytics.com"
+                                                                       "https://www.google-analytics.com",
+                                                                       $"https://s3.{Configuration["S3Region"]}.amazonaws.com"
                                                                    }.Concat(Configuration["CspImgSrc"]?.Split(";") ?? new string[0]));
                            cspBuilder.AddStyleSrc().Self() // Only allow style/css from these sources (note: css injection can actually be dangerous), or configured sources
                                                    .UnsafeInline() // Unfortunately this is necessary, the backend passess some things that are directly passed into css style attributes, especially on the project page. TODO: We should try to get rid of this.
