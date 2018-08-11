@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Hosting;
 
 namespace CollAction.Services.Image
 {
-    public class ImageService : IImageService
+    public class AmazonS3ImageService : IImageService
     {
         private readonly ApplicationDbContext _context; // TODO: Remove after migration has run
         private readonly IHostingEnvironment _environment; // TODO: Remove after migration has run
@@ -27,7 +27,7 @@ namespace CollAction.Services.Image
         private readonly string _region;
         private readonly IBackgroundJobClient _jobClient;
 
-        public ImageService(ApplicationDbContext context, IHostingEnvironment environment, IOptions<ImageServiceOptions> options, IBackgroundJobClient jobClient)
+        public AmazonS3ImageService(ApplicationDbContext context, IHostingEnvironment environment, IOptions<ImageServiceOptions> options, IBackgroundJobClient jobClient)
         {
             _environment = environment; // TODO: Remove after migration has run
             _context = context; // TODO: Remove after migration has run
