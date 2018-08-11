@@ -7,11 +7,7 @@ import "./manage";
 
 import "whatwg-fetch";
 
-import * as jQuery from "jquery";
 import * as Promise from "bluebird";
-
-// Let's Load jQuery in the window for the asp validations
-window["jQuery"] = jQuery;
 
 // Configure
 Promise.config({

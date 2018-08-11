@@ -26,22 +26,22 @@
                         <div>
                             <h3><label asp-for="Name" class="control-label required"></label></h3>
                             <input asp-for="Name" class="form-control" />
-                            @Html.ValidationMessage("Name")
+                            <span asp-validation-for="Name" class="field-validation-error" /></span>
                         </div>
                         <div>
                             <h3><label asp-for="CategoryId" class="control-label required"></label></h3>
                             <select asp-for="CategoryId" asp-items="Model.Categories" class="form-control"></select>
-                            @Html.ValidationMessage("CategoryId")
+                            <span asp-validation-for="CategoryId" class="field-validation-error" /></span>
                         </div>
                         <div>
                             <h3><label asp-for="Target" class="control-label required"></label></h3>
                             <input asp-for="Target" class="form-control" />
-                            @Html.ValidationMessage("Target")
+                            <span asp-validation-for="Target" class="field-validation-error" /></span>
                         </div>
                         <div>
                             <h3><label asp-for="Proposal" class="control-label required"></label></h3>
                             <textarea asp-for="Proposal" rows="4" class="form-control"></textarea>
-                            @Html.ValidationMessage("Proposal")
+                            <span asp-validation-for="Proposal" class="field-validation-error" /></span>
                         </div>
                     </div>
                 </div>
@@ -75,21 +75,21 @@
                         <h3><label asp-for="Description" class="control-label required"></label></h3>
                         <div id="create-project-description"></div>
                         <input asp-for="Description" type="hidden" />
-                        @Html.ValidationMessage("Description")
+                        <span asp-validation-for="Description" class="field-validation-error" /></span>
                     </div>
                     <div id="project-dates">
                         <h3><label asp-for="Start" class="control-label required"></label></h3>
                         <input asp-for="Start" class="form-control">
-                        @Html.ValidationMessage("Start")
+                        <span asp-validation-for="Start" class="field-validation-error" /></span>
 
                         <h3><label asp-for="End" class="control-label required"></label></h3>
                         <input asp-for="End" class="form-control">
-                        @Html.ValidationMessage("End")
+                        <span asp-validation-for="End" class="field-validation-error" /></span>
                     </div>
                     <div id="project-hashtags">
                         <h3><label asp-for="Hashtag" class="control-label"></label></h3>
                         <input asp-for="Hashtag" class="form-control">
-                        @Html.ValidationMessage("Hashtag")
+                        <span asp-validation-for="Hashtag" class="field-validation-error" /></span>
                     </div>
                 </div>
 
@@ -98,7 +98,7 @@
                         <h3><label asp-for="Goal" class="control-label required"></label></h3>
                         <div id="create-project-goal"></div>
                         <input asp-for="Goal" type="hidden" />
-                        @Html.ValidationMessage("Goal")
+                        <span asp-validation-for="Goal" class="field-validation-error" /></span>
                     </div>
 
                     <hr class="hidden-sm hidden-xs" />
@@ -107,7 +107,7 @@
                         <h3><label asp-for="CreatorComments" class="control-label"></label></h3>
                         <div id="create-project-creatorcomments"></div>
                         <input asp-for="CreatorComments" type="hidden" />
-                        @Html.ValidationMessage("CreatorComments")
+                        <span asp-validation-for="CreatorComments" class="field-validation-error" /></span>
                     </div>
                 </div>
 
@@ -117,13 +117,13 @@
                     <div id="project-image-description">
                         <h3><label asp-for="DescriptiveImageDescription" class="control-label"></label></h3>
                         <input name="DescriptiveImageDescription" class="form-control" />
-                        @Html.ValidationMessage("DescriptiveImageDescription")
+                        <span asp-validation-for="DescriptiveImageDescription" class="field-validation-error" /></span>
                     </div>
 
                     <div id="project-videolink">
                         <h3><label asp-for="DescriptionVideoLink" class="control-label"></label></h3>
                         <input asp-for="DescriptionVideoLink" class="form-control" />                    
-                        @Html.ValidationMessage("DescriptionVideoLink")
+                        <span asp-validation-for="DescriptionVideoLink" class="field-validation-error" /></span>
                     </div>
 
                     <div id="submit-project">
@@ -134,3 +134,12 @@
         </div> 
     </form>    
 </div> 
+
+@section Scripts {
+     <partial name="_ValidationScriptsPartial" />
+     <script lang="javascript">
+        $.validator.setDefaults({ 
+            ignore: [],
+        });
+     </script>
+ }
