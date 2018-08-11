@@ -4,9 +4,10 @@ using Microsoft.Extensions.Configuration;
 using CollAction.Services.Newsletter;
 using System;
 
-namespace CollAction.Tests
+namespace CollAction.Tests.Integration
 {
     [TestClass]
+    [TestCategory("Integration")]
     public sealed class MailChimpManagerTests
     {
         private string _newsletterTestListId;
@@ -36,9 +37,16 @@ namespace CollAction.Tests
         {
             string email = GetTestEmail();
 
-            await _manager.AddOrUpdateListMemberAsync(_newsletterTestListId, email);
-            MailChimpManager.SubscriptionStatus status = await _manager.GetListMemberStatusAsync(_newsletterTestListId, email);
-            Assert.AreEqual(MailChimpManager.SubscriptionStatus.Pending, status);
+            try
+            {
+                await _manager.AddOrUpdateListMemberAsync(_newsletterTestListId, email, true);
+                MailChimpManager.SubscriptionStatus status = await _manager.GetListMemberStatusAsync(_newsletterTestListId, email);
+                Assert.AreEqual(MailChimpManager.SubscriptionStatus.Pending, status);
+            }
+            finally
+            {
+                await _manager.DeleteListMemberAsync(_newsletterTestListId, email);
+            }
         }
 
         [TestMethod]
@@ -46,9 +54,16 @@ namespace CollAction.Tests
         {
             string email = GetTestEmail();
 
-            await _manager.AddOrUpdateListMemberAsync(_newsletterTestListId, email, false);
-            MailChimpManager.SubscriptionStatus status = await _manager.GetListMemberStatusAsync(_newsletterTestListId, email);
-            Assert.AreEqual(MailChimpManager.SubscriptionStatus.Subscribed, status);
+            try
+            {
+                await _manager.AddOrUpdateListMemberAsync(_newsletterTestListId, email, false);
+                MailChimpManager.SubscriptionStatus status = await _manager.GetListMemberStatusAsync(_newsletterTestListId, email);
+                Assert.AreEqual(MailChimpManager.SubscriptionStatus.Subscribed, status);
+            }
+            finally
+            {
+                await _manager.DeleteListMemberAsync(_newsletterTestListId, email);
+            }
         }
 
         [TestMethod]
