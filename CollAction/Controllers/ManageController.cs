@@ -111,9 +111,9 @@ namespace CollAction.Controllers
             {
                 _newsletterSubscriptionService.SetSubscription(user.Email, model.NewsletterSubscription, false);
                 if (model.NewsletterSubscription)
-                    StatusMessage = _localizer["Successfully subscribed to newsletter"];
+                    StatusMessage = _localizer["Successfully subscribed to newsletter (it might take a few seconds for the change to propagate)"];
                 else
-                    StatusMessage = _localizer["Successfully unsubscribed to newsletter"];
+                    StatusMessage = _localizer["Successfully unsubscribed to newsletter (it might take a few seconds for the change to propagate)"];
             }
             return RedirectToAction(nameof(Index));
         }
