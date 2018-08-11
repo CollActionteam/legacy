@@ -14,3 +14,5 @@ import "./MobileNavDraw";
 import "./ShareButtons";
 import "./RichTextEditor";
 import "./CookieMessage";
+
+import "./RichTextRequiredValidation";

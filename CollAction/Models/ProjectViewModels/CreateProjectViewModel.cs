@@ -42,13 +42,13 @@ namespace CollAction.Models
 
         public string ProjectStarterLastName { get; set; }        
 
-        [Required(ErrorMessage = "Give a succinct description of the issues your project is designed to address")]
+        [RichTextRequired(ErrorMessage = "Give a succinct description of the issues your project is designed to address")]
         [StringLength(10000, ErrorMessage = "Please use no more then 10.000 characters")]
         [SecureRichText]
         [Display(Name = "Short description", Prompt = "E.g Reduce plastic waste and save our oceans!")]
         public string Description { get; set; }
 
-        [Required(ErrorMessage = "Describe what you hope to have achieved upon successful completion of your project")]
+        [RichTextRequired(ErrorMessage = "Describe what you hope to have achieved upon successful completion of your project")]
         [StringLength(10000, ErrorMessage = "Please use no more then 10.000 characters")]
         [SecureRichText]
         [Display(Name = "Goal/Impact", Prompt = "Max 1000 characters")]

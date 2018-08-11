@@ -53,6 +53,10 @@ export default class RichTextEditor extends React.Component<ICollActionEditorPro
     const input = document.getElementById(this.props.formInputId) as HTMLInputElement;
     if (input) {
       input.value = this.state.content;
+
+      // Manually dispatch change event for the hidden input field to trigger validation
+      let event = new Event("change");
+      input.dispatchEvent(event);
     }
   }
 
@@ -75,7 +79,7 @@ export default class RichTextEditor extends React.Component<ICollActionEditorPro
         placeholder={ this.props.hint }
         modules={ this.modules }
         formats={ this.formats }
-        onChange={ this.handleChange }></ReactQuill>
+        onChange={ this.handleChange } />
     );
   }
 }
