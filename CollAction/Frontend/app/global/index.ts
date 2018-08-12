@@ -16,3 +16,4 @@ import "./RichTextEditor";
 import "./CookieMessage";
 
 import "./RichTextRequiredValidation";
+import "./WithinMonthsValidation";

@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
 namespace CollAction.ValidationAttributes
 {
-    public class WithinMonthsAfterTodayAttribute : ValidationAttribute
+    public class WithinMonthsAfterTodayAttribute : ValidationAttribute, IClientModelValidator
     {
         protected readonly int _months;
 
@@ -21,15 +22,29 @@ namespace CollAction.ValidationAttributes
         {
             if (value == null) return ValidationResult.Success;
 
-            DateTime startDate = DateTime.UtcNow;
-            DateTime endDate = startDate.AddMonths(_months);
-            DateTime checkDate = (DateTime)value;
-            if (checkDate < startDate || checkDate > endDate)
+            var today = GetNow();
+            var maxDate = today.AddMonths(_months);
+            var checkDate = (DateTime)value;
+            if (checkDate < today || checkDate > maxDate)
             {
                 return new ValidationResult(ErrorMessage);
             }
 
             return ValidationResult.Success;
+        }
+
+        public void AddValidation(ClientModelValidationContext context)
+        {
+            var now = GetNow();
+            context.Attributes["data-val"] = "true";
+            context.Attributes["data-val-withinmonthsaftertoday"] = ErrorMessage;
+            context.Attributes["data-val-withinmonthsaftertoday-today"] = now.ToString("o"); // Produce ISO 8601 date/times
+            context.Attributes["data-val-withinmonthsaftertoday-months"] = _months.ToString();
+        }
+
+        private DateTime GetNow()
+        {
+            return DateTime.UtcNow.Date;
         }
     }
 }
