@@ -50,9 +50,9 @@ export default class UploadBanner extends UploadImage {
                         disablePreview={true}
                         onDrop={this.onDrop}
                         onDropRejected={this.onRejected}
-                        rejectClassName="invalid">
+                        rejectClassName="field-validation-error">
                         <h3>Upload banner image</h3>
-                        <p className={this.state.invalid ? "invalid" : ""}>Drop or tap. Use jpg, png, gif or bmp. Max. 1 MB</p>
+                        <p className={this.state.invalid ? "field-validation-error" : ""}>Drop or tap. Use jpg, png, gif or bmp. Max. 1 MB</p>
                     </DropZone>
                 </div>
                 <div style={{display: this.state.preview ? "block" : "none"}}>
