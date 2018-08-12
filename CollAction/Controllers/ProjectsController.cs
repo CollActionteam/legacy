@@ -50,7 +50,7 @@ namespace CollAction.Controllers
             {
                 return NotFound();
             }
-            
+
             IEnumerable<DisplayProjectViewModel> items = await _projectService.GetProjectDisplayViewModels(p => p.Id == id && p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted);
             if (items.Count() == 0)
             {
@@ -192,7 +192,7 @@ namespace CollAction.Controllers
             {
                 Name = name
             });
-         }
+        }
 
         // GET: Projects/Delete/5
         [Authorize]
