@@ -161,9 +161,15 @@ namespace CollAction.Controllers
             foreach (var admin in administrators)
                 _emailSender.SendEmail(admin.Email, subject, confirmationEmailAdmin);
 
-            return View("ThankYouCreate", new ThankYouCreateProjectViewModel()
+            return LocalRedirect($"~/Projects/Create/{project.Id}/{Uri.EscapeDataString(project.Name)}/thankyou");
+        }
+
+        [Authorize]
+        public IActionResult ThankYouCreate(int? id, string name)
+        {
+            return View(new ThankYouCreateProjectViewModel
             {
-                Name = project.Name
+                Name = name
             });
         }
 
@@ -236,12 +242,8 @@ namespace CollAction.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Commit(int id, CommitProjectViewModel commitProjectViewModel)
+        public async Task<IActionResult> Commit(CommitProjectViewModel commitProjectViewModel)
         {
-            if (id != commitProjectViewModel.ProjectId)
-            {
-                return NotFound();
-            }
 
             ApplicationUser user = await _userManager.GetUserAsync(User);
             bool success = await _projectService.AddParticipant(user.Id, commitProjectViewModel.ProjectId);
@@ -274,11 +276,30 @@ namespace CollAction.Controllers
                     "</span>";
                 string subject = $"Thank you for participating in the \"{commitProjectViewModel.ProjectName}\" project on CollAction";
                 _emailSender.SendEmail(user.Email, subject, confirmationEmail);
-                return View("ThankYouCommit", commitProjectViewModel);
+                return LocalRedirect($"~/Projects/{commitProjectViewModel.ProjectId}/{Uri.EscapeDataString(commitProjectViewModel.ProjectName)}/thankyou");
             }
             else
             {
                 return View("Error");
+            }
+        }
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult ThankYouCommit(int id, string name)
+        {
+            if (name != null)
+            {
+                CommitProjectViewModel model = new CommitProjectViewModel()
+                {
+                    ProjectId = id,
+                    ProjectName = name
+                };
+                return View(nameof(ThankYouCommit), model);
+            }
+            else
+            {
+                return BadRequest();
             }
         }
 
