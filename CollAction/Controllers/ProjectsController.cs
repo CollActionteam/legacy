@@ -16,7 +16,6 @@ using CollAction.Helpers;
 using CollAction.Services;
 using CollAction.Models.ProjectViewModels;
 using System.Linq.Expressions;
-using Newtonsoft.Json;
 
 namespace CollAction.Controllers
 {
@@ -45,8 +44,13 @@ namespace CollAction.Controllers
         public IActionResult Find()
             => View();
 
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(int? id)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            
             IEnumerable<DisplayProjectViewModel> items = await _projectService.GetProjectDisplayViewModels(p => p.Id == id && p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted);
             if (items.Count() == 0)
             {

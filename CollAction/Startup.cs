@@ -280,12 +280,7 @@ namespace CollAction
                      "Projects/{id}/{name}/details",
                      new { controller = "Projects", action = "Details" }
                  );
-
-                routes.MapRoute("detailsbyid",
-                     "Projects/details/{id:int}",
-                     new { controller = "Projects", action = "DetailsById" }
-                 );
-
+                 
                  routes.MapRoute("participate",
                      "Projects/{id}/{name}/participate",
                      new { controller = "Projects", action = "Commit" }
@@ -297,7 +292,7 @@ namespace CollAction
                  );
 
                 routes.MapRoute("thankyoucreate",
-                     "Projects/Create/{name}/thankyou",
+                     "Projects/Create/{id}/{name}/thankyou",
                      new { controller = "Projects", action = "ThankYouCreate" }
                  );
 
