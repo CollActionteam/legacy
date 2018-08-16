@@ -78,17 +78,9 @@ namespace CollAction.Services
         {
             return await _context.Projects
                 .Where(filter)
-                .Include(p => p.Category)
-                .Include(p => p.Location)
-                .Include(p => p.BannerImage)
-                .Include(p => p.DescriptiveImage)
-                .Include(p => p.DescriptionVideoLink)
-                .Include(p => p.Owner)
-                .Include(p => p.Tags).ThenInclude(t => t.Tag)
-                .GroupJoin(_context.ProjectParticipants,
-                    project => project.Id,
-                    participants => participants.ProjectId,
-                    (project, participantsGroup) => new FindProjectsViewModel(_stringLocalizer)
+                .OrderBy(p => p.DisplayPriority)
+                .Select(project =>
+                    new FindProjectsViewModel(_stringLocalizer)
                     {
                         ProjectId = project.Id,
                         ProjectName = project.Name,
