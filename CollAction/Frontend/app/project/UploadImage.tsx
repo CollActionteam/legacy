@@ -1,9 +1,11 @@
 import * as React from "react";
 
-interface IUploadImageProps {
+export interface IUploadImageProps {
+    descriptionDivId?: string;
+    descriptionFieldName?: string;
 }
 
-interface IUploadImageState {
+export interface IUploadImageState {
     invalid: boolean;
     preview: boolean;
 }
@@ -80,7 +82,33 @@ export default abstract class UploadImage extends React.Component<IUploadImagePr
         let inputElement = this.getFileInputElement();
         inputElement.value = "";
 
+        if (this.props.descriptionFieldName) {
+            document.getElementsByName(this.props.descriptionFieldName).forEach(field => {
+                let input = field as HTMLInputElement;
+                input.value = null;
+            });
+        }
+
         this.setState({ preview: false });
+    }
+
+    componentDidMount() {
+        this.setDescriptionVisibility();
+    }
+
+    componentDidUpdate() {
+        this.setDescriptionVisibility();
+    }
+
+    setDescriptionVisibility() {
+        if (this.props.descriptionDivId) {
+            if (this.state.preview === true) {
+                document.getElementById(this.props.descriptionDivId).classList.remove("hidden");
+            }
+            else if (this.state.preview === false) {
+                document.getElementById(this.props.descriptionDivId).classList.add("hidden");
+            }
+        }
     }
 
     abstract render();

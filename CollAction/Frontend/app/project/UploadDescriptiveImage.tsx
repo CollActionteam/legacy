@@ -3,7 +3,7 @@ import UploadImage from "./UploadImage";
 import DropZone from "react-dropzone";
 import renderComponentIf from "../global/renderComponentIf";
 
-export default class UploadDescriptiveImage extends UploadImage {
+export default class UploadDescriptiveImage  extends UploadImage {
     constructor(props: {}) {
         super(props);
 
@@ -45,7 +45,7 @@ export default class UploadDescriptiveImage extends UploadImage {
                 </div>
                 <div className="text">
                     <img src="/images/BrowserSize.png"></img>
-                    <p>Try and change your browser size, or rotate your device, to see if the image is suitable.</p>                    
+                    <p>Try and change your browser size, or rotate your device, to see if the image is suitable.</p>
                 </div>
                 <div className="buttons">
                     <input type="button" value="Remove" onClick={this.removeBanner}></input>
@@ -87,6 +87,8 @@ export default class UploadDescriptiveImage extends UploadImage {
 }
 
 renderComponentIf(
-    <UploadDescriptiveImage></UploadDescriptiveImage>,
+    <UploadDescriptiveImage
+        descriptionDivId={ document.getElementById("create-project-upload-descriptive-image") && document.getElementById("create-project-upload-descriptive-image").dataset.descriptionDivId }
+        descriptionFieldName={ document.getElementById("create-project-upload-descriptive-image") && document.getElementById("create-project-upload-descriptive-image").dataset.descriptionFieldName } />,
     document.getElementById("create-project-upload-descriptive-image")
 );
