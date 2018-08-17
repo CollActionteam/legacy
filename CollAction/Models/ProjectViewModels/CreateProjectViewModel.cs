@@ -92,7 +92,7 @@ namespace CollAction.Models
         [Display(Name = "Description image")]
         public IFormFile DescriptiveImageUpload { get; set; }
 
-        [YouTubeLink]
+        [RegularExpression(@"^(http|https)://www.youtube.com/watch\?v=((?:\w|-){11}?)$", ErrorMessage="Only YouTube links of the form http://www.youtube.com/watch?v=<your-11-character-video-id> are accepted.")]
         [Display(Name = "YouTube Video Link", Prompt = "Descriptive Video. e.g. http://www.youtube.com/watch?v=-wtIMTCHWuI")]
         public string DescriptionVideoLink { get; set; }
 
