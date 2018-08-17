@@ -83,10 +83,11 @@ export default abstract class UploadImage extends React.Component<IUploadImagePr
         inputElement.value = "";
 
         if (this.props.descriptionFieldName) {
-            document.getElementsByName(this.props.descriptionFieldName).forEach(field => {
-                let input = field as HTMLInputElement;
+            let fields = document.getElementsByName(this.props.descriptionFieldName);
+            for (let i = 0; i < fields.length; i++) {
+                let input = fields.item(i) as HTMLInputElement;
                 input.value = null;
-            });
+            }
         }
 
         this.setState({ preview: false });
