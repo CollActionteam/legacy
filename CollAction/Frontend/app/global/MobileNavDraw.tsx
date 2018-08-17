@@ -37,10 +37,6 @@ export default class MobileNavDraw extends React.Component<IMobileNavDrawProps, 
             <li><a href="/start">Start Project</a></li>
             <li><a href="/about">Over</a></li>
             {this.props.loginText == "Logout" ?
-                (<li><a href="/manage">Account</a></li>) :
-                (<li></li>)
-            }
-            {this.props.loginText == "Logout" ?
                 (<li><button type="button" onClick={() => document.getElementById("logOutBtn").click()}>Logout</button></li>) :
                 (<li><a href="/account/login">Login</a></li>)
             }
