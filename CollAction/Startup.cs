@@ -201,7 +201,8 @@ namespace CollAction
                                                    .Sources.AddRange(Configuration["CspMediaSrc"]?.Split(";") ?? new string[0]); // Only allow self-hosted videos, or configured sources
                            cspBuilder.AddFrameAncestors().None(); // No framing allowed here (put us inside a frame tag)
                            cspBuilder.AddScriptSrc() // Only allow scripts from our own site, the aspnetcdn site, app insights and google analytics
-                                     .Self()
+                                     .Self()                                    
+                                     .UnsafeEval()
                                      .Sources.AddRange(new[]
                                                        {
                                                            "https://ajax.aspnetcdn.com",
