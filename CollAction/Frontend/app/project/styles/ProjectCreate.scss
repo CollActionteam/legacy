@@ -129,11 +129,10 @@
         input[type="button"] {
             background-color: #8a8a8a;
             color: #fff;
-            // margin-top:20px;
             padding: 10px 20px;
             border: none;
             border-radius: 20px;
-            font-size: 1em;
+            font-size: 0.9em;
             text-decoration-line: none;
         }
     }
@@ -165,24 +164,71 @@
 
     #project-image {
 
-        img {
+        img[id="preview"] {
             width: 100%;
             box-shadow: 5px 9.5px 34px -9px rgba(0, 0, 0, 0.45);
         }
 
         .image-control {
-            border-radius: 20px;
-            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+
             background-color: #eeeeee;
+            border-radius: 20px;
             padding: 20px;
 
-            input[type="button"] {
-                padding: 10px 15px;
+            .description {
+                margin-bottom: 20px;
             }
-        }
 
-        .under > .image-control {
-            margin: 20px 0 0 0;
+            .text {
+                display: flex;
+                align-items: center;
+
+                img {
+                    width: 58px;
+                    height: 50px;
+                }
+            }
+
+            .buttons {
+                margin-top: 20px;
+                text-align: center;
+            }
+
+            @media (min-width: 993px) {
+                // Portrait mode
+                .text {
+                    flex-direction: column;
+                    text-align: center;
+                    
+                    img {
+                        margin-left: 15px; // icon looks not centered otherwise due to make-up
+                    }
+
+                    p {
+                        margin-top: 10px;                        
+                    }
+                }    
+            }
+
+            @media (max-width: 993px) {
+                // Landscape
+                margin: 20px 0 0 0;
+
+                .description {
+                    margin-bottom: 0px;
+                    text-align: center;
+                }
+
+                .text {
+                    justify-content: center;
+
+                    p {
+                        margin-left: 10px;
+                    }
+                }                
+            }
         }
     }
 

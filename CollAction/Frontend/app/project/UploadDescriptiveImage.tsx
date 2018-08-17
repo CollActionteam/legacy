@@ -40,9 +40,16 @@ export default class UploadDescriptiveImage extends UploadImage {
     renderImageControl() {
         return (
             <div className="image-control">
-                <p>The image description will appear here.</p>
-                <p>Try and change your browser size, or rotate your device, to see if the image is suitable.</p>
-                <input type="button" value="Remove" onClick={this.removeBanner}></input>
+                <div className="description">
+                    <p>The image description will appear here.</p>
+                </div>
+                <div className="text">
+                    <img src="/images/BrowserSize.png"></img>
+                    <p>Try and change your browser size, or rotate your device, to see if the image is suitable.</p>                    
+                </div>
+                <div className="buttons">
+                    <input type="button" value="Remove" onClick={this.removeBanner}></input>
+                </div>
             </div>
         );
     }
@@ -65,13 +72,13 @@ export default class UploadDescriptiveImage extends UploadImage {
                         <p className={this.state.invalid ? "field-validation-error" : ""}>Drop or tap. Use jpg, png, gif or bmp. Max. 1 MB</p>
                     </DropZone>
                 </div>
-                <div className="hidden-xs hidden-sm col-md-2 leftside" style={{display: this.state.preview ? "block" : "none"}}>
+                <div className="hidden-xs hidden-sm col-md-2" style={{display: this.state.preview ? "block" : "none"}}>
                     { this.renderImageControl() }
                 </div>
                 <div className="col-xs-12 col-md-10" style={{display: this.state.preview ? "block" : "none"}}>
                     <img id="preview" className="pull-right"></img>
                 </div>
-                <div className="col-xs-12 hidden-md hidden-lg under" style={{display: this.state.preview ? "block" : "none"}}>
+                <div className="col-xs-12 hidden-md hidden-lg" style={{display: this.state.preview ? "block" : "none"}}>
                     { this.renderImageControl() }
                 </div>
             </div>
