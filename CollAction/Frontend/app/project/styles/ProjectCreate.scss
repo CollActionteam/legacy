@@ -58,7 +58,12 @@
         margin-top: 15px;
         background-color: #fff;
         padding: 20px;
-        width: 325px;
+        @media (min-width: 767px) {
+            width: 325px;
+        }
+        @media (max-width: 767px) {
+            width: 100%;
+        }
     }
 
     #project-info-card {
@@ -105,11 +110,10 @@
 
     #banner-image,
     #project-image {
-        text-align: center;
-
         .dropzone {
             border: 1px dashed #8a8a8a;
             border-radius: 10px;
+            text-align: center;
         }
 
         h3 {
@@ -122,16 +126,11 @@
             font-size: 0.7em;
         }
 
-        img {
-            width: 100%;
-            box-shadow: 5px 9.5px 34px -9px rgba(0, 0, 0, 0.45);
-        }
-
         input[type="button"] {
             background-color: #8a8a8a;
             color: #fff;
-            margin-top:20px;
-            padding: 10px 50px;
+            // margin-top:20px;
+            padding: 10px 20px;
             border: none;
             border-radius: 20px;
             font-size: 1em;
@@ -139,7 +138,46 @@
         }
     }
 
+    #banner-image {
+        .image-control {
+            display: flex;
+            flex-direction: column;
+
+            .text {
+                display: flex;
+                
+                img {
+                    width: 58px;
+                    height: 50px;
+                }
+
+                p {
+                    margin: 0 0 0 20px;
+                }
+            }
+
+            .buttons {
+                margin-top: 20px;
+                text-align: center;
+            }
+            // border-radius: 20px;
+            // margin-bottom: 20px;
+            // background-color: #eeeeee;
+            // padding: 20px;
+
+            // input[type="button"] {
+            //     padding: 10px 15px;
+            // }
+        }
+    }
+
     #project-image {
+
+        img {
+            width: 100%;
+            box-shadow: 5px 9.5px 34px -9px rgba(0, 0, 0, 0.45);
+        }
+
         .image-control {
             border-radius: 20px;
             margin-bottom: 20px;

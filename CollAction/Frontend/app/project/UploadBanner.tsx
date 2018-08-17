@@ -56,8 +56,15 @@ export default class UploadBanner extends UploadImage {
                     </DropZone>
                 </div>
                 <div style={{display: this.state.preview ? "block" : "none"}}>
-                    <p>Try and change your browser size, or rotate your device, to see if the image is suitable.</p>
-                    <input type="button" value="Remove banner" onClick={this.removeBanner}></input>
+                    <div className="image-control">
+                        <div className="text">
+                            <img src="/images/BrowserSize.png"></img>
+                            <p>Try and change your browser size, or rotate your device, to see if the image is suitable.</p>
+                        </div>
+                        <div className="buttons">
+                            <input type="button" value="Remove banner" onClick={this.removeBanner}></input>
+                        </div>
+                    </div>
                 </div>
             </div>
         );
