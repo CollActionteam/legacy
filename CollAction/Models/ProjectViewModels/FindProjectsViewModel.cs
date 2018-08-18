@@ -66,7 +66,7 @@ namespace CollAction.Models
                 if (value.TotalDays < 2)
                     RemainingTime = String.Format("{0} {1}", value.Hours, value.Hours == 1 ? _localizer["hour"] : _localizer["hours"]);
                 else
-                    RemainingTime = String.Format("{0} {1}", _localizer["days"]);
+                    RemainingTime = String.Format("{0} {1}", value.Days, _localizer["days"]);
             }
         }
     }
