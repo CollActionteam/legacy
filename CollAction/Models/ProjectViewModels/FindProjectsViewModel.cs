@@ -63,10 +63,10 @@ namespace CollAction.Models
             set
             {
                 _remaining = value;
-                if (value.TotalDays < 1)
+                if (value.TotalDays < 2)
                     RemainingTime = String.Format("{0} {1}", value.Hours, value.Hours == 1 ? _localizer["hour"] : _localizer["hours"]);
                 else
-                    RemainingTime = String.Format("{0} {1}", value.Days, value.Days == 1 ? _localizer["day"] : _localizer["days"]);
+                    RemainingTime = String.Format("{0} {1}", _localizer["days"]);
             }
         }
     }
