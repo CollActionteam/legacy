@@ -13,6 +13,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Web;
+using CollAction.Helpers;
 
 namespace CollAction.Services
 {
@@ -84,6 +85,7 @@ namespace CollAction.Services
                     {
                         ProjectId = project.Id,
                         ProjectName = project.Name,
+                        ProjectUriPart = project.Name.NormalizeUriPart(),
                         ProjectProposal = project.Proposal,
                         CategoryName = project.Category.Name,
                         CategoryColorHex = project.Category.ColorHex,

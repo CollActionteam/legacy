@@ -45,7 +45,7 @@ namespace CollAction.Controllers
         public IActionResult Find()
             => View();
 
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string name, int? id)
         {
             if (id == null)
             {
@@ -161,11 +161,11 @@ namespace CollAction.Controllers
             foreach (var admin in administrators)
                 _emailSender.SendEmail(admin.Email, subject, confirmationEmailAdmin);
 
-            return LocalRedirect($"~/Projects/Create/{project.Id}/{Uri.EscapeDataString(project.Name)}/thankyou");
+            return LocalRedirect($"~/Projects/Create/{Uri.EscapeDataString(project.Name).Normalize()}/{project.Id}/thankyou");
         }
 
         [Authorize]
-        public IActionResult ThankYouCreate(int? id, string name)
+        public IActionResult ThankYouCreate(string name, int? id)
         {
             return View(new ThankYouCreateProjectViewModel
             {
@@ -214,7 +214,7 @@ namespace CollAction.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Commit(int? id)
+        public async Task<IActionResult> Commit(string name, int? id)
         {
             if (id == null)
             {
@@ -276,7 +276,7 @@ namespace CollAction.Controllers
                     "</span>";
                 string subject = $"Thank you for participating in the \"{commitProjectViewModel.ProjectName}\" project on CollAction";
                 _emailSender.SendEmail(user.Email, subject, confirmationEmail);
-                return LocalRedirect($"~/Projects/{commitProjectViewModel.ProjectId}/{Uri.EscapeDataString(commitProjectViewModel.ProjectName)}/thankyou");
+                return LocalRedirect($"~/Projects/{Uri.EscapeDataString(commitProjectViewModel.ProjectName).Normalize()}/{commitProjectViewModel.ProjectId}/thankyou");
             }
             else
             {

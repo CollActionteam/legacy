@@ -119,6 +119,7 @@ namespace CollAction
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredLength = 8;
             });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -274,22 +275,22 @@ namespace CollAction
                 );
 
                 routes.MapRoute("details",
-                     "Projects/{id}/{name}/details",
+                     "Projects/{name}/{id}/details",
                      new { controller = "Projects", action = "Details" }
                  );
 
                 routes.MapRoute("participate",
-                     "Projects/{id}/{name}/participate",
+                     "Projects/{name}/{id}/participate",
                      new { controller = "Projects", action = "Commit" }
                  );
 
                 routes.MapRoute("thankyoucommit",
-                     "Projects/{id}/{name}/thankyou",
+                     "Projects/{name}/{id}/thankyou",
                      new { controller = "Projects", action = "ThankYouCommit" }
                  );
 
                 routes.MapRoute("thankyoucreate",
-                     "Projects/Create/{id}/{name}/thankyou",
+                     "Projects/Create/{name}/{id}/thankyou",
                      new { controller = "Projects", action = "ThankYouCreate" }
                  );
 
