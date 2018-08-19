@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using CollAction.Helpers;
 
 namespace CollAction.Models
 {
@@ -16,6 +17,6 @@ namespace CollAction.Models
 
         public bool IsActive { get; set; }
 
-        public string ProjectLink => $"/Projects/{ProjectId}/{Uri.EscapeDataString(ProjectName)}/Details";
+        public string ProjectLink => $"/Projects/{ProjectId}/{Uri.EscapeDataString(ProjectName.NormalizeUriPart())}/Details";
     }
 }
