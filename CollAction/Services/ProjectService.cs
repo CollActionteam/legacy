@@ -85,7 +85,7 @@ namespace CollAction.Services
                     {
                         ProjectId = project.Id,
                         ProjectName = project.Name,
-                        ProjectUriPart = project.Name.NormalizeUriPart(),
+                        ProjectNameUriPart = project.Name.NormalizeUriPart(),
                         ProjectProposal = project.Proposal,
                         CategoryName = project.Category.Name,
                         CategoryColorHex = project.Category.ColorHex,

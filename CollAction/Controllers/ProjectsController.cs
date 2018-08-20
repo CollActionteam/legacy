@@ -45,13 +45,8 @@ namespace CollAction.Controllers
         public IActionResult Find()
             => View();
 
-        public async Task<IActionResult> Details(string name, int? id)
+        public async Task<IActionResult> Details(string name, int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             IEnumerable<DisplayProjectViewModel> items = await _projectService.GetProjectDisplayViewModels(p => p.Id == id && p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted);
             if (items.Count() == 0)
             {
@@ -161,15 +156,20 @@ namespace CollAction.Controllers
             foreach (var admin in administrators)
                 _emailSender.SendEmail(admin.Email, subject, confirmationEmailAdmin);
 
-            return LocalRedirect($"~/Projects/Create/{Uri.EscapeDataString(project.Name.NormalizeUriPart())}/{project.Id}/thankyou");
+            return LocalRedirect($"~/Projects/Create/{project.Name.NormalizeUriPart()}/{project.Id}/thankyou");
         }
 
         [Authorize]
         public IActionResult ThankYouCreate(string name, int? id)
         {
+            var project = await _context.Projects.SingleOrDefaultAsync(m => m.Id == id.Value);
+            if (project == null)
+            {
+                return NotFound();
+            }
             return View(new ThankYouCreateProjectViewModel
             {
-                Name = name
+                Name = project.Name
             });
         }
 
@@ -214,14 +214,9 @@ namespace CollAction.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Commit(string name, int? id)
+        public async Task<IActionResult> Commit(string name, int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            Project project =  await _projectService.GetProjectById(id.Value); 
+            Project project =  await _projectService.GetProjectById(id); 
             if (project == null)
             {
                 return NotFound();
@@ -276,7 +271,7 @@ namespace CollAction.Controllers
                     "</span>";
                 string subject = $"Thank you for participating in the \"{commitProjectViewModel.ProjectName}\" project on CollAction";
                 _emailSender.SendEmail(user.Email, subject, confirmationEmail);
-                return LocalRedirect($"~/Projects/{Uri.EscapeDataString(commitProjectViewModel.ProjectName.NormalizeUriPart())}/{commitProjectViewModel.ProjectId}/thankyou");
+                return LocalRedirect($"~/Projects/{commitProjectViewModel.ProjectName.NormalizeUriPart()}/{commitProjectViewModel.ProjectId}/thankyou");
             }
             else
             {
@@ -288,19 +283,17 @@ namespace CollAction.Controllers
         [HttpGet]
         public IActionResult ThankYouCommit(int id, string name)
         {
-            if (name != null)
+            var project = await _context.Projects.SingleOrDefaultAsync(m => m.Id == id.Value);
+            if (project == null)
             {
-                CommitProjectViewModel model = new CommitProjectViewModel()
-                {
-                    ProjectId = id,
-                    ProjectName = name
-                };
-                return View(nameof(ThankYouCommit), model);
+                return NotFound();
             }
-            else
+            CommitProjectViewModel model = new CommitProjectViewModel()
             {
-                return BadRequest();
-            }
+                ProjectId = id,
+                ProjectName = project.Name
+            };
+            return View(nameof(ThankYouCommit), model);
         }
 
         [HttpGet]

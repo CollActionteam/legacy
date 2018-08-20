@@ -3,7 +3,7 @@ import * as React from "react";
 export interface IProject {
   projectId: string,
   projectName: string;
-  projectUriPart: string;
+  projectNameUriPart: string;
   projectProposal: string;
   categoryName: string;
   categoryColorHex: string;
@@ -22,7 +22,7 @@ class ProjectThumb extends React.Component<IProject, null> {
       backgroundImage: `url(${this.props.bannerImagePath})`,
     };
 
-    const link = `/projects/${encodeURIComponent(this.props.projectUriPart)}/${this.props.projectId}/details`;
+    const link = `/projects/${this.props.projectNameUriPart}/${this.props.projectId}/details`;
 
     return (
       <div className="col-xs-12 col-md-4 project-thumb-container">
