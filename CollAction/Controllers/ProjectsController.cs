@@ -162,7 +162,7 @@ namespace CollAction.Controllers
         [Authorize]
         public IActionResult ThankYouCreate(string name, int? id)
         {
-            var project = await _context.Projects.SingleOrDefaultAsync(m => m.Id == id.Value);
+            var project = _context.Projects.SingleOrDefault(m => m.Id == id.Value);
             if (project == null)
             {
                 return NotFound();
@@ -283,7 +283,7 @@ namespace CollAction.Controllers
         [HttpGet]
         public IActionResult ThankYouCommit(int id, string name)
         {
-            var project = await _context.Projects.SingleOrDefaultAsync(m => m.Id == id.Value);
+            var project = _context.Projects.SingleOrDefault(m => m.Id == id);
             if (project == null)
             {
                 return NotFound();
