@@ -9,25 +9,18 @@ namespace CollAction.Helpers
 {
     public static class ProjectNormalizeStringExtensions
     {
+        private static Regex _spaceRemoveRegex = new Regex(@"\s", RegexOptions.Compiled);
+        private static Regex _invalidCharRemoveRegex = new Regex(@"[^a-z0-9\s-_]",RegexOptions.Compiled);
+        private static Regex _doubleDashRemoveRegex = new Regex(@"([-_]){2,}", RegexOptions.Compiled);
+
         public static string ToUrlSlug(this string value)
         {                      
-            //First to lower case
             value = value.ToLowerInvariant();
-
-            //Replace spaces
-            value = Regex.Replace(value, @"\s", "-", RegexOptions.Compiled);
-
-            //Remove invalid chars
-            value = Regex.Replace(value, @"[^a-z0-9\s-_]", "",RegexOptions.Compiled);
-
-            //Trim dashes from end
+            value = _spaceRemoveRegex.Replace(value,"-");
+            value = _invalidCharRemoveRegex.Replace(value,"");
             value = value.Trim('-', '_');
-
-            //Replace double occurences of - or _
-            value = Regex.Replace(value, @"([-_]){2,}", "$1", RegexOptions.Compiled);
-
+            value = _doubleDashRemoveRegex.Replace(value,"$1");
             if(value.Length == 0){
-                //Replace empty string with placeholder - dash
                 value = "-";
             }
 
