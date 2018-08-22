@@ -16,7 +16,7 @@ namespace CollAction.Helpers
         public static string ToUrlSlug(this string value)
         {                      
             value = value.ToLowerInvariant();
-            value = _spaceRemoveRegex.Replace(value,"-");
+            value = _spaceRemoveRegex.Replace(value, "-");
             value = _invalidCharRemoveRegex.Replace(value, "");
             value = value.Trim('-', '_');
             value = _doubleDashRemoveRegex.Replace(value, "$1");
