@@ -17,10 +17,11 @@ namespace CollAction.Helpers
         {                      
             value = value.ToLowerInvariant();
             value = _spaceRemoveRegex.Replace(value,"-");
-            value = _invalidCharRemoveRegex.Replace(value,"");
+            value = _invalidCharRemoveRegex.Replace(value, "");
             value = value.Trim('-', '_');
-            value = _doubleDashRemoveRegex.Replace(value,"$1");
-            if(value.Length == 0){
+            value = _doubleDashRemoveRegex.Replace(value, "$1");
+            if(value.Length == 0)
+            {
                 value = "-";
             }
 
