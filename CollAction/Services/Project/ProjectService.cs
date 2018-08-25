@@ -14,7 +14,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace CollAction.Services.Project
 {
@@ -39,10 +38,8 @@ namespace CollAction.Services.Project
             _stringLocalizer = stringLocalizer;
         }
 
-        public async Task<Models.Project> GetProjectById(int id)
-        {
-            return await _context.Projects.SingleOrDefaultAsync(p => p.Id == id);
-        }
+        public Task<Models.Project> GetProjectById(int id)
+            => _context.Projects.SingleOrDefaultAsync(p => p.Id == id);
 
         public async Task<bool> AddParticipant(string userId, int projectId)
         {
@@ -70,6 +67,8 @@ namespace CollAction.Services.Project
                 return false;
             }
 
+            await RefreshParticipantCountMaterializedView();
+
             return true;
         }
 
@@ -95,7 +94,7 @@ namespace CollAction.Services.Project
                         BannerImagePath = project.BannerImage != null ? _imageService.GetUrl(project.BannerImage) : $"/images/default_banners/{project.Category.Name}.jpg",
                         BannerImageDescription = project.BannerImage.Description,
                         Target = project.Target,
-                        Participants = project.Participants.Sum(participant => participant.User.RepresentsNumberParticipants) + project.AnonymousUserParticipants,
+                        Participants = project.ParticipantCounts.Count,
                         Remaining = project.RemainingTime,
                         DescriptiveImagePath = project.DescriptiveImage == null ? null : _imageService.GetUrl(project.DescriptiveImage),
                         DescriptiveImageDescription = project.DescriptiveImage.Description,
@@ -117,13 +116,12 @@ namespace CollAction.Services.Project
                 .Include(p => p.DescriptionVideoLink)
                 .Include(p => p.Owner)
                 .Include(p => p.Tags).ThenInclude(t => t.Tag)
-                .GroupJoin(_context.ProjectParticipants,
-                    project => project.Id,
-                    participants => participants.ProjectId,
-                    (project, participantsGroup) => new DisplayProjectViewModel
+                .Include(p => p.ParticipantCounts)
+                .Select(project => 
+                    new DisplayProjectViewModel
                     {
                         Project = project,
-                        Participants = participantsGroup.Sum(p => p.User.RepresentsNumberParticipants) + project.AnonymousUserParticipants
+                        Participants = project.ParticipantCounts.Count
                     })
                 .ToListAsync();
         }
@@ -194,6 +192,9 @@ namespace CollAction.Services.Project
             else
                 throw new InvalidOperationException("unable to send project e-mails, limit exceeded");
         }
+
+        public Task RefreshParticipantCountMaterializedView()
+            => _context.Database.ExecuteSqlCommandAsync(@"REFRESH MATERIALIZED VIEW CONCURRENTLY ""ProjectParticipantCounts"";");
 
         private string FormatEmailMessage(string message, ApplicationUser user, string unsubscribeLink)
         {
