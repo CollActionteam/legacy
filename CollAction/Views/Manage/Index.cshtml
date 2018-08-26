@@ -26,9 +26,15 @@
             <dd>
                 <form asp-controller="Manage" asp-action="NewsletterSubscription" method="post" class="form-horizontal">
                     <div asp-validation-summary="All" class="text-danger"></div>
-                    <label asp-for="NewsletterSubscription" class="control-label"></label>
-                    @Html.CheckBoxFor(m => m.NewsletterSubscription, new { onclick = "this.form.submit();" })
+                    <input type="hidden" asp-for="NewsletterSubscription" value="@(!Model.NewsletterSubscription)" />
                     @Html.ValidationMessage("NewsletterSubscription")
+                    @if (Model.NewsletterSubscription)
+                    {
+                        <input type="submit" value="Unsubscribe from newsletter" />
+                    } else
+                    {
+                        <input type="submit" value="Subscribe to newsletter" />
+                    }
                 </form>
             </dd>
             <dt>Delete Account (Warning: This will permanently delete your data!)</dt>

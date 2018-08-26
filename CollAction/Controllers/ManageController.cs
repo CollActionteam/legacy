@@ -102,16 +102,16 @@ namespace CollAction.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> NewsletterSubscription(IndexViewModel model)
+        public async Task<IActionResult> NewsletterSubscription([Bind("NewsletterSubscription")]IndexViewModel model)
         {
             var user = await GetCurrentUserAsync();
             if (user != null)
             {
                 _newsletterSubscriptionService.SetSubscription(user.Email, model.NewsletterSubscription, false);
                 if (model.NewsletterSubscription)
-                    StatusMessage = _localizer["Successfully subscribed to newsletter"];
+                    StatusMessage = _localizer["Successfully subscribed to newsletter (it might take a few seconds for the change to propagate)"];
                 else
-                    StatusMessage = _localizer["Successfully unsubscribed to newsletter"];
+                    StatusMessage = _localizer["Successfully unsubscribed to newsletter (it might take a few seconds for the change to propagate)"];
             }
             return RedirectToAction(nameof(Index));
         }
