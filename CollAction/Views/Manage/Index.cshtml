@@ -38,17 +38,16 @@
                         <div class="panel-heading"><dt>Nieuwsbrief:</dt></div>
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-3">
                                         <form asp-controller="Manage" asp-action="NewsletterSubscription" method="post" class="form-horizontal">
-                                            <div asp-validation-summary="All" class="text-danger"></div>
                                             <input type="hidden" asp-for="NewsletterSubscription" value="@(!Model.NewsletterSubscription)" />
                                             @Html.ValidationMessage("NewsletterSubscription")
                                             @if (Model.NewsletterSubscription)
                                             {
-                                                <input type="submit" value="Unsubscribe from newsletter" />
+                                                <input class="symetric_buttons" type="submit" value="Unsubscribe from newsletter" />
                                             } else
                                             {
-                                                <input type="submit" value="Subscribe to newsletter" />
+                                                <input class="symetric_buttons" type="submit" value="Subscribe to newsletter" />
                                             }
                                         </form>
                                     </div>
@@ -72,7 +71,7 @@
                                         <form asp-controller="Account" asp-action="Delete" method="post">
                                             <input class="symetric_buttons" type="submit" value="Verwijder" />
                                         </form>
-                                    </div>
+                                </div>
                                 <div class="col-md-9"></div>
                             </div>
                         </div>
