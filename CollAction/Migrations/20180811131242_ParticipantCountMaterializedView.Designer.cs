@@ -4,15 +4,17 @@ using CollAction.Data;
 using CollAction.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace CollAction.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180811131242_ParticipantCountMaterializedView")]
+    partial class ParticipantCountMaterializedView
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -129,9 +131,18 @@ namespace CollAction.Migrations
                         .IsRequired();
 
                     b.Property<string>("Filepath")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(256);
+
+                    b.Property<string>("Format")
+                        .IsRequired()
+                        .HasMaxLength(16);
 
                     b.Property<int>("Height");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128);
 
                     b.Property<int>("Width");
 

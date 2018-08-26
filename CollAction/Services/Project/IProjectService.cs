@@ -20,5 +20,6 @@ namespace CollAction.Services.Project
         Task<IEnumerable<FindProjectsViewModel>> FindProjects(Expression<Func<Models.Project, bool>> filter);
         int NumberEmailsAllowedToSend(Models.Project project);
         DateTime CanSendEmailsUntil(Models.Project project);
+        Task RefreshParticipantCountMaterializedView();
     }
 }

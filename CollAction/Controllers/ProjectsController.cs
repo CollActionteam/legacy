@@ -147,6 +147,8 @@ namespace CollAction.Controllers
 
             await _context.SaveChangesAsync();
 
+            await _projectService.RefreshParticipantCountMaterializedView();
+
             // Notify admins and creator through e-mail
             //"Hi!<br>" +
             //"<br>" +
