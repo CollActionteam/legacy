@@ -21,7 +21,7 @@
             <div class="container">
 
                 <div class="panel panel-default">
-                        <div class="panel-heading"><dt>Password</dt></div>
+                        <div class="panel-heading"><dt>Password:</dt></div>
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-md-3">
@@ -45,17 +45,16 @@
                         <div class="panel-heading"><dt>Newsletter Subscription:</dt></div>
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-3">
                                         <form asp-controller="Manage" asp-action="NewsletterSubscription" method="post" class="form-horizontal">
-                                            <div asp-validation-summary="All" class="text-danger"></div>
                                             <input type="hidden" asp-for="NewsletterSubscription" value="@(!Model.NewsletterSubscription)" />
                                             @Html.ValidationMessage("NewsletterSubscription")
                                             @if (Model.NewsletterSubscription)
                                             {
-                                                <input type="submit" value="Unsubscribe from newsletter" />
+                                                <input class="symetric_buttons" type="submit" value="Unsubscribe" />
                                             } else
                                             {
-                                                <input type="submit" value="Subscribe to newsletter" />
+                                                <input class="symetric_buttons" type="submit" value="Subscribe" />
                                             }
                                         </form>
                                     </div>
@@ -71,7 +70,7 @@
         <div class="row">
             <div class="container">
                 <div class="panel panel-default">
-                        <div class="panel-heading"><dt>Delete Account</dt></div>
+                        <div class="panel-heading"><dt>Delete Account:</dt></div>
                         <div class="panel-body">
                             <div class="row">
                                 <div class="alert alert-warning" role="alert"><dt>Warning: This will permanently delete your data!</dt></div>
