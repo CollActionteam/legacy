@@ -40,7 +40,6 @@ namespace CollAction.Services
         {
             return await _context.Projects.SingleOrDefaultAsync(p => p.Id == id);
         }
-
         public async Task<bool> AddParticipant(string userId, int projectId)
         {
             Project project = await GetProjectById(projectId);
@@ -85,7 +84,7 @@ namespace CollAction.Services
                     {
                         ProjectId = project.Id,
                         ProjectName = project.Name,
-                        ProjectNameUriPart = project.Name.NormalizeUriPart(),
+                        ProjectNameUriPart = ProjectNameService.GetProjectNameNormalized(project.Name),
                         ProjectProposal = project.Proposal,
                         CategoryName = project.Category.Name,
                         CategoryColorHex = project.Category.ColorHex,

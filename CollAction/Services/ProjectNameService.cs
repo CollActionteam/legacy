@@ -4,16 +4,18 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
-namespace CollAction.Helpers
+namespace CollAction.Services
 {
-    public static class ProjectNormalizeStringExtensions
+    public static class ProjectNameService
     {
         private static Regex _spaceRemoveRegex = new Regex(@"\s", RegexOptions.Compiled);
         private static Regex _invalidCharRemoveRegex = new Regex(@"[^a-z0-9\s-_]",RegexOptions.Compiled);
         private static Regex _doubleDashRemoveRegex = new Regex(@"([-_]){2,}", RegexOptions.Compiled);
 
-        public static string ToUrlSlug(this string value)
+        private static string ToUrlSlug(string value)
         {                      
             value = value.ToLowerInvariant();
             value = _spaceRemoveRegex.Replace(value, "-");
@@ -28,7 +30,7 @@ namespace CollAction.Helpers
             return value;
         }
 
-        public static string RemoveDiacriticsFromString(this string text) 
+        private static string RemoveDiacriticsFromString(string text) 
         {
             var normalizedString = text.Normalize(NormalizationForm.FormD);
             var stringBuilder = new StringBuilder();
@@ -45,11 +47,13 @@ namespace CollAction.Helpers
             return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
         }
 
-        public static string NormalizeUriPart(this string project)
+        public static string GetProjectNameNormalized(string projectName)
         {
-            return project
-                .RemoveDiacriticsFromString()
-                .ToUrlSlug();
+            var normalizedString = String.Copy(projectName);
+            RemoveDiacriticsFromString(projectName);
+            ToUrlSlug(projectName);
+            return normalizedString;
         }
     }
+
 }

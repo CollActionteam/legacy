@@ -1,5 +1,6 @@
 ﻿using CollAction.Data;
 using CollAction.Models;
+using CollAction.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -60,7 +61,7 @@ namespace CollAction.Helpers
             HostString host = _urlHelper.ActionContext.HttpContext.Request.Host;
             List<XElement> projectElements = new List<XElement>(3)
             {
-                new XElement(_urlsetNamespace + "loc", _protocol + host + _urlHelper.Action("Details", "Projects", new { id = project.Id, name = project.Name.NormalizeUriPart() }))
+                new XElement(_urlsetNamespace + "loc", _protocol + host + _urlHelper.Action("Details", "Projects", new { id = project.Id, name = ProjectNameService.GetProjectNameNormalized(project.Name)}))
             };
             if (project.BannerImageFileId != null)
             {

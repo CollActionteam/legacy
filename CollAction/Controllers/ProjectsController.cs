@@ -156,7 +156,7 @@ namespace CollAction.Controllers
             foreach (var admin in administrators)
                 _emailSender.SendEmail(admin.Email, subject, confirmationEmailAdmin);
 
-            return LocalRedirect($"~/Projects/Create/{project.Name.NormalizeUriPart()}/{project.Id}/thankyou");
+            return LocalRedirect($"~/Projects/Create/{ProjectNameService.GetProjectNameNormalized(project.Name)}/{project.Id}/thankyou");
         }
 
         [Authorize]
@@ -271,7 +271,7 @@ namespace CollAction.Controllers
                     "</span>";
                 string subject = $"Thank you for participating in the \"{commitProjectViewModel.ProjectName}\" project on CollAction";
                 _emailSender.SendEmail(user.Email, subject, confirmationEmail);
-                return LocalRedirect($"~/Projects/{commitProjectViewModel.ProjectName.NormalizeUriPart()}/{commitProjectViewModel.ProjectId}/thankyou");
+                return LocalRedirect($"~/Projects/{ProjectNameService.GetProjectNameNormalized(commitProjectViewModel.ProjectName)}/{commitProjectViewModel.ProjectId}/thankyou");
             }
             else
             {

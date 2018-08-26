@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using CollAction.Helpers;
+using CollAction.Services;
 
 namespace CollAction.Models
 {
@@ -17,6 +18,6 @@ namespace CollAction.Models
 
         public bool IsActive { get; set; }
 
-        public string ProjectLink => $"/Projects/{ProjectId}/{ProjectName.NormalizeUriPart()}/Details";
+        public string ProjectLink => $"/Projects/{ProjectId}/{ProjectNameService.GetProjectNameNormalized(ProjectName)}/Details";
     }
 }
