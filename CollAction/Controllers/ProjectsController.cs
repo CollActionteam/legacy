@@ -156,7 +156,7 @@ namespace CollAction.Controllers
             foreach (var admin in administrators)
                 _emailSender.SendEmail(admin.Email, subject, confirmationEmailAdmin);
 
-            return LocalRedirect($"~/Projects/Create/{ProjectNameService.GetProjectNameNormalized(project.Name)}/{project.Id}/thankyou");
+            return LocalRedirect($"~/Projects/Create/{_projectService.GetProjectNameNormalized(project.Name)}/{project.Id}/thankyou");
         }
 
         [Authorize]
@@ -226,6 +226,7 @@ namespace CollAction.Controllers
             {
                 ProjectId = project.Id,
                 ProjectName = project.Name,
+                ProjectNameUriPart = _projectService.GetProjectNameNormalized(project.Name),
                 ProjectProposal = project.Proposal,
                 IsUserCommitted = (await _projectService.GetParticipant((await _userManager.GetUserAsync(User)).Id, project.Id) != null),
                 IsActive = project.IsActive
@@ -271,7 +272,8 @@ namespace CollAction.Controllers
                     "</span>";
                 string subject = $"Thank you for participating in the \"{commitProjectViewModel.ProjectName}\" project on CollAction";
                 _emailSender.SendEmail(user.Email, subject, confirmationEmail);
-                return LocalRedirect($"~/Projects/{ProjectNameService.GetProjectNameNormalized(commitProjectViewModel.ProjectName)}/{commitProjectViewModel.ProjectId}/thankyou");
+                commitProjectViewModel.ProjectNameUriPart = _projectService.GetProjectNameNormalized(commitProjectViewModel.ProjectName);
+                return LocalRedirect($"~/Projects/{commitProjectViewModel.ProjectNameUriPart}/{commitProjectViewModel.ProjectId}/thankyou");
             }
             else
             {
@@ -291,7 +293,8 @@ namespace CollAction.Controllers
             CommitProjectViewModel model = new CommitProjectViewModel()
             {
                 ProjectId = id,
-                ProjectName = project.Name
+                ProjectName = project.Name,
+                ProjectNameUriPart = _projectService.GetProjectNameNormalized(project.Name)
             };
             return View(nameof(ThankYouCommit), model);
         }
