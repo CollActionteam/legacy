@@ -335,10 +335,7 @@ namespace CollAction
             using (var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
             {
                 if (Configuration.GetValue<bool>("ResetTestDatabase"))
-                {
-                    context.Database.ExecuteSqlCommand($"DROP DATABASE IF EXISTS \"{Configuration["Db"]}\";");
-                    context.Database.ExecuteSqlCommand($"CREATE DATABASE \"{Configuration["Db"]}\";");
-                }
+                    context.Database.ExecuteSqlCommand("DROP SCHEMA public CASCADE; CREATE SCHEMA public;");
                 context.Database.Migrate();
                 Task.Run(() => context.Seed(Configuration, userManager, roleManager)).Wait();
             }
