@@ -50,8 +50,8 @@ namespace CollAction.Services
         public static string GetProjectNameNormalized(string projectName)
         {
             var normalizedString = String.Copy(projectName);
-            RemoveDiacriticsFromString(projectName);
-            ToUrlSlug(projectName);
+            RemoveDiacriticsFromString(normalizedString);
+            ToUrlSlug(normalizedString);
             return normalizedString;
         }
     }
