@@ -104,16 +104,16 @@ namespace CollAction.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> NewsletterSubscription(IndexViewModel model)
+        public async Task<IActionResult> NewsletterSubscription([Bind("NewsletterSubscription")]IndexViewModel model)
         {
             var user = await GetCurrentUserAsync();
             if (user != null)
             {
                 _newsletterSubscriptionService.SetSubscription(user.Email, model.NewsletterSubscription, false);
                 if (model.NewsletterSubscription)
-                    StatusMessage = _localizer["U bent nu ingeschreven voor de nieuwsbrief"];
+                    StatusMessage = _localizer["U bent nu ingeschreven voor de nieuwsbrief (het kan een paar seconden duren voordat u daadwerkelijk uitgeschreven bent)"];
                 else
-                    StatusMessage = _localizer["U bent niet meer ingeschreven voor de nieuwsbrief"];
+                    StatusMessage = _localizer["U bent niet meer ingeschreven voor de nieuwsbrief (het kan een paar seconden duren voordat u daadwerkelijk uitgeschreven bent)"];
             }
             return RedirectToAction(nameof(Index));
         }
