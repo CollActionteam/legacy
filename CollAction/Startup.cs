@@ -351,6 +351,8 @@ namespace CollAction
             using (var roleManager = serviceScope.ServiceProvider.GetService<RoleManager<IdentityRole>>())
             using (var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
             {
+                if (Configuration.GetValue<bool>("ResetTestDatabase"))
+                    context.Database.ExecuteSqlCommand("DROP SCHEMA public CASCADE; CREATE SCHEMA public;");
                 context.Database.Migrate();
                 Task.Run(() => context.Seed(Configuration, userManager, roleManager)).Wait();
             }

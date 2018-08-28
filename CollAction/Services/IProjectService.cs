@@ -21,5 +21,6 @@ namespace CollAction.Services
         int NumberEmailsAllowedToSend(Project project);
         DateTime CanSendEmailsUntil(Project project);
         string GetProjectNameNormalized(string projectName);
+        Task RefreshParticipantCountMaterializedView();
     }
 }
