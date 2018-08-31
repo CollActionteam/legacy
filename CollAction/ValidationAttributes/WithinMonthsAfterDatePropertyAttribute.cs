@@ -42,9 +42,9 @@ namespace CollAction.ValidationAttributes
             var duration = now.AddMonths(_months) - now;
 
             context.Attributes["data-val"] = "true";
-            context.Attributes["data-val-withinmonthsafterdate"] = ErrorMessage;
-            context.Attributes["data-val-withinmonthsafterdate-propertyname"] = _dateProperty;
-            context.Attributes["data-val-withinmonthsafterdate-months"] = _months.ToString();
+            context.Attributes["data-val-WithinMonthsAfterDate"] = ErrorMessage;
+            context.Attributes["data-val-WithinMonthsAfterDate-propertyname"] = _dateProperty;
+            context.Attributes["data-val-WithinMonthsAfterDate-months"] = _months.ToString();
         }
 
         private DateTime GetReferencedDate(Object instance)

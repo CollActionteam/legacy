@@ -2,7 +2,7 @@ import * as moment from "moment";
 
 if (typeof $ !== "undefined" && typeof $.validator !== "undefined" && typeof $.validator.unobtrusive !== "undefined") {
 
-    $.validator.addMethod("withinmonthsaftertoday",
+    $.validator.addMethod("WithinMonthsAfterToday",
         function(value, element, params) {
             let today = moment.utc(params[0]);
             let checkDate = moment.utc(value);
@@ -14,15 +14,15 @@ if (typeof $ !== "undefined" && typeof $.validator !== "undefined" && typeof $.v
         }
     );
 
-    $.validator.unobtrusive.adapters.add("withinmonthsaftertoday",
+    $.validator.unobtrusive.adapters.add("WithinMonthsAfterToday",
         ["today", "months"],
         function (options) {
-            options.rules["withinmonthsaftertoday"] = [options.params["today"], options.params["months"]];
-            options.messages["withinmonthsaftertoday"] = options.message;
+            options.rules["WithinMonthsAfterToday"] = [options.params["today"], options.params["months"]];
+            options.messages["WithinMonthsAfterToday"] = options.message;
        }
     );
 
-    $.validator.addMethod("withinmonthsafterdate",
+    $.validator.addMethod("WithinMonthsAfterDate",
         function(value, element, params) {
             let dateField = params[0];
             let startDate = moment.utc(dateField.val());
@@ -35,7 +35,7 @@ if (typeof $ !== "undefined" && typeof $.validator !== "undefined" && typeof $.v
         }
     );
 
-    $.validator.unobtrusive.adapters.add("withinmonthsafterdate",
+    $.validator.unobtrusive.adapters.add("WithinMonthsAfterDate",
         ["propertyname", "months"],
         function (options) {
             let propertyName = options.params["propertyname"];
@@ -45,8 +45,8 @@ if (typeof $ !== "undefined" && typeof $.validator !== "undefined" && typeof $.v
                 throw new Error(`Cannot find input field ${propertyName}.`);
             }
 
-            options.rules["withinmonthsafterdate"] = [dateField, options.params["months"]];
-            options.messages["withinmonthsafterdate"] = options.message;
+            options.rules["WithinMonthsAfterDate"] = [dateField, options.params["months"]];
+            options.messages["WithinMonthsAfterDate"] = options.message;
        }
     );
 }

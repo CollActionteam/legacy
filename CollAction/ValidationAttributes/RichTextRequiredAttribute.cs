@@ -10,7 +10,7 @@ namespace CollAction.ValidationAttributes
             var requiredMessage = ErrorMessage ?? $"{context.ModelMetadata.DisplayName} is required";
             context.Attributes["data-val"] = "true";
             context.Attributes["data-val-required"] = requiredMessage;
-            context.Attributes["data-val-richtextrequired"] = requiredMessage;
+            context.Attributes["data-val-RichTextRequired"] = requiredMessage;
         }
     }
 }

@@ -4,17 +4,17 @@ if (typeof $ !== "undefined" && typeof $.validator !== "undefined" && typeof $.v
         ignore: ".ql-editor"
     });
 
-    $.validator.addMethod("richtextrequired",
+    $.validator.addMethod("RichTextRequired",
         function(value, element, params) {
             let text = $(value).text().trim();
             return (text !== "");
         }
     );
 
-    $.validator.unobtrusive.adapters.add("richtextrequired",
+    $.validator.unobtrusive.adapters.add("RichTextRequired",
         function (options) {
-            options.rules["richtextrequired"] = [];
-            options.messages["richtextrequired"] = options.message;
+            options.rules["RichTextRequired"] = [];
+            options.messages["RichTextRequired"] = options.message;
 
             $(options.element).on("change", function () {
                 // Manually trigger validation on change event

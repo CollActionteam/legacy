@@ -37,9 +37,9 @@ namespace CollAction.ValidationAttributes
         {
             var now = GetNow();
             context.Attributes["data-val"] = "true";
-            context.Attributes["data-val-withinmonthsaftertoday"] = ErrorMessage;
-            context.Attributes["data-val-withinmonthsaftertoday-today"] = now.ToString("o"); // Produce ISO 8601 date/times
-            context.Attributes["data-val-withinmonthsaftertoday-months"] = _months.ToString();
+            context.Attributes["data-val-WithinMonthsAfterToday"] = ErrorMessage;
+            context.Attributes["data-val-WithinMonthsAfterToday-today"] = now.ToString("o"); // Produce ISO 8601 date/times
+            context.Attributes["data-val-WithinMonthsAfterToday-months"] = _months.ToString();
         }
 
         private DateTime GetNow()
