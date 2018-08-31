@@ -8,6 +8,8 @@ export interface IUploadImageProps {
 export interface IUploadImageState {
     invalid: boolean;
     preview: boolean;
+
+    image: any;
 }
 
 export default abstract class UploadImage extends React.Component<IUploadImageProps, IUploadImageState> {
@@ -16,18 +18,18 @@ export default abstract class UploadImage extends React.Component<IUploadImagePr
 
         this.state = {
             invalid: false,
-            preview: false
+            preview: false,
+            image: null
         };
 
         this.loadImage = this.loadImage.bind(this);
-        this.previewImage = this.previewImage.bind(this);
         this.rejectImage = this.rejectImage.bind(this);
         this.resetImage = this.resetImage.bind(this);
     }
 
-    loadImage(accepted: File[], rejected: File[], event: any) {
+    protected loadImage(accepted: File[], rejected: File[], event: any) {
         if (this.state.preview) {
-            // On Safari and Chrome, setBannerImageUploadInput triggers this this function again.
+            // On Safari and Chrome, setBannerImageUploadInput triggers this function again.
             // On Firefox it does not... so, if preview is already in progress, we can stop.
             return;
         }
@@ -38,7 +40,7 @@ export default abstract class UploadImage extends React.Component<IUploadImagePr
         }
 
         let that = this;
-        this.setState({ preview: true});
+        this.setState({ invalid: false, preview: true});
 
         if (event.dataTransfer) {
             // onDrop was triggered from drag and drop event.
@@ -47,7 +49,8 @@ export default abstract class UploadImage extends React.Component<IUploadImagePr
             setTimeout(function() {
                 // Schedule this for the next event loop.
                 // Otherwise, on Chrome and Safari it will trigger onDrop in the same event loop and we won't have the correct state.
-                that.setFileInput(files);
+                let inputElement = that.getFileInputElement();
+                inputElement.files = files;
             });
         }
 
@@ -57,7 +60,8 @@ export default abstract class UploadImage extends React.Component<IUploadImagePr
         let reader = new FileReader();
         let file = accepted[0];
         reader.onload = function() {
-            that.previewImage(file.type, reader.result);
+            let url = that.createImage(file.type, reader.result);
+            that.setState({ image: url });
         };
         reader.onabort = this.rejectImage;
         reader.onerror = this.rejectImage;
@@ -65,20 +69,15 @@ export default abstract class UploadImage extends React.Component<IUploadImagePr
         reader.readAsDataURL(file);
     }
 
-    setFileInput(files: FileList) {
-        let inputElement = this.getFileInputElement();
-        inputElement.files = files;
-    }
-
     abstract getFileInputElement(): HTMLInputElement;
 
-    abstract previewImage(type: string, image: any);
+    abstract createImage(type: string, image: any): any;
 
-    rejectImage() {
+    protected rejectImage() {
         this.setState({ invalid: true, preview: false });
     }
 
-    resetImage() {
+    protected resetImage() {
         let inputElement = this.getFileInputElement();
         inputElement.value = "";
 
@@ -90,7 +89,7 @@ export default abstract class UploadImage extends React.Component<IUploadImagePr
             }
         }
 
-        this.setState({ preview: false });
+        this.setState({ preview: false, image: null });
     }
 
     componentDidMount() {

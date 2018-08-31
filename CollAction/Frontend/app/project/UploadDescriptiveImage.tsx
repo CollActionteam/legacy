@@ -8,33 +8,24 @@ export default class UploadDescriptiveImage  extends UploadImage {
         super(props);
 
         this.onDrop = this.onDrop.bind(this);
-        this.previewImage = this.previewImage.bind(this);
-        this.onRejected = this.onRejected.bind(this);
+        this.createImage = this.createImage.bind(this);
         this.getFileInputElement = this.getFileInputElement.bind(this);
-        this.removeBanner = this.removeBanner.bind(this);
     }
 
     onDrop(accepted: File[], rejected: File[], event: any) {
-        super.loadImage(accepted, rejected, event);
-    }
-
-    previewImage(type: string, image: any) {
-        let background = document.getElementById("preview") as HTMLImageElement;
-        background.src = "data:" + type + ";" + image;
+        this.loadImage(accepted, rejected, event);
     }
 
     onRejected() {
-        super.rejectImage();
+        this.rejectImage();
+    }
+
+    createImage(type: string, image: any): string {
+        return `data:${type};${image}`;
     }
 
     getFileInputElement(): HTMLInputElement {
         return document.getElementsByName("DescriptiveImageUpload")[0] as HTMLInputElement;
-    }
-
-    removeBanner() {
-        super.resetImage();
-        let background = document.getElementById("preview") as HTMLImageElement;
-        background.src = null;
     }
 
     renderImageControl() {
@@ -48,7 +39,7 @@ export default class UploadDescriptiveImage  extends UploadImage {
                     <p>Try and change your browser size, or rotate your device, to see if the image is suitable.</p>
                 </div>
                 <div className="buttons">
-                    <input type="button" value="Remove" onClick={this.removeBanner}></input>
+                    <input type="button" value="Remove" onClick={this.resetImage}></input>
                 </div>
             </div>
         );
@@ -76,7 +67,7 @@ export default class UploadDescriptiveImage  extends UploadImage {
                     { this.renderImageControl() }
                 </div>
                 <div className="col-xs-12 col-md-10" style={{display: this.state.preview ? "block" : "none"}}>
-                    <img id="preview" className="pull-right"></img>
+                    <img id="preview" src={this.state.image} className="pull-right"></img>
                 </div>
                 <div className="col-xs-12 hidden-md hidden-lg" style={{display: this.state.preview ? "block" : "none"}}>
                     { this.renderImageControl() }
