@@ -71,6 +71,8 @@ namespace CollAction.Models
         
         public ProjectDisplayPriority DisplayPriority { get; set; }
 
+        public ProjectParticipantCount ParticipantCounts { get; set; }
+
         [NotMapped]
         public bool IsActive
             => Status == ProjectStatus.Running && Start <= DateTime.UtcNow && End >= DateTime.UtcNow;
