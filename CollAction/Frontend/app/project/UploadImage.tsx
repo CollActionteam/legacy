@@ -1,26 +1,17 @@
 import * as React from "react";
 
-export interface IUploadImageProps {
-    descriptionDivId?: string;
-    descriptionFieldName?: string;
+export interface IUploadImageProps{    
 }
 
 export interface IUploadImageState {
     invalid: boolean;
     preview: boolean;
-
     image: any;
 }
 
-export default abstract class UploadImage extends React.Component<IUploadImageProps, IUploadImageState> {
-    constructor(props: {}) {
+export default abstract class UploadImage<P extends IUploadImageProps, S extends IUploadImageState> extends React.Component<P, S> {
+    constructor(props: any) {
         super(props);
-
-        this.state = {
-            invalid: false,
-            preview: false,
-            image: null
-        };
 
         this.loadImage = this.loadImage.bind(this);
         this.rejectImage = this.rejectImage.bind(this);
@@ -81,34 +72,7 @@ export default abstract class UploadImage extends React.Component<IUploadImagePr
         let inputElement = this.getFileInputElement();
         inputElement.value = "";
 
-        if (this.props.descriptionFieldName) {
-            let fields = document.getElementsByName(this.props.descriptionFieldName);
-            for (let i = 0; i < fields.length; i++) {
-                let input = fields.item(i) as HTMLInputElement;
-                input.value = null;
-            }
-        }
-
         this.setState({ preview: false, image: null });
-    }
-
-    componentDidMount() {
-        this.setDescriptionVisibility();
-    }
-
-    componentDidUpdate() {
-        this.setDescriptionVisibility();
-    }
-
-    setDescriptionVisibility() {
-        if (this.props.descriptionDivId) {
-            if (this.state.preview === true) {
-                document.getElementById(this.props.descriptionDivId).classList.remove("hidden");
-            }
-            else if (this.state.preview === false) {
-                document.getElementById(this.props.descriptionDivId).classList.add("hidden");
-            }
-        }
     }
 
     abstract render();

@@ -1,11 +1,22 @@
 import * as React from "react";
-import UploadImage from "./UploadImage";
+import UploadImage, { IUploadImageState } from "./UploadImage";
 import DropZone from "react-dropzone";
 import renderComponentIf from "../global/renderComponentIf";
 
-export default class UploadDescriptiveImage  extends UploadImage {
-    constructor(props: {}) {
+export interface IUploadDescriptiveImageProps {
+    descriptionContainer: HTMLElement;
+    descriptionField: HTMLInputElement;
+}
+
+export default class UploadDescriptiveImage extends UploadImage<IUploadDescriptiveImageProps, IUploadImageState> {
+    constructor(props: any) {
         super(props);
+
+        this.state = {
+            invalid: false,
+            preview: false,
+            image: null
+        };
 
         this.onDrop = this.onDrop.bind(this);
         this.createImage = this.createImage.bind(this);
@@ -28,11 +39,33 @@ export default class UploadDescriptiveImage  extends UploadImage {
         return document.getElementsByName("DescriptiveImageUpload")[0] as HTMLInputElement;
     }
 
+    componentDidMount() {
+        this.setDescriptionVisibility();
+    }
+
+    componentDidUpdate() {
+        this.setDescriptionVisibility();
+    }
+
+    componentWillUpdate() {
+        this.setDescriptionVisibility();
+    }
+
+    private setDescriptionVisibility() {
+        if (this.state.preview === true) {
+            this.props.descriptionContainer.classList.remove("hidden");
+        }
+        else {
+            this.props.descriptionContainer.classList.add("hidden");
+            this.props.descriptionField.value = null;
+        }
+    }
+
     renderImageControl() {
         return (
             <div className="image-control">
                 <div className="description">
-                    <p>The image description will appear here.</p>
+                    <p>The image description will appear here</p>
                 </div>
                 <div className="text">
                     <img src="/images/BrowserSize.png"></img>
@@ -77,9 +110,10 @@ export default class UploadDescriptiveImage  extends UploadImage {
     }
 }
 
+let container = document.getElementById("create-project-upload-descriptive-image");
 renderComponentIf(
     <UploadDescriptiveImage
-        descriptionDivId={ document.getElementById("create-project-upload-descriptive-image") && document.getElementById("create-project-upload-descriptive-image").dataset.descriptionDivId }
-        descriptionFieldName={ document.getElementById("create-project-upload-descriptive-image") && document.getElementById("create-project-upload-descriptive-image").dataset.descriptionFieldName } />,
-    document.getElementById("create-project-upload-descriptive-image")
+        descriptionContainer={ document.getElementById(container.dataset.descriptionDivId) }
+        descriptionField={ document.getElementsByName(container.dataset.descriptionFieldName)[0] as HTMLInputElement } />,
+    container
 );

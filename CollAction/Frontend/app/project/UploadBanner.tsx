@@ -1,11 +1,17 @@
 import * as React from "react";
-import UploadImage from "./UploadImage";
+import UploadImage, { IUploadImageProps, IUploadImageState } from "./UploadImage";
 import DropZone from "react-dropzone";
 import renderComponentIf from "../global/renderComponentIf";
 
-export default class UploadBanner extends UploadImage {
+export default class UploadBanner extends UploadImage<IUploadImageProps, IUploadImageState> {
     constructor(props: {}) {
         super(props);
+
+        this.state = {
+            invalid: false,
+            preview: false,
+            image: null
+        };
 
         this.onDrop = this.onDrop.bind(this);
         this.onRejected = this.onRejected.bind(this);
