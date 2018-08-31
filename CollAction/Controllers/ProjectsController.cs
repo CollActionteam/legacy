@@ -69,10 +69,12 @@ namespace CollAction.Controllers
         {
             var user = await  _userManager.GetUserAsync(User);
 
+            if (user == null) throw new InvalidOperationException("User doesn't have a UserIdClaimType. Can't determine user information.");
+
             return View(new CreateProjectViewModel
             {
-                ProjectStarterFirstName = user?.FirstName,
-                ProjectStarterLastName = user?.LastName,
+                ProjectStarterFirstName = user.FirstName,
+                ProjectStarterLastName = user.LastName,
                 Start = DateTime.UtcNow.Date.AddDays(7), // A week from today
                 End = DateTime.UtcNow.Date.AddDays(7).AddMonths(1), // A month after start
                 Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description"),
