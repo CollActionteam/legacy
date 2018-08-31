@@ -67,7 +67,7 @@ namespace CollAction.Controllers
         [Authorize]
         public async Task<IActionResult> Create()
         {
-            var user = await  _userManager.GetUserAsync(User);
+            var user = await _userManager.GetUserAsync(User);
 
             if (user == null) throw new InvalidOperationException("User doesn't have a UserIdClaimType. Can't determine user information.");
 
