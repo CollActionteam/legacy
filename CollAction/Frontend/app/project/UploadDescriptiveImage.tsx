@@ -113,7 +113,7 @@ export default class UploadDescriptiveImage extends UploadImage<IUploadDescripti
 let container = document.getElementById("create-project-upload-descriptive-image");
 renderComponentIf(
     <UploadDescriptiveImage
-        descriptionContainer={ document.getElementById(container.dataset.descriptionDivId) }
-        descriptionField={ document.getElementsByName(container.dataset.descriptionFieldName)[0] as HTMLInputElement } />,
+        descriptionContainer={ container && document.getElementById(container.dataset.descriptionDivId) }
+        descriptionField={ container && document.getElementsByName(container.dataset.descriptionFieldName)[0] as HTMLInputElement } />,
     container
 );
