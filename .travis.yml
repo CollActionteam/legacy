@@ -4,21 +4,23 @@ sudo: required
 services:
 - docker
 
-before_install:
-  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-  - sudo apt-get update
-  - sudo apt-get -y install docker-ce
+# before_install:
+#   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+#   - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+#   - sudo apt-get update
+#   - sudo apt-get -y install docker-ce
 
 script:
-- docker build . -f CollAction/Dockerfile
+- cd CollAction
+- npm install -dd
+- NODE_ENV=production npm run build
 
-after_success:
-- pip install --user awscli # install xurrent version of aws cli w/o sudo
-- export PATH=$PATH:$HOME/.local/bin # put aws in the path
-- chmod +x scripts/docker-push.sh scripts/deploy.sh
-- scripts/docker-push.sh
-- scripts/deploy.sh
+# after_success:
+# - pip install --user awscli # install xurrent version of aws cli w/o sudo
+# - export PATH=$PATH:$HOME/.local/bin # put aws in the path
+# - chmod +x scripts/docker-push.sh scripts/deploy.sh
+# - scripts/docker-push.sh
+# - scripts/deploy.sh
 
 env:
   global:
