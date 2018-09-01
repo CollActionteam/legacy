@@ -4,6 +4,9 @@ sudo: required
 services:
 - docker
 
+before_script:
+- echo 151.101.36.162 registry.npmjs.org >> /etc/hosts
+
 script:
 - docker build . -f CollAction/Dockerfile
 
