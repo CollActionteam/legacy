@@ -1,10 +1,10 @@
 ﻿# Build webpack bundle 
 # Installs all packages and builds a production version of the javascript and css
-FROM node:10.9 as webpack
+FROM node:10.9-alpine as webpack
 WORKDIR /src
 COPY CollAction/package.json .
 COPY CollAction/package-lock.json .
-RUN npm install -ddd
+RUN npm install
 COPY CollAction/Frontend ./Frontend
 COPY CollAction/webpack.config.js .
 COPY CollAction/tsconfig.json .
