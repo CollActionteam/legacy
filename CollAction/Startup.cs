@@ -261,13 +261,14 @@ namespace CollAction
 
             app.UseStaticFiles();
 
+            app.UseHangfireServer(new BackgroundJobServerOptions() { WorkerCount = 1 });
+
             app.UseHangfireDashboard(options: new DashboardOptions()
             {
                 Authorization = new IDashboardAuthorizationFilter[] {
                     new HangfireAdminAuthorizationFilter()
                 }
             });
-            app.UseHangfireServer();
 
             app.UseMvc(routes =>
             {
