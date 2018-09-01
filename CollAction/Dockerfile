@@ -4,7 +4,7 @@ FROM node:10.9 as webpack
 WORKDIR /src
 COPY CollAction/package.json .
 COPY CollAction/package-lock.json .
-RUN npm install
+RUN npm config set strict-ssl false && npm install
 COPY CollAction/Frontend ./Frontend
 COPY CollAction/webpack.config.js .
 COPY CollAction/tsconfig.json .
