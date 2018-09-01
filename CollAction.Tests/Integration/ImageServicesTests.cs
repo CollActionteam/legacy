@@ -45,7 +45,7 @@ namespace CollAction.Tests.Integration
                               Task.Run(() => (Task)job.Method.Invoke(_imageService, job.Args.ToArray())).Wait();
                               return string.Empty;
                           });
-            _imageService = new AmazonS3ImageService(null, null, new OptionsWrapper<ImageServiceOptions>(_options), _jobClient.Object);
+            _imageService = new AmazonS3ImageService(new OptionsWrapper<ImageServiceOptions>(_options), _jobClient.Object);
             _upload = new Mock<IFormFile>();
             _upload.Setup(u => u.OpenReadStream()).Returns(new MemoryStream(_image));
         }
