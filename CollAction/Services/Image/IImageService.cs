@@ -10,6 +10,5 @@ namespace CollAction.Services.Image
         Task<ImageFile> UploadImage(ImageFile currentImage, IFormFile fileUploaded, string imageDescription);
         void DeleteImage(ImageFile imageFile);
         string GetUrl(ImageFile imageFile);
-        Task MigrationToS3(); // TODO: Remove after it's run
     }
 }

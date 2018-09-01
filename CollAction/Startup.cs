@@ -341,7 +341,6 @@ namespace CollAction
                         await context.Database.ExecuteSqlCommandAsync("DROP SCHEMA public CASCADE; CREATE SCHEMA public;");
                     await context.Database.MigrateAsync();
                     await context.Seed(Configuration, userManager, roleManager);
-                    await imageService.MigrationToS3(); // TODO: Remove after it's run
                 }).Wait();
             }
         }
