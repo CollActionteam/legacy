@@ -203,7 +203,6 @@ namespace CollAction
                            cspBuilder.AddFrameAncestors().None(); // No framing allowed here (put us inside a frame tag)
                            cspBuilder.AddScriptSrc() // Only allow scripts from our own site, the aspnetcdn site, app insights and google analytics
                                      .Self()                                    
-                                     .UnsafeEval()  // Needed for client side validation scripts
                                      .Sources.AddRange(new[]
                                                        {
                                                            "https://ajax.aspnetcdn.com",
