@@ -141,8 +141,7 @@ namespace CollAction.Services.Image
                     Image<Rgba32> memoryImage = SixLabors.ImageSharp.Image.Load(imageStream);
                     byte[] imageBytes = ConvertImageToPng(memoryImage);
                     image.Filepath = $"{Guid.NewGuid()}.png";
-                    _jobClient.Enqueue(() =>
-                        UploadToS3(imageBytes, image.Filepath));
+                    await UploadToS3(imageBytes, image.Filepath);
                 }
             }
 
