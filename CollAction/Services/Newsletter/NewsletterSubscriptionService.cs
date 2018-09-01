@@ -40,7 +40,9 @@ namespace CollAction.Services.Newsletter
 
         public enum SubscriptionStatus { NotFound, Pending, Subscribed, Unknown };
 
+        #pragma warning disable CS0649 // This field is deserialized to, the warning is incorrect
         private struct ListMemberInfo { public string status; }
+        #pragma warning restore CS0649
 
         private readonly string _apiKey;
         private readonly string _dataCenter;
@@ -48,7 +50,7 @@ namespace CollAction.Services.Newsletter
         private readonly IBackgroundJobClient _jobClient;
         private readonly ILogger<NewsletterSubscriptionService> _logger;
 
-        private Uri RootUri { get { return new Uri(String.Format("https://{0}.api.mailchimp.com/3.0", _dataCenter)); } }
+        private Uri RootUri { get { return new Uri(string.Format("https://{0}.api.mailchimp.com/3.0", _dataCenter)); } }
 
         public NewsletterSubscriptionService(IOptions<NewsletterSubscriptionServiceOptions> options, ILogger<NewsletterSubscriptionService> logger, IBackgroundJobClient jobClient)
         {
