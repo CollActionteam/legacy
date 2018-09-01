@@ -1,22 +1,26 @@
-﻿FROM microsoft/dotnet:2.1.1-aspnetcore-runtime AS base
-WORKDIR /app
-EXPOSE 80
+﻿FROM node:10.9-alpine as webpack
+WORKDIR /src
+COPY CollAction/package.json .
+COPY CollAction/package-lock.json .
+RUN npm install
+COPY CollAction/Frontend ./Frontend
+COPY CollAction/webpack.config.js .
+COPY CollAction/tsconfig.json .
+RUN NODE_ENV=production npm run build
 
-FROM microsoft/dotnet:2.1-sdk AS build
+FROM microsoft/dotnet:2.1-sdk-alpine AS build
 WORKDIR /src
 COPY CollAction/CollAction.csproj CollAction/
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
-RUN apt-get update && apt-get install -y nodejs build-essential
 RUN dotnet restore CollAction/CollAction.csproj
 COPY . .
 WORKDIR /src/CollAction
-RUN dotnet build CollAction.csproj -c Release -o /app
+RUN dotnet build CollAction.csproj --no-restore -c Release -o /app
+RUN dotnet publish CollAction.csproj --no-build -c Release -o /app
+COPY --from=webpack /src/wwwroot/js /app/wwwroot/js
 
-FROM build AS publish
-RUN dotnet publish CollAction.csproj -c Release -o /app
-
-FROM base AS final
+FROM microsoft/dotnet:2.1-aspnetcore-runtime-alpine
 WORKDIR /app
-COPY --from=publish /app .
+COPY --from=build /app .
 VOLUME ["/app/wwwroot/usercontent/"]
+EXPOSE 80
 ENTRYPOINT ["dotnet", "CollAction.dll"]
