@@ -129,12 +129,12 @@ namespace CollAction.Controllers
 
             if (model.BannerImageUpload != null)
             {
-                project.BannerImage = await _imageService.UploadImage(project.BannerImage, model.BannerImageUpload, model.BannerImageDescription);
+                project.BannerImage = await _imageService.UploadImage(project.BannerImage, model.BannerImageUpload, model.BannerImageDescription ?? string.Empty);
                 _context.ImageFiles.Add(project.BannerImage);
             }
             if (model.DescriptiveImageUpload != null)
             {
-                project.DescriptiveImage = await _imageService.UploadImage(project.DescriptiveImage, model.DescriptiveImageUpload, model.DescriptiveImageDescription);
+                project.DescriptiveImage = await _imageService.UploadImage(project.DescriptiveImage, model.DescriptiveImageUpload, model.DescriptiveImageDescription ?? string.Empty);
                 _context.ImageFiles.Add(project.DescriptiveImage);
             }
 
