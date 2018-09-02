@@ -12,8 +12,6 @@ using Microsoft.AspNetCore.Localization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Serilog;
-using Serilog.Events;
-using Serilog.Sinks.Slack;
 using System.Linq;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Rewrite;
@@ -35,23 +33,15 @@ namespace CollAction
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IHostingEnvironment env, IConfiguration configuration, ILogger<Startup> logger)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddEnvironmentVariables();
-
-            if (env.IsDevelopment())
-            {
-                // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                builder.AddUserSecrets<Startup>();
-            }
-
-            Configuration = builder.Build();
+            Configuration = configuration;
             Environment = env;
+            Logger = logger;
         }
 
-        public IConfigurationRoot Configuration { get; }
+        public ILogger<Startup> Logger { get; }
+        public IConfiguration Configuration { get; }
         public IHostingEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -142,6 +132,7 @@ namespace CollAction
 
                 if (!Configuration.GetValue<bool>("CspDisable"))
                 {
+                    Logger.LogInformation("enabling security headers");
                     app.UseSecurityHeaders(new HeaderPolicyCollection() // See https://www.owasp.org/index.php/OWASP_Secure_Headers_Project
                        .AddStrictTransportSecurityMaxAgeIncludeSubDomains() // Add a HSTS header, making sure browsers connect to collaction + subdomains with https from now on
                        .AddXssProtectionEnabled() // Enable browser xss protection
@@ -223,19 +214,6 @@ namespace CollAction
                 SupportedUICultures = supportedCultures,
             });
 
-            // Configure logging
-            LoggerConfiguration configuration = new LoggerConfiguration()
-                .WriteTo.RollingFile("log-{Date}.txt", LogEventLevel.Information)
-                .WriteTo.Console(LogEventLevel.Information);
-
-            if (!string.IsNullOrEmpty(Configuration["SlackHook"]))
-                configuration.WriteTo.Slack(Configuration["SlackHook"], restrictedToMinimumLevel: LogEventLevel.Error);
-
-            if (env.IsDevelopment())
-                configuration.WriteTo.Trace();
-
-            Log.Logger = configuration.CreateLogger();
-            loggerFactory.AddSerilog();
             applicationLifetime.ApplicationStopping.Register(() => Log.CloseAndFlush());
 
             if (env.IsDevelopment())
@@ -334,18 +312,18 @@ namespace CollAction
             {
                 Task.Run(async () =>
                 {
-                    var logger = serviceScope.ServiceProvider.GetService<Microsoft.Extensions.Logging.ILogger>();
                     if (Configuration.GetValue<bool>("ResetTestDatabase"))
                     {
-                        logger.LogInformation("resetting test database");
+                        Logger.LogInformation("resetting test database");
                         await context.Database.ExecuteSqlCommandAsync("DROP SCHEMA public CASCADE; CREATE SCHEMA public;");
                     }
-                    logger.LogInformation("migrating database");
+                    Logger.LogInformation("migrating database");
                     await context.Database.MigrateAsync();
-                    logger.LogInformation("seeding database");
+                    Logger.LogInformation("seeding database");
                     await context.Seed(Configuration, userManager, roleManager);
-                    logger.LogInformation("migrating images"); // TODO: Remove after it's run
+                    Logger.LogInformation("migrating images"); // TODO: Remove after it's run
                     await imageService.MigrationToS3(); // TODO: Remove after it's run
+                    Logger.LogInformation("done starting up");
                 }).Wait();
             }
         }
