@@ -334,10 +334,17 @@ namespace CollAction
             {
                 Task.Run(async () =>
                 {
+                    var logger = serviceScope.ServiceProvider.GetService<Microsoft.Extensions.Logging.ILogger>();
                     if (Configuration.GetValue<bool>("ResetTestDatabase"))
+                    {
+                        logger.LogInformation("resetting test database");
                         await context.Database.ExecuteSqlCommandAsync("DROP SCHEMA public CASCADE; CREATE SCHEMA public;");
+                    }
+                    logger.LogInformation("migrating database");
                     await context.Database.MigrateAsync();
+                    logger.LogInformation("seeding database");
                     await context.Seed(Configuration, userManager, roleManager);
+                    logger.LogInformation("migrating images"); // TODO: Remove after it's run
                     await imageService.MigrationToS3(); // TODO: Remove after it's run
                 }).Wait();
             }
