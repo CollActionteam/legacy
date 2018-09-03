@@ -3,6 +3,7 @@ import * as React from "react";
 export interface IProject {
   projectId: string,
   projectName: string;
+  projectNameUriPart: string;
   projectProposal: string;
   categoryName: string;
   categoryColorHex: string;
@@ -22,7 +23,7 @@ class ProjectThumb extends React.Component<IProject, null> {
       backgroundImage: `url(${this.props.bannerImagePath})`,
     };
 
-    const link = `/Projects/Details/${this.props.projectId}`;
+    const link = `/projects/${this.props.projectNameUriPart}/${this.props.projectId}/details`;
 
     const target = window.top !== window.self ? "_blank" : "_self";
 

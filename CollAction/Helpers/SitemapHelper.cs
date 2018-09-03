@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using CollAction.Services;
 
 namespace CollAction.Helpers
 {
@@ -17,11 +18,13 @@ namespace CollAction.Helpers
         private const string _protocol = "https://";
         private readonly ApplicationDbContext _context;
         private readonly IUrlHelper _urlHelper;
+        private readonly IProjectService _projectService;
 
-        public SitemapHelper(ApplicationDbContext context, IUrlHelper urlHelper)
+        public SitemapHelper(ApplicationDbContext context, IUrlHelper urlHelper, IProjectService projectService)
         {
             _context = context;
             _urlHelper = urlHelper;
+            _projectService = projectService;
         }
 
         public async Task<XDocument> GetSitemap()
@@ -59,7 +62,7 @@ namespace CollAction.Helpers
             HostString host = _urlHelper.ActionContext.HttpContext.Request.Host;
             List<XElement> projectElements = new List<XElement>(3)
             {
-                new XElement(_urlsetNamespace + "loc", _protocol + host + _urlHelper.Action("Details", "Projects", new { id = project.Id }))
+                new XElement(_urlsetNamespace + "loc", _protocol + host + _urlHelper.Action("Details", "Projects", new { id = project.Id, name = _projectService.GetProjectNameNormalized(project.Name)}))
             };
             if (project.BannerImageFileId != null)
             {
