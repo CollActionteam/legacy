@@ -234,6 +234,7 @@ namespace CollAction.Services
             }
              return value;
         }
+        
         private static string RemoveDiacriticsFromString(string text) 
         {
             var normalizedString = text.Normalize(NormalizationForm.FormD);
@@ -248,6 +249,7 @@ namespace CollAction.Services
             }
              return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
         }
+
         public string GetProjectNameNormalized(string projectName)
         {
             projectName = RemoveDiacriticsFromString(projectName);
