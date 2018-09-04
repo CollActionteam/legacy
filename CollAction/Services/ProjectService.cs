@@ -225,9 +225,10 @@ namespace CollAction.Services
         {
             yield return "first-name;last-name;email";
             yield return GetParticipantCsvLine(project.Owner);
-            foreach (ProjectParticipant participant in project.Participants)
+            foreach (ProjectParticip    ant participant in project.Participants)
                 yield return GetParticipantCsvLine(participant.User);
         }
+        
         private static string ToUrlSlug(string value)
         {                      
             value = value.ToLowerInvariant();
