@@ -14,6 +14,7 @@
   "author": "CollAction",
   "license": "ISC",
   "devDependencies": {
+    "@types/bluebird": "^3.5.24",
     "@types/react": "^16.4.0",
     "@types/react-dom": "^16.0.6",
     "css-loader": "^1.0.0",
