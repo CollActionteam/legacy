@@ -1,26 +1,17 @@
-﻿# Build webpack bundle 
-# Installs all packages and builds a production version of the javascript and css
-FROM node:10.9-alpine as webpack
-WORKDIR /src
-COPY CollAction/package.json .
-COPY CollAction/package-lock.json .
-RUN npm install
-COPY CollAction/Frontend ./Frontend
-COPY CollAction/webpack.config.js .
-COPY CollAction/tsconfig.json .
-RUN NODE_ENV=production npm run build
-
-# Build application
-# Installs all packages, compiles the dotnet code and copies the frontend bundle in it
-FROM microsoft/dotnet:2.1-sdk-alpine AS build
+﻿# Build application
+# Installs all packages, compiles the dotnet code and typescript code
+FROM microsoft/dotnet:2.1-sdk AS build
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+RUN apt-get update && apt-get install -y nodejs build-essential
 WORKDIR /src
 COPY CollAction/CollAction.csproj CollAction/
 RUN dotnet restore CollAction/CollAction.csproj
 COPY . .
 WORKDIR /src/CollAction
-RUN dotnet build CollAction.csproj --no-restore -c Release -o /app
+# Needed because the project npm install in production mode won't install the devDependencies (webpack etc.)
+RUN npm install
+RUN NODE_ENV=production dotnet build CollAction.csproj --no-restore -c Release -o /app
 RUN dotnet publish CollAction.csproj --no-build -c Release -o /app
-COPY --from=webpack /src/wwwroot/js /app/wwwroot/js
 
 # Create a runtime
 # Copies the published application package to a runtime container
