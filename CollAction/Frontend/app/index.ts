@@ -1,5 +1,3 @@
-import "bluebird";
-
 import "./home";
 import "./project";
 import "./global";

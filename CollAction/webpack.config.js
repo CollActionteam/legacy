@@ -3,10 +3,13 @@ const path = require('path')
 
 module.exports = {
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
-  entry: './Frontend/app/index.ts',
+  entry: {
+    frontend: './Frontend/app/index.ts',
+    validation: './Frontend/app/validation.ts'
+  },
   output: {
+    filename: '[name].bundle.js',
     path: path.resolve(__dirname, './wwwroot/js'),
-    filename: 'bundle.js',
   },
   resolve: {
     extensions: ['.webpack.js', '.web.js', '.ts', '.tsx', '.js']
@@ -18,5 +21,10 @@ module.exports = {
       { test: /\.css$/, use: ["style-loader", "css-loader?-url"] },
       { test: /\.svg$/, use: 'svg-inline-loader' }
     ]
-  }
+  },
+  plugins: [
+    new webpack.ProvidePlugin({
+      'Promise': 'bluebird', // Provide a Promise polyfill for older or less suportive browsers like IE9-11.
+    })
+  ]
 }
