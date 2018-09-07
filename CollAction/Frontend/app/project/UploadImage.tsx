@@ -1,12 +1,13 @@
 import * as React from "react";
 
-export interface IUploadImageProps{    
+export interface IUploadImageProps {
 }
 
 export interface IUploadImageState {
     invalid: boolean;
     preview: boolean;
     image: any;
+    ie11: boolean;
 }
 
 export default abstract class UploadImage<P extends IUploadImageProps, S extends IUploadImageState> extends React.Component<P, S> {
@@ -16,6 +17,15 @@ export default abstract class UploadImage<P extends IUploadImageProps, S extends
         this.loadImage = this.loadImage.bind(this);
         this.rejectImage = this.rejectImage.bind(this);
         this.resetImage = this.resetImage.bind(this);
+    }
+
+    protected createInitialState(): IUploadImageState {
+        return {
+            invalid: false,
+            preview: false,
+            image: null,
+            ie11: navigator.userAgent.indexOf("MSIE") !== -1 || navigator.appVersion.indexOf("Trident/") > 0
+        };
     }
 
     protected loadImage(accepted: File[], rejected: File[], event: any) {
@@ -51,8 +61,7 @@ export default abstract class UploadImage<P extends IUploadImageProps, S extends
         let reader = new FileReader();
         let file = accepted[0];
         reader.onload = function() {
-            let url = that.createImage(reader.result);
-            that.setState({ image: url });
+            that.setState({ image: reader.result });
         };
         reader.onabort = this.rejectImage;
         reader.onerror = this.rejectImage;
@@ -62,12 +71,9 @@ export default abstract class UploadImage<P extends IUploadImageProps, S extends
 
     abstract getFileInputElement(): HTMLInputElement;
 
-    abstract createImage(image: any): any;
-
     protected rejectImage() {
         this.setState({ invalid: true, preview: false });
     }
-
     protected resetImage() {
         let inputElement = this.getFileInputElement();
         inputElement.value = "";

@@ -12,14 +12,12 @@ export default class UploadDescriptiveImage extends UploadImage<IUploadDescripti
     constructor(props: any) {
         super(props);
 
-        this.state = {
-            invalid: false,
-            preview: false,
-            image: null
-        };
+        this.state = this.createInitialState();
 
         this.onDrop = this.onDrop.bind(this);
-        this.createImage = this.createImage.bind(this);
+        this.onRejected = this.onRejected.bind(this);
+        this.rejectImage = this.rejectImage.bind(this);
+        this.createSrcImage = this.createSrcImage.bind(this);
         this.getFileInputElement = this.getFileInputElement.bind(this);
     }
 
@@ -31,8 +29,8 @@ export default class UploadDescriptiveImage extends UploadImage<IUploadDescripti
         this.rejectImage();
     }
 
-    createImage(image: any): string {
-        return `${image}`;
+    createSrcImage(): string {
+        return this.state.image as string;
     }
 
     getFileInputElement(): HTMLInputElement {
@@ -100,7 +98,7 @@ export default class UploadDescriptiveImage extends UploadImage<IUploadDescripti
                     { this.renderImageControl() }
                 </div>
                 <div className="col-xs-12 col-md-10" style={{display: this.state.preview ? "block" : "none"}}>
-                    <img id="preview" src={this.state.image} className="pull-right"></img>
+                    <img id="preview" src={this.createSrcImage()} className="pull-right"></img>
                 </div>
                 <div className="col-xs-12 hidden-md hidden-lg" style={{display: this.state.preview ? "block" : "none"}}>
                     { this.renderImageControl() }
