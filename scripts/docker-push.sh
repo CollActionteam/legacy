@@ -24,8 +24,8 @@ else
 fi
 
 # Build 
-echo "Building CollAction image for $ECR_REPO:$TAG"
-docker build -t $ECR_REPO:$TAG . -f CollAction/Dockerfile
+echo "Tagging latest CollAction image as $ECR_REPO:$TAG"
+docker tag collaction:latest $ECR_REPO:$TAG
 
 # Log in to Amazon ECR.
 # This uses the environment variables AWS_ACCESS_KEY_ID and AWS_ACCESS_SECRET_KEY which are set in the .travis.yml env.secure section. 
