@@ -22,22 +22,22 @@
                         <div>
                             <h3><label asp-for="Name" class="control-label required"></label></h3>
                             <input asp-for="Name" class="form-control" />
-                            <span asp-validation-for="Name" /></span>
+                            <span asp-validation-for="Name"></span>
                         </div>
                         <div>
                             <h3><label asp-for="CategoryId" class="control-label required"></label></h3>
                             <select asp-for="CategoryId" asp-items="Model.Categories" class="form-control"></select>
-                            <span asp-validation-for="CategoryId" /></span>
+                            <span asp-validation-for="CategoryId"></span>
                         </div>
                         <div>
                             <h3><label asp-for="Target" class="control-label required"></label></h3>
                             <input asp-for="Target" class="form-control" />
-                            <span asp-validation-for="Target" /></span>
+                            <span asp-validation-for="Target"></span>
                         </div>
                         <div>
                             <h3><label asp-for="Proposal" class="control-label required"></label></h3>
                             <textarea asp-for="Proposal" rows="4" class="form-control"></textarea>
-                            <span asp-validation-for="Proposal" /></span>
+                            <span asp-validation-for="Proposal"></span>
                         </div>
                     </div>
                 </div>
@@ -71,21 +71,21 @@
                         <h3><label asp-for="Description" class="control-label required"></label></h3>
                         <div id="create-project-description"></div>
                         <input asp-for="Description" type="hidden" />
-                        <span asp-validation-for="Description" /></span>
+                        <span asp-validation-for="Description"></span>
                     </div>
                     <div id="project-dates">
                         <h3><label asp-for="Start" class="control-label required"></label></h3>
                         <input asp-for="Start" class="form-control">
-                        <span asp-validation-for="Start" /></span>
+                        <span asp-validation-for="Start"></span>
 
                         <h3><label asp-for="End" class="control-label required"></label></h3>
                         <input asp-for="End" class="form-control">
-                        <span asp-validation-for="End" /></span>
+                        <span asp-validation-for="End"></span>
                     </div>
                     <div id="project-hashtags">
                         <h3><label asp-for="Hashtag" class="control-label"></label></h3>
                         <input asp-for="Hashtag" class="form-control">
-                        <span asp-validation-for="Hashtag" /></span>
+                        <span asp-validation-for="Hashtag"></span>
                     </div>
                 </div>
 
@@ -94,7 +94,7 @@
                         <h3><label asp-for="Goal" class="control-label required"></label></h3>
                         <div id="create-project-goal"></div>
                         <input asp-for="Goal" type="hidden" />
-                        <span asp-validation-for="Goal" /></span>
+                        <span asp-validation-for="Goal"></span>
                     </div>
 
                     <hr class="hidden-sm hidden-xs" />
@@ -103,7 +103,7 @@
                         <h3><label asp-for="CreatorComments" class="control-label"></label></h3>
                         <div id="create-project-creatorcomments"></div>
                         <input asp-for="CreatorComments" type="hidden" />
-                        <span asp-validation-for="CreatorComments" /></span>
+                        <span asp-validation-for="CreatorComments"></span>
                     </div>
                 </div>
 
@@ -113,13 +113,13 @@
                     <div id="project-image-description">
                         <h3><label asp-for="DescriptiveImageDescription" class="control-label"></label></h3>
                         <input name="DescriptiveImageDescription" class="form-control" />
-                        <span asp-validation-for="DescriptiveImageDescription" /></span>
+                        <span asp-validation-for="DescriptiveImageDescription"></span>
                     </div>
 
                     <div id="project-videolink">
                         <h3><label asp-for="DescriptionVideoLink" class="control-label"></label></h3>
                         <input asp-for="DescriptionVideoLink" class="form-control" />                    
-                        <span asp-validation-for="DescriptionVideoLink" /></span>
+                        <span asp-validation-for="DescriptionVideoLink"></span>
                     </div>
 
                     <div id="submit-project">
