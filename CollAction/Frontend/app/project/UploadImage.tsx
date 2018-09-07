@@ -51,7 +51,7 @@ export default abstract class UploadImage<P extends IUploadImageProps, S extends
         let reader = new FileReader();
         let file = accepted[0];
         reader.onload = function() {
-            let url = that.createImage(file.type, reader.result);
+            let url = that.createImage(reader.result);
             that.setState({ image: url });
         };
         reader.onabort = this.rejectImage;
@@ -62,7 +62,7 @@ export default abstract class UploadImage<P extends IUploadImageProps, S extends
 
     abstract getFileInputElement(): HTMLInputElement;
 
-    abstract createImage(type: string, image: any): any;
+    abstract createImage(image: any): any;
 
     protected rejectImage() {
         this.setState({ invalid: true, preview: false });

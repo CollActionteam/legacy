@@ -31,8 +31,8 @@ export default class UploadDescriptiveImage extends UploadImage<IUploadDescripti
         this.rejectImage();
     }
 
-    createImage(type: string, image: any): string {
-        return `data:${type};${image}`;
+    createImage(image: any): string {
+        return `${image}`;
     }
 
     getFileInputElement(): HTMLInputElement {

@@ -27,9 +27,9 @@ export default class UploadBanner extends UploadImage<IUploadImageProps, IUpload
         this.rejectImage();
     }
 
-    createImage(type: string, image: any): React.CSSProperties {
+    createImage(image: any): React.CSSProperties {
         return {
-            backgroundImage: `url(data:${type};${image}`
+            backgroundImage: `url(${image}`
         };
     }
 
