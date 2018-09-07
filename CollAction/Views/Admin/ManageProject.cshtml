@@ -167,3 +167,7 @@
     <a asp-action="ManageProjectsIndex">Back to List</a>
     <a asp-action="ParticipantsDataExport" asp-route-id="@Model.Id">Export Participants Data</a>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,6 @@
+<environment names="Development">
+    <script src="~/js/validation.bundle.js?@DateTime.Now.Ticks.ToString()"></script>
+</environment>
+<environment names="Staging,Production">
+    <script src="~/js/validation.bundle.js"></script>
+</environment>
