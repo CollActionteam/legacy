@@ -45,10 +45,15 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <form asp-controller="Manage" asp-action="NewsletterSubscription" method="post" class="form-horizontal">
-                                    <input type="hidden" asp-for="NewsletterSubscription" value="@(!Model.NewsletterSubscription)" /> @Html.ValidationMessage("NewsletterSubscription") @if (Model.NewsletterSubscription)
+                                    <input type="hidden" asp-for="NewsletterSubscription" value="@(!Model.NewsletterSubscription)" /> 
+                                    @Html.ValidationMessage("NewsletterSubscription") 
+                                    @if (Model.NewsletterSubscription)
                                     {
-                                    <input class="symetric_buttons" type="submit" value="Schrijf je uit" /> } else {
-                                    <input class="symetric_buttons" type="submit" value="Schrijf je in" /> }
+                                        <input class="symetric_buttons" type="submit" value="Schrijf je uit" /> 
+                                    } else 
+                                    {
+                                        <input class="symetric_buttons" type="submit" value="Schrijf je in" /> 
+                                    }
                                 </form>
                             </div>
                             <div class="col-md-9"></div>
