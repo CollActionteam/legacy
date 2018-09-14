@@ -6,46 +6,62 @@
     ViewData["Title"] = Localizer["Start Project"];
 }
 
-
-<div id="project-create-nice">
-    <div class="container">
+<div id="start-info">
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-md-3 hidden-xs">
-                <div id="nice-circle">
-                    Nice!
+            <div id="background"></div>
+        </div>
+    </div> 
+    <div class="container-fluid">
+        <div class="row" id="starting-card-container">
+            <div class="col-md-5 col-md-push-7 col-sm-6 col-sm-push-6 col-xs-12">
+                <div id="starting-card">
+                    <h1>Starting a project</h1>
+                    <h2>(is super easy)</h2>
+                    <p>
+                        Would you like to do something about social or 
+                        environmental problems? Would you to lead the
+                        crowdacting movement? Start a proect on CollAction now! 
+                    </p>
+                    <h3>It's really easy - we'll guide you through it.</h3>
+                    @Html.ActionLink("Start a project", "Create", "Projects", null, new { @class = "btn" })
                 </div>
             </div>
-            <div class="col-md-9 col-xs-12">
-                <h1>Start Project</h1>
+        </div>
+    </div>
+    <div class="container-fluid" id="how-it-works">
+        <div class="row">
+            <div class="col-xs-12">
+                <h1>How it works</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="step col-xs-12 col-md-4">
+                <i class="fa fa-3x fa-lightbulb-o"></i>
+                <h2>Create your project</h2>
                 <p>
-                    Would you like to do something about a social or environmental problem? Would you like to lead the crowdacting movement? Start a project on CollAction! 
-                    
-                    There are <a href="/about#faq" target="_blank">a few criteria that your project needs to meet</a> – so please check those first. We’ll wait while you read it…
-
-                    …All good? Then <a href="/Projects/Create">start your project!</a>
+                    Complete the start project form. The CollAction team will review
+                    it as soon as possible
+                </p>
+            </div>
+            <div class="step col-xs-12 col-md-4">
+                <i class="fa fa-3x fa-share"></i>
+                <h2>Share your project</h2>
+                <p>
+                    Run a campaign to reach your target (once your project is approved)
+                </p>
+            </div>
+            <div class="step col-xs-12 col-md-4">
+                <i class="fa fa-3x fa-podcast"></i>
+                <h2>Make waves</h2>
+                <p>
+                    Act together if the target is met before the deadline. And share your
+                    success and impact!
                 </p>
             </div>
         </div>
-    </div>
-</div>
-
-<div id="project-create-starting">
-    <div class="container">
-        <div class="hidden-xs">
-            <div id="project-create-landscape-carousel"></div>
-        </div>
-        <div class="hidden-md hidden-sm hidden-lg">
-            <div id="project-create-mobile-carousel"></div>
-        </div>
-    </div>
-</div>
-
-<div id="project-registration-button">
-    <div class="container">
         <div class="row">
-            <div class="col-xs-12">
-                @Html.ActionLink("GO TO THE REGISTRATION FORM", "Create", "Projects", null, new { @class = "btn btn-success" })
-            </div>
+            @Html.ActionLink("Start a project", "Create", "Projects", null, new { @class = "btn" })
         </div>
     </div>
 </div>
