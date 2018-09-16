@@ -6,14 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using CollAction.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Identity;
-using System.IO.Compression;
-using System.IO;
-using System.Text;
-using System.Globalization;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using CollAction.Data.Geonames;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace CollAction.Data
 {
@@ -38,6 +32,7 @@ namespace CollAction.Data
         public DbSet<VideoLink> VideoLinks { get; set; }
         public DbSet<Job> Jobs { get; set; }
         public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
+        public DbSet<ProjectParticipantCount> ProjectParticipantCounts { get; set; }
 
         /// <summary>
         /// Configure the model (foreign keys, relations, primary keys, etc)
@@ -64,6 +59,10 @@ namespace CollAction.Data
                    .HasKey("UserId", "ProjectId");
             builder.Entity<ProjectTag>()
                    .HasKey("TagId", "ProjectId");
+            builder.Entity<Project>()
+                   .HasOne(p => p.ParticipantCounts)
+                   .WithOne(p => p.Project)
+                   .HasForeignKey<ProjectParticipantCount>(p => p.ProjectId);
             builder.Entity<Location>()
                    .HasOne(l => l.Country)
                    .WithMany(c => c.Locations)
