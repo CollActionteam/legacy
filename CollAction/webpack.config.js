@@ -16,7 +16,12 @@ function getPlugins() {
   return compatibilityPlugins; //.concat(process.env.NODE_ENV === "production" ? productionPlugins : [])
 }
 
+function getMode() {
+  return process.env.NODE_ENV === "production" ? "production" : "development"
+}
+
 module.exports = {
+  mode: getMode(),
   entry: [
     'font-awesome/scss/font-awesome.scss',
     'whatwg-fetch', 
