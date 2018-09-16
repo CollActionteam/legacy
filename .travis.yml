@@ -11,9 +11,10 @@ script:
 after_success:
 - pip install --user awscli # install current version of aws cli w/o sudo
 - export PATH=$PATH:$HOME/.local/bin # put aws in the path
-- chmod +x scripts/docker-push.sh scripts/deploy.sh
+- chmod +x scripts/docker-push.sh
 - scripts/docker-push.sh
-- scripts/deploy.sh
+# - scripts/deploy.sh auto-deployment disabled; use the test-select tool instead
+
 env:
   global:
   - DISABLE_NPM_BUILD=1
