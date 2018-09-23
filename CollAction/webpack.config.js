@@ -23,7 +23,6 @@ function getMode() {
 module.exports = {
   mode: getMode(),
   entry: [
-    'font-awesome/scss/font-awesome.scss',
     'whatwg-fetch', 
     'quill', 
     './Frontend/app/index.ts' 
@@ -45,20 +44,6 @@ module.exports = {
       {
         test: /\.css$/,
         loaders: ["style-loader", "css-loader?-url"],
-      },
-      { 
-        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, 
-        loader: "url-loader?limit=10000&mimetype=application/font-woff" 
-      },
-      { 
-        test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, 
-        use: [{
-          loader: 'file-loader',
-          options: {
-              name: '[name].[ext]',
-              outputPath: 'fonts/'
-          }
-        }]
       }
     ]
   },
