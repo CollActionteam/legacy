@@ -1,8 +1,8 @@
 import * as React from "react";
 import renderComponentIf from "./renderComponentIf";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimes } from '@fortawesome/free-solid-svg-icons'
-import { faBars } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 
 interface IMobileNavDrawProps {
   loginText?: string;
@@ -32,7 +32,7 @@ export default class MobileNavDraw extends React.Component<IMobileNavDrawProps, 
     return(
       <div id="draw-menu">
         <div id="draw-menu-close-button" onClick={() => self.close()}>
-          <FontAwesomeIcon icon="faTimes" />
+          <FontAwesomeIcon icon={faTimes} />
         </div>
         <ul>
             <li><a href="/">Home</a></li>
@@ -52,11 +52,13 @@ export default class MobileNavDraw extends React.Component<IMobileNavDrawProps, 
     const self = this;
     return (
       <div className="mobile-header">
-        <i className="fa fa-bars"
+      <FontAwesomeIcon icon={faBars}>
+        <div
           id="hamburger-icon"
           aria-hidden="true"
           onClick={() => self.open()}>
-        </i>
+        </div>
+      </FontAwesomeIcon>
         { this.state.open ? this.renderMenu() : null }
       </div>
     );
