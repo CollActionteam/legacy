@@ -1,5 +1,8 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
 interface ICarouselItem {
   name: string;
@@ -144,9 +147,9 @@ class DropDownWithImage extends React.Component<IDropDownProps, IDropDownState> 
 
   renderIcon () {
     if (this.state.open) {
-      return <i className="fa fa-chevron-up"></i>;
+      return <FontAwesomeIcon icon={faChevronUp} />
     }
-    return <i className="fa fa-chevron-down"></i>;
+    return <FontAwesomeIcon icon={faChevronDown} />
   }
 
   renderContent () {
