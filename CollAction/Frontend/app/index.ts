@@ -7,13 +7,10 @@ import "./manage";
 
 import "whatwg-fetch";
 
-import * as Promise from "bluebird";
+import * as jQuery from "jquery";
 
-// Configure
-Promise.config({
-    longStackTraces: true,
-    warnings: true // note, run node with --trace-warnings to see full stack traces for warnings
-});
+// Let's Load jQuery in the window for the asp validations
+window["jQuery"] = jQuery;
 
 function displayBodyOnLoad() {
   document.getElementById("body").style.display = "block";

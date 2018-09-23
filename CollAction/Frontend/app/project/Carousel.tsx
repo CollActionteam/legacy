@@ -53,7 +53,7 @@ const Item = (props) => {
        {props.itemTitle}
     </li>
   );
-}
+};
 
 class LandscapeCarousel extends React.Component<ICarouselProps, ICarouselState> {
 
@@ -91,7 +91,6 @@ class LandscapeCarousel extends React.Component<ICarouselProps, ICarouselState> 
           <div className="col-md-4 col-md-offset-2 col-xs-12 landscape-carousel-select">
             <p>In 6 easy Steps</p>
           </div>
-
           <div className="col-xs-4 landscape-carousel-body">
             <p>{this.props.items[this.state.selected].text}</p>
           </div>
@@ -113,7 +112,7 @@ class LandscapeCarousel extends React.Component<ICarouselProps, ICarouselState> 
             <img src={currentImageSoruce} />
           </div>
 
-          {this.renderImageOverlay()}          
+          {this.renderImageOverlay()}
         </div>
 
       </div>
