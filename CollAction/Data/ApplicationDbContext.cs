@@ -91,7 +91,7 @@ namespace CollAction.Data
         /// <param name="roleManager">Role managers to create and query roles</param>
         /// <param name="userManager">User manager to create and query users</param>
         /// <param name="token">Cancellation token</param>
-        public async Task Seed(IConfigurationRoot configuration, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public async Task Seed(IConfiguration configuration, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             ChangeTracker.AutoDetectChangesEnabled = false;
             await CreateAdminRoleAndUser(configuration, userManager, roleManager);
@@ -99,13 +99,13 @@ namespace CollAction.Data
             await ImportLocationData(configuration);
         }
 
-        private async Task ImportLocationData(IConfigurationRoot configuration)
+        private async Task ImportLocationData(IConfiguration configuration)
         {
             if (configuration["ImportLocationData"].Equals("1", StringComparison.Ordinal))
                 await new GeonamesImporter(this).ImportLocationData();
         }
 
-        private async Task CreateAdminRoleAndUser(IConfigurationRoot configuration, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        private async Task CreateAdminRoleAndUser(IConfiguration configuration, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             // Create admin role if not exists
             IdentityRole adminRole = await roleManager.FindByNameAsync(Constants.AdminRole);
