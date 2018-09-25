@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CollAction.Services
+namespace CollAction.Services.Project
 {
     public class ProjectEmailOptions
     {
