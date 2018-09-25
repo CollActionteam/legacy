@@ -316,11 +316,6 @@ namespace CollAction
             {
                 Task.Run(async () =>
                 {
-                    if (Configuration.GetValue<bool>("ResetTestDatabase"))
-                    {
-                        Logger.LogInformation("resetting test database");
-                        await context.Database.ExecuteSqlCommandAsync("DROP SCHEMA public CASCADE; CREATE SCHEMA public;");
-                    }
                     Logger.LogInformation("migrating database");
                     await context.Database.MigrateAsync();
                     Logger.LogInformation("seeding database");
