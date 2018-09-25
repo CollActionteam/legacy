@@ -121,7 +121,8 @@ namespace CollAction.Services.Project
                     new DisplayProjectViewModel
                     {
                         Project = project,
-                        Participants = project.ParticipantCounts.Count
+                        Participants = project.ParticipantCounts.Count,
+                        BannerImagePath = project.BannerImage == null ? $"/images/default_banners/{project.Category.Name}.jpg" : _imageService.GetUrl(project.BannerImage)
                     })
                 .ToListAsync();
         }
