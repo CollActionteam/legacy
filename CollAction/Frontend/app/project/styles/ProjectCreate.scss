@@ -310,6 +310,41 @@
     }
 }
 
+#project-create-nice {
+    background-color: #efefef; 
+    padding: 50px 0px;
+  
+    h1 {
+        color: $coll-action-green;
+    }
+    
+    #nice-circle {
+        background-color: $coll-action-green;
+        width: 250px; 
+        height: 250px; 
+        border-radius: 250px;
+        font-size: 5em;
+        color: #fff;
+        padding: 65px 45px 40px 35px
+    }
+  
+    p {
+        line-height: 1.5;
+        font-size: 1.25em;
+    }
+  
+    a {
+        color: $coll-action-green;
+    }  
+}
+  
+#project-registration-button {
+    a {
+        @include coll-action-button;
+        margin: 50px 0px;
+    }
+}
+
 #project-create-starting {
     padding: 50px 0px;
   
