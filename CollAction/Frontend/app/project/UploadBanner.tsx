@@ -52,9 +52,9 @@ export default class UploadBanner extends UploadImage<IUploadImageProps, IUpload
     render() {
         return (
             <div id="project-background" className="col-xs-12 banner" style={this.createCssImage()}>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-5 col-xs-12">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-md-5 col-xs-12">
                             <div id="banner-upload-card">
                                 <div id="banner-image">
                                     <div style={{display: this.state.preview ? "none" : "block"}}>
