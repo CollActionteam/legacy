@@ -128,18 +128,6 @@
             text-decoration: underline;
         }
 
-        .tap {
-            @media (pointer: fine) {
-                display: none;
-            }
-        }
-
-        .drop {
-            @media (pointer: coarse) {
-                display: none;
-            }
-        }
-
         .instructions {
             color: #8a8a8a;
             font-size: 0.7em;

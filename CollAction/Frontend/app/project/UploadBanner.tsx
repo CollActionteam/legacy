@@ -69,8 +69,8 @@ export default class UploadBanner extends UploadImage<IUploadImageProps, IUpload
                                             onDropRejected={this.onRejected}
                                             rejectClassName="field-validation-error">
                                             <h3>
-                                                <span className="tap">Tap to select banner image</span>
-                                                <span className="drop">Drop your banner image here</span>
+                                                <span className="mobile">Tap to select banner image</span>
+                                                <span className="desktop">Drop your banner image here</span>
                                             </h3>
                                             <div className="instructions">
                                                 <p className={ this.state.invalid ? "field-validation-error" : "hidden" }>
@@ -87,8 +87,15 @@ export default class UploadBanner extends UploadImage<IUploadImageProps, IUpload
                                             <div className="text">
                                                 <img src="/images/BrowserSize.png"></img>
                                                 {this.state.ie11
-                                                    ? <p>Image preview works better in newer browsers. <a target="_blank" href="http://outdatedbrowser.com">Check here</a> for upgrades.</p>
-                                                    : <p>Try and change your browser size, or rotate your device, to see if the image is suitable.</p>
+                                                    ?   <p>Image preview works better in newer browsers. <a target="_blank" href="http://outdatedbrowser.com">Check here</a> for upgrades.</p>
+                                                    :   <div>
+                                                            <span className="mobile">
+                                                                <p>Rotate your device to see if the image is suitable.</p>
+                                                            </span>
+                                                            <span className="desktop">
+                                                                <p>Try and change your browser size to see if the image is suitable.</p>
+                                                            </span>
+                                                        </div>
                                                 }
                                             </div>
                                             <div className="buttons">

@@ -67,7 +67,12 @@ export default class UploadDescriptiveImage extends UploadImage<IUploadDescripti
                 </div>
                 <div className="text">
                     <img src="/images/BrowserSize.png"></img>
-                    <p>Try and change your browser size, or rotate your device, to see if the image is suitable.</p>
+                    <span className="mobile">
+                        <p>Rotate your device, to see if the image is suitable.</p>
+                    </span>
+                    <span className="desktop">
+                        <p>Try and change your browser size to see if the image is suitable.</p>
+                    </span>
                 </div>
                 <div className="buttons">
                     <input type="button" value="Remove" onClick={this.resetImage}></input>
@@ -91,8 +96,8 @@ export default class UploadDescriptiveImage extends UploadImage<IUploadDescripti
                         onDropRejected={this.onRejected}
                         rejectClassName="field-validation-error">
                         <h3>
-                            <span className="tap">Tap to select banner image</span>
-                            <span className="drop">Drop your banner image here</span>
+                            <span className="mobile">Tap to select banner image</span>
+                            <span className="desktop">Drop your banner image here</span>
                         </h3>
                         <div className="instructions">
                             <p className={ this.state.invalid ? "field-validation-error" : "hidden" }>
@@ -104,10 +109,10 @@ export default class UploadDescriptiveImage extends UploadImage<IUploadDescripti
                         </div>
                     </DropZone>
                 </div>
-                <div className="hidden-xs hidden-sm col-md-2" style={{display: this.state.preview ? "block" : "none"}}>
+                <div className="hidden-xs hidden-sm col-md-3" style={{display: this.state.preview ? "block" : "none"}}>
                     { this.renderImageControl() }
                 </div>
-                <div className="col-xs-12 col-md-10" style={{display: this.state.preview ? "block" : "none"}}>
+                <div className="col-xs-12 col-md-9" style={{display: this.state.preview ? "block" : "none"}}>
                     <img id="preview" src={this.createSrcImage()} className="pull-right"></img>
                 </div>
                 <div className="col-xs-12 hidden-md hidden-lg" style={{display: this.state.preview ? "block" : "none"}}>
