@@ -316,8 +316,6 @@ namespace CollAction
                     await context.Database.MigrateAsync();
                     Logger.LogInformation("seeding database");
                     await context.Seed(Configuration, userManager, roleManager);
-                    Logger.LogInformation("migrating images"); // TODO: Remove after it's run
-                    await imageService.MigrationToS3(); // TODO: Remove after it's run
                     Logger.LogInformation("done starting up");
                 }).Wait();
             }

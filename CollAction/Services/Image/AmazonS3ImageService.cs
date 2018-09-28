@@ -1,5 +1,4 @@
-﻿using CollAction.Data;
-using CollAction.Models;
+﻿using CollAction.Models;
 using SixLabors.ImageSharp;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -11,26 +10,19 @@ using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon;
 using Hangfire;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using CollAction.Helpers;
-using Microsoft.AspNetCore.Hosting;
 
 namespace CollAction.Services.Image
 {
     public class AmazonS3ImageService : IImageService
     {
-        private readonly ApplicationDbContext _context; // TODO: Remove after migration has run
-        private readonly IHostingEnvironment _environment; // TODO: Remove after migration has run
         private readonly AmazonS3Client _client;
         private readonly string _bucket;
         private readonly string _region;
         private readonly IBackgroundJobClient _jobClient;
 
-        public AmazonS3ImageService(ApplicationDbContext context, IHostingEnvironment environment, IOptions<ImageServiceOptions> options, IBackgroundJobClient jobClient)
+        public AmazonS3ImageService(IOptions<ImageServiceOptions> options, IBackgroundJobClient jobClient)
         {
-            _environment = environment; // TODO: Remove after migration has run
-            _context = context; // TODO: Remove after migration has run
             _client = new AmazonS3Client(options.Value.S3AwsAccessKeyID, options.Value.S3AwsAccessKey, RegionEndpoint.GetBySystemName(options.Value.S3Region));
             _bucket = options.Value.S3Bucket;
             _region = options.Value.S3Region;
@@ -75,6 +67,7 @@ namespace CollAction.Services.Image
                 BucketName = _bucket,
                 Key = filePath
             };
+
             DeleteObjectResponse response = await _client.DeleteObjectAsync(deleteRequest);
             if (!response.HttpStatusCode.IsSuccess())
                 throw new InvalidOperationException($"failed to delete S3 object {filePath}, {response.HttpStatusCode}");
@@ -124,29 +117,6 @@ namespace CollAction.Services.Image
         public void Dispose()
         {
             _client.Dispose();
-        }
-
-        // TODO: Remove after this has run in production
-        public async Task MigrationToS3()
-        {
-            var imagesToMigrate =
-                await _context.ImageFiles
-                              .Where(f => f.Filepath.Contains("usercontent", StringComparison.InvariantCulture))
-                              .ToListAsync();
-
-            foreach (var image in imagesToMigrate)
-            {
-                using (FileStream imageStream = File.OpenRead(_environment.WebRootPath + image.Filepath))
-                {
-                    Image<Rgba32> memoryImage = SixLabors.ImageSharp.Image.Load(imageStream);
-                    byte[] imageBytes = ConvertImageToPng(memoryImage);
-                    image.Filepath = $"{Guid.NewGuid()}.png";
-                    await UploadToS3(imageBytes, image.Filepath);
-                }
-            }
-
-            _context.ImageFiles.UpdateRange(imagesToMigrate);
-            await _context.SaveChangesAsync();
         }
     }
 }
