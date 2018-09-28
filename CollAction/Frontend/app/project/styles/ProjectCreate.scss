@@ -48,9 +48,8 @@
     }
 
     #project-background {
-        background-color: #ff8142;
+        background-color: #d8d8d8;
         height: 450px;
-        background-size: cover;
 
         img.preview {
             border-radius: 20px;
@@ -69,20 +68,14 @@
 
     #banner-upload-card {
         border-radius: 20px;
-        margin-top: 15px;
         background-color: #fff;
         padding: 20px;
-        @media (min-width: 767px) {
-            width: 325px;
-        }
-        @media (max-width: 767px) {
-            width: 100%;
-        }
+        margin-top: 20px;
     }
 
     #project-info-card {
         border-radius: 20px;
-        margin: -265px 20px 35px 20px;
+        margin: -265px 0px 35px 80px;
         background-color: #fff;
         padding: 40px;
         box-shadow: 10px 10px 40px -9px rgba(0,0,0,0.55);
@@ -135,7 +128,7 @@
             text-decoration: underline;
         }
 
-        p {
+        .instructions {
             color: #8a8a8a;
             font-size: 0.7em;
         }
