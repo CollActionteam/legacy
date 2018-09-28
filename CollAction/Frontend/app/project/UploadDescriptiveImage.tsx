@@ -90,8 +90,15 @@ export default class UploadDescriptiveImage extends UploadImage<IUploadDescripti
                         onDrop={this.onDrop}
                         onDropRejected={this.onRejected}
                         rejectClassName="field-validation-error">
-                        <h3>Upload descriptive image</h3>
-                        <p className={this.state.invalid ? "field-validation-error" : ""}>Drop or tap. Use jpg, png, gif or bmp. Max. 1 MB</p>
+                        <h3>Drop your image here</h3>
+                        <div className="instructions">
+                            <p className={ this.state.invalid ? "field-validation-error" : "hidden" }>
+                                This image is not valid. Please edit it or pick another one.
+                            </p>
+                            <p>
+                                Use jpg, png, gif or bmp. Max. 1 MB.
+                            </p>
+                        </div>
                     </DropZone>
                 </div>
                 <div className="hidden-xs hidden-sm col-md-2" style={{display: this.state.preview ? "block" : "none"}}>
