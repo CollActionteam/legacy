@@ -17,5 +17,4 @@ RUN dotnet publish CollAction.csproj -c Release -o /app
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
-VOLUME ["/app/wwwroot/usercontent/"]
 ENTRYPOINT ["dotnet", "CollAction.dll"]
