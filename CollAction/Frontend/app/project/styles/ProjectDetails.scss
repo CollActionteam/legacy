@@ -2,49 +2,6 @@
 @import "../../mixins";
 
 #project-details {
-    @media (max-width: 767px) {
-        font-size: 100% !important;
-
-        #project-participation {
-            ul {
-                padding-left: 5px !important;
-            }
-        }
-
-        #project-starter-avatar {
-            background-color: #ff8142;
-            border-radius: 250px;
-            height: 75px !important;
-            width: 75px !important;
-        }
-
-        #project-starter-name {
-            font-size: 1em !important;
-            h3 {
-                font-size: 1em !important;
-            }
-        }
-    }
-
-    @media (max-width: 991px) {
-        .align-sides {
-            padding-left: 25px !important;
-            padding-right: 25px !important;
-        }
-
-        #project-info-card {
-            padding: 20px !important;
-            margin: -100px 0px 0px 0px !important;
-        }
-    }
-
-    @media (min-width: 991px) {
-        #project-starter-row {
-            .col-md-3 {
-            margin-top: -300px !important;
-            }
-        }
-    }
     
     hr {
         border-top-width: 2px;
@@ -70,55 +27,23 @@
         margin: 0px;
     }
 
-    .align-sides {
-        padding-left: 0px;
-        padding-right: 0px;
-    }
-
-    .project-image {
-        color: #999;
-        display: flex;
-        flex-wrap: wrap;
-        padding: 0px;
-
-        .image {
-            padding: 0px !important;
-
-            img {
-                background-color: gray;
-                width: 100%;
-                box-shadow: 5px 9.5px 34px -9px rgba(0, 0, 0, 0.45)
-            }
-        }
-
-        .caption {
-            background-color: #ebebeb;
-            padding: 15px;
-            font-size: 0.9em;
-
-            h5 {
-                padding: 0px;
-                margin: 0px;
-            }
-
-            p {
-                margin-top: 0px;
-            }
-        }
-    }
-
     #project-background {
-        background-color: #ff8142;
+        background-color: #d8d8d8;
         height: 450px;
         background-size: cover;
     }
 
     #project-info-card {
         border-radius: 20px;
-        margin: -265px 20px 20px 20px;
+        margin: -265px 0px 35px 80px;
         background-color: #fff;
         padding: 40px;
-        box-shadow: 10px 10px 122px -9px rgba(0,0,0,0.55);
+        box-shadow: 10px 10px 40px -9px rgba(0,0,0,0.55);
+
+        @media (max-width: 991px) {
+            padding: 20px !important;
+            margin: -100px 0px 0px 0px !important;
+        }
 
         #more-info {
             p {
@@ -140,6 +65,10 @@
 
             ul {
                 padding-left: 20px;
+
+                @media (max-width: 767px) {
+                    padding-left: 5px !important;
+                }
 
                 li {
                     list-style: none;
@@ -202,13 +131,26 @@
         border-radius: 250px;
         height: 150px;
         width: 150px;
+
+        @media (max-width: 767px) {
+            height: 75px !important;
+            width: 75px !important;
+        }
     }
 
     #project-starter-name {
         font-size: 1.29em;
 
+        @media (max-width: 767px) {
+            font-size: 1em !important;
+        }
+
         h3 {
             margin-bottom: 0em;
+
+            @media (max-width: 767px) {
+                font-size: 1em !important;
+            }
         }
 
         p {
@@ -232,6 +174,26 @@
 
     .project-green-proposal {
         word-wrap: break-word;
+    }
+
+    #project-image {
+        margin-top: 20px;
+        margin-bottom: 20px;
+
+        img {
+            width: 100%;
+            box-shadow: 5px 9.5px 34px -9px rgba(0, 0, 0, 0.45);
+        }        
+
+        .image-description {
+            background-color: #eeeeee;
+            border-radius: 20px;
+            padding: 5px 20px;
+
+            @media (max-width: 991px) {
+                margin-top: 20px;
+            }
+        }
     }
     
     .video-container {
@@ -267,7 +229,6 @@
         margin-top: 40px;
         background-color: #f7f7f7;
         padding: 20px 0px 20px 0px;
-
     }
 
     @media (min-width: 992px) {

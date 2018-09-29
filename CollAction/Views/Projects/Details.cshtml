@@ -110,7 +110,7 @@
                             <div id="project-details-share-buttons"></div>
                         }
                     </div>
-                    <div class="col-md-6 col-md-pull-6 col-xs-12 align-sides">
+                    <div class="col-md-6 col-md-pull-6 col-xs-12">
                         <div class="row">
                             @if (!String.IsNullOrEmpty(Model.Project.Owner?.FirstName) && !String.IsNullOrEmpty(Model.Project.Owner?.LastName))
                             {
@@ -128,20 +128,22 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-xs-12 align-sides">
+            <div class="col-xs-12">
                 <hr class="hidden-sm hidden-xs" />
             </div>
         </div>
 
         <div class="row">
-            <div class="col-xs-12 col-md-4 align-sides description-tags-container">
+            <div class="col-xs-12 col-md-4 description-tags-container">
                 <div class="project-short-description">
                     <h3>Short description:</h3>
                     <div>@Html.Raw(Model.Project.Description)</div>
                 </div>
                 <div class="project-dates">
-                    <h3>Start date: <span>@Html.DisplayFor(model => model.Start)</span></h3>
-                    <h3>End date: <span>@Html.DisplayFor(model => model.End)</span></h3>
+                    <h3>Start date:<h3> 
+                    <span>@Html.DisplayFor(model => model.Start)</span>                    
+                    <h3>End date:</h3>
+                    <span>@Html.DisplayFor(model => model.End)</span>
                 </div>
                 @if (Model.Project.Tags.Count > 0)
                 {
@@ -156,7 +158,7 @@
                     </div>
                 }
             </div>
-            <div class="col-xs-12 col-md-8 align-sides">
+            <div class="col-xs-12 col-md-7 col-md-offset-1">
                 <div class="goal-proposal-container">
                     <div class="project-goal">
                         <h3>Goal / impact</h3>
@@ -166,6 +168,7 @@
                         <p><q>@Html.DisplayFor(model => model.Project.Proposal)</q></p>
                     </div>
                 </div>
+
                 @if (!String.IsNullOrEmpty(Model.Project.CreatorComments))
                 {
                     <hr class="hidden-sm hidden-xs" />
@@ -180,20 +183,21 @@
         </div>
 
         @if (Model.Project.DescriptiveImage != null)
-        {
-            <div class="row project-image">
-                <div class="col-xs-12 col-md-8 col-md-push-4 image">
-                    <img src="@Model.Project.DescriptiveImage.Filepath"
-                         width="@Model.Project.DescriptiveImage.Width"
-                         height="@Model.Project.DescriptiveImage.Height"
-                         class="additional-image img-responsive"
-                         alt="Additional image not found." />
+        {            
+            <div class="row" id="project-image">
+                <div class="hidden-xs hidden-sm col-md-3">
+                    <div class="image-description">
+                        <p>@Html.DisplayFor(model => model.Project.DescriptiveImage.Description)</p>
+                    </div>
                 </div>
-                <div class="col-xs-12 col-md-4 col-md-pull-8 caption">
-                    <h5>Image</h5>
-                    <p>@Html.DisplayFor(model => model.Project.DescriptiveImage.Description)</p>
+                <div class="col-xs-12 col-md-9">
+                    <img src="@Model.Project.DescriptiveImage.Filepath" class="pull-right"></img>
                 </div>
-
+                <div class="col-xs-12 hidden-md hidden-lg">
+                    <div class="image-description">
+                        <p>@Html.DisplayFor(model => model.Project.DescriptiveImage.Description)</p>
+                    </div>
+                </div>
             </div>
         }
 
