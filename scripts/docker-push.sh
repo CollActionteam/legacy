@@ -1,25 +1,20 @@
 #! /bin/bash
-if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then 
-    echo "Building branch '$TRAVIS_PULL_REQUEST_BRANCH' for pull request '$TRAVIS_PULL_REQUEST'";
+echo "Building branch '$TRAVIS_BRANCH'"
 
-    # Extract CA-number from branch name
-    shopt -s nocasematch
-    CA_REGEX='(CA-[[:digit:]]+)'
+# Extract CA-number from branch name
+shopt -s nocasematch
+CA_REGEX='(CA-[[:digit:]]+)'
 
-    if ! [[ "$TRAVIS_PULL_REQUEST_BRANCH" =~ $CA_REGEX ]]; then
-        echo "Skip pushing to ECR because branch '$TRAVIS_PULL_REQUEST_BRANCH' doesn't contain a task number in the format 'CA-n'."
-        exit 0;
-    fi
-
+if [[ "$TRAVIS_BRANCH" =~ $CA_REGEX ]]; then
     # Use the CA-number as image tag
     TAG=${BASH_REMATCH[1]}
 elif [[ "$TRAVIS_BRANCH" == "master"  || "$TRAVIS_BRANCH" == "Friesland" ]]; then
-    echo "Building branch '$TRAVIS_BRANCH' "
+    echo "Building branch '$TRAVIS_BRANCH'"
 
     # Use the branch name as image tag
     TAG=${TRAVIS_BRANCH}
 else
-    echo "Skip pushing to ECR because branch '$TRAVIS_BRANCH' isn't a pull request nor master or Friesland branch."
+    echo "Skip pushing to ECR because branch '$TRAVIS_BRANCH' doesn't contain a task-number (format CA-n), and isn't master nor Friesland branch."
     exit 0;
 fi
 
