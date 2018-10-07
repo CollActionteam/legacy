@@ -79,31 +79,42 @@ class ShareButtons extends React.Component<IShareButtonsProps, IShareButtonsStat
     return `https://www.linkedin.com/shareArticle?mini=true&url=${this.getUrl()}&title=${this.getTitle()}&source=${encodeURIComponent(window.location.origin)}`;
   }
 
+  getWhatsappUrl() {
+      return `whatsapp://send?text=${this.getTitle()} ${this.getUrl()}`;
+  }
+
   render() {
     return (
       <div className="share-buttons">
         <div className="row">
-          <div className="col-xs-4">
+          <div className="col-xs-3 col-sm-4">
             <a href={this.getFacebookUrl()} target="_blank">
               <div className="social-media-share-buttons social-media-share-button-facebook">
                 <i className="fa fa-facebook"></i>
               </div>
             </a>
           </div>
-          <div className="col-xs-4">
+          <div className="col-xs-3 col-sm-4">
             <a href={this.getTwitterUrl()}>
               <div className="social-media-share-buttons social-media-share-button-twitter">
                 <i className="fa fa-twitter"></i>
               </div>
             </a>
           </div>
-          <div className="col-xs-4">
+          <div className="col-xs-3 col-sm-4">
             <a href={this.getLinkedInUrl()}>
               <div className="social-media-share-buttons social-media-share-button-linkedin">
                 <i className="fa fa-linkedin"></i>
               </div>
             </a>
           </div>
+                <div className="col-xs-3 hidden-sm hidden-md hidden-lg">
+                    <a href={this.getWhatsappUrl()}>
+                    <div className="social-media-share-buttons social-media-share-button-whatsapp">
+                        <i className="fa fa-whatsapp"></i>
+                    </div>
+                </a>
+            </div>
         </div>
       </div>
     );
