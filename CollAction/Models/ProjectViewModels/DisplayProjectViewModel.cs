@@ -23,8 +23,7 @@ namespace CollAction.Models
         public string DescriptionVideoYouTubeEmbedLink
             => HasDescriptionVideo ? $"https://www.youtube.com/embed/{YouTubeId}" : "";
 
-        public string BannerImagePath
-            => Project.BannerImage?.Filepath ?? $"/images/default_banners/{Project.Category.Name}.jpg";
+        public string BannerImagePath { get; set; }
 
         private string YouTubeId
         {

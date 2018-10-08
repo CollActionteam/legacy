@@ -7,13 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using CollAction.Models;
 using CollAction.Models.AccountViewModels;
-using CollAction.Services;
 using Microsoft.Extensions.Localization;
 using CollAction.Data;
 using Microsoft.AspNetCore.Authentication;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using CollAction.Services.Email;
+using CollAction.Services.Newsletter;
 
 namespace CollAction.Controllers
 {
