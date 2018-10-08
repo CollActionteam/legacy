@@ -1,22 +1,17 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using CollAction.Data;
 using CollAction.Models;
-using CollAction.Services;
 using Microsoft.AspNetCore.Mvc.Razor;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Serilog;
-using Serilog.Events;
-using Serilog.Sinks.Slack;
-using Amazon;
 using System.Linq;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Rewrite;
@@ -27,29 +22,26 @@ using Hangfire;
 using Hangfire.PostgreSql;
 using CollAction.Helpers;
 using Hangfire.Dashboard;
-using Microsoft.ApplicationInsights.AspNetCore.Extensions;
+using CollAction.Services.Email;
+using CollAction.Services.Project;
+using CollAction.Services.Newsletter;
+using CollAction.Services.Festival;
+using CollAction.Services.DataProtection;
+using CollAction.Services.Image;
 
 namespace CollAction
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IHostingEnvironment env, IConfiguration configuration, ILogger<Startup> logger)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddEnvironmentVariables();
-
-            if (env.IsDevelopment())
-            {
-                // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                builder.AddUserSecrets<Startup>();
-            }
-
-            Configuration = builder.Build();
+            Configuration = configuration;
             Environment = env;
+            Logger = logger;
         }
 
-        public IConfigurationRoot Configuration { get; }
+        public ILogger<Startup> Logger { get; }
+        public IConfiguration Configuration { get; }
         public IHostingEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -93,6 +85,7 @@ namespace CollAction
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddScoped<IProjectService, ProjectService>();
+            services.AddScoped<IImageService, AmazonS3ImageService>();
             services.AddTransient<INewsletterSubscriptionService, NewsletterSubscriptionService>();
             services.AddTransient<IFestivalService, FestivalService>();
 
@@ -101,13 +94,8 @@ namespace CollAction
 
             services.AddApplicationInsightsTelemetry(Configuration);
 
-            services.Configure<AuthMessageSenderOptions>(options =>
-            {
-                options.FromAddress = Configuration["FromAddress"];
-                options.Region = RegionEndpoint.EnumerableAllRegions.First(r => r.SystemName == Configuration["SesRegion"]);
-                options.SesAwsAccessKey = Configuration["SesAwsAccessKey"];
-                options.SesAwsAccessKeyID = Configuration["SesAwsAccessKeyID"];
-            });
+            services.Configure<AuthMessageSenderOptions>(Configuration);
+            services.Configure<ImageServiceOptions>(Configuration);
             services.Configure<NewsletterSubscriptionServiceOptions>(Configuration);
             services.Configure<FestivalServiceOptions>(Configuration);
             services.Configure<ProjectEmailOptions>(Configuration);
@@ -144,6 +132,7 @@ namespace CollAction
 
                 if (!Configuration.GetValue<bool>("CspDisable"))
                 {
+                    Logger.LogInformation("enabling security headers");
                     app.UseSecurityHeaders(new HeaderPolicyCollection() // See https://www.owasp.org/index.php/OWASP_Secure_Headers_Project
                        .AddStrictTransportSecurityMaxAgeIncludeSubDomains() // Add a HSTS header, making sure browsers connect to collaction + subdomains with https from now on
                        .AddXssProtectionEnabled() // Enable browser xss protection
@@ -180,7 +169,8 @@ namespace CollAction
                            cspBuilder.AddImgSrc().Self() // Only allow self-hosted images, or google analytics (for tracking images), or configured sources
                                                  .Sources.AddRange(new[]
                                                                    {
-                                                                       "https://www.google-analytics.com"
+                                                                       "https://www.google-analytics.com",
+                                                                       $"https://s3.{Configuration["S3Region"]}.amazonaws.com"
                                                                    }.Concat(Configuration["CspImgSrc"]?.Split(";") ?? new string[0]));
                            cspBuilder.AddStyleSrc().Self() // Only allow style/css from these sources (note: css injection can actually be dangerous), or configured sources
                                                    .UnsafeInline() // Unfortunately this is necessary, the backend passess some things that are directly passed into css style attributes, especially on the project page. TODO: We should try to get rid of this.
@@ -224,19 +214,6 @@ namespace CollAction
                 SupportedUICultures = supportedCultures,
             });
 
-            // Configure logging
-            LoggerConfiguration configuration = new LoggerConfiguration()
-                .WriteTo.RollingFile("log-{Date}.txt", LogEventLevel.Information)
-                .WriteTo.Console(LogEventLevel.Information);
-
-            if (!string.IsNullOrEmpty(Configuration["SlackHook"]))
-                configuration.WriteTo.Slack(Configuration["SlackHook"], restrictedToMinimumLevel: LogEventLevel.Error);
-
-            if (env.IsDevelopment())
-                configuration.WriteTo.Trace();
-
-            Log.Logger = configuration.CreateLogger();
-            loggerFactory.AddSerilog();
             applicationLifetime.ApplicationStopping.Register(() => Log.CloseAndFlush());
 
             if (env.IsDevelopment())
@@ -258,13 +235,14 @@ namespace CollAction
 
             app.UseStaticFiles();
 
+            app.UseHangfireServer(new BackgroundJobServerOptions() { WorkerCount = 1 });
+
             app.UseHangfireDashboard(options: new DashboardOptions()
             {
                 Authorization = new IDashboardAuthorizationFilter[] {
                     new HangfireAdminAuthorizationFilter()
                 }
             });
-            app.UseHangfireServer();
 
             app.UseMvc(routes =>
             {
@@ -329,12 +307,17 @@ namespace CollAction
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             using (var userManager = serviceScope.ServiceProvider.GetService<UserManager<ApplicationUser>>())
             using (var roleManager = serviceScope.ServiceProvider.GetService<RoleManager<IdentityRole>>())
+            using (var imageService = serviceScope.ServiceProvider.GetService<IImageService>())
             using (var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
             {
-                if (Configuration.GetValue<bool>("ResetTestDatabase"))
-                    context.Database.ExecuteSqlCommand("DROP SCHEMA public CASCADE; CREATE SCHEMA public;");
-                context.Database.Migrate();
-                Task.Run(() => context.Seed(Configuration, userManager, roleManager)).Wait();
+                Task.Run(async () =>
+                {
+                    Logger.LogInformation("migrating database");
+                    await context.Database.MigrateAsync();
+                    Logger.LogInformation("seeding database");
+                    await context.Seed(Configuration, userManager, roleManager);
+                    Logger.LogInformation("done starting up");
+                }).Wait();
             }
         }
     }
