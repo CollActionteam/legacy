@@ -10,6 +10,18 @@ import "quill";
 
 import * as jQuery from "jquery";
 
+import "@fortawesome/fontawesome-free/css/all.css";
+import "@fortawesome/fontawesome-free/js/all.js";
+import { faTwitter } from "@fortawesome/free-brands-svg-icons";
+import { faFacebook } from "@fortawesome/free-brands-svg-icons";
+import { faLinkedin } from "@fortawesome/free-brands-svg-icons";
+// import "font-awesome/scss/font-awesome.scss";
+import { dom, library } from "@fortawesome/fontawesome-svg-core";
+
+// after library.add
+library.add(faTwitter, faFacebook, faLinkedin);
+dom.i2svg();
+
 // Let's Load jQuery in the window for the asp validations
 window["jQuery"] = jQuery;
 
