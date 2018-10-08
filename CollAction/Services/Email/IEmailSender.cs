@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace CollAction.Services
+namespace CollAction.Services.Email
 {
     public interface IEmailSender
     {

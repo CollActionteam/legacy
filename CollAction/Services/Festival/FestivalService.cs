@@ -1,7 +1,7 @@
 using System;
 using Microsoft.Extensions.Options;
 
-namespace CollAction.Services
+namespace CollAction.Services.Festival
 {
     public class FestivalService : IFestivalService
     {

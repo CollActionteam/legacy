@@ -2,12 +2,28 @@ import * as React from "react";
 import renderComponentIf from "./renderComponentIf";
 
 interface IMobileNavDrawProps {
-  loginText?: string;
+  isLoggedIn: boolean;
 }
 
 interface IMobileNavDrawState {
   open: boolean;
 }
+
+function AccountManageNav(props) {
+  if (props.isLoggedIn) {
+    return <li><a href="/manage">Account</a></li>;
+  }else {
+    return null;
+  }
+ }
+
+ function LoginStateNav(props) {
+  if (props.isLoggedIn) {
+    return <li><button type="button" onClick={() => document.getElementById("logOutBtn").click()}>Logout</button></li>;
+  }else {
+    return <li><a href="/account/login">Login</a></li>;
+  }
+ }
 
 export default class MobileNavDraw extends React.Component<IMobileNavDrawProps, IMobileNavDrawState> {
 
@@ -26,6 +42,7 @@ export default class MobileNavDraw extends React.Component<IMobileNavDrawProps, 
 
   renderMenu () {
     const self = this;
+
     return(
       <div id="draw-menu">
         <div id="draw-menu-close-button" onClick={() => self.close()}>
@@ -36,10 +53,8 @@ export default class MobileNavDraw extends React.Component<IMobileNavDrawProps, 
             <li><a href="/find">Find Project</a></li>
             <li><a href="/start">Start Project</a></li>
             <li><a href="/about">About</a></li>
-            {this.props.loginText == "Logout" ?
-                (<li><button type="button" onClick={() => document.getElementById("logOutBtn").click()}>Logout</button></li>) :
-                (<li><a href="/account/login">Login</a></li>)
-            }
+            <AccountManageNav isLoggedIn={this.props.isLoggedIn} />
+            <LoginStateNav isLoggedIn={this.props.isLoggedIn} />
         </ul>
       </div>
     );
@@ -60,9 +75,9 @@ export default class MobileNavDraw extends React.Component<IMobileNavDrawProps, 
   }
 }
 
-var loginText = document.getElementById("logOutBtn")? "Logout" : "Login";
-
 renderComponentIf(
-  <MobileNavDraw loginText={loginText} />,
+  <MobileNavDraw
+    isLoggedIn={document.getElementById("logOutBtn") ? true : false}
+  />,
   document.getElementById("mobile-nav-draw")
 );
