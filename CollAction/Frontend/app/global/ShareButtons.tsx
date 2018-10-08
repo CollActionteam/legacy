@@ -2,9 +2,12 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import renderComponentIf from "./renderComponentIf";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
 import { faTwitter } from "@fortawesome/free-brands-svg-icons";
 import { faFacebook } from "@fortawesome/free-brands-svg-icons";
 import { faLinkedin } from "@fortawesome/free-brands-svg-icons";
+
+library.add(faTwitter, faFacebook, faLinkedin);
 
 enum States { ERROR, READY, LOADING }
 
