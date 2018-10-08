@@ -6,7 +6,7 @@ using System.Linq;
 using System.Xml.Linq;
 using Microsoft.EntityFrameworkCore;
 
-namespace CollAction.Services
+namespace CollAction.Services.DataProtection
 {
     public sealed class DataProtectionRepository : IXmlRepository
     {

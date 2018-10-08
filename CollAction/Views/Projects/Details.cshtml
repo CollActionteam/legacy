@@ -1,5 +1,8 @@
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Http.Features
+@using CollAction.Services.Image
 
+@inject IImageService ImageService
 @inject IViewLocalizer Localizer
 
 @model CollAction.Models.DisplayProjectViewModel
@@ -170,7 +173,7 @@
         {
             <div class="row project-image">
                 <div class="col-xs-12 col-md-8 col-md-push-4 image">
-                    <img src="@Model.Project.DescriptiveImage.Filepath"
+                    <img src="@ImageService.GetUrl(Model.Project.DescriptiveImage)"
                          width="@Model.Project.DescriptiveImage.Width"
                          height="@Model.Project.DescriptiveImage.Height"
                          class="additional-image img-responsive"
