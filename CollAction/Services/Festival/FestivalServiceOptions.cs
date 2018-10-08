@@ -1,6 +1,6 @@
 using System;
 
-namespace CollAction.Services
+namespace CollAction.Services.Festival
 {
     public class FestivalServiceOptions 
     {
