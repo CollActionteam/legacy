@@ -80,7 +80,7 @@ class ShareButtons extends React.Component<IShareButtonsProps, IShareButtonsStat
   }
 
   getWhatsappUrl() {
-      return `whatsapp://send?text=${this.getTitle()} ${this.getUrl()}`;
+      return `whatsapp://send?text=${this.getTitle()}%20${this.getUrl()}`;
   }
 
   render() {
