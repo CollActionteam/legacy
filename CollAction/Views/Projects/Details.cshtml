@@ -1,6 +1,8 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Microsoft.AspNetCore.Http.Features
+@using CollAction.Services.Image
 
+@inject IImageService ImageService
 @inject IViewLocalizer Localizer
 
 @model CollAction.Models.DisplayProjectViewModel
