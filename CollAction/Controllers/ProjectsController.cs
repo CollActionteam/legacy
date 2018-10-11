@@ -73,8 +73,6 @@ namespace CollAction.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
 
-            if (user == null) throw new InvalidOperationException("User doesn't have a UserIdClaimType. Can't determine user information.");
-
             return View(new CreateProjectViewModel
             {
                 ProjectStarterFirstName = user.FirstName,
