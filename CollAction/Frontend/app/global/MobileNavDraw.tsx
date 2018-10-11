@@ -27,8 +27,8 @@ function AccountManageNav(props) {
 
 export default class MobileNavDraw extends React.Component<IMobileNavDrawProps, IMobileNavDrawState> {
 
-  constructor () {
-    super();
+  constructor (props: IMobileNavDrawProps) {
+    super(props);
     this.state = { open: false };
   }
 

@@ -71,8 +71,12 @@ namespace CollAction.Controllers
         [Authorize]
         public async Task<IActionResult> Create()
         {
+            var user = await _userManager.GetUserAsync(User);
+
             return View(new CreateProjectViewModel
             {
+                ProjectStarterFirstName = user.FirstName,
+                ProjectStarterLastName = user.LastName,
                 Start = DateTime.UtcNow.Date.AddDays(7), // A week from today
                 End = DateTime.UtcNow.Date.AddDays(7).AddMonths(1), // A month after start
                 Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Description"),

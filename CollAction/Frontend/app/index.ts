@@ -1,22 +1,19 @@
-import "./home/index";
-import "./project/index";
-import "./global/index";
-import "./account/index";
-import "./admin/index";
-import "./manage/index";
+import "./home";
+import "./project";
+import "./global";
+import "./account";
+import "./admin";
+import "./manage";
 
 import "whatwg-fetch";
-import "quill";
 
-import * as jQuery from "jquery";
-import * as injectTapEventPlugin from "react-tap-event-plugin";
+import * as Promise from "bluebird";
 
-// Let's Load jQuery in the window for the asp validations
-window["jQuery"] = jQuery;
-
-// Needed for onTouchTap.
-// http://stackoverflow.com/a/34015469/988941 
-injectTapEventPlugin();
+// Configure
+Promise.config({
+    longStackTraces: true,
+    warnings: true // note, run node with --trace-warnings to see full stack traces for warnings
+});
 
 function displayBodyOnLoad() {
   document.getElementById("body").style.display = "block";

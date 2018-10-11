@@ -7,6 +7,7 @@ import "./styles/footer.scss";
 import "./styles/banner.scss";
 import "./styles/share-buttons.scss";
 import "./styles/cookiemessage.scss";
+import "./styles/helpers.scss";
 
 import "./styles/quill-snow.css";
 
