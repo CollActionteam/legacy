@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using CollAction.Services;
+using CollAction.Services.Project;
 
 namespace CollAction.Helpers
 {

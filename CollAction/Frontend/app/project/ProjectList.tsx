@@ -1,7 +1,7 @@
 import * as React from "react";
 
 export interface IProject {
-  projectId: string,
+  projectId: string;
   projectName: string;
   projectNameUriPart: string;
   projectProposal: string;
