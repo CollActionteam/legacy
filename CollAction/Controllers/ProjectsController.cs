@@ -48,13 +48,8 @@ namespace CollAction.Controllers
         public IActionResult Find()
             => View();
 
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string name, int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             IEnumerable<DisplayProjectViewModel> items = await _projectService.GetProjectDisplayViewModels(p => p.Id == id && p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted);
             if (items.Count() == 0)
             {
@@ -192,11 +187,22 @@ namespace CollAction.Controllers
             foreach (var admin in administrators)
                 _emailSender.SendEmail(admin.Email, subject, confirmationEmailAdmin);
 
-            return View("ThankYouCreate", new ThankYouCreateProjectViewModel()
+            return LocalRedirect($"~/Projects/Create/{_projectService.GetProjectNameNormalized(project.Name)}/{project.Id}/thankyou");
+        }
+
+        [Authorize]
+        public IActionResult ThankYouCreate(string name, int? id)
+        {
+            var project = _context.Projects.SingleOrDefault(m => m.Id == id.Value);
+            if (project == null)
+            {
+                return NotFound();
+            }
+            return View(new ThankYouCreateProjectViewModel
             {
                 Name = project.Name
             });
-        }
+         }
 
         [Authorize]
         public async Task<IActionResult> Delete(int? id)
@@ -239,14 +245,9 @@ namespace CollAction.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Commit(int? id)
+        public async Task<IActionResult> Commit(string name, int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            Project project =  await _projectService.GetProjectById(id.Value); 
+            Project project =  await _projectService.GetProjectById(id);
             if (project == null)
             {
                 return NotFound();
@@ -256,6 +257,7 @@ namespace CollAction.Controllers
             {
                 ProjectId = project.Id,
                 ProjectName = project.Name,
+                ProjectNameUriPart = _projectService.GetProjectNameNormalized(project.Name),
                 ProjectProposal = project.Proposal,
                 IsUserCommitted = (await _projectService.GetParticipant((await _userManager.GetUserAsync(User)).Id, project.Id) != null),
                 IsActive = project.IsActive
@@ -267,13 +269,8 @@ namespace CollAction.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Commit(int id, CommitProjectViewModel commitProjectViewModel)
+        public async Task<IActionResult> Commit(CommitProjectViewModel commitProjectViewModel)
         {
-            if (id != commitProjectViewModel.ProjectId)
-            {
-                return NotFound();
-            }
-
             ApplicationUser user = await _userManager.GetUserAsync(User);
             bool success = await _projectService.AddParticipant(user.Id, commitProjectViewModel.ProjectId);
 
@@ -295,12 +292,31 @@ namespace CollAction.Controllers
                 // Thank you for participating in a CollAction project!
                 string subject = "Dank voor je deelname aan een Freonen crowdacting project!";
                 _emailSender.SendEmail(user.Email, subject, confirmationEmail);
-                return View("ThankYouCommit", commitProjectViewModel);
+                commitProjectViewModel.ProjectNameUriPart = _projectService.GetProjectNameNormalized(commitProjectViewModel.ProjectName);
+                return LocalRedirect($"~/Projects/{commitProjectViewModel.ProjectNameUriPart}/{commitProjectViewModel.ProjectId}/thankyou");
             }
             else
             {
                 return View("Error");
             }
+        }
+        
+        [Authorize]
+        [HttpGet]
+        public IActionResult ThankYouCommit(int id, string name)
+        {
+            var project = _context.Projects.SingleOrDefault(m => m.Id == id);
+            if (project == null)
+            {
+                return NotFound();
+            }
+            CommitProjectViewModel model = new CommitProjectViewModel()
+            {
+                ProjectId = id,
+                ProjectName = project.Name,
+                ProjectNameUriPart = _projectService.GetProjectNameNormalized(project.Name)
+            };
+            return View(nameof(ThankYouCommit), model);
         }
 
         [HttpGet]

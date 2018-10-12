@@ -18,6 +18,8 @@ namespace CollAction.Models
 
         public string ProjectProposal { get; set; }
 
+        public string ProjectNameUriPart { get; set; }
+
         public string CategoryName { get; set; }
 
         public string CategoryColorHex { get; set; }
