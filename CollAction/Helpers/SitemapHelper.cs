@@ -1,5 +1,6 @@
 ﻿using CollAction.Data;
 using CollAction.Models;
+using CollAction.Services.Image;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,12 +20,15 @@ namespace CollAction.Helpers
         private readonly ApplicationDbContext _context;
         private readonly IUrlHelper _urlHelper;
         private readonly IProjectService _projectService;
+        private readonly IImageService _imageService;
+        
 
-        public SitemapHelper(ApplicationDbContext context, IUrlHelper urlHelper, IProjectService projectService)
+        public SitemapHelper(ApplicationDbContext context, IUrlHelper urlHelper, IImageService imageService, IProjectService projectService)
         {
             _context = context;
             _urlHelper = urlHelper;
             _projectService = projectService;
+            _imageService = imageService;
         }
 
         public async Task<XDocument> GetSitemap()
@@ -68,7 +72,7 @@ namespace CollAction.Helpers
             {
                 projectElements.Add(new XElement(_imageNamespace + "image", new[]
                 {
-                    new XElement(_imageNamespace + "loc", _protocol + host + _urlHelper.Content(project.BannerImage.Filepath)),
+                    new XElement(_imageNamespace + "loc", _protocol + host + _imageService.GetUrl(project.BannerImage)),
                     new XElement(_imageNamespace + "caption", project.BannerImage.Description)
                 }));
             }

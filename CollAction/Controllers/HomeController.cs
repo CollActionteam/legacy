@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using CollAction.Helpers;
 using System.Threading.Tasks;
 using CollAction.Services;
+using CollAction.Services.Image;
 
 namespace CollAction.Controllers
 {
@@ -14,14 +15,24 @@ namespace CollAction.Controllers
         private readonly IStringLocalizer<HomeController> _localizer;
         private readonly ApplicationDbContext _context;
         private readonly IHostingEnvironment _hostingEnvironment;
+<<<<<<< HEAD
         private readonly IProjectService _projectService;
 
         public HomeController(IStringLocalizer<HomeController> localizer, ApplicationDbContext context, IHostingEnvironment hostingEnvironment, IProjectService projectService)
+=======
+        private readonly IImageService _imageService;
+
+        public HomeController(IImageService imageService, IStringLocalizer<HomeController> localizer, ApplicationDbContext context, IHostingEnvironment hostingEnvironment)
+>>>>>>> cb5976e79c6f4b8892547e6b43f28c6e8ac2ef8a
         {
             _localizer = localizer;
             _context = context;
             _hostingEnvironment = hostingEnvironment;
+<<<<<<< HEAD
             _projectService = projectService;
+=======
+            _imageService = imageService;
+>>>>>>> cb5976e79c6f4b8892547e6b43f28c6e8ac2ef8a
         }
 
         public IActionResult Index()
@@ -70,6 +81,6 @@ namespace CollAction.Controllers
         }
 
         public async Task<ContentResult> Sitemap()
-            => Content((await new SitemapHelper(_context, Url, _projectService).GetSitemap()).ToString(), "text/xml", Encoding.UTF8);
+            => Content((await new SitemapHelper(_context, Url, _imageService, _projectService).GetSitemap()).ToString(), "text/xml", Encoding.UTF8);
     }
 }
