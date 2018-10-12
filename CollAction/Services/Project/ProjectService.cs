@@ -14,6 +14,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using System.Web;
+using System.Text;
+using System.Globalization;
+using System.Text.RegularExpressions;
+using CollAction.Helpers;
 
 namespace CollAction.Services.Project
 {
@@ -26,6 +31,9 @@ namespace CollAction.Services.Project
         private readonly IEmailSender _emailSender;
         private readonly ILogger<ProjectService> _logger;
         private readonly IStringLocalizer<ProjectService> _stringLocalizer;
+        private static Regex _spaceRemoveRegex = new Regex(@"\s", RegexOptions.Compiled);
+        private static Regex _invalidCharRemoveRegex = new Regex(@"[^a-z0-9\s-_]",RegexOptions.Compiled);
+        private static Regex _doubleDashRemoveRegex = new Regex(@"([-_]){2,}", RegexOptions.Compiled);
 
         public ProjectService(ApplicationDbContext context, IEmailSender emailSender, IImageService imageService, IOptions<ProjectEmailOptions> projectEmailOptions, ILogger<ProjectService> logger, IStringLocalizer<ProjectService> stringLocalizer, UserManager<ApplicationUser> userManager)
         {
@@ -87,6 +95,7 @@ namespace CollAction.Services.Project
                     {
                         ProjectId = project.Id,
                         ProjectName = project.Name,
+                        ProjectNameUriPart = GetProjectNameNormalized(project.Name),
                         ProjectProposal = project.Proposal,
                         CategoryName = project.Category.Name,
                         CategoryColorHex = project.Category.ColorHex,
@@ -223,6 +232,45 @@ namespace CollAction.Services.Project
             yield return GetParticipantCsvLine(project.Owner);
             foreach (ProjectParticipant participant in project.Participants)
                 yield return GetParticipantCsvLine(participant.User);
+        }
+        
+        private static string ToUrlSlug(string value)
+        {                      
+            value = value.ToLowerInvariant();
+            value = _spaceRemoveRegex.Replace(value, "-");
+            value = _invalidCharRemoveRegex.Replace(value, "");
+            value = value.Trim('-', '_');
+            value = _doubleDashRemoveRegex.Replace(value, "$1");
+            if(value.Length == 0)
+            {
+                value = "-";
+            }
+
+            return value;
+        }
+
+        private static string RemoveDiacriticsFromString(string text) 
+        {
+            var normalizedString = text.Normalize(NormalizationForm.FormD);
+            var stringBuilder = new StringBuilder();
+
+            foreach (var c in normalizedString)
+            {
+                var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
+                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+                {
+                        stringBuilder.Append(c);
+                }
+            }
+
+            return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
+        }
+
+        public string GetProjectNameNormalized(string projectName)
+        {
+            projectName = RemoveDiacriticsFromString(projectName);
+            projectName = ToUrlSlug(projectName);        
+            return projectName;
         }
 
         private string GetParticipantCsvLine(ApplicationUser user)
