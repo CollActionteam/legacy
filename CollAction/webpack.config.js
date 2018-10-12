@@ -1,42 +1,30 @@
 const webpack = require('webpack');
-
-function getPlugins() {
-  const productionPlugins = [
-    new webpack.optimize.UglifyJsPlugin({
-      minimize: true,
-    }),
-  ];
-
-  const compatibilityPlugins = [
-    new webpack.ProvidePlugin({
-      'Promise': 'bluebird', // Provide a Promise polyfill for older or less suportive browsers like IE9-11.
-    }),
-  ];
-
-  return compatibilityPlugins.concat(process.env.NODE_ENV === "production" ? productionPlugins : []);
-}
+const path = require('path')
 
 module.exports = {
-  entry: [ 'whatwg-fetch', 'quill', './Frontend/app/index.ts' ],
+  mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+  entry: {
+    frontend: './Frontend/app/index.ts',
+    validation: './Frontend/app/validation.ts'
+  },
   output: {
-    path: './wwwroot/js',
-    filename: 'bundle.js',
+    filename: '[name].bundle.js',
+    path: path.resolve(__dirname, './wwwroot/js'),
   },
   resolve: {
-    extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js']
+    extensions: ['.webpack.js', '.web.js', '.ts', '.tsx', '.js']
   },
   module: {
-    loaders: [
-      { test: /\.tsx?$/, loader: 'ts-loader' },
-      {
-        test: /\.scss$/,
-        loaders: ["style-loader", "css-loader?-url", "sass-loader"],
-      },
-      {
-        test: /\.css$/,
-        loaders: ["style-loader", "css-loader?-url"],
-      }
+    rules: [
+      { test: /\.tsx?$/, use: 'ts-loader' },      
+      { test: /\.scss$/, use: ["style-loader", "css-loader?-url", "sass-loader"] },
+      { test: /\.css$/, use: ["style-loader", "css-loader?-url"] },
+      { test: /\.svg$/, use: 'svg-inline-loader' }
     ]
   },
-  plugins: getPlugins()
+  plugins: [
+    new webpack.ProvidePlugin({
+      'Promise': 'bluebird', // Provide a Promise polyfill for older or less suportive browsers like IE9-11.
+    })
+  ]
 }

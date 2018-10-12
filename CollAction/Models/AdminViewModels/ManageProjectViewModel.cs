@@ -82,8 +82,8 @@ namespace CollAction.Models.AdminViewModels
         public IFormFile DescriptiveImageUpload { get; set; }
         public ImageFile DescriptiveImageFile { get; set; }
 
+        [RegularExpression(@"^(http|https)://www.youtube.com/watch\?v=((?:\w|-){11}?)$", ErrorMessage="Only YouTube links of the form http://www.youtube.com/watch?v=<your-11-character-video-id> are accepted.")]
         [Display(Name = "YouTube Video Link", Prompt = "Descriptive Video. e.g. http://www.youtube.com/watch?v=-wtIMTCHWuI")]
-        [YouTubeLink]
         public string DescriptionVideoLink { get; set; }
 
         [Display(Name = "Hashtag", Prompt = "Max 30 characters. Please enter without #-sign. E.g. 'tag1;tag2'.")]

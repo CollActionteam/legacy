@@ -3,11 +3,13 @@ dotnet: 2.1.301
 mono: none
 dist: trusty
 sudo: required
+
 services:
 - docker
+
 script:
 - dotnet test CollAction.Tests
-- docker build . -f CollAction/Dockerfile
+- docker build . -f CollAction/Dockerfile -t collaction:latest
 after_success:
 - pip install --user awscli # install current version of aws cli w/o sudo
 - export PATH=$PATH:$HOME/.local/bin # put aws in the path

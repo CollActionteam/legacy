@@ -1,0 +1,11 @@
+.mobile {
+    @media (pointer: fine) {
+        display: none;
+    }
+}
+
+.desktop {
+    @media (pointer: coarse) {
+        display: none;
+    }
+}
