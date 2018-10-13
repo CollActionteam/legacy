@@ -5,7 +5,6 @@ using CollAction.Data;
 using Microsoft.AspNetCore.Hosting;
 using CollAction.Helpers;
 using System.Threading.Tasks;
-using CollAction.Services;
 using CollAction.Services.Image;
 using CollAction.Services.Project;
 

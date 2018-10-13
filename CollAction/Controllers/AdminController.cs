@@ -1,5 +1,4 @@
 ﻿using CollAction.Data;
-using CollAction.Helpers;
 using CollAction.Models;
 using CollAction.Models.AdminViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -10,7 +9,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CollAction.Services.Project;

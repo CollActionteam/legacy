@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using CollAction.Helpers;
-using CollAction.Services;
-
-namespace CollAction.Models
+﻿namespace CollAction.Models
 {
     public class CommitProjectViewModel
     {

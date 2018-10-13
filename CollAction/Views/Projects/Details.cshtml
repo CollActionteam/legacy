@@ -2,7 +2,6 @@
 @using Microsoft.AspNetCore.Http.Features
 @using CollAction.Services.Image
 
-@inject IImageService ImageService
 @inject IViewLocalizer Localizer
 
 @model CollAction.Models.DisplayProjectViewModel
@@ -142,7 +141,7 @@
                     <div>@Html.Raw(Model.Project.Description)</div>
                 </div>
                 <div class="project-dates">
-                    <h3>Start date:<h3> 
+                    <h3>Start date:</h3> 
                     <span>@Html.DisplayFor(model => model.Start)</span>                    
                     <h3>End date:</h3>
                     <span>@Html.DisplayFor(model => model.End)</span>
@@ -193,7 +192,7 @@
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-9">
-                    <img src="@Model.Project.DescriptiveImage.Filepath" class="pull-right"></img>
+                    <img src="@Model.DescriptiveImagePath" class="pull-right" />
                 </div>
                 <div class="col-xs-12 hidden-md hidden-lg">
                     <div class="image-description">

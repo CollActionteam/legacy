@@ -1,11 +1,5 @@
-﻿using CollAction.Data;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using CollAction.Helpers;
 
 namespace CollAction.Models
@@ -24,6 +18,8 @@ namespace CollAction.Models
             => HasDescriptionVideo ? $"https://www.youtube.com/embed/{YouTubeId}" : "";
 
         public string BannerImagePath { get; set; }
+
+        public string DescriptiveImagePath { get; internal set; }
 
         private string YouTubeId
         {

@@ -14,11 +14,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using System.Web;
 using System.Text;
 using System.Globalization;
 using System.Text.RegularExpressions;
-using CollAction.Helpers;
 
 namespace CollAction.Services.Project
 {
@@ -131,7 +129,8 @@ namespace CollAction.Services.Project
                     {
                         Project = project,
                         Participants = project.ParticipantCounts.Count,
-                        BannerImagePath = project.BannerImage == null ? $"/images/default_banners/{project.Category.Name}.jpg" : _imageService.GetUrl(project.BannerImage)
+                        BannerImagePath = project.BannerImage == null ? $"/images/default_banners/{project.Category.Name}.jpg" : _imageService.GetUrl(project.BannerImage),
+                        DescriptiveImagePath = project.DescriptiveImage == null ? null : _imageService.GetUrl(project.DescriptiveImage)
                     })
                 .ToListAsync();
         }
