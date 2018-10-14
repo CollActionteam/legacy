@@ -150,6 +150,11 @@ renderComponentIf(
 
 renderComponentIf(
   <ShareButtons />,
+  document.getElementById("social-list-component")
+);
+
+renderComponentIf(
+  <ShareButtons />,
   document.getElementById("project-details-share-buttons")
 );
 
