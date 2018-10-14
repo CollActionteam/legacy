@@ -2,11 +2,11 @@
 @{
     if (Model.SubscribedToProjectEmails)
     {
-        ViewData["Title"] = $"Schrijf je in voor e-mails van project '{@Model.Project.Name}'";
+        ViewData["Title"] = $"Schrijf je uit van e-mails van project '{@Model.Project.Name}'";
     }
     else
     {
-        ViewData["Title"] = $"Schrijf je uit van e-mails van project '{@Model.Project.Name}'";
+        ViewData["Title"] = $"Schrijf je in voor e-mails van project '{@Model.Project.Name}'";
     }
 }
 
@@ -20,11 +20,11 @@
             <div class="form-group">
                 @if (Model.SubscribedToProjectEmails)
                 {
-                    <input type="submit" value="Schrijf je in" class="btn btn-default" />
+                    <input type="submit" value="Schrijf je uit" class="btn btn-default" />
                 }
                 else
                 {
-                    <input type="submit" value="Schrijf je uit" class="btn btn-default" />
+                    <input type="submit" value="Schrijf je in" class="btn btn-default" />
                 }
             </div>
         </form>
