@@ -5,6 +5,9 @@ using CollAction.Data;
 using Microsoft.AspNetCore.Hosting;
 using CollAction.Helpers;
 using System.Threading.Tasks;
+using CollAction.Services;
+using CollAction.Services.Image;
+using CollAction.Services.Project;
 
 namespace CollAction.Controllers
 {
@@ -13,12 +16,16 @@ namespace CollAction.Controllers
         private readonly IStringLocalizer<HomeController> _localizer;
         private readonly ApplicationDbContext _context;
         private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IProjectService _projectService;
+        private readonly IImageService _imageService;
 
-        public HomeController(IStringLocalizer<HomeController> localizer, ApplicationDbContext context, IHostingEnvironment hostingEnvironment)
+        public HomeController(IImageService imageService, IProjectService projectService, IStringLocalizer<HomeController> localizer, ApplicationDbContext context, IHostingEnvironment hostingEnvironment)
         {
             _localizer = localizer;
             _context = context;
             _hostingEnvironment = hostingEnvironment;
+            _projectService = projectService;
+            _imageService = imageService;
         }
 
         public IActionResult Index()
@@ -67,6 +74,6 @@ namespace CollAction.Controllers
         }
 
         public async Task<ContentResult> Sitemap()
-            => Content((await new SitemapHelper(_context, Url).GetSitemap()).ToString(), "text/xml", Encoding.UTF8);
+            => Content((await new SitemapHelper(_context, Url, _imageService, _projectService).GetSitemap()).ToString(), "text/xml", Encoding.UTF8);
     }
 }

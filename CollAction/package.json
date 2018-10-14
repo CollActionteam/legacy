@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "CollAction Front End Application",
   "main": "Frontend/app/index.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CollActionteam/CollAction"
+  },
   "scripts": {
     "build": "webpack",
     "watch": "webpack -w"

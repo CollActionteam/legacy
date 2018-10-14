@@ -1,5 +1,6 @@
 ﻿using CollAction.Data;
 using CollAction.Models;
+using CollAction.Services.Image;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using CollAction.Services;
+using CollAction.Services.Project;
 
 namespace CollAction.Helpers
 {
@@ -17,11 +20,16 @@ namespace CollAction.Helpers
         private const string _protocol = "https://";
         private readonly ApplicationDbContext _context;
         private readonly IUrlHelper _urlHelper;
+        private readonly IProjectService _projectService;
+        private readonly IImageService _imageService;
+        
 
-        public SitemapHelper(ApplicationDbContext context, IUrlHelper urlHelper)
+        public SitemapHelper(ApplicationDbContext context, IUrlHelper urlHelper, IImageService imageService, IProjectService projectService)
         {
             _context = context;
             _urlHelper = urlHelper;
+            _projectService = projectService;
+            _imageService = imageService;
         }
 
         public async Task<XDocument> GetSitemap()
@@ -59,13 +67,13 @@ namespace CollAction.Helpers
             HostString host = _urlHelper.ActionContext.HttpContext.Request.Host;
             List<XElement> projectElements = new List<XElement>(3)
             {
-                new XElement(_urlsetNamespace + "loc", _protocol + host + _urlHelper.Action("Details", "Projects", new { id = project.Id }))
+                new XElement(_urlsetNamespace + "loc", _protocol + host + _urlHelper.Action("Details", "Projects", new { id = project.Id, name = _projectService.GetProjectNameNormalized(project.Name)}))
             };
             if (project.BannerImageFileId != null)
             {
                 projectElements.Add(new XElement(_imageNamespace + "image", new[]
                 {
-                    new XElement(_imageNamespace + "loc", _protocol + host + _urlHelper.Content(project.BannerImage.Filepath)),
+                    new XElement(_imageNamespace + "loc", _protocol + host + _imageService.GetUrl(project.BannerImage)),
                     new XElement(_imageNamespace + "caption", project.BannerImage.Description)
                 }));
             }
