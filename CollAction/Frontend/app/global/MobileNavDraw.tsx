@@ -1,8 +1,10 @@
 import * as React from "react";
 import renderComponentIf from "./renderComponentIf";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimes } from '@fortawesome/free-solid-svg-icons'
-import { faBars } from '@fortawesome/free-solid-svg-icons'
+
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+library.add(faTimes);
 
 interface IMobileNavDrawProps {
   isLoggedIn: boolean;
@@ -48,7 +50,7 @@ export default class MobileNavDraw extends React.Component<IMobileNavDrawProps, 
     return(
       <div id="draw-menu">
         <div id="draw-menu-close-button" onClick={() => self.close()}>
-          <FontAwesomeIcon icon="faTimes" />
+          <FontAwesomeIcon icon={faTimes} />
         </div>
         <ul>
             <li><a href="/">Home</a></li>

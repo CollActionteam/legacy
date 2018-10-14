@@ -2,11 +2,11 @@
 @{
     if (Model.SubscribedToProjectEmails)
     {
-        ViewData["Title"] = $"Schrijf je uit van e-mails van project '{@Model.Project.Name}'";
+        ViewData["Title"] = $"Schrijf je in voor e-mails van project '{@Model.Project.Name}'";
     }
     else
     {
-        ViewData["Title"] = $"Schrijf je in voor e-mails van project '{@Model.Project.Name}'";
+        ViewData["Title"] = $"Schrijf je uit van e-mails van project '{@Model.Project.Name}'";
     }
 }
 
