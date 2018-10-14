@@ -23,8 +23,7 @@ namespace CollAction.Models
         public string DescriptionVideoYouTubeEmbedLink
             => HasDescriptionVideo ? $"https://www.youtube.com/embed/{YouTubeId}" : "";
 
-        public string BannerImagePath
-            => Project.BannerImage?.Filepath ?? $"/images/default_banners/{Project.Category.Name}.jpg";
+        public string BannerImagePath { get; set; }
 
         private string YouTubeId
         {
@@ -86,7 +85,7 @@ namespace CollAction.Models
                 else if (remaining.Days > 1)
                     return $"{remaining.Days} dagen";
                 else if (remaining.Hours > 1)
-                    return $"{remaining.Hours} uren";
+                     return $"{(int)remaining.TotalHours} uren";
                 else if (remaining.Minutes > 0)
                     return $"{remaining.Minutes} minuten";
                 else

@@ -1,6 +1,6 @@
 import * as React from "react";
 import renderComponentIf from "./renderComponentIf";
-const ReactQuill = require('react-quill');
+const ReactQuill = require("react-quill");
 
 interface ICollActionEditorProps {
   formInputId: string;
