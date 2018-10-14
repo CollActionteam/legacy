@@ -9,7 +9,7 @@ import { faLinkedin } from "@fortawesome/free-brands-svg-icons";
 
 library.add(faTwitter, faFacebook, faLinkedin);
 
-enum States { ERROR, READY, LOADING };
+enum States { ERROR, READY, LOADING }
 
 interface IShareButtonsProps {
   title?: string;
