@@ -38,7 +38,10 @@
                             <span asp-validation-for="Target"></span>
                         </div>
                         <div>
-                            <h3><label asp-for="Proposal" class="control-label required"></label></h3>
+                            <h3>
+                                <label asp-for="Proposal" class="control-label required"></label>
+                                <span id="proposal-tooltip" class="tooltip" />
+                            </h3>
                             <textarea asp-for="Proposal" rows="4" class="form-control"></textarea>
                             <span asp-validation-for="Proposal"></span>
                         </div>

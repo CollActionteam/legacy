@@ -3,14 +3,12 @@ import Tooltip from "rc-tooltip";
 import renderComponentIf from "./renderComponentIf";
 import "rc-tooltip/assets/bootstrap_white.css";
 
-const align = {
-    offset: [-25, -10]
-};
-
 renderComponentIf(
     <Tooltip
         placement="topLeft"
-        align={align}
+        align={{
+            offset: [-30, -10]
+        }}
         arrowContent={<div className="rc-tooltip-arrow-inner"></div>}
         overlay={
             <span>
@@ -26,4 +24,28 @@ renderComponentIf(
         <i className="fa fa-question-circle-o"></i>
     </Tooltip>,
     document.getElementById("target-tooltip")
+);
+
+renderComponentIf(
+    <Tooltip
+        placement="topLeft"
+        align={{
+            offset: [-25, -10]
+        }}
+        arrowContent={<div className="rc-tooltip-arrow-inner"></div>}
+        overlay={
+            <span>
+                In one short sentence:<br/>
+                what is the action that<br/>
+                you're proposing and how<br/>
+                many people have to commit<br/>
+                for the collective action<br/>
+                to take place?<br/>
+                E.g. use the format:<br/>
+                "If X people commit to do Y,<br/>
+                then we'll all do it together!"
+            </span>}>
+        <i className="fa fa-question-circle-o"></i>
+    </Tooltip>,
+    document.getElementById("proposal-tooltip")
 );
