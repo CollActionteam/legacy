@@ -92,10 +92,32 @@ renderComponentIf(
                 not the date on which people<br/>
                 start acting - that will only<br/>
                 happen after the “End date”,<br/>
-                if enough people have signed up<br/>
-                to the project.
+                if enough people have signed<br/>
+                up to the project.
             </span>}>
         <i className="fa fa-question-circle-o"></i>
     </Tooltip>,
     document.getElementById("startdate-tooltip")
+);
+
+renderComponentIf(
+    <Tooltip
+        placement="topLeft"
+        align={{
+            offset: [-20, -10]
+        }}
+        arrowContent={<div className="rc-tooltip-arrow-inner"></div>}
+        overlay={
+            <span>
+                This is the day until which<br/>
+                people can register for the<br/>
+                project. If the target you<br/>
+                set is reached by this date,<br/>
+                the project is considered<br/>
+                a success and participants<br/>
+                will act collectively!
+            </span>}>
+        <i className="fa fa-question-circle-o"></i>
+    </Tooltip>,
+    document.getElementById("enddate-tooltip")
 );
