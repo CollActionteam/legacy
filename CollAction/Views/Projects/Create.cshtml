@@ -29,8 +29,11 @@
                             <select asp-for="CategoryId" asp-items="Model.Categories" class="form-control"></select>
                             <span asp-validation-for="CategoryId"></span>
                         </div>
-                        <div>
-                            <h3><label asp-for="Target" class="control-label required"></label></h3>
+                        <div class="inner-addon right-addon">
+                            <h3>
+                                <label asp-for="Target" class="control-label required"></label>
+                                <span id="target-tooltip" class="tooltip" />
+                            </h3>
                             <input asp-for="Target" class="form-control" />
                             <span asp-validation-for="Target"></span>
                         </div>

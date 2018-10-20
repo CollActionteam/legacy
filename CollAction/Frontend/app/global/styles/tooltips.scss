@@ -1,0 +1,13 @@
+@import "../../colors.scss";
+
+.tooltip {
+    color: $coll-action-green;
+}
+
+.rc-tooltip {
+    font-size: 0.9em !important;
+
+    a {
+        color: $coll-action-green;
+    }
+}
