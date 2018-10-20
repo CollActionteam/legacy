@@ -97,7 +97,10 @@
 
                 <div class="col-xs-12 col-md-7 col-md-offset-1">
                     <div id="project-goal">
-                        <h3><label asp-for="Goal" class="control-label required"></label></h3>
+                        <h3>
+                            <label asp-for="Goal" class="control-label required"></label>
+                            <span id="goal-tooltip" class="tooltip" />
+                        </h3>
                         <div id="create-project-goal"></div>
                         <input asp-for="Goal" type="hidden" />
                         <span asp-validation-for="Goal"></span>
