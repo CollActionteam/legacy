@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Reflection;
 
 namespace CollAction.ValidationAttributes
 {

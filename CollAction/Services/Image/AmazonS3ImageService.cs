@@ -34,13 +34,17 @@ namespace CollAction.Services.Image
             using (Image<Rgba32> image = await UploadToImage(fileUploaded))
             {
                 if (currentImage == null)
-                    currentImage = new ImageFile();
+                {
+                    currentImage = new ImageFile()
+                    {
+                        Filepath = $"{Guid.NewGuid()}.png"
+                    };
+                }
 
                 currentImage.Date = DateTime.UtcNow;
                 currentImage.Description = imageDescription;
                 currentImage.Height = image.Height;
                 currentImage.Width = image.Width;
-                currentImage.Filepath = currentImage.Filepath ?? $"{Guid.NewGuid()}.png";
 
                 byte[] imageBytes = ConvertImageToPng(image);
                 _jobClient.Enqueue(() => 
