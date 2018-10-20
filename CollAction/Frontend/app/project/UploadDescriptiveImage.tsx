@@ -96,8 +96,8 @@ export default class UploadDescriptiveImage extends UploadImage<IUploadDescripti
                         onDropRejected={this.onRejected}
                         rejectClassName="field-validation-error">
                         <h3>
-                            <span className="mobile">Tap to select banner image</span>
-                            <span className="desktop">Drop your banner image here</span>
+                            <span className="mobile">Tap to select descriptive image</span>
+                            <span className="desktop">Drop descriptive image here</span>
                         </h3>
                         <div className="instructions">
                             <p className={ this.state.invalid ? "field-validation-error" : "hidden" }>
