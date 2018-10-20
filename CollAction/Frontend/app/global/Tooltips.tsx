@@ -75,3 +75,27 @@ renderComponentIf(
     </Tooltip>,
     document.getElementById("goal-tooltip")
 );
+
+renderComponentIf(
+    <Tooltip
+        placement="topLeft"
+        align={{
+            offset: [-25, -10]
+        }}
+        arrowContent={<div className="rc-tooltip-arrow-inner"></div>}
+        overlay={
+            <span>
+                This is the day on which<br/>
+                the campaign opens and<br/>
+                people can start registering<br/>
+                for the project. So it is<br/>
+                not the date on which people<br/>
+                start acting - that will only<br/>
+                happen after the “End date”,<br/>
+                if enough people have signed up<br/>
+                to the project.
+            </span>}>
+        <i className="fa fa-question-circle-o"></i>
+    </Tooltip>,
+    document.getElementById("startdate-tooltip")
+);

@@ -80,7 +80,10 @@
                         <span asp-validation-for="Description"></span>
                     </div>
                     <div id="project-dates">
-                        <h3><label asp-for="Start" class="control-label required"></label></h3>
+                        <h3>
+                            <label asp-for="Start" class="control-label required"></label>
+                            <span id="startdate-tooltip" class="tooltip" />
+                        </h3>
                         <input asp-for="Start" class="form-control">
                         <span asp-validation-for="Start"></span>
 
