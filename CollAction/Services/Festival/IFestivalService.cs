@@ -1,4 +1,4 @@
-namespace CollAction.Services
+namespace CollAction.Services.Festival
 {
     public interface IFestivalService
     {

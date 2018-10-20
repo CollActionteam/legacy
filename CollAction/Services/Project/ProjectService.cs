@@ -1,5 +1,7 @@
 ﻿using CollAction.Data;
 using CollAction.Models;
+using CollAction.Services.Email;
+using CollAction.Services.Image;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -13,10 +15,11 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace CollAction.Services
+namespace CollAction.Services.Project
 {
     public class ProjectService : IProjectService
     {
+        private readonly IImageService _imageService;
         private readonly ApplicationDbContext _context;
         private readonly ProjectEmailOptions _projectEmailOptions;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -24,8 +27,9 @@ namespace CollAction.Services
         private readonly ILogger<ProjectService> _logger;
         private readonly IStringLocalizer<ProjectService> _stringLocalizer;
 
-        public ProjectService(ApplicationDbContext context, IEmailSender emailSender, IOptions<ProjectEmailOptions> projectEmailOptions, ILogger<ProjectService> logger, IStringLocalizer<ProjectService> stringLocalizer, UserManager<ApplicationUser> userManager)
+        public ProjectService(ApplicationDbContext context, IEmailSender emailSender, IImageService imageService, IOptions<ProjectEmailOptions> projectEmailOptions, ILogger<ProjectService> logger, IStringLocalizer<ProjectService> stringLocalizer, UserManager<ApplicationUser> userManager)
         {
+            _imageService = imageService;
             _context = context;
             _projectEmailOptions = projectEmailOptions.Value;
             _userManager = userManager;
@@ -34,12 +38,12 @@ namespace CollAction.Services
             _stringLocalizer = stringLocalizer;
         }
 
-        public Task<Project> GetProjectById(int id)
+        public Task<Models.Project> GetProjectById(int id)
             => _context.Projects.SingleOrDefaultAsync(p => p.Id == id);
 
         public async Task<bool> AddParticipant(string userId, int projectId)
         {
-            Project project = await GetProjectById(projectId);
+            Models.Project project = await GetProjectById(projectId);
             if (project == null || !project.IsActive)
             {
                 return false;
@@ -73,7 +77,7 @@ namespace CollAction.Services
             return await _context.ProjectParticipants.SingleOrDefaultAsync(p => p.ProjectId == projectId && p.UserId == userId);
         }
 
-        public async Task<IEnumerable<FindProjectsViewModel>> FindProjects(Expression<Func<Project, bool>> filter)
+        public async Task<IEnumerable<FindProjectsViewModel>> FindProjects(Expression<Func<Models.Project, bool>> filter)
         {
             return await _context.Projects
                 .Where(filter)
@@ -87,12 +91,12 @@ namespace CollAction.Services
                         CategoryName = project.Category.Name,
                         CategoryColorHex = project.Category.ColorHex,
                         LocationName = project.Location.Name,
-                        BannerImagePath = project.BannerImage != null ? project.BannerImage.Filepath : $"/images/default_banners/{project.Category.Name}.jpg",
+                        BannerImagePath = project.BannerImage != null ? _imageService.GetUrl(project.BannerImage) : $"/images/default_banners/{project.Category.Name}.jpg",
                         BannerImageDescription = project.BannerImage.Description,
                         Target = project.Target,
                         Participants = project.ParticipantCounts.Count,
                         Remaining = project.RemainingTime,
-                        DescriptiveImagePath = project.DescriptiveImage.Filepath,
+                        DescriptiveImagePath = project.DescriptiveImage == null ? null : _imageService.GetUrl(project.DescriptiveImage),
                         DescriptiveImageDescription = project.DescriptiveImage.Description,
                         Status = project.Status,
                         Start = project.Start,
@@ -101,7 +105,7 @@ namespace CollAction.Services
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<DisplayProjectViewModel>> GetProjectDisplayViewModels(Expression<Func<Project, bool>> filter)
+        public async Task<IEnumerable<DisplayProjectViewModel>> GetProjectDisplayViewModels(Expression<Func<Models.Project, bool>> filter)
         {
             return await _context.Projects
                 .Where(filter)
@@ -117,14 +121,15 @@ namespace CollAction.Services
                     new DisplayProjectViewModel
                     {
                         Project = project,
-                        Participants = project.ParticipantCounts.Count
+                        Participants = project.ParticipantCounts.Count,
+                        BannerImagePath = project.BannerImage == null ? $"/images/default_banners/{project.Category.Name}.jpg" : _imageService.GetUrl(project.BannerImage)
                     })
                 .ToListAsync();
         }
 
         public async Task<string> GenerateParticipantsDataExport(int projectId)
         {
-            Project project = await _context
+            Models.Project project = await _context
                 .Projects
                 .Where(p => p.Id == projectId)
                 .Include(p => p.Participants).ThenInclude(p => p.User)
@@ -136,7 +141,7 @@ namespace CollAction.Services
                 return string.Join("\r\n", GetParticipantsCsv(project));
         }
 
-        public bool CanSendProjectEmail(Project project)
+        public bool CanSendProjectEmail(Models.Project project)
         {
             DateTime now = DateTime.UtcNow;
             return project.NumberProjectEmailsSend < _projectEmailOptions.MaxNumberProjectEmails && 
@@ -147,13 +152,13 @@ namespace CollAction.Services
                    now >= project.Start;
         }
 
-        public int NumberEmailsAllowedToSend(Project project)
+        public int NumberEmailsAllowedToSend(Models.Project project)
             => _projectEmailOptions.MaxNumberProjectEmails - project.NumberProjectEmailsSend;
 
-        public DateTime CanSendEmailsUntil(Project project)
+        public DateTime CanSendEmailsUntil(Models.Project project)
             => project.End + _projectEmailOptions.TimeEmailAllowedAfterProjectEnd;
 
-        public async Task SendProjectEmail(Project project, string subject, string message, HttpRequest request, IUrlHelper helper)
+        public async Task SendProjectEmail(Models.Project project, string subject, string message, HttpRequest request, IUrlHelper helper)
         {
             if (CanSendProjectEmail(project))
             {
@@ -212,7 +217,7 @@ namespace CollAction.Services
             return message;
         }
 
-        private IEnumerable<string> GetParticipantsCsv(Project project)
+        private IEnumerable<string> GetParticipantsCsv(Models.Project project)
         {
             yield return "first-name;last-name;email";
             yield return GetParticipantCsvLine(project.Owner);
