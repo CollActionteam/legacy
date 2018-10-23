@@ -28,6 +28,9 @@ using CollAction.Services.Newsletter;
 using CollAction.Services.Festival;
 using CollAction.Services.DataProtection;
 using CollAction.Services.Image;
+using Hangfire.Annotations;
+using Hangfire.Common;
+using Hangfire.States;
 
 namespace CollAction
 {
@@ -43,6 +46,19 @@ namespace CollAction
         public ILogger<Startup> Logger { get; }
         public IConfiguration Configuration { get; }
         public IHostingEnvironment Environment { get; }
+
+        class EmptyHangfireImpl : IBackgroundJobClient
+        {
+            public bool ChangeState([NotNull] string jobId, [NotNull] IState state, [CanBeNull] string expectedState)
+            {
+                return true;
+            }
+
+            public string Create([NotNull] Hangfire.Common.Job job, [NotNull] IState state)
+            {
+                return string.Empty;
+            }
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -80,7 +96,8 @@ namespace CollAction
                     .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                     .AddDataAnnotationsLocalization();
 
-            services.AddHangfire(config => config.UsePostgreSqlStorage(connectionString));
+            //services.AddHangfire(config => config.UsePostgreSqlStorage(connectionString));
+            services.AddTransient<IBackgroundJobClient, EmptyHangfireImpl>();
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
@@ -236,14 +253,14 @@ namespace CollAction
 
             app.UseStaticFiles();
 
-            app.UseHangfireServer(new BackgroundJobServerOptions() { WorkerCount = 1 });
+            //app.UseHangfireServer(new BackgroundJobServerOptions() { WorkerCount = 1 });
 
-            app.UseHangfireDashboard(options: new DashboardOptions()
-            {
-                Authorization = new IDashboardAuthorizationFilter[] {
-                    new HangfireAdminAuthorizationFilter()
-                }
-            });
+            //app.UseHangfireDashboard(options: new DashboardOptions()
+            //{
+                //Authorization = new IDashboardAuthorizationFilter[] {
+                    //new HangfireAdminAuthorizationFilter()
+                //}
+            //});
 
             app.UseMvc(routes =>
             {
@@ -328,7 +345,6 @@ namespace CollAction
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             using (var userManager = serviceScope.ServiceProvider.GetService<UserManager<ApplicationUser>>())
             using (var roleManager = serviceScope.ServiceProvider.GetService<RoleManager<IdentityRole>>())
-            using (var imageService = serviceScope.ServiceProvider.GetService<IImageService>())
             using (var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
             {
                 Task.Run(async () =>
