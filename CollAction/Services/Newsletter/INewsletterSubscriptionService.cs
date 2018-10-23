@@ -1,7 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-namespace CollAction.Services
+namespace CollAction.Services.Newsletter
 {
     public interface INewsletterSubscriptionService
     {

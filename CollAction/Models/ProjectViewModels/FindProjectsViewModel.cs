@@ -15,6 +15,8 @@ namespace CollAction.Models
         public int ProjectId { get; set; }
 
         public string ProjectName { get; set; }
+        
+        public string ProjectNameUriPart { get; set; }
 
         public string ProjectProposal { get; set; }
 
@@ -63,10 +65,10 @@ namespace CollAction.Models
             set
             {
                 _remaining = value;
-                if (value.TotalDays < 1)
-                    RemainingTime = String.Format("{0} {1}", value.Hours, value.Hours == 1 ? _localizer["hour"] : _localizer["hours"]);
+                if (value.TotalDays < 2)
+                    RemainingTime = String.Format("{0} {1}", (int)value.TotalHours, value.TotalHours == 1 ? _localizer["hour"] : _localizer["hours"]);
                 else
-                    RemainingTime = String.Format("{0} {1}", value.Days, value.Days == 1 ? _localizer["day"] : _localizer["days"]);
+                    RemainingTime = String.Format("{0} {1}", value.Days, _localizer["days"]);
             }
         }
     }

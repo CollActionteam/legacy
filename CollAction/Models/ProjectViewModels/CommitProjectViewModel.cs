@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-
-namespace CollAction.Models
+﻿namespace CollAction.Models
 {
     public class CommitProjectViewModel
     {
@@ -9,12 +6,14 @@ namespace CollAction.Models
 
         public string ProjectName { get; set; }
 
+        public string ProjectNameUriPart { get; set; }
+
         public string ProjectProposal { get; set; }
 
         public bool IsUserCommitted { get; set; } = false;
 
         public bool IsActive { get; set; }
 
-        public string ProjectLink => $"/Projects/Details/{ProjectId}";
+        public string ProjectLink => $"/Projects/{ProjectId}/{ProjectNameUriPart}/Details";
     }
 }

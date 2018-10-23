@@ -2,7 +2,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import renderComponentIf from "./renderComponentIf";
 
-enum States { ERROR, READY, LOADING };
+enum States { ERROR, READY, LOADING }
 
 interface IShareButtonsProps {
   title?: string;

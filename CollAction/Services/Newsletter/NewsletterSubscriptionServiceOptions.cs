@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace CollAction.Services
+﻿namespace CollAction.Services.Newsletter
 {
     public class NewsletterSubscriptionServiceOptions
     {

@@ -129,18 +129,9 @@ namespace CollAction.Migrations
                         .IsRequired();
 
                     b.Property<string>("Filepath")
-                        .IsRequired()
-                        .HasMaxLength(256);
-
-                    b.Property<string>("Format")
-                        .IsRequired()
-                        .HasMaxLength(16);
+                        .IsRequired();
 
                     b.Property<int>("Height");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(128);
 
                     b.Property<int>("Width");
 

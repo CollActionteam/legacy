@@ -1,11 +1,5 @@
-﻿using CollAction.Data;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using CollAction.Helpers;
 
 namespace CollAction.Models
@@ -23,8 +17,9 @@ namespace CollAction.Models
         public string DescriptionVideoYouTubeEmbedLink
             => HasDescriptionVideo ? $"https://www.youtube.com/embed/{YouTubeId}" : "";
 
-        public string BannerImagePath
-            => Project.BannerImage?.Filepath ?? $"/images/default_banners/{Project.Category.Name}.jpg";
+        public string BannerImagePath { get; set; }
+
+        public string DescriptiveImagePath { get; internal set; }
 
         private string YouTubeId
         {
@@ -87,7 +82,7 @@ namespace CollAction.Models
                 else if (remaining.Days > 1)
                     return $"{remaining.Days} days";
                 else if (remaining.Hours > 1)
-                    return $"{remaining.Hours} hours";
+                    return $"{(int)remaining.TotalHours} hours";
                 else if (remaining.Minutes > 0)
                     return $"{remaining.Minutes} minutes";
                 else

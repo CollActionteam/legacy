@@ -7,6 +7,8 @@ import "./styles/footer.scss";
 import "./styles/banner.scss";
 import "./styles/share-buttons.scss";
 import "./styles/cookiemessage.scss";
+import "./styles/helpers.scss";
+import "./styles/tooltips.scss";
 
 import "./styles/quill-snow.css";
 
@@ -14,3 +16,4 @@ import "./MobileNavDraw";
 import "./ShareButtons";
 import "./RichTextEditor";
 import "./CookieMessage";
+import "./Tooltips";
