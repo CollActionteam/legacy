@@ -84,7 +84,7 @@ export default class UploadDescriptiveImage extends UploadImage<IUploadDescripti
     render() {
         return (
             <div id="project-image">
-                <div className="col-xs-12 col-md-7 col-md-offset-5" style={{display: this.state.preview ? "none" : "block"}}>
+                <div className="col-xs-12 col-md-8 col-md-offset-4" style={{display: this.state.preview ? "none" : "block"}}>
                     <DropZone
                         name="DescriptiveImageUpload"
                         className="dropzone"
@@ -96,8 +96,8 @@ export default class UploadDescriptiveImage extends UploadImage<IUploadDescripti
                         onDropRejected={this.onRejected}
                         rejectClassName="field-validation-error">
                         <h3>
-                            <span className="mobile">Tap to select banner image</span>
-                            <span className="desktop">Drop your banner image here</span>
+                            <span className="mobile">Tap to select descriptive image</span>
+                            <span className="desktop">Drop descriptive image here</span>
                         </h3>
                         <div className="instructions">
                             <p className={ this.state.invalid ? "field-validation-error" : "hidden" }>
@@ -109,10 +109,10 @@ export default class UploadDescriptiveImage extends UploadImage<IUploadDescripti
                         </div>
                     </DropZone>
                 </div>
-                <div className="hidden-xs hidden-sm col-md-3" style={{display: this.state.preview ? "block" : "none"}}>
+                <div className="hidden-xs hidden-sm col-md-4" style={{display: this.state.preview ? "block" : "none"}}>
                     { this.renderImageControl() }
                 </div>
-                <div className="col-xs-12 col-md-9" style={{display: this.state.preview ? "block" : "none"}}>
+                <div className="col-xs-12 col-md-8" style={{display: this.state.preview ? "block" : "none"}}>
                     <img id="preview" src={this.createSrcImage()} className="pull-right"></img>
                 </div>
                 <div className="col-xs-12 hidden-md hidden-lg" style={{display: this.state.preview ? "block" : "none"}}>

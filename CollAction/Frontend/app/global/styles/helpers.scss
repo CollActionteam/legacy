@@ -1,10 +1,12 @@
 .mobile {
+    // Visible on mobile devices only
     @media (pointer: fine) {
         display: none;
     }
 }
 
 .desktop {
+    // Visible on desktop  only
     @media (pointer: coarse) {
         display: none;
     }

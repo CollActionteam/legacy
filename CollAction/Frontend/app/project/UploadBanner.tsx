@@ -70,7 +70,7 @@ export default class UploadBanner extends UploadImage<IUploadImageProps, IUpload
                                             rejectClassName="field-validation-error">
                                             <h3>
                                                 <span className="mobile">Tap to select banner image</span>
-                                                <span className="desktop">Drop your banner image here</span>
+                                                <span className="desktop">Drop banner image here</span>
                                             </h3>
                                             <div className="instructions">
                                                 <p className={ this.state.invalid ? "field-validation-error" : "hidden" }>

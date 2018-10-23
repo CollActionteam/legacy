@@ -141,7 +141,7 @@
                     <div>@Html.Raw(Model.Project.Description)</div>
                 </div>
                 <div class="project-dates">
-                    <h3>Start date:</h3> 
+                    <h3>Start date:<h3> 
                     <span>@Html.DisplayFor(model => model.Start)</span>                    
                     <h3>End date:</h3>
                     <span>@Html.DisplayFor(model => model.End)</span>
@@ -159,7 +159,7 @@
                     </div>
                 }
             </div>
-            <div class="col-xs-12 col-md-7 col-md-offset-1">
+            <div class="col-xs-12 col-md-8">
                 <div class="goal-proposal-container">
                     <div class="project-goal">
                         <h3>Goal / impact</h3>
@@ -186,12 +186,12 @@
         @if (Model.Project.DescriptiveImage != null)
         {            
             <div class="row" id="project-image">
-                <div class="hidden-xs hidden-sm col-md-3">
+                <div class="hidden-xs hidden-sm col-md-4">
                     <div class="image-description">
                         <p>@Html.DisplayFor(model => model.Project.DescriptiveImage.Description)</p>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-9">
+                <div class="col-xs-12 col-md-8">
                     <img src="@Model.DescriptiveImagePath" class="pull-right" />
                 </div>
                 <div class="col-xs-12 hidden-md hidden-lg">
