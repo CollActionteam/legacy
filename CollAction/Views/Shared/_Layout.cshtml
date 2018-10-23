@@ -1,8 +1,6 @@
 ﻿﻿@using Microsoft.ApplicationInsights.AspNetCore
 @using Microsoft.AspNetCore.Http.Features
 
-@inject JavaScriptSnippet snippet
-
 @{
     var consentFeature = Context.Features.Get<ITrackingConsentFeature>();
     var canTrack = consentFeature.CanTrack;
@@ -32,7 +30,6 @@
 
     @RenderSection("styles", required: false)
     @RenderSection("Meta", required: false)
-    @Html.Raw(snippet.FullScript)
 </head>
 <body id="body">
     @if (canTrack) 
