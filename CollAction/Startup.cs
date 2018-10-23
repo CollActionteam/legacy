@@ -328,7 +328,6 @@ namespace CollAction
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             using (var userManager = serviceScope.ServiceProvider.GetService<UserManager<ApplicationUser>>())
             using (var roleManager = serviceScope.ServiceProvider.GetService<RoleManager<IdentityRole>>())
-            using (var imageService = serviceScope.ServiceProvider.GetService<IImageService>())
             using (var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
             {
                 Task.Run(async () =>
