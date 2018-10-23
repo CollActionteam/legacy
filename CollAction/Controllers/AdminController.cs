@@ -1,5 +1,4 @@
 ﻿using CollAction.Data;
-using CollAction.Helpers;
 using CollAction.Models;
 using CollAction.Models.AdminViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -10,7 +9,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CollAction.Services.Project;
@@ -302,14 +300,30 @@ namespace CollAction.Controllers
 
                 if (model.BannerImageUpload != null)
                 {
-                    project.BannerImage = await _imageService.UploadImage(project.BannerImage, model.BannerImageUpload, model.BannerImageDescription ?? string.Empty);
-                    _context.ImageFiles.Add(project.BannerImage);
+                    ImageFile uploaded = await _imageService.UploadImage(project.BannerImage, model.BannerImageUpload, model.BannerImageDescription ?? string.Empty);
+                    if (project.BannerImage == null)
+                    {
+                        project.BannerImage = uploaded;
+                        _context.ImageFiles.Add(project.BannerImage);
+                    }
+                }
+                else if (model.BannerImageDescription != project.BannerImage?.Description && project.BannerImage != null)
+                {
+                    project.BannerImage.Description = model.BannerImageDescription ?? string.Empty;
                 }
 
                 if (model.DescriptiveImageUpload != null)
                 {
-                    project.DescriptiveImage = await _imageService.UploadImage(project.DescriptiveImage, model.DescriptiveImageUpload, model.DescriptiveImageDescription ?? string.Empty);
-                    _context.ImageFiles.Add(project.DescriptiveImage);
+                    ImageFile uploaded = await _imageService.UploadImage(project.DescriptiveImage, model.DescriptiveImageUpload, model.DescriptiveImageDescription ?? string.Empty);
+                    if (project.DescriptiveImage == null)
+                    {
+                        project.DescriptiveImage = uploaded;
+                        _context.ImageFiles.Add(project.DescriptiveImage);
+                    }
+                }
+                else if (model.DescriptiveImageDescription != project.DescriptiveImage?.Description && project.DescriptiveImage != null)
+                {
+                    project.DescriptiveImage.Description = model.DescriptiveImageDescription ?? string.Empty;
                 }
 
                 await project.SetTags(_context, model.Hashtag?.Split(';') ?? new string[0]);

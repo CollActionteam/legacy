@@ -20,6 +20,10 @@ form {
     font-size: 1em;
   }
 
+  .field-validation-error {
+    color: #cc0000 !important;
+  }
+
   input[type='submit'] {
     background-color: $coll-action-green;
     color: #fff;

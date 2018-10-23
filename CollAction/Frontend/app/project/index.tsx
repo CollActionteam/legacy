@@ -11,6 +11,9 @@ import "./styles/ProjectSendEmail.scss";
 import "./PieChart";
 import "./Carousel";
 
+import "./UploadBanner";
+import "./UploadDescriptiveImage";
+
 import renderComponentIf from "../global/renderComponentIf";
 
 renderComponentIf(

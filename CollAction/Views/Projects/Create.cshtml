@@ -2,105 +2,150 @@
 
 @inject IViewLocalizer Localizer
 
-@model CreateProjectViewModel
+@model CollAction.Models.CreateProjectViewModel
 
 @{
     ViewData["Title"] = Localizer["Create"];
 }
 
-<div id="project-create-form">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 col-md-offset-3 col-xs-12">
-                <form asp-action="Create" enctype="multipart/form-data">
-                    <div asp-validation-summary="All" class="text-danger"></div>
-                    <div class="form-group">
-                        <label asp-for="Name" class="control-label required"></label>
-                        <input asp-for="Name" class="form-control" />
-                        @Html.ValidationMessage("Name")
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Description" class="control-label required"></label>
-                        <div id="create-project-description"></div>
-                        @Html.HiddenFor(m => m.Description)
-                        @Html.ValidationMessage("Description")
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Proposal" class="control-label required"></label>
-                        <textarea asp-for="Proposal" class="form-control" rows="5"></textarea>
-                        @Html.ValidationMessage("Proposal")
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Goal" class="control-label required"></label>
-                        <div id="create-project-goal"></div>
-                        @Html.HiddenFor(m => m.Goal)
-                        @Html.ValidationMessage("Goal")
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="CategoryId" class="control-label required"></label>
-                        @Html.DropDownList("CategoryId", Model.Categories)
-                        @Html.ValidationMessage("CategoryId")
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Target" class="control-label required"></label>
-                        <input asp-for="Target" class="form-control" />
-                        @Html.ValidationMessage("Target")
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Start" class="control-label required"></label>
-                        <input asp-for="Start" class="form-control" />
-                        @Html.ValidationMessage("Start")
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="End" class="control-label required"></label>
-                        <input asp-for="End" class="form-control" />
-                        @Html.ValidationMessage("End")
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="CreatorComments" class="control-label"></label>
-                        <div id="create-project-creatorcomments"></div>
-                        @Html.HiddenFor(m => m.CreatorComments)
-                        @Html.ValidationMessage("CreatorComments")
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="BannerImageDescription" class="control-label"></label>
-                        <input asp-for="BannerImageDescription" class="form-control" />
-                        @Html.ValidationMessage("BannerImageDescription")
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="BannerImageUpload" class="control-label"></label>
-                        <input asp-for="BannerImageUpload" class="form-control" />
-                        @Html.ValidationMessage("BannerImageUpload")
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="DescriptiveImageDescription" class="control-label"></label>
-                        <input asp-for="DescriptiveImageDescription" class="form-control" />
-                        @Html.ValidationMessage("DescriptiveImageDescription")
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="DescriptiveImageUpload" class="control-label"></label>
-                        <input asp-for="DescriptiveImageUpload" class="form-control" />
-                        @Html.ValidationMessage("DescriptiveImageUpload")
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="DescriptionVideoLink" class="control-label"></label>
-                        <input asp-for="DescriptionVideoLink" class="form-control" />
-                        @Html.ValidationMessage("DescriptionVideoLink")
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Hashtag" class="control-label"></label>
-                        <input asp-for="Hashtag" class="form-control" />
-                        @Html.ValidationMessage("Hashtag")
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" value="Create" class="btn btn-default" />
-                    </div>
-                </form>
+<div id="project-create">
+    <form name="Project" asp-action="Create" enctype="multipart/form-data">
+        <div class="container-fluid">
+            <div class="row">
+                <div id="create-project-upload-banner-image"></div>
             </div>
-        </div>
-    </div>
-</div>
+        </div> 
+        <div class="container">
+            <div class="row" id="project-details-row">
+                <div class="col-md-6 col-md-push-6 col-xs-12">
+                    <div id="project-info-card">
+                        <div>
+                            <h3><label asp-for="Name" class="control-label required"></label></h3>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name"></span>
+                        </div>
+                        <div>
+                            <h3><label asp-for="CategoryId" class="control-label required"></label></h3>
+                            <select asp-for="CategoryId" asp-items="Model.Categories" class="form-control"></select>
+                            <span asp-validation-for="CategoryId"></span>
+                        </div>
+                        <div class="inner-addon right-addon">
+                            <h3>
+                                <label asp-for="Target" class="control-label required"></label>
+                                <span id="target-tooltip" class="tooltip" />
+                            </h3>
+                            <input asp-for="Target" class="form-control" />
+                            <span asp-validation-for="Target"></span>
+                        </div>
+                        <div>
+                            <h3>
+                                <label asp-for="Proposal" class="control-label required"></label>
+                                <span id="proposal-tooltip" class="tooltip" />
+                            </h3>
+                            <textarea asp-for="Proposal" rows="4" class="form-control"></textarea>
+                            <span asp-validation-for="Proposal"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-md-pull-6 col-xs-12">
+                    <div class="row" id="project-starter-row">
+                        <div class="col-md-6 col-xs-12">
+                            <div class="row">
+                                <div class="col-xs-3 col-md-12">
+                                    <div id="project-starter-avatar"></div>
+                                </div>
+                                <div class="col-xs-9 col-md-12" id="project-starter-name">
+                                    <h3>Project Starter</h3>
+                                    <p>@Model.ProjectStarterFirstName @Model.ProjectStarterLastName</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <hr class="hidden-sm hidden-xs" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 col-md-4">
+                    <div id="project-short-description">
+                        <h3><label asp-for="Description" class="control-label required"></label></h3>
+                        <div id="create-project-description"></div>
+                        <input asp-for="Description" type="hidden" />
+                        <span asp-validation-for="Description"></span>
+                    </div>
+                    <div id="project-dates">
+                        <h3>
+                            <label asp-for="Start" class="control-label required"></label>
+                            <span id="startdate-tooltip" class="tooltip" />
+                        </h3>
+                        <input asp-for="Start" class="form-control">
+                        <span asp-validation-for="Start"></span>
+
+                        <h3>
+                            <label asp-for="End" class="control-label required"></label>
+                            <span id="enddate-tooltip" class="tooltip" />
+                        </h3>
+                        <input asp-for="End" class="form-control">
+                        <span asp-validation-for="End"></span>
+                    </div>
+                    <div id="project-hashtags">
+                        <h3><label asp-for="Hashtag" class="control-label"></label></h3>
+                        <input asp-for="Hashtag" class="form-control">
+                        <span asp-validation-for="Hashtag"></span>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-md-8">
+                    <div id="project-goal">
+                        <h3>
+                            <label asp-for="Goal" class="control-label required"></label>
+                            <span id="goal-tooltip" class="tooltip" />
+                        </h3>
+                        <div id="create-project-goal"></div>
+                        <input asp-for="Goal" type="hidden" />
+                        <span asp-validation-for="Goal"></span>
+                    </div>
+
+                    <hr class="hidden-sm hidden-xs" />
+                    
+                    <div id="project-comments">
+                        <h3><label asp-for="CreatorComments" class="control-label"></label></h3>
+                        <div id="create-project-creatorcomments"></div>
+                        <input asp-for="CreatorComments" type="hidden" />
+                        <span asp-validation-for="CreatorComments"></span>
+                    </div>
+                </div>
+
+                <div id="create-project-upload-descriptive-image" data-description-div-id="project-image-description" data-description-field-name="DescriptiveImageDescription" class="col-xs-12"></div>
+
+                <div class="col-xs-12 col-md-8 col-md-offset-4">                
+                    <div id="project-image-description">
+                        <h3><label asp-for="DescriptiveImageDescription" class="control-label"></label></h3>
+                        <input name="DescriptiveImageDescription" class="form-control" />
+                        <span asp-validation-for="DescriptiveImageDescription"></span>
+                    </div>
+
+                    <div id="project-videolink">
+                        <h3><label asp-for="DescriptionVideoLink" class="control-label"></label></h3>
+                        <input asp-for="DescriptionVideoLink" class="form-control" />                    
+                        <span asp-validation-for="DescriptionVideoLink"></span>
+                    </div>
+
+                    <div id="submit-project">
+                        <input type="submit" value="Submit" class="btn btn-default pull-right" />
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </form>    
+</div> 
 
 @section Scripts {
-     <partial name="_ValidationScriptsPartial" />
- }
+    <partial name="_ValidationScriptsPartial" />
+}

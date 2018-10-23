@@ -167,6 +167,7 @@ namespace CollAction
                                                                            "https://dc.services.visualstudio.com/"
                                                                        }.Concat(Configuration["CspConnectSrc"]?.Split(";") ?? new string[0]));
                            cspBuilder.AddImgSrc().Self() // Only allow self-hosted images, or google analytics (for tracking images), or configured sources
+                                                 .Data()    // Used for project creation image preview
                                                  .Sources.AddRange(new[]
                                                                    {
                                                                        "https://www.google-analytics.com",
@@ -191,7 +192,7 @@ namespace CollAction
                                                    .Sources.AddRange(Configuration["CspMediaSrc"]?.Split(";") ?? new string[0]); // Only allow self-hosted videos, or configured sources
                            cspBuilder.AddFrameAncestors().None(); // No framing allowed here (put us inside a frame tag)
                            cspBuilder.AddScriptSrc() // Only allow scripts from our own site, the aspnetcdn site, app insights and google analytics
-                                     .Self()
+                                     .Self()                                    
                                      .Sources.AddRange(new[]
                                                        {
                                                            "https://ajax.aspnetcdn.com",
@@ -250,6 +251,26 @@ namespace CollAction
                      "find",
                      new { controller = "Projects", action = "Find" }
                 );
+
+                routes.MapRoute("details",
+                     "Projects/{name}/{id}/details",
+                     new { controller = "Projects", action = "Details" }
+                 );
+
+                routes.MapRoute("participate",
+                     "Projects/{name}/{id}/participate",
+                     new { controller = "Projects", action = "Commit" }
+                 );
+
+                routes.MapRoute("thankyoucommit",
+                     "Projects/{name}/{id}/thankyou",
+                     new { controller = "Projects", action = "ThankYouCommit" }
+                 );
+
+                routes.MapRoute("thankyoucreate",
+                     "Projects/Create/{name}/{id}/thankyou",
+                     new { controller = "Projects", action = "ThankYouCreate" }
+                 );
 
                 routes.MapRoute("start",
                      "start",

@@ -1,6 +1,4 @@
-﻿using Amazon;
-
-namespace CollAction.Services.Email
+﻿namespace CollAction.Services.Email
 {
     public class AuthMessageSenderOptions
     {
