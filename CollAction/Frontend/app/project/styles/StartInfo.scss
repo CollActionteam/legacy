@@ -102,4 +102,35 @@
             border-bottom: 1px solid #8a8a8a;
         }
     }
+
+    #kickstart {
+        padding-bottom: 50px;
+
+        #kickstart-card {
+            border-radius: 5px;
+            background-color: #efefef;
+            padding: 20px 40px;
+    
+            h2 {
+                color: $coll-action-green;
+            }
+
+            a.btn {
+                color: white;
+                background-color: $coll-action-green;
+
+                @media (min-width: 768px) {
+                    padding: 10px 80px;                    
+                }
+                
+                @media (max-width: 767px) {
+                    width: 100%;
+                }                
+            }
+
+            .logo {
+                width: 40px;
+            }
+        }
+    }
 }
