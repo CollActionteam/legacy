@@ -17,3 +17,4 @@ import "./ShareButtons";
 import "./RichTextEditor";
 import "./CookieMessage";
 import "./Tooltips";
+import "./Faqs";

@@ -52,6 +52,7 @@
     #how-it-works {
         background: #efefef;
         text-align: center;
+
         padding-bottom: 50px;
         
         h1 {
@@ -67,6 +68,38 @@
             color: white;
             background-color: $coll-action-green;
             width: 100%;
+        }
+    }
+
+    #faq {
+        padding-bottom: 50px;
+
+        h1 {
+            color: $coll-action-green;
+        }
+
+        a, i {
+            color: #8a8a8a;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .is-closed i.fa.fa-minus {
+            display: none;
+        }
+
+        .is-open i.fa.fa-plus {
+            display: none;
+        }
+
+        .toggle {
+            float: right !important;
+        }
+
+        .Collapsible__contentOuter {
+            border-bottom: 1px solid #8a8a8a;
         }
     }
 }
