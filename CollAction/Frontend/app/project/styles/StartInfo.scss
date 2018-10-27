@@ -25,7 +25,7 @@
         font-weight: bold;
         margin: 20px 0;
         box-shadow: 1px 1px 40px -9px rgba(0,0,0,0.55);
-        padding: 10px 80px;
+        padding: 10px 20px;
         text-align: center;
     }
 
@@ -45,6 +45,7 @@
         a.btn {
             color: $coll-action-green;
             background-color: white;
+            width: 100%;
         }
     }
 
@@ -65,6 +66,7 @@
         a.btn {
             color: white;
             background-color: $coll-action-green;
+            width: 100%;
         }
     }
 }
