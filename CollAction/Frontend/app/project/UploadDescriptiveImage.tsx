@@ -67,7 +67,12 @@ export default class UploadDescriptiveImage extends UploadImage<IUploadDescripti
                 </div>
                 <div className="text">
                     <img src="/images/BrowserSize.png"></img>
-                    <p>Try and change your browser size, or rotate your device, to see if the image is suitable.</p>
+                    <span className="mobile">
+                        <p>Rotate your device, to see if the image is suitable.</p>
+                    </span>
+                    <span className="desktop">
+                        <p>Try and change your browser size to see if the image is suitable.</p>
+                    </span>
                 </div>
                 <div className="buttons">
                     <input type="button" value="Remove" onClick={this.resetImage}></input>
@@ -79,7 +84,7 @@ export default class UploadDescriptiveImage extends UploadImage<IUploadDescripti
     render() {
         return (
             <div id="project-image">
-                <div className="col-xs-12 col-md-7 col-md-offset-5" style={{display: this.state.preview ? "none" : "block"}}>
+                <div className="col-xs-12 col-md-8 col-md-offset-4" style={{display: this.state.preview ? "none" : "block"}}>
                     <DropZone
                         name="DescriptiveImageUpload"
                         className="dropzone"
@@ -90,14 +95,24 @@ export default class UploadDescriptiveImage extends UploadImage<IUploadDescripti
                         onDrop={this.onDrop}
                         onDropRejected={this.onRejected}
                         rejectClassName="field-validation-error">
-                        <h3>Upload descriptive image</h3>
-                        <p className={this.state.invalid ? "field-validation-error" : ""}>Drop or tap. Use jpg, png, gif or bmp. Max. 1 MB</p>
+                        <h3>
+                            <span className="mobile">Tap to select descriptive image</span>
+                            <span className="desktop">Drop descriptive image here</span>
+                        </h3>
+                        <div className="instructions">
+                            <p className={ this.state.invalid ? "field-validation-error" : "hidden" }>
+                                This image is not valid. Please edit it or pick another one.
+                            </p>
+                            <p>
+                                Use jpg, png, gif or bmp. Max. 1 MB.
+                            </p>
+                        </div>
                     </DropZone>
                 </div>
-                <div className="hidden-xs hidden-sm col-md-2" style={{display: this.state.preview ? "block" : "none"}}>
+                <div className="hidden-xs hidden-sm col-md-4" style={{display: this.state.preview ? "block" : "none"}}>
                     { this.renderImageControl() }
                 </div>
-                <div className="col-xs-12 col-md-10" style={{display: this.state.preview ? "block" : "none"}}>
+                <div className="col-xs-12 col-md-8" style={{display: this.state.preview ? "block" : "none"}}>
                     <img id="preview" src={this.createSrcImage()} className="pull-right"></img>
                 </div>
                 <div className="col-xs-12 hidden-md hidden-lg" style={{display: this.state.preview ? "block" : "none"}}>

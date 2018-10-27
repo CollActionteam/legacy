@@ -1,8 +1,6 @@
 ﻿using CollAction.Data;
-using CollAction.Helpers;
 using CollAction.Models;
 using CollAction.Models.AdminViewModels;
-using CollAction.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -11,10 +9,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
+using CollAction.Services.Project;
+using CollAction.Services.Email;
+using CollAction.Services.Image;
 
 namespace CollAction.Controllers
 {
@@ -27,6 +26,7 @@ namespace CollAction.Controllers
             IHostingEnvironment hostingEnvironment,
             IEmailSender emailSender,
             IProjectService projectService,
+            IImageService imageService,
             ApplicationDbContext context)
         {
             _userManager = userManager;
@@ -35,6 +35,7 @@ namespace CollAction.Controllers
             _hostingEnvironment = hostingEnvironment;
             _emailSender = emailSender;
             _projectService = projectService;
+            _imageService = imageService;
         }
 
         private readonly ApplicationDbContext _context;
@@ -43,6 +44,7 @@ namespace CollAction.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSender _emailSender;
         private readonly IProjectService _projectService;
+        private readonly IImageService _imageService;
 
         [HttpGet]
         public IActionResult Index()
@@ -169,9 +171,9 @@ namespace CollAction.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteDescriptiveImage(int id)
         {
-            var fileManager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "descriptiveimages"));
             Project project = await _context.Projects.Include(p => p.DescriptiveImage).FirstAsync(p => p.Id == id);
-            fileManager.DeleteImageFileIfExists(project.DescriptiveImage);
+            _context.ImageFiles.Remove(project.DescriptiveImage);
+            _imageService.DeleteImage(project.DescriptiveImage);
             project.DescriptiveImageFileId = null;
             await _context.SaveChangesAsync();
             return RedirectToAction("ManageProject", new { id = id });
@@ -181,9 +183,9 @@ namespace CollAction.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteBannerImage(int id)
         {
-            var fileManager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "bannerimages"));
             Project project = await _context.Projects.Include(p => p.BannerImage).FirstAsync(p => p.Id == id);
-            fileManager.DeleteImageFileIfExists(project.BannerImage);
+            _context.ImageFiles.Remove(project.BannerImage);
+            _imageService.DeleteImage(project.BannerImage);
             project.BannerImageFileId = null;
             await _context.SaveChangesAsync();
             return RedirectToAction("ManageProject", new { id = id });
@@ -287,7 +289,7 @@ namespace CollAction.Controllers
                 project.Description = model.Description;
                 project.Proposal = model.Proposal;
                 project.Goal = model.Goal;
-                project.CreatorComments = model.CreatorComments;                
+                project.CreatorComments = model.CreatorComments;
                 project.CategoryId = model.CategoryId;
                 project.Target = model.Target;
                 project.Start = model.Start;
@@ -296,11 +298,33 @@ namespace CollAction.Controllers
                 project.OwnerId = model.OwnerId;
                 project.DisplayPriority = model.DisplayPriority;
 
-                var bannerImageManager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "bannerimages"));
-                project.BannerImage = await bannerImageManager.CreateOrReplaceImageFileIfNeeded(project.BannerImage, model.BannerImageUpload, model.BannerImageDescription);
+                if (model.BannerImageUpload != null)
+                {
+                    ImageFile uploaded = await _imageService.UploadImage(project.BannerImage, model.BannerImageUpload, model.BannerImageDescription ?? string.Empty);
+                    if (project.BannerImage == null)
+                    {
+                        project.BannerImage = uploaded;
+                        _context.ImageFiles.Add(project.BannerImage);
+                    }
+                }
+                else if (model.BannerImageDescription != project.BannerImage?.Description && project.BannerImage != null)
+                {
+                    project.BannerImage.Description = model.BannerImageDescription ?? string.Empty;
+                }
 
-                var descriptiveImageManager = new ImageFileManager(_context, _hostingEnvironment.WebRootPath, Path.Combine("usercontent", "descriptiveimages"));
-                project.DescriptiveImage = await descriptiveImageManager.CreateOrReplaceImageFileIfNeeded(project.DescriptiveImage, model.DescriptiveImageUpload, model.DescriptiveImageDescription);
+                if (model.DescriptiveImageUpload != null)
+                {
+                    ImageFile uploaded = await _imageService.UploadImage(project.DescriptiveImage, model.DescriptiveImageUpload, model.DescriptiveImageDescription ?? string.Empty);
+                    if (project.DescriptiveImage == null)
+                    {
+                        project.DescriptiveImage = uploaded;
+                        _context.ImageFiles.Add(project.DescriptiveImage);
+                    }
+                }
+                else if (model.DescriptiveImageDescription != project.DescriptiveImage?.Description && project.DescriptiveImage != null)
+                {
+                    project.DescriptiveImage.Description = model.DescriptiveImageDescription ?? string.Empty;
+                }
 
                 await project.SetTags(_context, model.Hashtag?.Split(';') ?? new string[0]);
 

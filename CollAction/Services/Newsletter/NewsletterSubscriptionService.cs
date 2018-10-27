@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
-namespace CollAction.Services
+namespace CollAction.Services.Newsletter
 {
     public class NewsletterSubscriptionService : INewsletterSubscriptionService
     {
@@ -40,20 +40,24 @@ namespace CollAction.Services
 
         public enum SubscriptionStatus { NotFound, Pending, Subscribed, Unknown };
 
-        public struct ListMemberInfo { public string status; }
+        #pragma warning disable CS0649 // This field is deserialized to, the warning is incorrect
+        private struct ListMemberInfo { public string status; }
+        #pragma warning restore CS0649
 
         private readonly string _apiKey;
         private readonly string _dataCenter;
         private readonly string _newsletterListId;
+        private readonly IBackgroundJobClient _jobClient;
         private readonly ILogger<NewsletterSubscriptionService> _logger;
 
-        private Uri RootUri { get { return new Uri(String.Format("https://{0}.api.mailchimp.com/3.0", _dataCenter)); } }
+        private Uri RootUri { get { return new Uri(string.Format("https://{0}.api.mailchimp.com/3.0", _dataCenter)); } }
 
-        public NewsletterSubscriptionService(IOptions<NewsletterSubscriptionServiceOptions> options, ILogger<NewsletterSubscriptionService> logger)
+        public NewsletterSubscriptionService(IOptions<NewsletterSubscriptionServiceOptions> options, ILogger<NewsletterSubscriptionService> logger, IBackgroundJobClient jobClient)
         {
             _apiKey = options.Value.MailChimpKey;
             _dataCenter = _apiKey.Split('-')[1];
             _newsletterListId = options.Value.MailChimpNewsletterListId;
+            _jobClient = jobClient;
             _logger = logger;
         }
 
@@ -65,11 +69,10 @@ namespace CollAction.Services
 
         public void SetSubscription(string email, bool wantsSubscription, bool requireEmailConfirmationIfSubscribing)
         {
-            string job = wantsSubscription ? BackgroundJob.Enqueue(() => AddOrUpdateListMemberAsync(_newsletterListId, email, requireEmailConfirmationIfSubscribing)) :
-                                             BackgroundJob.Enqueue(() => DeleteListMemberAsync(_newsletterListId, email));
+            string job = wantsSubscription ? _jobClient.Enqueue(() => AddOrUpdateListMemberAsync(_newsletterListId, email, requireEmailConfirmationIfSubscribing)) :
+                                             _jobClient.Enqueue(() => DeleteListMemberAsync(_newsletterListId, email));
             _logger.LogInformation("changed maillist subscription for {0} setting it to {1} with require email confirmation to {2} and hangfire job {3}", email, wantsSubscription, requireEmailConfirmationIfSubscribing, job);
         }
-
 
         public async Task<SubscriptionStatus> GetListMemberStatusAsync(string listId, string email)
         {
@@ -77,7 +80,6 @@ namespace CollAction.Services
             {
                 using (HttpResponseMessage response = await client.GetAsync(GetListMemberUri(listId, email) + "?fields=status"))
                 {
-
                     if (response.StatusCode == HttpStatusCode.NotFound)
                     {
                         return SubscriptionStatus.NotFound;
@@ -107,7 +109,6 @@ namespace CollAction.Services
                 StringContent content = new StringContent(GetAddOrUpdateListMemberParametersJSON(email, usePendingStatusIfNew), Encoding.UTF8, "application/json");
                 using (HttpResponseMessage response = await client.PutAsync(GetListMemberUri(listId, email), content))
                 {
-
                     if (response.StatusCode != HttpStatusCode.OK)
                     {
                         string errorResponse = await GetMailChimpErrorResponse(response);
@@ -126,7 +127,6 @@ namespace CollAction.Services
             {
                 using (HttpResponseMessage response = await client.DeleteAsync(GetListMemberUri(listId, email)))
                 {
-
                     if (response.StatusCode != HttpStatusCode.NoContent && response.StatusCode != HttpStatusCode.NotFound)
                     {
                         string errorResponse = await GetMailChimpErrorResponse(response);
