@@ -6,7 +6,7 @@ COPY CollAction/CollAction.csproj CollAction/
 RUN dotnet restore CollAction/CollAction.csproj
 COPY . .
 WORKDIR /src/CollAction
-RUN npm install # Needed because the project npm install in production mode won''t install the devDependencies (webpack etc.)
+RUN npm install # Needed because the project npm install in production mode won't install the devDependencies (webpack etc.)
 RUN NODE_ENV=production dotnet build CollAction.csproj --no-restore -c Release -o /app
 RUN dotnet publish CollAction.csproj --no-build -c Release -o /app
 
