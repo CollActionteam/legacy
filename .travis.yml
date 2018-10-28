@@ -1,4 +1,7 @@
-language: minimal
+language: csharp
+dotnet: 2.1.301
+mono: none
+dist: trusty
 sudo: required
 
 services:
