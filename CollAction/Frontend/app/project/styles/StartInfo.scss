@@ -31,10 +31,16 @@
     #starting-card {
         color: white;
         border-radius: 20px;
-        margin: -365px 20px 35px 20px;
         background-color: $coll-action-green;
         padding: 20px 40px;
         box-shadow: 10px 10px 40px -9px rgba(0,0,0,0.55);
+
+        @media (min-width: 768px) {
+            margin: -365px 40px 35px 0px;
+        }
+        @media (max-width: 767px) {
+            margin: -365px 10px 35px 10px;
+        }
 
         h2 {
             font-weight: lighter;
