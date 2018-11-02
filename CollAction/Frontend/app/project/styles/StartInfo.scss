@@ -6,15 +6,15 @@
         border-top-width: 2px;
     }
 
+    #start-info-intro {
+        background-color: #efefef;
+    }
+    
     #background {
         background-color: white;
         height: 565px;
         background-size: cover;
         background-image: url('/images/start-project.jpg')
-    }
-
-    #starting-card-container {
-        background-color: #efefef;
     }
 
     a.btn {
@@ -32,15 +32,9 @@
         color: white;
         border-radius: 20px;
         background-color: $coll-action-green;
+        margin: -365px 0px 35px 0px;
         padding: 20px 40px;
         box-shadow: 10px 10px 40px -9px rgba(0,0,0,0.55);
-
-        @media (min-width: 768px) {
-            margin: -365px 40px 35px 0px;
-        }
-        @media (max-width: 767px) {
-            margin: -365px 10px 35px 10px;
-        }
 
         h2 {
             font-weight: lighter;

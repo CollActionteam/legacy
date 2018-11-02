@@ -7,24 +7,26 @@
 }
 
 <div id="start-info">
-    <div class="container-fluid">
-        <div class="row">
-            <div id="background"></div>
-        </div>
-    </div> 
-    <div class="container-fluid">
-        <div class="row" id="starting-card-container">
-            <div class="col-md-5 col-md-push-7 col-sm-6 col-sm-push-6 col-xs-12">
-                <div id="starting-card">
-                    <h1>Starting a project</h1>
-                    <h2>(is super easy)</h2>
-                    <p>
-                        Would you like to do something about social or 
-                        environmental problems? Would you to lead the
-                        crowdacting movement? Start a proect on CollAction now! 
-                    </p>
-                    <h3>It's really easy - we'll guide you through it.</h3>
-                    @Html.ActionLink("Start a project", "Create", "Projects", null, new { @class = "btn" })
+    <div id="start-info-intro">
+        <div class="container-fluid">
+            <div class="row">
+                <div id="background"></div>
+            </div>
+        </div> 
+        <div class="container">
+            <div class="row" id="starting-card-container">
+                <div class="col-md-5 col-md-push-7 col-sm-6 col-sm-push-6 col-xs-12">
+                    <div id="starting-card">
+                        <h1>Starting a project</h1>
+                        <h2>(is super easy)</h2>
+                        <p>
+                            Would you like to do something about social or 
+                            environmental problems? Would you to lead the
+                            crowdacting movement? Start a proect on CollAction now! 
+                        </p>
+                        <h3>It's really easy - we'll guide you through it.</h3>
+                        @Html.ActionLink("Start a project", "Create", "Projects", null, new { @class = "btn" })
+                    </div>
                 </div>
             </div>
         </div>
