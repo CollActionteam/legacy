@@ -32,45 +32,53 @@
         </div>
     </div>
     <div class="container-fluid" id="how-it-works">
-        <div class="row">
-            <div class="col-xs-12">
-                <h1>How it works</h1>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-md-offset-1 col-md-10">
+                    <div class="row">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <h1>How it works</h1>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="step col-xs-12 col-md-4">
+                                <i class="fa fa-3x fa-lightbulb-o"></i>
+                                <h2>Create your project</h2>
+                                <p>
+                                    Complete the start project form. The CollAction team will review
+                                    it as soon as possible
+                                </p>
+                            </div>
+                            <div class="step col-xs-12 col-md-4">
+                                <i class="fa fa-3x fa-share"></i>
+                                <h2>Share your project</h2>
+                                <p>
+                                    Run a campaign to reach your target (once your project is approved)
+                                </p>
+                            </div>
+                            <div class="step col-xs-12 col-md-4">
+                                <i class="fa fa-3x fa-podcast"></i>
+                                <h2>Make waves</h2>
+                                <p>
+                                    Act together if the target is met before the deadline. And share your
+                                    success and impact!
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4"></div>
+                            <div class="col-xs-12 col-md-4">
+                                @Html.ActionLink("Start a project", "Create", "Projects", null, new { @class = "btn" })
+                            </div>
+                            <div class="col-md-4"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="step col-xs-12 col-md-offset-1 col-md-3">
-                <i class="fa fa-3x fa-lightbulb-o"></i>
-                <h2>Create your project</h2>
-                <p>
-                    Complete the start project form. The CollAction team will review
-                    it as soon as possible
-                </p>
-            </div>
-            <div class="step col-xs-12 col-md-4">
-                <i class="fa fa-3x fa-share"></i>
-                <h2>Share your project</h2>
-                <p>
-                    Run a campaign to reach your target (once your project is approved)
-                </p>
-            </div>
-            <div class="step col-xs-12 col-md-3">
-                <i class="fa fa-3x fa-podcast"></i>
-                <h2>Make waves</h2>
-                <p>
-                    Act together if the target is met before the deadline. And share your
-                    success and impact!
-                </p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4"></div>
-            <div class="col-xs-12 col-md-4">
-                @Html.ActionLink("Start a project", "Create", "Projects", null, new { @class = "btn" })
-            </div>
-            <div class="col-md-4"></div>
         </div>
     </div>
-    <div class="container-fluid" id="faq">
+    <div class="container" id="faq">
         <div class="row">
             <div class="col-xs-12 col-md-offset-1 col-md-10">
                 <h1>Frequently Asked Questions</h1>
@@ -84,7 +92,7 @@
             </div>
         </div>
     </div>
-    <div class="container-fluid" id="kickstart">
+    <div class="container" id="kickstart">
         <div class="row">
             <div class="col-xs-12 col-md-offset-1 col-md-10">
                 <div id="kickstart-card">
@@ -111,5 +119,4 @@
             </div>
         </div>
     </div>
-
 </div>
