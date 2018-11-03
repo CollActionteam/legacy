@@ -80,7 +80,7 @@ class ShareButtons extends React.Component<IShareButtonsProps, IShareButtonsStat
   }
 
   getWhatsappUrl() {
-      return `whatsapp://send?text=${this.getTitle()}%20${this.getUrl()}`;
+    return `whatsapp://send?text=${this.getTitle()}%20${this.getUrl()}`;
   }
 
   render() {
@@ -108,13 +108,13 @@ class ShareButtons extends React.Component<IShareButtonsProps, IShareButtonsStat
               </div>
             </a>
           </div>
-                <div className="col-xs-3 hidden-sm hidden-md hidden-lg">
-                    <a href={this.getWhatsappUrl()}>
-                    <div className="social-media-share-buttons social-media-share-button-whatsapp">
-                        <i className="fa fa-whatsapp"></i>
-                    </div>
-                </a>
-            </div>
+          <div className="col-xs-3 visible-xs">
+            <a href={this.getWhatsappUrl()}>
+              <div className="social-media-share-buttons social-media-share-button-whatsapp">
+                <i className="fa fa-whatsapp"></i>
+              </div>
+            </a>
+          </div>
         </div>
       </div>
     );
