@@ -11,6 +11,7 @@ using Amazon.S3.Model;
 using Amazon;
 using Hangfire;
 using CollAction.Helpers;
+using SixLabors.ImageSharp.Processing;
 
 namespace CollAction.Services.Image
 {
@@ -20,13 +21,15 @@ namespace CollAction.Services.Image
         private readonly string _bucket;
         private readonly string _region;
         private readonly IBackgroundJobClient _jobClient;
+        private readonly int _imageResizeThreshold;
 
-        public AmazonS3ImageService(IOptions<ImageServiceOptions> options, IBackgroundJobClient jobClient)
+        public AmazonS3ImageService(IOptions<ImageServiceOptions> options, IOptions<ImageProcessingOptions> processingOptions, IBackgroundJobClient jobClient)
         {
             _client = new AmazonS3Client(options.Value.S3AwsAccessKeyID, options.Value.S3AwsAccessKey, RegionEndpoint.GetBySystemName(options.Value.S3Region));
             _bucket = options.Value.S3Bucket;
             _region = options.Value.S3Region;
             _jobClient = jobClient;
+            _imageResizeThreshold = processingOptions.Value.MaxImageDimensionPixels;
         }
 
         public async Task<ImageFile> UploadImage(ImageFile currentImage, IFormFile fileUploaded, string imageDescription)
@@ -104,7 +107,11 @@ namespace CollAction.Services.Image
                 using (MemoryStream ms = new MemoryStream())
                 {
                     await uploadStream.CopyToAsync(ms);
-                    return SixLabors.ImageSharp.Image.Load(ms.ToArray());
+                    var image = SixLabors.ImageSharp.Image.Load(ms.ToArray());
+                    image.Mutate(x => x
+                        .Resize((int)(image.Width*GetScaleRatioForImage(image)), (int)(image.Height*GetScaleRatioForImage(image)))
+                        );
+                    return image;
                 }
             }
         }
@@ -118,6 +125,19 @@ namespace CollAction.Services.Image
             }
         }
 
+        private double GetScaleRatioForImage(Image<Rgba32> image)
+        {
+            if(image.Width > _imageResizeThreshold || image.Height > _imageResizeThreshold){
+                if(image.Width > image.Height) {
+                    return (_imageResizeThreshold/image.Width);
+                }else{
+                    return (_imageResizeThreshold/image.Height);
+                }
+            }
+
+            return 1.0;
+        }
+    
         public void Dispose()
         {
             _client.Dispose();
