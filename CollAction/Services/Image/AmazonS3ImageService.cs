@@ -108,8 +108,9 @@ namespace CollAction.Services.Image
                 {
                     await uploadStream.CopyToAsync(ms);
                     var image = SixLabors.ImageSharp.Image.Load(ms.ToArray());
+                    var scaleRatio = GetScaleRatioForImage(image);
                     image.Mutate(x => x
-                        .Resize((int)(image.Width*GetScaleRatioForImage(image)), (int)(image.Height*GetScaleRatioForImage(image)))
+                        .Resize((int)(image.Width*scaleRatio), (int)(image.Height*scaleRatio))
                         );
                     return image;
                 }
