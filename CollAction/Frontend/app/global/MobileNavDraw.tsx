@@ -15,7 +15,8 @@ interface IMobileNavDrawState {
 function AccountManageNav(props) {
   if (props.isLoggedIn) {
     return <li><a href="/manage">Account</a></li>;
-  } else {
+  }
+  else {
     return null;
   }
  }
@@ -23,7 +24,8 @@ function AccountManageNav(props) {
   function LoginStateNav(props) {
   if (props.isLoggedIn) {
     return <li><button type="button" onClick={() => document.getElementById("logOutBtn").click()}>Logout</button></li>;
-  } else {
+  }
+  else {
     return <li><a href="/account/login">Login</a></li>;
   }
  }
