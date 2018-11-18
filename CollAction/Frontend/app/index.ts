@@ -16,14 +16,9 @@ Promise.config({
 
 import "@fortawesome/fontawesome-free/css/all.css";
 import "@fortawesome/fontawesome-free/js/all.js";
-import { faTwitter } from "@fortawesome/free-brands-svg-icons";
-import { faFacebook } from "@fortawesome/free-brands-svg-icons";
-import { faLinkedin } from "@fortawesome/free-brands-svg-icons";
 import { dom, library } from "@fortawesome/fontawesome-svg-core";
 
-library.add(faTwitter, faFacebook, faLinkedin);
 dom.i2svg();
-
 window["jQuery"] = jQuery;
 
 function displayBodyOnLoad() {
