@@ -131,14 +131,15 @@ namespace CollAction.Services.Image
 
         private double GetScaleRatioForImage(Image<Rgba32> image)
         {
-            if (image.Width > _imageResizeThreshold || image.Height > _imageResizeThreshold){
+            if (image.Width > _imageResizeThreshold || image.Height > _imageResizeThreshold)
+            {
                 if (image.Width > image.Height) 
                 {
-                    return (_imageResizeThreshold/image.Width);
+                    return ( (double)_imageResizeThreshold/(double)image.Width);
                 }
                 else
                 {
-                    return (_imageResizeThreshold/image.Height);
+                    return ( (double)_imageResizeThreshold/(double)image.Height);
                 }
             }
 
