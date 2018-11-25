@@ -109,9 +109,12 @@ namespace CollAction.Services.Image
                     await uploadStream.CopyToAsync(ms);
                     var image = SixLabors.ImageSharp.Image.Load(ms.ToArray());
                     var scaleRatio = GetScaleRatioForImage(image);
-                    image.Mutate(x => x
-                        .Resize((int)(image.Width*scaleRatio), (int)(image.Height*scaleRatio))
-                        );
+                    if (scaleRatio != 1.0)
+                    {
+                        image.Mutate(x => x
+                            .Resize((int)(image.Width*scaleRatio), (int)(image.Height*scaleRatio))
+                            );
+                    }
                     return image;
                 }
             }
@@ -128,10 +131,13 @@ namespace CollAction.Services.Image
 
         private double GetScaleRatioForImage(Image<Rgba32> image)
         {
-            if(image.Width > _imageResizeThreshold || image.Height > _imageResizeThreshold){
-                if(image.Width > image.Height) {
+            if (image.Width > _imageResizeThreshold || image.Height > _imageResizeThreshold){
+                if (image.Width > image.Height) 
+                {
                     return (_imageResizeThreshold/image.Width);
-                }else{
+                }
+                else
+                {
                     return (_imageResizeThreshold/image.Height);
                 }
             }
