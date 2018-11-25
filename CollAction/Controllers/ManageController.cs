@@ -12,6 +12,7 @@ using CollAction.Models.ManageViewModels;
 using Microsoft.EntityFrameworkCore;
 using CollAction.Services.Email;
 using CollAction.Services.Newsletter;
+using CollAction.Services.Project;
 
 namespace CollAction.Controllers
 {
@@ -24,7 +25,7 @@ namespace CollAction.Controllers
         private readonly INewsletterSubscriptionService _newsletterSubscriptionService;
         private readonly ILogger _logger;
         private readonly IStringLocalizer<ManageController> _localizer;
-        private readonly ApplicationDbContext _context;
+        private readonly IProjectService  _projectService;
 
         public ManageController(
           UserManager<ApplicationUser> userManager,
@@ -33,7 +34,7 @@ namespace CollAction.Controllers
           INewsletterSubscriptionService newsletterSubscriptionService,
           ILoggerFactory loggerFactory,
           IStringLocalizer<ManageController> localizer,
-          ApplicationDbContext context)
+          IProjectService projectService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -41,7 +42,7 @@ namespace CollAction.Controllers
             _newsletterSubscriptionService = newsletterSubscriptionService;
             _logger = loggerFactory.CreateLogger<ManageController>();
             _localizer = localizer;
-            _context = context;
+            _projectService = projectService;
         }
 
         [TempData]
@@ -62,13 +63,32 @@ namespace CollAction.Controllers
                 Email = user.Email,
                 StatusMessage = StatusMessage,
                 NewsletterSubscription = await _newsletterSubscriptionService.IsSubscribedAsync(user.Email),
-                ProjectsParticipated = (await _context.ProjectParticipants
-                                                      .Where(part => part.UserId == user.Id)
-                                                      .Include(part => part.Project)
-                                                      .ToListAsync()).Select(part => part.Project),
-                ProjectsCreated = await _context.Projects.Where(proj => proj.OwnerId == user.Id && proj.Status != ProjectStatus.Deleted).ToListAsync()
+                ProjectsParticipated = Enumerable.Empty<Project>(),
+                ProjectsCreated = Enumerable.Empty<Project>()
+                // ProjectsParticipated = (await _context.ProjectParticipants
+                //     .Where(part => part.UserId == user.Id)
+                //     .Include(part => part.Project)
+                //     .ToListAsync()).Select(part => part.Project),
             };
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> MyProjects()
+        {
+            var user = await GetCurrentUserAsync();
+            
+            var projects = await _projectService.MyProjects(user.Id);
+            return Json(projects);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> ParticipatingInProjects()
+        {
+            var user = await GetCurrentUserAsync();
+            
+            var projects = await _projectService.ParticipatingInProjects(user.Id);
+            return Json(projects);
         }
 
         [HttpPost]

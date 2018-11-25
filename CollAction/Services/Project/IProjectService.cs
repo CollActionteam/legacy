@@ -22,5 +22,7 @@ namespace CollAction.Services.Project
         DateTime CanSendEmailsUntil(Models.Project project);
         Task RefreshParticipantCountMaterializedView();
         string GetProjectNameNormalized(string projectName);
+        Task<IEnumerable<FindProjectsViewModel>> MyProjects(string userId);
+        Task<IEnumerable<FindProjectsViewModel>> ParticipatingInProjects(string userId);
     }
 }

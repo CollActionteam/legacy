@@ -88,8 +88,7 @@ namespace CollAction.Services.Project
             return await _context.Projects
                 .Where(filter)
                 .OrderBy(p => p.DisplayPriority)
-                .Select(project =>
-                    new FindProjectsViewModel(_stringLocalizer)
+                .Select(project => new FindProjectsViewModel(_stringLocalizer)  // Cannot be moved to private method. Won't work with EF
                     {
                         ProjectId = project.Id,
                         ProjectName = project.Name,
@@ -231,7 +230,7 @@ namespace CollAction.Services.Project
             yield return GetParticipantCsvLine(project.Owner);
             foreach (ProjectParticipant participant in project.Participants)
                 yield return GetParticipantCsvLine(participant.User);
-        }
+        }                
         
         private static string ToUrlSlug(string value)
         {                      
@@ -277,5 +276,62 @@ namespace CollAction.Services.Project
 
         private string EscapeCsv(string str)
             => $"\"{str?.Replace("\"", "\"\"")}\"";
+
+        public async Task<IEnumerable<FindProjectsViewModel>> MyProjects(string userId)
+        {
+            return await _context.Projects
+                .Where(p => p.OwnerId == userId && p.Status != ProjectStatus.Deleted)
+                .OrderBy(p => p.DisplayPriority)
+                .Select(project => new FindProjectsViewModel(_stringLocalizer) // Cannot be moved to private method. Won't work with EF
+                {
+                    ProjectId = project.Id,
+                    ProjectName = project.Name,
+                    ProjectNameUriPart = GetProjectNameNormalized(project.Name),
+                    ProjectProposal = project.Proposal,
+                    CategoryName = project.Category.Name,
+                    CategoryColorHex = project.Category.ColorHex,
+                    LocationName = project.Location.Name,
+                    BannerImagePath = project.BannerImage != null ? _imageService.GetUrl(project.BannerImage) : $"/images/default_banners/{project.Category.Name}.jpg",
+                    BannerImageDescription = project.BannerImage.Description,
+                    Target = project.Target,
+                    Participants = project.ParticipantCounts.Count,
+                    Remaining = project.RemainingTime,
+                    DescriptiveImagePath = project.DescriptiveImage == null ? null : _imageService.GetUrl(project.DescriptiveImage),
+                    DescriptiveImageDescription = project.DescriptiveImage.Description,
+                    Status = project.Status,
+                    Start = project.Start,
+                    End = project.End
+                })
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<FindProjectsViewModel>> ParticipatingInProjects(string userId)
+        {
+            return await _context.ProjectParticipants
+                .Where(p => p.UserId == userId && p.Project.Status != ProjectStatus.Deleted)
+                .OrderBy(p => p.Project.DisplayPriority)
+                .Select(p => p.Project)
+                .Select(project => new FindProjectsViewModel(_stringLocalizer) // Cannot be moved to private method. Won't work with EF
+                {
+                    ProjectId = project.Id,
+                    ProjectName = project.Name,
+                    ProjectNameUriPart = GetProjectNameNormalized(project.Name),
+                    ProjectProposal = project.Proposal,
+                    CategoryName = project.Category.Name,
+                    CategoryColorHex = project.Category.ColorHex,
+                    LocationName = project.Location.Name,
+                    BannerImagePath = project.BannerImage != null ? _imageService.GetUrl(project.BannerImage) : $"/images/default_banners/{project.Category.Name}.jpg",
+                    BannerImageDescription = project.BannerImage.Description,
+                    Target = project.Target,
+                    Participants = project.ParticipantCounts.Count,
+                    Remaining = project.RemainingTime,
+                    DescriptiveImagePath = project.DescriptiveImage == null ? null : _imageService.GetUrl(project.DescriptiveImage),
+                    DescriptiveImageDescription = project.DescriptiveImage.Description,
+                    Status = project.Status,
+                    Start = project.Start,
+                    End = project.End
+                })
+                .ToListAsync();
+        }        
     }
 }
