@@ -83,38 +83,42 @@ namespace CollAction.Services.Project
             return await _context.ProjectParticipants.SingleOrDefaultAsync(p => p.ProjectId == projectId && p.UserId == userId);
         }
 
-        public async Task<IEnumerable<FindProjectsViewModel>> FindProjects(Expression<Func<Models.Project, bool>> filter)
+        public IQueryable<FindProjectsViewModel> FindProjects(Expression<Func<Models.Project, bool>> filter, int? limit)
         {
-            return await _context.Projects
+            IQueryable<Models.Project> projects = _context.Projects
                 .Where(filter)
-                .OrderBy(p => p.DisplayPriority)
+                .OrderBy(p => p.DisplayPriority);
+
+            if (limit.HasValue)
+                projects = projects.Take(limit.Value);
+
+            return projects
                 .Select(project =>
-                    new FindProjectsViewModel(_stringLocalizer)
-                    {
-                        ProjectId = project.Id,
-                        ProjectName = project.Name,
-                        ProjectNameUriPart = GetProjectNameNormalized(project.Name),
-                        ProjectProposal = project.Proposal,
-                        CategoryName = project.Category.Name,
-                        CategoryColorHex = project.Category.ColorHex,
-                        LocationName = project.Location.Name,
-                        BannerImagePath = project.BannerImage != null ? _imageService.GetUrl(project.BannerImage) : $"/images/default_banners/{project.Category.Name}.jpg",
-                        BannerImageDescription = project.BannerImage.Description,
-                        Target = project.Target,
-                        Participants = project.ParticipantCounts.Count,
-                        Remaining = project.RemainingTime,
-                        DescriptiveImagePath = project.DescriptiveImage == null ? null : _imageService.GetUrl(project.DescriptiveImage),
-                        DescriptiveImageDescription = project.DescriptiveImage.Description,
-                        Status = project.Status,
-                        Start = project.Start,
-                        End = project.End
-                    })
-                .ToListAsync();
+                            new FindProjectsViewModel(_stringLocalizer)
+                            {
+                                ProjectId = project.Id,
+                                ProjectName = project.Name,
+                                ProjectNameUriPart = GetProjectNameNormalized(project.Name),
+                                ProjectProposal = project.Proposal,
+                                CategoryName = project.Category.Name,
+                                CategoryColorHex = project.Category.ColorHex,
+                                LocationName = project.Location.Name,
+                                BannerImagePath = project.BannerImage != null ? _imageService.GetUrl(project.BannerImage) : $"/images/default_banners/{project.Category.Name}.jpg",
+                                BannerImageDescription = project.BannerImage.Description,
+                                Target = project.Target,
+                                Participants = project.ParticipantCounts.Count,
+                                Remaining = project.RemainingTime,
+                                DescriptiveImagePath = project.DescriptiveImage == null ? null : _imageService.GetUrl(project.DescriptiveImage),
+                                DescriptiveImageDescription = project.DescriptiveImage.Description,
+                                Status = project.Status,
+                                Start = project.Start,
+                                End = project.End
+                            });
         }
 
-        public async Task<IEnumerable<DisplayProjectViewModel>> GetProjectDisplayViewModels(Expression<Func<Models.Project, bool>> filter)
+        public IQueryable<DisplayProjectViewModel> GetProjectDisplayViewModels(Expression<Func<Models.Project, bool>> filter)
         {
-            return await _context.Projects
+            return _context.Projects
                 .Where(filter)
                 .Include(p => p.Category)
                 .Include(p => p.Location)
@@ -124,15 +128,14 @@ namespace CollAction.Services.Project
                 .Include(p => p.Owner)
                 .Include(p => p.Tags).ThenInclude(t => t.Tag)
                 .Include(p => p.ParticipantCounts)
-                .Select(project => 
-                    new DisplayProjectViewModel
-                    {
-                        Project = project,
-                        Participants = project.ParticipantCounts.Count,
-                        BannerImagePath = project.BannerImage == null ? $"/images/default_banners/{project.Category.Name}.jpg" : _imageService.GetUrl(project.BannerImage),
-                        DescriptiveImagePath = project.DescriptiveImage == null ? null : _imageService.GetUrl(project.DescriptiveImage)
-                    })
-                .ToListAsync();
+                .Select(project =>
+                            new DisplayProjectViewModel
+                            {
+                                Project = project,
+                                Participants = project.ParticipantCounts.Count,
+                                BannerImagePath = project.BannerImage == null ? $"/images/default_banners/{project.Category.Name}.jpg" : _imageService.GetUrl(project.BannerImage),
+                                DescriptiveImagePath = project.DescriptiveImage == null ? null : _imageService.GetUrl(project.DescriptiveImage)
+                            });
         }
 
         public async Task<string> GenerateParticipantsDataExport(int projectId)
