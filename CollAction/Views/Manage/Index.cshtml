@@ -20,61 +20,59 @@
                 <h2>Manage your account</h2>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <dt>Password:</dt>
+                        <dt>Password</dt>
                     </div>
                     <div class="panel-body">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <form asp-controller="Manage" asp-action="ChangePassword" method="get">
-                                    <input class="symetric_buttons" type="submit" value="Change Password" />
-                                </form>
-                            </div>
-                            <div class="col-md-9"></div>
-                        </div>
+                        <p>
+                            Changing your password regularly and using different passwords for different sites help keep your digital identity safe. Tip: use a password manager!
+                        </p>
+                        <a class="btn" asp-controller="Manage" asp-action="ChangePassword">
+                            Change your password
+                        </a>
                     </div>
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <dt>Newsletter Subscription:</dt>
+                        <dt>Newsletter Subscription</dt>
                     </div>
                     <div class="panel-body">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <form asp-controller="Manage" asp-action="NewsletterSubscription" method="post" class="form-horizontal">
-                                    <input type="hidden" asp-for="NewsletterSubscription" value="@(!Model.NewsletterSubscription)" /> 
-                                    @Html.ValidationMessage("NewsletterSubscription") 
-                                    @if (Model.NewsletterSubscription)
-                                    {
-                                        <input class="symetric_buttons" type="submit" value="Unsubscribe" /> 
-                                    } 
-                                    else 
-                                    {
-                                        <input class="symetric_buttons" type="submit" value="Subscribe" /> 
-                                    }
-                                </form>
-                            </div>
-                            <div class="col-md-9"></div>
-                        </div>
+                        <form asp-controller="Manage" asp-action="NewsletterSubscription" method="post" class="form-horizontal">
+                            <input type="hidden" asp-for="NewsletterSubscription" value="@(!Model.NewsletterSubscription)" /> 
+                            @Html.ValidationMessage("NewsletterSubscription") 
+                            @if (Model.NewsletterSubscription)
+                            {
+                                <p>
+                                    We won't spam you, we'll just send you an update from CollAction every once in a while. But if you just want to keep your inbox as clean as possible, you can unsubscribe here.
+                                </p>
+                                <p>
+                                    Note: it'll take a few seconds to process your change.
+                                </p>
+                                <input type="submit" value="Unsubscribe" /> 
+                            } 
+                            else 
+                            {
+                                <p>
+                                    Subscribe to our newsletter if you would like to receive an update from CollAction every once in a while - don't worry, we like spam as little as you do! 🙂 
+                                </p>
+                                <p>
+                                    Note: it'll take a few seconds to process your change.
+                                </p>
+                                <input type="submit" value="Subscribe" /> 
+                            }
+                        </form>
                     </div>
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <dt>Delete Account:</dt>
+                        <dt>Delete Account</dt>
                     </div>
                     <div class="panel-body">
-                        <div class="row">
-                            <div class="alert alert-warning" role="alert">
-                                <dt>Warning: This will permanently delete your data!</dt>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <form asp-controller="Account" asp-action="Delete" method="post">
-                                    <input class="symetric_buttons" type="submit" value="Delete" />
-                                </form>
-                            </div>
-                            <div class="col-md-9"></div>
-                        </div>
+                        <p>
+                            We're sorry if you want to leave... however, if you really want to, you can delete your account here.
+                        </p>
+                        <form asp-controller="Account" asp-action="Delete" method="post">
+                            <input type="submit" value="Delete" />
+                        </form>
                     </div>
                 </div>
             </div>
