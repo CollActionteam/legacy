@@ -9,26 +9,15 @@
     ViewData["Title"] = "Manage your account";
 }
 
-<div id="manage-index">
+<div class="container">
+    <div id="manage-account">
 
-    <div class="container">
-
-        <h2>@ViewData["Title"]</h2>
         <p class="text-success">@Model.StatusMessage</p>
         <br/>
 
         <div class="row">
-            <h3>Projects you've created</h3>
-            <div id="my-projects"></div>
-        </div>
-
-        <div class="row">
-            <h3>Projects you're participating in</h3>
-            <div id="participating-in-projects"></div>
-        </div>
-
-        <div class="row">
-            <div class="container">
+            <div class="col-md-5 col-xs-12">
+                <h2>Manage your account</h2>
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <dt>Password:</dt>
@@ -44,15 +33,6 @@
                         </div>
                     </div>
                 </div>
-
-            </div>
-        </div>
-
-        <br/>
-        <br/>
-
-        <div class="row">
-            <div class="container">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <dt>Newsletter Subscription:</dt>
@@ -77,14 +57,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <br/>
-        <br/>
-
-        <div class="row">
-            <div class="container">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <dt>Delete Account:</dt>
@@ -106,9 +78,19 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-7 col-xs-12">
+                <div class="row">
+                    <div id="participating-in-projects"></div>
+                </div>
+                <div class="row">
+                    <div id="my-projects"></div>
+                </div>
+            </div>
         </div>
-        <br/>
+    </div>
+</div>
 
+@*
         <div class="row">
 
             <div class="panel panel-default">
@@ -170,6 +152,7 @@
 
     </div>
 </div>
+*@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

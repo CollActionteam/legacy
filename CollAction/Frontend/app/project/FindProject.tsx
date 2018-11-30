@@ -64,7 +64,9 @@ export default class FindProject extends React.Component<IFindProjectProps, IFin
     return (
       <div id="find-project">
         { this.props.controller ?  controller : null }
-        <ProjectList projectList={this.state.projectList} />
+        <div className="container">
+          <ProjectList projectList={this.state.projectList} tileClassName="col-xs-12 col-md-4" />
+        </div>
       </div>
     );
   }

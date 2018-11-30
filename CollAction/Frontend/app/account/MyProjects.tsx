@@ -46,7 +46,10 @@ export default class MyProjects extends React.Component<IMyProjectsProps, IMyPro
 
   render () {
     return (
-    <ProjectList projectList={this.state.projectList} />
+      <div>
+        <h2 hidden={this.state.projectFetching}>Projects you've created</h2>
+        <ProjectList projectList={this.state.projectList} tileClassName="col-xs-12 col-md-6" />
+      </div>
     );
   }
 }

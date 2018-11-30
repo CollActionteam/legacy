@@ -46,7 +46,10 @@ export default class ParticipatingInProjects extends React.Component<IParticipat
 
   render () {
     return (
-    <ProjectList projectList={this.state.projectList} />
+      <div>
+        <h2 hidden={this.state.projectFetching}>Projects you're participating in</h2>
+        <ProjectList projectList={this.state.projectList} tileClassName="col-xs-12 col-md-6" />
+      </div>
     );
   }
 }

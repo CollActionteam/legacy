@@ -1,7 +1,7 @@
 import * as React from "react";
 
 export interface IProject {
-  projectId: string,
+  projectId: string;
   projectName: string;
   projectNameUriPart: string;
   projectProposal: string;
@@ -14,6 +14,8 @@ export interface IProject {
   participants: number;
   progressPercent: number;
   status: string;
+
+  tileClassName: string;
 }
 
 class ProjectThumb extends React.Component<IProject, null> {
@@ -25,7 +27,7 @@ class ProjectThumb extends React.Component<IProject, null> {
     const link = `/projects/${this.props.projectNameUriPart}/${this.props.projectId}/details`;
 
     return (
-      <div className="col-xs-12 col-md-4 project-thumb-container">
+      <div className={this.props.tileClassName + " project-thumb-container"}>
         <div className="project-thumb">
           <div className="project-thumb-image" style={projectImageStyle} >
             <div className="category-name" style={{backgroundColor: "#" + this.props.categoryColorHex}}>
@@ -63,12 +65,10 @@ class ProjectThumb extends React.Component<IProject, null> {
   }
 }
 
-export default ({ projectList }) => {
+export default ({ projectList, tileClassName }) => {
   return (
     <div id="project-list">
-      <div className="container">
-        { projectList.map(project => <ProjectThumb key={project.projectId} {...project} />) }
-      </div>
+        { projectList.map(project => <ProjectThumb key={project.projectId} tileClassName={tileClassName} {...project} />) }
     </div>
   );
-}
+};
