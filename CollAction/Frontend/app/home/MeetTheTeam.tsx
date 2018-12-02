@@ -73,14 +73,14 @@ export default class MeetTheTeam extends React.Component<IMeetTheTeamProps, IMee
 
 const teamMembers: ITeamMember[] = [
   {
-    name: "Abhinay Kondamreddy",
+    name: "Barbera Putman Cramer",
     role: "",
-    photo: "NoPhoto.png"
+    photo: "Barbara Putman Cramer.png"
   },
   {
-    name: "Christa Brouwer",
+    name: "Chris Schuchmann",
     role: "",
-    photo: "NoPhoto.png"
+    photo: "Chris Schuchmann.png"
   },
   {
     name: "Daniela Becker",
@@ -90,7 +90,7 @@ const teamMembers: ITeamMember[] = [
   {
     name: "Dominik Guz",
     role: "",
-    photo: "NoPhoto.png"
+    photo: "Dominik Guz.png"
   },
   {
     name: "Edoardo Felici",
@@ -98,35 +98,29 @@ const teamMembers: ITeamMember[] = [
     photo: "Edoardo Felici.png"
   },
   {
+    name: "Laura Wennekes",
+    role: "",
+    photo: "Laura Wennekes.png"
+  },
+  {
+    name: "Lena Hartog",
+    role: "",
+    photo: "Lena Hartog.png"
+  },
+  {
+    name: "Luc Geurts",
+    role: "",
+    photo: "Luc Geurts.png"
+  },
+  {
     name: "Luuk Boschker",
     role: "",
     photo: "Luuk Boschker.png"
-
-  },
-  {
-    name: "Laura Wennekes",
-    role: "",
-    photo: "NoPhoto.png"
-  },
-  {
-    name: "Martijn de Haan",
-    role: "",
-    photo: "Martijn de Haan.png"
-  },
-  {
-    name: "Melchior Jong",
-    role: "",
-    photo: "Melchior Jong.png"
-  },
-  {
-    name: "Mina Yao",
-    role: "",
-    photo: "NoPhoto.png"
   },
   {
     name: "Nikie van Thiel",
     role: "",
-    photo: "NoPhoto.png"
+    photo: "Nikie van Thiel.png"
   },
   {
     name: "Ron van den Akker",
@@ -144,6 +138,11 @@ const teamMembers: ITeamMember[] = [
     photo: "Tim Stokman.png"
   },
   {
+    name: "Tuanh Lam",
+    role: "",
+    photo: "Tuanh Lam.png"
+  },
+  {
     name: "Vivian Vos",
     role: "",
     photo: "Vivian Vos.png"
@@ -151,8 +150,8 @@ const teamMembers: ITeamMember[] = [
   {
     name: "Brian Russell",
     role: "",
-    photo: "NoPhoto.png"
-  }
+    photo: "Brian Russell.png"
+  },
 ];
 
 renderComponentIf(
