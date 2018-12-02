@@ -2,5 +2,3 @@ wwwroot/js/*.bundle.js
 wwwroot/js/bundle.js
 node_modules
 log*
-package-lock.json
-CollAction/package-lock.json

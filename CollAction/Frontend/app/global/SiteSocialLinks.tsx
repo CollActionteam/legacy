@@ -11,12 +11,8 @@ import { faYoutube } from "@fortawesome/free-brands-svg-icons";
 library.add(faTwitter, faFacebook, faLinkedin, faYoutube);
 
 class SiteSocialLinks extends React.Component {
-
   constructor(props) {
     super(props);
-  }
-
-  componentDidMount() {
   }
 
   getTwitterUrl () {

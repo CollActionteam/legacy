@@ -8,14 +8,6 @@ import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 library.add(faMapMarkerAlt);
 
 class MapMarkerItem extends React.Component {
-
-  constructor(props) {
-    super(props);
-  }
-
-  componentDidMount() {
-  }
-
   render() {
     return (
       <div className="">
