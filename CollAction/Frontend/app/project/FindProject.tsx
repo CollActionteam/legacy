@@ -1,20 +1,19 @@
-import { ProjectFilter, IProjectFilter } from "./ProjectFilter";
-import ProjectList from "./ProjectList";
 import * as React from "react";
-import { IProject } from "./ProjectList";
+import ProjectList from "./ProjectList";
+import { IProjectsProps, IProjectsState, Projects} from "../global/Projects";
+import { ProjectFilter, IProjectFilter } from "./ProjectFilter";
+import renderComponentIf from "../global/renderComponentIf";
 
-interface IFindProjectProps {
+interface IFindProjectProps extends IProjectsProps {
   controller: boolean;
 }
 
-interface IFindProjectState {
-  projectList: IProject[];
+interface IFindProjectState extends IProjectsState {
   projectFilterState: IProjectFilter;
-  projectFetching: boolean;
-  projectFetchError: any;
 }
 
-export default class FindProject extends React.Component<IFindProjectProps, IFindProjectState> {
+export default class FindProject extends Projects<IFindProjectProps, IFindProjectState> {
+
   constructor (props) {
     super(props);
     const projectList = [];
@@ -33,33 +32,20 @@ export default class FindProject extends React.Component<IFindProjectProps, IFin
     }
   }
 
-  async fetchProjects(projectFilter: IProjectFilter = null) {
-    this.setState({ projectFetching: true });
-
-    // Fetch projects with out filters set
-    const getUrl: () => string = () => {
-      if (projectFilter) {
-        return `/api/projects/find?categoryId=${projectFilter.categoryId}&statusId=${projectFilter.statusId}`;
-      }
-      return "/api/projects/find";
-    };
-
-    try {
-      const searchProjectRequest: Request = new Request(getUrl());
-      const fetchResult: Response = await fetch(searchProjectRequest);
-      const jsonResponse = await fetchResult.json();
-      this.setState({ projectFetching: false, projectList: jsonResponse });
-    } catch (e) {
-      this.setState({ projectFetching: false, projectFetchError: e });
+  projectsUrl() {
+    if (this.state.projectFilterState) {
+      return `/api/projects/find?categoryId=${this.state.projectFilterState.categoryId}&statusId=${this.state.projectFilterState.statusId}`;
     }
+    return "/api/projects/find";
   }
 
   onChange (newState: IProjectFilter) {
-    this.setState({ projectFilterState: newState });
-    this.fetchProjects(newState);
+    this.setState(
+      { projectFilterState: newState },
+      () => this.fetchProjects());
   }
 
-  render () {
+  render() {
     const controller = <ProjectFilter onChange={(searchState: IProjectFilter) => this.onChange(searchState) }/>;
     return (
       <div id="find-project">
@@ -71,3 +57,13 @@ export default class FindProject extends React.Component<IFindProjectProps, IFin
     );
   }
 }
+
+renderComponentIf(
+  <FindProject controller={true} />,
+  document.getElementById("project-controller")
+);
+
+renderComponentIf(
+  <FindProject controller={false} />,
+  document.getElementById("projects-container")
+);

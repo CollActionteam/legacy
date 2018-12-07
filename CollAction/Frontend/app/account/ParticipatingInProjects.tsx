@@ -1,17 +1,9 @@
 import * as React from "react";
-import ProjectList, { IProject } from "../project/ProjectList";
+import ProjectList from "../project/ProjectList";
+import { IProjectsProps, IProjectsState, Projects} from "../global/Projects";
 import renderComponentIf from "../global/renderComponentIf";
 
-interface IParticipatingInProjectsProps {
-}
-
-interface IParticipatingInProjectsState {
-  projectList: IProject[];
-  projectFetching: boolean;
-  projectFetchError: any;
-}
-
-export default class ParticipatingInProjects extends React.Component<IParticipatingInProjectsProps, IParticipatingInProjectsState> {
+export default class ParticipatingInProjects extends Projects<IProjectsProps, IProjectsState> {
   constructor (props) {
     super(props);
     const projectList = [];
@@ -27,24 +19,11 @@ export default class ParticipatingInProjects extends React.Component<IParticipat
     this.fetchProjects();
   }
 
-  async fetchProjects() {
-    this.setState({ projectFetching: true });
-
-    const getUrl: () => string = () => {
-      return "/api/manage/participating";
-    };
-
-    try {
-      const searchProjectRequest: Request = new Request(getUrl());
-      const fetchResult: Response = await fetch(searchProjectRequest);
-      const jsonResponse = await fetchResult.json();
-      this.setState({ projectFetching: false, projectList: jsonResponse });
-    } catch (e) {
-      this.setState({ projectFetching: false, projectFetchError: e });
-    }
+  projectsUrl(): string {
+    return "/api/manage/participating";
   }
 
-  render () {
+  render() {
     return (
       <div>
         <h2 hidden={this.state.projectFetching}>Projects you're participating in</h2>
