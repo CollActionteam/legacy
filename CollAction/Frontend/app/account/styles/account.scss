@@ -19,6 +19,7 @@
     
     .panel-body {
         input[type="submit"] {
+            @include coll-action-button;
             width: 100%;
         }
     }
