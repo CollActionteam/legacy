@@ -98,6 +98,11 @@ const teamMembers: ITeamMember[] = [
     photo: "Edoardo Felici.png"
   },
   {
+    name: "Juan Naputi",
+    role: "",
+    photo: "Juan Naputi.png"
+  },
+  {
     name: "Laura Wennekes",
     role: "",
     photo: "Laura Wennekes.png"
