@@ -49,14 +49,14 @@ export default class MyProjects extends Projects<IProjectsProps, IProjectsState>
           <div className="kickstart-card">
               <div className="row">
                   <div className="col-xs-10">
-                      <h2>You didn't create any projects.</h2>
+                      <h2>You haven't created any projects yet.</h2>
                   </div>
                   <div className="col-xs-2">
                       <h2><object className="logo pull-right" type="image/svg+xml" data="/images/step3.svg"></object></h2>
                   </div>
                   <div className="col-xs-12">
                       <p>
-                        Would you like to do something about social or environmental problems? Would you to lead the crowdacting movement? Start a project on CollAction now!
+                        Would you like to do something about social or environmental problems? Would you like to lead the crowdacting movement? Start a project on CollAction now!
                       </p>
                       <a className="btn" href="/start">Start a project</a>
                   </div>
