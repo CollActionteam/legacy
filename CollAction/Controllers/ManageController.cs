@@ -190,6 +190,20 @@ namespace CollAction.Controllers
             return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
         }
 
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> ToggleEmailSubscription(int projectId)
+        {
+            ApplicationUser user = await _userManager.GetUserAsync(User);
+            var newValue = await _projectService.ToggleNewsletterSubscription(projectId, user.Id);
+
+            StatusMessage = newValue 
+                ? _localizer["You are now subscribed to this project's newsletters"]
+                : _localizer["You are no longer subscribed to this project's newsletters"];
+
+            return RedirectToAction(nameof(Index));
+        }
+
         #region Helpers
 
         private void AddErrors(IdentityResult result)

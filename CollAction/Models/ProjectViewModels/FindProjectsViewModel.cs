@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Localization;
 using System;
 
-namespace CollAction.Models
+namespace CollAction.Models.ProjectViewModels
 {
     public class FindProjectsViewModel
     {

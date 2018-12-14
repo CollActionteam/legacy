@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using System.Text;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using CollAction.Models.ProjectViewModels;
 
 namespace CollAction.Services.Project
 {
@@ -305,33 +306,53 @@ namespace CollAction.Services.Project
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<FindProjectsViewModel>> ParticipatingInProjects(string userId)
+        public async Task<IEnumerable<ParticipatingInProjectsViewModel>> ParticipatingInProjects(string userId)
         {
             return await _context.ProjectParticipants
-                .Where(p => p.UserId == userId && p.Project.Status != ProjectStatus.Deleted)
+                .Where(participant => participant.UserId == userId && participant.Project.Status != ProjectStatus.Deleted)
                 .OrderBy(p => p.Project.DisplayPriority)
-                .Select(p => p.Project)
-                .Select(project => new FindProjectsViewModel(_stringLocalizer) // Cannot be moved to private method. Won't work with EF
+                .Select(participant => new ParticipatingInProjectsViewModel(_stringLocalizer) // Cannot be moved to private method. Won't work with EF
                 {
-                    ProjectId = project.Id,
-                    ProjectName = project.Name,
-                    ProjectNameUriPart = GetProjectNameNormalized(project.Name),
-                    ProjectProposal = project.Proposal,
-                    CategoryName = project.Category.Name,
-                    CategoryColorHex = project.Category.ColorHex,
-                    LocationName = project.Location.Name,
-                    BannerImagePath = project.BannerImage != null ? _imageService.GetUrl(project.BannerImage) : $"/images/default_banners/{project.Category.Name}.jpg",
-                    BannerImageDescription = project.BannerImage.Description,
-                    Target = project.Target,
-                    Participants = project.ParticipantCounts.Count,
-                    Remaining = project.RemainingTime,
-                    DescriptiveImagePath = project.DescriptiveImage == null ? null : _imageService.GetUrl(project.DescriptiveImage),
-                    DescriptiveImageDescription = project.DescriptiveImage.Description,
-                    Status = project.Status,
-                    Start = project.Start,
-                    End = project.End
+                    ProjectId = participant.Project.Id,
+                    ProjectName = participant.Project.Name,
+                    ProjectNameUriPart = GetProjectNameNormalized(participant.Project.Name),
+                    ProjectProposal = participant.Project.Proposal,
+                    CategoryName = participant.Project.Category.Name,
+                    CategoryColorHex = participant.Project.Category.ColorHex,
+                    LocationName = participant.Project.Location.Name,
+                    BannerImagePath = participant.Project.BannerImage != null ? _imageService.GetUrl(participant.Project.BannerImage) : $"/images/default_banners/{participant.Project.Category.Name}.jpg",
+                    BannerImageDescription = participant.Project.BannerImage.Description,
+                    Target = participant.Project.Target,
+                    Participants = participant.Project.ParticipantCounts.Count,
+                    Remaining = participant.Project.RemainingTime,
+                    DescriptiveImagePath = participant.Project.DescriptiveImage == null ? null : _imageService.GetUrl(participant.Project.DescriptiveImage),
+                    DescriptiveImageDescription = participant.Project.DescriptiveImage.Description,
+                    Status = participant.Project.Status,
+                    Start = participant.Project.Start,
+                    End = participant.Project.End,
+                    SubscribedToEmails = participant.SubscribedToProjectEmails                    
                 })
                 .ToListAsync();
-        }        
+        }
+
+        public async Task<bool> ToggleNewsletterSubscription(int projectId, string userId)
+        {
+            ProjectParticipant participant = await _context
+                .ProjectParticipants
+                .Include(p => p.Project)
+                .FirstAsync(p => p.ProjectId == projectId && p.UserId == userId);
+
+            if (participant == null)
+            {
+                throw new ArgumentException($"User {userId} does not participate in project {projectId}");
+            }
+
+            var newValue = !participant.SubscribedToProjectEmails;
+
+            participant.SubscribedToProjectEmails = newValue;
+            await _context.SaveChangesAsync();
+
+            return newValue;
+        }
     }
 }
