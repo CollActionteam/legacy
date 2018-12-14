@@ -18,6 +18,7 @@ export default class UploadBanner extends UploadImage<IUploadImageProps, IUpload
     }
 
     onDrop(accepted: File[], rejected: File[], event: any) {
+        event.persist();
         this.loadImage(accepted, rejected, event);
     }
 
