@@ -60,26 +60,33 @@ export default class UploadBanner extends UploadImage<IUploadImageProps, IUpload
                                     <div style={{display: this.state.preview ? "none" : "block"}}>
                                         <DropZone
                                             name="BannerImageUpload"
-                                            className="dropzone"
                                             accept="image/jpeg, image/png, image/gif, image/bmp"
                                             maxSize={1024000}
                                             multiple={false}
-                                            disablePreview={true}
+                                            disableClick
                                             onDrop={this.onDrop}
-                                            onDropRejected={this.onRejected}
-                                            rejectClassName="field-validation-error">
-                                            <h3>
-                                                <span className="mobile">Tap to select banner image</span>
-                                                <span className="desktop">Drop banner image here</span>
-                                            </h3>
-                                            <div className="instructions">
-                                                <p className={ this.state.invalid ? "field-validation-error" : "hidden" }>
-                                                    This image is not valid. Please edit it or pick another one.
-                                                </p>
-                                                <p>
-                                                    Use jpg, png, gif or bmp. Max. 1 MB.
-                                                </p>
-                                            </div>
+                                            onDropRejected={this.onRejected}>
+                                        {({getRootProps, getInputProps, isDragReject, open}) => {
+                                            return (
+                                                <div {...getRootProps()}
+                                                    className={(isDragReject ? "field-validation-error " : "") + "dropzone"}
+                                                    onClick={() => open()}>
+                                                    <h3>
+                                                        <span className="mobile">Tap to select banner image</span>
+                                                        <span className="desktop">Drop banner image here</span>
+                                                    </h3>
+                                                    <div className="instructions">
+                                                        <p className={ this.state.invalid ? "field-validation-error" : "hidden" }>
+                                                            This image is not valid. Please edit it or pick another one.
+                                                        </p>
+                                                        <p>
+                                                            Use jpg, png, gif or bmp. Max. 1 MB.
+                                                        </p>
+                                                    </div>
+                                                    <input {...getInputProps()} />
+                                                </div>
+                                            );
+                                        }}
                                         </DropZone>
                                     </div>
                                     <div style={{display: this.state.preview ? "block" : "none"}}>
