@@ -10,7 +10,5 @@ namespace CollAction.Models.ManageViewModels
         public string Username { get; set; }
         public string Email { get; set; }
         public string StatusMessage { get; set; }
-        public IEnumerable<Project> ProjectsParticipated { get; set; }
-        public IEnumerable<Project> ProjectsCreated { get; set; }
     }
 }

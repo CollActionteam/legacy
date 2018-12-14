@@ -62,13 +62,7 @@ namespace CollAction.Controllers
                 Username = user.UserName,
                 Email = user.Email,
                 StatusMessage = StatusMessage,
-                NewsletterSubscription = await _newsletterSubscriptionService.IsSubscribedAsync(user.Email),
-                ProjectsParticipated = Enumerable.Empty<Project>(),
-                ProjectsCreated = Enumerable.Empty<Project>()
-                // ProjectsParticipated = (await _context.ProjectParticipants
-                //     .Where(part => part.UserId == user.Id)
-                //     .Include(part => part.Project)
-                //     .ToListAsync()).Select(part => part.Project),
+                NewsletterSubscription = await _newsletterSubscriptionService.IsSubscribedAsync(user.Email)
             };
             return View(model);
         }
