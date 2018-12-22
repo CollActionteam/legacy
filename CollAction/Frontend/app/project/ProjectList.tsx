@@ -19,16 +19,71 @@ export interface IProject {
   tileClassName: string;
 }
 
-class ProjectThumb extends React.Component<IProject, null> {
+interface IThumbState {
+  busy: boolean;
+}
+
+class ProjectThumb extends React.Component<IProject, IThumbState> {
+
+  constructor(props: IProject) {
+    super(props);
+
+    this.state = {
+      busy: false
+    };
+
+    this.toggleSubscription = this.toggleSubscription.bind(this);
+  }
+
+  async toggleSubscription() {
+    this.setState({busy: true});
+
+    let formData = new FormData();
+    formData.append("projectId", this.props.projectId);
+
+    const request = new Request("/Manage/ToggleEmailSubscription", { method: "POST", body: formData});
+    const verificationToken = document.getElementById("RequestVerificationToken") as HTMLInputElement;
+    if (verificationToken) {
+      request.headers.set("RequestVerificationToken", verificationToken.value);
+    }
+
+    try {
+      await fetch(request);
+      location.reload();
+    }
+    catch (e) {
+      this.setState({busy: false});
+    }
+  }
+
   render () {
     const projectImageStyle = {
       backgroundImage: `url(${this.props.bannerImagePath})`,
     };
 
-    const verificationToken = document.getElementById("RequestVerificationToken") as HTMLInputElement;
-    const verificationTokenInput = verificationToken ? <input type="hidden" name="RequestVerificationToken" value={verificationToken.value} /> : "";
- 
     const link = `/projects/${this.props.projectNameUriPart}/${this.props.projectId}/details`;
+
+    let subscriptionButton: JSX.Element;
+    if (this.props.subscribedToEmails !== undefined) {
+      if (!this.state.busy) {
+        subscriptionButton =
+          <div className="email-subscription">
+            <a  href="javascript:void(0)"
+                onClick={this.toggleSubscription}
+                className={"btn" + (this.props.subscribedToEmails ? " unsubscribe" : " subscribe")}>
+              {this.props.subscribedToEmails ? "Unsubscribe from news" : "Subscribe to news"}
+            </a>
+          </div>;
+      }
+      else {
+        subscriptionButton =
+          <div className="email-subscription">
+            <div className="busy-indicator">
+              {this.props.subscribedToEmails ? "Unsubscribing..." : "Subscribing..."}
+            </div>
+          </div>;
+      }
+    }
 
     return (
       <div>
@@ -65,15 +120,7 @@ class ProjectThumb extends React.Component<IProject, null> {
               <a href={link} style={{backgroundColor: "#" + this.props.categoryColorHex}}>Read More</a>
             </div>
           </div>
-          { this.props.subscribedToEmails !== undefined &&
-            <div className="email-subscription">
-              <form action="/Manage/ToggleEmailSubscription" method="post">
-                {verificationTokenInput}
-                <input type="hidden" name="projectId" value={this.props.projectId} />
-                <input type="submit" className={"btn " + (this.props.subscribedToEmails ? "unsubscribe" : "subscribe")} value={this.props.subscribedToEmails ? "Unsubscribe from news" : "Subscribe to news"} />
-              </form>
-            </div>
-          }
+          {subscriptionButton}
         </div>
       </div>
     );
