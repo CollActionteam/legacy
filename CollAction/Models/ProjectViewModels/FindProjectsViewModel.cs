@@ -71,5 +71,7 @@ namespace CollAction.Models.ProjectViewModels
                     RemainingTime = String.Format("{0} {1}", value.Days, _localizer["days"]);
             }
         }
+
+        public bool? SubscribedToEmails { get; set; }
     }
 }

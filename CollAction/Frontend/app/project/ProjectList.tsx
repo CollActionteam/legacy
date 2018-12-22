@@ -14,7 +14,7 @@ export interface IProject {
   participants: number;
   progressPercent: number;
   status: string;
-  subscribedToEmails?: boolean;
+  subscribedToEmails: boolean | null;
 
   tileClassName: string;
 }
@@ -64,7 +64,7 @@ class ProjectThumb extends React.Component<IProject, IThumbState> {
     const link = `/projects/${this.props.projectNameUriPart}/${this.props.projectId}/details`;
 
     let subscriptionButton: JSX.Element;
-    if (this.props.subscribedToEmails !== undefined) {
+    if (this.props.subscribedToEmails !== null) {
       if (!this.state.busy) {
         subscriptionButton =
           <div className="email-subscription">

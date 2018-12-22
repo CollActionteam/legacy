@@ -306,12 +306,12 @@ namespace CollAction.Services.Project
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<ParticipatingInProjectsViewModel>> ParticipatingInProjects(string userId)
+        public async Task<IEnumerable<FindProjectsViewModel>> ParticipatingInProjects(string userId)
         {
             return await _context.ProjectParticipants
                 .Where(participant => participant.UserId == userId && participant.Project.Status != ProjectStatus.Deleted)
                 .OrderBy(p => p.Project.DisplayPriority)
-                .Select(participant => new ParticipatingInProjectsViewModel(_stringLocalizer) // Cannot be moved to private method. Won't work with EF
+                .Select(participant => new FindProjectsViewModel(_stringLocalizer) // Cannot be moved to private method. Won't work with EF
                 {
                     ProjectId = participant.Project.Id,
                     ProjectName = participant.Project.Name,
