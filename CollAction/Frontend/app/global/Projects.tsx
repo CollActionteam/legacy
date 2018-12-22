@@ -11,7 +11,6 @@ export interface IProjectsState {
 }
 
 export abstract class Projects<P extends IProjectsProps, S extends IProjectsState> extends React.Component<P, S> {
-
     abstract projectsUrl(): string;
 
     async fetchProjects() {
