@@ -45,9 +45,6 @@ namespace CollAction.Controllers
             _projectService = projectService;
         }
 
-        [TempData]
-        public string StatusMessage { get; set; }
-
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -61,7 +58,6 @@ namespace CollAction.Controllers
             {
                 Username = user.UserName,
                 Email = user.Email,
-                StatusMessage = StatusMessage,
                 NewsletterSubscription = await _newsletterSubscriptionService.IsSubscribedAsync(user.Email)
             };
             return View(model);
@@ -114,7 +110,6 @@ namespace CollAction.Controllers
                 }
             }
 
-            StatusMessage = _localizer["Your profile has been updated"];
             return RedirectToAction(nameof(Index));
         }
 
@@ -126,10 +121,6 @@ namespace CollAction.Controllers
             if (user != null)
             {
                 _newsletterSubscriptionService.SetSubscription(user.Email, model.NewsletterSubscription, false);
-                if (model.NewsletterSubscription)
-                    StatusMessage = _localizer["Successfully subscribed to newsletter (it might take a few seconds for the change to propagate)"];
-                else
-                    StatusMessage = _localizer["Successfully unsubscribed to newsletter (it might take a few seconds for the change to propagate)"];
             }
             return RedirectToAction(nameof(Index));
         }
@@ -200,12 +191,7 @@ namespace CollAction.Controllers
         public async Task<IActionResult> ToggleEmailSubscription(int projectId)
         {
             ApplicationUser user = await _userManager.GetUserAsync(User);
-            var newValue = await _projectService.ToggleNewsletterSubscription(projectId, user.Id);
-
-            StatusMessage = newValue 
-                ? _localizer["You are now subscribed to this project's newsletters"]
-                : _localizer["You are no longer subscribed to this project's newsletters"];
-
+            await _projectService.ToggleNewsletterSubscription(projectId, user.Id);
             return RedirectToAction(nameof(Index));
         }
 
