@@ -374,6 +374,79 @@ namespace CollAction.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> ChangeSubscriptionFromToken(ChangeSubscriptionFromTokenViewModel unsubscribeViewmodel)
+        {
+            ProjectParticipant participant = await _context
+                .ProjectParticipants
+                .Include(p => p.Project)
+                .FirstAsync(p => p.ProjectId == unsubscribeViewmodel.ProjectId && p.UserId == unsubscribeViewmodel.UserId);
+
+            if (participant != null && participant.UnsubscribeToken == new Guid(unsubscribeViewmodel.UnsubscribeToken))
+                return View(participant);
+            else
+                return Unauthorized();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeSubscriptionFromTokenPerform(ChangeSubscriptionFromTokenViewModel unsubscribeViewmodel)
+        {
+            ProjectParticipant participant = await _context
+                .ProjectParticipants
+                .Include(p => p.Project)
+                .FirstAsync(p => p.ProjectId == unsubscribeViewmodel.ProjectId && p.UserId == unsubscribeViewmodel.UserId);
+
+            if (participant != null && participant.UnsubscribeToken == new Guid(unsubscribeViewmodel.UnsubscribeToken))
+            {
+                participant.SubscribedToProjectEmails = !participant.SubscribedToProjectEmails;
+                await _context.SaveChangesAsync();
+
+                return View(nameof(ChangeSubscriptionFromToken), participant);
+            }
+            else
+                return Unauthorized();
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> ChangeSubscriptionFromAccount(int id)
+        {
+            ApplicationUser user = await _userManager.GetUserAsync(User);
+            ProjectParticipant participant = await _context
+                .ProjectParticipants
+                .Include(p => p.Project)
+                .FirstAsync(p => p.ProjectId == id && p.UserId == user.Id);
+
+            if (participant != null)
+                return View(participant);
+            else
+                return Unauthorized();
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeSubscriptionFromAccountPerform(int id)
+        {
+            ApplicationUser user = await _userManager.GetUserAsync(User);
+
+            ProjectParticipant participant = await _context
+                .ProjectParticipants
+                .Include(p => p.Project)
+                .FirstAsync(p => p.ProjectId == id && p.UserId == user.Id);
+
+            if (participant != null)
+            {
+                participant.SubscribedToProjectEmails = !participant.SubscribedToProjectEmails;
+                await _context.SaveChangesAsync();
+
+                return View(nameof(ChangeSubscriptionFromAccount), participant);
+            }
+            else
+                return Unauthorized();
+        }
+
+        [HttpGet]
         public async Task<JsonResult> GetCategories()
             => Json(new[] { new CategoryViewModel() { Id = -1, Name = "All" } }.Concat(
                 await _context
