@@ -25,6 +25,9 @@ class ProjectThumb extends React.Component<IProject, null> {
       backgroundImage: `url(${this.props.bannerImagePath})`,
     };
 
+    const verificationToken = document.getElementById("RequestVerificationToken") as HTMLInputElement;
+    const verificationTokenInput = verificationToken ? <input type="hidden" name="RequestVerificationToken" value={verificationToken.value} /> : "";
+ 
     const link = `/projects/${this.props.projectNameUriPart}/${this.props.projectId}/details`;
 
     return (
@@ -65,6 +68,7 @@ class ProjectThumb extends React.Component<IProject, null> {
           { this.props.subscribedToEmails !== undefined &&
             <div className="email-subscription">
               <form action="/Manage/ToggleEmailSubscription" method="post">
+                {verificationTokenInput}
                 <input type="hidden" name="projectId" value={this.props.projectId} />
                 <input type="submit" className={"btn " + (this.props.subscribedToEmails ? "unsubscribe" : "subscribe")} value={this.props.subscribedToEmails ? "Unsubscribe from news" : "Subscribe to news"} />
               </form>

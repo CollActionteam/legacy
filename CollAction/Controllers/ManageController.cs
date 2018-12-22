@@ -68,6 +68,8 @@ namespace CollAction.Controllers
         }
 
         [HttpGet]
+        [Authorize]
+        [ValidateAntiForgeryToken]
         public async Task<JsonResult> MyProjects()
         {
             var user = await GetCurrentUserAsync();
@@ -77,6 +79,8 @@ namespace CollAction.Controllers
         }
 
         [HttpGet]
+        [Authorize]
+        [ValidateAntiForgeryToken]
         public async Task<JsonResult> ParticipatingInProjects()
         {
             var user = await GetCurrentUserAsync();
@@ -192,6 +196,7 @@ namespace CollAction.Controllers
 
         [HttpPost]
         [Authorize]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ToggleEmailSubscription(int projectId)
         {
             ApplicationUser user = await _userManager.GetUserAsync(User);
