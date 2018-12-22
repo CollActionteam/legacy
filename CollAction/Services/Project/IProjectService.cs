@@ -25,7 +25,6 @@ namespace CollAction.Services.Project
         string GetProjectNameNormalized(string projectName);
         Task<IEnumerable<FindProjectsViewModel>> MyProjects(string userId);
         Task<IEnumerable<FindProjectsViewModel>> ParticipatingInProjects(string userId);
-
         Task<bool> ToggleNewsletterSubscription(int projectId, string userId);
     }
 }
