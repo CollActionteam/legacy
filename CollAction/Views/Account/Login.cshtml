@@ -18,6 +18,9 @@
 @section styles {
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
 }
+@section scripts {
+    <script defer src="https://use.fontawesome.com/releases/v5.4.1/js/all.js"></script>
+}
 
 <div id="login-starting">
     <div class="container">
@@ -46,7 +49,18 @@
 
                             <div class="form-group">
                                 <button type="submit" class="btn-socialmedia-login @providerClass" name="provider" value="@provider.Name">
-                                    <i class="fa fa-@providerClass"></i>&nbsp;&nbsp;LOGIN with @providerName
+                                    @if(providerName == "GOOGLE")
+                                    {
+                                        <div>
+                                            <i class="fab fa-@providerClass"></i>&nbsp;&nbsp;LOGIN with @providerName
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div>
+                                            <i class="fab fa-@providerClass-square"></i>&nbsp;&nbsp;LOGIN with @providerName
+                                        </div>
+                                    }
                                 </button>
                             </div>
                         }
