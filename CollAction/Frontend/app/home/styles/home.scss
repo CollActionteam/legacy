@@ -8,7 +8,7 @@
     width: 100%;
     margin-bottom: 20px;
   }
-  
+
   #festival-banner,
   #festival-banner-mobile {
     background-color: $coll-action-green;
@@ -47,15 +47,14 @@
     #festival-banner-mobile {
       display: none;
     }
-  }  
+  }
 
   #title-row {
-
     margin-top: 150px;
 
     h1, h2 {
-      margin:0px;
-      padding:0px;
+      margin: 0px;
+      padding: 0px;
     }
 
     h1 {
@@ -89,7 +88,7 @@
     .intro-question {
       font-size: 25px;
       font-weight: bold;
-      color: $coll-action-green;      
+      color: $coll-action-green;
     }
 
     .intro-paragraph {
@@ -127,12 +126,7 @@
     }
   }
 
-  #project-create-starting {
-    background-color: #efefef;
-  }
-
-  #homepage-share-buttons
-  {
+  #homepage-share-buttons {
     margin-bottom: 25px;
   }
 
@@ -156,7 +150,52 @@
     color: $coll-action-green;
   }
 
+  #how-it-works {
+    background: #efefef;
+    text-align: center;
+    padding-top: 50px;
+    padding-bottom: 50px;
 
+    img.icon {
+      height: 40px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 4em;
+      letter-spacing: 10px;
+      text-transform: uppercase;
+      color: $coll-action-green;
+      margin: 5px 0px 5px 0px;
+    }
+
+    h4 {
+      color: gray;
+      text-align: center;
+      font-size: 2em;
+      text-transform: uppercase;
+      letter-spacing: 10px;
+      margin: 0px 0px 30px 0px;
+    }
+
+    .step {
+      margin-bottom: 20px
+    }
+
+    a.btn {
+      border-radius: 20px;
+      display: inline-block;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-weight: bold;
+      margin: 20px 0;
+      padding: 10px 20px;
+      text-align: center;
+      color: white;
+      background-color: $coll-action-green;
+      width: 100%;
+    }
+  }
 }
 
 @media (min-width: 991px) {

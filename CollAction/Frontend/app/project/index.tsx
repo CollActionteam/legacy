@@ -11,7 +11,6 @@ import "./styles/ProjectThankYouCommit.scss";
 import "./styles/ProjectSendEmail.scss";
 
 import "./PieChart";
-import "./Carousel";
 
 import "./UploadBanner";
 import "./UploadDescriptiveImage";
