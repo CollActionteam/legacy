@@ -8,7 +8,7 @@
     width: 100%;
     margin-bottom: 20px;
   }
-  
+
   #festival-banner,
   #festival-banner-mobile {
     background-color: $coll-action-green;
@@ -47,15 +47,14 @@
     #festival-banner-mobile {
       display: none;
     }
-  }  
+  }
 
   #title-row {
-
     margin-top: 150px;
 
     h1, h2 {
-      margin:0px;
-      padding:0px;
+      margin: 0px;
+      padding: 0px;
     }
 
     h1 {
@@ -89,7 +88,7 @@
     .intro-question {
       font-size: 25px;
       font-weight: bold;
-      color: $coll-action-green;      
+      color: $coll-action-green;
     }
 
     .intro-paragraph {
@@ -125,14 +124,25 @@
       text-transform: uppercase;
       color: $coll-action-green;
     }
+
+    #find-button {
+      background-color: $coll-action-green;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 20px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: 12em;
+    }
   }
 
   #project-create-starting {
     background-color: #efefef;
   }
 
-  #homepage-share-buttons
-  {
+  #homepage-share-buttons {
     margin-bottom: 25px;
   }
 
@@ -155,8 +165,6 @@
     background-image: url(/images/front-page.jpg);
     color: $coll-action-green;
   }
-
-
 }
 
 @media (min-width: 991px) {

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -16,8 +17,8 @@ namespace CollAction.Services.Project
         Task<string> GenerateParticipantsDataExport(int projectId);
         bool CanSendProjectEmail(Models.Project project);
         Task SendProjectEmail(Models.Project project, string subject, string message, HttpRequest request, IUrlHelper helper);
-        Task<IEnumerable<DisplayProjectViewModel>> GetProjectDisplayViewModels(Expression<Func<Models.Project, bool>> filter);
-        Task<IEnumerable<FindProjectsViewModel>> FindProjects(Expression<Func<Models.Project, bool>> filter);
+        IQueryable<DisplayProjectViewModel> GetProjectDisplayViewModels(Expression<Func<Models.Project, bool>> filter);
+        IQueryable<FindProjectsViewModel> FindProjects(Expression<Func<Models.Project, bool>> filter, int? limit);
         int NumberEmailsAllowedToSend(Models.Project project);
         DateTime CanSendEmailsUntil(Models.Project project);
         Task RefreshParticipantCountMaterializedView();

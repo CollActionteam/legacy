@@ -41,7 +41,7 @@ export default class FindProject extends React.Component<IFindProjectProps, IFin
       if (projectFilter) {
         return `/api/projects/find?categoryId=${projectFilter.categoryId}&statusId=${projectFilter.statusId}`;
       }
-      return "/api/projects/find";
+      return "/api/projects/find?limit=30";
     };
 
     try {
