@@ -29,15 +29,25 @@ export default class UploadBanner extends UploadImage<IUploadImageProps, IUpload
         if (this.state.image === null) {
             return {
                 backgroundImage: "url(/images/picture.svg)",
+                backgroundColor: "#d8d8d8",
                 backgroundSize: "120px"
             };
         }
         else {
             return {
-                backgroundImage: `url(${this.state.image}`,
-                backgroundSize: "cover",
-                backgroundPosition: "center"
+                backgroundImage: `url(${this.state.image}`
             };
+        }
+    }
+
+    uploadCardStyle() {
+        if (this.state.image != null) {
+            return {
+                opacity: 0.7
+            };
+        }
+        else {
+            return {};
         }
     }
 
@@ -55,7 +65,7 @@ export default class UploadBanner extends UploadImage<IUploadImageProps, IUpload
                 <div className="container">
                     <div className="row">
                         <div className="col-md-5 col-xs-12">
-                            <div id="banner-upload-card">
+                            <div id="banner-upload-card" style={this.uploadCardStyle()}>
                                 <div id="banner-image">
                                     <div style={{display: this.state.preview ? "none" : "block"}}>
                                         <DropZone
