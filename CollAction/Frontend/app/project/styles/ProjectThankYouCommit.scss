@@ -8,7 +8,7 @@
 
         padding: 30px 0 30px 0;
 
-        @media (max-width: 991px) {
+        @media (max-width: 767px) {
             text-align: center;
         }
     }
@@ -18,12 +18,17 @@
 
         padding: 30px 0 30px 0;
 
-        @media (max-width: 991px) {
+        @media (max-width: 767px) {
             text-align: center;
         }
 
         h2 {
             color: $coll-action-green;
+        }
+
+        .arrow {
+            margin-top: -15px;
+            width: 80px;            
         }
     }
 }
