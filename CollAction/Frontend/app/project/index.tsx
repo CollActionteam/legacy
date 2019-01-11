@@ -16,6 +16,8 @@ import "./Carousel";
 import "./UploadBanner";
 import "./UploadDescriptiveImage";
 
+import  "./ProjectPreview";
+
 import renderComponentIf from "../global/renderComponentIf";
 
 renderComponentIf(

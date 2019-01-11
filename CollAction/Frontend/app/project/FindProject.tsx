@@ -1,7 +1,7 @@
 import { ProjectFilter, IProjectFilter } from "./ProjectFilter";
 import ProjectList from "./ProjectList";
 import * as React from "react";
-import { IProject } from "./ProjectList";
+import { IProject } from "./ProjectThumb";
 
 interface IFindProjectProps {
   controller: boolean;
