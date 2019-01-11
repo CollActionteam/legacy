@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Localization;
 using System;
 
-namespace CollAction.Models
+namespace CollAction.Models.ProjectViewModels
 {
     public class FindProjectsViewModel
     {
@@ -71,5 +71,7 @@ namespace CollAction.Models
                     RemainingTime = String.Format("{0} {1}", value.Days, _localizer["days"]);
             }
         }
+
+        public bool? SubscribedToEmails { get; set; }
     }
 }
