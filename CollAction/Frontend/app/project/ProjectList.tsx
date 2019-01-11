@@ -1,12 +1,10 @@
 import * as React from "react";
 import ProjectThumb from "./ProjectThumb";
 
-export default ({ projectList }) => {
+export default ({ projectList, tileClassName }) => {
   return (
     <div id="project-list">
-      <div className="container">
-        { projectList.map(project => <ProjectThumb key={project.projectId} {...project} />) }
-      </div>
+        { projectList.map(project => <ProjectThumb key={project.projectId} tileClassName={tileClassName} {...project} />) }
     </div>
   );
 };

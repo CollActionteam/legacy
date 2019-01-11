@@ -1,4 +1,5 @@
 ﻿using CollAction.Models;
+using CollAction.Models.ProjectViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -23,5 +24,8 @@ namespace CollAction.Services.Project
         DateTime CanSendEmailsUntil(Models.Project project);
         Task RefreshParticipantCountMaterializedView();
         string GetProjectNameNormalized(string projectName);
+        Task<IEnumerable<FindProjectsViewModel>> MyProjects(string userId);
+        Task<IEnumerable<FindProjectsViewModel>> ParticipatingInProjects(string userId);
+        Task<bool> ToggleNewsletterSubscription(int projectId, string userId);
     }
 }
