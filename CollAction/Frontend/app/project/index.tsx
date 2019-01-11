@@ -4,7 +4,6 @@ import FindProject from "./FindProject";
 import "./styles/FindProject.scss";
 import "./styles/ProjectDetails.scss";
 import "./styles/StartInfo.scss";
-import "./styles/SimpleProjectCreate.scss";
 import "./styles/ProjectCreate.scss";
 import "./styles/ProjectCommit.scss";
 import "./styles/ProjectThankYouCommit.scss";
