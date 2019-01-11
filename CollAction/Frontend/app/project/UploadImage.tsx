@@ -29,6 +29,7 @@ export default abstract class UploadImage<P extends IUploadImageProps, S extends
     }
 
     protected loadImage(accepted: File[], rejected: File[], event: any) {
+        event.persist();
         if (this.state.preview) {
             // On Safari and Chrome, setBannerImageUploadInput triggers this function again.
             // On Firefox it does not... so, if preview is already in progress, we can stop.
