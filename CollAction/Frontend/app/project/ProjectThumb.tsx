@@ -55,6 +55,32 @@ export default class ProjectThumb extends React.Component<IProject, IThumbState>
     }
   }
 
+  createSubscriptionButton() {
+    const subscribeButton =
+      <a href="javascript:void(0)" onClick={this.toggleSubscription} className="btn">
+        Subscribe to news
+      </a>;
+
+    const unsubscribeButton =
+      <a href="javascript:void(0)" onClick={this.toggleSubscription} className="btn unsubscribe">
+        Unsubscribe from news
+      </a>;
+
+    const loadingIndicator =
+      <div className="busy-indicator">
+        {this.props.subscribedToEmails ? "Unsubscribing..." : "Subscribing..."}
+      </div>;
+
+    if (this.props.subscribedToEmails !== null) {
+      if (this.state.busy) {
+        return loadingIndicator;
+      }
+      else {
+        return this.props.subscribedToEmails ? unsubscribeButton : subscribeButton;
+      }
+    }
+  }
+
   render () {
     const projectImageStyle = {
       backgroundImage: `url(${this.props.bannerImagePath})`,
@@ -62,31 +88,9 @@ export default class ProjectThumb extends React.Component<IProject, IThumbState>
 
     const link = `/projects/${this.props.projectNameUriPart}/${this.props.projectId}/details`;
 
-    let subscriptionButton: JSX.Element;
-    if (this.props.subscribedToEmails !== null) {
-      if (!this.state.busy) {
-        subscriptionButton =
-          <div className="email-subscription">
-            <a  href="javascript:void(0)"
-                onClick={this.toggleSubscription}
-                className={"btn" + (this.props.subscribedToEmails ? " unsubscribe" : " subscribe")}>
-              {this.props.subscribedToEmails ? "Unsubscribe from news" : "Subscribe to news"}
-            </a>
-          </div>;
-      }
-      else {
-        subscriptionButton =
-          <div className="email-subscription">
-            <div className="busy-indicator">
-              {this.props.subscribedToEmails ? "Unsubscribing..." : "Subscribing..."}
-            </div>
-          </div>;
-      }
-    }
-
     return (
-      <div>
-        <div className={this.props.tileClassName + " project-thumb-container"}>
+      <div className={this.props.tileClassName}>
+        <div className="project-thumb-container">
           <div className="project-thumb">
             <div className="project-thumb-image" style={projectImageStyle} >
               <div className="category-name" style={{backgroundColor: "#" + this.props.categoryColorHex}}>
@@ -119,7 +123,9 @@ export default class ProjectThumb extends React.Component<IProject, IThumbState>
               <a href={link} style={{backgroundColor: "#" + this.props.categoryColorHex}}>Read More</a>
             </div>
           </div>
-          {subscriptionButton}
+        </div>
+        <div className="email-subscription">
+          {this.createSubscriptionButton()}
         </div>
       </div>
     );

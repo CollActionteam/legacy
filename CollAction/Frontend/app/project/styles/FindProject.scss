@@ -184,28 +184,30 @@
         float: right;
       }
     }
+  }
 
-    .email-subscription {
-      padding-top: 20px;
+  .email-subscription {
+    padding: 0px 20px 20px 0;
 
-      .btn {
-        width: 100%;
-        font-size: 0.8em;
+    .btn {
+      width: 100%;
+      font-size: 0.8em;
 
-        &.unsubscribe {
-          color: $coll-action-green;
-          border: 1px solid $coll-action-green;
-          background-color: white;
-        }
+      &.unsubscribe {
+        color: $coll-action-green;
+        border: 1px solid $coll-action-green;
+        background-color: white;
+        padding-bottom: 8px; // compensate for the border
       }
+    }
 
-      .busy-indicator {
-        font-size: 0.8em;
-        padding: 10px 50px;
-        width: 100%;
-        text-align: center;
-        display: inline-block;
-      }
+
+    .busy-indicator {
+      font-size: 0.8em;
+      padding: 10px 50px;
+      width: 100%;
+      text-align: center;
+      display: inline-block;
     }
   }
 }
