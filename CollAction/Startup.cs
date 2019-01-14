@@ -15,8 +15,6 @@ using Serilog;
 using System.Linq;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Rewrite;
-using NetEscapades.AspNetCore.SecurityHeaders;
-using NetEscapades.AspNetCore.SecurityHeaders.Infrastructure;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Hangfire;
 using Hangfire.PostgreSql;
@@ -28,6 +26,8 @@ using CollAction.Services.Newsletter;
 using CollAction.Services.Festival;
 using CollAction.Services.DataProtection;
 using CollAction.Services.Image;
+using Stripe;
+using CollAction.Services.Donation;
 
 namespace CollAction
 {
@@ -88,6 +88,7 @@ namespace CollAction
             services.AddScoped<IImageService, AmazonS3ImageService>();
             services.AddTransient<INewsletterSubscriptionService, NewsletterSubscriptionService>();
             services.AddTransient<IFestivalService, FestivalService>();
+            services.AddTransient<IDonationService, DonationService>();
 
             services.AddDataProtection()
                     .Services.Configure<KeyManagementOptions>(options => options.XmlRepository = new DataProtectionRepository(new DbContextOptionsBuilder<ApplicationDbContext>().UseNpgsql(connectionString).Options));
@@ -99,6 +100,10 @@ namespace CollAction
             services.Configure<NewsletterSubscriptionServiceOptions>(Configuration);
             services.Configure<FestivalServiceOptions>(Configuration);
             services.Configure<ProjectEmailOptions>(Configuration);
+            services.Configure<RequestOptions>(options =>
+            {
+                options.ApiKey = Configuration["StripeApiKey"];
+            });
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireDigit = false;
