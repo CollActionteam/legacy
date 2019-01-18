@@ -30,10 +30,6 @@ namespace CollAction.Models.ProjectViewModels
 
         public string BannerImageDescription { get; set; }
 
-        public string DescriptiveImagePath { get; set; }
-
-        public string DescriptiveImageDescription { get; set; }
-
         public int Target { get; set; }
 
         public int Participants { get; set; }
