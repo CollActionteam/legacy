@@ -34,9 +34,25 @@
 
     #project-preview {
         margin-top: -150px;
+        margin-left: -20px;
     }
 
-    #donate {
-        background-image: url('/images/startproject/cheering-people.jpg')
+    #mission {
+        height: 450px;
+        padding-top: 40px;
+        
+        background-image:
+            linear-gradient(rgba(35, 216, 132, 0.25), rgba(35, 216, 132, 0.25)),
+            url('/images/startproject/cheering-people.jpg');
+        background-size: cover;
+        background-position: center;
+
+        h2 {
+            color: $coll-action-green;
+        }
+
+        h1 {
+            color: white;
+        }
     }
 }
