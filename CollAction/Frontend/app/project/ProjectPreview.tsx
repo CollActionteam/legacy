@@ -22,7 +22,17 @@ export class ProjectPreview extends React.Component<IProjectPreviewProps, IProje
         this.loadProject(this.props.projectId);
     }
 
-    loadProject(projectId: string) {
+    async loadProject(projectId: string) {
+        try {
+          const searchProjectRequest: Request = new Request(`/api/projects/${projectId}`);
+          const fetchResult: Response = await fetch(searchProjectRequest);
+          const jsonResponse = await fetchResult.json();
+          this.setState({ project: jsonResponse });
+        }
+        catch (e) {
+          console.error(`Could not load project ${projectId}`);
+          console.error(e);
+        }
     }
 
     render() {
