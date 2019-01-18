@@ -43,16 +43,81 @@
         
         background-image:
             linear-gradient(rgba(35, 216, 132, 0.25), rgba(35, 216, 132, 0.25)),
-            url('/images/startproject/cheering-people.jpg');
+            url('/images/thankyoucommit/cheering-people.jpg');
         background-size: cover;
         background-position: center;
 
-        h2 {
+        h3 {
             color: $coll-action-green;
         }
 
         h1 {
             color: white;
+        }
+    }
+
+    #donate {
+        margin-bottom: 40px;
+
+        .donation-box {
+            margin-top: -200px;
+            padding: 20px 40px 20px 40px;
+
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 10px 10px 40px -9px rgba(0,0,0,0.55);
+
+            h2 {
+                color: $coll-action-green;
+            }
+
+            input[type=radio] {
+                position: absolute;
+                visibility: hidden;
+                display: none;
+            }
+              
+            label {
+                color: $coll-action-green;
+                display: inline-block;
+                cursor: pointer;
+                padding: 10px 0px;
+                border: solid 1px $coll-action-green;
+                width: 100%;
+                text-align: center;
+                margin: 10px 0 10px 0;
+            }
+              
+            input[type=radio]:checked + label {
+                color: white;
+                background: $coll-action-green;
+            }
+            
+            input[type=text] {
+                border: solid 1px $coll-action-green;
+                width: 100%;
+            }
+
+            .payment-options {
+                .btn {
+                    background-color: #f2f2f2;
+                    border: solid 2px #dbdbdb;
+                    color: #4b4b4b;
+                    padding: 10px;
+                    // font-size: 20px;
+                    cursor: pointer;
+                    width: 100%;
+                    margin: 10px 0 10px 0;
+
+                    img {
+                        height: 30px;
+                    }
+
+                    img + span {
+                        margin-left: 10px;
+                    }
+                }
+            }
         }
     }
 }
