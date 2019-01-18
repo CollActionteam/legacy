@@ -57,12 +57,12 @@ export default class ProjectThumb extends React.Component<IProject, IThumbState>
 
   createSubscriptionButton() {
     const subscribeButton =
-      <a href="javascript:void(0)" onClick={this.toggleSubscription} className="btn">
+      <a href="javascript:void(0)" onClick={this.toggleSubscription} className="btn-subscribe">
         Subscribe to news
       </a>;
 
     const unsubscribeButton =
-      <a href="javascript:void(0)" onClick={this.toggleSubscription} className="btn unsubscribe">
+      <a href="javascript:void(0)" onClick={this.toggleSubscription} className="btn-unsubscribe">
         Unsubscribe from news
       </a>;
 
