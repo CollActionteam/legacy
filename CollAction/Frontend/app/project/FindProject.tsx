@@ -64,7 +64,7 @@ export default class FindProject extends Projects<IFindProjectProps, IFindProjec
   onChange (newState: IProjectFilter) {
     this.setState(
       { projectFilterState: newState },
-      () => this.fetchProjects());
+      () => this.fetchProjects(newState));
   }
 
   render() {
