@@ -10,6 +10,8 @@ import "./styles/cookiemessage.scss";
 import "./styles/helpers.scss";
 import "./styles/tooltips.scss";
 import "./styles/busy-indicator.scss";
+import "./styles/donation.scss";
+import "./styles/faq.scss";
 
 import "./styles/quill-snow.css";
 
