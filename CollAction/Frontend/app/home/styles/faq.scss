@@ -1,0 +1,34 @@
+@import "../../colors";
+
+.faqs {
+    padding-bottom: 50px;
+
+    h1 {
+        color: $coll-action-green;
+    }
+
+    .title, i {
+        color: #8a8a8a;
+    }
+    
+    a {
+        color: $coll-action-green;
+        text-decoration: none;
+    }
+
+    .is-closed i.fa.fa-minus {
+        display: none;
+    }
+
+    .is-open i.fa.fa-plus {
+        display: none;
+    }
+
+    .toggle {
+        float: right !important;
+    }
+
+    .Collapsible__contentOuter {
+        border-bottom: 1px solid #8a8a8a;
+    }
+}
