@@ -100,11 +100,15 @@
 
             .payment-options {
                 .btn {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
                     background-color: #f2f2f2;
                     border: solid 2px #dbdbdb;
                     color: #4b4b4b;
                     padding: 10px;
-                    // font-size: 20px;
+
                     cursor: pointer;
                     width: 100%;
                     margin: 10px 0 10px 0;
@@ -113,7 +117,7 @@
                         height: 30px;
                     }
 
-                    img + span {
+                    img + div {
                         margin-left: 10px;
                     }
                 }
