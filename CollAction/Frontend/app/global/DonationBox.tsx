@@ -37,7 +37,7 @@ export default class DonationBox extends React.Component<IDonationBoxProps, IDon
         const id = `amount${amount}`;
         return (
             <div className="col-xs-6 col-sm-3">
-                <input type="radio" id={id} name="amount" value={amount} onChange={this.setAmount} checked={this.state.amount === amount} />
+                <input id={id} type="radio" name="amount" value={amount} onChange={this.setAmount} checked={this.state.amount === amount} />
                 <label htmlFor={id}>&euro; {amount}</label>
             </div>
         );
@@ -63,16 +63,14 @@ export default class DonationBox extends React.Component<IDonationBoxProps, IDon
                     If you'd like make a one-time donation, please select the amount and payment option.
                 </p>
                 <div className="row">
-                    <form>
-                        {this.renderAmount(3)}
-                        {this.renderAmount(5)}
-                        {this.renderAmount(10)}
-                        {this.renderAmount(20)}
-                        {this.renderAmount(30)}
-                        {this.renderAmount(50)}
-                        {this.renderAmount(100)}
-                        {this.renderCustomAmount()}
-                    </form>
+                    {this.renderAmount(3)}
+                    {this.renderAmount(5)}
+                    {this.renderAmount(10)}
+                    {this.renderAmount(20)}
+                    {this.renderAmount(30)}
+                    {this.renderAmount(50)}
+                    {this.renderAmount(100)}
+                    {this.renderCustomAmount()}
                 </div>
                 <div className="error" hidden={!this.state.showError}>
                     <p>Thank you! Please select or enter an amount you'd like to donate.</p>

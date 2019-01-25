@@ -35,9 +35,8 @@
         }
 
         input[type=radio] {
+            opacity: 0;
             position: absolute;
-            visibility: hidden;
-            display: none;
         }
           
         label {
@@ -51,6 +50,10 @@
             margin: 10px 0;
         }
           
+        input[type=radio]:focus + label {
+            border: 1px solid $coll-action-green;
+        }
+
         input[type=radio]:checked + label {
             color: white;
             background: $coll-action-green;
