@@ -30,7 +30,7 @@ export default class DonationBox extends React.Component<IDonationBoxProps, IDon
             return;
         }
 
-        console.log(`Paying eur ${this.state.amount}, payment option ${option}`);
+        console.log(`Paying eur ${this.state.amount} with payment option ${option}`);
     }
 
     renderAmount(amount: number) {
@@ -86,23 +86,9 @@ export default class DonationBox extends React.Component<IDonationBoxProps, IDon
                     </div>
                     <div className="row">
                         <div className="col-xs-12">
-                            <button className="btn" value="paypal" onClick={this.pay}>
-                                <img src="/images/thankyoucommit/paypal-logo.png" alt="PayPal" />
-                            </button>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-xs-12">
                             <button className="btn" value="creditcard" onClick={this.pay}>
                                 <img src="/images/thankyoucommit/bank-card.png" />
                                 <div>Debit / Creditcard</div>
-                            </button>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-xs-12">
-                            <button className="btn" value="manual" onClick={this.pay}>
-                                <div>Manual transfer</div>
                             </button>
                         </div>
                     </div>
