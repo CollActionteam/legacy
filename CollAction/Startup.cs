@@ -323,6 +323,16 @@ namespace CollAction
                      new { controller = "Projects", action = "GetStatuses" }
                  );
 
+                routes.MapRoute("MyProjects",
+                     "api/manage/myprojects",
+                     new { controller = "Manage", action = "MyProjects" }
+                 );
+
+                routes.MapRoute("ParticipatingInProjects",
+                     "api/manage/participating",
+                     new { controller = "Manage", action = "ParticipatingInProjects" }
+                 );
+
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
