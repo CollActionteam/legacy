@@ -10,7 +10,6 @@ namespace CollAction.Services.Donation
     public class DonationService : IDonationService
     {
         private readonly RequestOptions _options;
-        private readonly IMapper _mapper;
         private readonly CustomerService _customerService;
         private readonly ChargeService _chargeService;
         /*
@@ -34,10 +33,9 @@ namespace CollAction.Services.Donation
             };
         */
 
-        public DonationService(IOptions<RequestOptions> options, IMapper mapper)
+        public DonationService(IOptions<RequestOptions> options)
         {
             _options = options.Value;
-            _mapper = mapper;
             _customerService = new CustomerService(_options.ApiKey);
             _chargeService = new ChargeService(_options.ApiKey);
             /*

@@ -13,7 +13,7 @@ namespace CollAction.Controllers
             _donationService = donationService;
         }
 
-        public IActionResult Donation()
+        public IActionResult Donate()
         {
             return View();
         }
