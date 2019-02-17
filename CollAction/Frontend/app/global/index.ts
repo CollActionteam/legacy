@@ -10,7 +10,8 @@ import "./styles/cookiemessage.scss";
 import "./styles/helpers.scss";
 import "./styles/tooltips.scss";
 import "./styles/busy-indicator.scss";
-
+import "./styles/faq.scss";
+import "./styles/donationbox.scss";
 import "./styles/quill-snow.css";
 
 import "./MobileNavDraw";
@@ -19,3 +20,4 @@ import "./RichTextEditor";
 import "./CookieMessage";
 import "./Tooltips";
 import "./Faqs";
+import "./DonationBox";

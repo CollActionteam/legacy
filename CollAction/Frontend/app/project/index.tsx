@@ -2,6 +2,7 @@ import * as React from "react";
 
 import "./styles/FindProject.scss";
 import "./styles/ProjectDetails.scss";
+import "./styles/ProjectThumb.scss";
 import "./styles/StartInfo.scss";
 import "./styles/SimpleProjectCreate.scss";
 import "./styles/ProjectCreate.scss";
@@ -16,3 +17,7 @@ import "./Carousel";
 
 import "./UploadBanner";
 import "./UploadDescriptiveImage";
+
+import  "./ProjectPreview";
+
+import renderComponentIf from "../global/renderComponentIf";
