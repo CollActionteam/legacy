@@ -1,5 +1,8 @@
 import * as React from "react";
 import onClickOutside from "react-onclickoutside";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
 const Options = ({ list, onSelected }) => {
   return (
@@ -66,7 +69,7 @@ class DropDown extends React.Component<IDropdownProps, IDropdownState> {
     return (
       <div onClick={() => this.onClick()} className="project-filter-drop-down">
         {this.state.currentlySelected ? this.state.currentlySelected.name : null }
-        {this.state.open ? <i className="fa fa-chevron-up" /> : <i className="fa fa-chevron-down" />}
+        {this.state.open ? <FontAwesomeIcon icon={faChevronUp} /> : <FontAwesomeIcon icon={faChevronDown} /> }
         {this.state.open ? <Options list={this.props.options} onSelected={(selection) => this.onSelected(selection)} /> : null}
       </div>
     );

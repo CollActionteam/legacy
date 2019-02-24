@@ -14,6 +14,6 @@
 
         public bool IsActive { get; set; }
 
-        public string ProjectLink => $"/Projects/{ProjectId}/{ProjectNameUriPart}/Details";
+        public string ProjectLink => $"/Projects/{ProjectNameUriPart}/{ProjectId}/Details";
     }
 }
