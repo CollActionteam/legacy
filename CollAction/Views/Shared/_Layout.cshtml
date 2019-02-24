@@ -1,10 +1,6 @@
 ﻿﻿@using Microsoft.ApplicationInsights.AspNetCore
 @using Microsoft.AspNetCore.Http.Features
-@using Microsoft.AspNetCore.Identity
-@using CollAction.Models
 
-@inject SignInManager<ApplicationUser> SignInManager
-@inject UserManager<ApplicationUser> UserManager
 @inject JavaScriptSnippet snippet
 
 @{
@@ -44,33 +40,19 @@
                         <div class="hidden-md hidden-lg" id="mobile-nav-draw"></div>
                         <partial name="_logo" />
                     </div>
-                    <div class="col-md-6 nav-bar hidden-xs hidden-sm">
+                    <div class="col-md-7 nav-bar hidden-xs hidden-sm">
                         <ul id="header-menu">
                             <li><a asp-controller="Projects" asp-action="Find">Find Project</a></li>
                             <li><a asp-controller="Projects" asp-action="StartInfo">Start Project</a></li>
                             <li><a asp-controller="Home" asp-action="About">About</a></li>
                             @if (User.IsInRole(Constants.AdminRole))
                             {
+                                <li><a asp-area="" asp-controller="Admin" asp-action="Index">Admin Dashboard</a></li>
                             }
                         </ul>
                     </div>
-                    <div class="col-md-3 nav-bar hidden-xs hidden-sm" id="header-right">
-                        <ul id="account-menu">
-                            <li><a asp-controller="Donation" asp-action="Donate" id="donateBtn"><span class="fa fa-heart-o">&nbsp;</span>Donate</a></li>
-                            @if (SignInManager.IsSignedIn(User))
-                            {
-                                <li><a asp-controller="Manage" asp-action="Index">Account</a></li>
-                                <li>
-                                    <form asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm">
-                                        <input type="submit" value="Logout" id="logOutBtn" />
-                                    </form>
-                                </li>
-                            }
-                            else
-                            {
-                                <li><a asp-controller="Account" asp-action="Login" id="logInBtn">Login</a></li>
-                            }
-                        </ul>
+                    <div class="col-md-2 nav-bar hidden-xs hidden-sm" id="header-login">
+                        @await Html.PartialAsync("_LoginPartial")
                     </div>
                 </div>
             </div>
