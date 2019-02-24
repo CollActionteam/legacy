@@ -49,7 +49,7 @@ namespace CollAction.Controllers
 
         public async Task<IActionResult> Details(string name, int id)
         {
-            IEnumerable<DisplayProjectViewModel> items = await _projectService.GetProjectDisplayViewModels(p => p.Id == id && p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted);
+            IEnumerable<DisplayProjectViewModel> items = await _projectService.GetProjectDisplayViewModels(p => p.Id == id && p.Status != ProjectStatus.Hidden && p.Status != ProjectStatus.Deleted).ToListAsync();
             if (items.Count() == 0)
             {
                 return NotFound();
@@ -313,7 +313,7 @@ namespace CollAction.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> FindProjects(int? categoryId, int? statusId)
+        public async Task<JsonResult> FindProjects(int? categoryId, int? statusId, int? limit)
         {
             Expression<Func<Project, bool>> projectExpression = (p =>
                 p.Status != ProjectStatus.Hidden &&
@@ -329,8 +329,7 @@ namespace CollAction.Controllers
                 default: statusExpression = (p => true); break;
             }
 
-            var projects = await _projectService.FindProjects(
-                Expression.Lambda<Func<Project, bool>>(Expression.AndAlso(projectExpression.Body, Expression.Invoke(statusExpression, projectExpression.Parameters[0])), projectExpression.Parameters[0]));
+            var projects = await _projectService.FindProjects(Expression.Lambda<Func<Project, bool>>(Expression.AndAlso(projectExpression.Body, Expression.Invoke(statusExpression, projectExpression.Parameters[0])), projectExpression.Parameters[0]), limit).ToListAsync();
 
             return Json(projects);
         }
@@ -402,45 +401,6 @@ namespace CollAction.Controllers
                 await _context.SaveChangesAsync();
 
                 return View(nameof(ChangeSubscriptionFromToken), participant);
-            }
-            else
-                return Unauthorized();
-        }
-
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> ChangeSubscriptionFromAccount(int id)
-        {
-            ApplicationUser user = await _userManager.GetUserAsync(User);
-            ProjectParticipant participant = await _context
-                .ProjectParticipants
-                .Include(p => p.Project)
-                .FirstAsync(p => p.ProjectId == id && p.UserId == user.Id);
-
-            if (participant != null)
-                return View(participant);
-            else
-                return Unauthorized();
-        }
-
-        [HttpPost]
-        [Authorize]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ChangeSubscriptionFromAccountPerform(int id)
-        {
-            ApplicationUser user = await _userManager.GetUserAsync(User);
-
-            ProjectParticipant participant = await _context
-                .ProjectParticipants
-                .Include(p => p.Project)
-                .FirstAsync(p => p.ProjectId == id && p.UserId == user.Id);
-
-            if (participant != null)
-            {
-                participant.SubscribedToProjectEmails = !participant.SubscribedToProjectEmails;
-                await _context.SaveChangesAsync();
-
-                return View(nameof(ChangeSubscriptionFromAccount), participant);
             }
             else
                 return Unauthorized();

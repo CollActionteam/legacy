@@ -25,7 +25,7 @@ export default class CookieMessage extends React.Component<ICookieMessageProps, 
     accept() {
         document.cookie = this.props.cookieString;
         location.reload();
-    };
+    }
 
     renderMessage() {
         return (

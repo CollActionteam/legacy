@@ -139,7 +139,9 @@ namespace CollAction.Services.Newsletter
         private HttpClient GetClient()
         {
             HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", _apiKey);
+
+            var byteArray = Encoding.ASCII.GetBytes($"collaction:{_apiKey}");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
             client.BaseAddress = RootUri;
             return client;
         }
