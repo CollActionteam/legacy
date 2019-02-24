@@ -12,6 +12,7 @@ using CollAction.Models.ManageViewModels;
 using Microsoft.EntityFrameworkCore;
 using CollAction.Services.Email;
 using CollAction.Services.Newsletter;
+using CollAction.Services.Project;
 
 namespace CollAction.Controllers
 {
@@ -24,7 +25,7 @@ namespace CollAction.Controllers
         private readonly INewsletterSubscriptionService _newsletterSubscriptionService;
         private readonly ILogger _logger;
         private readonly IStringLocalizer<ManageController> _localizer;
-        private readonly ApplicationDbContext _context;
+        private readonly IProjectService  _projectService;
 
         public ManageController(
           UserManager<ApplicationUser> userManager,
@@ -33,7 +34,7 @@ namespace CollAction.Controllers
           INewsletterSubscriptionService newsletterSubscriptionService,
           ILoggerFactory loggerFactory,
           IStringLocalizer<ManageController> localizer,
-          ApplicationDbContext context)
+          IProjectService projectService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -41,11 +42,8 @@ namespace CollAction.Controllers
             _newsletterSubscriptionService = newsletterSubscriptionService;
             _logger = loggerFactory.CreateLogger<ManageController>();
             _localizer = localizer;
-            _context = context;
+            _projectService = projectService;
         }
-
-        [TempData]
-        public string StatusMessage { get; set; }
 
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -60,15 +58,31 @@ namespace CollAction.Controllers
             {
                 Username = user.UserName,
                 Email = user.Email,
-                StatusMessage = StatusMessage,
-                NewsletterSubscription = await _newsletterSubscriptionService.IsSubscribedAsync(user.Email),
-                ProjectsParticipated = (await _context.ProjectParticipants
-                                                      .Where(part => part.UserId == user.Id)
-                                                      .Include(part => part.Project)
-                                                      .ToListAsync()).Select(part => part.Project),
-                ProjectsCreated = await _context.Projects.Where(proj => proj.OwnerId == user.Id && proj.Status != ProjectStatus.Deleted).ToListAsync()
+                NewsletterSubscription = await _newsletterSubscriptionService.IsSubscribedAsync(user.Email)
             };
             return View(model);
+        }
+
+        [HttpGet]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> MyProjects()
+        {
+            var user = await GetCurrentUserAsync();
+            
+            var projects = await _projectService.MyProjects(user.Id);
+            return Json(projects);
+        }
+
+        [HttpGet]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> ParticipatingInProjects()
+        {
+            var user = await GetCurrentUserAsync();
+            
+            var projects = await _projectService.ParticipatingInProjects(user.Id);
+            return Json(projects);
         }
 
         [HttpPost]
@@ -96,7 +110,6 @@ namespace CollAction.Controllers
                 }
             }
 
-            StatusMessage = _localizer["Your profile has been updated"];
             return RedirectToAction(nameof(Index));
         }
 
@@ -108,10 +121,6 @@ namespace CollAction.Controllers
             if (user != null)
             {
                 _newsletterSubscriptionService.SetSubscription(user.Email, model.NewsletterSubscription, false);
-                if (model.NewsletterSubscription)
-                    StatusMessage = _localizer["Successfully subscribed to newsletter (it might take a few seconds for the change to propagate)"];
-                else
-                    StatusMessage = _localizer["Successfully unsubscribed to newsletter (it might take a few seconds for the change to propagate)"];
             }
             return RedirectToAction(nameof(Index));
         }
@@ -174,6 +183,16 @@ namespace CollAction.Controllers
                 return View(model);
             }
             return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ToggleEmailSubscription(int projectId)
+        {
+            ApplicationUser user = await _userManager.GetUserAsync(User);
+            await _projectService.ToggleNewsletterSubscription(projectId, user.Id);
+            return RedirectToAction(nameof(Index));
         }
 
         #region Helpers
