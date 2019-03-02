@@ -58,34 +58,6 @@
         }
     }
 
-    #mc_embed_signup {
-        label, 
-        #mc-embedded-subscribe,
-        .indicates-required {
-            display: none;
-        }
-    }
-
-    input[type=email] {
-        width: 250px;
-        border: none;
-        outline: none;
-        background-color: #e6e6e6;
-        -webkit-border-radius: 2em;
-        -moz-border-radius: 2em;
-        border-radius: 2em;
-        padding: 0px 30px 0px 15px;
-    }
-
-    .email-icon {
-        position: relative;
-        z-index: 1;
-        left: -25px;
-        top: 1px;
-        width: 0px;
-        color: #7d7d7d;
-    }
-
     li {
         list-style: none;
     }
@@ -115,6 +87,77 @@
     {
         a {
             text-decoration: underline;
+        }
+    }
+
+
+    //Newsletter signup
+    .newsletter-signup {
+        position: relative;
+    }
+
+    .newsletter-signup__container {
+        display: flex;
+        transition: opacity .3s;
+
+        &.loading {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+    }
+  
+    .newsletter-signup__input {
+        width: 250px;
+        border: none;
+        outline: none;
+        background-color: #e6e6e6;
+        padding: 0px 30px 0px 15px;
+        -webkit-border-radius: 2em 0 0 2em;
+        -moz-border-radius: 2em 0 0 2em;
+        border-radius: 2em 0 0 2em;
+    }
+
+    .newsletter-signup__submit {
+        padding: 5px 15px;
+        -webkit-border-radius: 0 2em 2em 0;
+        -moz-border-radius: 0 2em 2em 0;
+        border-radius: 0 2em 2em 0;
+        transition: background-color .15s;
+        background-color: black;
+
+        &:hover,
+        &:focus {
+            text-decoration: underline;
+        }
+    }
+
+    .newsletter-signup__message {
+        position: absolute;
+        width: 250px;
+        padding: 10px;
+        border-radius: 5px;
+        top: 0;
+        left: 0;
+        transform: translate3d(0, 100%, 0);
+        opacity: 0;
+        color: white;
+        line-height: 1.5;
+        z-index: 1;
+        transition: transform .15s, opacity .15s;
+
+        &.show-error,
+        &.show-success {
+            transform: translate3d(0, 0, 0);
+            opacity: 1;
+        }
+
+        &.show-error {
+            transform: translate3d(0, 50px, 0);
+            background-color: red;
+        }
+
+        &.show-success {
+            background-color: $coll-action-green;
         }
     }
 }
