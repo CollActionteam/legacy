@@ -16,19 +16,19 @@ class SiteSocialLinks extends React.Component {
   }
 
   getTwitterUrl () {
-    return `https://twitter.com/freonen`;
+    return `https://twitter.com/CollAction_org`;
   }
 
   getFacebookUrl() {
-    return `https://www.facebook.com/freonen/`;
+    return `https://www.facebook.com/collaction.org/`;
   }
 
   getLinkedInUrl () {
-    return `https://www.linkedin.com/company/freonen-fan-fossylfry-frysl%C3%A2n/`;
+    return `https://www.linkedin.com/company/stichting-collaction/`;
   }
 
   getYoutubeUrl () {
-    return `https://www.youtube.com/channel/UCd8GD6UcaH8MEpJQhB3qzzA`;
+    return `https://www.youtube.com/channel/UCC2SBF4mbeKXrHqnMuN6Iew/`;
   }
 
   render() {
