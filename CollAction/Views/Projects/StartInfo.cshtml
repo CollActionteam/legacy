@@ -6,45 +6,116 @@
     ViewData["Title"] = Localizer["Start Project"];
 }
 
-
-<div id="project-create-nice">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-3 hidden-xs">
-                <div id="nice-circle">
-                    Nice!
+<div id="start-info">
+    <div id="start-info-intro">
+        <div class="container-fluid">
+            <div class="row">
+                <div id="background" class="banner"></div>
+            </div>
+        </div> 
+        <div class="container">
+            <div class="row" id="starting-card-container">
+                <div class="col-md-5 col-md-push-7 col-sm-6 col-sm-push-6 col-xs-12">
+                    <div id="starting-card">
+                        <h1>Starting a project</h1>
+                        <h2>(is super easy)</h2>
+                        <p>
+                            Would you like to do something about social or 
+                            environmental problems? Would you like to lead the
+                            crowdacting movement? Start a project on CollAction&nbsp;now! 
+                        </p>
+                        <h3>It's really easy - we'll guide you through&nbsp;it.</h3>
+                        @Html.ActionLink("Start a project", "Create", "Projects", null, new { @class = "btn" })
+                    </div>
                 </div>
             </div>
-            <div class="col-md-9 col-xs-12">
-                <h1>Start Project</h1>
-                <p>
-                    Would you like to do something about a social or environmental problem? Would you like to lead the crowdacting movement? Start a project on CollAction! 
-                    
-                    There are <a href="/about#faq" target="_blank">a few criteria that your project needs to meet</a> – so please check those first. We’ll wait while you read it…
-
-                    …All good? Then <a href="/Projects/Create">start your project!</a>
-                </p>
+        </div>
+    </div>
+    <div class="container-fluid" id="how-it-works">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-md-offset-1 col-md-10">
+                    <div class="row">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <h1>How it works</h1>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="step col-xs-12 col-md-4">
+                                <img class="icon" src="/images/startproject/project-idea.png" />
+                                <h2>Create your project</h2>
+                                <p>
+                                    Complete the start project form. The CollAction team will review
+                                    it as soon as possible
+                                </p>
+                            </div>
+                            <div class="step col-xs-12 col-md-4">
+                                <img class="icon" src="/images/startproject/share-project.png" />
+                                <h2>Share your project</h2>
+                                <p>
+                                    Run a campaign to reach your target (once your project is approved)
+                                </p>
+                            </div>
+                            <div class="step col-xs-12 col-md-4">
+                                <img class="icon" src="/images/startproject/make-waves.png" />
+                                <h2>Make waves</h2>
+                                <p>
+                                    Act together if the target is met before the deadline. And share your
+                                    success and impact!
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4"></div>
+                            <div class="col-xs-12 col-md-4">
+                                @Html.ActionLink("Start a project", "Create", "Projects", null, new { @class = "btn" })
+                            </div>
+                            <div class="col-md-4"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
-<div id="project-create-starting">
-    <div class="container">
-        <div class="hidden-xs">
-            <div id="project-create-landscape-carousel"></div>
+    <div class="container" id="faq">
+        <div class="row">
+            <div class="col-xs-12 col-md-offset-1 col-md-10">
+                <h1>Frequently Asked Questions</h1>
+            </div>
         </div>
-        <div class="hidden-md hidden-sm hidden-lg">
-            <div id="project-create-mobile-carousel"></div>
+        <div class="row">
+            <div class="col-xs-12 col-md-offset-1 col-md-10">
+                <div id="faq-who-can-start"></div>
+                <div id="faq-reasonable-target"></div>
+                <div id="faq-criteria"></div>
+            </div>
         </div>
     </div>
-</div>
-
-<div id="project-registration-button">
-    <div class="container">
+    <div class="container" id="kickstart">
         <div class="row">
-            <div class="col-xs-12">
-                @Html.ActionLink("GO TO THE REGISTRATION FORM", "Create", "Projects", null, new { @class = "btn btn-success" })
+            <div class="col-xs-12 col-md-offset-1 col-md-10">
+                <div id="kickstart-card">
+                    <div class="row">
+                        <div class="col-xs-10">
+                            <h2>Kickstart your project idea on CollAction</h2>
+                        </div>
+                        <div class="col-xs-2">
+                            <h2><object class="logo pull-right" type="image/svg+xml" data="/images/step3.svg"></object></h2>
+                        </div>
+                        <div class="col-xs-12 visible-xs">
+                            <p>
+                                Want to discuss your project idea with the CollAction team?
+                            </p>
+                            <a class="btn" href="mailto:collactionteam@gmail.com">Email us</a>
+                        </div>
+                        <div class="col-xs-12 hidden-xs">
+                            <p>
+                                Want to discuss your project idea with the CollAction team? Send us an email at <a href="mailto:collactionteam@gmail.com">collactionteam@gmail.com</a>.
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

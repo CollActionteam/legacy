@@ -1,6 +1,13 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import renderComponentIf from "./renderComponentIf";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faTwitter } from "@fortawesome/free-brands-svg-icons";
+import { faFacebook } from "@fortawesome/free-brands-svg-icons";
+import { faLinkedin } from "@fortawesome/free-brands-svg-icons";
+
+library.add(faTwitter, faFacebook, faLinkedin);
 
 enum States { ERROR, READY, LOADING }
 
@@ -79,28 +86,39 @@ class ShareButtons extends React.Component<IShareButtonsProps, IShareButtonsStat
     return `https://www.linkedin.com/shareArticle?mini=true&url=${this.getUrl()}&title=${this.getTitle()}&source=${encodeURIComponent(window.location.origin)}`;
   }
 
+  getWhatsappUrl() {
+    return `whatsapp://send?text=${this.getTitle()}%20${this.getUrl()}`;
+  }
+
   render() {
     return (
       <div className="share-buttons">
         <div className="row">
-          <div className="col-xs-4">
+          <div className="col-xs-3 col-sm-4">
             <a href={this.getFacebookUrl()} target="_blank">
               <div className="social-media-share-buttons social-media-share-button-facebook">
-                <i className="fa fa-facebook"></i>
+                <FontAwesomeIcon icon={faFacebook} />
               </div>
             </a>
           </div>
-          <div className="col-xs-4">
+          <div className="col-xs-3 col-sm-4">
             <a href={this.getTwitterUrl()}>
               <div className="social-media-share-buttons social-media-share-button-twitter">
-                <i className="fa fa-twitter"></i>
+                <FontAwesomeIcon icon={faTwitter} />
               </div>
             </a>
           </div>
-          <div className="col-xs-4">
+          <div className="col-xs-3 col-sm-4">
             <a href={this.getLinkedInUrl()}>
               <div className="social-media-share-buttons social-media-share-button-linkedin">
-                <i className="fa fa-linkedin"></i>
+                <FontAwesomeIcon icon={faLinkedin} />
+              </div>
+            </a>
+          </div>
+          <div className="col-xs-3 visible-xs">
+            <a href={this.getWhatsappUrl()}>
+              <div className="social-media-share-buttons social-media-share-button-whatsapp">
+                <i className="fa fa-whatsapp"></i>
               </div>
             </a>
           </div>
@@ -128,6 +146,11 @@ const FullShareButtons = () => {
 renderComponentIf(
   <FullShareButtons />,
   document.getElementById("homepage-share-buttons")
+);
+
+renderComponentIf(
+  <ShareButtons />,
+  document.getElementById("social-list-component")
 );
 
 renderComponentIf(

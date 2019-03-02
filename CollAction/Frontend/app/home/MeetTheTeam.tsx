@@ -73,14 +73,14 @@ export default class MeetTheTeam extends React.Component<IMeetTheTeamProps, IMee
 
 const teamMembers: ITeamMember[] = [
   {
-    name: "Barbera Putman Cramer",
+    name: "Abhinay Kondamreddy",
     role: "",
-    photo: "Barbara Putman Cramer.png"
+    photo: "NoPhoto.png"
   },
   {
-    name: "Chris Schuchmann",
+    name: "Christa Brouwer",
     role: "",
-    photo: "Chris Schuchmann.png"
+    photo: "NoPhoto.png"
   },
   {
     name: "Daniela Becker",
@@ -90,7 +90,7 @@ const teamMembers: ITeamMember[] = [
   {
     name: "Dominik Guz",
     role: "",
-    photo: "Dominik Guz.png"
+    photo: "NoPhoto.png"
   },
   {
     name: "Edoardo Felici",
@@ -98,34 +98,35 @@ const teamMembers: ITeamMember[] = [
     photo: "Edoardo Felici.png"
   },
   {
-    name: "Juan Naputi",
+    name: "Luuk Boschker",
     role: "",
-    photo: "Juan Naputi.png"
+    photo: "Luuk Boschker.png"
+
   },
   {
     name: "Laura Wennekes",
     role: "",
-    photo: "Laura Wennekes.png"
+    photo: "NoPhoto.png"
   },
   {
-    name: "Lena Hartog",
+    name: "Martijn de Haan",
     role: "",
-    photo: "Lena Hartog.png"
+    photo: "Martijn de Haan.png"
   },
   {
-    name: "Luc Geurts",
+    name: "Melchior Jong",
     role: "",
-    photo: "Luc Geurts.png"
+    photo: "Melchior Jong.png"
   },
   {
-    name: "Luuk Boschker",
+    name: "Mina Yao",
     role: "",
-    photo: "Luuk Boschker.png"
+    photo: "NoPhoto.png"
   },
   {
     name: "Nikie van Thiel",
     role: "",
-    photo: "Nikie van Thiel.png"
+    photo: "NoPhoto.png"
   },
   {
     name: "Ron van den Akker",
@@ -143,11 +144,6 @@ const teamMembers: ITeamMember[] = [
     photo: "Tim Stokman.png"
   },
   {
-    name: "Tuanh Lam",
-    role: "",
-    photo: "Tuanh Lam.png"
-  },
-  {
     name: "Vivian Vos",
     role: "",
     photo: "Vivian Vos.png"
@@ -155,8 +151,8 @@ const teamMembers: ITeamMember[] = [
   {
     name: "Brian Russell",
     role: "",
-    photo: "Brian Russell.png"
-  },
+    photo: "NoPhoto.png"
+  }
 ];
 
 renderComponentIf(
