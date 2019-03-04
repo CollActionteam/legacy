@@ -36,18 +36,6 @@
         color: #111;
     }
 
-    #account-menu {
-        list-style: none;
-        padding: 0px;
-        margin: 0px;
-
-        li {
-            display: inline;
-            font-weight: bold;
-            margin: 0px 50px 0px 50px;
-        }
-    }
-
     #header-menu {
         list-style: none;
         padding: 0px;
@@ -101,7 +89,7 @@
         width: 100vw;
     }
 
-    #header-right {
+    #header-login {
         text-align: right;
 
         #logInBtn {
@@ -118,12 +106,6 @@
             padding: 0 !important;
             border: none;
             outline-color: transparent;
-        }
-
-        #donateBtn {
-            padding: 10px 20px;
-            border: solid 1px;
-            border-radius: 20px;
         }
     }
 }
