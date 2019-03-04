@@ -1,8 +1,5 @@
 import * as React from "react";
 import renderComponentIf from "./renderComponentIf";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
 
 interface IMobileNavDrawProps {
   isLoggedIn: boolean;
@@ -15,8 +12,7 @@ interface IMobileNavDrawState {
 function AccountManageNav(props) {
   if (props.isLoggedIn) {
     return <li><a href="/manage">Account</a></li>;
-  }
-  else {
+  }else {
     return null;
   }
  }
@@ -24,16 +20,15 @@ function AccountManageNav(props) {
  function LoginStateNav(props) {
   if (props.isLoggedIn) {
     return <li><button type="button" onClick={() => document.getElementById("logOutBtn").click()}>Logout</button></li>;
-  }
-  else {
+  }else {
     return <li><a href="/account/login">Login</a></li>;
   }
  }
 
 export default class MobileNavDraw extends React.Component<IMobileNavDrawProps, IMobileNavDrawState> {
 
-  constructor (props?: IMobileNavDrawProps, context?: any) {
-    super(props, context);
+  constructor (props: IMobileNavDrawProps) {
+    super(props);
     this.state = { open: false };
   }
 
@@ -51,7 +46,7 @@ export default class MobileNavDraw extends React.Component<IMobileNavDrawProps, 
     return(
       <div id="draw-menu">
         <div id="draw-menu-close-button" onClick={() => self.close()}>
-          <FontAwesomeIcon icon={faTimes} />
+          <i className="fa fa-times" aria-hidden="true"></i>
         </div>
         <ul>
             <li><a href="/">Home</a></li>
@@ -69,13 +64,11 @@ export default class MobileNavDraw extends React.Component<IMobileNavDrawProps, 
     const self = this;
     return (
       <div className="mobile-header">
-      <FontAwesomeIcon icon={faBars}>
-        <div
+        <i className="fa fa-bars"
           id="hamburger-icon"
           aria-hidden="true"
           onClick={() => self.open()}>
-        </div>
-      </FontAwesomeIcon>
+        </i>
         { this.state.open ? this.renderMenu() : null }
       </div>
     );
