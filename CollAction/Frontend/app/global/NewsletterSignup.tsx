@@ -18,7 +18,6 @@ interface NewsLetterSignupState {
   email?: string;
   signupStatusMessage?: string;
 }
-
 class NewsletterSignup extends React.Component<NewsLetterSignupProps, NewsLetterSignupState> {
 
   constructor(props) {
@@ -64,7 +63,7 @@ class NewsletterSignup extends React.Component<NewsLetterSignupProps, NewsLetter
   }
 
   isValidEmail() {
-    return /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}/.test(this.state.email);
+    return /@/.test(this.state.email);
   }
 
   handleSubmit(event) {
@@ -86,7 +85,7 @@ class NewsletterSignup extends React.Component<NewsLetterSignupProps, NewsLetter
     formData.append("id", this.props.mailChimpListId);
 
     this.setState({ subscriptionState: States.LOADING });
-    
+
     fetch("http://collaction.us14.list-manage.com/subscribe/post", {
       method: "POST",
       body: formData,
@@ -95,10 +94,10 @@ class NewsletterSignup extends React.Component<NewsLetterSignupProps, NewsLetter
       if (response.ok) {
         this.showSignupSucces();
       } else {
-        this.showSignupError();
+        this.showSignupError(response.statusText);
       }
     })
-    .catch(() => this.showSignupError());
+    .catch(() => this.showSignupError("E-mail signup could not be completed."));
   }
 
   showSignupSucces() {
@@ -108,13 +107,13 @@ class NewsletterSignup extends React.Component<NewsLetterSignupProps, NewsLetter
     });
   }
 
-  showSignupError() {
+  showSignupError(errorMessage: string) {
     this.setState({
       subscriptionState: States.ERROR,
-      signupStatusMessage: "E-mail signup could not be completed. Please enter a valid e-mail address"
+      signupStatusMessage: errorMessage
     });
 
-    throw new Error("E-mail signup could not be completed.");
+    throw new Error(errorMessage);
   }
 
   render() {

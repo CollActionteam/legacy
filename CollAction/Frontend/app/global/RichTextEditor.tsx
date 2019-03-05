@@ -1,5 +1,5 @@
 import * as React from "react";
-import * as ReactQuill from "react-quill";
+import ReactQuill from "react-quill";
 import renderComponentIf from "./renderComponentIf";
 
 interface ICollActionEditorProps {
