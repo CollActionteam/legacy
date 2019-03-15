@@ -1,11 +1,66 @@
 @import "../../colors";
+@import '../../mixins';
 
 #header-container {
-    position: fixed;
-    background-color: white;
-    width: 100%;
-    z-index: 2;
-    height: 85px;
+    .navbar {
+        margin-bottom: 0;
+        padding: 20px 0 20px 0;
+
+        @media (min-width: 768px) {
+            .navbar-nav {
+                height: 44px;
+                & > li > a {
+                    margin-top: -3px;   // Align with the logo
+                }
+            }
+        }
+
+        .navbar-toggle {
+            float: left;
+            font-size: 30px;
+            padding: 0;
+            margin: 0 0 0 20px;
+            width: 0;   // reset so the logo will center correctly
+
+            button {
+                border: none;
+                margin: 0;
+                padding: 0;
+                width: auto;
+                overflow: visible;
+                outline: none;            
+                background: transparent;
+            }
+        }
+
+        .logo {
+            text-align: center;
+        }
+
+        a.btn {
+            @include coll-action-button;
+        }
+        
+        ul.nav > li > a:not(.btn) {
+            font-weight: bold;
+            color: #111;
+
+            @media (max-width: 767px) {
+                font-weight: lighter;
+                font-size: 22px;
+                color: $coll-action-green;
+
+                line-height: inherit;
+                margin-left: 40px;
+            }
+
+            &:hover, 
+            &:focus {
+                text-decoration: underline;
+                background-color: inherit;
+            }
+        }
+    }
 }
 
 #header-padding {

@@ -1,6 +1,5 @@
 ﻿﻿@using Microsoft.ApplicationInsights.AspNetCore
 @using Microsoft.AspNetCore.Http.Features
-
 @inject JavaScriptSnippet snippet
 
 @{
@@ -33,32 +32,9 @@
     }
 
     <div id="header-container">
-        <div class="container" id="nav-container">
-            <div id="header">
-                <div class="row nav-row">
-                    <div class="col-md-3 col-xs-12 header-logo">
-                        <div class="hidden-md hidden-lg" id="mobile-nav-draw"></div>
-                        <partial name="_logo" />
-                    </div>
-                    <div class="col-md-7 nav-bar hidden-xs hidden-sm">
-                        <ul id="header-menu">
-                            <li><a asp-controller="Projects" asp-action="Find">Find Project</a></li>
-                            <li><a asp-controller="Projects" asp-action="StartInfo">Start Project</a></li>
-                            <li><a asp-controller="Home" asp-action="About">About</a></li>
-                            @if (User.IsInRole(Constants.AdminRole))
-                            {
-                                <li><a asp-area="" asp-controller="Admin" asp-action="Index">Admin Dashboard</a></li>
-                            }
-                        </ul>
-                    </div>
-                    <div class="col-md-2 nav-bar hidden-xs hidden-sm" id="header-login">
-                        @await Html.PartialAsync("_LoginPartial")
-                    </div>
-                </div>
-            </div>
-        </div>
+        <partial name="_NavMenu" />
     </div>
-    <div id="header-padding"></div>   
+
     <partial name="_CookieConsentPartial" /> 
     @RenderBody()
     <partial name="_Footer" />
