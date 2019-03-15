@@ -16,11 +16,11 @@
         text-decoration: none;
     }
 
-    .is-closed i.fa.fa-minus {
+    .is-closed .toggle .fa-minus {
         display: none;
     }
 
-    .is-open i.fa.fa-plus {
+    .is-open .toggle .fa-plus {
         display: none;
     }
 
