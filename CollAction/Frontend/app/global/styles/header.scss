@@ -9,8 +9,9 @@
         @media (min-width: 768px) {
             .navbar-nav {
                 height: 44px;
+
                 & > li > a {
-                    margin-top: -3px;   // Align with the logo
+                    margin-top: 1px;   // Align with the logo
                 }
             }
         }
@@ -44,7 +45,16 @@
         ul.nav > li > a:not(.btn) {
             font-weight: bold;
             color: #111;
+            padding-top: 10px;
+            padding-bottom: 10px;
 
+            &.attention {
+                @media (min-width: 768px) {
+                    color: $coll-action-green;
+                    font-weight: lighter;
+                }
+            }
+            
             @media (max-width: 767px) {
                 font-weight: lighter;
                 font-size: 22px;

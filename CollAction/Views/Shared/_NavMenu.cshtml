@@ -23,12 +23,17 @@
                 <li><a asp-controller="Home" asp-action="About">About</a></li>
             </ul> 
             <ul class="nav navbar-nav navbar-right">
+                @if (User.IsInRole(Constants.AdminRole))
+                {
+                    <li><a asp-controller="Admin" asp-action="Index">Admin Dashboard</a></li>
+                }
+                else
+                {
+                    <li><a class="attention" asp-controller="Donation" asp-action="Donate"><i class="fa fa-heart"></i>&nbsp;Donate</a></li>
+                }
+
                 @if (SignInManager.IsSignedIn(User))
                 {
-                    @if (User.IsInRole(Constants.AdminRole))
-                    {
-                        <li><a asp-controller="Admin" asp-action="Index">Admin Dashboard</a></li>
-                    }
                     <li><a asp-controller="Manage" asp-action="Index">Account</a></li>
                     <li>
                         <a href='#' onclick='document.forms["logoff"].submit(); return false;'>Logout</a>
