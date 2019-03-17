@@ -18,8 +18,8 @@ interface NewsLetterSignupState {
   email?: string;
   signupStatusMessage?: string;
 }
-class NewsletterSignup extends React.Component<NewsLetterSignupProps, NewsLetterSignupState> {
 
+class NewsletterSignup extends React.Component<NewsLetterSignupProps, NewsLetterSignupState> {
   constructor(props) {
     super(props);
 
