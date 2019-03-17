@@ -40,7 +40,6 @@ export default class FindProject extends Projects<IFindProjectProps, IFindProjec
   }
 
   componentDidMount() {
-
     if (this.props.controller === false) {
       this.fetchProjects();
     }
@@ -50,13 +49,11 @@ export default class FindProject extends Projects<IFindProjectProps, IFindProjec
   }
 
   componentWillUnmount() {
-
     // Unbind scroll event
     window.removeEventListener("scroll", this.onScroll, false);
   }
 
   onScroll = () => {
-
     let treshold = 200;
 
     // Check if window scrolled to half of project list
@@ -68,7 +65,6 @@ export default class FindProject extends Projects<IFindProjectProps, IFindProjec
   }
 
   async fetchProjects(projectFilter: IProjectFilter = null, start: number = 0) {
-
     // Prevent unnecessary fetching
     if (this.state.projectFetching || this.state.allProjectsFetched) {
       return;
