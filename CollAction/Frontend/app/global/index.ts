@@ -16,8 +16,6 @@ import "./styles/quill-snow.css";
 
 import "./NavbarToggler";
 import "./ShareButtons";
-import "./SiteSocialLinks";
-import "./MapMarkerItem";
 import "./RichTextEditor";
 import "./CookieMessage";
 import "./Tooltips";

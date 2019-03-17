@@ -30,7 +30,7 @@ const TeamMemberThumb = ({ teamMember }) => {
       </div>
     </div>
   );
-}
+};
 
 const NavigationDots = ({ currentIndex, length}) => {
   const dotClicked = () => {
@@ -50,7 +50,7 @@ const NavigationDots = ({ currentIndex, length}) => {
       { dots }
     </div>
   );
-}
+};
 
 export default class MeetTheTeam extends React.Component<IMeetTheTeamProps, IMeetTheTeamState> {
 
@@ -67,7 +67,7 @@ export default class MeetTheTeam extends React.Component<IMeetTheTeamProps, IMee
         </div>
         <NavigationDots currentIndex={this.state.currentIndex} length={this.props.teamMembers.length}/>
       </div>
-    )
+    );
   }
 }
 
@@ -156,6 +156,6 @@ const teamMembers: ITeamMember[] = [
 ];
 
 renderComponentIf(
-  <MeetTheTeam teamMembers={teamMembers} />, 
+  <MeetTheTeam teamMembers={teamMembers} />,
   document.getElementById("meet-the-team-widget")
 );
