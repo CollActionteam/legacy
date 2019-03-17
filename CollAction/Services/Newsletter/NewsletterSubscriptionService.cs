@@ -47,6 +47,7 @@ namespace CollAction.Services.Newsletter
         private readonly string _apiKey;
         private readonly string _dataCenter;
         private readonly string _newsletterListId;
+        private readonly string _userId;
         private readonly IBackgroundJobClient _jobClient;
         private readonly ILogger<NewsletterSubscriptionService> _logger;
 
@@ -59,6 +60,7 @@ namespace CollAction.Services.Newsletter
             _newsletterListId = options.Value.MailChimpNewsletterListId;
             _jobClient = jobClient;
             _logger = logger;
+            _userId = options.Value.MailChimpUserId;
         }
 
         public async Task<bool> IsSubscribedAsync(string email)
