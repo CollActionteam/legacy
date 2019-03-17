@@ -60,7 +60,6 @@ namespace CollAction.Services.Newsletter
             _newsletterListId = options.Value.MailChimpNewsletterListId;
             _jobClient = jobClient;
             _logger = logger;
-            _userId = options.Value.MailChimpUserId;
         }
 
         public async Task<bool> IsSubscribedAsync(string email)
