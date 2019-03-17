@@ -1,4 +1,5 @@
 import "./styles/bootstrap.css";
+
 import "./styles/dotbackground.scss";
 import "./styles/forms.scss";
 import "./styles/body.scss";
@@ -13,7 +14,7 @@ import "./styles/busy-indicator.scss";
 import "./styles/donationbox.scss";
 import "./styles/quill-snow.css";
 
-import "./MobileNavDraw";
+import "./NavbarToggler";
 import "./ShareButtons";
 import "./SiteSocialLinks";
 import "./MapMarkerItem";
