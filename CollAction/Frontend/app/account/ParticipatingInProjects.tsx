@@ -12,6 +12,7 @@ export default class ParticipatingInProjects extends Projects<IProjectsProps, IP
       projectList,
       projectFetching: false,
       projectFetchError: null,
+      allProjectsFetched: false
     };
   }
 

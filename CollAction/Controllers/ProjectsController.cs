@@ -313,7 +313,7 @@ namespace CollAction.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> FindProjects(int? categoryId, int? statusId, int? limit)
+        public async Task<JsonResult> FindProjects(int? categoryId, int? statusId, int? limit, int start)
         {
             Expression<Func<Project, bool>> projectExpression = (p =>
                 p.Status != ProjectStatus.Hidden &&
@@ -329,7 +329,7 @@ namespace CollAction.Controllers
                 default: statusExpression = (p => true); break;
             }
 
-            var projects = await _projectService.FindProjects(Expression.Lambda<Func<Project, bool>>(Expression.AndAlso(projectExpression.Body, Expression.Invoke(statusExpression, projectExpression.Parameters[0])), projectExpression.Parameters[0]), limit).ToListAsync();
+            var projects = await _projectService.FindProjects(Expression.Lambda<Func<Project, bool>>(Expression.AndAlso(projectExpression.Body, Expression.Invoke(statusExpression, projectExpression.Parameters[0])), projectExpression.Parameters[0]), limit, start).ToListAsync();
 
             return Json(projects);
         }
