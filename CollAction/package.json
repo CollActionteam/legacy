@@ -14,13 +14,8 @@
   "author": "CollAction",
   "license": "ISC",
   "devDependencies": {
-    "@types/bluebird": "^3.5.24",
-    "@types/react": "^16.4.0",
-    "@types/react-dom": "^16.0.6",
     "css-loader": "^1.0.0",
-    "node-sass": "^4.9.2",
-    "react": "^16.4.0",
-    "react-dom": "^16.4.0",
+    "node-sass": "^4.11.0",
     "sass-loader": "^7.0.3",
     "style-loader": "^0.21.0",
     "svg-inline-loader": "^0.8.0",
@@ -31,6 +26,13 @@
     "webpack-cli": "^3.1.0"
   },
   "dependencies": {
+    "@types/bluebird": "^3.5.24",
+    "@types/react": "^16.4.0",
+    "@types/react-dom": "^16.0.6",
+    "react": "^16.4.0",
+    "react-dom": "^16.4.0",
+    "@fortawesome/fontawesome-svg-core": "^1.2.15",
+    "@fortawesome/free-solid-svg-icons": "^5.7.2",
     "bluebird": "^3.5.2",
     "jquery": "^3.3.1",
     "jquery-validation": "^1.17.0",
