@@ -19,7 +19,6 @@ namespace CollAction.Services.Project
         bool CanSendProjectEmail(Models.Project project);
         Task SendProjectEmail(Models.Project project, string subject, string message, HttpRequest request, IUrlHelper helper);
         IQueryable<DisplayProjectViewModel> GetProjectDisplayViewModels(Expression<Func<Models.Project, bool>> filter);
-        Task<FindProjectsViewModel> FindProject(int projectId);
         IQueryable<FindProjectsViewModel> FindProjects(Expression<Func<Models.Project, bool>> filter, int? limit);
         int NumberEmailsAllowedToSend(Models.Project project);
         DateTime CanSendEmailsUntil(Models.Project project);
