@@ -315,11 +315,6 @@ namespace CollAction
                      new { controller = "Projects", action = "GetCategories" }
                  );
 
-                routes.MapRoute("FindProject",
-                     "api/projects/{projectId:int}",
-                     new { controller = "Projects", action = "FindProject" }
-                 );
-
                 routes.MapRoute("FindProjects",
                      "api/projects/find",
                      new { controller = "Projects", action = "FindProjects" }
