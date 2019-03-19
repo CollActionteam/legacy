@@ -1,8 +1,8 @@
 import * as React from "react";
 import renderComponentIf from "./renderComponentIf";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
+//import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+//import { faTimes } from "@fortawesome/free-solid-svg-icons";
+//import { faBars } from "@fortawesome/free-solid-svg-icons";
 
 interface INavbarTogglerProps {
     targetId: string;
@@ -45,9 +45,12 @@ export default class NavbarToggler extends React.Component<INavbarTogglerProps, 
     render() {
         return (
             <button onClick={this.toggle}>
-                <FontAwesomeIcon icon={this.state.open ? faTimes : faBars } />
-            </button>
-        );
+            </button>);
+        //return (
+            //<button onClick={this.toggle}>
+                //<FontAwesomeIcon icon={this.state.open ? faTimes : faBars } />
+            //</button>
+        //);
     }
 }
 
