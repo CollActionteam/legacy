@@ -1,5 +1,4 @@
 import * as React from "react";
-import { notEqual } from "assert";
 
 export interface IProject {
   projectId: string;
