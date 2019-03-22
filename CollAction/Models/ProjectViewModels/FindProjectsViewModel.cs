@@ -73,5 +73,7 @@ namespace CollAction.Models.ProjectViewModels
         }
 
         public bool? SubscribedToEmails { get; set; }
+
+        public bool? CanSendProjectEmail { get; set;}
     }
 }

@@ -305,7 +305,8 @@ namespace CollAction.Services.Project
                     DescriptiveImageDescription = project.DescriptiveImage.Description,
                     Status = project.Status,
                     Start = project.Start,
-                    End = project.End
+                    End = project.End,
+                    CanSendProjectEmail = this.CanSendProjectEmail(project)
                 })
                 .ToListAsync();
         }
@@ -334,7 +335,7 @@ namespace CollAction.Services.Project
                     Status = participant.Project.Status,
                     Start = participant.Project.Start,
                     End = participant.Project.End,
-                    SubscribedToEmails = participant.SubscribedToProjectEmails                    
+                    SubscribedToEmails = participant.SubscribedToProjectEmails
                 })
                 .ToListAsync();
         }
