@@ -45,6 +45,7 @@
     "react-dropzone": "^8.0.1",
     "react-onclickoutside": "^6.4.0",
     "react-quill": "1.2.7",
+    "react-stripe-elements": "^2.0.3",
     "whatwg-fetch": "^2.0.3"
   }
 }
