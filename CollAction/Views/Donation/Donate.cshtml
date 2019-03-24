@@ -5,16 +5,4 @@
     ViewData["Title"] = "Donate";
 }
 
-<h1>Donate</h1>
-
-<form action="your-server-side-code" method="POST">
-    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-            data-key="@StripeOptions.Value.ApiKey"
-            data-name="CollAction Donation"
-            data-label="Donate"
-            data-description="Widget"
-            data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-            data-locale="auto"
-            data-zip-code="true">
-    </script>
-</form>
+<div id="donation-box" />
