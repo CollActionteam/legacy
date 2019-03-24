@@ -147,7 +147,6 @@ namespace CollAction
                            cspBuilder.AddFormAction().Self() // Only allow form actions to our own site, or mailinator, or social media logins, or configured sources
                                                      .Sources.AddRange(new[]
                                                                        {
-                                                                           "https://collaction.us14.list-manage.com/",
                                                                            "https://www.facebook.com/",
                                                                            "https://m.facebook.com",
                                                                            "https://accounts.google.com/",
@@ -164,7 +163,8 @@ namespace CollAction
                                                                            "https://www.facebook.com/",
                                                                            "https://facebook.com/",
                                                                            "https://graph.facebook.com/",
-                                                                           "https://dc.services.visualstudio.com/"
+                                                                           "https://dc.services.visualstudio.com/",
+                                                                           "http://collaction.us14.list-manage.com/"
                                                                        }.Concat(Configuration["CspConnectSrc"]?.Split(";") ?? new string[0]));
                            cspBuilder.AddImgSrc().Self() // Only allow self-hosted images, or google analytics (for tracking images), or configured sources
                                                  .Data()    // Used for project creation image preview
