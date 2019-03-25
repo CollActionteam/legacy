@@ -6,6 +6,7 @@ import renderComponentIf from "../global/renderComponentIf";
 
 interface IFindProjectProps extends IProjectsProps {
   controller: boolean;
+  projectListContainerElement?: any;
 }
 
 interface IFindProjectState extends IProjectsState {
@@ -13,6 +14,12 @@ interface IFindProjectState extends IProjectsState {
 }
 
 export default class FindProject extends Projects<IFindProjectProps, IFindProjectState> {
+
+  // Define project list DOM element reference for scrolling
+  private projectListContainerElement: React.RefObject<HTMLDivElement>;
+
+  // Define number of projects we want to fetch on scroll
+  private fetchNumberOfProjectsOnScroll;
 
   constructor (props) {
     super(props);
@@ -23,16 +30,46 @@ export default class FindProject extends Projects<IFindProjectProps, IFindProjec
       projectFilterState: null,
       projectFetching: false,
       projectFetchError: null,
+      allProjectsFetched: false
     };
+
+    // Set constants
+    this.projectListContainerElement = React.createRef();
+
+    this.fetchNumberOfProjectsOnScroll = 15;
   }
 
   componentDidMount() {
     if (this.props.controller === false) {
       this.fetchProjects();
     }
+
+    // Bind scroll event
+    window.addEventListener("scroll", this.onScroll, false);
   }
 
-  async fetchProjects(projectFilter: IProjectFilter = null) {
+  componentWillUnmount() {
+    // Unbind scroll event
+    window.removeEventListener("scroll", this.onScroll, false);
+  }
+
+  onScroll = () => {
+    let treshold = 200;
+
+    // Check if window scrolled to half of project list
+    if (window.pageYOffset + window.innerHeight >= (this.projectListContainerElement.current.offsetTop + this.projectListContainerElement.current.offsetHeight) - treshold) {
+
+      // Fetch more projects
+      this.fetchProjects(this.state.projectFilterState, this.state.projectList.length);
+    }
+  }
+
+  async fetchProjects(projectFilter: IProjectFilter = null, start: number = 0) {
+    // Prevent unnecessary fetching
+    if (this.state.projectFetching || this.state.allProjectsFetched) {
+      return;
+    }
+
     this.setState({ projectFetching: true });
 
     // Fetch projects with out filters set
@@ -40,14 +77,24 @@ export default class FindProject extends Projects<IFindProjectProps, IFindProjec
       if (projectFilter) {
         return `/api/projects/find?categoryId=${projectFilter.categoryId}&statusId=${projectFilter.statusId}`;
       }
-      return "/api/projects/find?limit=30";
+      return `/api/projects/find?start=${start}&limit=${start + this.fetchNumberOfProjectsOnScroll}`;
     };
 
     try {
       const searchProjectRequest: Request = new Request(getUrl());
       const fetchResult: Response = await fetch(searchProjectRequest);
       const jsonResponse = await fetchResult.json();
-      this.setState({ projectFetching: false, projectList: jsonResponse });
+
+      // Add projects to project list
+      this.setState((prevState) => ({
+        projectFetching: false,
+        projectList: [...prevState.projectList, ...jsonResponse]
+      }));
+
+      // We assume that if no or less than limit are returned, all projects have been fetched
+      if (!jsonResponse.length || jsonResponse.length < this.fetchNumberOfProjectsOnScroll) {
+        this.setState({ allProjectsFetched: true });
+      }
     }
     catch (e) {
       this.setState({ projectFetching: false, projectFetchError: e });
@@ -72,7 +119,7 @@ export default class FindProject extends Projects<IFindProjectProps, IFindProjec
     return (
       <div id="find-project">
         { this.props.controller ?  controller : null }
-        <div className="container">
+        <div className="container" ref={this.projectListContainerElement}>
           <ProjectList projectList={this.state.projectList} tileClassName="col-xs-12 col-md-4" />
         </div>
       </div>

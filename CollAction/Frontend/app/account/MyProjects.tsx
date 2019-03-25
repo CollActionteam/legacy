@@ -12,6 +12,7 @@ export default class MyProjects extends Projects<IProjectsProps, IProjectsState>
       projectList,
       projectFetching: false,
       projectFetchError: null,
+      allProjectsFetched: false
     };
   }
 
