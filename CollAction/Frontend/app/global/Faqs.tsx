@@ -112,3 +112,15 @@ renderComponentIf(
     document.getElementById("faq-criteria")
 );
 
+renderComponentIf(
+    <Faq
+        title="Where can I find more tips and tricks on how to start, run and finish a project?"
+        content={
+            <span>
+                <p>
+                    Check out our <a href="https://docs.google.com/document/d/1JK058S_tZXntn3GzFYgiH3LWV5e9qQ0vXmEyV-89Tmw" target="_blank">Project Starter Handbook</a>
+                </p>
+            </span>
+        } />,
+    document.getElementById("faq-tips-and-tricks")
+);
