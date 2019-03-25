@@ -10,10 +10,14 @@ namespace CollAction.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        public DateTime Timestamp { get; set; }
+        public DateTime EventLoggedAt { get; set; }
 
         [Column(TypeName = "json")]
         [Required]
         public string EventData { get; set; }
+
+        public string UserId { get; set; }
+        [ForeignKey("UserId")]
+        public ApplicationUser User { get; set; }
     }
 }

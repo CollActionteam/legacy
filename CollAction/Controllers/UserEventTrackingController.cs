@@ -4,8 +4,8 @@ using CollAction.Data;
 using CollAction.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace CollAction.Controllers
@@ -15,10 +15,12 @@ namespace CollAction.Controllers
     public class UserEventTrackingController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public UserEventTrackingController(ApplicationDbContext context)
+        public UserEventTrackingController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         [HttpPost]
@@ -27,10 +29,12 @@ namespace CollAction.Controllers
             var consentFeature = HttpContext.Features.Get<ITrackingConsentFeature>();
             if (consentFeature.CanTrack)
             {
+                ApplicationUser user = await _userManager.GetUserAsync(User);
                 var userEvent = new UserEvent()
                 {
-                    Timestamp = DateTime.UtcNow,
-                    EventData = eventData.ToString()
+                    EventLoggedAt = DateTime.UtcNow,
+                    EventData = eventData.ToString(),
+                    UserId = user?.Id
                 };
                 _context.UserEvents.Add(userEvent);
                 await _context.SaveChangesAsync();

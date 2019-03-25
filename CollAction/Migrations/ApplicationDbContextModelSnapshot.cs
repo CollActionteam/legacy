@@ -464,9 +464,13 @@ namespace CollAction.Migrations
                         .IsRequired()
                         .HasColumnType("json");
 
-                    b.Property<DateTime>("Timestamp");
+                    b.Property<DateTime>("EventLoggedAt");
+
+                    b.Property<string>("UserId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserEvents");
                 });
@@ -729,6 +733,13 @@ namespace CollAction.Migrations
                         .WithMany("ProjectTags")
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("CollAction.Models.UserEvent", b =>
+                {
+                    b.HasOne("CollAction.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
