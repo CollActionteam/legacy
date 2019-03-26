@@ -96,6 +96,7 @@ namespace CollAction
 
             services.Configure<AuthMessageSenderOptions>(Configuration);
             services.Configure<ImageServiceOptions>(Configuration);
+            services.Configure<ImageProcessingOptions>(Configuration);
             services.Configure<NewsletterSubscriptionServiceOptions>(Configuration);
             services.Configure<FestivalServiceOptions>(Configuration);
             services.Configure<ProjectEmailOptions>(Configuration);
