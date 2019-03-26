@@ -179,16 +179,14 @@ namespace CollAction
                                                    .Sources.AddRange(new[]
                                                                      {
                                                                          "https://maxcdn.bootstrapcdn.com/",
-                                                                         "https://fonts.googleapis.com/",
-                                                                          "https://use.fontawesome.com/"
+                                                                         "https://fonts.googleapis.com/"
                                                                      }.Concat(Configuration["CspStyleSrc"]?.Split(";") ?? new string[0]));
                            cspBuilder.AddFontSrc().Self() // Only allow fonts from these sources, or configured sources
                                                   .Sources.AddRange(new[]
                                                                    {
                                                                        "https://maxcdn.bootstrapcdn.com/",
                                                                        "https://fonts.googleapis.com/",
-                                                                       "https://fonts.gstatic.com",
-                                                                       "https://use.fontawesome.com/"
+                                                                       "https://fonts.gstatic.com"
                                                                    }.Concat(Configuration["CspFontSrc"]?.Split(";") ?? new string[0]));
                            cspBuilder.AddFrameAncestors().Sources.AddRange(Configuration["CspFrameAncestors"]?.Split(";") ?? new string[0]); // Only allow configured sources
                            cspBuilder.AddMediaSrc().Self()
@@ -201,7 +199,6 @@ namespace CollAction
                                                            "https://ajax.aspnetcdn.com",
                                                            "https://www.googletagmanager.com",
                                                            "https://www.google-analytics.com",
-                                                           "https://use.fontawesome.com/",
                                                            "*.msecnd.net",
                                                            "'sha256-EHA5HNhe/+uz3ph6Fw34N85vHxX87fsJ5cH4KbZKIgU='"
                                                        }.Concat(Configuration["CspScriptSrc"]?.Split(";") ?? new string[0]));

@@ -17,7 +17,7 @@ namespace CollAction.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
+                .HasAnnotation("ProductVersion", "2.1.8-servicing-32085")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("CollAction.Models.ApplicationUser", b =>
@@ -455,6 +455,26 @@ namespace CollAction.Migrations
                     b.ToTable("Tags");
                 });
 
+            modelBuilder.Entity("CollAction.Models.UserEvent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("EventData")
+                        .IsRequired()
+                        .HasColumnType("json");
+
+                    b.Property<DateTime>("EventLoggedAt");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserEvents");
+                });
+
             modelBuilder.Entity("CollAction.Models.VideoLink", b =>
                 {
                     b.Property<int>("Id")
@@ -713,6 +733,13 @@ namespace CollAction.Migrations
                         .WithMany("ProjectTags")
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("CollAction.Models.UserEvent", b =>
+                {
+                    b.HasOne("CollAction.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

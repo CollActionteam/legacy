@@ -15,10 +15,6 @@
     var canTrack = consentFeature.CanTrack;
 }
 
-@section styles {
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
-}
-
 <div id="login-starting">
     <div class="container">
         <div class="row">
@@ -46,18 +42,7 @@
 
                             <div class="form-group">
                                 <button type="submit" class="btn-socialmedia-login @providerClass" name="provider" value="@provider.Name">
-                                    @if(providerName == "GOOGLE")
-                                    {
-                                        <div>
-                                            <i class="fab fa-@providerClass"></i>&nbsp;&nbsp;LOGIN with @providerName
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div>
-                                            <i class="fab fa-@providerClass-square"></i>&nbsp;&nbsp;LOGIN with @providerName
-                                        </div>
-                                    }
+                                    <i class="fa fa-@providerClass"></i>&nbsp;&nbsp;LOGIN with @providerName
                                 </button>
                             </div>
                         }

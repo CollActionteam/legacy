@@ -1,6 +1,6 @@
 import * as React from "react";
+import * as ReactQuill from "react-quill";
 import renderComponentIf from "./renderComponentIf";
-import ReactQuill from "react-quill";
 
 interface ICollActionEditorProps {
   formInputId: string;
@@ -16,8 +16,8 @@ export default class RichTextEditor extends React.Component<ICollActionEditorPro
 
   private HREF_REGEX = /href=\"(?!http:\/\/|https:\/\/)([^\"]*)(\")/ig;
 
-  constructor(props?: ICollActionEditorProps, context?: any) {
-    super(props, context);
+  constructor(props: ICollActionEditorProps) {
+    super(props);
 
     this.state = {
       content: ""

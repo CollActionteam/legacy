@@ -13,6 +13,19 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - CollAction</title>
+    @if (canTrack) 
+    {
+        <script src="~/lib/google/tagmanager.js">
+        </script>
+    }
+    <environment names="Development">
+        <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    </environment>
+    <link href="https://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet">
+
     <style>
         body { display: none; }
     </style>

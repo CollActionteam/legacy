@@ -148,12 +148,14 @@ namespace CollAction.Controllers
                 "<br>" +
                 "Thanks for submitting a project on www.collaction.org!<br>" +
                 "The CollAction Team will review your project as soon as possible - if it meets all the criteria we'll publish the project on the website and will let you know, so you can start promoting it! If we have any additional questions or comments, we'll reach out to you by email.<br>" +
+                "Also, did you know we have a <a href=\"https://docs.google.com/document/d/1JK058S_tZXntn3GzFYgiH3LWV5e9qQ0vXmEyV-89Tmw\">Project Starter Handbook</a> with tips and tricks on how to start, run, and finish a project on CollAction?" +
+                "<br>" +
                 "<br>" +
                 "Thanks so much for driving the CollAction / crowdacting movement!<br>" +
                 "<br>" +
                 "Warm regards,<br>" +
                 "The CollAction team";
-            string subject = $"Thank you for participating in the \"{project.Name}\" project on CollAction";
+            string subject = $"Thank you for submitting \"{project.Name}\" on CollAction";
 
             ApplicationUser user = await _userManager.GetUserAsync(User);
             _emailSender.SendEmail(user.Email, subject, confirmationEmail);
@@ -313,7 +315,7 @@ namespace CollAction.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> FindProjects(int? categoryId, int? statusId, int? limit)
+        public async Task<JsonResult> FindProjects(int? categoryId, int? statusId, int? limit, int start)
         {
             Expression<Func<Project, bool>> projectExpression = (p =>
                 p.Status != ProjectStatus.Hidden &&
@@ -329,7 +331,7 @@ namespace CollAction.Controllers
                 default: statusExpression = (p => true); break;
             }
 
-            var projects = await _projectService.FindProjects(Expression.Lambda<Func<Project, bool>>(Expression.AndAlso(projectExpression.Body, Expression.Invoke(statusExpression, projectExpression.Parameters[0])), projectExpression.Parameters[0]), limit).ToListAsync();
+            var projects = await _projectService.FindProjects(Expression.Lambda<Func<Project, bool>>(Expression.AndAlso(projectExpression.Body, Expression.Invoke(statusExpression, projectExpression.Parameters[0])), projectExpression.Parameters[0]), limit, start).ToListAsync();
 
             return Json(projects);
         }

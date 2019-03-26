@@ -138,10 +138,6 @@
     }
   }
 
-  #project-create-starting {
-    background-color: #efefef;
-  }
-
   #homepage-share-buttons {
     margin-bottom: 25px;
   }
@@ -164,6 +160,54 @@
   #banner-title {
     background-image: url(/images/front-page.jpg);
     color: $coll-action-green;
+  }
+
+  #how-it-works {
+    background: #efefef;
+    text-align: center;
+    margin-top: 50px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+
+    img.icon {
+      height: 40px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 4em;
+      letter-spacing: 10px;
+      text-transform: uppercase;
+      color: $coll-action-green;
+      margin: 5px 0px 5px 0px;
+    }
+
+    h4 {
+      color: gray;
+      text-align: center;
+      font-size: 2em;
+      text-transform: uppercase;
+      letter-spacing: 10px;
+      margin: 0px 0px 30px 0px;
+    }
+
+    .step {
+      margin-bottom: 20px
+    }
+
+    a.btn {
+      border-radius: 20px;
+      display: inline-block;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-weight: bold;
+      margin: 20px 0;
+      padding: 10px 20px;
+      text-align: center;
+      color: white;
+      background-color: $coll-action-green;
+      width: 100%;
+    }
   }
 }
 
