@@ -152,6 +152,11 @@ const teamMembers: ITeamMember[] = [
     name: "Brian Russell",
     role: "",
     photo: "NoPhoto.png"
+  },
+  {
+    name:"Alexis Padula",
+    role:"",
+    photo:"NoPhoto.png"
   }
 ];
 
