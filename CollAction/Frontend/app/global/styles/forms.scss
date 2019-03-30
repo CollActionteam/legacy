@@ -16,6 +16,10 @@ form {
     padding-right: 1.5em
   }
 
+  select::-ms-expand {
+    display: none;
+  }
+
   label {
     font-weight: bold;
   }
