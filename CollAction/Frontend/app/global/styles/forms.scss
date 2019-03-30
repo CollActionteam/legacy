@@ -19,6 +19,10 @@ form {
   select::-ms-expand {
     display: none;
   }
+    
+  input[type="date"] {
+    background-color: white;
+  }
 
   label {
     font-weight: bold;
