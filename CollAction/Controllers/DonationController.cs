@@ -19,9 +19,9 @@ namespace CollAction.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PerformDonation(string email, int amount, string currency, string token) 
+        public async Task<IActionResult> PerformDonation(string name, string token) 
         {
-            await _donationService.Charge(email, token, amount, currency);
+            //await _donationService.Charge(email, token, amount, currency);
             return View();
         }
     }
