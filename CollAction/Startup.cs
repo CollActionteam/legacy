@@ -28,6 +28,7 @@ using CollAction.Services.Newsletter;
 using CollAction.Services.Festival;
 using CollAction.Services.DataProtection;
 using CollAction.Services.Image;
+using Microsoft.AspNetCore.Http;
 
 namespace CollAction
 {
@@ -96,6 +97,7 @@ namespace CollAction
 
             services.Configure<AuthMessageSenderOptions>(Configuration);
             services.Configure<ImageServiceOptions>(Configuration);
+            services.Configure<ImageProcessingOptions>(Configuration);
             services.Configure<NewsletterSubscriptionServiceOptions>(Configuration);
             services.Configure<FestivalServiceOptions>(Configuration);
             services.Configure<ProjectEmailOptions>(Configuration);
@@ -106,6 +108,12 @@ namespace CollAction
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredLength = 8;
+            });
+
+            services.Configure<CookiePolicyOptions>(options => 
+            {
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
             });
         }
 

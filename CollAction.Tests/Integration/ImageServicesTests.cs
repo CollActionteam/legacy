@@ -21,6 +21,7 @@ namespace CollAction.Tests.Integration
     {
         private readonly byte[] _image = new byte[] { 0x42, 0x4D, 0x1E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1A, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x00, 0xFF, 0x00 };
         private readonly ImageServiceOptions _options;
+        private readonly ImageProcessingOptions _imageProcessingOptions;
         private Mock<IBackgroundJobClient> _jobClient;
         private AmazonS3ImageService _imageService;
         private Mock<IFormFile> _upload;
@@ -32,6 +33,7 @@ namespace CollAction.Tests.Integration
                                           .AddEnvironmentVariables()
                                           .Build();
             _options = new ImageServiceOptions();
+            _imageProcessingOptions = new ImageProcessingOptions();
             configuration.Bind(_options);
         }
 
@@ -45,7 +47,7 @@ namespace CollAction.Tests.Integration
                               Task.Run(() => (Task)job.Method.Invoke(_imageService, job.Args.ToArray())).Wait();
                               return string.Empty;
                           });
-            _imageService = new AmazonS3ImageService(new OptionsWrapper<ImageServiceOptions>(_options), _jobClient.Object);
+            _imageService = new AmazonS3ImageService(new OptionsWrapper<ImageServiceOptions>(_options), new OptionsWrapper<ImageProcessingOptions>(_imageProcessingOptions), _jobClient.Object);
             _upload = new Mock<IFormFile>();
             _upload.Setup(u => u.OpenReadStream()).Returns(new MemoryStream(_image));
         }

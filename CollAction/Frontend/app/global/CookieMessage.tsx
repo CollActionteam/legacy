@@ -14,6 +14,8 @@ export default class CookieMessage extends React.Component<ICookieMessageProps, 
     constructor(props) {
         super(props);
         this.state = { showBanner: false };
+
+        this.accept = this.accept.bind(this);
     }
 
     componentDidMount() {
