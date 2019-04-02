@@ -40,6 +40,16 @@
             margin-top: -20px;
         }
 
+        a {
+            color: white;
+            text-decoration: underline;
+
+            &:hover,
+            &:focus {
+                text-decoration: none;
+            }
+        }
+
         a.btn {
             color: $coll-action-green;
             background-color: white;

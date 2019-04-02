@@ -84,7 +84,7 @@ namespace CollAction.Services.Project
             return await _context.ProjectParticipants.SingleOrDefaultAsync(p => p.ProjectId == projectId && p.UserId == userId);
         }
 
-        public IQueryable<FindProjectsViewModel> FindProjects(Expression<Func<Models.Project, bool>> filter, int? limit)
+        public IQueryable<FindProjectsViewModel> FindProjects(Expression<Func<Models.Project, bool>> filter, int? limit, int? start)
         {
             IQueryable<Models.Project> projects = _context.Projects
                 .Where(filter)
@@ -92,6 +92,9 @@ namespace CollAction.Services.Project
 
             if (limit.HasValue)
                 projects = projects.Take(limit.Value);
+
+            if(start.HasValue)
+                projects = projects.Skip(start.Value);
 
             return projects
                 .Select(project =>
@@ -305,7 +308,8 @@ namespace CollAction.Services.Project
                     DescriptiveImageDescription = project.DescriptiveImage.Description,
                     Status = project.Status,
                     Start = project.Start,
-                    End = project.End
+                    End = project.End,
+                    CanSendProjectEmail = this.CanSendProjectEmail(project)
                 })
                 .ToListAsync();
         }

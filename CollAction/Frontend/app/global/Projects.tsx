@@ -8,6 +8,7 @@ export interface IProjectsState {
   projectList: IProject[];
   projectFetching: boolean;
   projectFetchError: any;
+  allProjectsFetched: boolean;
 }
 
 export abstract class Projects<P extends IProjectsProps, S extends IProjectsState> extends React.Component<P, S> {
@@ -26,7 +27,7 @@ export abstract class Projects<P extends IProjectsProps, S extends IProjectsStat
 
             const fetchResult: Response = await fetch(searchProjectRequest);
             const jsonResponse = await fetchResult.json();
-            this.setState({ projectFetching: false, projectList: jsonResponse });
+            this.setState({ projectFetching: false, projectList: jsonResponse, allProjectsFetched: true });
         }
         catch (e) {
             this.setState({ projectFetching: false, projectFetchError: e });

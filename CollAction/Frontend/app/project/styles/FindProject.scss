@@ -212,6 +212,25 @@
         display: inline-block;
       }
     }
+
+    .mail-to-participants {
+      margin-top: 20px;
+
+      .btn {
+        font-size: 0.8em;
+      }
+      
+      &.not-available {
+        text-align: center;        
+        span {
+          width: 100%;
+          padding: 10px 0;
+          font-size: 0.8em;
+          display: inline-block;
+          color: gray;
+        }
+      }
+    }
   }
 }
 
