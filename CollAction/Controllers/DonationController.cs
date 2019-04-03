@@ -22,7 +22,12 @@ namespace CollAction.Controllers
         public async Task<IActionResult> PerformDonation(string name, string token) 
         {
             //await _donationService.Charge(email, token, amount, currency);
-            return View();
+            return Ok();
+        }
+
+        public IActionResult ThankYou(string name)
+        {
+            return View(name);
         }
     }
 }

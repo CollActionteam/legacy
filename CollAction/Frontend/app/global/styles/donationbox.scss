@@ -23,6 +23,10 @@
 #donation-modal {
     width: 26em;
 
+    .error {
+        color: $coll-action-green;
+    }
+
     a.btn {
         @include coll-action-button;
         margin-top: 1em;

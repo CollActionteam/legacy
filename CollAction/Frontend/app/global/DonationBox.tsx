@@ -11,6 +11,7 @@ interface IDonationBoxProps {
 interface IDonationBoxState {
     amount: number;
     showError: boolean;
+    error: string;
     paymentMethod: PaymentMethod;
     showPopup: boolean;
     name: string;
@@ -41,7 +42,8 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
             showError: false, 
             showPopup: false, 
             paymentMethod: PaymentMethod.None, 
-            name: ""
+            name: "",
+            error: ""
         };
         Modal.setAppElement('#site-content');
     }
@@ -60,7 +62,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
 
     pay = (method: PaymentMethod) => {
         if (this.state.amount <= 0) {
-            this.setState({ showError: true});
+            this.setState({ showError: true, error: "Thank you! Please select or enter an amount you'd like to donate."});
             return;
         }
         this.setState({paymentMethod: method, showPopup: true});
@@ -93,7 +95,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
     }
 
     closePayment() {
-        this.setState({showPopup: false, paymentMethod: PaymentMethod.None});
+        this.setState({ showPopup: false, paymentMethod: PaymentMethod.None, showError: false });
     }
 
     showPopup() {
@@ -101,18 +103,34 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
     }
 
     async submitPayment() {
+        if (this.state.name === "" || this.state.name === null) {
+            this.setState({ showError: true, error: "please fill in your name" });
+            return;
+        }
         let { stripeToken } = await this.props.stripe.createToken({name: this.state.name});
+        if (stripeToken === null) {
+            this.setState({ showError: true, error: "couldn't receive token" });
+            return;
+        }
         let response = await fetch(`/Donation/PerformDonation?name=${encodeURIComponent(this.state.name)}&token=${stripeToken}`, {
             method: "POST"
         });
+        if (response.status === 200) {
+            window.location.href = "/donation/thankyou?name=" + this.state.name;
+        } else {
+            this.setState({ showError: true, error: "couldn't process token" });
+        }
     }
 
     renderPaymentPopup() {
         return (
             <Modal isOpen={this.state.showPopup} onRequestClose={() => this.closePayment()} contentLabel="Donate" style={popupStyles}>
+                <div className="error" hidden={!this.state.showError}>
+                    <p>{this.state.error}</p>
+                </div>
                 <div id="donation-modal">
                     <label htmlFor="name-input">Name</label>
-                    <input id="name-input" className="form-control" onChange={(event) => this.setName} type="text" />
+                    <input id="name-input" className="form-control" onChange={(event) => this.setName(event)} type="text" />
                     {this.renderStripe()}
                     <a className="btn btn-default" onClick={() => this.submitPayment()}>Submit</a>
                     <a className="btn" onClick={() => this.closePayment()}>Close</a>
@@ -157,7 +175,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
                     {this.renderCustomAmount()}
                 </div>
                 <div className="error" hidden={!this.state.showError}>
-                    <p>Thank you! Please select or enter an amount you'd like to donate.</p>
+                    <p>{this.state.error}</p>
                 </div>
                 <div className="payment-options">
                     <div className="row">
