@@ -36,8 +36,9 @@
                 {
                     <li><a asp-controller="Manage" asp-action="Index">Account</a></li>
                     <li>
-                        <a href='#' onclick='document.forms["logoff"].submit(); return false;'>Logout</a>
-                        <form name="logoff" asp-controller="Account" asp-action="LogOff" method="post"></form>
+                        <form asp-area="" asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm">
+                            <input type="submit" value="Logout" id="logOutBtn" />
+                        </form>
                     </li>
                 }
                 else

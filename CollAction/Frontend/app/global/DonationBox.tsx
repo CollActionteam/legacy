@@ -43,6 +43,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
             paymentMethod: PaymentMethod.None, 
             name: ""
         };
+        Modal.setAppElement('#site-content');
     }
 
     setAmount = (event) => {
@@ -109,11 +110,13 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
     renderPaymentPopup() {
         return (
             <Modal isOpen={this.state.showPopup} onRequestClose={() => this.closePayment()} contentLabel="Donate" style={popupStyles}>
-                <label htmlFor="name-input">Name</label>
-                <input id="name-input" onChange={(event) => this.setName} type="text" />
-                {this.renderStripe()}
-                <button onClick={() => this.submitPayment()}>Submit</button>
-                <button onClick={() => this.closePayment()}>Close</button>
+                <div id="donation-modal">
+                    <label htmlFor="name-input">Name</label>
+                    <input id="name-input" className="form-control" onChange={(event) => this.setName} type="text" />
+                    {this.renderStripe()}
+                    <a className="btn btn-default" onClick={() => this.submitPayment()}>Submit</a>
+                    <a className="btn" onClick={() => this.closePayment()}>Close</a>
+                </div>
             </Modal>
         );
     }

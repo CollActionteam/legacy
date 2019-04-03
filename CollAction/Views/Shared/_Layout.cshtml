@@ -50,7 +50,9 @@
     </div>
 
     <partial name="_CookieConsentPartial" /> 
+    <div id="site-content">
     @RenderBody()
+    </div>
     <partial name="_Footer" />
 
     @RenderSection("scripts", required: false)
