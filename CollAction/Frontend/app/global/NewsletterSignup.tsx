@@ -79,19 +79,16 @@ class NewsletterSignup extends React.Component<NewsLetterSignupProps, NewsLetter
       return;
     }
 
+    let formData = new FormData();
+    formData.append("MERGE0", this.state.email);
+    formData.append("u", this.props.mailchimpUser);
+    formData.append("id", this.props.mailChimpListId);
+
     this.setState({ subscriptionState: States.LOADING });
 
-    fetch("http://collaction.us14.list-manage.com/subscribe/post-json", {
-      method: "GET",
-      headers: new Headers({
-        "dataType" : "json",
-        "contentType" : "application/json; charset=utf-8"
-      }),
-      body: JSON.stringify({
-        MERGE0 : this.state.email,
-        u : this.props.mailchimpUser,
-        id: this.props.mailChimpListId
-      }),
+    fetch("http://collaction.us14.list-manage.com/subscribe/post", {
+      method: "POST",
+      body: formData
     })
     .then(response => {
       if (response.ok) {
