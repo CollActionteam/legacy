@@ -74,6 +74,7 @@ namespace CollAction.Models.AdminViewModels
         [Display(Name = "Description image", Prompt = "1088x518 JPEG, GIF, PNG, BMP")]
         [FileSize(1024000)] // 1MB
         [FileType("jpg", "jpeg", "gif", "png", "bmp")]
+        [MaxImageDimensions(1088, 518)]
         public IFormFile DescriptiveImageUpload { get; set; }
         public ImageFile DescriptiveImageFile { get; set; }
 
