@@ -2,11 +2,16 @@
 
 @inject IViewLocalizer Localizer
 
-@model string
-
 @{
     ViewData["Title"] = Localizer["Thank you for supporting CollAction!"];
 }
 
-<h1>Awesome!</h1>
-<h2>Thank you '@Model' for supporting CollAction!</h2>
+<div id="thank-you-commit">
+    <div class="container-fluid">
+        <div id="thank-you" class="row">
+            <div class="col-xs-12 col-md-offset-5 col-md-7">
+                <h1>Thank you for supporting CollAction!</h1>
+            </div>
+        </div>
+    </div>
+</div>

@@ -11,7 +11,6 @@ import "./styles/cookiemessage.scss";
 import "./styles/helpers.scss";
 import "./styles/tooltips.scss";
 import "./styles/busy-indicator.scss";
-import "./styles/donationbox.scss";
 import "./styles/quill-snow.css";
 
 import "./NavbarToggler";
@@ -19,5 +18,4 @@ import "./ShareButtons";
 import "./RichTextEditor";
 import "./CookieMessage";
 import "./Tooltips";
-import "./Faqs";
-import "./DonationBox";
+import "./Faqs"; 

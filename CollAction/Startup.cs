@@ -29,6 +29,7 @@ using CollAction.Services.Image;
 using Microsoft.AspNetCore.Http;
 using Stripe;
 using CollAction.Services.Donation;
+using CollAction.Services;
 
 namespace CollAction
 {
@@ -96,6 +97,7 @@ namespace CollAction
 
             services.AddApplicationInsightsTelemetry(Configuration);
 
+            services.Configure<SiteOptions>(Configuration);
             services.Configure<AuthMessageSenderOptions>(Configuration);
             services.Configure<ImageServiceOptions>(Configuration);
             services.Configure<ImageProcessingOptions>(Configuration);

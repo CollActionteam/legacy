@@ -4,6 +4,7 @@ import "./global";
 import "./account";
 import "./admin";
 import "./manage";
+import "./donation";
 
 import "whatwg-fetch";
 

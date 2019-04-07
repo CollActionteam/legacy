@@ -1,5 +1,7 @@
 ﻿using System.Threading.Tasks;
+using CollAction.Models;
 using CollAction.Services.Donation;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CollAction.Controllers
@@ -7,10 +9,12 @@ namespace CollAction.Controllers
     public class DonationController : Controller
     {
         private IDonationService _donationService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public DonationController(IDonationService donationService)
+        public DonationController(IDonationService donationService, UserManager<ApplicationUser> userManager)
         {
             _donationService = donationService;
+            _userManager = userManager;
         }
 
         public IActionResult Donate()
@@ -19,15 +23,16 @@ namespace CollAction.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PerformDonation(string name, string token) 
+        public async Task<IActionResult> InitializeCreditCardCheckout(string currency, int amount)
         {
-            //await _donationService.Charge(email, token, amount, currency);
-            return Ok();
+            string checkoutId = await _donationService.InitializeCreditCardCheckout(currency, amount, await _userManager.GetUserAsync(User));
+            return Ok(checkoutId);
         }
 
-        public IActionResult ThankYou(string name)
+        [HttpGet]
+        public IActionResult ThankYou()
         {
-            return View(name);
+            return View();
         }
     }
 }
