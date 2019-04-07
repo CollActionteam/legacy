@@ -32,7 +32,7 @@ export default class IdealBox extends React.Component<IIdealBoxProps, IIdealBoxS
         event.preventDefault();
         this.setState({ showError: false });
 
-        let sourceData: any = {
+        let sourceData = {
             type: "ideal",
             amount: this.props.amount * 100,
             currency: "eur",
@@ -42,22 +42,19 @@ export default class IdealBox extends React.Component<IIdealBoxProps, IIdealBoxS
             redirect: {
                 return_url: window.location.origin + "/donation/ThankYou"
             }
-        }
-
-        let customerIdResponse = await fetch("/donation/GetOrCreateCustomer", { method: "POST" });
-        let customerId = customerIdResponse.status == 200 ?
-            await customerIdResponse.text() :
-            null;
-
-        if (customerId != null && customerId != "") {
-            sourceData.customer = customerId;
-        }
+        };
 
         let response = await this.props.stripe.createSource(sourceData);
         if (!response.error) {
-            window.location.href = response.source.redirect.url;
+            let initializeResponse = await fetch(`/donation/InitializeIdealCheckout?sourceId=${response.source.id}`, { method: 'POST' });
+            if (initializeResponse.status == 200) {
+                window.location.href = response.source.redirect.url;
+            } else {
+                console.log("Unable to start iDeal: " + await initializeResponse.text());
+                this.setState({ showError: true, error: "Unable to start iDeal" })
+            }
         } else {
-            console.log(response.error);
+            console.log("Unable to start iDeal: " + response.error);
             this.setState({ showError: true, error: "Unable to start iDeal" })
         }
     }

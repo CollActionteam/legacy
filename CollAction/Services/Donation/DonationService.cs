@@ -1,4 +1,5 @@
-﻿using CollAction.Models;
+﻿using CollAction.Data;
+using CollAction.Models;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using Stripe;
@@ -16,33 +17,17 @@ namespace CollAction.Services.Donation
     {
         private readonly CustomerService _customerService;
         private readonly SourceService _sourceService;
+        private readonly ApplicationDbContext _context;
         private readonly RequestOptions _requestOptions;
         private readonly SiteOptions _siteOptions;
 
-        public DonationService(IOptions<RequestOptions> requestOptions, IOptions<SiteOptions> siteOptions)
+        public DonationService(IOptions<RequestOptions> requestOptions, IOptions<SiteOptions> siteOptions, ApplicationDbContext context)
         {
             _requestOptions = requestOptions.Value;
             _siteOptions = siteOptions.Value;
             _customerService = new CustomerService(_requestOptions.ApiKey);
             _sourceService = new SourceService(_requestOptions.ApiKey);
-        }
-
-        public async Task<Customer> GetOrCreateCustomer(ApplicationUser applicationUser)
-        {
-            if (applicationUser == null)
-            {
-                return null;
-            }
-
-            Customer customer = (await _customerService.ListAsync(new CustomerListOptions() { Email = applicationUser.Email, Limit = 1 }, _requestOptions)).FirstOrDefault();
-            if (customer == null)
-            {
-                customer = await _customerService.CreateAsync(new CustomerCreateOptions()
-                {
-                    Email = applicationUser.Email
-                });
-            }
-            return customer;
+            _context = context;
         }
 
         public async Task<string> InitializeCreditCardCheckout(string currency, int amount, ApplicationUser user)
@@ -88,7 +73,17 @@ namespace CollAction.Services.Donation
                     if (response.IsSuccessStatusCode)
                     {
                         var responseContent = JObject.Parse(content);
-                        return ((JValue)responseContent["id"]).Value<string>();
+                        string checkoutId = ((JValue)responseContent["id"]).Value<string>();
+
+                        _context.DonationEventLog.Add(new DonationEventLog()
+                        {
+                            UserId = user?.Id,
+                            Type = DonationEventType.Internal,
+                            EventData = content
+                        });
+                        await _context.SaveChangesAsync();
+
+                        return checkoutId;
                     }
                     else
                     {
@@ -98,82 +93,57 @@ namespace CollAction.Services.Donation
             }
         }
 
-        /*
-        private readonly static ProductCreateOptions DonationProductSettings = 
-            new ProductCreateOptions()
-            {
-                Id = "COLL_RECUR_PROD",
-                Name = "CollAction Recurring Donation",
-                Caption = "A recurring donation to Stichting CollAction",
-                Description = "A recurring donation to Stichting CollAction",
-                StatementDescriptor = "A recurring donation to Stichting CollAction",
-                Shippable = false,
-                UnitLabel = "Amount",
-                Type = "service",
-                Active = true
-            };
-        public async Task Initialize()
+        public async Task InitializeIdealCheckout(string sourceId, ApplicationUser user)
         {
-            _donationProduct = await _productService.GetAsync(DonationProductSettings.Id, _options);
-            if (_donationProduct == null)
+            Customer customer = await GetOrCreateCustomer(user);
+            Source source;
+            if (customer != null)
             {
-                _donationProduct = await _productService.CreateAsync(DonationProductSettings);
+                source = await _sourceService.AttachAsync(customer.Id, new SourceAttachOptions()
+                {
+                    Source = sourceId
+                });
             }
             else
             {
-                _donationProduct = await _productService.UpdateAsync(DonationProductSettings.Id, _mapper.Map<ProductUpdateOptions>(DonationProductSettings), _options);
+                source = await _sourceService.GetAsync(sourceId);
             }
+
+            _context.DonationEventLog.Add(new DonationEventLog()
+            {
+                UserId = user?.Id,
+                Type = DonationEventType.Internal,
+                EventData = source.ToJson()
+            });
+            await _context.SaveChangesAsync();
         }
 
-        public async Task ChargeRepeating(string email, string token, long amount, string period, string currency)
+        public Task LogExternalEvent(JObject stripeEvent)
         {
-            Customer customer = (await _customerService.ListAsync(new CustomerListOptions() { Email = email, Limit = 1 }, _options)).FirstOrDefault();
+            _context.DonationEventLog.Add(new DonationEventLog()
+            {
+                Type = DonationEventType.External,
+                EventData = stripeEvent.ToString()
+            });
+            return _context.SaveChangesAsync();
+        }
+
+        private async Task<Customer> GetOrCreateCustomer(ApplicationUser user)
+        {
+            if (user == null)
+            {
+                return null;
+            }
+
+            Customer customer = (await _customerService.ListAsync(new CustomerListOptions() { Email = user.Email, Limit = 1 }, _requestOptions)).FirstOrDefault();
             if (customer == null)
             {
                 customer = await _customerService.CreateAsync(new CustomerCreateOptions()
                 {
-                    Email = email,
-                    SourceToken = token
+                    Email = user.Email
                 });
             }
-
-            string planId = $"COLL_PLAN_{currency}_{period}_{amount}";
-            Plan plan = await _planService.GetAsync(planId);
-            if (plan == null)
-            {
-                plan = await _planService.CreateAsync(new PlanCreateOptions() { Active = true, Currency = currency, Amount = amount });
-            }
-
-            await _subscriptionService.CreateAsync(new SubscriptionCreateOptions() { });
-
-            Charge charge = await _chargeService.CreateAsync(new ChargeCreateOptions()
-            {
-                Amount = amount,
-                Description = "Donation to CollAction",
-                Currency = currency,
-                CustomerId = customer.Id,
-            });
+            return customer;
         }
-
-        public async Task Charge(string email, string token, long amount, string currency)
-        {
-            Customer customer = (await _customerService.ListAsync(new CustomerListOptions() { Email = email, Limit = 1 }, _options)).FirstOrDefault();
-            if (customer == null)
-            {
-                customer = await _customerService.CreateAsync(new CustomerCreateOptions()
-                {
-                    Email = email,
-                    SourceToken = token
-                });
-            }
-
-            Charge charge = await _chargeService.CreateAsync(new ChargeCreateOptions()
-            {
-                Amount = amount,
-                Description = "Donation to CollAction",
-                Currency = currency,
-                CustomerId = customer.Id,
-            });
-        }*/
     }
 }

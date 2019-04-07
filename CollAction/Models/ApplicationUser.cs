@@ -17,5 +17,7 @@ namespace CollAction.Models
         public List<Project> Projects { get; set; }
 
         public List<ProjectParticipant> Participates { get; set; }
+
+        public List<DonationEventLog> DonationEvents { get; set; }
     }
 }

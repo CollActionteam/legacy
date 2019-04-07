@@ -3,6 +3,7 @@ using CollAction.Models;
 using CollAction.Services.Donation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 
 namespace CollAction.Controllers
 {
@@ -17,11 +18,6 @@ namespace CollAction.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Donate()
-        {
-            return View();
-        }
-
         [HttpPost]
         public async Task<IActionResult> InitializeCreditCardCheckout(string currency, int amount)
         {
@@ -30,10 +26,22 @@ namespace CollAction.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetOrCreateCustomer()
+        public async Task<IActionResult> InitializeIdealCheckout(string sourceId)
         {
-            string customerId = (await _donationService.GetOrCreateCustomer(await _userManager.GetUserAsync(User)))?.Id;
-            return Ok(customerId);
+            await _donationService.InitializeIdealCheckout(sourceId, await _userManager.GetUserAsync(User));
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PaymentEvent([FromBody] JObject stripeEvent)
+        {
+            await _donationService.LogExternalEvent(stripeEvent);
+            return Ok();
+        }
+
+        public IActionResult Donate()
+        {
+            return View();
         }
 
         [HttpGet]

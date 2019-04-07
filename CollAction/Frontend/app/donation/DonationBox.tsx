@@ -81,10 +81,13 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
             let checkoutId = await checkoutTokenResponse.text();
             let checkoutResponse = await stripe.redirectToCheckout({ sessionId: checkoutId });
             if (checkoutResponse.status != 200) {
-              this.setState({ showError: true, error: "Unable to redirect to checkout" });
+                let responseBody = await checkoutResponse.text();
+                console.log("Unable to redirect to checkout: " + responseBody);
+                this.setState({ showError: true, error: "Unable to redirect to checkout" });
             }
         } else {
-            this.setState({ showError: true, error: "Unable to initialize checkout" });
+            let responseBody = await checkoutTokenResponse.text();
+            this.setState({ showError: true, error: "Unable to initialize checkout: " + responseBody });
         }
     }
 
