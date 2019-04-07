@@ -13,7 +13,7 @@
     <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.7.38" />
     <PackageReference Include="Hangfire.AspNetCore" Version="1.6.23" />
     <PackageReference Include="Hangfire.PostgreSql" Version="1.5.0" />
-    <PackageReference Include="HtmlSanitizer" Version="4.0.207" />
+    <PackageReference Include="HtmlSanitizer" Version="4.0.210" />
     <PackageReference Include="Microsoft.AspNetCore.All" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.3" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
