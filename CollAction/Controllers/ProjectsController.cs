@@ -315,7 +315,7 @@ namespace CollAction.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> FindProjects(int? categoryId, int? statusId, int? limit, int start)
+        public async Task<JsonResult> FindProjects(int? categoryId, int? statusId, int? limit, int? start)
         {
             Expression<Func<Project, bool>> projectExpression = (p =>
                 p.Status != ProjectStatus.Hidden &&
