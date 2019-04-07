@@ -87,7 +87,8 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
             }
         } else {
             let responseBody = await checkoutTokenResponse.text();
-            this.setState({ showError: true, error: "Unable to initialize checkout: " + responseBody });
+            console.log("Unable to redirect to checkout: " + responseBody);
+            this.setState({ showError: true, error: "Unable to initialize checkout" });
         }
     }
 
