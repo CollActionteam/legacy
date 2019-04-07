@@ -11,7 +11,7 @@ namespace CollAction.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql("DELETE FROM \"Categories\" WHERE \"Name\" = 'Friesland'");
+            migrationBuilder.Sql("INSERT INTO \"Categories\" (\"Color\", \"Description\", \"File\", \"Name\") VALUES ( 32067, 'Friesland', '', 'Friesland')");
         }
     }
 }
