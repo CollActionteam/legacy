@@ -13,7 +13,11 @@ const popupStyles = {
     right                 : 'auto',
     bottom                : 'auto',
     marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)'
+    transform             : 'translate(-50%, -50%)',
+    backgroundColor       : '#efefef',
+    overlay: {
+       backgroundColor: '#efefef'
+    }
   }
 };
 

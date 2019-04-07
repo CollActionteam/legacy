@@ -27,6 +27,24 @@ namespace CollAction.Services.Donation
             _sourceService = new SourceService(_requestOptions.ApiKey);
         }
 
+        public async Task<Customer> GetOrCreateCustomer(ApplicationUser applicationUser)
+        {
+            if (applicationUser == null)
+            {
+                return null;
+            }
+
+            Customer customer = (await _customerService.ListAsync(new CustomerListOptions() { Email = applicationUser.Email, Limit = 1 }, _requestOptions)).FirstOrDefault();
+            if (customer == null)
+            {
+                customer = await _customerService.CreateAsync(new CustomerCreateOptions()
+                {
+                    Email = applicationUser.Email
+                });
+            }
+            return customer;
+        }
+
         public async Task<string> InitializeCreditCardCheckout(string currency, int amount, ApplicationUser user)
         {
             if (amount <= 0)
@@ -78,24 +96,6 @@ namespace CollAction.Services.Donation
                     }
                 }
             }
-        }
-
-        private async Task<Customer> GetOrCreateCustomer(ApplicationUser user)
-        {
-            if (user == null)
-            {
-                return null;
-            }
-
-            Customer customer = (await _customerService.ListAsync(new CustomerListOptions() { Email = user.Email, Limit = 1 }, _requestOptions)).FirstOrDefault();
-            if (customer == null)
-            {
-                customer = await _customerService.CreateAsync(new CustomerCreateOptions()
-                {
-                    Email = user.Email
-                });
-            }
-            return customer;
         }
 
         /*

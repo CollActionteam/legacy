@@ -27,7 +27,7 @@
         color: $coll-action-green;
     }
 
-    a.btn {
+    .btn {
         @include coll-action-button;
         margin-top: 1em;
         margin-right: 1em;

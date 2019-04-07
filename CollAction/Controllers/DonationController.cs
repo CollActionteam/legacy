@@ -29,6 +29,13 @@ namespace CollAction.Controllers
             return Ok(checkoutId);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> GetOrCreateCustomer()
+        {
+            string customerId = (await _donationService.GetOrCreateCustomer(await _userManager.GetUserAsync(User)))?.Id;
+            return Ok(customerId);
+        }
+
         [HttpGet]
         public IActionResult ThankYou()
         {
