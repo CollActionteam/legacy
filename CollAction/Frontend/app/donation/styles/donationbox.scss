@@ -66,12 +66,16 @@
 #donation {
     margin-bottom: 40px;
 
-    .donation-box {
+    #donation-thankyou-box {
         margin-top: -200px;
         padding: 20px 40px 20px 40px;
         background-color: white;
         border-radius: 5px;
         box-shadow: 10px 10px 40px -9px rgba(0,0,0,0.55);
+
+        h2 {
+            color: $coll-action-green;
+        }
 
         .donation-smiley {
             width: 161px;
@@ -86,6 +90,14 @@
             letter-spacing: normal;
             color: #4b4b4b;
         }
+    }
+
+    #donation-box {
+        margin-top: -200px;
+        padding: 20px 40px 20px 40px;
+        background-color: white;
+        border-radius: 5px;
+        box-shadow: 10px 10px 40px -9px rgba(0,0,0,0.55);
 
         h2 {
             color: $coll-action-green;

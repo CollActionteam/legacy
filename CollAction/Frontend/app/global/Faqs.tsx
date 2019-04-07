@@ -124,3 +124,29 @@ renderComponentIf(
         } />,
     document.getElementById("faq-tips-and-tricks")
 );
+
+renderComponentIf(
+    <Faq
+        title="What are collective action problems?"
+        content={
+            <span>
+                <p>
+                    Collective action problems are TODO
+                </p>
+            </span>
+        } />,
+    document.getElementById("faq-collective-action-problems")
+);
+
+renderComponentIf(
+    <Faq
+        title="Where does my donation go?"
+        content={
+            <span>
+                <p>
+                    Your donation goes to TODO
+                </p>
+            </span>
+        } />,
+    document.getElementById("faq-donation-goes-to")
+);
