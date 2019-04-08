@@ -72,23 +72,25 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
             this.setState({ showError: true, error: "Please fill in a valid and positive donation amount" });
             return;
         }
+
         let checkoutTokenResponse: Response = await fetch(`/Donation/InitializeCreditCardCheckout?currency=eur&amount=${this.state.amount}`, { method: "POST" });
-        if (checkoutTokenResponse.status === 200) {
-            let options = {
-              betas: ['checkout_beta_4']
-            } as stripe.StripeOptions; // "betas" option is not supported, need to cast
-            let stripe: any = Stripe(this.props.stripePublicKey, options); // cast to any because redirectToCheckout is a beta API
-            let checkoutId = await checkoutTokenResponse.text();
-            let checkoutResponse = await stripe.redirectToCheckout({ sessionId: checkoutId });
-            if (checkoutResponse.status != 200) {
-                let responseBody = await checkoutResponse.text();
-                console.log("Unable to redirect to checkout: " + responseBody);
-                this.setState({ showError: true, error: "Unable to redirect to checkout" });
-            }
-        } else {
+        if (checkoutTokenResponse.status != 200) {
             let responseBody = await checkoutTokenResponse.text();
             console.log("Unable to redirect to checkout: " + responseBody);
             this.setState({ showError: true, error: "Unable to initialize checkout" });
+            return;
+        }
+
+        let options = {
+          betas: ['checkout_beta_4']
+        } as stripe.StripeOptions; // "betas" option is not supported, need to cast
+        let stripe: any = Stripe(this.props.stripePublicKey, options); // cast to any because redirectToCheckout is a beta API
+        let checkoutId = await checkoutTokenResponse.text();
+        let checkoutResponse = await stripe.redirectToCheckout({ sessionId: checkoutId });
+        if (checkoutResponse.status != 200) {
+            let responseBody = await checkoutResponse.text();
+            console.log("Unable to redirect to checkout: " + responseBody);
+            this.setState({ showError: true, error: "Unable to redirect to checkout" });
         }
     }
 

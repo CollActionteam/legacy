@@ -45,16 +45,17 @@ export default class IdealBox extends React.Component<IIdealBoxProps, IIdealBoxS
         };
 
         let response = await this.props.stripe.createSource(sourceData);
-        if (!response.error) {
-            let initializeResponse = await fetch(`/donation/InitializeIdealCheckout?sourceId=${response.source.id}`, { method: 'POST' });
-            if (initializeResponse.status == 200) {
-                window.location.href = response.source.redirect.url;
-            } else {
-                console.log("Unable to start iDeal: " + await initializeResponse.text());
-                this.setState({ showError: true, error: "Unable to start iDeal" })
-            }
-        } else {
+        if (response.error) {
             console.log("Unable to start iDeal: " + response.error);
+            this.setState({ showError: true, error: "Unable to start iDeal" })
+            return;
+        }
+
+        let initializeResponse = await fetch(`/donation/InitializeIdealCheckout?sourceId=${response.source.id}`, { method: 'POST' });
+        if (initializeResponse.status == 200) {
+            window.location.href = response.source.redirect.url;
+        } else {
+            console.log("Unable to start iDeal: " + await initializeResponse.text());
             this.setState({ showError: true, error: "Unable to start iDeal" })
         }
     }
