@@ -389,5 +389,6 @@
     "navbar.less",
     "responsive-embed.less"
   ],
-  "js": []
+  "js": [],
+  "customizerUrl": "http://getbootstrap.com/customize/?id=b16cc84fa80d0dc07f50849d5978a251"
 }
