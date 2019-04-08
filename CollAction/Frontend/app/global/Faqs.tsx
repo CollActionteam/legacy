@@ -127,26 +127,42 @@ renderComponentIf(
 
 renderComponentIf(
     <Faq
-        title="What are collective action problems?"
+        title="Why should I donate?"
         content={
-            <span>
-                <p>
-                    Collective action problems are TODO
-                </p>
-            </span>
+            <ul>
+                <li>
+                    Our goal is to move millions of people to act for good by launching the crowdacting movement. Whereas back in the day, people turned to politicians and policy makers to fix the world's social and environmental problems (with different levels of success :) ), we think it's time for a new approach. With crowdacting, we take matters into our own collective hands.
+                </li>
+                <li>
+                    But in order to reach our ambitious goals, we need you support. CollAction is a non profit organization. We keep costs super low with the support of our amazing team of volunteers and great pro bono supporters. However, there are still certain costs that need to be covered (you can find an overview of our financials <a href="https://drive.google.com/file/d/1syiUgEq-Or-GOfvBYY8k3fgTu5UZvLey/view">here</a>). We don't like to be dependent on subsidies and we believe it is vital to remain independent from commercial interests. Hence, we ask for contributions from the crowd to survive, scale our impact, and remain independent.
+                </li>
+            </ul>
         } />,
-    document.getElementById("faq-collective-action-problems")
+    document.getElementById("faq-why-donate")
 );
 
 renderComponentIf(
     <Faq
-        title="Where does my donation go?"
+        title="What will my donation be spent on? "
         content={
             <span>
                 <p>
-                    Your donation goes to TODO
+                    You can find an overview of our financials <a href="https://drive.google.com/file/d/1syiUgEq-Or-GOfvBYY8k3fgTu5UZvLey/view">here</a> (apologies, it's in Dutch, since that's where our headquarter is based). In short, the main part of our budget goes to website and organizational costs (e.g. hosting, membership at a co-working space, banking costs). There are also costs related to events, but we generally break even on these events, e.g. by selling tickets, so they pay for themselves. As a team of volunteers, we manage to do a lot with just a little - your donation will go a long way. Our ambitious goal is to start the crowdacting movement and inspire millions of people to act for good by the end of 2020. All money is spent towards that goal.
                 </p>
             </span>
         } />,
     document.getElementById("faq-donation-goes-to")
+);
+
+renderComponentIf(
+    <Faq
+        title="Who started CollAction?"
+        content={
+            <span>
+                <p>
+                    CollAction is started by a <a href="/about">team</a> of optimistic and pragmatic people that believe we can make this world a better place through crowdacting. The concept of CollAction/crowdacting was born in The Netherlands, but we now have an international team of around 20 volunteers.
+                </p>
+            </span>
+        } />,
+    document.getElementById("faq-collaction-started")
 );
