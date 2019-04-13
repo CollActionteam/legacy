@@ -6,11 +6,20 @@ import renderComponentIf from "./renderComponentIf";
 interface IFaqProps {
     title: any;
     content: any;
+    open?: string;
 }
 
-export default class Faq extends React.Component<IFaqProps> {
+interface IFaqState {
+    open: boolean;
+}
+
+export default class Faq extends React.Component<IFaqProps, IFaqState> {
     constructor(props: IFaqProps) {
         super(props);
+
+        this.state = {
+            open: this.props.open === "true" ? true : false
+        };
     }
 
     renderTitle() {
@@ -28,14 +37,13 @@ export default class Faq extends React.Component<IFaqProps> {
     render() {
         return (
             <div className="faq-item">
-                <Collapsible trigger={this.renderTitle()} transitionTime={300} lazyRender={true}>
+                <Collapsible open={this.state.open} trigger={this.renderTitle()} transitionTime={300} lazyRender={true}>
                     {this.props.content}
                 </Collapsible>
             </div>
         );
     }
 }
-
 
 renderComponentIf(
     <Faq
@@ -47,7 +55,9 @@ renderComponentIf(
                     helps people to solve Collective Action Problems through crowdacting.
                 </p>
             </span>
-        } />,
+        }
+        open={getOpenAttribute("faq-what-is-collaction")}
+    />,
     document.getElementById("faq-what-is-collaction")
 );
 
@@ -79,7 +89,9 @@ renderComponentIf(
                     More information can be found on <a href="http://www.crowdacting.org/" target="_blank">www.crowdacting.org</a>.
                 </p>
             </span>
-        } />,
+        }
+        open={getOpenAttribute("faq-what-is-crowdacting")}
+    />,
     document.getElementById("faq-what-is-crowdacting")
 );
 
@@ -98,7 +110,9 @@ renderComponentIf(
                     from other initiatives can be found on <a href="http://www.crowdacting.org/" target="_blank">www.crowdacting.org</a>.
                 </p>
             </span>
-        } />,
+        }
+        open={getOpenAttribute("faq-crowdacting-a-new-thing")}
+    />,
     document.getElementById("faq-crowdacting-a-new-thing")
 );
 
@@ -130,12 +144,14 @@ renderComponentIf(
                 </p>
                 <p>
                     Traditionally, there are two solutions to collective action problems:
-                    <ol>
-                        <li>Privatisation: the commons can be divided between the farmers. Now the farmers benefit from taking good care of
-                            their own piece of land, so that it is of use to them in the long term.</li>
-                        <li>Regulation: Agreements can be made and enforced about the usage of the commons. It is, for example, possible to
-                            decide on a maximum number of cows per farmer.</li>
-                    </ol>
+                </p>
+                <ol>
+                    <li>Privatisation: the commons can be divided between the farmers. Now the farmers benefit from taking good care of
+                        their own piece of land, so that it is of use to them in the long term.</li>
+                    <li>Regulation: Agreements can be made and enforced about the usage of the commons. It is, for example, possible to
+                        decide on a maximum number of cows per farmer.</li>
+                </ol>
+                <p>
                     However, these solutions are not applicable to all collective action problems. It is not so easy (or desirable) to
                     privatise certain goods (how do you privatise the ozone layer? Or migrating fish populations?). Coming up with
                     regulations and enforce these regulations to solve (cross border) problems has proven difficult - just think about
@@ -145,7 +161,9 @@ renderComponentIf(
                     So, we need a new solution to old problems: crowdacting.
                 </p>
             </span>
-        } />,
+        }
+        open={getOpenAttribute("faq-what-are-collactive-problems")}
+    />,
     document.getElementById("faq-what-are-collactive-problems")
 );
 
@@ -156,7 +174,9 @@ renderComponentIf(
             <span>
                 <a href="http://www.crowdacting.org/" target="_blank">www.crowdacting.org</a>.
             </span>
-        } />,
+        }
+        open={getOpenAttribute("faq-where-to-learn-more")}
+    />,
     document.getElementById("faq-where-to-learn-more")
 );
 
@@ -168,7 +188,9 @@ renderComponentIf(
                 Yes! You can create a project <a href="/Projects/StartInfo" target="_blank">here</a>. Make sure to check if your idea
                 meets the CollAction criteria below.
             </span>
-        } />,
+        }
+        open={getOpenAttribute("faq-where-to-learn-more")}
+    />,
     document.getElementById("faq-start-it-yourself")
 );
 
@@ -181,7 +203,9 @@ renderComponentIf(
                 duration, such as eating less meat, periodically visiting lonely elderly people or helping refugees with language
                 lessons and their integration. In other words, the duration of an action differs from one project to the other.
             </span>
-        } />,
+        }
+        open={getOpenAttribute("faq-how-long-does-it-run")}
+    />,
     document.getElementById("faq-how-long-does-it-run")
 );
 
@@ -193,7 +217,9 @@ renderComponentIf(
                 If the target is not met by the deadline, no one needs to act. Crowdacting means: No cure, no action. However,
                 if you are really inspired to take action anyway, we will of course applaud this.
             </span>
-        } />,
+        }
+        open={getOpenAttribute("faq-how-long-does-it-run")}
+    />,
     document.getElementById("faq-target-not-reached")
 );
 
@@ -219,7 +245,9 @@ renderComponentIf(
                     help you think this through!
                 </p>
             </span>
-        } />,
+        }
+        open={getOpenAttribute("faq-how-do-you-know")}
+    />,
     document.getElementById("faq-how-do-you-know")
 );
 
@@ -232,7 +260,9 @@ renderComponentIf(
                     The project ends at the end (23:59:59) of the day that is listed as "End Date" in the UTC (London) timezone.
                 </p>
             </span>
-        } />,
+        }
+        open={getOpenAttribute("faq-when-will-it-end")}
+    />,
     document.getElementById("faq-when-will-it-end")
 );
 
@@ -248,7 +278,9 @@ renderComponentIf(
                     But if you paste it in Google Translate, you should be able to get the gist ☺.
                 </p>
             </span>
-        } />,
+        }
+        open={getOpenAttribute("faq-about-the-organization")}
+    />,
     document.getElementById("faq-about-the-organization")
 );
 
@@ -262,7 +294,9 @@ renderComponentIf(
                     project: whether they are individuals, groups of friends or like minded people, or organizations.
                 </p>
             </span>
-        } />,
+        }
+        open={getOpenAttribute("faq-who-can-start")}
+    />,
     document.getElementById("faq-who-can-start")
 );
 
@@ -287,7 +321,9 @@ renderComponentIf(
                     think about this!
                 </p>
             </span>
-        } />,
+        }
+        open={getOpenAttribute("faq-reasonable-target")}
+    />,
     document.getElementById("faq-reasonable-target")
 );
 
@@ -322,7 +358,7 @@ renderComponentIf(
                         The ProjectStarter has thought through how people can be moved from commitment to action. We can help you with this!
                     </li>
                     <li>
-                        The project is ambitious but realistic � the CollAction evaluation commission judges if this is the case.
+                        The project is ambitious but realistic - The CollAction evaluation commission judges if this is the case.
                         The ProjectStarter can activate his/her own network, and/or has a good plan to achieve the target.
                     </li>
                     <li>
@@ -331,7 +367,9 @@ renderComponentIf(
                     </li>
                 </ul>
             </span>
-        } />,
+        }
+        open={getOpenAttribute("faq-criteria")}
+    />,
     document.getElementById("faq-criteria")
 );
 
@@ -344,7 +382,9 @@ renderComponentIf(
                     Check out our <a href="https://docs.google.com/document/d/1JK058S_tZXntn3GzFYgiH3LWV5e9qQ0vXmEyV-89Tmw" target="_blank">Project Starter Handbook</a>
                 </p>
             </span>
-        } />,
+        }
+        open={getOpenAttribute("faq-tips-and-tricks")}
+    />,
     document.getElementById("faq-tips-and-tricks")
 );
 
@@ -366,7 +406,9 @@ renderComponentIf(
                     Hence, we ask for contributions from the crowd to survive, scale our impact, and remain independent.
                 </li>
             </ul>
-        } />,
+        }
+        open={getOpenAttribute("faq-why-donate")}
+    />,
     document.getElementById("faq-why-donate")
 );
 
@@ -384,7 +426,9 @@ renderComponentIf(
                     millions of people to act for good by the end of 2020. All money is spent towards that goal.
                 </p>
             </span>
-        } />,
+        }
+        open={getOpenAttribute("faq-donation-goes-to")}
+    />,
     document.getElementById("faq-donation-goes-to")
 );
 
@@ -399,6 +443,12 @@ renderComponentIf(
                     international team of around 20 volunteers.
                 </p>
             </span>
-        } />,
+        }
+        open={getOpenAttribute("faq-collaction-started")}
+    />,
     document.getElementById("faq-collaction-started")
 );
+
+function getOpenAttribute(id) {
+    return document.getElementById(id) && document.getElementById(id).dataset.open;
+}
