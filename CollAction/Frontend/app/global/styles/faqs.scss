@@ -1,11 +1,8 @@
 @import "../../colors";
 
 .faq-item {
-    a, i {
+    a.faq-title, i {
         color: #8a8a8a;
-    }
-
-    a {
         text-decoration: none;
     }
 
