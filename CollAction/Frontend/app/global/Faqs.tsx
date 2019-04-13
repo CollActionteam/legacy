@@ -418,8 +418,8 @@ renderComponentIf(
         content={
             <span>
                 <p>
-                    You can find an overview of our financials <a href="https://drive.google.com/file/d/1syiUgEq-Or-GOfvBYY8k3fgTu5UZvLey/view">here</a>
-                    (apologies, it's in Dutch, since that's where our headquarter is based). In short, the main part of our budget goes to website and
+                    You can find an overview of our financials <a href="https://drive.google.com/file/d/1syiUgEq-Or-GOfvBYY8k3fgTu5UZvLey/view">here</a> (apologies,
+                    it's in Dutch, since that's where our headquarter is based). In short, the main part of our budget goes to website and
                     organizational costs (e.g. hosting, membership at a co-working space, banking costs). There are also costs related to events, but we
                     generally break even on these events, e.g. by selling tickets, so they pay for themselves. As a team of volunteers, we manage to do
                     a lot with just a little - your donation will go a long way. Our ambitious goal is to start the crowdacting movement and inspire
