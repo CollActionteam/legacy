@@ -27,9 +27,11 @@ export default class Faq extends React.Component<IFaqProps> {
 
     render() {
         return (
-            <Collapsible trigger={this.renderTitle()} transitionTime={300} lazyRender={true}>
-                {this.props.content}
-            </Collapsible>
+            <div className="faq-item">
+                <Collapsible trigger={this.renderTitle()} transitionTime={300} lazyRender={true}>
+                    {this.props.content}
+                </Collapsible>
+            </div>
         );
     }
 }
@@ -101,7 +103,7 @@ renderComponentIf(
                         The ProjectStarter has thought through how people can be moved from commitment to action. We can help you with this!
                     </li>
                     <li>
-                        The project is ambitious but realistic – the CollAction evaluation commission judges if this is the case. The ProjectStarter can activate his/her own network, and/or has a good plan to achieve the target.
+                        The project is ambitious but realistic ï¿½ the CollAction evaluation commission judges if this is the case. The ProjectStarter can activate his/her own network, and/or has a good plan to achieve the target.
                     </li>
                     <li>
                         The ProjectStarter commits to measuring the impact of the action (e.g. the number of people that have acted as a result of the project) and to sharing this information with CollAction.
