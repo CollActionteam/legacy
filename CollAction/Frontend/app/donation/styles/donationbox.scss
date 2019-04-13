@@ -66,6 +66,10 @@
 #donation {
     margin-bottom: 40px;
 
+    h1 {
+        color: #8a8a8a;
+    }
+
     #donation-thankyou-box {
         margin-top: -200px;
         padding: 20px 40px 20px 40px;
@@ -91,6 +95,7 @@
 
     #donation-box {
         margin-top: -200px;
+        margin-bottom: 40px;
         padding: 20px 40px 20px 40px;
         background-color: white;
         border-radius: 5px;
