@@ -67,7 +67,7 @@ class ProjectThumb extends React.Component<IProject, IThumbState> {
         <div className="email-subscription">
           <a  href="javascript:void(0)"
               onClick={this.toggleSubscription}
-              className={`btn ${this.props.subscribedToEmails ? " unsubscribe" : " subscribe"}`}>
+              className={`btn ${this.props.subscribedToEmails ? "unsubscribe" : "subscribe"}`}>
             {this.props.subscribedToEmails ? "Unsubscribe from news" : "Subscribe to news"}
           </a>
         </div>
