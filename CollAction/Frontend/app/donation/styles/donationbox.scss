@@ -21,7 +21,8 @@
 }
 
 #donation-modal {
-    width: 26em;
+    width: 80vw;
+    max-width: 26em;
 
     .error {
         color: $coll-action-green;
