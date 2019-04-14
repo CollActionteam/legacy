@@ -167,7 +167,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
     renderName() {
         if (this.needsToEnterName()) {
             return (
-                <div>
+                <div id="name-input-box">
                     <label htmlFor="name-input">Name</label>
                     <input id="name-input" className="form-control" onChange={(ev) => this.setName(ev)} type="text" />
                 </div>);
@@ -177,7 +177,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
     renderEmail() {
         if (this.needsToEnterEmail()) {
             return (
-                <div>
+                <div id="email-input-box">
                     <label htmlFor="email-input">E-Mail</label>
                     <input id="email-input" className="form-control" onChange={(ev) => this.setEmail(ev)} type="text" />
                 </div>);
