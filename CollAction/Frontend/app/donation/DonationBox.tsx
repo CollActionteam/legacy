@@ -67,7 +67,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
     }
 
     needsToEnterEmail() {
-        return this.props.userEmail.indexOf("@") < 0;
+        return this.props.userEmail.match(/.+@.+/) === null;
     }
 
     async payIdeal() {
@@ -84,7 +84,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
             return true;
         }
 
-        if (this.getName() == "" || this.getEmail().indexOf("@") < 0) {
+        if (this.getName() == "" || this.getEmail().match(/.+@.+/) === null) {
             this.setState({ showError: true, error: "Please fill in your user-details" });
             return true;
         }
