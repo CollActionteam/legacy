@@ -39,6 +39,7 @@ namespace CollAction.Controllers
             return Ok();
         }
 
+        [HttpGet]
         public IActionResult Donate()
         {
             return View();
