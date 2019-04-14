@@ -70,13 +70,6 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         return this.props.userEmail.match(/.+@.+/) === null;
     }
 
-    async payIdeal() {
-        if (this.checkFormErrors()) {
-            return;
-        }
-        this.setState({ showDialog: true });
-    }
-
     checkFormErrors() {
         this.clearErrors();
         if (this.state.amount <= 0) {
@@ -92,12 +85,20 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         return false;
     }
 
+    async payIdeal() {
+        if (this.checkFormErrors()) {
+            return;
+        }
+        this.setState({ showDialog: true });
+    }
+
     async payCreditCard() {
         if (this.checkFormErrors()) {
             return;
         }
 
-        let checkoutTokenResponse: Response = await fetch(`/Donation/InitializeCreditCardCheckout?currency=eur&amount=${this.state.amount}&name=${encodeURIComponent(this.getName())}&email=${encodeURIComponent(this.getEmail())}`, { method: "POST" });
+        let checkoutTokenUrl = `/Donation/InitializeCreditCardCheckout?currency=eur&amount=${this.state.amount}&name=${encodeURIComponent(this.getName())}&email=${encodeURIComponent(this.getEmail())}`;
+        let checkoutTokenResponse: Response = await fetch(checkoutTokenUrl, { method: "POST" });
         if (checkoutTokenResponse.status != 200) {
             let responseBody = await checkoutTokenResponse.text();
             console.log("Unable to redirect to checkout: " + responseBody);

@@ -48,7 +48,8 @@ export default class IdealBox extends React.Component<IIdealBoxProps, IIdealBoxS
             return;
         }
 
-        let initializeResponse = await fetch(`/donation/InitializeIdealCheckout?sourceId=${response.source.id}&name=${encodeURIComponent(this.props.userName)}&email=${encodeURIComponent(this.props.userEmail)}`, { method: 'POST' });
+        let initializeUrl = `/donation/InitializeIdealCheckout?sourceId=${response.source.id}&name=${encodeURIComponent(this.props.userName)}&email=${encodeURIComponent(this.props.userEmail)}`;
+        let initializeResponse = await fetch(initializeUrl, { method: 'POST' });
         if (initializeResponse.status == 200) {
             window.location.href = response.source.redirect.url;
         } else {
