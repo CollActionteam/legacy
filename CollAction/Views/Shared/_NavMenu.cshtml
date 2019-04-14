@@ -2,6 +2,12 @@
 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@using Microsoft.AspNetCore.Http.Features
+
+@{
+    var consentFeature = Context.Features.Get<ITrackingConsentFeature>();
+    var canTrack = consentFeature.CanTrack;
+}
 
 <nav class="navbar">
     <div class="container-fluid">
@@ -26,7 +32,7 @@
                 {
                     <li><a asp-controller="Admin" asp-action="Index">Admin Dashboard</a></li>
                 }
-                else
+                else if (canTrack)
                 {
                     <li><a class="attention" asp-controller="Donation" asp-action="Donate"><i class="fa fa-heart"></i>&nbsp;Donate</a></li>
                 }

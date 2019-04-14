@@ -24,6 +24,8 @@ const popupStyles = {
 
 interface IDonationBoxProps {
     stripePublicKey: string;
+    userEmail: string;
+    userName: string;
 }
 
 interface IDonationBoxState {
@@ -31,6 +33,8 @@ interface IDonationBoxState {
     showError: boolean;
     error: string;
     showDialog: boolean;
+    inputUserName: string;
+    inputUserEmail: string;
 }
 
 class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> {
@@ -40,7 +44,9 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
             amount: 0, 
             showError: false, 
             error: "",
-            showDialog: false
+            showDialog: false,
+            inputUserEmail: "",
+            inputUserName: ""
         };
     }
 
@@ -56,24 +62,42 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         this.setState({ showError: false, error: null });
     }
 
+    needsToEnterName() {
+        return this.props.userName.match(/^ *$/) !== null;
+    }
+
+    needsToEnterEmail() {
+        return this.props.userEmail.indexOf("@") < 0;
+    }
+
     async payIdeal() {
+        if (this.checkFormErrors()) {
+            return;
+        }
+        this.setState({ showDialog: true });
+    }
+
+    checkFormErrors() {
         this.clearErrors();
         if (this.state.amount <= 0) {
             this.setState({ showError: true, error: "Please fill in a valid and positive donation amount" });
+            return true;
         }
-        else {
-            this.setState({ showDialog: true });
+
+        if (this.getName() == "" || this.getEmail().indexOf("@") < 0) {
+            this.setState({ showError: true, error: "Please fill in your user-details" });
+            return true;
         }
+
+        return false;
     }
 
     async payCreditCard() {
-        this.clearErrors();
-        if (this.state.amount <= 0) {
-            this.setState({ showError: true, error: "Please fill in a valid and positive donation amount" });
+        if (this.checkFormErrors()) {
             return;
         }
 
-        let checkoutTokenResponse: Response = await fetch(`/Donation/InitializeCreditCardCheckout?currency=eur&amount=${this.state.amount}`, { method: "POST" });
+        let checkoutTokenResponse: Response = await fetch(`/Donation/InitializeCreditCardCheckout?currency=eur&amount=${this.state.amount}&name=${encodeURIComponent(this.getName())}&email=${encodeURIComponent(this.getEmail())}`, { method: "POST" });
         if (checkoutTokenResponse.status != 200) {
             let responseBody = await checkoutTokenResponse.text();
             console.log("Unable to redirect to checkout: " + responseBody);
@@ -91,6 +115,34 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
             let responseBody = await checkoutResponse.text();
             console.log("Unable to redirect to checkout: " + responseBody);
             this.setState({ showError: true, error: "Unable to redirect to checkout" });
+        }
+    }
+
+    onCloseDialog() {
+        this.setState({ showDialog: false });
+    }
+
+    setName(ev: React.ChangeEvent<HTMLInputElement>) {
+        this.setState({ inputUserName: ev.currentTarget.value });
+    }
+
+    setEmail(ev: React.ChangeEvent<HTMLInputElement>) {
+        this.setState({ inputUserEmail: ev.currentTarget.value });
+    }
+
+    getName() {
+        if (!this.needsToEnterName()) {
+            return this.props.userName;
+        } else {
+            return this.state.inputUserName;
+        }
+    }
+
+    getEmail() {
+        if (!this.needsToEnterEmail()) {
+            return this.props.userEmail;
+        } else {
+            return this.state.inputUserEmail;
         }
     }
 
@@ -112,8 +164,34 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         );
     }
 
-    onCloseDialog() {
-        this.setState({ showDialog: false });
+    renderName() {
+        if (this.needsToEnterName()) {
+            return (
+                <div>
+                    <label htmlFor="name-input">Name</label>
+                    <input id="name-input" className="form-control" onChange={(ev) => this.setName(ev)} type="text" />
+                </div>);
+        }
+    }
+
+    renderEmail() {
+        if (this.needsToEnterEmail()) {
+            return (
+                <div>
+                    <label htmlFor="email-input">E-Mail</label>
+                    <input id="email-input" className="form-control" onChange={(ev) => this.setEmail(ev)} type="text" />
+                </div>);
+        }
+    }
+
+    renderUserDetails() {
+        if (this.needsToEnterEmail() || this.needsToEnterName()) {
+            return (
+                <div className="user-details">
+                    {this.renderName()}
+                    {this.renderEmail()}
+                </div>);
+        }
     }
 
     renderAmounts() {
@@ -136,7 +214,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
                 <div id="donation-modal">
                     <StripeProvider apiKey={this.props.stripePublicKey}>
                         <Elements>
-                            <InjectedIdealBox amount={this.state.amount} />
+                            <InjectedIdealBox amount={this.state.amount} userEmail={this.getEmail()} userName={this.getName()} />
                         </Elements>
                     </StripeProvider>
                     <a className="btn" onClick={() => this.onCloseDialog()}>Close</a>
@@ -191,6 +269,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
             <div className="donation-box">
                 {this.renderHeader()}
                 {this.renderErrors()}
+                {this.renderUserDetails()}
                 {this.renderAmounts()}
                 {this.renderPopup()}
                 {this.renderPaymentOptions()}
@@ -201,9 +280,11 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
 
 let donationBox: HTMLElement = document.getElementById("donation-box");
 if (donationBox !== null) {
-    let stripePublicKey: string = donationBox.getAttribute("data-stripe-public-key");
+    let stripePublicKey = donationBox.getAttribute("data-stripe-public-key");
+    let name = donationBox.getAttribute("data-user-name");
+    let email = donationBox.getAttribute("data-user-email");
     renderComponentIf(
-        <DonationBox stripePublicKey={stripePublicKey} />,
+        <DonationBox stripePublicKey={stripePublicKey} userName={name} userEmail={email} />,
         donationBox
     );
 }
