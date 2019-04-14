@@ -21,7 +21,6 @@ const popupStyles = {
   }
 };
 
-
 interface IDonationBoxProps {
     stripePublicKey: string;
     userEmail: string;
@@ -48,14 +47,6 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
             inputUserEmail: "",
             inputUserName: ""
         };
-    }
-
-    setAmount(event) {
-        let newAmount = Number.parseInt(event.currentTarget.value);
-        if (!newAmount) {
-            newAmount = 0;
-        }
-        this.setState({amount: newAmount, showError: false});
     }
 
     clearErrors() {
@@ -129,6 +120,14 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
 
     setEmail(ev: React.ChangeEvent<HTMLInputElement>) {
         this.setState({ inputUserEmail: ev.currentTarget.value });
+    }
+
+    setAmount(event: React.ChangeEvent<HTMLInputElement>) {
+        let newAmount = Number.parseInt(event.currentTarget.value);
+        if (!newAmount) {
+            newAmount = 0;
+        }
+        this.setState({amount: newAmount, showError: false});
     }
 
     getName() {
