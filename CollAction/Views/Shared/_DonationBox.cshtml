@@ -20,7 +20,7 @@
     </div>
     <div id="donation" class="row">
         <div class="col-xs-12 col-md-offset-1 col-md-5">
-            <div id="donation-box" data-stripe-public-key="@StripeOptions.Value.StripePublicKey" data-user-name="@(user == null ? null : $"{user.FirstName} {user.LastName}")" data-user-email="@user?.Email"></div>
+            <div id="donation-box" data-stripe-public-key="@StripeOptions.Value.StripePublicKey" data-user-name="@user?.FullName" data-user-email="@user?.Email"></div>
         </div>
         <div class="col-xs-12 col-md-offset 6 col-md-5">
             <div id="donation-faq">

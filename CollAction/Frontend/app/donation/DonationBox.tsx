@@ -63,7 +63,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
     }
 
     needsToEnterName() {
-        return this.props.userName.match(/^ *$/) !== null;
+        return this.props.userName === "";
     }
 
     needsToEnterEmail() {
@@ -169,7 +169,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
             return (
                 <div id="name-input-box">
                     <label htmlFor="name-input">Name</label>
-                    <input id="name-input" className="form-control" onChange={(ev) => this.setName(ev)} type="text" />
+                    <input id="name-input" className="form-control" onChange={(ev) => this.setName(ev)} placeholder="Your name..." type="text" />
                 </div>);
         }
     }
@@ -179,7 +179,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
             return (
                 <div id="email-input-box">
                     <label htmlFor="email-input">E-Mail</label>
-                    <input id="email-input" className="form-control" onChange={(ev) => this.setEmail(ev)} type="text" />
+                    <input id="email-input" className="form-control" onChange={(ev) => this.setEmail(ev)} placeholder="Your e-mail..." type="text" />
                 </div>);
         }
     }
