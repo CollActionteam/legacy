@@ -1,2 +1,2 @@
-import "./global/RichTextRequiredValidation";
-import "./global/WithinMonthsValidation";
+import "./components/global/RichTextRequiredValidation";
+import "./components/global/WithinMonthsValidation";

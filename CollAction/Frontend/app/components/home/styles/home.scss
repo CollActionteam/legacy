@@ -1,0 +1,266 @@
+
+#index {
+
+  .banner-link,
+  .project-actions-link {
+    @include coll-action-button;
+    text-transform: none; // rewrite uppercase in coll-action-button
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  #festival-banner,
+  #festival-banner-mobile {
+    background-color: var(--c-primary);
+    color: white;
+    text-align: center;
+
+    a {
+      color: white;
+      border: 1px solid white;
+      border-radius: 20px;
+      padding: 5px 10px;
+      display: inline-block;
+      text-decoration: none;
+    }
+  }
+
+  #festival-banner {
+    a {
+      margin-left: 20px;
+    }
+  }
+
+  #festival-banner-mobile {
+    a {
+      margin-bottom: 16px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    #festival-banner {
+      display: none;
+    }
+  }
+
+  @media (min-width: 768px) {
+    #festival-banner-mobile {
+      display: none;
+    }
+  }
+
+  #title-row {
+    margin-top: 150px;
+
+    h1, h2 {
+      margin: 0px;
+      padding: 0px;
+    }
+
+    h1 {
+      font-weight: 700;
+      font-size: 34px;
+    }
+
+    h2 {
+      font-weight: 400;
+    }
+
+    text-align: center;
+    margin-bottom: 50px;
+  }
+
+  #link-row {
+    margin-bottom: 150px;
+  }
+
+  #intro-text,
+  #three-steps {
+    a {
+      font-weight: bold;
+      color: var(--c-primary);
+    }
+  }
+
+  #intro-text {
+    text-align: center;
+
+    .intro-question {
+      font-size: 25px;
+      font-weight: bold;
+      color: var(--c-primary);
+    }
+
+    .intro-paragraph {
+      font-size: 18px;
+      line-height: 34px;
+    }
+  }
+
+  #three-steps {
+    text-align: center;
+    background-color: var(--c-gray-light);
+
+    .three-step-image {
+      height: 72px;
+    }
+
+    .heading {
+      font-size: 36px;
+      font-weight: 600; // semibold
+      color: var(--c-primary);
+    }
+
+    .explanation {
+      font-size: 18px;
+      line-height: 30px;
+    }
+  }
+
+  #join-a-project {
+    h3 {
+      text-align: center;
+      font-size: 69px;
+      text-transform: uppercase;
+      color: var(--c-primary);
+    }
+
+    #find-button {
+      background-color: var(--c-primary);
+      color: var(--c-white);
+      padding: 10px 20px;
+      border: none;
+      border-radius: 20px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: 12em;
+    }
+  }
+
+  #homepage-share-buttons {
+    margin-bottom: 25px;
+  }
+
+  #three-steps,
+  #intro-text {
+    padding: 50px 0px;
+  }
+
+  #project-actions {
+    background-color: var(--c-white);
+    padding: 50px 0px 0px 0px;
+  }
+
+  #project-share {
+    background-color: #f7f7f7;
+    padding: 20px 0px 40px 0px;
+  }
+
+  #banner-title {
+    background-image: url(/images/front-page.jpg);
+    color: var(--c-primary);
+  }
+
+  #how-it-works {
+    background: var(--c-gray-light);
+    text-align: center;
+    margin-top: 50px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+
+    img.icon {
+      height: 40px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 4em;
+      letter-spacing: 10px;
+      text-transform: uppercase;
+      color: var(--c-primary);
+      margin: 5px 0px 5px 0px;
+    }
+
+    h4 {
+      color: gray;
+      text-align: center;
+      font-size: 2em;
+      text-transform: uppercase;
+      letter-spacing: 10px;
+      margin: 0px 0px 30px 0px;
+    }
+
+    .step {
+      margin-bottom: 20px
+    }
+
+    a.btn {
+      border-radius: 20px;
+      display: inline-block;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-weight: bold;
+      margin: 20px 0;
+      padding: 10px 20px;
+      text-align: center;
+      color: white;
+      background-color: var(--c-primary);
+      width: 100%;
+    }
+  }
+}
+
+@media (min-width: 991px) {
+  #project-actions {
+    display:none;
+  }
+
+
+  #banner-title {
+    .banner-link {
+      height: 150px;
+      border-radius: 150px;
+      width: 150px;
+      padding: 65px 0px;
+      font-weight: 700;
+    }
+  }
+
+  #index {
+    #title-row {
+      h1 {
+        font-size: 5em;
+      }
+    }
+  }
+}
+
+@media (max-width: 991px) {
+  #join-a-project {
+    display:none;
+  }
+
+  #index {
+
+    #title-row {
+      h1 {
+        font-size: 2.5em;
+      }
+    }
+    
+    #project-share {
+      background-color: var(--c-white);
+      padding-top: 0px;
+
+      #home-share-container {
+        background-color: var(--c-white);
+        border: none;
+        
+        h3 {
+          font-size: 1.7em;
+        }
+      }
+    }
+  }
+}

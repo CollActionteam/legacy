@@ -1,0 +1,152 @@
+@import '../../../style/tools/mixins';
+@import '../../../style/settings/colors';
+
+#start-info {          
+    hr {
+        border-top-width: 2px;
+    }
+
+    #start-info-intro {
+        background-color: var(--c-gray-light);
+    }
+    
+    #background {
+        background-color: white;
+        height: 450px;
+        background-image: url('/images/startproject/happy-people.jpg')
+    }
+
+    a.btn {
+        border-radius: 20px;
+        display: inline-block;
+        text-decoration: none;
+        text-transform: uppercase;
+        font-weight: bold;
+        margin: 20px 0;
+        padding: 10px 20px;
+        text-align: center;
+    }
+
+    #starting-card {
+        color: white;
+        border-radius: 20px;
+        background-color: var(--c-primary);
+        margin: -365px 0px 35px 0px;
+        padding: 20px 40px;
+        box-shadow: 10px 10px 40px -9px rgba(0,0,0,0.55);
+
+        h2 {
+            font-weight: lighter;
+            margin-top: -20px;
+        }
+
+        a {
+            color: white;
+            text-decoration: underline;
+
+            &:hover,
+            &:focus {
+                text-decoration: none;
+            }
+        }
+
+        a.btn {
+            color: var(--c-primary);
+            background-color: white;
+            width: 100%;
+        }
+    }
+
+    #how-it-works {
+        background: var(--c-gray-light);
+        text-align: center;
+
+        padding-bottom: 50px;
+
+        img.icon {
+            height: 40px;
+        }
+        
+        h1 {
+            color: var(--c-primary);
+            font-size: 3em;
+        }
+
+        .step {
+            margin-bottom: 20px
+        }
+
+        a.btn {
+            color: white;
+            background-color: var(--c-primary);
+            width: 100%;
+        }
+    }
+
+    #faq {
+        padding-bottom: 50px;
+
+        h1 {
+            color: var(--c-primary);
+        }
+
+        a, i {
+            color: #8a8a8a;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .is-closed i.fa.fa-minus {
+            display: none;
+        }
+
+        .is-open i.fa.fa-plus {
+            display: none;
+        }
+
+        .toggle {
+            float: right !important;
+        }
+
+        .Collapsible__contentOuter {
+            border-bottom: 1px solid #8a8a8a;
+        }
+    }
+
+    #kickstart {
+        padding-bottom: 50px;
+
+        #kickstart-card {
+            border-radius: 5px;
+            background-color: var(--c-gray-light);
+            padding: 20px 40px;
+    
+            h2 {
+                color: var(--c-primary);
+            }
+
+            p {
+                font-size: 18px;
+            }
+
+            a.btn {
+                color: white;
+                background-color: var(--c-primary);
+
+                @media (min-width: 768px) {
+                    padding: 10px 80px;                    
+                }
+                
+                @media (max-width: 767px) {
+                    width: 100%;
+                }                
+            }
+
+            .logo {
+                width: 40px;
+            }
+        }
+    }
+}

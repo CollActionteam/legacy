@@ -1,0 +1,7 @@
+:root {
+    --spacing: 10px;
+    --spacing-xs: calc(var(--global-spacing) / 4);
+    --spacing-sm: calc(var(--global-spacing) / 2);
+    --spacing-lg: calc(var(--global-spacing)  * 2);
+    --spacing-xlg: calc(var(--global-spacing)  * 4);
+}

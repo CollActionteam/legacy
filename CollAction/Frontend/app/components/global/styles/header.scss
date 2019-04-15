@@ -1,0 +1,171 @@
+@import '../../../style/settings/colors';
+
+#header-container {
+    position: fixed;
+    background-color: white;
+    width: 100%;
+    z-index: 2;
+    height: 85px;
+}
+
+#header-padding {
+    padding-top: 85px;
+}
+
+#header {
+    margin: 20px 0px;
+
+    #NavigationBar a {
+        font-weight: 700;
+    }
+
+    #hamburger-icon {
+        font-size: 22px;
+        margin: 7px;
+    }
+
+    form {
+        float: right;
+    }
+
+    .nav-bar {
+        margin-top: 13px;
+    }
+
+    a {
+        color: #111;
+    }
+
+    #header-menu {
+        list-style: none;
+        padding: 0px;
+        margin: 0px;
+
+        li {
+            display: inline;
+            font-weight: bold;
+            margin: 0px 50px 0px 50px;
+        }
+    }
+
+    #draw-menu {
+        ul {
+            list-style: none;
+            padding: 0px;
+            margin: 70px 0px 0px 0px;
+        }
+
+        li {
+            margin: 30px 20px;
+            font-size: 22px;
+
+            a {
+                color: var(--c-primary);
+            }
+
+            button {
+                color: var(--c-primary);
+                font-weight: normal;
+                background: none !important;
+                padding: 0 !important;
+                border: none;
+                -webkit-box-shadow: none;
+                box-shadow: none;
+                outline-color: transparent;
+            }
+        }
+
+        #draw-menu-close-button {
+            font-size: 35px;
+            margin: -2px 20px 20px 20px;
+        }
+
+        position: absolute;
+        background-color: var(--c-white);
+        left: 0px;
+        top: 0px;
+        z-index: 21;
+        height: 100vh;
+        width: 100vw;
+    }
+
+    #header-login {
+        text-align: right;
+
+        #logInBtn {
+            background-color: var(--c-primary);
+            color: var(--c-white);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+        }
+
+        #logOutBtn {
+            color: #111;
+            background: none !important;
+            padding: 0 !important;
+            border: none;
+            outline-color: transparent;
+        }
+    }
+}
+
+@media (max-width: 991px) {
+    #header-container {
+        #nav-container {
+            padding-left: 0px;
+            padding-right: 0px;
+            margin-left: 0px;
+            margin-right: 0px;
+            width: 100%;
+
+            a {
+              margin: 0px auto;
+              max-width: 300px;
+              display: block;
+              padding-left: 45px;
+            }
+
+            .nav-row {
+                margin-left: 0px;
+                margin-right: 0px;
+
+                #mobile-nav-draw {
+                    text-align: left;
+                }
+                
+                .mobile-header {
+                    float: left;
+                    height: 50px;
+                    width: 45px;
+                }
+
+                .fa-bars {
+                    font-size: 30px;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 767px) {
+  #header-container {
+    #nav-container {
+      .nav-row {
+        .mobile-header {
+          padding-left: 0px;
+          height: 45px;
+          width: 45px;
+
+          #hamburger-icon {
+            margin-left: 0px;
+            margin-right: 0px;
+            margin-top: 7px;
+            margin-bottom: 0px;
+          }
+        }
+      }
+    }
+  }
+}
+

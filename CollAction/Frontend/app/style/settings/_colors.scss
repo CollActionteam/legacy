@@ -1,0 +1,10 @@
+:root {
+    --c-white: #ffffff;
+    --c-black: #000000;
+    --c-green: #23D884;
+    --c-gray: #4b4b4b;
+    --c-gray-light: var(--c-gray-light);
+
+    --c-primary: var(--c-green);
+    --c-secondary: var(--c-gray);
+}

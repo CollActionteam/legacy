@@ -1,0 +1,26 @@
+@mixin card {
+    -webkit-box-shadow: 10px 10px 10px -5px rgba(170,170,170,1);
+    -moz-box-shadow: 10px 10px 10px -5px rgba(170,170,170,1);
+    box-shadow: 10px 10px 10px -5px rgba(170,170,170,1);
+    background-color: var(--c-white);
+    color: var(--c-gray);
+    border-radius: 15px;
+}
+
+@mixin coll-action-button {
+    background-color: var(--c-primary);
+    color: var(--c-white);
+    padding: 10px 50px;
+    border: none;
+    border-radius: 20px;
+    font-size: 1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    display: inline-block;
+
+    a {
+      text-decoration: none;
+    }
+}

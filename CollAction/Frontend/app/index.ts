@@ -1,9 +1,12 @@
-import "./home";
-import "./project";
-import "./global";
-import "./account";
-import "./admin";
-import "./manage";
+import "./components/home";
+import "./components/project";
+import "./components/global";
+import "./components/account";
+import "./components/admin";
+import "./components/manage";
+
+// New ITCSS architecture
+import "./style";
 
 import "whatwg-fetch";
 

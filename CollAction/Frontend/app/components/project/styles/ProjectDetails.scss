@@ -1,0 +1,241 @@
+@import '../../../style/tools/mixins';
+@import '../../../style/settings/colors';
+
+#project-details {
+    
+    hr {
+        border-top-width: 2px;
+    }
+
+    .take-part-button {
+        @include coll-action-button;
+        width: 100%;
+        display: inline-block;
+        letter-spacing: 0.09em;
+
+        &.disable-commit {
+            pointer-events: none;
+            background-color: #75dabd;
+        }
+    }
+
+    .participating {
+        text-align: center;
+        color: var(--c-primary);
+        font-size: 1.14em;
+        letter-spacing: 0.09em;
+        margin: 0px;
+    }
+
+    #project-background {
+        background-color: var(--c-white);
+        height: 450px;
+    }
+
+    #project-info-card {
+        border-radius: 20px;
+        margin: -265px 0px 35px 80px;
+        background-color: var(--c-white);
+        padding: 40px;
+        box-shadow: 10px 10px 40px -9px rgba(0,0,0,0.55);
+
+        @media (max-width: 991px) {
+            padding: 20px !important;
+            margin: -100px 0px 0px 0px !important;
+        }
+
+        #more-info {
+            p {
+                margin: 0px;
+            }
+        }
+
+        #more-info,
+        #project-location {
+            text-align: center;
+            width: 80%;
+            margin: 0 auto;
+            font-size: 1.21em;
+            font-weight: bold;
+        }
+
+        #project-participation {
+            font-size: 1.12em;
+
+            ul {
+                padding-left: 20px;
+
+                @media (max-width: 767px) {
+                    padding-left: 5px !important;
+                }
+
+                li {
+                    list-style: none;
+                    display: inline-block;
+                    width: 30%;
+
+                    h4 {
+                        margin: 0px 0px 5px 0px;
+                    }
+
+                    p {
+                        margin: 0px;
+                    }
+                }
+            }
+        }
+
+
+        h1 {
+            text-align: center;
+            color: var(--c-primary);
+            word-wrap: break-word;
+            margin-bottom: 0px;
+        }
+
+
+        #project-category {
+            background-color: #00AEEF;
+            padding: 0px 10px;
+            border-radius: 5px;
+            color: var(--c-white);
+            display: inline-block;
+            text-align: right;
+        }
+
+        #project-progress {
+            display: table;
+            margin: 0 auto;
+            margin-bottom: 35px;
+
+            canvas {
+                margin-bottom: -30px;
+                margin-right: 20px;
+            }
+
+            h2 {
+                display: inline;
+                font-size: 5em;
+            }
+        }
+    }
+
+    #project-starter-row {
+        margin-top: 40px;
+    }
+
+    
+    #project-starter-avatar {
+        background-color: #ff8142;
+        border-radius: 250px;
+        height: 150px;
+        width: 150px;
+
+        @media (max-width: 767px) {
+            height: 75px !important;
+            width: 75px !important;
+        }
+    }
+
+    #project-starter-name {
+        font-size: 1.29em;
+
+        @media (max-width: 767px) {
+            font-size: 1em !important;
+        }
+
+        h3 {
+            margin-bottom: 0em;
+
+            @media (max-width: 767px) {
+                font-size: 1em !important;
+            }
+        }
+
+        p {
+            margin-top: 0em;
+            margin-bottom: 0em;
+        }
+    }
+
+    #more-info,
+    .project-short-description,
+    .project-goal,
+    .project-comments,
+    .caption {
+        word-wrap: break-word;
+
+        p {
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+    }
+
+    .project-green-proposal {
+        word-wrap: break-word;
+    }
+
+    #project-image {
+        margin-top: 20px;
+        margin-bottom: 20px;
+
+        img {
+            width: 100%;
+            box-shadow: 5px 9.5px 34px -9px rgba(0, 0, 0, 0.45);
+        }        
+
+        .image-description {
+            background-color: #eeeeee;
+            border-radius: 20px;
+            padding: 5px 20px;
+
+            @media (max-width: 991px) {
+                margin-top: 20px;
+            }
+        }
+    }
+    
+    .video-container {
+        .ytembed {
+            box-shadow: 0px 9.5px 34px 0px rgba(0, 0, 0, 0.36);
+        }
+    }
+
+    .description-tags-container {
+        padding-right: 15px;
+    }
+
+    .project-green-proposal {
+        font-style: italic;
+        color: var(--c-primary);
+    }
+
+    .bottom-take-part {
+        padding-top: 50px;
+    }
+
+    .project-dates {
+        span {
+            font-size: 1em;
+            font-weight: normal;
+        }
+    }
+
+    #project-share {
+        margin-top: 40px;
+        background-color: #f7f7f7;
+        padding: 20px 0px 20px 0px;
+    }
+
+    @media (min-width: 992px) {
+        #project-background {
+            padding: 150px 0px;
+        }
+    }
+
+    @media (max-width: 992px) {
+        #project-background {
+            padding: 70px 0px;
+        }
+    }
+}

@@ -1,0 +1,57 @@
+@import '../../../style/tools/mixins';
+
+#manage-account {
+  
+    padding-bottom: 50px;
+  
+    #project-list {
+      padding: 0;
+  
+      .project-thumb-container {
+        padding: 0 20px 20px 0;
+      }
+    }
+
+    a.btn {
+        @include coll-action-button;
+        width: 100%;
+    }
+    
+    .panel-body {
+        input[type="submit"] {
+            @include coll-action-button;
+            width: 100%;
+        }
+    }
+
+    .kickstart-card {
+        border-radius: 5px;
+        background-color: var(--c-gray-light);
+        padding: 20px 40px;
+
+        h2 {
+            color: var(--c-primary);
+        }
+
+        p {
+            font-size: 18px;
+        }
+
+        a.btn {
+            color: white;
+            background-color: var(--c-primary);
+
+            @media (min-width: 768px) {
+                padding: 10px 80px;                    
+            }
+            
+            @media (max-width: 767px) {
+                width: 100%;
+            }                
+        }
+
+        .logo {
+            width: 40px;
+        }
+    }
+}

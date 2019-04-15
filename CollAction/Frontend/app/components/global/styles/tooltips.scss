@@ -1,0 +1,13 @@
+@import '../../../style/settings/colors';
+
+.tooltip {
+    color: var(--c-primary);
+}
+
+.rc-tooltip {
+    font-size: 0.9em !important;
+
+    a {
+        color: var(--c-primary);
+    }
+}

@@ -1,0 +1,51 @@
+@import '../../../style/settings/colors';
+
+.share-container {
+  background-color: var(--c-white);
+  border-radius: 9px;
+  border: solid 1px #dadada;
+  h3 {
+    text-align: center;
+    color: var(--c-primary);
+    font-size: 2em;
+    margin: 10px 0px 10px 0px;
+  }
+
+  .share-buttons-container {
+    padding: 20px;
+  }
+  
+}
+
+.share-buttons {
+  .share-count {
+    color: #3b5998;
+    font-weight: bold;
+  }
+
+  .social-media-share-buttons {
+    font-size: 20px;
+    padding: 7px 12px;
+    border-radius: 35px;
+    width: 40px;
+    height: 40px;
+    color: var(--c-white);
+    margin: 0px auto;
+  }
+
+  .social-media-share-button-facebook {
+    background-color: #3b5998;
+  }
+
+  .social-media-share-button-twitter {
+    background-color: #00aced;
+  }
+
+  .social-media-share-button-linkedin {
+    background-color: #007bb6;
+  }
+
+  .social-media-share-button-whatsapp {
+    background-color: #25d366;
+  }
+}
