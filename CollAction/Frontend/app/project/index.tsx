@@ -7,10 +7,11 @@ import "./styles/ProjectCreate.scss";
 import "./styles/ProjectCommit.scss";
 import "./styles/ProjectThankYouCommit.scss";
 import "./styles/ProjectSendEmail.scss";
+import "./styles/ProjectTimeline.scss";
 
 import "./FindProject";
-
 import "./PieChart";
-
 import "./UploadBanner";
 import "./UploadDescriptiveImage";
+
+import "./ProjectTimeline";
