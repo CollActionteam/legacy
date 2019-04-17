@@ -387,8 +387,8 @@
     "responsive-utilities.less",
     "navs.less",
     "navbar.less",
+    "panels.less",
     "responsive-embed.less"
   ],
-  "js": [],
-  "customizerUrl": "http://getbootstrap.com/customize/?id=b16cc84fa80d0dc07f50849d5978a251"
+  "js": []
 }
