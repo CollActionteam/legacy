@@ -17,7 +17,6 @@
         }
 
         .navbar-toggle {
-            float: left;
             font-size: 30px;
             padding: 0;
             margin: 0 0 0 20px;
@@ -40,6 +39,7 @@
 
         a.btn {
             @include coll-action-button;
+            text-transform: none;
         }
         
         ul.nav > li > a:not(.btn) {
