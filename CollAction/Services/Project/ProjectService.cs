@@ -84,42 +84,6 @@ namespace CollAction.Services.Project
             return await _context.ProjectParticipants.SingleOrDefaultAsync(p => p.ProjectId == projectId && p.UserId == userId);
         }
 
-        public IQueryable<FindProjectsViewModel> FindProjects(Expression<Func<Models.Project, bool>> filter, int? limit, int? start)
-        {
-            IQueryable<Models.Project> projects = _context.Projects
-                .Where(filter)
-                .OrderBy(p => p.DisplayPriority);
-
-            if (limit.HasValue)
-                projects = projects.Take(limit.Value);
-
-            if(start.HasValue)
-                projects = projects.Skip(start.Value);
-
-            return projects
-                .Select(project =>
-                            new FindProjectsViewModel(_stringLocalizer)
-                            {
-                                ProjectId = project.Id,
-                                ProjectName = project.Name,
-                                ProjectNameUriPart = GetProjectNameNormalized(project.Name),
-                                ProjectProposal = project.Proposal,
-                                CategoryName = project.Category.Name,
-                                CategoryColorHex = project.Category.ColorHex,
-                                LocationName = project.Location.Name,
-                                BannerImagePath = project.BannerImage != null ? _imageService.GetUrl(project.BannerImage) : $"/images/default_banners/{project.Category.Name}.jpg",
-                                BannerImageDescription = project.BannerImage != null ? project.BannerImage.Description : string.Empty,
-                                Target = project.Target,
-                                Participants = project.ParticipantCounts.Count,
-                                Remaining = project.RemainingTime,
-                                DescriptiveImagePath = project.DescriptiveImage == null ? null : _imageService.GetUrl(project.DescriptiveImage),
-                                DescriptiveImageDescription = project.Description == null ? string.Empty : project.DescriptiveImage.Description,
-                                Status = project.Status,
-                                Start = project.Start,
-                                End = project.End
-                            });
-        }
-
         public IQueryable<DisplayProjectViewModel> GetProjectDisplayViewModels(Expression<Func<Models.Project, bool>> filter)
         {
             return _context.Projects
@@ -285,62 +249,98 @@ namespace CollAction.Services.Project
         private string EscapeCsv(string str)
             => $"\"{str?.Replace("\"", "\"\"")}\"";
 
+        public async Task<FindProjectsViewModel> FindProject(int projectId)
+        {
+            var project =  await _context
+                .Projects
+                .Include(p => p.Category)
+                .Include(p => p.Location)
+                .Include(p => p.BannerImage)
+                .Include(p => p.ParticipantCounts)
+                .FirstOrDefaultAsync(p => p.Id == projectId);
+
+            return project != null
+                ? CreateFindProjectsViewModel(project)
+                : null;
+        }
+
+        public IQueryable<FindProjectsViewModel> FindProjects(Expression<Func<Models.Project, bool>> filter, int? limit, int? start)
+        {
+            IQueryable<Models.Project> projects = _context
+                .Projects
+                .Include(p => p.Category)
+                .Include(p => p.Location)
+                .Include(p => p.BannerImage)
+                .Include(p => p.ParticipantCounts)
+                .Where(filter)
+                .OrderBy(p => p.DisplayPriority);
+
+            if (limit.HasValue)
+                projects = projects.Take(limit.Value);
+
+            return projects.Select(p => CreateFindProjectsViewModel(p));
+        }
         public async Task<IEnumerable<FindProjectsViewModel>> MyProjects(string userId)
         {
-            return await _context.Projects
+            return await _context
+                .Projects
+                .Include(p => p.Category)
+                .Include(p => p.Location)
+                .Include(p => p.BannerImage)
+                .Include(p => p.ParticipantCounts)                
                 .Where(p => p.OwnerId == userId && p.Status != ProjectStatus.Deleted)
                 .OrderBy(p => p.DisplayPriority)
-                .Select(project => new FindProjectsViewModel(_stringLocalizer) // Cannot be moved to private method. Won't work with EF
-                {
-                    ProjectId = project.Id,
-                    ProjectName = project.Name,
-                    ProjectNameUriPart = GetProjectNameNormalized(project.Name),
-                    ProjectProposal = project.Proposal,
-                    CategoryName = project.Category.Name,
-                    CategoryColorHex = project.Category.ColorHex,
-                    LocationName = project.Location.Name,
-                    BannerImagePath = project.BannerImage != null ? _imageService.GetUrl(project.BannerImage) : $"/images/default_banners/{project.Category.Name}.jpg",
-                    BannerImageDescription = project.BannerImage.Description,
-                    Target = project.Target,
-                    Participants = project.ParticipantCounts.Count,
-                    Remaining = project.RemainingTime,
-                    DescriptiveImagePath = project.DescriptiveImage == null ? null : _imageService.GetUrl(project.DescriptiveImage),
-                    DescriptiveImageDescription = project.DescriptiveImage.Description,
-                    Status = project.Status,
-                    Start = project.Start,
-                    End = project.End,
-                    CanSendProjectEmail = this.CanSendProjectEmail(project)
-                })
+                .Select(p => CreateFindProjectsViewModel(p))
                 .ToListAsync();
         }
 
         public async Task<IEnumerable<FindProjectsViewModel>> ParticipatingInProjects(string userId)
         {
-            return await _context.ProjectParticipants
-                .Where(participant => participant.UserId == userId && participant.Project.Status != ProjectStatus.Deleted)
-                .OrderBy(p => p.Project.DisplayPriority)
-                .Select(participant => new FindProjectsViewModel(_stringLocalizer)
-                {
-                    ProjectId = participant.Project.Id,
-                    ProjectName = participant.Project.Name,
-                    ProjectNameUriPart = GetProjectNameNormalized(participant.Project.Name),
-                    ProjectProposal = participant.Project.Proposal,
-                    CategoryName = participant.Project.Category.Name,
-                    CategoryColorHex = participant.Project.Category.ColorHex,
-                    LocationName = participant.Project.Location.Name,
-                    BannerImagePath = participant.Project.BannerImage != null ? _imageService.GetUrl(participant.Project.BannerImage) : $"/images/default_banners/{participant.Project.Category.Name}.jpg",
-                    BannerImageDescription = participant.Project.BannerImage.Description,
-                    Target = participant.Project.Target,
-                    Participants = participant.Project.ParticipantCounts.Count,
-                    Remaining = participant.Project.RemainingTime,
-                    DescriptiveImagePath = participant.Project.DescriptiveImage == null ? null : _imageService.GetUrl(participant.Project.DescriptiveImage),
-                    DescriptiveImageDescription = participant.Project.DescriptiveImage.Description,
-                    Status = participant.Project.Status,
-                    Start = participant.Project.Start,
-                    End = participant.Project.End,
-                    SubscribedToEmails = participant.SubscribedToProjectEmails
-                })
+            var projects = await _context
+                .ProjectParticipants
+                .Where(pa => pa.UserId == userId && pa.Project.Status != ProjectStatus.Deleted)
+                .Select(pa => pa.Project)
+                .Include(p => p.Category)
+                .Include(p => p.Location)
+                .Include(p => p.BannerImage)
+                .Include(p => p.ParticipantCounts)
+                .Include(p => p.Participants)
+                .OrderBy(p => p.DisplayPriority)                
                 .ToListAsync();
+
+            var viewModels = projects
+                .Select(p => 
+                {
+                    var viewModel = CreateFindProjectsViewModel(p);
+                    viewModel.SubscribedToEmails = p.Participants
+                        .First(pa => pa.UserId == userId)
+                        .SubscribedToProjectEmails;
+                    return viewModel;
+                })
+                .ToList();
+
+            return viewModels;
+        }
+
+        private FindProjectsViewModel CreateFindProjectsViewModel(Models.Project project)
+        {
+            var viewModel = new FindProjectsViewModel(_stringLocalizer);
+            viewModel.ProjectId = project.Id;
+            viewModel.ProjectName = project.Name;
+            viewModel.ProjectNameUriPart = GetProjectNameNormalized(project.Name);
+            viewModel.ProjectProposal = project.Proposal;
+            viewModel.CategoryName = project.Category.Name;
+            viewModel.CategoryColorHex = project.Category.ColorHex;
+            viewModel.LocationName = project.Location != null ? project.Location.Name : string.Empty;
+            viewModel.BannerImagePath = project.BannerImage != null ? _imageService.GetUrl(project.BannerImage) : $"/images/default_banners/{project.Category.Name}.jpg";
+            viewModel.BannerImageDescription = project.BannerImage != null ? project.BannerImage.Description : string.Empty;
+            viewModel.Target = project.Target;
+            viewModel.Participants = project.ParticipantCounts.Count;
+            viewModel.Remaining = project.RemainingTime;
+            viewModel.Status = project.Status;
+            viewModel.Start = project.Start;
+            viewModel.End = project.End;
+            return viewModel;
         }
 
         public async Task<bool> ToggleNewsletterSubscription(int projectId, string userId)
