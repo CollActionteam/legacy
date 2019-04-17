@@ -40,6 +40,19 @@ namespace CollAction.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Return(string source, string client_secret, bool livemode)
+        {
+            if (await _donationService.HasIdealPaymentSucceeded(source, client_secret))
+            {
+                return RedirectToAction(nameof(ThankYou));
+            }
+            else
+            {
+                return RedirectToAction(nameof(Donate));
+            }
+        }
+
+        [HttpGet]
         public IActionResult Donate()
         {
             return View();

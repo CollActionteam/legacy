@@ -37,7 +37,7 @@ export default class IdealBox extends React.Component<IIdealBoxProps, IIdealBoxS
                 email: this.props.userEmail
             },
             redirect: {
-                return_url: window.location.origin + "/donation/ThankYou"
+                return_url: window.location.origin + "/donation/Return"
             }
         };
 

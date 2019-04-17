@@ -16,6 +16,9 @@ namespace CollAction.Services.Donation
 {
     public class DonationService : IDonationService
     {
+        const string StatusChargeable = "chargeable";
+        const string StatusConsumed = "consumed";
+
         private readonly CustomerService _customerService;
         private readonly SourceService _sourceService;
         private readonly ApplicationDbContext _context;
@@ -31,6 +34,13 @@ namespace CollAction.Services.Donation
             _sourceService = new SourceService(_requestOptions.ApiKey);
             _context = context;
             _userManager = userManager;
+        }
+
+        public async Task<bool> HasIdealPaymentSucceeded(string sourceId, string clientSecret)
+        {
+            Source source = await _sourceService.GetAsync(sourceId);
+            return (source.Status == StatusChargeable || source.Status == StatusConsumed) && 
+                   clientSecret == source.ClientSecret;
         }
 
         public async Task<string> InitializeCreditCardCheckout(string currency, int amount, string name, string email)
