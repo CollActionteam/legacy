@@ -6,10 +6,11 @@ import {IdealBankElement} from 'react-stripe-elements';
 interface IIdealBoxProps {
     stripe: any;
     amount: number;
+    userEmail: string;
+    userName: string;
 }
 
 interface IIdealBoxState {
-    name: string;
     showError: boolean;
     error: string;
 }
@@ -18,14 +19,9 @@ export default class IdealBox extends React.Component<IIdealBoxProps, IIdealBoxS
     constructor(props) {
         super(props);
         this.state = {
-            name: "",
             showError: false,
             error: ""
         };
-    }
-
-    setName(event: React.ChangeEvent<HTMLInputElement>) {
-        this.setState({ name: event.currentTarget.value });
     }
 
     async submitPayment(event: React.FormEvent<HTMLFormElement>) {
@@ -37,7 +33,8 @@ export default class IdealBox extends React.Component<IIdealBoxProps, IIdealBoxS
             amount: this.props.amount * 100,
             currency: "eur",
             owner: {
-                name: this.state.name
+                name: this.props.userName,
+                email: this.props.userEmail
             },
             redirect: {
                 return_url: window.location.origin + "/donation/ThankYou"
@@ -51,7 +48,8 @@ export default class IdealBox extends React.Component<IIdealBoxProps, IIdealBoxS
             return;
         }
 
-        let initializeResponse = await fetch(`/donation/InitializeIdealCheckout?sourceId=${response.source.id}`, { method: 'POST' });
+        let initializeUrl = `/donation/InitializeIdealCheckout?sourceId=${response.source.id}&name=${encodeURIComponent(this.props.userName)}&email=${encodeURIComponent(this.props.userEmail)}`;
+        let initializeResponse = await fetch(initializeUrl, { method: 'POST' });
         if (initializeResponse.status == 200) {
             window.location.href = response.source.redirect.url;
         } else {
@@ -66,8 +64,6 @@ export default class IdealBox extends React.Component<IIdealBoxProps, IIdealBoxS
                 <div className="error" hidden={!this.state.showError}>
                     <p>{this.state.error}</p>
                 </div>
-                <label htmlFor="name-input">Name</label>
-                <input id="name-input" className="form-control" onChange={(ev) => this.setName(ev)} type="text" />
                 <IdealBankElement />
                 <input type="submit" className="btn btn-default" value="submit" />
             </form>);
