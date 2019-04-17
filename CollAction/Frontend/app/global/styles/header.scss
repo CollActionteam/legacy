@@ -37,6 +37,10 @@
             text-align: center;
         }
 
+        .navbar-nav > li {
+            margin-left: 20px;
+        }
+
         a.btn {
             @include coll-action-button;
             text-transform: none;
