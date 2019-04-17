@@ -19,16 +19,16 @@ namespace CollAction.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> InitializeCreditCardCheckout(string currency, int amount)
+        public async Task<IActionResult> InitializeCreditCardCheckout(string currency, int amount, string name, string email)
         {
-            string checkoutId = await _donationService.InitializeCreditCardCheckout(currency, amount, await _userManager.GetUserAsync(User));
+            string checkoutId = await _donationService.InitializeCreditCardCheckout(currency, amount, name, email);
             return Ok(checkoutId);
         }
 
         [HttpPost]
-        public async Task<IActionResult> InitializeIdealCheckout(string sourceId)
+        public async Task<IActionResult> InitializeIdealCheckout(string sourceId, string name, string email)
         {
-            await _donationService.InitializeIdealCheckout(sourceId, await _userManager.GetUserAsync(User));
+            await _donationService.InitializeIdealCheckout(sourceId, name, email);
             return Ok();
         }
 
@@ -39,6 +39,7 @@ namespace CollAction.Controllers
             return Ok();
         }
 
+        [HttpGet]
         public IActionResult Donate()
         {
             return View();

@@ -1,5 +1,6 @@
 ﻿using CollAction.Data;
 using CollAction.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using Stripe;
@@ -18,26 +19,26 @@ namespace CollAction.Services.Donation
         private readonly CustomerService _customerService;
         private readonly SourceService _sourceService;
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly RequestOptions _requestOptions;
         private readonly SiteOptions _siteOptions;
 
-        public DonationService(IOptions<RequestOptions> requestOptions, IOptions<SiteOptions> siteOptions, ApplicationDbContext context)
+        public DonationService(IOptions<RequestOptions> requestOptions, IOptions<SiteOptions> siteOptions, UserManager<ApplicationUser> userManager, ApplicationDbContext context)
         {
             _requestOptions = requestOptions.Value;
             _siteOptions = siteOptions.Value;
             _customerService = new CustomerService(_requestOptions.ApiKey);
             _sourceService = new SourceService(_requestOptions.ApiKey);
             _context = context;
+            _userManager = userManager;
         }
 
-        public async Task<string> InitializeCreditCardCheckout(string currency, int amount, ApplicationUser user)
+        public async Task<string> InitializeCreditCardCheckout(string currency, int amount, string name, string email)
         {
-            if (amount <= 0)
-            {
-                throw new InvalidOperationException($"Invalid amount requested: {amount}");
-            }
+            ValidateDetails(amount, name, email);
 
-            Customer customer = await GetOrCreateCustomer(user);
+            ApplicationUser user = await _userManager.FindByEmailAsync(email);
+            Customer customer = await GetOrCreateCustomer(name, email);
 
             using (var client = new HttpClient())
             {
@@ -50,13 +51,9 @@ namespace CollAction.Services.Donation
                     { "line_items[][currency]", currency },
                     { "line_items[][name]", "donation" },
                     { "line_items[][description]", "A donation to Stichting CollAction" },
-                    { "line_items[][quantity]", "1" }
+                    { "line_items[][quantity]", "1" },
+                    { "customer", customer.Id }
                 };
-
-                if (customer != null)
-                {
-                    requestContent["customer"] = customer.Id;
-                }
 
                 using (var request = new HttpRequestMessage()
                 {
@@ -93,21 +90,16 @@ namespace CollAction.Services.Donation
             }
         }
 
-        public async Task InitializeIdealCheckout(string sourceId, ApplicationUser user)
+        public async Task InitializeIdealCheckout(string sourceId, string name, string email)
         {
-            Customer customer = await GetOrCreateCustomer(user);
-            Source source;
-            if (customer != null)
+            ValidateDetails(name, email);
+
+            ApplicationUser user = await _userManager.FindByEmailAsync(email);
+            Customer customer = await GetOrCreateCustomer(name, email);
+            Source source = await _sourceService.AttachAsync(customer.Id, new SourceAttachOptions()
             {
-                source = await _sourceService.AttachAsync(customer.Id, new SourceAttachOptions()
-                {
-                    Source = sourceId
-                });
-            }
-            else
-            {
-                source = await _sourceService.GetAsync(sourceId);
-            }
+                Source = sourceId
+            });
 
             _context.DonationEventLog.Add(new DonationEventLog()
             {
@@ -128,22 +120,46 @@ namespace CollAction.Services.Donation
             return _context.SaveChangesAsync();
         }
 
-        private async Task<Customer> GetOrCreateCustomer(ApplicationUser user)
+        private async Task<Customer> GetOrCreateCustomer(string name, string email)
         {
-            if (user == null)
-            {
-                return null;
-            }
-
-            Customer customer = (await _customerService.ListAsync(new CustomerListOptions() { Email = user.Email, Limit = 1 }, _requestOptions)).FirstOrDefault();
+            Customer customer = (await _customerService.ListAsync(new CustomerListOptions() { Email = email, Limit = 1 }, _requestOptions)).FirstOrDefault();
+            string metadataName = null;
+            customer?.Metadata?.TryGetValue("name", out metadataName);
+            var metadata = new Dictionary<string, string>() { { "name", name } };
             if (customer == null)
             {
                 customer = await _customerService.CreateAsync(new CustomerCreateOptions()
                 {
-                    Email = user.Email
+                    Email = email,
+                    Metadata = metadata
+                });
+            }
+            else if (!name.Equals(metadataName, StringComparison.Ordinal))
+            {
+                customer = await _customerService.UpdateAsync(customer.Id, new CustomerUpdateOptions()
+                {
+                    Metadata = metadata
                 });
             }
             return customer;
+        }
+
+        private void ValidateDetails(string name, string email)
+        {
+            if (string.IsNullOrEmpty(name) || !email.Contains("@", StringComparison.Ordinal))
+            {
+                throw new InvalidOperationException($"Invalid user-details");
+            }
+        }
+
+        private void ValidateDetails(int amount, string name, string email)
+        {
+            if (amount <= 0)
+            {
+                throw new InvalidOperationException($"Invalid amount requested: {amount}");
+            }
+
+            ValidateDetails(name, email);
         }
     }
 }
