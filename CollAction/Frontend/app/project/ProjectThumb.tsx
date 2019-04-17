@@ -1,4 +1,5 @@
 import * as React from "react";
+import { props } from "bluebird";
 
 export interface IProject {
   projectId: string;
@@ -13,7 +14,9 @@ export interface IProject {
   target: number;
   participants: number;
   progressPercent: number;
-  status: string;
+  start: string;
+  end: string;
+  status: number;
   subscribedToEmails: boolean | null;
 
   tileClassName: string;
@@ -52,6 +55,45 @@ export default class ProjectThumb extends React.Component<IProject, IThumbState>
     }
     catch (e) {
       this.setState({busy: false});
+    }
+  }
+
+  renderProjectStatus() {
+    let status: string;
+    let className: string;
+
+    switch (this.props.status) {
+      case 2:
+        status = "Successful";
+        break;
+      case 3:
+        status = "Failed :(";
+        break;
+      case 1:
+      status = this.determineRunningStatus();
+        break;
+      default:
+        status = "";
+    }
+
+    return (
+      <span>{ status }</span>
+    );
+  }
+
+  determineRunningStatus() {
+    const now = new Date(Date.now()); // Returns UTC time
+    const enddate = new Date(this.props.end);
+    const startdate = new Date(this.props.start);
+
+    if (enddate < now) {
+      return this.props.progressPercent === 100 ? "Closed - succes!" : "Closed - failed :(";
+    }
+    else if (startdate >= now) {
+      return "Coming soon";
+    }
+    else {
+      return "Running";
     }
   }
 
@@ -105,7 +147,7 @@ export default class ProjectThumb extends React.Component<IProject, IThumbState>
               <div>{this.props.locationName}</div>
               <div className="project-status">
                 <div className="percentage">{this.props.progressPercent}%</div>
-                <div className="status">Closed</div>
+                <div className="status">{ this.renderProjectStatus() }</div>
               </div>
             </div>
             <div className="project-thumb-stats">
