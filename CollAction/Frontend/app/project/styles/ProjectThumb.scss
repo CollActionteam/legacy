@@ -48,9 +48,24 @@
       }
     }
 
-    .project-thumb-about {
-      font-weight: bold;
-      font-size: 32px;
+    .project-thumb-about {   
+      .project-status {
+        display: flex;
+        justify-content: space-between;
+
+        .percentage {        
+          font-weight: bold;
+          font-size: 32px;
+        }
+  
+        .status {
+          align-self: flex-end;
+          color: $coll-action-green;
+          
+          font-size: inherit;
+          font-weight: inherit;
+        }  
+      }
     }
 
     .project-thumb-button {

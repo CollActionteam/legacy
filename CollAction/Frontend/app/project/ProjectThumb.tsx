@@ -103,7 +103,10 @@ export default class ProjectThumb extends React.Component<IProject, IThumbState>
             </div>
             <div className="project-thumb-about">
               <div>{this.props.locationName}</div>
-              <div>{this.props.progressPercent}%</div>
+              <div className="project-status">
+                <div className="percentage">{this.props.progressPercent}%</div>
+                <div className="status">Closed</div>
+              </div>
             </div>
             <div className="project-thumb-stats">
               <div>
