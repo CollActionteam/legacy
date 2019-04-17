@@ -13,5 +13,7 @@ import "./FindProject";
 
 import "./PieChart";
 
+import "./ProjectPreview";
+
 import "./UploadBanner";
 import "./UploadDescriptiveImage";
