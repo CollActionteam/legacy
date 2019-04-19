@@ -1,5 +1,6 @@
 ﻿using CollAction.Data;
 using CollAction.Models;
+using Hangfire;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
@@ -21,17 +22,23 @@ namespace CollAction.Services.Donation
 
         private readonly CustomerService _customerService;
         private readonly SourceService _sourceService;
+        private readonly EventService _eventService;
+        private readonly ChargeService _chargeService;
+        private readonly IBackgroundJobClient _backgroundJobClient;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RequestOptions _requestOptions;
         private readonly SiteOptions _siteOptions;
 
-        public DonationService(IOptions<RequestOptions> requestOptions, IOptions<SiteOptions> siteOptions, UserManager<ApplicationUser> userManager, ApplicationDbContext context)
+        public DonationService(IOptions<RequestOptions> requestOptions, IOptions<SiteOptions> siteOptions, UserManager<ApplicationUser> userManager, ApplicationDbContext context, IBackgroundJobClient backgroundJobClient)
         {
             _requestOptions = requestOptions.Value;
             _siteOptions = siteOptions.Value;
             _customerService = new CustomerService(_requestOptions.ApiKey);
             _sourceService = new SourceService(_requestOptions.ApiKey);
+            _eventService = new EventService(_requestOptions.ApiKey);
+            _chargeService = new ChargeService(_requestOptions.ApiKey);
+            _backgroundJobClient = backgroundJobClient;
             _context = context;
             _userManager = userManager;
         }
@@ -43,6 +50,9 @@ namespace CollAction.Services.Donation
                    clientSecret == source.ClientSecret;
         }
 
+        /*
+         * Here we're initializing a stripe checkout session for paying with a credit card. The upcoming SCA regulations ensure we have to do it through this API, because it's the only one that /easily/ supports things like 3D secure.
+         */
         public async Task<string> InitializeCreditCardCheckout(string currency, int amount, string name, string email)
         {
             ValidateDetails(amount, name, email);
@@ -100,6 +110,10 @@ namespace CollAction.Services.Donation
             }
         }
 
+        /*
+         * Here we're initializing the part of the iDeal payment that has to happen on the backend. For now, that's only attaching an actual customer record to the payment source.
+         * In the future to handle SCA, we might need to start using payment intents or checkout here. SCA starts from september the 14th. The support for iDeal is not there yet though, so we'll have to wait.
+         */
         public async Task InitializeIdealCheckout(string sourceId, string name, string email)
         {
             ValidateDetails(name, email);
@@ -120,14 +134,66 @@ namespace CollAction.Services.Donation
             await _context.SaveChangesAsync();
         }
 
-        public Task LogExternalEvent(JObject stripeEvent)
+        /*
+         * We're receiving an event from the stripe webhook, an payment source can be charge. We're queueing it up so we can retry it as much as possible.
+         * In the future to handle SCA, we might need to start using payment intents or checkout here. SCA starts from september the 14th. The support for iDeal is not there yet though, so we'll have to wait.
+         */
+        public async Task HandleChargeable(JObject stripeEvent)
         {
+            Event ev = await _eventService.GetAsync(stripeEvent["id"].ToString()); // Refetch the event to ensure it's an actual stripe event
+            if (ev.Type == "source.chargeable")
+            {
+                string sourceId = ((Source)ev.Data.Object)?.Id;
+                _backgroundJobClient.Enqueue(() => Charge(sourceId));
+            }
+            else
+            {
+                throw new InvalidOperationException($"invalid event sent to source.chargeable webhook: {ev.ToJson()}");
+            }
+        }
+
+        /*
+         * We're logging all stripe events here. For audit purposes, and maybe the dwh team can make something pretty out of this data.
+         */
+        public async Task LogExternalEvent(JObject stripeEvent)
+        {
+            var ev = await _eventService.GetAsync(stripeEvent["id"].ToString()); // Refetch the event to ensure it's an actual stripe event
             _context.DonationEventLog.Add(new DonationEventLog()
             {
                 Type = DonationEventType.External,
-                EventData = stripeEvent.ToString()
+                EventData = ev.ToJson()
             });
-            return _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+        }
+
+        private async Task Charge(string sourceId)
+        {
+            Source source = await _sourceService.GetAsync(sourceId);
+            if (source.Status == "chargeable")
+            {
+                Charge charge = await _chargeService.CreateAsync(new ChargeCreateOptions()
+                {
+                    Amount = source.Amount,
+                    Currency = source.Currency,
+                    SourceId = sourceId,
+                    Description = "A donation to Stichting CollAction",
+                    StatementDescriptor = "A donation to Stichting CollAction"
+                });
+
+                Customer customer = await _customerService.GetAsync(source.Customer);
+                ApplicationUser user = customer != null ? await _userManager.FindByEmailAsync(customer.Email) : null;
+                _context.DonationEventLog.Add(new DonationEventLog()
+                {
+                    UserId = user?.Id,
+                    Type = DonationEventType.Internal,
+                    EventData = charge.ToJson()
+                });
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                throw new InvalidOperationException($"source: {source.Id} is not chargeable, something went wrong in the payment flow");
+            }
         }
 
         private async Task<Customer> GetOrCreateCustomer(string name, string email)

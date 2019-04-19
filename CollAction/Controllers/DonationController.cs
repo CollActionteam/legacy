@@ -39,6 +39,13 @@ namespace CollAction.Controllers
             return Ok();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Chargeable([FromBody] JObject stripeEvent)
+        {
+            await _donationService.HandleChargeable(stripeEvent);
+            return Ok();
+        }
+
         [HttpGet]
         public async Task<IActionResult> Return(string source, string client_secret, bool livemode)
         {

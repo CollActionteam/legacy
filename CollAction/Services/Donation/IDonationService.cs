@@ -9,5 +9,6 @@ namespace CollAction.Services.Donation
         Task InitializeIdealCheckout(string sourceId, string name, string email);
         Task<bool> HasIdealPaymentSucceeded(string sourceId, string clientSecret);
         Task LogExternalEvent(JObject stripeEvent);
+        Task HandleChargeable(JObject stripeEvent);
     }
 }
