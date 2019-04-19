@@ -19,6 +19,8 @@ namespace CollAction.Services.Donation
     {
         const string StatusChargeable = "chargeable";
         const string StatusConsumed = "consumed";
+        const string EventTypeChargeableSource = "source.chargeable";
+        const string NameKey = "name";
 
         private readonly CustomerService _customerService;
         private readonly SourceService _sourceService;
@@ -141,7 +143,7 @@ namespace CollAction.Services.Donation
         public async Task HandleChargeable(JObject stripeEvent)
         {
             Event ev = await _eventService.GetAsync(stripeEvent["id"].ToString()); // Refetch the event to ensure it's an actual stripe event
-            if (ev.Type == "source.chargeable")
+            if (ev.Type == EventTypeChargeableSource)
             {
                 string sourceId = ((Source)ev.Data.Object)?.Id;
                 _backgroundJobClient.Enqueue(() => Charge(sourceId));
@@ -169,7 +171,7 @@ namespace CollAction.Services.Donation
         private async Task Charge(string sourceId)
         {
             Source source = await _sourceService.GetAsync(sourceId);
-            if (source.Status == "chargeable")
+            if (source.Status == StatusChargeable)
             {
                 Charge charge = await _chargeService.CreateAsync(new ChargeCreateOptions()
                 {
@@ -200,8 +202,8 @@ namespace CollAction.Services.Donation
         {
             Customer customer = (await _customerService.ListAsync(new CustomerListOptions() { Email = email, Limit = 1 }, _requestOptions)).FirstOrDefault();
             string metadataName = null;
-            customer?.Metadata?.TryGetValue("name", out metadataName);
-            var metadata = new Dictionary<string, string>() { { "name", name } };
+            customer?.Metadata?.TryGetValue(NameKey, out metadataName);
+            var metadata = new Dictionary<string, string>() { { NameKey, name } };
             if (customer == null)
             {
                 customer = await _customerService.CreateAsync(new CustomerCreateOptions()
