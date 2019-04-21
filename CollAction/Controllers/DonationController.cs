@@ -4,21 +4,16 @@ using CollAction.Models;
 using CollAction.Services.Donation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json.Linq;
-using Stripe;
 
 namespace CollAction.Controllers
 {
     public class DonationController : Controller
     {
         private IDonationService _donationService;
-        private readonly UserManager<ApplicationUser> _userManager;
 
-        public DonationController(IDonationService donationService, UserManager<ApplicationUser> userManager)
+        public DonationController(IDonationService donationService)
         {
             _donationService = donationService;
-            _userManager = userManager;
         }
 
         [HttpPost]

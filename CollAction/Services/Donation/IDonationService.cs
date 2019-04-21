@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using Stripe;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace CollAction.Services.Donation
 {
