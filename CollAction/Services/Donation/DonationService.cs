@@ -85,7 +85,6 @@ namespace CollAction.Services.Donation
                 })
                 {
                     request.Headers.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes(_requestOptions.ApiKey + ":")));
-                    request.Headers.Add("Stripe-Version", "2019-03-14; checkout_sessions_beta=v1");
 
                     HttpResponseMessage response = await client.SendAsync(request, HttpCompletionOption.ResponseContentRead);
                     string content = await response.Content.ReadAsStringAsync();
@@ -179,8 +178,7 @@ namespace CollAction.Services.Donation
                     Currency = source.Currency,
                     SourceId = sourceId,
                     CustomerId = source.Customer,
-                    Description = "A donation to Stichting CollAction",
-                    StatementDescriptor = "Donation CollAction"
+                    Description = "A donation to Stichting CollAction"
                 });
 
                 Customer customer = await _customerService.GetAsync(source.Customer);

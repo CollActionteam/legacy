@@ -32,6 +32,7 @@ export default class IdealBox extends React.Component<IIdealBoxProps, IIdealBoxS
             type: "ideal",
             amount: this.props.amount * 100,
             currency: "eur",
+            statement_descriptor: "Donation CollAction",
             owner: {
                 name: this.props.userName,
                 email: this.props.userEmail
