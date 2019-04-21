@@ -1,8 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
 using CollAction.Models;
 using CollAction.Services.Donation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using Stripe;
 
@@ -34,17 +36,27 @@ namespace CollAction.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PaymentEvent([FromBody] Event stripeEvent)
+        public async Task<IActionResult> PaymentEvent()
         {
-            await _donationService.LogExternalEvent(stripeEvent);
-            return Ok();
+            using (var streamReader = new StreamReader(HttpContext.Request.Body))
+            {
+                string json = await streamReader.ReadToEndAsync();
+                string signature = Request.Headers["Stripe-Signature"];
+                await _donationService.LogExternalEvent(json, signature, "/Donation/PaymentEvent");
+                return Ok();
+            }
         }
 
         [HttpPost]
-        public IActionResult Chargeable([FromBody] Event stripeEvent)
+        public async Task<IActionResult> Chargeable()
         {
-            _donationService.HandleChargeable(stripeEvent);
-            return Ok();
+            using (var streamReader = new StreamReader(HttpContext.Request.Body))
+            {
+                string json = await streamReader.ReadToEndAsync();
+                string signature = Request.Headers["Stripe-Signature"];
+                await _donationService.HandleChargeable(json, signature, "/Donation/Chargeable");
+                return Ok();
+            }
         }
 
         [HttpGet]

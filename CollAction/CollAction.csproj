@@ -9,9 +9,9 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="8.0.0" />
-    <PackageReference Include="AWSSDK.S3" Version="3.3.101.3" />
-    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.100.5" />
-    <PackageReference Include="Hangfire.AspNetCore" Version="1.7.0" />
+    <PackageReference Include="AWSSDK.S3" Version="3.3.101.5" />
+    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.100.7" />
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.7.1" />
     <PackageReference Include="Hangfire.PostgreSql" Version="1.5.0" />
     <PackageReference Include="HtmlSanitizer" Version="4.0.210" />
     <PackageReference Include="Microsoft.AspNetCore.All" />
@@ -28,7 +28,7 @@
     <PackageReference Include="Serilog.Sinks.Slack" Version="1.2.63" />
     <PackageReference Include="Serilog.Sinks.Trace" Version="2.1.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0005" />
-    <PackageReference Include="Stripe.net" Version="25.6.0" />
+    <PackageReference Include="Stripe.net" Version="25.9.0" />
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.1.0-preview1-final" />

@@ -24,8 +24,8 @@ namespace CollAction.Services.Donation
 
         private readonly CustomerService _customerService;
         private readonly SourceService _sourceService;
-        private readonly EventService _eventService;
         private readonly ChargeService _chargeService;
+        private readonly WebhookEndpointService _webhookService;
         private readonly IBackgroundJobClient _backgroundJobClient;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -38,8 +38,8 @@ namespace CollAction.Services.Donation
             _siteOptions = siteOptions.Value;
             _customerService = new CustomerService(_requestOptions.ApiKey);
             _sourceService = new SourceService(_requestOptions.ApiKey);
-            _eventService = new EventService(_requestOptions.ApiKey);
             _chargeService = new ChargeService(_requestOptions.ApiKey);
+            _webhookService = new WebhookEndpointService(_requestOptions.ApiKey);
             _backgroundJobClient = backgroundJobClient;
             _context = context;
             _userManager = userManager;
@@ -140,8 +140,9 @@ namespace CollAction.Services.Donation
          * We're receiving an event from the stripe webhook, an payment source can be charge. We're queueing it up so we can retry it as much as possible.
          * In the future to handle SCA, we might need to start using payment intents or checkout here. SCA starts from september the 14th. The support for iDeal is not there yet though, so we'll have to wait.
          */
-        public void HandleChargeable(Event stripeEvent)
+        public async Task HandleChargeable(string json, string signature, string url)
         {
+            Event stripeEvent = await GetAndCheckEvent(url, json, signature);
             if (stripeEvent.Type == EventTypeChargeableSource)
             {
                 string sourceId = ((Source)stripeEvent.Data.Object)?.Id;
@@ -156,8 +157,9 @@ namespace CollAction.Services.Donation
         /*
          * We're logging all stripe events here. For audit purposes, and maybe the dwh team can make something pretty out of this data.
          */
-        public async Task LogExternalEvent(Event stripeEvent)
+        public async Task LogExternalEvent(string json, string signature, string url)
         {
+            Event stripeEvent = await GetAndCheckEvent(json, signature, url);
             _context.DonationEventLog.Add(new DonationEventLog()
             {
                 Type = DonationEventType.External,
@@ -218,6 +220,12 @@ namespace CollAction.Services.Donation
                 });
             }
             return customer;
+        }
+
+        private async Task<Event> GetAndCheckEvent(string json, string signature, string url)
+        {
+            WebhookEndpoint webhook = (await _webhookService.ListAsync(new WebhookEndpointListOptions() { Limit = 100 })).Single(w => w.Url == _siteOptions.PublicAddress + url);
+            return EventUtility.ConstructEvent(json, signature, webhook.Secret);
         }
 
         private void ValidateDetails(string name, string email)
