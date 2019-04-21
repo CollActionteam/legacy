@@ -30,6 +30,9 @@ using Microsoft.AspNetCore.Http;
 using Stripe;
 using CollAction.Services.Donation;
 using CollAction.Services;
+using Serilog.Events;
+using Serilog.Sinks.Slack;
+using Microsoft.ApplicationInsights.Extensibility;
 
 namespace CollAction
 {
@@ -76,6 +79,30 @@ namespace CollAction
                         options.ConsumerSecret = Configuration["Authentication:Twitter:ConsumerSecret"];
                     });
 
+            services.AddApplicationInsightsTelemetry(Configuration);
+
+            services.AddLogging(loggingBuilder =>
+            {
+                LoggerConfiguration configuration = new LoggerConfiguration()
+                       .WriteTo.RollingFile("log-{Date}.txt", LogEventLevel.Information)
+                       .WriteTo.Console(LogEventLevel.Information) 
+                       .WriteTo.ApplicationInsights(TelemetryConfiguration.Active, TelemetryConverter.Traces);
+
+                string slackHook = Configuration["SlackHook"];
+                if (slackHook != null)
+                {
+                    configuration.WriteTo.Slack(slackHook, restrictedToMinimumLevel: LogEventLevel.Error);
+                }
+
+                if (Environment.IsDevelopment())
+                {
+                    configuration.WriteTo.Trace();
+                }
+
+                Log.Logger = configuration.CreateLogger();
+                loggingBuilder.AddSerilog(Log.Logger);
+            });
+
             services.AddLocalization(options => options.ResourcesPath = "Resources");
 
             services.AddMvc()
@@ -94,8 +121,6 @@ namespace CollAction
 
             services.AddDataProtection()
                     .Services.Configure<KeyManagementOptions>(options => options.XmlRepository = new DataProtectionRepository(new DbContextOptionsBuilder<ApplicationDbContext>().UseNpgsql(connectionString).Options));
-
-            services.AddApplicationInsightsTelemetry(Configuration);
 
             services.Configure<SiteOptions>(Configuration);
             services.Configure<AuthMessageSenderOptions>(Configuration);
