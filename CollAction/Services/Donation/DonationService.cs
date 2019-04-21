@@ -224,9 +224,9 @@ namespace CollAction.Services.Donation
         }
 
         private Event GetAndCheckEvent(string json, string signature, WebhookEndpointType endpointType)
-            => EventUtility.ConstructEvent(json, signature, GetSecret(endpointType));
+            => EventUtility.ConstructEvent(json, signature, GetWebhookSecret(endpointType));
 
-        private string GetSecret(WebhookEndpointType endpointType)
+        private string GetWebhookSecret(WebhookEndpointType endpointType)
         {
             switch (endpointType)
             {
