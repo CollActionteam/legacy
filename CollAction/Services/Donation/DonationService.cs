@@ -180,7 +180,7 @@ namespace CollAction.Services.Donation
                     SourceId = sourceId,
                     CustomerId = source.Customer,
                     Description = "A donation to Stichting CollAction",
-                    StatementDescriptor = "A donation to Stichting CollAction"
+                    StatementDescriptor = "Donation CollAction"
                 });
 
                 Customer customer = await _customerService.GetAsync(source.Customer);
