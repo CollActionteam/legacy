@@ -224,7 +224,9 @@ namespace CollAction.Services.Donation
 
         private async Task<Event> GetAndCheckEvent(string json, string signature, string url)
         {
-            WebhookEndpoint webhook = (await _webhookService.ListAsync(new WebhookEndpointListOptions() { Limit = 100 })).Single(w => w.Url == _siteOptions.PublicAddress + url);
+            var webhooks = await _webhookService.ListAsync();
+            string fullUrl = _siteOptions.PublicAddress + url;
+            WebhookEndpoint webhook = webhooks.Single(w => w.Url.Equals(fullUrl, StringComparison.OrdinalIgnoreCase));
             return EventUtility.ConstructEvent(json, signature, webhook.Secret);
         }
 
