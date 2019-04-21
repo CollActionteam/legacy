@@ -122,6 +122,7 @@ namespace CollAction
             services.AddDataProtection()
                     .Services.Configure<KeyManagementOptions>(options => options.XmlRepository = new DataProtectionRepository(new DbContextOptionsBuilder<ApplicationDbContext>().UseNpgsql(connectionString).Options));
 
+            services.Configure<StripeSignatures>(Configuration);
             services.Configure<SiteOptions>(Configuration);
             services.Configure<AuthMessageSenderOptions>(Configuration);
             services.Configure<ImageServiceOptions>(Configuration);

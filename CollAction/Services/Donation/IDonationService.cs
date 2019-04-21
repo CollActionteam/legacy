@@ -7,7 +7,7 @@ namespace CollAction.Services.Donation
         Task<string> InitializeCreditCardCheckout(string currency, int amount, string name, string email);
         Task InitializeIdealCheckout(string sourceId, string name, string email);
         Task<bool> HasIdealPaymentSucceeded(string sourceId, string clientSecret);
-        Task LogExternalEvent(string json, string signature, string url);
-        Task HandleChargeable(string json, string signature, string url);
+        Task LogPaymentEvent(string json, string signature);
+        void HandleChargeable(string json, string signature);
     }
 }

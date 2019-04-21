@@ -37,7 +37,7 @@ namespace CollAction.Controllers
             {
                 string json = await streamReader.ReadToEndAsync();
                 string signature = Request.Headers["Stripe-Signature"];
-                await _donationService.LogExternalEvent(json, signature, "/Donation/PaymentEvent");
+                await _donationService.LogPaymentEvent(json, signature);
                 return Ok();
             }
         }
@@ -49,7 +49,7 @@ namespace CollAction.Controllers
             {
                 string json = await streamReader.ReadToEndAsync();
                 string signature = Request.Headers["Stripe-Signature"];
-                await _donationService.HandleChargeable(json, signature, "/Donation/Chargeable");
+                _donationService.HandleChargeable(json, signature);
                 return Ok();
             }
         }

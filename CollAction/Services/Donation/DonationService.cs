@@ -25,22 +25,22 @@ namespace CollAction.Services.Donation
         private readonly CustomerService _customerService;
         private readonly SourceService _sourceService;
         private readonly ChargeService _chargeService;
-        private readonly WebhookEndpointService _webhookService;
         private readonly IBackgroundJobClient _backgroundJobClient;
+        private readonly StripeSignatures _stripeSignatures;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RequestOptions _requestOptions;
         private readonly SiteOptions _siteOptions;
 
-        public DonationService(IOptions<RequestOptions> requestOptions, IOptions<SiteOptions> siteOptions, UserManager<ApplicationUser> userManager, ApplicationDbContext context, IBackgroundJobClient backgroundJobClient)
+        public DonationService(IOptions<RequestOptions> requestOptions, IOptions<SiteOptions> siteOptions, UserManager<ApplicationUser> userManager, ApplicationDbContext context, IBackgroundJobClient backgroundJobClient, IOptions<StripeSignatures> stripeSignatures)
         {
             _requestOptions = requestOptions.Value;
             _siteOptions = siteOptions.Value;
             _customerService = new CustomerService(_requestOptions.ApiKey);
             _sourceService = new SourceService(_requestOptions.ApiKey);
             _chargeService = new ChargeService(_requestOptions.ApiKey);
-            _webhookService = new WebhookEndpointService(_requestOptions.ApiKey);
             _backgroundJobClient = backgroundJobClient;
+            _stripeSignatures = stripeSignatures.Value;
             _context = context;
             _userManager = userManager;
         }
@@ -140,9 +140,9 @@ namespace CollAction.Services.Donation
          * We're receiving an event from the stripe webhook, an payment source can be charge. We're queueing it up so we can retry it as much as possible.
          * In the future to handle SCA, we might need to start using payment intents or checkout here. SCA starts from september the 14th. The support for iDeal is not there yet though, so we'll have to wait.
          */
-        public async Task HandleChargeable(string json, string signature, string url)
+        public void HandleChargeable(string json, string signature)
         {
-            Event stripeEvent = await GetAndCheckEvent(url, json, signature);
+            Event stripeEvent = GetAndCheckEvent(json, signature, WebhookEndpointType.Chargeable);
             if (stripeEvent.Type == EventTypeChargeableSource)
             {
                 string sourceId = ((Source)stripeEvent.Data.Object)?.Id;
@@ -157,9 +157,9 @@ namespace CollAction.Services.Donation
         /*
          * We're logging all stripe events here. For audit purposes, and maybe the dwh team can make something pretty out of this data.
          */
-        public async Task LogExternalEvent(string json, string signature, string url)
+        public async Task LogPaymentEvent(string json, string signature)
         {
-            Event stripeEvent = await GetAndCheckEvent(json, signature, url);
+            Event stripeEvent = GetAndCheckEvent(json, signature, WebhookEndpointType.PaymentEvent);
             _context.DonationEventLog.Add(new DonationEventLog()
             {
                 Type = DonationEventType.External,
@@ -222,12 +222,20 @@ namespace CollAction.Services.Donation
             return customer;
         }
 
-        private async Task<Event> GetAndCheckEvent(string json, string signature, string url)
+        private Event GetAndCheckEvent(string json, string signature, WebhookEndpointType endpointType)
+            => EventUtility.ConstructEvent(json, signature, GetSecret(endpointType));
+
+        private string GetSecret(WebhookEndpointType endpointType)
         {
-            var webhooks = await _webhookService.ListAsync();
-            string fullUrl = _siteOptions.PublicAddress + url;
-            WebhookEndpoint webhook = webhooks.Single(w => w.Url.Equals(fullUrl, StringComparison.OrdinalIgnoreCase));
-            return EventUtility.ConstructEvent(json, signature, webhook.Secret);
+            switch (endpointType)
+            {
+                case WebhookEndpointType.Chargeable:
+                    return _stripeSignatures.StripeChargeableWebhookSecret;
+                case WebhookEndpointType.PaymentEvent:
+                    return _stripeSignatures.StripePaymentEventWebhookSecret;
+                default:
+                    return null;
+            }
         }
 
         private void ValidateDetails(string name, string email)
