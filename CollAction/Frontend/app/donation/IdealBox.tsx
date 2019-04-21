@@ -1,6 +1,4 @@
-﻿import renderComponentIf from "../global/renderComponentIf";
-import * as React from "react";
-import * as ReactDOM from 'react-dom';
+﻿import * as React from "react";
 import {IdealBankElement} from 'react-stripe-elements';
 
 interface IIdealBoxProps {
