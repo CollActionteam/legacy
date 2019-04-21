@@ -140,35 +140,33 @@ namespace CollAction.Services.Donation
          * We're receiving an event from the stripe webhook, an payment source can be charge. We're queueing it up so we can retry it as much as possible.
          * In the future to handle SCA, we might need to start using payment intents or checkout here. SCA starts from september the 14th. The support for iDeal is not there yet though, so we'll have to wait.
          */
-        public async Task HandleChargeable(JObject stripeEvent)
+        public void HandleChargeable(Event stripeEvent)
         {
-            Event ev = await _eventService.GetAsync(stripeEvent["id"].ToString()); // Refetch the event to ensure it's an actual stripe event
-            if (ev.Type == EventTypeChargeableSource)
+            if (stripeEvent.Type == EventTypeChargeableSource)
             {
-                string sourceId = ((Source)ev.Data.Object)?.Id;
+                string sourceId = ((Source)stripeEvent.Data.Object)?.Id;
                 _backgroundJobClient.Enqueue(() => Charge(sourceId));
             }
             else
             {
-                throw new InvalidOperationException($"invalid event sent to source.chargeable webhook: {ev.ToJson()}");
+                throw new InvalidOperationException($"invalid event sent to source.chargeable webhook: {stripeEvent.ToJson()}");
             }
         }
 
         /*
          * We're logging all stripe events here. For audit purposes, and maybe the dwh team can make something pretty out of this data.
          */
-        public async Task LogExternalEvent(JObject stripeEvent)
+        public async Task LogExternalEvent(Event stripeEvent)
         {
-            var ev = await _eventService.GetAsync(stripeEvent["id"].ToString()); // Refetch the event to ensure it's an actual stripe event
             _context.DonationEventLog.Add(new DonationEventLog()
             {
                 Type = DonationEventType.External,
-                EventData = ev.ToJson()
+                EventData = stripeEvent.ToJson()
             });
             await _context.SaveChangesAsync();
         }
 
-        private async Task Charge(string sourceId)
+        public async Task Charge(string sourceId)
         {
             Source source = await _sourceService.GetAsync(sourceId);
             if (source.Status == StatusChargeable)

@@ -4,6 +4,7 @@ using CollAction.Services.Donation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
+using Stripe;
 
 namespace CollAction.Controllers
 {
@@ -33,16 +34,16 @@ namespace CollAction.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PaymentEvent([FromBody] JObject stripeEvent)
+        public async Task<IActionResult> PaymentEvent([FromBody] Event stripeEvent)
         {
             await _donationService.LogExternalEvent(stripeEvent);
             return Ok();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Chargeable([FromBody] JObject stripeEvent)
+        public IActionResult Chargeable([FromBody] Event stripeEvent)
         {
-            await _donationService.HandleChargeable(stripeEvent);
+            _donationService.HandleChargeable(stripeEvent);
             return Ok();
         }
 
