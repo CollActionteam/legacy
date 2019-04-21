@@ -141,7 +141,7 @@ namespace CollAction.Services.Donation
          */
         public void HandleChargeable(string json, string signature)
         {
-            Event stripeEvent = GetAndCheckEvent(json, signature, WebhookEndpointType.Chargeable);
+            Event stripeEvent = EventUtility.ConstructEvent(json, signature, _stripeSignatures.StripeChargeableWebhookSecret);
             if (stripeEvent.Type == EventTypeChargeableSource)
             {
                 string sourceId = ((Source)stripeEvent.Data.Object)?.Id;
@@ -158,7 +158,7 @@ namespace CollAction.Services.Donation
          */
         public async Task LogPaymentEvent(string json, string signature)
         {
-            Event stripeEvent = GetAndCheckEvent(json, signature, WebhookEndpointType.PaymentEvent);
+            Event stripeEvent = EventUtility.ConstructEvent(json, signature, _stripeSignatures.StripePaymentEventWebhookSecret);
             _context.DonationEventLog.Add(new DonationEventLog()
             {
                 Type = DonationEventType.External,
@@ -219,22 +219,6 @@ namespace CollAction.Services.Donation
                 });
             }
             return customer;
-        }
-
-        private Event GetAndCheckEvent(string json, string signature, WebhookEndpointType endpointType)
-            => EventUtility.ConstructEvent(json, signature, GetWebhookSecret(endpointType));
-
-        private string GetWebhookSecret(WebhookEndpointType endpointType)
-        {
-            switch (endpointType)
-            {
-                case WebhookEndpointType.Chargeable:
-                    return _stripeSignatures.StripeChargeableWebhookSecret;
-                case WebhookEndpointType.PaymentEvent:
-                    return _stripeSignatures.StripePaymentEventWebhookSecret;
-                default:
-                    return null;
-            }
         }
 
         private void ValidateDetails(string name, string email)
