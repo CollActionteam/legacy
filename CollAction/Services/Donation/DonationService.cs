@@ -178,6 +178,7 @@ namespace CollAction.Services.Donation
                     Amount = source.Amount,
                     Currency = source.Currency,
                     SourceId = sourceId,
+                    CustomerId = source.Customer,
                     Description = "A donation to Stichting CollAction",
                     StatementDescriptor = "A donation to Stichting CollAction"
                 });
