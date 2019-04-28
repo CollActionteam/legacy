@@ -34,6 +34,7 @@ interface IDonationBoxState {
     showDialog: boolean;
     inputUserName: string;
     inputUserEmail: string;
+    isOneOff: boolean;
 }
 
 class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> {
@@ -44,6 +45,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
             showError: false, 
             error: "",
             showDialog: false,
+            isOneOff: true,
             inputUserEmail: "",
             inputUserName: ""
         };
@@ -53,11 +55,11 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         this.setState({ showError: false, error: null });
     }
 
-    needsToEnterName() {
+    needsToEnterName(): boolean {
         return this.props.userName === "";
     }
 
-    needsToEnterEmail() {
+    needsToEnterEmail(): boolean {
         return this.props.userEmail.match(/.+@.+/) === null;
     }
 
@@ -126,8 +128,16 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         }
         this.setState({amount: newAmount, showError: false});
     }
+    
+    setIsOneOff(event: React.ChangeEvent<HTMLInputElement>) {
+        this.setState({ isOneOff: event.currentTarget.checked });
+    }
 
-    getName() {
+    setIsMonthly(event: React.ChangeEvent<HTMLInputElement>) {
+        this.setState({ isOneOff: !event.currentTarget.checked });
+    }
+
+    getName(): string {
         if (!this.needsToEnterName()) {
             return this.props.userName;
         } else {
@@ -135,12 +145,27 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         }
     }
 
-    getEmail() {
+    getEmail(): string {
         if (!this.needsToEnterEmail()) {
             return this.props.userEmail;
         } else {
             return this.state.inputUserEmail;
         }
+    }
+
+    renderPeriodSelection() {
+        return (
+            <React.Fragment>
+                <div className="col-xs-12 col-sm-6 donation-period-one-off">
+                    <input id="one-off-donation-button" type="radio" name="period" value="one-off" onChange={(event) => this.setIsOneOff(event)} checked={!!this.state.isOneOff} />
+                    <label htmlFor="one-off-donation-button">One-off</label>
+                </div>
+                <div className="col-xs-12 col-sm-6 donation-period-monthly">
+                    <input id="monthly-donation-button" type="radio" name="period" value="one-off" onChange={(event) => this.setIsMonthly(event)} checked={!this.state.isOneOff} />
+                    <label htmlFor="monthly-donation-button">Monthly</label>
+                </div>
+            </React.Fragment>
+        );
     }
 
     renderAmount(amount: number) {
@@ -267,6 +292,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
                 {this.renderHeader()}
                 {this.renderErrors()}
                 {this.renderUserDetails()}
+                {this.renderPeriodSelection()}
                 {this.renderAmounts()}
                 {this.renderPopup()}
                 {this.renderPaymentOptions()}

@@ -148,6 +148,14 @@
             color: $coll-action-green;
         }
 
+        .donation-period-one-off {
+            padding-left: 0;
+        }
+
+        .donation-period-monthly {
+            padding-right: 0;
+        }
+
         .payment-options {
             .btn {
                 display: flex;
