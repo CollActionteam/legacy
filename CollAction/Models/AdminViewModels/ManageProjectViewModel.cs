@@ -48,12 +48,12 @@ namespace CollAction.Models.AdminViewModels
 
         [Required]
         [DataType(DataType.Date)]
-        [Display(Name = "Start date")]
+        [Display(Name = "Sign up opens")]
         public DateTime Start { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
-        [Display(Name = "Deadline")]
+        [Display(Name = "Sign up closes")]
         [WithinMonthsAfterDateProperty(12, "Start", ErrorMessage = "The deadline must be within a year of the start date.")]
         public DateTime End { get; set; }
 
