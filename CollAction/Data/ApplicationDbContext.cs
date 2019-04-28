@@ -35,6 +35,12 @@ namespace CollAction.Data
         public DbSet<ProjectParticipantCount> ProjectParticipantCounts { get; set; }
         public DbSet<UserEvent> UserEvents { get; set; }
 
+        public DbSet<Comment> Comments { get; set; }
+
+        public DbSet<CommentReply> Replies { get; set; }
+
+        public DbSet<CommentLike> Likes { get; set; }
+
         /// <summary>
         /// Configure the model (foreign keys, relations, primary keys, etc)
         /// </summary>
@@ -83,6 +89,11 @@ namespace CollAction.Data
                                       .OnDelete(DeleteBehavior.SetNull);
             builder.Entity<LocationLevel2>().HasOne(l => l.Location);
             builder.Entity<ApplicationUser>().Property(u => u.RepresentsNumberParticipants).HasDefaultValue(1);
+            
+            builder.Entity<Comment>()
+                   .HasIndex(c => c.ExternalReference);
+            builder.Entity<CommentReply>()
+                   .HasIndex(r => r.ExternalReference);
         }
 
         /// <summary>

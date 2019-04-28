@@ -73,6 +73,8 @@ namespace CollAction.Models
 
         public ProjectParticipantCount ParticipantCounts { get; set; }
 
+        public List<Comment> Comments { get; set; }
+
         [NotMapped]
         public bool IsActive
             => Status == ProjectStatus.Running && Start <= DateTime.UtcNow && End >= DateTime.UtcNow;
