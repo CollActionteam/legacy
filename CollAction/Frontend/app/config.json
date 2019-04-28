@@ -388,7 +388,8 @@
     "navs.less",
     "navbar.less",
     "panels.less",
-    "responsive-embed.less"
+    "responsive-embed.less",
+    "component-animations.less"
   ],
   "js": []
 }
