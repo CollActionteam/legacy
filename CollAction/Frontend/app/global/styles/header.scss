@@ -1,171 +1,86 @@
 @import "../../colors";
-
-#header-container {
-    position: fixed;
-    background-color: white;
-    width: 100%;
-    z-index: 2;
-    height: 85px;
-}
-
-#header-padding {
-    padding-top: 85px;
-}
+@import '../../mixins';
 
 #header {
-    margin: 20px 0px;
+    .navbar {
+        margin-bottom: 0;
+        padding: 20px 0 20px 0;
 
-    #NavigationBar a {
-        font-weight: 700;
-    }
+        @media (min-width: 768px) {
+            .navbar-nav {
+                height: 44px;
 
-    #hamburger-icon {
-        font-size: 22px;
-        margin: 7px;
-    }
-
-    form {
-        float: right;
-    }
-
-    .nav-bar {
-        margin-top: 13px;
-    }
-
-    a {
-        color: #111;
-    }
-
-    #header-menu {
-        list-style: none;
-        padding: 0px;
-        margin: 0px;
-
-        li {
-            display: inline;
-            font-weight: bold;
-            margin: 0px 50px 0px 50px;
-        }
-    }
-
-    #draw-menu {
-        ul {
-            list-style: none;
-            padding: 0px;
-            margin: 70px 0px 0px 0px;
-        }
-
-        li {
-            margin: 30px 20px;
-            font-size: 22px;
-
-            a {
-                color: $coll-action-green;
+                & > li > a {
+                    margin-top: 1px;   // Align with the logo
+                }
             }
+        }
+
+        .navbar-toggle {
+            position: absolute;
+            font-size: 30px;
+            padding: 0;
+            margin: 0 0 0 20px;
+            width: 0;   // reset so the logo will center correctly
 
             button {
-                color: $coll-action-green;
-                font-weight: normal;
-                background: none !important;
-                padding: 0 !important;
                 border: none;
-                -webkit-box-shadow: none;
-                box-shadow: none;
-                outline-color: transparent;
+                margin: 0;
+                padding: 0;
+                width: auto;
+                overflow: visible;
+                outline: none;            
+                background: transparent;
             }
         }
 
-        #draw-menu-close-button {
-            font-size: 35px;
-            margin: -2px 20px 20px 20px;
+        .logo {
+            text-align: center;
         }
 
-        position: absolute;
-        background-color: #fff;
-        left: 0px;
-        top: 0px;
-        z-index: 21;
-        height: 100vh;
-        width: 100vw;
-    }
+        .navbar-nav {
 
-    #header-login {
-        text-align: right;
-
-        #logInBtn {
-            background-color: $coll-action-green;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 20px;
+            li {
+                margin-left: 20px;
+            }
         }
 
-        #logOutBtn {
+        a.btn {
+            @include coll-action-button;
+            text-transform: none;
+        }
+        
+        ul.nav > li > a:not(.btn) {
+            font-weight: bold;
             color: #111;
-            background: none !important;
-            padding: 0 !important;
-            border: none;
-            outline-color: transparent;
-        }
-    }
-}
+            padding-top: 10px;
+            padding-bottom: 10px;
 
-@media (max-width: 991px) {
-    #header-container {
-        #nav-container {
-            padding-left: 0px;
-            padding-right: 0px;
-            margin-left: 0px;
-            margin-right: 0px;
-            width: 100%;
+            &.attention {
+                @media (min-width: 768px) {
+                    color: $coll-action-green;
+                }
+            }
+            
+            @media (max-width: 767px) {
+                font-size: 22px;
+                color: $coll-action-green;
 
-            a {
-              margin: 0px auto;
-              max-width: 300px;
-              display: block;
-              padding-left: 45px;
+                line-height: inherit;
+                margin-left: 40px;
             }
 
-            .nav-row {
-                margin-left: 0px;
-                margin-right: 0px;
+            &:hover, 
+            &:focus {
+                text-decoration: underline;
+                background-color: inherit;
+            }
+        }
 
-                #mobile-nav-draw {
-                    text-align: left;
-                }
-                
-                .mobile-header {
-                    float: left;
-                    height: 50px;
-                    width: 45px;
-                }
-
-                .fa-bars {
-                    font-size: 30px;
-                }
+        @media (min-width: 768px) {
+            ul.nav.navbar-right > li > a {
+                font-weight: lighter;
             }
         }
     }
 }
-
-@media (max-width: 767px) {
-  #header-container {
-    #nav-container {
-      .nav-row {
-        .mobile-header {
-          padding-left: 0px;
-          height: 45px;
-          width: 45px;
-
-          #hamburger-icon {
-            margin-left: 0px;
-            margin-right: 0px;
-            margin-top: 7px;
-            margin-bottom: 0px;
-          }
-        }
-      }
-    }
-  }
-}
-

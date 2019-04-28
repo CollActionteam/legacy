@@ -106,6 +106,9 @@ class ProjectThumb extends React.Component<IProject, IThumbState> {
     }
   }
 
+  openProject = () => {
+    window.location.href = `/projects/${this.props.projectNameUriPart}/${this.props.projectId}/details`;
+  }
   render () {
     const projectImageStyle = {
       backgroundImage: `url(${this.props.bannerImagePath})`,
@@ -117,7 +120,7 @@ class ProjectThumb extends React.Component<IProject, IThumbState> {
       <div>
         <div className={`${this.props.tileClassName} project-thumb-container`}>
           <div className="project-thumb">
-            <div className="project-thumb-image" style={projectImageStyle} >
+            <div className="project-thumb-image" style={projectImageStyle} onClick={this.openProject}>
               <div className="category-name" style={{backgroundColor: `#${this.props.categoryColorHex}`}}>
                 {this.props.categoryName}
               </div>

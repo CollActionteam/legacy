@@ -15,8 +15,6 @@ using Serilog;
 using System.Linq;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Rewrite;
-using NetEscapades.AspNetCore.SecurityHeaders;
-using NetEscapades.AspNetCore.SecurityHeaders.Infrastructure;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Hangfire;
 using Hangfire.PostgreSql;
@@ -29,6 +27,12 @@ using CollAction.Services.Festival;
 using CollAction.Services.DataProtection;
 using CollAction.Services.Image;
 using Microsoft.AspNetCore.Http;
+using Stripe;
+using CollAction.Services.Donation;
+using CollAction.Services;
+using Serilog.Events;
+using Serilog.Sinks.Slack;
+using Microsoft.ApplicationInsights.Extensibility;
 
 namespace CollAction
 {
@@ -75,6 +79,30 @@ namespace CollAction
                         options.ConsumerSecret = Configuration["Authentication:Twitter:ConsumerSecret"];
                     });
 
+            services.AddApplicationInsightsTelemetry(Configuration);
+
+            services.AddLogging(loggingBuilder =>
+            {
+                LoggerConfiguration configuration = new LoggerConfiguration()
+                       .WriteTo.RollingFile("log-{Date}.txt", LogEventLevel.Information)
+                       .WriteTo.Console(LogEventLevel.Information) 
+                       .WriteTo.ApplicationInsights(TelemetryConfiguration.Active, TelemetryConverter.Traces);
+
+                string slackHook = Configuration["SlackHook"];
+                if (slackHook != null)
+                {
+                    configuration.WriteTo.Slack(slackHook, restrictedToMinimumLevel: LogEventLevel.Error);
+                }
+
+                if (Environment.IsDevelopment())
+                {
+                    configuration.WriteTo.Trace();
+                }
+
+                Log.Logger = configuration.CreateLogger();
+                loggingBuilder.AddSerilog(Log.Logger);
+            });
+
             services.AddLocalization(options => options.ResourcesPath = "Resources");
 
             services.AddMvc()
@@ -89,18 +117,27 @@ namespace CollAction
             services.AddScoped<IImageService, AmazonS3ImageService>();
             services.AddTransient<INewsletterSubscriptionService, NewsletterSubscriptionService>();
             services.AddTransient<IFestivalService, FestivalService>();
+            services.AddTransient<IDonationService, DonationService>();
 
             services.AddDataProtection()
                     .Services.Configure<KeyManagementOptions>(options => options.XmlRepository = new DataProtectionRepository(new DbContextOptionsBuilder<ApplicationDbContext>().UseNpgsql(connectionString).Options));
 
-            services.AddApplicationInsightsTelemetry(Configuration);
-
+            services.Configure<StripeSignatures>(Configuration);
+            services.Configure<SiteOptions>(Configuration);
             services.Configure<AuthMessageSenderOptions>(Configuration);
             services.Configure<ImageServiceOptions>(Configuration);
             services.Configure<ImageProcessingOptions>(Configuration);
             services.Configure<NewsletterSubscriptionServiceOptions>(Configuration);
             services.Configure<FestivalServiceOptions>(Configuration);
             services.Configure<ProjectEmailOptions>(Configuration);
+            services.Configure<RequestOptions>(options =>
+            {
+                options.ApiKey = Configuration["StripeSecretApiKey"];
+            });
+            services.Configure<StripeJavascriptOptions>(options =>
+            {
+                options.StripePublicKey = Configuration["StripePublicApiKey"];
+            });
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireDigit = false;
@@ -137,83 +174,85 @@ namespace CollAction
                 forwardedHeaderOptions.KnownProxies.Clear();
                 forwardedHeaderOptions.KnownNetworks.Clear();
                 app.UseForwardedHeaders(forwardedHeaderOptions);
+                app.UseRewriter(new RewriteOptions().AddRedirectToHttpsPermanent());
+            }
 
-                if (!Configuration.GetValue<bool>("CspDisable"))
-                {
-                    Logger.LogInformation("enabling security headers");
-                    app.UseSecurityHeaders(new HeaderPolicyCollection() // See https://www.owasp.org/index.php/OWASP_Secure_Headers_Project
-                       .AddStrictTransportSecurityMaxAgeIncludeSubDomains() // Add a HSTS header, making sure browsers connect to collaction + subdomains with https from now on
-                       .AddXssProtectionEnabled() // Enable browser xss protection
-                       .AddContentTypeOptionsNoSniff() // Ensure the browser doesn't guess/sniff content-types
-                       .AddReferrerPolicyStrictOriginWhenCrossOrigin() // Send a full URL when performing a same-origin request, only send the origin of the document to a-priori as-much-secure destination (HTTPS->HTTPS), and send no header to a less secure destination (HTTPS->HTTP) 
-                       .AddFrameOptionsDeny() // No framing allowed (put us inside a frame tag)
-                       .AddContentSecurityPolicy(cspBuilder =>
-                       {
-                           cspBuilder.AddBlockAllMixedContent(); // Block mixed http/https content
-                           cspBuilder.AddUpgradeInsecureRequests(); // Upgrade all http requests to https
-                           cspBuilder.AddObjectSrc().Self().Sources.AddRange(Configuration["CspObjectSrc"]?.Split(";") ?? new string[0]); // Only allow plugins/objects from our own site, or configured sources
-                           cspBuilder.AddFormAction().Self() // Only allow form actions to our own site, or mailinator, or social media logins, or configured sources
-                                                     .Sources.AddRange(new[]
-                                                                       {
-                                                                           "https://collaction.us14.list-manage.com/",
-                                                                           "https://www.facebook.com/",
-                                                                           "https://m.facebook.com",
-                                                                           "https://accounts.google.com/",
-                                                                           "https://api.twitter.com/",
-                                                                           "https://www.twitter.com/"
-                                                                       }.Concat(Configuration["CspFormAction"]?.Split(";") ?? new string[0]));
-                           cspBuilder.AddConnectSrc().Self() // Only allow API calls to self, and the websites we use for the share buttons, app insights or configured sources
-                                                     .Sources.AddRange(new[]
-                                                                       {
-                                                                           "https://www.linkedin.com/",
-                                                                           "https://linkedin.com/",
-                                                                           "https://www.twitter.com/",
-                                                                           "https://twitter.com/",
-                                                                           "https://www.facebook.com/",
-                                                                           "https://facebook.com/",
-                                                                           "https://graph.facebook.com/",
-                                                                           "https://dc.services.visualstudio.com/"
-                                                                       }.Concat(Configuration["CspConnectSrc"]?.Split(";") ?? new string[0]));
-                           cspBuilder.AddImgSrc().Self() // Only allow self-hosted images, or google analytics (for tracking images), or configured sources
-                                                 .Data()    // Used for project creation image preview
+            if (!Configuration.GetValue<bool>("CspDisable"))
+            {
+                Logger.LogInformation("enabling security headers");
+                app.UseSecurityHeaders(new HeaderPolicyCollection() // See https://www.owasp.org/index.php/OWASP_Secure_Headers_Project
+                   .AddStrictTransportSecurityMaxAgeIncludeSubDomains() // Add a HSTS header, making sure browsers connect to collaction + subdomains with https from now on
+                   .AddXssProtectionEnabled() // Enable browser xss protection
+                   .AddContentTypeOptionsNoSniff() // Ensure the browser doesn't guess/sniff content-types
+                   .AddReferrerPolicyStrictOriginWhenCrossOrigin() // Send a full URL when performing a same-origin request, only send the origin of the document to a-priori as-much-secure destination (HTTPS->HTTPS), and send no header to a less secure destination (HTTPS->HTTP) 
+                   .AddFrameOptionsDeny() // No framing allowed (put us inside a frame tag)
+                   .AddContentSecurityPolicy(cspBuilder =>
+                   {
+                       cspBuilder.AddBlockAllMixedContent(); // Block mixed http/https content
+                       cspBuilder.AddUpgradeInsecureRequests(); // Upgrade all http requests to https
+                       cspBuilder.AddObjectSrc().Self().Sources.AddRange(Configuration["CspObjectSrc"]?.Split(";") ?? new string[0]); // Only allow plugins/objects from our own site, or configured sources
+                       cspBuilder.AddFormAction().Self() // Only allow form actions to our own site, or mailinator, or social media logins, or configured sources
                                                  .Sources.AddRange(new[]
                                                                    {
-                                                                       "https://www.google-analytics.com",
-                                                                       $"https://s3.{Configuration["S3Region"]}.amazonaws.com"
-                                                                   }.Concat(Configuration["CspImgSrc"]?.Split(";") ?? new string[0]));
-                           cspBuilder.AddStyleSrc().Self() // Only allow style/css from these sources (note: css injection can actually be dangerous), or configured sources
-                                                   .UnsafeInline() // Unfortunately this is necessary, the backend passess some things that are directly passed into css style attributes, especially on the project page. TODO: We should try to get rid of this.
-                                                   .Sources.AddRange(new[]
-                                                                     {
-                                                                         "https://maxcdn.bootstrapcdn.com/",
-                                                                         "https://fonts.googleapis.com/"
-                                                                     }.Concat(Configuration["CspStyleSrc"]?.Split(";") ?? new string[0]));
-                           cspBuilder.AddFontSrc().Self() // Only allow fonts from these sources, or configured sources
-                                                  .Sources.AddRange(new[]
+                                                                   "https://collaction.us14.list-manage.com/",
+                                                                   "https://www.facebook.com/",
+                                                                   "https://m.facebook.com",
+                                                                   "https://accounts.google.com/",
+                                                                   "https://api.twitter.com/",
+                                                                   "https://www.twitter.com/"
+                                                                   }.Concat(Configuration["CspFormAction"]?.Split(";") ?? new string[0]));
+                       cspBuilder.AddConnectSrc().Self() // Only allow API calls to self, and the websites we use for the share buttons, app insights or configured sources
+                                                 .Sources.AddRange(new[]
                                                                    {
-                                                                       "https://maxcdn.bootstrapcdn.com/",
-                                                                       "https://fonts.googleapis.com/",
-                                                                       "https://fonts.gstatic.com"
-                                                                   }.Concat(Configuration["CspFontSrc"]?.Split(";") ?? new string[0]));
-                           cspBuilder.AddFrameAncestors().Sources.AddRange(Configuration["CspFrameAncestors"]?.Split(";") ?? new string[0]); // Only allow configured sources
-                           cspBuilder.AddMediaSrc().Self()
+                                                                   "https://www.linkedin.com/",
+                                                                   "https://linkedin.com/",
+                                                                   "https://www.twitter.com/",
+                                                                   "https://twitter.com/",
+                                                                   "https://www.facebook.com/",
+                                                                   "https://facebook.com/",
+                                                                   "https://graph.facebook.com/",
+                                                                   "https://dc.services.visualstudio.com/"
+                                                                   }.Concat(Configuration["CspConnectSrc"]?.Split(";") ?? new string[0]));
+                       cspBuilder.AddImgSrc().Self() // Only allow self-hosted images, or google analytics (for tracking images), or configured sources
+                                             .Data()    // Used for project creation image preview
+                                             .Sources.AddRange(new[]
+                                                               {
+                                                               "https://www.google-analytics.com",
+                                                               $"https://s3.{Configuration["S3Region"]}.amazonaws.com"
+                                                               }.Concat(Configuration["CspImgSrc"]?.Split(";") ?? new string[0]));
+                       cspBuilder.AddStyleSrc().Self() // Only allow style/css from these sources (note: css injection can actually be dangerous), or configured sources
+                                               .UnsafeInline() // Unfortunately this is necessary, the backend passess some things that are directly passed into css style attributes, especially on the project page. TODO: We should try to get rid of this.
+                                               .Sources.AddRange(new[]
+                                                                 {
+                                                                 "https://maxcdn.bootstrapcdn.com/",
+                                                                 "https://fonts.googleapis.com/"
+                                                                 }.Concat(Configuration["CspStyleSrc"]?.Split(";") ?? new string[0]));
+                       cspBuilder.AddFontSrc().Self() // Only allow fonts from these sources, or configured sources
+                                              .Sources.AddRange(new[]
+                                                               {
+                                                               "https://maxcdn.bootstrapcdn.com/",
+                                                               "https://fonts.googleapis.com/",
+                                                               "https://fonts.gstatic.com"
+                                                               }.Concat(Configuration["CspFontSrc"]?.Split(";") ?? new string[0]));
+                       cspBuilder.AddFrameAncestors().Sources.AddRange(Configuration["CspFrameAncestors"]?.Split(";") ?? new string[0]); // Only allow configured sources
+                       cspBuilder.AddMediaSrc().Self()
                                                    .Sources.AddRange(Configuration["CspMediaSrc"]?.Split(";") ?? new string[0]); // Only allow self-hosted videos, or configured sources
-                           cspBuilder.AddFrameAncestors().None(); // No framing allowed here (put us inside a frame tag)
-                           cspBuilder.AddScriptSrc() // Only allow scripts from our own site, the aspnetcdn site, app insights and google analytics
-                                     .Self()                                    
-                                     .Sources.AddRange(new[]
-                                                       {
-                                                           "https://ajax.aspnetcdn.com",
-                                                           "https://www.googletagmanager.com",
-                                                           "https://www.google-analytics.com",
-                                                           "*.msecnd.net",
-                                                           "'sha256-EHA5HNhe/+uz3ph6Fw34N85vHxX87fsJ5cH4KbZKIgU='"
-                                                       }.Concat(Configuration["CspScriptSrc"]?.Split(";") ?? new string[0]));
-                        })
-                    );
-                }
-
-                app.UseRewriter(new RewriteOptions().AddRedirectToHttpsPermanent());
+                       cspBuilder.AddFrameAncestors().None(); // No framing allowed here (put us inside a frame tag)
+                       cspBuilder.AddScriptSrc() // Only allow scripts from our own site, the aspnetcdn site, app insights and google analytics
+                                 .Self()
+                                 .Sources.AddRange(new[]
+                                                   {
+                                                   "https://ajax.aspnetcdn.com",
+                                                   "https://www.googletagmanager.com",
+                                                   "https://www.google-analytics.com",
+                                                   "https://js.stripe.com",
+                                                   "*.msecnd.net",
+                                                   "'sha256-EHA5HNhe/+uz3ph6Fw34N85vHxX87fsJ5cH4KbZKIgU='"
+                                                   }.Concat(Configuration["CspScriptSrc"]?.Split(";") ?? new string[0])
+                                                    .Concat(env.IsDevelopment() ? new[] { "'unsafe-eval'" } : // In development mode webpack uses eval to load debug information
+                                                                                  Enumerable.Empty<string>()));
+                   })
+                );
             }
 
             app.UseRequestLocalization(new RequestLocalizationOptions

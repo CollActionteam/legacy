@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-const path = require('path')
+const path = require('path');
 
 module.exports = {
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
@@ -24,7 +24,7 @@ module.exports = {
   },
   plugins: [
     new webpack.ProvidePlugin({
-      'Promise': 'bluebird', // Provide a Promise polyfill for older or less suportive browsers like IE9-11.
+      'Promise': 'bluebird' // Provide a Promise polyfill for older or less suportive browsers like IE9-11.
     })
   ]
-}
+};
