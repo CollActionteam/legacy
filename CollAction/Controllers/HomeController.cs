@@ -7,6 +7,8 @@ using CollAction.Helpers;
 using System.Threading.Tasks;
 using CollAction.Services.Image;
 using CollAction.Services.Project;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Diagnostics;
 
 namespace CollAction.Controllers
 {
@@ -17,14 +19,16 @@ namespace CollAction.Controllers
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly IProjectService _projectService;
         private readonly IImageService _imageService;
+        private readonly ILogger<HomeController> _logger;
 
-        public HomeController(IStringLocalizer<HomeController> localizer, ApplicationDbContext context, IHostingEnvironment hostingEnvironment, IProjectService projectService, IImageService imageService)
+        public HomeController(IStringLocalizer<HomeController> localizer, ApplicationDbContext context, IHostingEnvironment hostingEnvironment, IProjectService projectService, IImageService imageService, ILogger<HomeController> logger)
         {
             _localizer = localizer;
             _context = context;
             _hostingEnvironment = hostingEnvironment;
             _projectService = projectService;
             _imageService = imageService;
+            _logger = logger;
         }
 
         public IActionResult Index()
@@ -62,6 +66,8 @@ namespace CollAction.Controllers
 
         public IActionResult Error()
         {
+            var exceptionHandlerPathFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+            _logger.LogError(exceptionHandlerPathFeature.Error, "An error has occurred at: {0}", exceptionHandlerPathFeature.Path);
             return View();
         }
 

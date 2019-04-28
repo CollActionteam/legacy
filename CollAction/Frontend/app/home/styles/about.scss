@@ -64,6 +64,12 @@
     padding: 50px 0px;
   }
 
+  #faq {
+    .faq-title {
+      color: inherit !important;
+    }
+  }
+
   a.fragment {
     display: block;
     position: relative;
