@@ -141,10 +141,8 @@
                     <div>@Html.Raw(Model.Project.Description)</div>
                 </div>
                 <div class="project-dates">
-                    <h3>Start date:<h3> 
-                    <span>@Html.DisplayFor(model => model.Start)</span>                    
-                    <h3>End date:</h3>
-                    <span>@Html.DisplayFor(model => model.End)</span>
+                    <h3>Sign up opens: <span>@Html.DisplayFor(model => model.Start) </span> </h3>
+                    <h3>Sign up closes: <span>@Html.DisplayFor(model => model.End) </span> </h3>
                 </div>
                 @if (Model.Project.Tags.Count > 0)
                 {

@@ -257,7 +257,7 @@ renderComponentIf(
         content={
             <span>
                 <p>
-                    The project ends at the end (23:59:59) of the day that is listed as "End Date" in the UTC (London) timezone.
+                    The project ends at the end (23:59:59) of the day that is listed as "Sign up closes" in the UTC (London) timezone.
                 </p>
             </span>
         }
