@@ -8,9 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="8.0.0" />
-    <PackageReference Include="AWSSDK.S3" Version="3.3.101.5" />
-    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.100.7" />
+    <PackageReference Include="AutoMapper" Version="8.1.0" />
+    <PackageReference Include="AWSSDK.S3" Version="3.3.101.9" />
+    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.100.11" />
     <PackageReference Include="Hangfire.AspNetCore" Version="1.7.1" />
     <PackageReference Include="Hangfire.PostgreSql" Version="1.5.0" />
     <PackageReference Include="HtmlSanitizer" Version="4.0.210" />
@@ -21,14 +21,14 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" PrivateAssets="All" />
     <PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" Version="0.9.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.0" />
-    <PackageReference Include="Serilog.Extensions.Logging" Version="2.0.2" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="2.0.4" />
     <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="3.0.3" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
     <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
     <PackageReference Include="Serilog.Sinks.Slack" Version="1.2.63" />
     <PackageReference Include="Serilog.Sinks.Trace" Version="2.1.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0005" />
-    <PackageReference Include="Stripe.net" Version="25.9.0" />
+    <PackageReference Include="Stripe.net" Version="25.12.0" />
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.1.0-preview1-final" />

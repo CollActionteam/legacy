@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using Stripe;
+using Stripe.Checkout;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,7 @@ namespace CollAction.Services.Donation
         private readonly CustomerService _customerService;
         private readonly SourceService _sourceService;
         private readonly ChargeService _chargeService;
+        private readonly SessionService _sessionService;
         private readonly IBackgroundJobClient _backgroundJobClient;
         private readonly StripeSignatures _stripeSignatures;
         private readonly ApplicationDbContext _context;
@@ -39,6 +41,7 @@ namespace CollAction.Services.Donation
             _customerService = new CustomerService(_requestOptions.ApiKey);
             _sourceService = new SourceService(_requestOptions.ApiKey);
             _chargeService = new ChargeService(_requestOptions.ApiKey);
+            _sessionService = new SessionService(_requestOptions.ApiKey);
             _backgroundJobClient = backgroundJobClient;
             _stripeSignatures = stripeSignatures.Value;
             _context = context;
@@ -62,53 +65,37 @@ namespace CollAction.Services.Donation
             ApplicationUser user = await _userManager.FindByEmailAsync(email);
             Customer customer = await GetOrCreateCustomer(name, email);
 
-            using (var client = new HttpClient())
+            Session session = await _sessionService.CreateAsync(new SessionCreateOptions()
             {
-                var requestContent = new Dictionary<string, string>()
+                SuccessUrl = $"{_siteOptions.PublicAddress}/Donation/ThankYou",
+                CancelUrl = $"{_siteOptions.PublicAddress}/Donation/Donate",
+                CustomerId = customer.Id,
+                PaymentMethodTypes = new List<string>
                 {
-                    { "success_url", $"{_siteOptions.PublicAddress}/Donation/ThankYou" },
-                    { "cancel_url", $"{_siteOptions.PublicAddress}/Donation/Donate" },
-                    { "payment_method_types[]", "card" },
-                    { "line_items[][amount]", (amount * 100).ToString() },
-                    { "line_items[][currency]", currency },
-                    { "line_items[][name]", "donation" },
-                    { "line_items[][description]", "A donation to Stichting CollAction" },
-                    { "line_items[][quantity]", "1" },
-                    { "customer", customer.Id }
-                };
-
-                using (var request = new HttpRequestMessage()
+                    "card",
+                },
+                LineItems = new List<SessionLineItemOptions>()
                 {
-                    RequestUri = new Uri("https://api.stripe.com/v1/checkout/sessions"),
-                    Method = HttpMethod.Post,
-                    Content = new FormUrlEncodedContent(requestContent)
-                })
-                {
-                    request.Headers.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes(_requestOptions.ApiKey + ":")));
-
-                    HttpResponseMessage response = await client.SendAsync(request, HttpCompletionOption.ResponseContentRead);
-                    string content = await response.Content.ReadAsStringAsync();
-                    if (response.IsSuccessStatusCode)
+                    new SessionLineItemOptions()
                     {
-                        var responseContent = JObject.Parse(content);
-                        string checkoutId = ((JValue)responseContent["id"]).Value<string>();
-
-                        _context.DonationEventLog.Add(new DonationEventLog()
-                        {
-                            UserId = user?.Id,
-                            Type = DonationEventType.Internal,
-                            EventData = content
-                        });
-                        await _context.SaveChangesAsync();
-
-                        return checkoutId;
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException($"Stripe checkout returned: {response.StatusCode}: '{content}'");
+                        Amount = amount * 100,
+                        Currency = currency,
+                        Name = "donation",
+                        Description = "A donation to Stichting CollAction",
+                        Quantity = 1
                     }
                 }
-            }
+            });
+
+            _context.DonationEventLog.Add(new DonationEventLog()
+            {
+                UserId = user?.Id,
+                Type = DonationEventType.Internal,
+                EventData = session.ToJson()
+            });
+            await _context.SaveChangesAsync();
+
+            return session.Id;
         }
 
         /*
