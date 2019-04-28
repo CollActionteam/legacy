@@ -34,7 +34,7 @@ namespace CollAction.Models
         }
         
         [DataType(DataType.Date)]
-        [Display(Name = "Start date")]
+        [Display(Name = "Sign up opens")]
         [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
         public DateTime Start 
         {
@@ -45,7 +45,7 @@ namespace CollAction.Models
         }
 
         [DataType(DataType.Date)]
-        [Display(Name = "End date")]
+        [Display(Name = "Sign up closes")]
         [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
         public DateTime End 
         {
