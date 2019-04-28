@@ -42,29 +42,26 @@ export default class FindProject extends Projects<IFindProjectProps, IFindProjec
   componentDidMount() {
     if (this.props.controller === false) {
       this.fetchProjects();
+      window.addEventListener("scroll", this.fetchProjectsOnScroll, false);
     }
-
-    // Bind scroll event
-    window.addEventListener("scroll", this.onScroll, false);
   }
 
   componentWillUnmount() {
-    // Unbind scroll event
-    window.removeEventListener("scroll", this.onScroll, false);
+    window.removeEventListener("scroll", this.fetchProjectsOnScroll, false);
   }
 
-  onScroll = () => {
+  fetchProjectsOnScroll = () => {
     let treshold = 200;
 
     // Check if window scrolled to half of project list
     if (window.pageYOffset + window.innerHeight >= (this.projectListContainerElement.current.offsetTop + this.projectListContainerElement.current.offsetHeight) - treshold) {
 
       // Fetch more projects
-      this.fetchProjects(this.state.projectFilterState, this.state.projectList.length);
+      this.fetchProjects(this.state.projectList.length);
     }
   }
 
-  async fetchProjects(projectFilter: IProjectFilter = null, start: number = 0) {
+  async fetchProjects(start: number = 0) {
     // Prevent unnecessary fetching
     if (this.state.projectFetching || this.state.allProjectsFetched) {
       return;
@@ -73,15 +70,10 @@ export default class FindProject extends Projects<IFindProjectProps, IFindProjec
     this.setState({ projectFetching: true });
 
     // Fetch projects with out filters set
-    const getUrl: () => string = () => {
-      if (projectFilter) {
-        return `/api/projects/find?categoryId=${projectFilter.categoryId}&statusId=${projectFilter.statusId}`;
-      }
-      return `/api/projects/find?start=${start}&limit=${start + this.fetchNumberOfProjectsOnScroll}`;
-    };
+    const getUrl = `/api/projects/find?start=${start}&limit=${start + this.fetchNumberOfProjectsOnScroll}`;
 
     try {
-      const searchProjectRequest: Request = new Request(getUrl());
+      const searchProjectRequest: Request = new Request(getUrl);
       const fetchResult: Response = await fetch(searchProjectRequest);
       const jsonResponse = await fetchResult.json();
 
@@ -101,6 +93,28 @@ export default class FindProject extends Projects<IFindProjectProps, IFindProjec
     }
   }
 
+  async fetchFilteredProjects(projectFilter: IProjectFilter = null) {
+    this.setState({ projectFetching: true });
+
+    // Fetch projects with filter
+    const getUrl = `/api/projects/find?categoryId=${projectFilter.categoryId}&statusId=${projectFilter.statusId}`;
+
+    try {
+      const searchProjectRequest: Request = new Request(getUrl);
+      const fetchResult: Response = await fetch(searchProjectRequest);
+      const jsonResponse = await fetchResult.json();
+
+      // Show filtered projects list
+      this.setState(() => ({
+        projectFetching: false,
+        projectList: jsonResponse
+      }));
+    }
+    catch (e) {
+      this.setState({ projectFetching: false, projectFetchError: e });
+    }
+  }
+
   projectsUrl() {
     if (this.state.projectFilterState) {
       return `/api/projects/find?categoryId=${this.state.projectFilterState.categoryId}&statusId=${this.state.projectFilterState.statusId}`;
@@ -111,7 +125,7 @@ export default class FindProject extends Projects<IFindProjectProps, IFindProjec
   onChange (newState: IProjectFilter) {
     this.setState(
       { projectFilterState: newState },
-      () => this.fetchProjects(newState));
+      () => this.fetchFilteredProjects(newState));
   }
 
   render() {

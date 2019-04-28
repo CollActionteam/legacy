@@ -10,6 +10,8 @@ interface ICollActionEditorProps {
 
 interface ICollActionEditorState {
   content?: string;
+  maxLength: number | null;
+  currentLength: number;
 }
 
 export default class RichTextEditor extends React.Component<ICollActionEditorProps, ICollActionEditorState> {
@@ -20,7 +22,9 @@ export default class RichTextEditor extends React.Component<ICollActionEditorPro
     super(props);
 
     this.state = {
-      content: ""
+      content: "",
+      maxLength: null,
+      currentLength: 0
     };
     this.handleChange = this.handleChange.bind(this);
 
@@ -40,15 +44,29 @@ export default class RichTextEditor extends React.Component<ICollActionEditorPro
 
   componentWillMount() {
     const input = document.getElementById(this.props.formInputId) as HTMLInputElement;
-    if (input) {
-      this.setState({ content: input.value });
+    if (!input) {
+      return;
+    }
+
+    this.setState({
+      content: input.value,
+      currentLength: input.value.length
+     });
+
+    if (input.dataset.valLengthMax) {
+      this.setState({
+        maxLength: parseInt(input.dataset.valLengthMax),
+      });
     }
   }
 
   handleChange(value) {
     value = this.fixLinks(value);
 
-    this.setState({ content: value });
+    this.setState({
+      content: value,
+      currentLength: value.length
+    });
 
     const input = document.getElementById(this.props.formInputId) as HTMLInputElement;
     if (input) {
@@ -73,13 +91,16 @@ export default class RichTextEditor extends React.Component<ICollActionEditorPro
 
   render() {
     return (
-      <ReactQuill
-        theme="snow"
-        value={ this.state.content }
-        placeholder={ this.props.hint }
-        modules={ this.modules }
-        formats={ this.formats }
-        onChange={ this.handleChange } />
+      <div>
+        { this.state.maxLength && <p className="richtext-counter">{ this.state.currentLength.toLocaleString() } / {this.state.maxLength.toLocaleString() } </p> }
+        <ReactQuill
+          theme="snow"
+          value={ this.state.content }
+          placeholder={ this.props.hint }
+          modules={ this.modules }
+          formats={ this.formats }
+          onChange={ this.handleChange } />
+      </div>
     );
   }
 }
@@ -101,7 +122,7 @@ renderComponentIf(
 renderComponentIf(
   <RichTextEditor
     formInputId="Goal"
-    hint="Max 1000 characters" />,
+    hint="What is the problem you are trying to solve?" />,
   document.getElementById("create-project-goal")
 );
 
