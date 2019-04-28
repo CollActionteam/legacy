@@ -3,15 +3,11 @@ using CollAction.Models;
 using Hangfire;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json.Linq;
 using Stripe;
 using Stripe.Checkout;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CollAction.Services.Donation
@@ -22,11 +18,15 @@ namespace CollAction.Services.Donation
         const string StatusConsumed = "consumed";
         const string EventTypeChargeableSource = "source.chargeable";
         const string NameKey = "name";
+        const string RecurringDonationProduct = "Recurring Donation Stichting CollAction";
 
         private readonly CustomerService _customerService;
         private readonly SourceService _sourceService;
         private readonly ChargeService _chargeService;
         private readonly SessionService _sessionService;
+        private readonly SubscriptionService _subscriptionService;
+        private readonly PlanService _planService;
+        private readonly ProductService _productService;
         private readonly IBackgroundJobClient _backgroundJobClient;
         private readonly StripeSignatures _stripeSignatures;
         private readonly ApplicationDbContext _context;
@@ -42,6 +42,9 @@ namespace CollAction.Services.Donation
             _sourceService = new SourceService(_requestOptions.ApiKey);
             _chargeService = new ChargeService(_requestOptions.ApiKey);
             _sessionService = new SessionService(_requestOptions.ApiKey);
+            _subscriptionService = new SubscriptionService(_requestOptions.ApiKey);
+            _planService = new PlanService(_requestOptions.ApiKey);
+            _productService = new ProductService(_requestOptions.ApiKey);
             _backgroundJobClient = backgroundJobClient;
             _stripeSignatures = stripeSignatures.Value;
             _context = context;
@@ -58,23 +61,42 @@ namespace CollAction.Services.Donation
         /*
          * Here we're initializing a stripe checkout session for paying with a credit card. The upcoming SCA regulations ensure we have to do it through this API, because it's the only one that /easily/ supports things like 3D secure.
          */
-        public async Task<string> InitializeCreditCardCheckout(string currency, int amount, string name, string email)
+        public async Task<string> InitializeCreditCardCheckout(string currency, int amount, string name, string email, bool recurring)
         {
             ValidateDetails(amount, name, email);
 
             ApplicationUser user = await _userManager.FindByEmailAsync(email);
             Customer customer = await GetOrCreateCustomer(name, email);
 
-            Session session = await _sessionService.CreateAsync(new SessionCreateOptions()
+            var sessionOptions = new SessionCreateOptions()
             {
                 SuccessUrl = $"{_siteOptions.PublicAddress}/Donation/ThankYou",
                 CancelUrl = $"{_siteOptions.PublicAddress}/Donation/Donate",
-                CustomerId = customer.Id,
                 PaymentMethodTypes = new List<string>
                 {
                     "card",
-                },
-                LineItems = new List<SessionLineItemOptions>()
+                }
+            };
+
+            if (recurring)
+            {
+                sessionOptions.CustomerEmail = customer.Email; // TODO: Once supported, replace this with the customer id
+                sessionOptions.SubscriptionData = new SessionSubscriptionDataOptions()
+                {
+                    Items = new List<SessionSubscriptionDataItemOptions>()
+                    {
+                        new SessionSubscriptionDataItemOptions()
+                        {
+                            PlanId = (await CreateRecurringPlan(amount, currency)).Id,
+                            Quantity = 1
+                        }
+                    }
+                };
+            }
+            else
+            {
+                sessionOptions.CustomerId = customer.Id;
+                sessionOptions.LineItems = new List<SessionLineItemOptions>()
                 {
                     new SessionLineItemOptions()
                     {
@@ -84,8 +106,10 @@ namespace CollAction.Services.Donation
                         Description = "A donation to Stichting CollAction",
                         Quantity = 1
                     }
-                }
-            });
+                };
+            }
+
+            Session session = await _sessionService.CreateAsync(sessionOptions);
 
             _context.DonationEventLog.Add(new DonationEventLog()
             {
@@ -102,8 +126,10 @@ namespace CollAction.Services.Donation
          * Here we're initializing the part of the iDeal payment that has to happen on the backend. For now, that's only attaching an actual customer record to the payment source.
          * In the future to handle SCA, we might need to start using payment intents or checkout here. SCA starts from september the 14th. The support for iDeal is not there yet though, so we'll have to wait.
          */
-        public async Task InitializeIdealCheckout(string sourceId, string name, string email)
+        public async Task InitializeIdealCheckout(string sourceId, string name, string email, bool recurring)
         {
+            // TODO: recurring
+
             ValidateDetails(name, email);
 
             ApplicationUser user = await _userManager.FindByEmailAsync(email);
@@ -182,6 +208,43 @@ namespace CollAction.Services.Donation
             {
                 throw new InvalidOperationException($"source: {source.Id} is not chargeable, something went wrong in the payment flow");
             }
+        }
+
+        private async Task<Plan> CreateRecurringPlan(int amount, string currency)
+        {
+            Product product = await GetOrCreateRecurringDonationProduct();
+            return await _planService.CreateAsync(new PlanCreateOptions()
+            {
+                ProductId = product.Id,
+                Active = true,
+                Amount = amount * 100,
+                Currency = currency,
+                Interval = "month",
+                BillingScheme = "per_unit",
+                UsageType = "licensed",
+                IntervalCount = 1
+            });
+        }
+
+        private async Task<Product> GetOrCreateRecurringDonationProduct()
+        {
+            var products = await _productService.ListAsync(new ProductListOptions()
+            {
+                Active = true,
+                Type = "service"
+            });
+            Product product = products.FirstOrDefault(p => p.Name == RecurringDonationProduct);
+            if (product == null)
+            {
+                product = await _productService.CreateAsync(new ProductCreateOptions()
+                {
+                    Active = true,
+                    Name = RecurringDonationProduct,
+                    StatementDescriptor = "Donation CollAction",
+                    Type = "service"
+                });
+            }
+            return product;
         }
 
         private async Task<Customer> GetOrCreateCustomer(string name, string email)

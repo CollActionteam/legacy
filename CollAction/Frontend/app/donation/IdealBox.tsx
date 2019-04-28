@@ -6,6 +6,7 @@ interface IIdealBoxProps {
     amount: number;
     userEmail: string;
     userName: string;
+    isRecurring: boolean;
 }
 
 interface IIdealBoxState {

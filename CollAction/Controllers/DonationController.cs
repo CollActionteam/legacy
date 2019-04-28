@@ -1,8 +1,6 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
-using CollAction.Models;
 using CollAction.Services.Donation;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CollAction.Controllers
@@ -17,16 +15,16 @@ namespace CollAction.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> InitializeCreditCardCheckout(string currency, int amount, string name, string email)
+        public async Task<IActionResult> InitializeCreditCardCheckout(string currency, int amount, string name, string email, bool recurring)
         {
-            string checkoutId = await _donationService.InitializeCreditCardCheckout(currency, amount, name, email);
+            string checkoutId = await _donationService.InitializeCreditCardCheckout(currency, amount, name, email, recurring);
             return Ok(checkoutId);
         }
 
         [HttpPost]
-        public async Task<IActionResult> InitializeIdealCheckout(string sourceId, string name, string email)
+        public async Task<IActionResult> InitializeIdealCheckout(string sourceId, string name, string email, bool recurring)
         {
-            await _donationService.InitializeIdealCheckout(sourceId, name, email);
+            await _donationService.InitializeIdealCheckout(sourceId, name, email, recurring);
             return Ok();
         }
 

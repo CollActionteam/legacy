@@ -34,7 +34,7 @@ interface IDonationBoxState {
     showDialog: boolean;
     inputUserName: string;
     inputUserEmail: string;
-    isOneOff: boolean;
+    isRecurring: boolean;
 }
 
 class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> {
@@ -45,7 +45,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
             showError: false, 
             error: "",
             showDialog: false,
-            isOneOff: true,
+            isRecurring: false,
             inputUserEmail: "",
             inputUserName: ""
         };
@@ -90,7 +90,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
             return;
         }
 
-        let checkoutTokenUrl = `/Donation/InitializeCreditCardCheckout?currency=eur&amount=${this.state.amount}&name=${encodeURIComponent(this.getName())}&email=${encodeURIComponent(this.getEmail())}`;
+        let checkoutTokenUrl = `/Donation/InitializeCreditCardCheckout?currency=eur&amount=${this.state.amount}&name=${encodeURIComponent(this.getName())}&email=${encodeURIComponent(this.getEmail())}&recurring=${this.state.isRecurring}`;
         let checkoutTokenResponse: Response = await fetch(checkoutTokenUrl, { method: "POST" });
         if (checkoutTokenResponse.status != 200) {
             let responseBody = await checkoutTokenResponse.text();
@@ -130,11 +130,11 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
     }
     
     setIsOneOff(event: React.ChangeEvent<HTMLInputElement>) {
-        this.setState({ isOneOff: event.currentTarget.checked });
+        this.setState({ isRecurring: !event.currentTarget.checked });
     }
 
     setIsMonthly(event: React.ChangeEvent<HTMLInputElement>) {
-        this.setState({ isOneOff: !event.currentTarget.checked });
+        this.setState({ isRecurring: event.currentTarget.checked });
     }
 
     getName(): string {
@@ -157,11 +157,11 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         return (
             <React.Fragment>
                 <div className="col-xs-12 col-sm-6 donation-period-one-off">
-                    <input id="one-off-donation-button" type="radio" name="period" value="one-off" onChange={(event) => this.setIsOneOff(event)} checked={!!this.state.isOneOff} />
+                    <input id="one-off-donation-button" type="radio" name="period" value="one-off" onChange={(event) => this.setIsOneOff(event)} checked={!this.state.isRecurring} />
                     <label htmlFor="one-off-donation-button">One-off</label>
                 </div>
                 <div className="col-xs-12 col-sm-6 donation-period-monthly">
-                    <input id="monthly-donation-button" type="radio" name="period" value="one-off" onChange={(event) => this.setIsMonthly(event)} checked={!this.state.isOneOff} />
+                    <input id="monthly-donation-button" type="radio" name="period" value="one-off" onChange={(event) => this.setIsMonthly(event)} checked={!!this.state.isRecurring} />
                     <label htmlFor="monthly-donation-button">Monthly</label>
                 </div>
             </React.Fragment>
@@ -236,7 +236,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
                 <div id="donation-modal">
                     <StripeProvider apiKey={this.props.stripePublicKey}>
                         <Elements>
-                            <InjectedIdealBox amount={this.state.amount} userEmail={this.getEmail()} userName={this.getName()} />
+                            <InjectedIdealBox amount={this.state.amount} userEmail={this.getEmail()} userName={this.getName()} isRecurring={this.state.isRecurring} />
                         </Elements>
                     </StripeProvider>
                     <a className="btn" onClick={() => this.onCloseDialog()}>Close</a>
