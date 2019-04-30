@@ -27,7 +27,17 @@ export default class BankDetailsBox extends React.Component<IBankDetailsBoxProps
         event.preventDefault();
         this.setState({ showError: false });
 
-        let sourceData = {
+        let sourceData = this.props.isRecurring ? {
+            type: 'sepa_debit',
+            currency: 'eur',
+            owner: {
+                name: this.props.userName,
+                email: this.props.userEmail
+            },
+            mandate: {
+                notification_method: 'email' // Automatically send a mandate notification email to your customer once the source is charged
+            }
+        } : {
             type: "ideal",
             amount: this.props.amount * 100,
             currency: "eur",
@@ -60,7 +70,16 @@ export default class BankDetailsBox extends React.Component<IBankDetailsBoxProps
 
     renderBankElement() {
         if (this.props.isRecurring) {
-            return <IbanElement supportedCountries={['SEPA']} />;
+            return (
+                <React.Fragment>
+                    <div className="alert alert-warning">
+                        <i className="fa fa-exclamation-circle" />&nbsp;
+                        By providing your IBAN and confirming this payment, you are authorizing Stichting CollAction and Stripe, our payment service provider, to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions. 
+                        You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. 
+                        A refund must be claimed within 8 weeks starting from the date on which your account was debited.
+                    </div>
+                    <IbanElement supportedCountries={['SEPA']} />;
+                </React.Fragment>);
         }
         else {
             return <IdealBankElement />;

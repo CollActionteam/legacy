@@ -250,7 +250,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
                 <div className="col-xs-12">
                     <button className="btn" value="ideal" onClick={() => this.payBank()}>
                         <img src="/images/thankyoucommit/iDEAL-logo.png" />
-                        <div>iDEAL / IBAN</div>
+                        <div>iDeal / SEPA Direct</div>
                     </button>
                 </div>
             </div>
