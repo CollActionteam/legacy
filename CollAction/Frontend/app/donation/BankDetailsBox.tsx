@@ -1,7 +1,7 @@
 ﻿import * as React from "react";
-import {IdealBankElement} from 'react-stripe-elements';
+import { IdealBankElement, IbanElement } from 'react-stripe-elements';
 
-interface IIdealBoxProps {
+interface IBankDetailsBoxProps {
     stripe: any;
     amount: number;
     userEmail: string;
@@ -9,12 +9,12 @@ interface IIdealBoxProps {
     isRecurring: boolean;
 }
 
-interface IIdealBoxState {
+interface IBankDetailsBoxState {
     showError: boolean;
     error: string;
 }
 
-export default class IdealBox extends React.Component<IIdealBoxProps, IIdealBoxState> {
+export default class BankDetailsBox extends React.Component<IBankDetailsBoxProps, IBankDetailsBoxState> {
     constructor(props) {
         super(props);
         this.state = {
@@ -58,13 +58,22 @@ export default class IdealBox extends React.Component<IIdealBoxProps, IIdealBoxS
         }
     }
 
+    renderBankElement() {
+        if (this.props.isRecurring) {
+            return <IbanElement />;
+        }
+        else {
+            return <IdealBankElement supportedCountries={['SEPA']} />
+        }
+    }
+
     render() {
         return (
             <form onSubmit={(ev) => this.submitPayment(ev)}>
                 <div className="error" hidden={!this.state.showError}>
                     <p>{this.state.error}</p>
                 </div>
-                <IdealBankElement />
+                {this.renderBankElement()}
                 <input type="submit" className="btn btn-default" value="submit" />
             </form>);
     }

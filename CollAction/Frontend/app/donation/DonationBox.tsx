@@ -1,10 +1,10 @@
 import renderComponentIf from "../global/renderComponentIf";
 import * as React from "react";
-import IdealBox from "./IdealBox";
+import BankDetailsBox from "./BankDetailsBox";
 import {StripeProvider, Elements, injectStripe} from 'react-stripe-elements';
 import * as Modal from 'react-modal';
 
-const InjectedIdealBox = injectStripe(IdealBox);
+const InjectedBankDetailsBox = injectStripe(BankDetailsBox);
 
 const popupStyles = {
   content : {
@@ -31,7 +31,7 @@ interface IDonationBoxState {
     amount: number;
     showError: boolean;
     error: string;
-    showDialog: boolean;
+    showBankDialog: boolean;
     inputUserName: string;
     inputUserEmail: string;
     isRecurring: boolean;
@@ -44,7 +44,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
             amount: 0, 
             showError: false, 
             error: "",
-            showDialog: false,
+            showBankDialog: false,
             isRecurring: false,
             inputUserEmail: "",
             inputUserName: ""
@@ -78,11 +78,11 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         return false;
     }
 
-    async payIdeal() {
+    async payBank() {
         if (this.checkFormErrors()) {
             return;
         }
-        this.setState({ showDialog: true });
+        this.setState({ showBankDialog: true });
     }
 
     async payCreditCard() {
@@ -110,7 +110,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
     }
 
     onCloseDialog() {
-        this.setState({ showDialog: false });
+        this.setState({ showBankDialog: false });
     }
 
     setName(ev: React.ChangeEvent<HTMLInputElement>) {
@@ -232,11 +232,11 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
 
     renderPopup() {
         return (
-            <Modal isOpen={this.state.showDialog} onRequestClose={() => this.onCloseDialog()} contentLabel="Donate" style={popupStyles}>
+            <Modal isOpen={this.state.showBankDialog} onRequestClose={() => this.onCloseDialog()} contentLabel="Donate" style={popupStyles}>
                 <div id="donation-modal">
                     <StripeProvider apiKey={this.props.stripePublicKey}>
                         <Elements>
-                            <InjectedIdealBox amount={this.state.amount} userEmail={this.getEmail()} userName={this.getName()} isRecurring={this.state.isRecurring} />
+                            <InjectedBankDetailsBox amount={this.state.amount} userEmail={this.getEmail()} userName={this.getName()} isRecurring={this.state.isRecurring} />
                         </Elements>
                     </StripeProvider>
                     <a className="btn" onClick={() => this.onCloseDialog()}>Close</a>
@@ -248,9 +248,9 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         return (<div className="payment-options">
             <div className="row">
                 <div className="col-xs-12">
-                    <button className="btn" value="ideal" onClick={() => this.payIdeal()}>
+                    <button className="btn" value="ideal" onClick={() => this.payBank()}>
                         <img src="/images/thankyoucommit/iDEAL-logo.png" />
-                        <div>iDEAL</div>
+                        <div>iDEAL / IBAN</div>
                     </button>
                 </div>
             </div>
