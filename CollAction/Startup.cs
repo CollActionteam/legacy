@@ -211,7 +211,8 @@ namespace CollAction
                                                                    "https://www.facebook.com/",
                                                                    "https://facebook.com/",
                                                                    "https://graph.facebook.com/",
-                                                                   "https://dc.services.visualstudio.com/"
+                                                                   "https://dc.services.visualstudio.com/",
+                                                                   "https://api.stripe.com"
                                                                    }.Concat(Configuration["CspConnectSrc"]?.Split(";") ?? new string[0]));
                        cspBuilder.AddImgSrc().Self() // Only allow self-hosted images, or google analytics (for tracking images), or configured sources
                                              .Data()    // Used for project creation image preview
@@ -238,6 +239,12 @@ namespace CollAction
                        cspBuilder.AddMediaSrc().Self()
                                                    .Sources.AddRange(Configuration["CspMediaSrc"]?.Split(";") ?? new string[0]); // Only allow self-hosted videos, or configured sources
                        cspBuilder.AddFrameAncestors().None(); // No framing allowed here (put us inside a frame tag)
+                       cspBuilder.AddFrameSource().Sources
+                                                  .AddRange(new[]
+                                                            {
+                                                                "https://js.stripe.com",
+                                                                "https://hooks.stripe.com"
+                                                            });
                        cspBuilder.AddScriptSrc() // Only allow scripts from our own site, the aspnetcdn site, app insights and google analytics
                                  .Self()
                                  .Sources.AddRange(new[]
