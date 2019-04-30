@@ -60,10 +60,10 @@ export default class BankDetailsBox extends React.Component<IBankDetailsBoxProps
 
     renderBankElement() {
         if (this.props.isRecurring) {
-            return <IbanElement />;
+            return <IbanElement supportedCountries={['SEPA']} />;
         }
         else {
-            return <IdealBankElement supportedCountries={['SEPA']} />
+            return <IdealBankElement />;
         }
     }
 
