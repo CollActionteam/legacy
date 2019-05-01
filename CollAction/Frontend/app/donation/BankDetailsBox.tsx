@@ -23,11 +23,20 @@ export default class BankDetailsBox extends React.Component<IBankDetailsBoxProps
         };
     }
 
-    async submitPayment(event: React.FormEvent<HTMLFormElement>) {
+    submitPayment(event: React.FormEvent<HTMLFormElement>) : Promise<void> {
         event.preventDefault();
         this.setState({ showError: false });
 
-        let sourceData = this.props.isRecurring ? {
+        if (this.props.isRecurring) {
+            return this.submitPaymentBank();
+        }
+        else {
+            return this.submitPaymentIdeal();
+        }
+    }
+
+    async submitPaymentBank(): Promise<void> {
+        let sourceData = {
             type: 'sepa_debit',
             currency: 'eur',
             owner: {
@@ -37,7 +46,27 @@ export default class BankDetailsBox extends React.Component<IBankDetailsBoxProps
             mandate: {
                 notification_method: 'email' // Automatically send a mandate notification email to your customer once the source is charged
             }
-        } : {
+        };
+
+        let response = await this.props.stripe.createSource(sourceData);
+        if (response.error) {
+            console.log("Unable to start SEPA Direct: " + response.error);
+            this.setState({ showError: true, error: "Unable to start SEPA Direct" })
+            return;
+        }
+
+        let initializeUrl = `/donation/InitializeSepaDirect?sourceId=${response.source.id}&name=${encodeURIComponent(this.props.userName)}&email=${encodeURIComponent(this.props.userEmail)}&amount=${this.props.amount}`;
+        let initializeResponse = await fetch(initializeUrl, { method: 'POST' });
+        if (initializeResponse.status == 200) {
+            window.location.href = response.source.redirect.url;
+        } else {
+            console.log("Unable to start SEPA Direct: " + await initializeResponse.text());
+            this.setState({ showError: true, error: "Unable to start SEPA Direct" })
+        }
+    }
+
+    async submitPaymentIdeal(): Promise<void> {
+        let sourceData = {
             type: "ideal",
             amount: this.props.amount * 100,
             currency: "eur",
@@ -68,7 +97,7 @@ export default class BankDetailsBox extends React.Component<IBankDetailsBoxProps
         }
     }
 
-    renderBankElement() {
+    renderBankElement(): JSX.Element {
         if (this.props.isRecurring) {
             return (
                 <React.Fragment>
@@ -86,7 +115,7 @@ export default class BankDetailsBox extends React.Component<IBankDetailsBoxProps
         }
     }
 
-    render() {
+    render(): JSX.Element {
         return (
             <form onSubmit={(ev) => this.submitPayment(ev)}>
                 <div className="error" hidden={!this.state.showError}>

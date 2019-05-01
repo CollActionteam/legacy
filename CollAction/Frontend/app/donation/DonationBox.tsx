@@ -51,7 +51,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         };
     }
 
-    clearErrors() {
+    clearErrors(): void {
         this.setState({ showError: false, error: null });
     }
 
@@ -63,7 +63,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         return this.props.userEmail.match(/.+@.+/) === null;
     }
 
-    checkFormErrors() {
+    checkFormErrors(): boolean {
         this.clearErrors();
         if (this.state.amount <= 0) {
             this.setState({ showError: true, error: "Please fill in a valid and positive donation amount" });
@@ -78,14 +78,14 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         return false;
     }
 
-    async payBank() {
+    payBank(): void {
         if (this.checkFormErrors()) {
             return;
         }
         this.setState({ showBankDialog: true });
     }
 
-    async payCreditCard() {
+    async payCreditCard(): Promise<void> {
         if (this.checkFormErrors()) {
             return;
         }
@@ -109,19 +109,19 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         }
     }
 
-    onCloseDialog() {
+    onCloseDialog(): void {
         this.setState({ showBankDialog: false });
     }
 
-    setName(ev: React.ChangeEvent<HTMLInputElement>) {
+    setName(ev: React.ChangeEvent<HTMLInputElement>): void {
         this.setState({ inputUserName: ev.currentTarget.value });
     }
 
-    setEmail(ev: React.ChangeEvent<HTMLInputElement>) {
+    setEmail(ev: React.ChangeEvent<HTMLInputElement>): void {
         this.setState({ inputUserEmail: ev.currentTarget.value });
     }
 
-    setAmount(event: React.ChangeEvent<HTMLInputElement>) {
+    setAmount(event: React.ChangeEvent<HTMLInputElement>): void {
         let newAmount = Number.parseInt(event.currentTarget.value);
         if (!newAmount) {
             newAmount = 0;
@@ -129,11 +129,11 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         this.setState({amount: newAmount, showError: false});
     }
     
-    setIsOneOff(event: React.ChangeEvent<HTMLInputElement>) {
+    setIsOneOff(event: React.ChangeEvent<HTMLInputElement>): void {
         this.setState({ isRecurring: !event.currentTarget.checked });
     }
 
-    setIsMonthly(event: React.ChangeEvent<HTMLInputElement>) {
+    setIsMonthly(event: React.ChangeEvent<HTMLInputElement>): void {
         this.setState({ isRecurring: event.currentTarget.checked });
     }
 
@@ -153,7 +153,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         }
     }
 
-    renderPeriodSelection() {
+    renderPeriodSelection(): JSX.Element {
         return (
             <React.Fragment>
                 <div className="col-xs-12 col-sm-6 donation-period-one-off">
@@ -168,7 +168,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         );
     }
 
-    renderAmount(amount: number) {
+    renderAmount(amount: number): JSX.Element {
         const id = `amount${amount}`;
         return (
             <div className="col-xs-6 col-sm-3">
@@ -178,7 +178,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         );
     }
 
-    renderCustomAmount() {
+    renderCustomAmount(): JSX.Element {
         return (
             <div className="col-xs-6 col-sm-3">
                 <input type="text" id="amountCustom" name="amount" placeholder="Other..." onChange={(event) => this.setAmount(event)} />
@@ -186,7 +186,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         );
     }
 
-    renderName() {
+    renderName(): JSX.Element {
         if (this.needsToEnterName()) {
             return (
                 <div id="name-input-box">
@@ -196,7 +196,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         }
     }
 
-    renderEmail() {
+    renderEmail(): JSX.Element {
         if (this.needsToEnterEmail()) {
             return (
                 <div id="email-input-box">
@@ -206,7 +206,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         }
     }
 
-    renderUserDetails() {
+    renderUserDetails(): JSX.Element {
         if (this.needsToEnterEmail() || this.needsToEnterName()) {
             return (
                 <div className="user-details">
@@ -216,7 +216,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         }
     }
 
-    renderAmounts() {
+    renderAmounts(): JSX.Element {
         return (
             <div className="row">
                 {this.renderAmount(3)}
@@ -230,7 +230,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
             </div>);
     }
 
-    renderPopup() {
+    renderPopup(): JSX.Element {
         return (
             <Modal isOpen={this.state.showBankDialog} onRequestClose={() => this.onCloseDialog()} contentLabel="Donate" style={popupStyles}>
                 <div id="donation-modal">
@@ -244,7 +244,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
             </Modal>);
     }
 
-    renderPaymentOptions() {
+    renderPaymentOptions(): JSX.Element {
         return (<div className="payment-options">
             <div className="row">
                 <div className="col-xs-12">
@@ -265,14 +265,14 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         </div>);
     }
 
-    renderErrors() {
+    renderErrors(): JSX.Element {
         return (
             <div className="error" hidden={!this.state.showError}>
                 <p>{this.state.error}</p>
             </div>);
     }
 
-    renderHeader() {
+    renderHeader(): JSX.Element {
         return (
             <div>
                 <h2>Help us reaching our mission by donating!</h2>
@@ -286,7 +286,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
             </div>);
     }
 
-    render() {
+    render(): JSX.Element {
         return (
             <div className="donation-box">
                 {this.renderHeader()}

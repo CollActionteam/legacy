@@ -22,9 +22,16 @@ namespace CollAction.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> InitializeIdealCheckout(string sourceId, string name, string email, bool recurring)
+        public async Task<IActionResult> InitializeSepaDirect(string sourceId, string name, string email, int amount)
         {
-            await _donationService.InitializeIdealCheckout(sourceId, name, email, recurring);
+            await _donationService.InitializeSepaDirect(sourceId, name, email, amount);
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> InitializeIdealCheckout(string sourceId, string name, string email)
+        {
+            await _donationService.InitializeIdealCheckout(sourceId, name, email);
             return Ok();
         }
 

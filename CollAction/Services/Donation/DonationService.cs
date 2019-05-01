@@ -122,14 +122,47 @@ namespace CollAction.Services.Donation
             return session.Id;
         }
 
+        public async Task InitializeSepaDirect(string sourceId, string name, string email, int amount)
+        {
+            ValidateDetails(amount, name, email);
+
+            ApplicationUser user = await _userManager.FindByEmailAsync(email);
+            Customer customer = await GetOrCreateCustomer(name, email);
+            Source source = await _sourceService.AttachAsync(customer.Id, new SourceAttachOptions()
+            {
+                Source = sourceId
+            });
+            Plan plan = await CreateRecurringPlan(amount, "eur");
+            Subscription subscription = await _subscriptionService.CreateAsync(new SubscriptionCreateOptions()
+            {
+                DefaultSource = source.Id,
+                Billing = Billing.ChargeAutomatically,
+                CustomerId = customer.Id,
+                Items = new List<SubscriptionItemOption>()
+                {
+                    new SubscriptionItemOption()
+                    {
+                        PlanId = plan.Id,
+                        Quantity = 1
+                    }
+                }
+            });
+
+            _context.DonationEventLog.Add(new DonationEventLog()
+            {
+                UserId = user?.Id,
+                Type = DonationEventType.Internal,
+                EventData = subscription.ToJson()
+            });
+            await _context.SaveChangesAsync();
+        }
+
         /*
          * Here we're initializing the part of the iDeal payment that has to happen on the backend. For now, that's only attaching an actual customer record to the payment source.
          * In the future to handle SCA, we might need to start using payment intents or checkout here. SCA starts from september the 14th. The support for iDeal is not there yet though, so we'll have to wait.
          */
-        public async Task InitializeIdealCheckout(string sourceId, string name, string email, bool recurring)
+        public async Task InitializeIdealCheckout(string sourceId, string name, string email)
         {
-            // TODO: recurring
-
             ValidateDetails(name, email);
 
             ApplicationUser user = await _userManager.FindByEmailAsync(email);
