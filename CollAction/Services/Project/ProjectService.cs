@@ -278,6 +278,9 @@ namespace CollAction.Services.Project
             if (limit.HasValue)
                 projects = projects.Take(limit.Value);
 
+            if(start.HasValue)
+                projects = projects.Skip(start.Value);
+
             return projects.Select(p => CreateFindProjectsViewModel(p));
         }
 
