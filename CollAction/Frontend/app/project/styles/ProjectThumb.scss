@@ -89,32 +89,53 @@
       float: right;
     }
   }
-}
 
-.email-subscription {
-  padding: 0px 20px 20px 0;
+  .email-subscription {
+    margin-top: 20px;
 
-  .btn-subscribe {    
-    @include coll-action-button;
-    width: 100%;
-    font-size: 0.8em;
+    .btn-subscribe {    
+      @include coll-action-button;
+      width: 100%;
+      font-size: 0.8em;
+    }
+
+    .btn-unsubscribe {
+      @include coll-action-button;
+      width: 100%;
+      font-size: 0.8em;
+      color: $coll-action-green;
+      border: 1px solid $coll-action-green;
+      background-color: white;
+      padding-bottom: 8px; // compensate for the border
+    }
+
+    .busy-indicator {
+      font-size: 0.8em;
+      padding: 10px 50px;
+      width: 100%;
+      text-align: center;
+      display: inline-block;
+    }
   }
 
-  .btn-unsubscribe {
-    @include coll-action-button;
-    width: 100%;
-    font-size: 0.8em;
-    color: $coll-action-green;
-    border: 1px solid $coll-action-green;
-    background-color: white;
-    padding-bottom: 8px; // compensate for the border
-  }
+  .mail-to-participants {
+    margin-top: 20px;
 
-  .busy-indicator {
-    font-size: 0.8em;
-    padding: 10px 50px;
-    width: 100%;
-    text-align: center;
-    display: inline-block;
+    .btn-send-email {
+      @include coll-action-button;
+      width: 100%;
+      font-size: 0.8em;
+    }
+
+    &.not-available {
+      text-align: center;        
+      span {
+        width: 100%;
+        padding: 10px 0;
+        font-size: 0.8em;
+        display: inline-block;
+        color: gray;
+      }
+    }
   }
 }

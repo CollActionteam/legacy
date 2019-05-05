@@ -66,7 +66,7 @@ export default class ProjectThumb extends React.Component<IProject, IThumbState>
         <div className="email-subscription">
           <a  href="javascript:void(0)"
               onClick={this.toggleSubscription}
-              className={`btn ${this.props.subscribedToEmails ? " unsubscribe" : " subscribe"}`}>
+              className={`btn-${this.props.subscribedToEmails ? "unsubscribe" : "subscribe"}`}>
             {this.props.subscribedToEmails ? "Unsubscribe from news" : "Subscribe to news"}
           </a>
         </div>
@@ -90,7 +90,7 @@ export default class ProjectThumb extends React.Component<IProject, IThumbState>
     else if (this.props.canSendProjectEmail === true) {
       return (
         <div className="mail-to-participants">
-            <a href={`/Projects/SendProjectEmail/${this.props.projectId}`} className="btn">
+            <a href={`/Projects/SendProjectEmail/${this.props.projectId}`} className="btn-send-email">
               Send project e-mail
             </a>
         </div>
