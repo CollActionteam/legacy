@@ -6,6 +6,12 @@
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
     <TypeScriptToolsVersion>3.3</TypeScriptToolsVersion>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Frontend\app\manage\styles\Manage.scss" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Frontend\app\manage\styles\Manage.scss" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="8.1.0" />
