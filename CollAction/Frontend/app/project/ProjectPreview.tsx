@@ -11,7 +11,6 @@ interface IProjectPreviewState {
 }
 
 export class ProjectPreview extends React.Component<IProjectPreviewProps, IProjectPreviewState> {
-
     constructor(props) {
         super(props);
 

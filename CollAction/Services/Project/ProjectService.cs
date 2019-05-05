@@ -280,6 +280,7 @@ namespace CollAction.Services.Project
 
             return projects.Select(p => CreateFindProjectsViewModel(p));
         }
+
         public async Task<IEnumerable<FindProjectsViewModel>> MyProjects(string userId)
         {
             var projects = await _context
@@ -331,26 +332,25 @@ namespace CollAction.Services.Project
             return viewModels;
         }
 
-        private FindProjectsViewModel CreateFindProjectsViewModel(Models.Project project)
-        {
-            var viewModel = new FindProjectsViewModel(_stringLocalizer);
-            viewModel.ProjectId = project.Id;
-            viewModel.ProjectName = project.Name;
-            viewModel.ProjectNameUriPart = GetProjectNameNormalized(project.Name);
-            viewModel.ProjectProposal = project.Proposal;
-            viewModel.CategoryName = project.Category.Name;
-            viewModel.CategoryColorHex = project.Category.ColorHex;
-            viewModel.LocationName = project.Location != null ? project.Location.Name : string.Empty;
-            viewModel.BannerImagePath = project.BannerImage != null ? _imageService.GetUrl(project.BannerImage) : $"/images/default_banners/{project.Category.Name}.jpg";
-            viewModel.BannerImageDescription = project.BannerImage != null ? project.BannerImage.Description : string.Empty;
-            viewModel.Target = project.Target;
-            viewModel.Participants = project.ParticipantCounts.Count;
-            viewModel.Remaining = project.RemainingTime;
-            viewModel.Status = project.Status;
-            viewModel.Start = project.Start;
-            viewModel.End = project.End;
-            return viewModel;
-        }
+        private FindProjectsViewModel CreateFindProjectsViewModel(Models.Project project) =>
+            new FindProjectsViewModel(_stringLocalizer)
+            {
+                ProjectId = project.Id,
+                ProjectName = project.Name,
+                ProjectNameUriPart = GetProjectNameNormalized(project.Name),
+                ProjectProposal = project.Proposal,
+                CategoryName = project.Category.Name,
+                CategoryColorHex = project.Category.ColorHex,
+                LocationName = project.Location != null ? project.Location.Name : string.Empty,
+                BannerImagePath = project.BannerImage != null ? _imageService.GetUrl(project.BannerImage) : $"/images/default_banners/{project.Category.Name}.jpg",
+                BannerImageDescription = project.BannerImage != null ? project.BannerImage.Description : string.Empty,
+                Target = project.Target,
+                Participants = project.ParticipantCounts.Count,
+                Remaining = project.RemainingTime,
+                Status = project.Status,
+                Start = project.Start,
+                End = project.End
+            };
 
         public async Task<bool> ToggleNewsletterSubscription(int projectId, string userId)
         {

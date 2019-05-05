@@ -16,7 +16,6 @@ export interface IProject {
   status: string;
   subscribedToEmails: boolean | null;
   canSendProjectEmail: boolean | null;
-
   tileClassName: string;
 }
 
@@ -108,6 +107,7 @@ export default class ProjectThumb extends React.Component<IProject, IThumbState>
   openProject = () => {
     window.location.href = `/projects/${this.props.projectNameUriPart}/${this.props.projectId}/details`;
   }
+
   render () {
     const projectImageStyle = {
       backgroundImage: `url(${this.props.bannerImagePath})`,
