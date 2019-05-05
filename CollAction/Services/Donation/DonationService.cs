@@ -148,6 +148,9 @@ namespace CollAction.Services.Donation
             return session.Id;
         }
 
+        /*
+         * Here we're initializing a stripe SEPA subscription on a source with sepa/iban data. This subscription should auto-charge.
+         */
         public async Task InitializeSepaDirect(string sourceId, string name, string email, int amount)
         {
             ValidateDetails(amount, name, email);
@@ -239,6 +242,9 @@ namespace CollAction.Services.Donation
             await _context.SaveChangesAsync();
         }
 
+        /*
+         * Charge a source here (only used for iDeal right now). It's a background job so it can be restarted.
+         */
         public async Task Charge(string sourceId)
         {
             Source source = await _sourceService.GetAsync(sourceId);
