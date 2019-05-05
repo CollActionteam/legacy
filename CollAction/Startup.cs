@@ -30,6 +30,9 @@ using Microsoft.AspNetCore.Http;
 using Stripe;
 using CollAction.Services.Donation;
 using CollAction.Services;
+using Serilog.Events;
+using Serilog.Sinks.Slack;
+using Microsoft.ApplicationInsights.Extensibility;
 
 namespace CollAction
 {
@@ -76,6 +79,30 @@ namespace CollAction
                         options.ConsumerSecret = Configuration["Authentication:Twitter:ConsumerSecret"];
                     });
 
+            services.AddApplicationInsightsTelemetry(Configuration);
+
+            services.AddLogging(loggingBuilder =>
+            {
+                LoggerConfiguration configuration = new LoggerConfiguration()
+                       .WriteTo.RollingFile("log-{Date}.txt", LogEventLevel.Information)
+                       .WriteTo.Console(LogEventLevel.Information) 
+                       .WriteTo.ApplicationInsights(TelemetryConfiguration.Active, TelemetryConverter.Traces);
+
+                string slackHook = Configuration["SlackHook"];
+                if (slackHook != null)
+                {
+                    configuration.WriteTo.Slack(slackHook, restrictedToMinimumLevel: LogEventLevel.Error);
+                }
+
+                if (Environment.IsDevelopment())
+                {
+                    configuration.WriteTo.Trace();
+                }
+
+                Log.Logger = configuration.CreateLogger();
+                loggingBuilder.AddSerilog(Log.Logger);
+            });
+
             services.AddLocalization(options => options.ResourcesPath = "Resources");
 
             services.AddMvc()
@@ -95,8 +122,7 @@ namespace CollAction
             services.AddDataProtection()
                     .Services.Configure<KeyManagementOptions>(options => options.XmlRepository = new DataProtectionRepository(new DbContextOptionsBuilder<ApplicationDbContext>().UseNpgsql(connectionString).Options));
 
-            services.AddApplicationInsightsTelemetry(Configuration);
-
+            services.Configure<StripeSignatures>(Configuration);
             services.Configure<SiteOptions>(Configuration);
             services.Configure<AuthMessageSenderOptions>(Configuration);
             services.Configure<ImageServiceOptions>(Configuration);
@@ -185,7 +211,8 @@ namespace CollAction
                                                                    "https://www.facebook.com/",
                                                                    "https://facebook.com/",
                                                                    "https://graph.facebook.com/",
-                                                                   "https://dc.services.visualstudio.com/"
+                                                                   "https://dc.services.visualstudio.com/",
+                                                                   "https://api.stripe.com"
                                                                    }.Concat(Configuration["CspConnectSrc"]?.Split(";") ?? new string[0]));
                        cspBuilder.AddImgSrc().Self() // Only allow self-hosted images, or google analytics (for tracking images), or configured sources
                                              .Data()    // Used for project creation image preview
@@ -212,6 +239,12 @@ namespace CollAction
                        cspBuilder.AddMediaSrc().Self()
                                                    .Sources.AddRange(Configuration["CspMediaSrc"]?.Split(";") ?? new string[0]); // Only allow self-hosted videos, or configured sources
                        cspBuilder.AddFrameAncestors().None(); // No framing allowed here (put us inside a frame tag)
+                       cspBuilder.AddFrameSource().Sources
+                                                  .AddRange(new[]
+                                                            {
+                                                                "https://js.stripe.com",
+                                                                "https://hooks.stripe.com"
+                                                            });
                        cspBuilder.AddScriptSrc() // Only allow scripts from our own site, the aspnetcdn site, app insights and google analytics
                                  .Self()
                                  .Sources.AddRange(new[]

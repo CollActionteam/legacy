@@ -51,3 +51,20 @@ form {
     font-size: 1em;
   }
 }
+
+// Fix fireFox / Edge datetime input textbox
+// https://bugzilla.mozilla.org/show_bug.cgi?format=default&id=1503427
+@mixin DateTimeFix() {
+  input[type="date"].form-control, input[type="time"].form-control,
+  input[type="datetime-local"].form-control, input[type="month"].form-control {
+      line-height: initial;
+  }
+}
+
+@-moz-document url-prefix() {
+  @include DateTimeFix();
+}
+
+@supports (-ms-ime-align:auto) {
+  @include DateTimeFix();
+}

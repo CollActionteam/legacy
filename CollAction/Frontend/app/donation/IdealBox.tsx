@@ -1,6 +1,4 @@
-﻿import renderComponentIf from "../global/renderComponentIf";
-import * as React from "react";
-import * as ReactDOM from 'react-dom';
+﻿import * as React from "react";
 import {IdealBankElement} from 'react-stripe-elements';
 
 interface IIdealBoxProps {
@@ -32,12 +30,13 @@ export default class IdealBox extends React.Component<IIdealBoxProps, IIdealBoxS
             type: "ideal",
             amount: this.props.amount * 100,
             currency: "eur",
+            statement_descriptor: "Donation CollAction",
             owner: {
                 name: this.props.userName,
                 email: this.props.userEmail
             },
             redirect: {
-                return_url: window.location.origin + "/donation/ThankYou"
+                return_url: window.location.origin + "/donation/Return"
             }
         };
 

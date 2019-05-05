@@ -15,6 +15,7 @@ export interface IProject {
   progressPercent: number;
   status: string;
   subscribedToEmails: boolean | null;
+  canSendProjectEmail: boolean | null;
 
   tileClassName: string;
 }
@@ -55,32 +56,58 @@ export default class ProjectThumb extends React.Component<IProject, IThumbState>
     }
   }
 
-  createSubscriptionButton() {
-    const subscribeButton =
-      <a href="javascript:void(0)" onClick={this.toggleSubscription} className="btn-subscribe">
-        Subscribe to news
-      </a>;
+  renderSubscriptionButton() {
+    if (this.props.subscribedToEmails === null) {
+      return;
+    }
 
-    const unsubscribeButton =
-      <a href="javascript:void(0)" onClick={this.toggleSubscription} className="btn-unsubscribe">
-        Unsubscribe from news
-      </a>;
-
-    const loadingIndicator =
-      <div className="busy-indicator">
-        {this.props.subscribedToEmails ? "Unsubscribing..." : "Subscribing..."}
-      </div>;
-
-    if (this.props.subscribedToEmails !== null) {
-      if (this.state.busy) {
-        return loadingIndicator;
-      }
-      else {
-        return this.props.subscribedToEmails ? unsubscribeButton : subscribeButton;
-      }
+    if (!this.state.busy) {
+      return (
+        <div className="email-subscription">
+          <a  href="javascript:void(0)"
+              onClick={this.toggleSubscription}
+              className={`btn ${this.props.subscribedToEmails ? " unsubscribe" : " subscribe"}`}>
+            {this.props.subscribedToEmails ? "Unsubscribe from news" : "Subscribe to news"}
+          </a>
+        </div>
+      );
+    }
+    else {
+      return (
+        <div className="email-subscription">
+          <div className="busy-indicator">
+            {this.props.subscribedToEmails ? "Unsubscribing..." : "Subscribing..."}
+          </div>
+        </div>
+      );
     }
   }
 
+  renderMailToParticipantsButton() {
+    if (this.props.canSendProjectEmail === null) {
+      return;
+    }
+    else if (this.props.canSendProjectEmail === true) {
+      return (
+        <div className="mail-to-participants">
+            <a href={`/Projects/SendProjectEmail/${this.props.projectId}`} className="btn">
+              Send project e-mail
+            </a>
+        </div>
+      );
+    }
+    else {
+      return (
+        <div className="mail-to-participants not-available">
+          <span>Project e-mails no longer available</span>
+        </div>
+      );
+    }
+  }
+
+  openProject = () => {
+    window.location.href = `/projects/${this.props.projectNameUriPart}/${this.props.projectId}/details`;
+  }
   render () {
     const projectImageStyle = {
       backgroundImage: `url(${this.props.bannerImagePath})`,
@@ -89,11 +116,11 @@ export default class ProjectThumb extends React.Component<IProject, IThumbState>
     const link = `/projects/${this.props.projectNameUriPart}/${this.props.projectId}/details`;
 
     return (
-      <div className={this.props.tileClassName}>
-        <div className="project-thumb-container">
+      <div>
+        <div className={`${this.props.tileClassName} project-thumb-container`}>
           <div className="project-thumb">
-            <div className="project-thumb-image" style={projectImageStyle} >
-              <div className="category-name" style={{backgroundColor: "#" + this.props.categoryColorHex}}>
+            <div className="project-thumb-image" style={projectImageStyle} onClick={this.openProject}>
+              <div className="category-name" style={{backgroundColor: `#${this.props.categoryColorHex}`}}>
                 {this.props.categoryName}
               </div>
             </div>
@@ -120,12 +147,12 @@ export default class ProjectThumb extends React.Component<IProject, IThumbState>
               </div>
             </div>
             <div className="project-thumb-button">
-              <a href={link} style={{backgroundColor: "#" + this.props.categoryColorHex}}>Read More</a>
+              <a href={link} style={{backgroundColor: `#${this.props.categoryColorHex}`}}>Read More</a>
             </div>
           </div>
-        </div>
-        <div className="email-subscription">
-          {this.createSubscriptionButton()}
+
+          {this.renderSubscriptionButton()}
+          {this.renderMailToParticipantsButton()}
         </div>
       </div>
     );

@@ -97,10 +97,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
             return;
         }
 
-        let options = {
-          betas: ['checkout_beta_4']
-        } as stripe.StripeOptions; // "betas" option is not supported, need to cast
-        let stripe: any = Stripe(this.props.stripePublicKey, options); // cast to any because redirectToCheckout is a beta API
+        let stripe: any = Stripe(this.props.stripePublicKey); // cast to any because redirectToCheckout is not yet in stripe.js
         let checkoutId = await checkoutTokenResponse.text();
         let checkoutResponse = await stripe.redirectToCheckout({ sessionId: checkoutId });
         if (checkoutResponse.status != 200) {

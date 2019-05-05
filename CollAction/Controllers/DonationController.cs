@@ -1,21 +1,19 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
 using CollAction.Models;
 using CollAction.Services.Donation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
 
 namespace CollAction.Controllers
 {
     public class DonationController : Controller
     {
         private IDonationService _donationService;
-        private readonly UserManager<ApplicationUser> _userManager;
 
-        public DonationController(IDonationService donationService, UserManager<ApplicationUser> userManager)
+        public DonationController(IDonationService donationService)
         {
             _donationService = donationService;
-            _userManager = userManager;
         }
 
         [HttpPost]
@@ -33,10 +31,40 @@ namespace CollAction.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PaymentEvent([FromBody] JObject stripeEvent)
+        public async Task<IActionResult> PaymentEvent()
         {
-            await _donationService.LogExternalEvent(stripeEvent);
-            return Ok();
+            using (var streamReader = new StreamReader(HttpContext.Request.Body))
+            {
+                string json = await streamReader.ReadToEndAsync();
+                string signature = Request.Headers["Stripe-Signature"];
+                await _donationService.LogPaymentEvent(json, signature);
+                return Ok();
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Chargeable()
+        {
+            using (var streamReader = new StreamReader(HttpContext.Request.Body))
+            {
+                string json = await streamReader.ReadToEndAsync();
+                string signature = Request.Headers["Stripe-Signature"];
+                _donationService.HandleChargeable(json, signature);
+                return Ok();
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Return(string source, string client_secret, bool livemode)
+        {
+            if (await _donationService.HasIdealPaymentSucceeded(source, client_secret))
+            {
+                return RedirectToAction(nameof(ThankYou));
+            }
+            else
+            {
+                return RedirectToAction(nameof(Donate));
+            }
         }
 
         [HttpGet]
