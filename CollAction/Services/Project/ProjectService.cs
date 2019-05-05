@@ -282,16 +282,25 @@ namespace CollAction.Services.Project
         }
         public async Task<IEnumerable<FindProjectsViewModel>> MyProjects(string userId)
         {
-            return await _context
+            var projects = await _context
                 .Projects
+                .Where(p => p.OwnerId == userId && p.Status != ProjectStatus.Deleted)
                 .Include(p => p.Category)
                 .Include(p => p.Location)
                 .Include(p => p.BannerImage)
                 .Include(p => p.ParticipantCounts)                
-                .Where(p => p.OwnerId == userId && p.Status != ProjectStatus.Deleted)
                 .OrderBy(p => p.DisplayPriority)
-                .Select(p => CreateFindProjectsViewModel(p))
                 .ToListAsync();
+
+            var viewModels = projects.Select(p => 
+                {
+                    var viewModel = CreateFindProjectsViewModel(p);
+                    viewModel.CanSendProjectEmail = this.CanSendProjectEmail(p);
+                    return viewModel;
+                })
+                .ToList();
+
+            return viewModels;
         }
 
         public async Task<IEnumerable<FindProjectsViewModel>> ParticipatingInProjects(string userId)
