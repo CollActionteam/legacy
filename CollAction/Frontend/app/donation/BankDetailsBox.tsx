@@ -28,14 +28,14 @@ export default class BankDetailsBox extends React.Component<IBankDetailsBoxProps
         this.setState({ showError: false });
 
         if (this.props.isRecurring) {
-            return this.submitPaymentBank();
+            return this.submitPaymentSepa();
         }
         else {
             return this.submitPaymentIdeal();
         }
     }
 
-    async submitPaymentBank(): Promise<void> {
+    async submitPaymentSepa(): Promise<void> {
         let sourceData = {
             type: 'sepa_debit',
             currency: 'eur',
@@ -55,10 +55,10 @@ export default class BankDetailsBox extends React.Component<IBankDetailsBoxProps
             return;
         }
 
-        let initializeUrl = `/donation/InitializeSepaDirect?sourceId=${response.source.id}&name=${encodeURIComponent(this.props.userName)}&email=${encodeURIComponent(this.props.userEmail)}&amount=${this.props.amount}`;
+        let initializeUrl = `/Donation/InitializeSepaDirect?sourceId=${response.source.id}&name=${encodeURIComponent(this.props.userName)}&email=${encodeURIComponent(this.props.userEmail)}&amount=${this.props.amount}`;
         let initializeResponse = await fetch(initializeUrl, { method: 'POST' });
         if (initializeResponse.status == 200) {
-            window.location.href = "/donation/ThankYou";
+            window.location.href = "/Donation/ThankYou";
         } else {
             console.log("Unable to start SEPA Direct: " + await initializeResponse.text());
             this.setState({ showError: true, error: "Unable to start SEPA Direct" })
@@ -76,7 +76,7 @@ export default class BankDetailsBox extends React.Component<IBankDetailsBoxProps
                 email: this.props.userEmail
             },
             redirect: {
-                return_url: window.location.origin + "/donation/Return"
+                return_url: window.location.origin + "/Donation/Return"
             }
         };
 
@@ -87,7 +87,7 @@ export default class BankDetailsBox extends React.Component<IBankDetailsBoxProps
             return;
         }
 
-        let initializeUrl = `/donation/InitializeIdealCheckout?sourceId=${response.source.id}&name=${encodeURIComponent(this.props.userName)}&email=${encodeURIComponent(this.props.userEmail)}`;
+        let initializeUrl = `/Donation/InitializeIdealCheckout?sourceId=${response.source.id}&name=${encodeURIComponent(this.props.userName)}&email=${encodeURIComponent(this.props.userEmail)}`;
         let initializeResponse = await fetch(initializeUrl, { method: 'POST' });
         if (initializeResponse.status == 200) {
             window.location.href = response.source.redirect.url;

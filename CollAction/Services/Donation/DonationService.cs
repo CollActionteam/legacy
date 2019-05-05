@@ -12,6 +12,32 @@ using System.Threading.Tasks;
 
 namespace CollAction.Services.Donation
 {
+    /// <summary>
+    /// There are 4 donation flows:
+    /// * Non-recurring iDeal payments
+    ///   - The flow is started at BankDetails.tsx where a source with the relevant details is created client-side
+    ///   - This source is sent to /Donation/InitializeIdealCheckout, where this source is attached to a customer-id (this can't be done with the public stripe API keys)
+    ///   - After that, the BankDetails component will redirect the user to the source redirect-url, where the user will get his bank iDeal dialog
+    ///   - On success, the user will be redirected to the return page, which will redirect the user to the thank-you page if successfull, otherwise the user will be redirected to the donation-page
+    ///   - Stripe will POST to the chargeable webhook (set to /Donation/Chargeable if the stripe settings are correct). This will finish the iDeal payment. If these settings aren't correct, we won't receive the payment.
+    /// * Non-recurring credit card payments
+    ///   - All the details are gathered in DonationBox.tsx, and are sent to /Donation/InitializeCreditCardCheckout
+    ///   - Here we'll initiate a "Checkout" session for the credit card payment
+    ///   - From /Donation/InitializeCreditCardCheckout, we return the checkout-id. In DonationBox.tsx we use stripe.js to redirect user to the checkout page
+    ///   - If successfull, the user will be returned to the thank-you page, otherwise the user will be redirected to the donation-page
+    ///   - Checkout will auto-charge, so the webhook won't be necessary
+    /// * Recurring SEPA Direct payments
+    ///   - The flow is started at BankDetails.tsx where a source with the relevant details is created client-side
+    ///   - This source is sent to /Donation/InitializeSepaDirect, where this source is attached to a auto-charged recurring subscription
+    ///   - On success, the user will be redirected to the thank-you page, otherwise the user will be shown an error
+    ///   - Checkout/Billing will auto-charge the subscription, so the webhook won't be necessary
+    /// * Recurring credit card payments
+    ///   - All the details are gathered in DonationBox.tsx, and are sent to /Donation/InitializeCreditCardCheckout
+    ///   - Here we'll initiate a "Checkout" session with a monthly subscription + plan for the credit card payment
+    ///   - From /Donation/InitializeCreditCardCheckout, we return the checkout-id. In DonationBox.tsx we use stripe.js to redirect user to the checkout page
+    ///   - If successfull, the user will be returned to the thank-you page, otherwise the user will be redirected to the donation-page
+    ///   - Checkout/Billing will auto-charge the subscription, so the webhook won't be necessary
+    /// </summary>
     public class DonationService : IDonationService
     {
         const string StatusChargeable = "chargeable";
