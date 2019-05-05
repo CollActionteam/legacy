@@ -1,10 +1,10 @@
 import renderComponentIf from "../global/renderComponentIf";
 import * as React from "react";
-import BankDetailsBox from "./BankDetailsBox";
+import DebitDetailsBox from "./DebitDetailsBox";
 import {StripeProvider, Elements, injectStripe} from 'react-stripe-elements';
 import * as Modal from 'react-modal';
 
-const InjectedBankDetailsBox = injectStripe(BankDetailsBox);
+const InjectedDebitDetailsBox = injectStripe(DebitDetailsBox);
 
 const popupStyles = {
   content : {
@@ -236,7 +236,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
                 <div id="donation-modal">
                     <StripeProvider apiKey={this.props.stripePublicKey}>
                         <Elements>
-                            <InjectedBankDetailsBox amount={this.state.amount} userEmail={this.getEmail()} userName={this.getName()} isRecurring={this.state.isRecurring} />
+                            <InjectedDebitDetailsBox amount={this.state.amount} userEmail={this.getEmail()} userName={this.getName()} isRecurring={this.state.isRecurring} />
                         </Elements>
                     </StripeProvider>
                     <a className="btn" onClick={() => this.onCloseDialog()}>Close</a>

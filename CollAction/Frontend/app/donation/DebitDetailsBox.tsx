@@ -1,7 +1,7 @@
 ﻿import * as React from "react";
 import { IdealBankElement, IbanElement } from 'react-stripe-elements';
 
-interface IBankDetailsBoxProps {
+interface IDebitDetailsBoxProps {
     stripe: any;
     amount: number;
     userEmail: string;
@@ -9,12 +9,12 @@ interface IBankDetailsBoxProps {
     isRecurring: boolean;
 }
 
-interface IBankDetailsBoxState {
+interface IDebitDetailsBoxState {
     showError: boolean;
     error: string;
 }
 
-export default class BankDetailsBox extends React.Component<IBankDetailsBoxProps, IBankDetailsBoxState> {
+export default class DebitDetailsBox extends React.Component<IDebitDetailsBoxProps, IDebitDetailsBoxState> {
     constructor(props) {
         super(props);
         this.state = {
