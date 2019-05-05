@@ -1,22 +1,22 @@
 import renderComponentIf from "../global/renderComponentIf";
 import * as React from "react";
 import DebitDetailsBox from "./DebitDetailsBox";
-import {StripeProvider, Elements, injectStripe} from 'react-stripe-elements';
-import * as Modal from 'react-modal';
+import {StripeProvider, Elements, injectStripe} from "react-stripe-elements";
+import * as Modal from "react-modal";
 
 const InjectedDebitDetailsBox = injectStripe(DebitDetailsBox);
 
 const popupStyles = {
   content : {
-    top                   : '50%',
-    left                  : '50%',
-    right                 : 'auto',
-    bottom                : 'auto',
-    marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)',
-    backgroundColor       : '#efefef',
+    top                   : "50%",
+    left                  : "50%",
+    right                 : "auto",
+    bottom                : "auto",
+    marginRight           : "-50%",
+    transform             : "translate(-50%, -50%)",
+    backgroundColor       : "#efefef",
     overlay: {
-       backgroundColor: '#efefef'
+       backgroundColor: "#efefef"
     }
   }
 };
@@ -78,7 +78,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         return false;
     }
 
-    payBank(): void {
+    payDebit(): void {
         if (this.checkFormErrors()) {
             return;
         }
@@ -153,7 +153,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         }
     }
 
-    renderPeriodSelection(): JSX.Element {
+    private renderPeriodSelection(): JSX.Element {
         return (
             <React.Fragment>
                 <div className="col-xs-12 col-sm-6 donation-period-one-off">
@@ -168,7 +168,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         );
     }
 
-    renderAmount(amount: number): JSX.Element {
+    private renderAmount(amount: number): JSX.Element {
         const id = `amount${amount}`;
         return (
             <div className="col-xs-6 col-sm-3">
@@ -178,7 +178,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         );
     }
 
-    renderCustomAmount(): JSX.Element {
+    private renderCustomAmount(): JSX.Element {
         return (
             <div className="col-xs-6 col-sm-3">
                 <input type="text" id="amountCustom" name="amount" placeholder="Other..." onChange={(event) => this.setAmount(event)} />
@@ -186,7 +186,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         );
     }
 
-    renderName(): JSX.Element {
+    private renderName(): JSX.Element {
         if (this.needsToEnterName()) {
             return (
                 <div id="name-input-box">
@@ -196,7 +196,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         }
     }
 
-    renderEmail(): JSX.Element {
+    private renderEmail(): JSX.Element {
         if (this.needsToEnterEmail()) {
             return (
                 <div id="email-input-box">
@@ -206,7 +206,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         }
     }
 
-    renderUserDetails(): JSX.Element {
+    private renderUserDetails(): JSX.Element {
         if (this.needsToEnterEmail() || this.needsToEnterName()) {
             return (
                 <div className="user-details">
@@ -216,7 +216,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         }
     }
 
-    renderAmounts(): JSX.Element {
+    private renderAmounts(): JSX.Element {
         return (
             <div className="row">
                 {this.renderAmount(3)}
@@ -230,7 +230,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
             </div>);
     }
 
-    renderPopup(): JSX.Element {
+    private renderPopup(): JSX.Element {
         return (
             <Modal isOpen={this.state.showBankDialog} onRequestClose={() => this.onCloseDialog()} contentLabel="Donate" style={popupStyles}>
                 <div id="donation-modal">
@@ -244,11 +244,11 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
             </Modal>);
     }
 
-    renderPaymentOptions(): JSX.Element {
+    private renderPaymentOptions(): JSX.Element {
         return (<div className="payment-options">
             <div className="row">
                 <div className="col-xs-12">
-                    <button className="btn" value="ideal" onClick={() => this.payBank()}>
+                    <button className="btn" value="ideal" onClick={() => this.payDebit()}>
                         <img src="/images/thankyoucommit/iDEAL-logo.png" />
                         <div>Debit (iDeal / SEPA Direct)</div>
                     </button>
@@ -265,14 +265,14 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         </div>);
     }
 
-    renderErrors(): JSX.Element {
+    private renderErrors(): JSX.Element {
         return (
             <div className="error" hidden={!this.state.showError}>
                 <p>{this.state.error}</p>
             </div>);
     }
 
-    renderHeader(): JSX.Element {
+    private renderHeader(): JSX.Element {
         return (
             <div>
                 <h2>Help us reaching our mission by donating!</h2>

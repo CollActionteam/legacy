@@ -1,5 +1,5 @@
 ﻿import * as React from "react";
-import { IdealBankElement, IbanElement } from 'react-stripe-elements';
+import { IdealBankElement, IbanElement } from "react-stripe-elements";
 
 interface IDebitDetailsBoxProps {
     stripe: any;
@@ -35,16 +35,16 @@ export default class DebitDetailsBox extends React.Component<IDebitDetailsBoxPro
         }
     }
 
-    async submitPaymentSepa(): Promise<void> {
+    private async submitPaymentSepa(): Promise<void> {
         let sourceData = {
-            type: 'sepa_debit',
-            currency: 'eur',
+            type: "sepa_debit",
+            currency: "eur",
             owner: {
                 name: this.props.userName,
                 email: this.props.userEmail
             },
             mandate: {
-                notification_method: 'email' // Automatically send a mandate notification email to your customer once the source is charged
+                notification_method: "email" // Automatically send a mandate notification email to your customer once the source is charged
             }
         };
 
@@ -56,7 +56,7 @@ export default class DebitDetailsBox extends React.Component<IDebitDetailsBoxPro
         }
 
         let initializeUrl = `/Donation/InitializeSepaDirect?sourceId=${response.source.id}&name=${encodeURIComponent(this.props.userName)}&email=${encodeURIComponent(this.props.userEmail)}&amount=${this.props.amount}`;
-        let initializeResponse = await fetch(initializeUrl, { method: 'POST' });
+        let initializeResponse = await fetch(initializeUrl, { method: "POST" });
         if (initializeResponse.status == 200) {
             window.location.href = "/Donation/ThankYou";
         } else {
@@ -65,7 +65,7 @@ export default class DebitDetailsBox extends React.Component<IDebitDetailsBoxPro
         }
     }
 
-    async submitPaymentIdeal(): Promise<void> {
+    private async submitPaymentIdeal(): Promise<void> {
         let sourceData = {
             type: "ideal",
             amount: this.props.amount * 100,
@@ -88,7 +88,7 @@ export default class DebitDetailsBox extends React.Component<IDebitDetailsBoxPro
         }
 
         let initializeUrl = `/Donation/InitializeIdealCheckout?sourceId=${response.source.id}&name=${encodeURIComponent(this.props.userName)}&email=${encodeURIComponent(this.props.userEmail)}`;
-        let initializeResponse = await fetch(initializeUrl, { method: 'POST' });
+        let initializeResponse = await fetch(initializeUrl, { method: "POST" });
         if (initializeResponse.status == 200) {
             window.location.href = response.source.redirect.url;
         } else {
@@ -97,7 +97,7 @@ export default class DebitDetailsBox extends React.Component<IDebitDetailsBoxPro
         }
     }
 
-    renderBankElement(): JSX.Element {
+    private renderBankElement(): JSX.Element {
         if (this.props.isRecurring) {
             return (
                 <React.Fragment>
@@ -107,7 +107,7 @@ export default class DebitDetailsBox extends React.Component<IDebitDetailsBoxPro
                         You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. 
                         A refund must be claimed within 8 weeks starting from the date on which your account was debited.
                     </div>
-                    <IbanElement supportedCountries={['SEPA']} />;
+                    <IbanElement supportedCountries={["SEPA"]} />;
                 </React.Fragment>);
         }
         else {
