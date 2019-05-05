@@ -105,7 +105,6 @@ class ProjectThumb extends React.Component<IProject, IThumbState> {
       );
     }
   }
-
   openProject = () => {
     window.location.href = `/projects/${this.props.projectNameUriPart}/${this.props.projectId}/details`;
   }
