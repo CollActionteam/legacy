@@ -243,7 +243,8 @@ namespace CollAction
                                                   .AddRange(new[]
                                                             {
                                                                 "https://js.stripe.com",
-                                                                "https://hooks.stripe.com"
+                                                                "https://hooks.stripe.com",
+                                                                "https://www.youtube.com/"
                                                             });
                        cspBuilder.AddScriptSrc() // Only allow scripts from our own site, the aspnetcdn site, app insights and google analytics
                                  .Self()
