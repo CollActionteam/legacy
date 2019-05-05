@@ -95,7 +95,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         if (checkoutTokenResponse.status != 200) {
             let responseBody = await checkoutTokenResponse.text();
             console.log("Unable to redirect to checkout: " + responseBody);
-            this.setState({ showError: true, error: "Unable to initialize checkout" });
+            this.setState({ showError: true, error: "We're unable to start your credit-card donation, there is something wrong, sorry" });
             return;
         }
 
@@ -105,7 +105,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         if (checkoutResponse.status != 200) {
             let responseBody = await checkoutResponse.text();
             console.log("Unable to redirect to checkout: " + responseBody);
-            this.setState({ showError: true, error: "Unable to redirect to checkout" });
+            this.setState({ showError: true, error: "We're unable to start your credit-card donation, there is something wrong, sorry" });
         }
     }
 

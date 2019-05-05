@@ -51,7 +51,7 @@ export default class DebitDetailsBox extends React.Component<IDebitDetailsBoxPro
         let response = await this.props.stripe.createSource(sourceData);
         if (response.error) {
             console.log("Unable to start SEPA Direct: " + response.error);
-            this.setState({ showError: true, error: "Unable to start SEPA Direct" })
+            this.setState({ showError: true, error: "We're unable to setup your SEPA Direct donation, something is wrong, we're sorry" });
             return;
         }
 
@@ -61,7 +61,7 @@ export default class DebitDetailsBox extends React.Component<IDebitDetailsBoxPro
             window.location.href = "/Donation/ThankYou";
         } else {
             console.log("Unable to start SEPA Direct: " + await initializeResponse.text());
-            this.setState({ showError: true, error: "Unable to start SEPA Direct" })
+            this.setState({ showError: true, error: "We're unable to setup your SEPA Direct donation, something is wrong, we're sorry" });
         }
     }
 
@@ -83,7 +83,7 @@ export default class DebitDetailsBox extends React.Component<IDebitDetailsBoxPro
         let response = await this.props.stripe.createSource(sourceData);
         if (response.error) {
             console.log("Unable to start iDeal: " + response.error);
-            this.setState({ showError: true, error: "Unable to start iDeal" })
+            this.setState({ showError: true, error: "We're unable to start your iDeal donation, something is wrong, we're sorry" });
             return;
         }
 
@@ -93,7 +93,7 @@ export default class DebitDetailsBox extends React.Component<IDebitDetailsBoxPro
             window.location.href = response.source.redirect.url;
         } else {
             console.log("Unable to start iDeal: " + await initializeResponse.text());
-            this.setState({ showError: true, error: "Unable to start iDeal" })
+            this.setState({ showError: true, error: "We're unable to start your iDeal donation, something is wrong, we're sorry" });
         }
     }
 
