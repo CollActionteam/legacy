@@ -34,6 +34,7 @@ namespace CollAction.Data
         public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
         public DbSet<ProjectParticipantCount> ProjectParticipantCounts { get; set; }
         public DbSet<UserEvent> UserEvents { get; set; }
+        public DbSet<DonationEventLog> DonationEventLog { get; set; }
 
         /// <summary>
         /// Configure the model (foreign keys, relations, primary keys, etc)

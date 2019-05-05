@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -7,9 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using CollAction.Models;
 using Microsoft.Extensions.Localization;
-using CollAction.Data;
 using CollAction.Models.ManageViewModels;
-using Microsoft.EntityFrameworkCore;
 using CollAction.Services.Email;
 using CollAction.Services.Newsletter;
 using CollAction.Services.Project;

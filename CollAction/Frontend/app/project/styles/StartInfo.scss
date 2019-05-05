@@ -1,7 +1,7 @@
 @import "../../colors";
 @import "../../mixins";
 
-#start-info {          
+#start-info {
     hr {
         border-top-width: 2px;
     }
@@ -9,7 +9,7 @@
     #start-info-intro {
         background-color: #efefef;
     }
-    
+
     #background {
         background-color: white;
         height: 450px;
@@ -60,13 +60,12 @@
     #how-it-works {
         background: #efefef;
         text-align: center;
-
         padding-bottom: 50px;
 
         img.icon {
             height: 40px;
         }
-        
+
         h1 {
             color: $coll-action-green;
             font-size: 3em;
@@ -89,30 +88,6 @@
         h1 {
             color: $coll-action-green;
         }
-
-        a, i {
-            color: #8a8a8a;
-        }
-
-        a {
-            text-decoration: none;
-        }
-
-        .is-closed i.fa.fa-minus {
-            display: none;
-        }
-
-        .is-open i.fa.fa-plus {
-            display: none;
-        }
-
-        .toggle {
-            float: right !important;
-        }
-
-        .Collapsible__contentOuter {
-            border-bottom: 1px solid #8a8a8a;
-        }
     }
 
     #kickstart {
@@ -122,7 +97,7 @@
             border-radius: 5px;
             background-color: #efefef;
             padding: 20px 40px;
-    
+
             h2 {
                 color: $coll-action-green;
             }
@@ -136,12 +111,12 @@
                 background-color: $coll-action-green;
 
                 @media (min-width: 768px) {
-                    padding: 10px 80px;                    
+                    padding: 10px 80px;
                 }
-                
+
                 @media (max-width: 767px) {
                     width: 100%;
-                }                
+                }
             }
 
             .logo {
