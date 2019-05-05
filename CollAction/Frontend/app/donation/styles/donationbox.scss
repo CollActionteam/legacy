@@ -71,6 +71,29 @@
         color: #8a8a8a;
     }
 
+    #donation-cancelled-box {
+        margin-top: -200px;
+        padding: 20px 40px 20px 40px;
+        background-color: white;
+        border-radius: 5px;
+        box-shadow: 10px 10px 40px -9px rgba(0,0,0,0.55);
+
+        h1 {
+            color: $coll-action-green;
+        }
+
+        .donation-smiley {
+            margin-left: auto;
+            margin-right: auto;
+            width: 161px;
+            height: 23px;
+            font-family: LucidaGrande;
+            font-size: 46px;
+            font-weight: bold;
+            line-height: 0.5;
+        }
+    }
+
     #donation-thankyou-box {
         margin-top: -200px;
         padding: 20px 40px 20px 40px;

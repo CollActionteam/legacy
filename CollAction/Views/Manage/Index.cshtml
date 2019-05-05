@@ -68,6 +68,33 @@
                         </form>
                     </div>
                 </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <dt>Recurring Donations</dt>
+                    </div>
+                    <div class="panel-body">
+                        @if (Model.DonationSubscriptions.Any())
+                        {
+                            <p>
+                                You can cancel your recurring donations here.
+                            </p>
+
+                            @foreach (var subscription in Model.DonationSubscriptions)
+                            {
+                                <form asp-controller="Donation" asp-action="CancelSubscription" method="post">
+                                    <input type="hidden" name="subscriptionId" value="@subscription.Id" />
+                                    <input type="submit" value="Cancel donation started at @subscription.Start.Value.ToShortDateString()" />
+                                </form>
+                            }
+                        }
+                        else
+                        {
+                            <p>
+                                You don't have any recurring donations.
+                           </p>
+                        }
+                    </div>
+                </div>
                 @if (!User.IsInRole(Constants.AdminRole))
                 {
                     <div class="panel panel-default">

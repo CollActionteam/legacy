@@ -4,15 +4,15 @@
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <UserSecretsId>aspnet-CollAction-29a5d7b8-3530-4482-9ed6-572bd6c178fa</UserSecretsId>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
-    <TypeScriptToolsVersion>3.4.2</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>3.3</TypeScriptToolsVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="8.1.0" />
-    <PackageReference Include="AWSSDK.S3" Version="3.3.101.9" />
-    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.100.11" />
-    <PackageReference Include="Hangfire.AspNetCore" Version="1.7.1" />
-    <PackageReference Include="Hangfire.PostgreSql" Version="1.5.0" />
+    <PackageReference Include="AWSSDK.S3" Version="3.3.101.13" />
+    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.100.15" />
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.7.2" />
+    <PackageReference Include="Hangfire.PostgreSql" Version="1.6.0" />
     <PackageReference Include="HtmlSanitizer" Version="4.0.210" />
     <PackageReference Include="Microsoft.AspNetCore.All" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.4" PrivateAssets="all">
@@ -28,7 +28,7 @@
     <PackageReference Include="Serilog.Sinks.Slack" Version="1.2.63" />
     <PackageReference Include="Serilog.Sinks.Trace" Version="2.1.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0005" />
-    <PackageReference Include="Stripe.net" Version="25.12.0" />
+    <PackageReference Include="Stripe.net" Version="25.15.0" />
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.1.0-preview1-final" />

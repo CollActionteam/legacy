@@ -58,7 +58,7 @@ export default class BankDetailsBox extends React.Component<IBankDetailsBoxProps
         let initializeUrl = `/donation/InitializeSepaDirect?sourceId=${response.source.id}&name=${encodeURIComponent(this.props.userName)}&email=${encodeURIComponent(this.props.userEmail)}&amount=${this.props.amount}`;
         let initializeResponse = await fetch(initializeUrl, { method: 'POST' });
         if (initializeResponse.status == 200) {
-            window.location.href = response.source.redirect.url;
+            window.location.href = "/donation/ThankYou";
         } else {
             console.log("Unable to start SEPA Direct: " + await initializeResponse.text());
             this.setState({ showError: true, error: "Unable to start SEPA Direct" })

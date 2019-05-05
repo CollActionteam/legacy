@@ -80,7 +80,7 @@ namespace CollAction.Services.Donation
 
             if (recurring)
             {
-                sessionOptions.CustomerEmail = customer.Email; // TODO: Once supported, replace this with the customer id
+                sessionOptions.CustomerEmail = customer.Email; // TODO: sessionOptions.CustomerId = customer.Id; // Once supported
                 sessionOptions.SubscriptionData = new SessionSubscriptionDataOptions()
                 {
                     Items = new List<SessionSubscriptionDataItemOptions>()
@@ -241,6 +241,44 @@ namespace CollAction.Services.Donation
             {
                 throw new InvalidOperationException($"source: {source.Id} is not chargeable, something went wrong in the payment flow");
             }
+        }
+
+        public async Task<IEnumerable<Subscription>> GetSubscriptionsFor(ApplicationUser userFor)
+        {
+            var customers = await _customerService.ListAsync(new CustomerListOptions()
+            {
+                Email = userFor.Email
+            });
+
+            var subscriptions = await Task.WhenAll(
+                customers.Select(c =>
+                    _subscriptionService.ListAsync(new SubscriptionListOptions()
+                    {
+                        CustomerId = c.Id
+                    })));
+
+            return subscriptions.SelectMany(s => s);
+        }
+
+        public async Task CancelSubscription(string subscriptionId, ApplicationUser userFor)
+        {
+            Subscription subscription = await _subscriptionService.GetAsync(subscriptionId);
+            Customer customer = await _customerService.GetAsync(subscription.CustomerId);
+
+            if (!customer.Email.Equals(userFor.Email, StringComparison.OrdinalIgnoreCase))
+            {
+                throw new InvalidOperationException($"User {userFor.Email} doesn't match subscription e-mail {subscription.Customer.Email}");
+            }
+
+            subscription = await _subscriptionService.CancelAsync(subscriptionId, new SubscriptionCancelOptions());
+
+            _context.DonationEventLog.Add(new DonationEventLog()
+            {
+                UserId = userFor.Id,
+                Type = DonationEventType.Internal,
+                EventData = subscription.ToJson()
+            });
+            await _context.SaveChangesAsync();
         }
 
         private async Task<Plan> CreateRecurringPlan(int amount, string currency)

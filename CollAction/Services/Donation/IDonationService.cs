@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using CollAction.Models;
+using Stripe;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CollAction.Services.Donation
 {
@@ -10,5 +13,7 @@ namespace CollAction.Services.Donation
         Task LogPaymentEvent(string json, string signature);
         void HandleChargeable(string json, string signature);
         Task InitializeSepaDirect(string sourceId, string name, string email, int amount);
+        Task<IEnumerable<Subscription>> GetSubscriptionsFor(ApplicationUser userFor);
+        Task CancelSubscription(string subscriptionId, ApplicationUser userFor);
     }
 }

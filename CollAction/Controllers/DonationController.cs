@@ -1,17 +1,25 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using CollAction.Models;
 using CollAction.Services.Donation;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Stripe;
 
 namespace CollAction.Controllers
 {
     public class DonationController : Controller
     {
         private IDonationService _donationService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public DonationController(IDonationService donationService)
+        public DonationController(IDonationService donationService, UserManager<ApplicationUser> userManager)
         {
             _donationService = donationService;
+            _userManager = userManager;
         }
 
         [HttpPost]
@@ -70,6 +78,14 @@ namespace CollAction.Controllers
             {
                 return RedirectToAction(nameof(Donate));
             }
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> CancelSubscription(string subscriptionId)
+        {
+            await _donationService.CancelSubscription(subscriptionId, await _userManager.GetUserAsync(User));
+            return View();
         }
 
         [HttpGet]

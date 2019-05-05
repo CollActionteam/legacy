@@ -258,7 +258,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
                 <div className="col-xs-12">
                     <button className="btn" value="creditcard" onClick={() => this.payCreditCard()}>
                         <img src="/images/thankyoucommit/bank-card.png" />
-                        <div>Debit / Creditcard</div>
+                        <div>Creditcard</div>
                     </button>
                 </div>
             </div>
