@@ -23,7 +23,7 @@ export default class DebitDetailsBox extends React.Component<IDebitDetailsBoxPro
         };
     }
 
-    submitPayment(event: React.FormEvent<HTMLFormElement>) : Promise<void> {
+    submitPayment(event: React.FormEvent<HTMLFormElement>): Promise<void> {
         event.preventDefault();
         this.setState({ showError: false });
 
