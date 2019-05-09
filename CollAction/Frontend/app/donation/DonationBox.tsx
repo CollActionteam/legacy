@@ -239,16 +239,27 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
             </div>);
     }
 
+    private detailsBox: DebitDetailsBox;
+
     private renderPopup(): JSX.Element {
         return (
             <Modal isOpen={this.state.showBankDialog} onRequestClose={() => this.onCloseDialog()} contentLabel="Donate" style={popupStyles}>
                 <div id="donation-modal">
                     <StripeProvider apiKey={this.props.stripePublicKey}>
                         <Elements>
-                            <InjectedDebitDetailsBox amount={this.state.amount} userEmail={this.getEmail()} userName={this.getName()} isRecurring={this.state.isRecurring} />
+                            <InjectedDebitDetailsBox
+                                onRef={ref => (this.detailsBox = ref)}
+                                amount={this.state.amount}
+                                userEmail={this.getEmail()}
+                                userName={this.getName()}
+                                isRecurring={this.state.isRecurring}
+                            />
                         </Elements>
                     </StripeProvider>
-                    <a className="btn" onClick={() => this.onCloseDialog()}>Close</a>
+                    <div className="buttons">
+                        <input type="button" className="btn btn-default" value="Donate!" onClick={() => this.detailsBox.submitPayment()}></input>
+                        <input type="button" className="btn" value="Close" onClick={() =>  this.onCloseDialog()}></input>
+                    </div>
                 </div>
             </Modal>);
     }
