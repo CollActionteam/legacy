@@ -12,6 +12,7 @@ import "./styles/ProjectSendEmail.scss";
 import "./FindProject";
 
 import "./PieChart";
+import "./Participate";
 
 import "./ProjectPreview";
 
