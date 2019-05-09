@@ -315,6 +315,19 @@ namespace CollAction.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> FindProject(int projectId)
+        {
+            var project = await _projectService.FindProject(projectId);
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            return Json(project);
+        }        
+
+        [HttpGet]
         public async Task<JsonResult> FindProjects(int? categoryId, int? statusId, int? limit, int? start)
         {
             Expression<Func<Project, bool>> projectExpression = (p =>
