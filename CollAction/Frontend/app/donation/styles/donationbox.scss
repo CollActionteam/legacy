@@ -1,6 +1,10 @@
 @import "../../colors";
 @import '../../mixins';
 
+.ReactModal__Body--open {
+    overflow-y: hidden;
+}
+  
 #donation-mission {
     height: 450px;
     padding-top: 40px;

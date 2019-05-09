@@ -318,6 +318,8 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
     }
 }
 
+Modal.setAppElement(document.querySelector("#main"));
+
 let donationBox: HTMLElement = document.getElementById("donation-box");
 if (donationBox !== null) {
     let stripePublicKey = donationBox.getAttribute("data-stripe-public-key");
