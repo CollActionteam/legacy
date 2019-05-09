@@ -23,27 +23,53 @@
 #donation-modal {
     width: 80vw;
     max-width: 26em;
+    max-height: 100%;
 
     .error {
         color: $coll-action-green;
     }
 
     .buttons {
+        display: flex;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
+
+        margin-top: 20px;
         text-align: center;
 
         .btn {
+            margin: 10px 0;
             @include coll-action-button;
-            margin-top: 1em;
-
-            & + .btn {
-                margin-left: 1em;
-            }
         }
     }
 
-    #name-input {
-        margin-top: 1em;
-        margin-bottom: 1em;
+    @media (max-width: 375px) {
+        .buttons  .btn {
+            width: 100%;
+        }
+    }
+
+    @media (max-height: 320px) {
+        // Crammin' a bit for small iPhones
+        p {
+            margin-bottom: 5px;
+        }
+        .buttons {
+            margin-top: 0px;
+        }
+    }
+
+
+    .bank-list {
+        @media (min-width: 766px) {
+            // Needed so the bank-dropdown will be visible inside the popup.
+            margin-bottom: 120px;
+        }
+    }
+
+    .alert {
+        // Smaller font, so it's visible on mobile devices as well
+        font-size: 0.8em;
     }
 
     .StripeElement {
@@ -64,10 +90,6 @@
 
     .StripeElement--invalid {
         border-color: #fa755a;
-    }
-
-    .StripeElement--webkit-autofill {
-        background-color: #fefde5 !important;
     }
 }
 

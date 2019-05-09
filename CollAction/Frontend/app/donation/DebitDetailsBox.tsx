@@ -118,13 +118,21 @@ export default class DebitDetailsBox extends React.Component<IDebitDetailsBoxPro
                         You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank.
                         A refund must be claimed within 8 weeks starting from the date on which your account was debited.
                     </div>
+                    <p>Please enter your IBAN:</p>
                     <IbanElement supportedCountries={["SEPA"]} />
                 </div>
             );
         }
         else {
             return (
-                <IdealBankElement />
+                <div className="bank-list">
+                    <p>Please select your bank:</p>
+                    <IdealBankElement style={{
+                        base: {
+                            fontFamily: "Raleway, sans-serif"
+                        }
+                    }}/>
+                </div>
             );
         }
     }
