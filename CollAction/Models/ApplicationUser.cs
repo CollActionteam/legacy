@@ -7,6 +7,18 @@ namespace CollAction.Models
 {
     public class ApplicationUser : IdentityUser
     {
+        public ApplicationUser() 
+        {
+            RepresentsNumberParticipants = 1;        
+        }
+
+        public ApplicationUser(string email) 
+            : base()
+        {
+            UserName = email;
+            Email = email;
+        }
+
         [MaxLength(250)]
         public string FirstName { get; set; }
 
