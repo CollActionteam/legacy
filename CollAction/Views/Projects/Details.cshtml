@@ -210,14 +210,15 @@
             </div>
         }
 
-        @if (Model.IsUserCommitted)
-        {
-            <h4 class="participating">You&apos;re participating!</h4>
-        }
-        else
-        {
-            <div class="row">
-                <div class="col-xs-12 col-md-4 col-md-offset-8 bottom-take-part">
+        <div class="row bottom-take-part">
+            <div class="col-xs-12 col-md-offset-4 col-md-4">
+                @if (Model.IsUserCommitted)
+                {
+                    <h4 class="participating">You&apos;re participating!</h4>
+
+                }
+                else
+                {
                     <form id="bottom-form" asp-action="Commit" asp-route-id="@Model.Project.Id">
                         <input type="hidden" name="ProjectId" value="@Model.Project.Id" />
                         <div id="participate-in-projectdetails" 
@@ -227,10 +228,10 @@
                             data-project-status="@status"
                         ></div>
                     </form>
-                </div>
+                }
             </div>
-        }
-    </div> 
+        </div>
+    </div>
     
     @if (canTrack)
     {
