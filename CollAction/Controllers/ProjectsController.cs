@@ -27,16 +27,18 @@ namespace CollAction.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly IProjectService _projectService;
+        private readonly IParticipantsService _participantsService;
         private readonly IEmailSender _emailSender;
         private readonly IImageService _imageService;
 
-        public ProjectsController(ApplicationDbContext context, IStringLocalizer<ProjectsController> localizer, UserManager<ApplicationUser> userManager, IHostingEnvironment hostingEnvironment, IProjectService projectService, IEmailSender emailSender, IImageService imageService)
+        public ProjectsController(ApplicationDbContext context, IStringLocalizer<ProjectsController> localizer, UserManager<ApplicationUser> userManager, IHostingEnvironment hostingEnvironment, IProjectService projectService, IParticipantsService participantsService, IEmailSender emailSender, IImageService imageService)
         {
             _context = context;
             _localizer = localizer;
             _userManager = userManager;
             _hostingEnvironment = hostingEnvironment;
             _projectService = projectService;
+            _participantsService = participantsService;
             _emailSender = emailSender;
             _imageService = imageService;
         }
@@ -56,7 +58,7 @@ namespace CollAction.Controllers
             }
             DisplayProjectViewModel displayProject = items.First();
             string userId = (await _userManager.GetUserAsync(User))?.Id;
-            displayProject.IsUserCommitted = userId != null && (await _projectService.GetParticipant(userId, displayProject.Project.Id) != null);
+            displayProject.IsUserCommitted = userId != null && (await _participantsService.GetParticipant(userId, displayProject.Project.Id) != null);
 
             return View(displayProject);
         }
@@ -140,7 +142,7 @@ namespace CollAction.Controllers
 
             await _context.SaveChangesAsync();
 
-            await _projectService.RefreshParticipantCountMaterializedView();
+            await _participantsService.RefreshParticipantCountMaterializedView();
 
             // Notify admins and creator through e-mail
             string confirmationEmail =
@@ -254,7 +256,7 @@ namespace CollAction.Controllers
                 return NotFound();
             }
             
-            var success = await _projectService.AddParticipant(user.Id, commitProjectViewModel.ProjectId);
+            var success = await _participantsService.AddParticipant(user.Id, commitProjectViewModel.ProjectId);
 
             // TODO: if success == false, then the user is already participating. Send him a different mail maybe?
 

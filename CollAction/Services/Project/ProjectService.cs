@@ -48,42 +48,6 @@ namespace CollAction.Services.Project
         public Task<Models.Project> GetProjectById(int id)
             => _context.Projects.SingleOrDefaultAsync(p => p.Id == id);
 
-        public async Task<bool> AddParticipant(string userId, int projectId)
-        {
-            Models.Project project = await GetProjectById(projectId);
-            if (project == null || !project.IsActive)
-            {
-                return false;
-            }
-
-            var participant = new ProjectParticipant
-            {
-                UserId = userId,
-                ProjectId = projectId,
-                SubscribedToProjectEmails = true,
-                UnsubscribeToken = Guid.NewGuid()
-            };
-
-            try
-            {
-                _context.Add(participant);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                return false;
-            }
-
-            await RefreshParticipantCountMaterializedView();
-
-            return true;
-        }
-
-        public async Task<ProjectParticipant> GetParticipant(string userId, int projectId)
-        {
-            return await _context.ProjectParticipants.SingleOrDefaultAsync(p => p.ProjectId == projectId && p.UserId == userId);
-        }
-
         public IQueryable<DisplayProjectViewModel> GetProjectDisplayViewModels(Expression<Func<Models.Project, bool>> filter)
         {
             return _context.Projects
@@ -104,20 +68,6 @@ namespace CollAction.Services.Project
                                 BannerImagePath = project.BannerImage == null ? $"/images/default_banners/{project.Category.Name}.jpg" : _imageService.GetUrl(project.BannerImage),
                                 DescriptiveImagePath = project.DescriptiveImage == null ? null : _imageService.GetUrl(project.DescriptiveImage)
                             });
-        }
-
-        public async Task<string> GenerateParticipantsDataExport(int projectId)
-        {
-            Models.Project project = await _context
-                .Projects
-                .Where(p => p.Id == projectId)
-                .Include(p => p.Participants).ThenInclude(p => p.User)
-                .Include(p => p.Owner)
-                .FirstOrDefaultAsync();
-            if (project == null)
-                return null;
-            else
-                return string.Join("\r\n", GetParticipantsCsv(project));
         }
 
         public bool CanSendProjectEmail(Models.Project project)
@@ -173,9 +123,6 @@ namespace CollAction.Services.Project
                 throw new InvalidOperationException("unable to send project e-mails, limit exceeded");
         }
 
-        public Task RefreshParticipantCountMaterializedView()
-            => _context.Database.ExecuteSqlCommandAsync(@"REFRESH MATERIALIZED VIEW CONCURRENTLY ""ProjectParticipantCounts"";");
-
         private string FormatEmailMessage(string message, ApplicationUser user, string unsubscribeLink)
         {
             if (!string.IsNullOrEmpty(unsubscribeLink))
@@ -194,14 +141,6 @@ namespace CollAction.Services.Project
                 message = message.Replace("{lastname}", user.LastName);
 
             return message;
-        }
-
-        private IEnumerable<string> GetParticipantsCsv(Models.Project project)
-        {
-            yield return "first-name;last-name;email";
-            yield return GetParticipantCsvLine(project.Owner);
-            foreach (ProjectParticipant participant in project.Participants)
-                yield return GetParticipantCsvLine(participant.User);
         }
 
         private static string ToUrlSlug(string value)
@@ -242,12 +181,6 @@ namespace CollAction.Services.Project
             projectName = ToUrlSlug(projectName);
             return projectName;
         }
-
-        private string GetParticipantCsvLine(ApplicationUser user)
-            => $"{EscapeCsv(user?.FirstName)};{EscapeCsv(user?.LastName)};{EscapeCsv(user?.Email)}";
-
-        private string EscapeCsv(string str)
-            => $"\"{str?.Replace("\"", "\"\"")}\"";
 
         public async Task<FindProjectsViewModel> FindProject(int projectId)
         {

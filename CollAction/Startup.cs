@@ -114,6 +114,7 @@ namespace CollAction
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddScoped<IProjectService, ProjectService>();
+            services.AddScoped<IParticipantsService, ParticipantsService>();
             services.AddScoped<IImageService, AmazonS3ImageService>();
             services.AddTransient<INewsletterSubscriptionService, NewsletterSubscriptionService>();
             services.AddTransient<IFestivalService, FestivalService>();
