@@ -232,7 +232,7 @@ namespace CollAction.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Commit(int projectId, string email)
+        public async Task<IActionResult> Commit(int projectId, string email = null)
         {
             var project =  await _projectService.GetProjectById(projectId); 
             if (project == null)
@@ -240,53 +240,49 @@ namespace CollAction.Controllers
                 return NotFound();
             }
 
-            var commitProjectViewModel = new CommitProjectViewModel
-            {
-                ProjectId = project.Id,
-                ProjectName = project.Name,
-                ProjectNameUriPart = _projectService.GetProjectNameNormalized(project.Name),
-                ProjectProposal = project.Proposal,
-                IsActive = project.IsActive
-            };
-
             var user = await _userManager.GetUserAsync(User) ?? await _userManager.FindByEmailAsync(email);
-            if (user == null)
+            var projectUri = new Uri($"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.PathBase}");
+
+            if (user != null)
             {
-                // User not found, create a new one
-                return NotFound();
+                await _participantsService.AddParticipant(projectId, user.Id, projectUri);
             }
-            
-            var success = await _participantsService.AddParticipant(user.Id, commitProjectViewModel.ProjectId);
+            else
+            {
+                if (email == null) throw new ArgumentException("No e-mail specified.");
+                await _participantsService.AddUnregisteredParticipant(projectId, email, projectUri);
+            }
 
-            // TODO: if success == false, then the user is already participating. Send him a different mail maybe?
+            // var projectUrl = Url.Action("Details", "Projects", new { id = commitProjectViewModel.ProjectId }, HttpContext.Request.Scheme); 
+            // var systemUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.PathBase}";
+            // var userDescription = user?.FirstName ?? "";
+            // var confirmationEmail =
+            //     $"Hi {userDescription}!<br><br>" +
+            //     "Thank you for participating in a CollAction project!<br><br>" +
+            //     "In crowdacting, we only act collectively when we meet the target before the deadline, so please feel very welcome to share this project on social media through the social media buttons below and on the <a href="+projectUrl+">project page</a>!<br><br>" +
+            //     "We'll keep you updated on the project. Also feel free to Like us on <a href=\"https://www.facebook.com/collaction.org/\">Facebook</a> to stay up to date on everything CollAction!<br><br>" +
+            //     "Warm regards,<br>The CollAction team<br><br>" +
+            //     "PS: Did you know you can start your own project on <a href=\"https://collaction.org/start\">www.collaction.org/start</a> ?<br><br>"+
+            //     "<span style='#share-buttons img {}'>"+
+            //     "<div id='share-buttons'>"+
+            //     "<p>Multiply your impact and share the project with the buttons below 🙂</p>"+
+            //     "<a href=https://www.facebook.com/sharer/sharer.php?u="+projectUrl+">"+
+            //     "<img style='width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;' src="+systemUrl+"/images/social/facebook.png alt='Facebook' />"+
+            //     "</a>"+
+            //     "<a href=\"http://www.linkedin.com/shareArticle?mini=true&url="+projectUrl+"&title="+WebUtility.UrlEncode(commitProjectViewModel.ProjectName)+"\" target=\"_blank\">"+
+            //     "<img style='width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;' src="+systemUrl+"/images/social/linkedin.png alt='LinkedIn' />"+
+            //     "</a>"+
+            //     "<a href=\"https://twitter.com/intent/tweet?text="+WebUtility.UrlEncode(commitProjectViewModel.ProjectName)+"&url="+projectUrl+"\" target=\"_blank\">"+
+            //     "<img style='width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;' src="+systemUrl+"/images/social/twitter.png alt='Twitter' />"+
+            //     "</a>"+
+            //     "</div>"+
+            //     "</span>";
+            // var subject = $"Thank you for participating in the \"{commitProjectViewModel.ProjectName}\" project on CollAction";
+            // _emailSender.SendEmail(user.Email, subject, confirmationEmail);
 
-            var projectUrl = Url.Action("Details", "Projects", new { id = commitProjectViewModel.ProjectId }, HttpContext.Request.Scheme); 
-            var systemUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.PathBase}";
-            var userDescription = user?.FirstName ?? "";
-            var confirmationEmail =
-                $"Hi {userDescription}!<br><br>" +
-                "Thank you for participating in a CollAction project!<br><br>" +
-                "In crowdacting, we only act collectively when we meet the target before the deadline, so please feel very welcome to share this project on social media through the social media buttons below and on the <a href="+projectUrl+">project page</a>!<br><br>" +
-                "We'll keep you updated on the project. Also feel free to Like us on <a href=\"https://www.facebook.com/collaction.org/\">Facebook</a> to stay up to date on everything CollAction!<br><br>" +
-                "Warm regards,<br>The CollAction team<br><br>" +
-                "PS: Did you know you can start your own project on <a href=\"https://collaction.org/start\">www.collaction.org/start</a> ?<br><br>"+
-                "<span style='#share-buttons img {}'>"+
-                "<div id='share-buttons'>"+
-                "<p>Multiply your impact and share the project with the buttons below 🙂</p>"+
-                "<a href=https://www.facebook.com/sharer/sharer.php?u="+projectUrl+">"+
-                "<img style='width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;' src="+systemUrl+"/images/social/facebook.png alt='Facebook' />"+
-                "</a>"+
-                "<a href=\"http://www.linkedin.com/shareArticle?mini=true&url="+projectUrl+"&title="+WebUtility.UrlEncode(commitProjectViewModel.ProjectName)+"\" target=\"_blank\">"+
-                "<img style='width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;' src="+systemUrl+"/images/social/linkedin.png alt='LinkedIn' />"+
-                "</a>"+
-                "<a href=\"https://twitter.com/intent/tweet?text="+WebUtility.UrlEncode(commitProjectViewModel.ProjectName)+"&url="+projectUrl+"\" target=\"_blank\">"+
-                "<img style='width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;' src="+systemUrl+"/images/social/twitter.png alt='Twitter' />"+
-                "</a>"+
-                "</div>"+
-                "</span>";
-            var subject = $"Thank you for participating in the \"{commitProjectViewModel.ProjectName}\" project on CollAction";
-            _emailSender.SendEmail(user.Email, subject, confirmationEmail);
-                return LocalRedirect($"~/Projects/{commitProjectViewModel.ProjectNameUriPart}/{commitProjectViewModel.ProjectId}/thankyou");
+
+            var projectNameUriPart = _projectService.GetProjectNameNormalized(project.Name);
+            return LocalRedirect($"~/Projects/{projectNameUriPart}/{projectId}/thankyou");
         }
 
         [HttpGet]
@@ -297,7 +293,8 @@ namespace CollAction.Controllers
             {
                 return NotFound();
             }
-            CommitProjectViewModel model = new CommitProjectViewModel()
+
+            var model = new CommitProjectViewModel()
             {
                 ProjectId = id,
                 ProjectName = project.Name,

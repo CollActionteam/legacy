@@ -20,14 +20,57 @@ namespace CollAction.Services.Project
             _userManager = userManager;
         }
 
-        public async Task<bool> AddParticipant(string userId, int projectId)
+        public async Task AddUnregisteredParticipant(int projectId, string email, Uri projectLink)
         {
             var project = await _context.Projects.SingleOrDefaultAsync(p => p.Id == projectId);
             if (project == null || !project.IsActive)
             {
-                return false;
+                return;
             }
 
+            var result = await _userManager.CreateAsync(new ApplicationUser(email));
+
+            if (!result.Succeeded)
+            {
+                var errors = string.Join(',', result.Errors.Select(e => $"{e.Code}: {e.Description}"));
+                throw new InvalidOperationException($"Could not create new unregisterd user {email}: {errors}");
+            }
+
+            var user = await _userManager.FindByEmailAsync(email);
+            var added = await InsertParticipant(projectId, user.Id);
+
+            if (added) 
+            {
+                // Send welcome e-mail incl. invitation to finish registration
+            }
+            else 
+            {
+                // Send e-mail that you are already participating... (and link to login screen)
+            }
+        }
+
+        public async Task AddParticipant(int projectId, string userId, Uri projectLink)
+        {
+            var project = await _context.Projects.SingleOrDefaultAsync(p => p.Id == projectId);
+            if (project == null || !project.IsActive)
+            {
+                return;
+            }
+
+            var added = await InsertParticipant(projectId, userId);
+
+            if (added) 
+            {
+                // Send welcome e-mail
+            }
+            else 
+            {
+                // Send e-mail that you are already participating... (and link to login screen)
+            }
+        }
+
+        private async Task<bool> InsertParticipant(int projectId, string userId)
+        {
             var participant = new ProjectParticipant
             {
                 UserId = userId,
@@ -39,17 +82,19 @@ namespace CollAction.Services.Project
             try
             {
                 _context.Add(participant);
+                
                 await _context.SaveChangesAsync();
+                
+                await RefreshParticipantCountMaterializedView();
+                
+                return true;
             }
             catch (DbUpdateException)
             {
+                // User is already participanting
                 return false;
-            }
-
-            await RefreshParticipantCountMaterializedView();
-
-            return true;
-        }
+            }            
+        }    
 
         public Task RefreshParticipantCountMaterializedView()
             => _context.Database.ExecuteSqlCommandAsync(@"REFRESH MATERIALIZED VIEW CONCURRENTLY ""ProjectParticipantCounts"";");
