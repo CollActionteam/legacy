@@ -33,6 +33,7 @@ using CollAction.Services;
 using Serilog.Events;
 using Serilog.Sinks.Slack;
 using Microsoft.ApplicationInsights.Extensibility;
+using CollAction.Services.ViewRender;
 
 namespace CollAction
 {
@@ -112,12 +113,13 @@ namespace CollAction
             services.AddHangfire(config => config.UsePostgreSqlStorage(connectionString));
 
             // Add application services.
-            services.AddTransient<IEmailSender, AuthMessageSender>();
+            services.AddTransient<IEmailSender, EmailSender>();
             services.AddScoped<IProjectService, ProjectService>();
             services.AddScoped<IImageService, AmazonS3ImageService>();
             services.AddTransient<INewsletterSubscriptionService, NewsletterSubscriptionService>();
             services.AddTransient<IFestivalService, FestivalService>();
             services.AddTransient<IDonationService, DonationService>();
+            services.AddTransient<IViewRenderService, ViewRenderService>();
 
             services.AddDataProtection()
                     .Services.Configure<KeyManagementOptions>(options => options.XmlRepository = new DataProtectionRepository(new DbContextOptionsBuilder<ApplicationDbContext>().UseNpgsql(connectionString).Options));

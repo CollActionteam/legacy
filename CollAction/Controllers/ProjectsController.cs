@@ -17,6 +17,7 @@ using System.Linq.Expressions;
 using CollAction.Services.Project;
 using CollAction.Services.Email;
 using CollAction.Services.Image;
+using CollAction.Models.EmailViewModels;
 
 namespace CollAction.Controllers
 {
@@ -143,33 +144,13 @@ namespace CollAction.Controllers
             await _projectService.RefreshParticipantCountMaterializedView();
 
             // Notify admins and creator through e-mail
-            string confirmationEmail =
-                "Hi!<br>" +
-                "<br>" +
-                "Thanks for submitting a project on www.collaction.org!<br>" +
-                "The CollAction Team will review your project as soon as possible - if it meets all the criteria we'll publish the project on the website and will let you know, so you can start promoting it! If we have any additional questions or comments, we'll reach out to you by email.<br>" +
-                "Also, did you know we have a <a href=\"https://docs.google.com/document/d/1JK058S_tZXntn3GzFYgiH3LWV5e9qQ0vXmEyV-89Tmw\">Project Starter Handbook</a> with tips and tricks on how to start, run, and finish a project on CollAction?" +
-                "<br>" +
-                "<br>" +
-                "Thanks so much for driving the CollAction / crowdacting movement!<br>" +
-                "<br>" +
-                "Warm regards,<br>" +
-                "The CollAction team";
             string subject = $"Thank you for submitting \"{project.Name}\" on CollAction";
 
             ApplicationUser user = await _userManager.GetUserAsync(User);
-            _emailSender.SendEmail(user.Email, subject, confirmationEmail);
-
-            string confirmationEmailAdmin =
-                "Hi!<br>" +
-                "<br>" +
-                $"There's a new project waiting for approval: {project.Name}<br>" +
-                "Warm regards,<br>" +
-                "The CollAction team";
+            await _emailSender.SendEmailTemplated(user.Email, subject, "ProjectConfirmation");
 
             var administrators = await _userManager.GetUsersInRoleAsync(Constants.AdminRole);
-            foreach (var admin in administrators)
-                _emailSender.SendEmail(admin.Email, subject, confirmationEmailAdmin);
+            await _emailSender.SendEmailsTemplated(administrators.Select(a => a.Email), subject, "ProjectAddedAdmin", project.Name);
 
             return LocalRedirect($"~/Projects/Create/{_projectService.GetProjectNameNormalized(project.Name)}/{project.Id}/thankyou");
         }
@@ -261,32 +242,15 @@ namespace CollAction.Controllers
 
             if (success)
             {
-                string projectUrl = Url.Action("Details", "Projects", new { id = commitProjectViewModel.ProjectId }, HttpContext.Request.Scheme); 
-                var systemUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.PathBase}";
-                var userDescription = user?.FirstName ?? "";
-                string confirmationEmail =
-                    $"Hi {userDescription}!<br><br>" +
-                    "Thank you for participating in a CollAction project!<br><br>" +
-                    "In crowdacting, we only act collectively when we meet the target before the deadline, so please feel very welcome to share this project on social media through the social media buttons below and on the <a href="+projectUrl+">project page</a>!<br><br>" +
-                    "We'll keep you updated on the project. Also feel free to Like us on <a href=\"https://www.facebook.com/collaction.org/\">Facebook</a> to stay up to date on everything CollAction!<br><br>" +
-                    "Warm regards,<br>The CollAction team<br><br>" +
-                    "PS: Did you know you can start your own project on <a href=\"https://collaction.org/start\">www.collaction.org/start</a> ?<br><br>"+
-                    "<span style='#share-buttons img {}'>"+
-                    "<div id='share-buttons'>"+
-                    "<p>Multiply your impact and share the project with the buttons below 🙂</p>"+
-                    "<a href=https://www.facebook.com/sharer/sharer.php?u="+projectUrl+">"+
-                    "<img style='width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;' src="+systemUrl+"/images/social/facebook.png alt='Facebook' />"+
-                    "</a>"+
-                    "<a href=\"http://www.linkedin.com/shareArticle?mini=true&url="+projectUrl+"&title="+WebUtility.UrlEncode(commitProjectViewModel.ProjectName)+"\" target=\"_blank\">"+
-                    "<img style='width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;' src="+systemUrl+"/images/social/linkedin.png alt='LinkedIn' />"+
-                    "</a>"+
-                    "<a href=\"https://twitter.com/intent/tweet?text="+WebUtility.UrlEncode(commitProjectViewModel.ProjectName)+"&url="+projectUrl+"\" target=\"_blank\">"+
-                    "<img style='width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;' src="+systemUrl+"/images/social/twitter.png alt='Twitter' />"+
-                    "</a>"+
-                    "</div>"+
-                    "</span>";
+                var emailModel = new ProjectCommitEmailViewModel()
+                {
+                    ProjectUrl = Url.Action("Details", "Projects", new { id = commitProjectViewModel.ProjectId }, HttpContext.Request.Scheme), 
+                    SiteUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.PathBase}",
+                    UserDescription = user?.FirstName ?? "",
+                    ProjectName = WebUtility.UrlEncode(commitProjectViewModel.ProjectName)
+                };
                 string subject = $"Thank you for participating in the \"{commitProjectViewModel.ProjectName}\" project on CollAction";
-                _emailSender.SendEmail(user.Email, subject, confirmationEmail);
+                await _emailSender.SendEmailTemplated(user.Email, subject, "ProjectCommit", emailModel);
                 commitProjectViewModel.ProjectNameUriPart = _projectService.GetProjectNameNormalized(commitProjectViewModel.ProjectName);
                 return LocalRedirect($"~/Projects/{commitProjectViewModel.ProjectNameUriPart}/{commitProjectViewModel.ProjectId}/thankyou");
             }
