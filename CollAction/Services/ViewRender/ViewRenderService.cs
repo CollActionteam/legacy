@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,13 +13,13 @@ namespace CollAction.Services.ViewRender
 {
     public class ViewRenderService : IViewRenderService
     {
-        IRazorViewEngine _viewEngine;
-        IHttpContextAccessor _httpContextAccessor;
+        private readonly ICompositeViewEngine _viewEngine;
+        private readonly IUrlHelper _urlHelper;
 
-        public ViewRenderService(IRazorViewEngine viewEngine, IHttpContextAccessor httpContextAccessor)
+        public ViewRenderService(ICompositeViewEngine viewEngine, IUrlHelper urlHelper)
         {
             _viewEngine = viewEngine;
-            _httpContextAccessor = httpContextAccessor;
+            _urlHelper = urlHelper;
         }
 
         public Task<string> Render(string viewPath)
@@ -39,7 +40,10 @@ namespace CollAction.Services.ViewRender
             {
                 var viewContext = new ViewContext()
                 {
-                    HttpContext = _httpContextAccessor.HttpContext,
+                    HttpContext = _urlHelper.ActionContext.HttpContext,
+                    RouteData = _urlHelper.ActionContext.RouteData,
+                    ActionDescriptor = _urlHelper.ActionContext.ActionDescriptor,
+                    View = view,
                     ViewData = new ViewDataDictionary<TModel>(new EmptyModelMetadataProvider(), new ModelStateDictionary())
                     {
                         Model = model

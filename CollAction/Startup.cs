@@ -34,6 +34,7 @@ using Serilog.Events;
 using Serilog.Sinks.Slack;
 using Microsoft.ApplicationInsights.Extensibility;
 using CollAction.Services.ViewRender;
+using AspNetCore.IServiceCollection.AddIUrlHelper;
 
 namespace CollAction
 {
@@ -81,6 +82,8 @@ namespace CollAction
                     });
 
             services.AddApplicationInsightsTelemetry(Configuration);
+
+            services.AddUrlHelper();
 
             services.AddLogging(loggingBuilder =>
             {
