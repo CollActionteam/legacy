@@ -1,22 +1,22 @@
 import renderComponentIf from "../global/renderComponentIf";
 import * as React from "react";
-import IdealBox from "./IdealBox";
-import {StripeProvider, Elements, injectStripe} from 'react-stripe-elements';
-import * as Modal from 'react-modal';
+import DebitDetailsBox from "./DebitDetailsBox";
+import {StripeProvider, Elements, injectStripe} from "react-stripe-elements";
+import * as Modal from "react-modal";
 
-const InjectedIdealBox = injectStripe(IdealBox);
+const InjectedDebitDetailsBox = injectStripe(DebitDetailsBox);
 
 const popupStyles = {
   content : {
-    top                   : '50%',
-    left                  : '50%',
-    right                 : 'auto',
-    bottom                : 'auto',
-    marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)',
-    backgroundColor       : '#efefef',
+    top                   : "50%",
+    left                  : "50%",
+    right                 : "auto",
+    bottom                : "auto",
+    marginRight           : "-50%",
+    transform             : "translate(-50%, -50%)",
+    backgroundColor       : "#efefef",
     overlay: {
-       backgroundColor: '#efefef'
+       backgroundColor: "#efefef"
     }
   }
 };
@@ -31,9 +31,10 @@ interface IDonationBoxState {
     amount: number;
     showError: boolean;
     error: string;
-    showDialog: boolean;
+    showBankDialog: boolean;
     inputUserName: string;
     inputUserEmail: string;
+    isRecurring: boolean;
 }
 
 class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> {
@@ -43,25 +44,26 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
             amount: 0, 
             showError: false, 
             error: "",
-            showDialog: false,
+            showBankDialog: false,
+            isRecurring: false,
             inputUserEmail: "",
             inputUserName: ""
         };
     }
 
-    clearErrors() {
+    clearErrors(): void {
         this.setState({ showError: false, error: null });
     }
 
-    needsToEnterName() {
+    needsToEnterName(): boolean {
         return this.props.userName === "";
     }
 
-    needsToEnterEmail() {
+    needsToEnterEmail(): boolean {
         return this.props.userEmail.match(/.+@.+/) === null;
     }
 
-    checkFormErrors() {
+    checkFormErrors(): boolean {
         this.clearErrors();
         if (this.state.amount <= 0) {
             this.setState({ showError: true, error: "Please fill in a valid and positive donation amount" });
@@ -76,24 +78,24 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         return false;
     }
 
-    async payIdeal() {
+    payDebit(): void {
         if (this.checkFormErrors()) {
             return;
         }
-        this.setState({ showDialog: true });
+        this.setState({ showBankDialog: true });
     }
 
-    async payCreditCard() {
+    async payCreditCard(): Promise<void> {
         if (this.checkFormErrors()) {
             return;
         }
 
-        let checkoutTokenUrl = `/Donation/InitializeCreditCardCheckout?currency=eur&amount=${this.state.amount}&name=${encodeURIComponent(this.getName())}&email=${encodeURIComponent(this.getEmail())}`;
+        let checkoutTokenUrl = `/Donation/InitializeCreditCardCheckout?currency=eur&amount=${this.state.amount}&name=${encodeURIComponent(this.getName())}&email=${encodeURIComponent(this.getEmail())}&recurring=${this.state.isRecurring}`;
         let checkoutTokenResponse: Response = await fetch(checkoutTokenUrl, { method: "POST" });
         if (checkoutTokenResponse.status != 200) {
             let responseBody = await checkoutTokenResponse.text();
             console.log("Unable to redirect to checkout: " + responseBody);
-            this.setState({ showError: true, error: "Unable to initialize checkout" });
+            this.setState({ showError: true, error: "We're unable to start your credit-card donation, there is something wrong, sorry" });
             return;
         }
 
@@ -103,31 +105,39 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         if (checkoutResponse.status != 200) {
             let responseBody = await checkoutResponse.text();
             console.log("Unable to redirect to checkout: " + responseBody);
-            this.setState({ showError: true, error: "Unable to redirect to checkout" });
+            this.setState({ showError: true, error: "We're unable to start your credit-card donation, there is something wrong, sorry" });
         }
     }
 
-    onCloseDialog() {
-        this.setState({ showDialog: false });
+    onCloseDialog(): void {
+        this.setState({ showBankDialog: false });
     }
 
-    setName(ev: React.ChangeEvent<HTMLInputElement>) {
+    setName(ev: React.ChangeEvent<HTMLInputElement>): void {
         this.setState({ inputUserName: ev.currentTarget.value });
     }
 
-    setEmail(ev: React.ChangeEvent<HTMLInputElement>) {
+    setEmail(ev: React.ChangeEvent<HTMLInputElement>): void {
         this.setState({ inputUserEmail: ev.currentTarget.value });
     }
 
-    setAmount(event: React.ChangeEvent<HTMLInputElement>) {
+    setAmount(event: React.ChangeEvent<HTMLInputElement>): void {
         let newAmount = Number.parseInt(event.currentTarget.value);
         if (!newAmount) {
             newAmount = 0;
         }
         this.setState({amount: newAmount, showError: false});
     }
+    
+    setIsOneOff(event: React.ChangeEvent<HTMLInputElement>): void {
+        this.setState({ isRecurring: !event.currentTarget.checked });
+    }
 
-    getName() {
+    setIsMonthly(event: React.ChangeEvent<HTMLInputElement>): void {
+        this.setState({ isRecurring: event.currentTarget.checked });
+    }
+
+    getName(): string {
         if (!this.needsToEnterName()) {
             return this.props.userName;
         } else {
@@ -135,7 +145,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         }
     }
 
-    getEmail() {
+    getEmail(): string {
         if (!this.needsToEnterEmail()) {
             return this.props.userEmail;
         } else {
@@ -143,7 +153,22 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         }
     }
 
-    renderAmount(amount: number) {
+    private renderPeriodSelection(): JSX.Element {
+        return (
+            <React.Fragment>
+                <div className="col-xs-12 col-sm-6 donation-period-one-off">
+                    <input id="one-off-donation-button" type="radio" name="period" value="one-off" onChange={(event) => this.setIsOneOff(event)} checked={!this.state.isRecurring} />
+                    <label htmlFor="one-off-donation-button">One-off</label>
+                </div>
+                <div className="col-xs-12 col-sm-6 donation-period-monthly">
+                    <input id="monthly-donation-button" type="radio" name="period" value="one-off" onChange={(event) => this.setIsMonthly(event)} checked={!!this.state.isRecurring} />
+                    <label htmlFor="monthly-donation-button">Monthly</label>
+                </div>
+            </React.Fragment>
+        );
+    }
+
+    private renderAmount(amount: number): JSX.Element {
         const id = `amount${amount}`;
         return (
             <div className="col-xs-6 col-sm-3">
@@ -153,7 +178,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         );
     }
 
-    renderCustomAmount() {
+    private renderCustomAmount(): JSX.Element {
         return (
             <div className="col-xs-6 col-sm-3">
                 <input type="text" id="amountCustom" name="amount" placeholder="Other..." onChange={(event) => this.setAmount(event)} />
@@ -161,7 +186,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         );
     }
 
-    renderName() {
+    private renderName(): JSX.Element {
         if (this.needsToEnterName()) {
             return (
                 <div id="name-input-box">
@@ -171,7 +196,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         }
     }
 
-    renderEmail() {
+    private renderEmail(): JSX.Element {
         if (this.needsToEnterEmail()) {
             return (
                 <div id="email-input-box">
@@ -181,7 +206,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         }
     }
 
-    renderUserDetails() {
+    private renderUserDetails(): JSX.Element {
         if (this.needsToEnterEmail() || this.needsToEnterName()) {
             return (
                 <div className="user-details">
@@ -191,7 +216,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         }
     }
 
-    renderAmounts() {
+    private renderAmounts(): JSX.Element {
         return (
             <div className="row">
                 {this.renderAmount(3)}
@@ -205,13 +230,13 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
             </div>);
     }
 
-    renderPopup() {
+    private renderPopup(): JSX.Element {
         return (
-            <Modal isOpen={this.state.showDialog} onRequestClose={() => this.onCloseDialog()} contentLabel="Donate" style={popupStyles}>
+            <Modal isOpen={this.state.showBankDialog} onRequestClose={() => this.onCloseDialog()} contentLabel="Donate" style={popupStyles}>
                 <div id="donation-modal">
                     <StripeProvider apiKey={this.props.stripePublicKey}>
                         <Elements>
-                            <InjectedIdealBox amount={this.state.amount} userEmail={this.getEmail()} userName={this.getName()} />
+                            <InjectedDebitDetailsBox amount={this.state.amount} userEmail={this.getEmail()} userName={this.getName()} isRecurring={this.state.isRecurring} />
                         </Elements>
                     </StripeProvider>
                     <a className="btn" onClick={() => this.onCloseDialog()}>Close</a>
@@ -219,13 +244,13 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
             </Modal>);
     }
 
-    renderPaymentOptions() {
+    private renderPaymentOptions(): JSX.Element {
         return (<div className="payment-options">
             <div className="row">
                 <div className="col-xs-12">
-                    <button className="btn" value="ideal" onClick={() => this.payIdeal()}>
+                    <button className="btn" value="ideal" onClick={() => this.payDebit()}>
                         <img src="/images/thankyoucommit/iDEAL-logo.png" />
-                        <div>iDEAL</div>
+                        <div>Debit (iDeal / SEPA Direct)</div>
                     </button>
                 </div>
             </div>
@@ -240,14 +265,14 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         </div>);
     }
 
-    renderErrors() {
+    private renderErrors(): JSX.Element {
         return (
             <div className="error" hidden={!this.state.showError}>
                 <p>{this.state.error}</p>
             </div>);
     }
 
-    renderHeader() {
+    private renderHeader(): JSX.Element {
         return (
             <div>
                 <h2>Help us reaching our mission by donating!</h2>
@@ -261,12 +286,13 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
             </div>);
     }
 
-    render() {
+    render(): JSX.Element {
         return (
             <div className="donation-box">
                 {this.renderHeader()}
                 {this.renderErrors()}
                 {this.renderUserDetails()}
+                {this.renderPeriodSelection()}
                 {this.renderAmounts()}
                 {this.renderPopup()}
                 {this.renderPaymentOptions()}

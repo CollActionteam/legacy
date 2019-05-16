@@ -10,6 +10,8 @@ using CollAction.Models.ManageViewModels;
 using CollAction.Services.Email;
 using CollAction.Services.Newsletter;
 using CollAction.Services.Project;
+using CollAction.Services.Donation;
+using System.Linq;
 
 namespace CollAction.Controllers
 {
@@ -17,6 +19,7 @@ namespace CollAction.Controllers
     public class ManageController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IDonationService _donationService;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly INewsletterSubscriptionService _newsletterSubscriptionService;
@@ -31,9 +34,11 @@ namespace CollAction.Controllers
           INewsletterSubscriptionService newsletterSubscriptionService,
           ILoggerFactory loggerFactory,
           IStringLocalizer<ManageController> localizer,
+          IDonationService donationService,
           IProjectService projectService)
         {
             _userManager = userManager;
+            _donationService = donationService;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _newsletterSubscriptionService = newsletterSubscriptionService;
@@ -55,7 +60,8 @@ namespace CollAction.Controllers
             {
                 Username = user.UserName,
                 Email = user.Email,
-                NewsletterSubscription = await _newsletterSubscriptionService.IsSubscribedAsync(user.Email)
+                NewsletterSubscription = await _newsletterSubscriptionService.IsSubscribedAsync(user.Email),
+                DonationSubscriptions = (await _donationService.GetSubscriptionsFor(user)).Where(s => !s.CanceledAt.HasValue)
             };
             return View(model);
         }

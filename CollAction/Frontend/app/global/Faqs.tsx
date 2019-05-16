@@ -434,6 +434,21 @@ renderComponentIf(
 
 renderComponentIf(
     <Faq
+        title="How do I cancel my monthly donations?"
+        content={
+            <span>
+                <p>
+                    You can cancel your recurring donations on your <a href="/Manage">account page</a> or by e-mailing <a href="mailto:collactionteam@gmail.com">collactionteam@gmail.com</a>. Cancellations sent through e-mail will be processed within five days, cancellations through your account page will be processed immediately.
+                </p>
+            </span>
+        }
+        open={getOpenAttribute("faq-cancel-donation")}
+    />,
+    document.getElementById("faq-cancel-donation")
+);
+
+renderComponentIf(
+    <Faq
         title="Who started CollAction?"
         content={
             <span>
