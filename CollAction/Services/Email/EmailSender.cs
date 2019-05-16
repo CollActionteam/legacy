@@ -10,20 +10,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CollAction.Services.Email
 {
     public class EmailSender : IEmailSender
     {
         private readonly AuthMessageSenderOptions _authOptions;
-        private readonly IViewRenderService _viewRenderService;
+        private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<EmailSender> _logger;
         private readonly IBackgroundJobClient _jobClient;
 
-        public EmailSender(IOptions<AuthMessageSenderOptions> authOptions, IBackgroundJobClient jobClient, ILoggerFactory loggerFactory, IViewRenderService viewRenderService)
+        public EmailSender(IOptions<AuthMessageSenderOptions> authOptions, IBackgroundJobClient jobClient, ILoggerFactory loggerFactory, IServiceProvider serviceProvider)
         {
             _authOptions = authOptions.Value;
-            _viewRenderService = viewRenderService;
+            _serviceProvider = serviceProvider;
             _logger = loggerFactory.CreateLogger<EmailSender>();
             _jobClient = jobClient;
         }
@@ -45,7 +46,8 @@ namespace CollAction.Services.Email
 
         public async Task SendEmailsTemplated<TModel>(IEnumerable<string> emails, string subject, string emailTemplate, TModel model)
         {
-            string message = await _viewRenderService.Render($"Views/Emails/{emailTemplate}.cshtml", model);
+            var viewRenderer = _serviceProvider.GetService<IViewRenderService>(); // This dependency is not available from tasks, so we have to inject it like this
+            string message = await viewRenderer.Render($"Views/Emails/{emailTemplate}.cshtml", model);
             SendEmails(emails, subject, message);
         }
 
