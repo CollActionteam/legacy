@@ -245,7 +245,7 @@ namespace CollAction.Services.Donation
             });
             await _context.SaveChangesAsync();
 
-            if (stripeEvent.Type == "charge.succeeded")
+            if (await IsFirstSuccessfullChargeOfSource(stripeEvent))
             {
                 Charge charge = (Charge)stripeEvent.Data.Object;
                 await SendDonationThankYou(charge.Customer);
@@ -390,6 +390,21 @@ namespace CollAction.Services.Donation
             {
                 throw new InvalidOperationException($"Invalid user-details");
             }
+        }
+
+        private async Task<bool> IsFirstSuccessfullChargeOfSource(Event stripeEvent)
+        {
+            if (stripeEvent.Type == "charge.succeeded")
+            {
+                Charge charge = (Charge)stripeEvent.Data.Object;
+                var otherCharges = (await _chargeService.ListAsync(new ChargeListOptions()
+                {
+                    CustomerId = charge.CustomerId
+                })).Where(ch => charge.Source.Id == ch.Source.Id && charge.Id != ch.Id && charge.Status == "succeeded");
+                return !otherCharges.Any();
+            }
+
+            return false;
         }
 
         private Task SendDonationThankYou(Customer customer)
