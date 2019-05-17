@@ -29,6 +29,10 @@ namespace CollAction.Models
         public string FullName
             => $"{FirstName} {LastName}".Trim();
 
+        [NotMapped]
+        public bool Activated
+            => PasswordHash != null;
+
         public int RepresentsNumberParticipants { get; set; } // Users might represent a business or a school. In that case, one user might represent multiple participants. Only settable by an admin user. Defaults to 1.
 
         public List<Project> Projects { get; set; }
