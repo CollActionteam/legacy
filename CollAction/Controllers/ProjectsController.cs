@@ -247,11 +247,11 @@ namespace CollAction.Controllers
 
             var loggedInUser = await _userManager.GetUserAsync(User);
             
-            var scenario = loggedInUser != null
+            var result = loggedInUser != null
                 ? await _participantsService.AddLoggedInParticipant(projectId, loggedInUser.Id)
                 : await _participantsService.AddAnonymousParticipant(projectId, email);
 
-            var emailHelper = new CommitEmailHelper(project, scenario, loggedInUser, systemUrl, projectUrl);
+            var emailHelper = new CommitEmailHelper(project, result, loggedInUser, systemUrl, projectUrl);
 
             var emailAddress = loggedInUser?.Email 
                 ?? email 

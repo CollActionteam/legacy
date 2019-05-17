@@ -20,7 +20,7 @@ namespace CollAction.Services.Project
             _userManager = userManager;
         }
 
-        public async Task<AddParticipantScenario> AddAnonymousParticipant(int projectId, string email)
+        public async Task<AddParticipantResult> AddAnonymousParticipant(int projectId, string email)
         {
             var project = await _context.Projects.SingleOrDefaultAsync(p => p.Id == projectId);
             if (project == null || !project.IsActive)
@@ -47,10 +47,16 @@ namespace CollAction.Services.Project
             result.UserAdded = await InsertParticipant(projectId, user.Id);
             result.UserAlreadyActive = user.Activated;
 
-            return result.Scenario;
+            if (!result.UserAlreadyActive)
+            {
+                result.ParticipantEmail = user.Email;
+                result.PasswordResetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+            }
+
+            return result;
         }
 
-        public async Task<AddParticipantScenario> AddLoggedInParticipant(int projectId, string userId)
+        public async Task<AddParticipantResult> AddLoggedInParticipant(int projectId, string userId)
         {
             var project = await _context.Projects.SingleOrDefaultAsync(p => p.Id == projectId);
             if (project == null || !project.IsActive)
@@ -65,8 +71,7 @@ namespace CollAction.Services.Project
                 throw new ArgumentException($"User {userId} is already participating in project {projectId}.");
             }
 
-            var result = new AddParticipantResult { LoggedIn = true, UserAdded = true };
-            return result.Scenario;
+            return new AddParticipantResult { LoggedIn = true, UserAdded = true };
         }
 
         private async Task<bool> InsertParticipant(int projectId, string userId)
@@ -133,31 +138,5 @@ namespace CollAction.Services.Project
 
         private string EscapeCsv(string str)
             => $"\"{str?.Replace("\"", "\"\"")}\"";
-    }
-
-    class AddParticipantResult
-    {
-        public bool LoggedIn { get; set;}
-        public bool UserAdded {get; set;}
-        public bool UserCreated { get; set; }
-        public bool UserAlreadyActive { get; set; }
-
-        public AddParticipantScenario Scenario 
-        { 
-            get 
-            {
-                if (LoggedIn && UserAdded) return AddParticipantScenario.LoggedInAndAdded;
-                if (!LoggedIn && UserCreated && UserAdded) return AddParticipantScenario.AnonymousCreatedAndAdded;
-                if (!LoggedIn && UserAlreadyActive && UserAdded) return AddParticipantScenario.AnonymousAlreadyRegisteredAndAdded;
-                if (!LoggedIn && !UserAlreadyActive && UserAdded) return AddParticipantScenario.AnonymousNotRegisteredPresentAndAdded;
-                if (!LoggedIn && UserAlreadyActive && !UserAdded) return AddParticipantScenario.AnonymousAlreadyRegisteredAndAlreadyParticipating;
-                if (!LoggedIn && !UserAlreadyActive && !UserAdded) return AddParticipantScenario.AnonymousNotRegisteredPresentAndAlreadyParticipating;
-
-                throw new InvalidOperationException(
-                    "No participant scenario available for " +
-                    $"{nameof(LoggedIn)}:{LoggedIn}, {nameof(UserAdded)}:{UserAdded}, " +
-                    $"{nameof(UserCreated)}:{UserCreated}, {nameof(UserAlreadyActive)}:{UserAlreadyActive}");
-            }
-        }
     }
 }

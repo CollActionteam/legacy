@@ -8,16 +8,16 @@ namespace CollAction.Helpers
     public class CommitEmailHelper 
     {
         public readonly Project Project;
-        private readonly AddParticipantScenario _scenario;
+        private readonly AddParticipantResult _result;
         private readonly ApplicationUser _loggedInUser;
         private readonly string _systemUrl;
         private readonly string _projectUrl;
 
-        public CommitEmailHelper(Project project, AddParticipantScenario scenario, ApplicationUser loggedInUser, string systemUrl, string projectUrl)
+        public CommitEmailHelper(Project project, AddParticipantResult result, ApplicationUser loggedInUser, string systemUrl, string projectUrl)
         {
             Project = project;
 
-            _scenario = scenario;
+            _result = result;
             _loggedInUser = loggedInUser;
             _systemUrl = systemUrl;
             _projectUrl = projectUrl;
@@ -28,7 +28,7 @@ namespace CollAction.Helpers
 
         public string GenerateEmail() 
         {
-            switch (_scenario)
+            switch (_result.Scenario)
             {
                 case AddParticipantScenario.LoggedInAndAdded:
                     return 
@@ -62,7 +62,7 @@ namespace CollAction.Helpers
                         GenerateCreateAccount() +
                         GenerateRegards();
                 default:
-                    throw new InvalidOperationException($"There is no e-mail for scenario {_scenario}");
+                    throw new InvalidOperationException($"There is no e-mail for scenario {_result}");
             }
         }
 
@@ -91,15 +91,17 @@ namespace CollAction.Helpers
         private string GenerateYouCanLogIn()
         {
             return 
-                "You can <a href=\"https://collaction.org/account/login\">log in</a> to keep track of the projects you are committed to, " +
-                "and even <a href=\"https://collaction.org/start\">start your own projects!</a><br/><br/>";
+                $"You can <a href=\"{ _systemUrl }/account/login\">log in</a> to keep track of the projects you are committed to, " +
+                $"and even <a href=\"{ _systemUrl }/start\">start your own projects!</a><br/><br/>";
         }
 
         private string GenerateCreateAccount() 
         {
             return 
                 "Did you know you can easily create an account with us? You'll be able to keep track of the projects you are committed to, " +
-                "and even <a href=\"https://collaction.org/start\">start your own projects!</a><br/><br/>";
+                $"and even <a href=\"{ _systemUrl }/start\">start your own projects!</a><br/><br/>" +
+
+                $"<a href=\"{ _systemUrl }/account/finishregistration?email={ WebUtility.UrlEncode(_result.ParticipantEmail) }&code={ WebUtility.UrlEncode(_result.PasswordResetToken) }\">Create your account now!</a><br/><br/>";
         }        
 
         private string GenerateRegards()
@@ -126,7 +128,7 @@ namespace CollAction.Helpers
 
         private string GenerateCreateYourOwnProject()
         {
-            return "PS: Did you know you can start your own project on <a href=\"https://collaction.org/start\">www.collaction.org/start</a>?<br><br>";
+            return $"PS: Did you know you can start your own project on <a href=\"{ _systemUrl }/start\">www.collaction.org/start</a>?<br><br>";
         }
     }
 }
