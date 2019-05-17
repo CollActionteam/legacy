@@ -64,7 +64,7 @@ export default class ParticipateInProject extends React.Component<IParticipation
             : this.askContactEmail() }
         </div>
         <p>
-          <a onClick={ () => this.submitForm() } className="take-part-button">Take part</a>
+          <a href="javascript:void(0)" onClick={ () => this.submitForm() } className="take-part-button">Take part</a>
         </p>
       </Collapsible>
     );
