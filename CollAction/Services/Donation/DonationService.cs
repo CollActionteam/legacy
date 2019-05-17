@@ -44,6 +44,7 @@ namespace CollAction.Services.Donation
         const string StatusChargeable = "chargeable";
         const string StatusConsumed = "consumed";
         const string EventTypeChargeableSource = "source.chargeable";
+        const string EventTypeChargeSucceeded = "charge.succeeded";
         const string NameKey = "name";
         const string RecurringDonationProduct = "Recurring Donation Stichting CollAction";
 
@@ -394,7 +395,7 @@ namespace CollAction.Services.Donation
 
         private async Task<bool> IsFirstSuccessfullChargeOfSource(Event stripeEvent)
         {
-            if (stripeEvent.Type == "charge.succeeded")
+            if (stripeEvent.Type == EventTypeChargeSucceeded)
             {
                 Charge charge = (Charge)stripeEvent.Data.Object;
                 var otherCharges = (await _chargeService.ListAsync(new ChargeListOptions()
