@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -234,9 +235,14 @@ namespace CollAction.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Commit(int projectId, string email = null)
+        public async Task<IActionResult> Commit(CommitViewModel model)
         {
-            var project =  await _projectService.GetProjectById(projectId); 
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Details", new { Id = model.ProjectId });
+            }
+
+            var project =  await _projectService.GetProjectById(model.ProjectId); 
             if (project == null)
             {
                 return NotFound();
@@ -249,18 +255,18 @@ namespace CollAction.Controllers
             var loggedInUser = await _userManager.GetUserAsync(User);
             
             var result = loggedInUser != null
-                ? await _participantsService.AddLoggedInParticipant(projectId, loggedInUser.Id)
-                : await _participantsService.AddAnonymousParticipant(projectId, email);
+                ? await _participantsService.AddLoggedInParticipant(model.ProjectId, loggedInUser.Id)
+                : await _participantsService.AddAnonymousParticipant(model.ProjectId, model.Email);
 
             var emailHelper = new CommitEmailHelper(project, result, loggedInUser, systemUrl, projectUrl);
 
             var emailAddress = loggedInUser?.Email 
-                ?? email 
+                ?? model.Email 
                 ?? throw new ArgumentException("No e-mail adres specified");
 
             _emailSender.SendEmail(emailAddress, emailHelper.GenerateSubject(), emailHelper.GenerateEmail());
 
-            return LocalRedirect($"~/Projects/{projectNameUriPart}/{projectId}/thankyou");
+            return LocalRedirect($"~/Projects/{projectNameUriPart}/{model.ProjectId}/thankyou");
         }
 
         [HttpGet]
@@ -272,7 +278,7 @@ namespace CollAction.Controllers
                 return NotFound();
             }
 
-            var model = new CommitProjectViewModel()
+            var model = new ThankYouCommitViewModel()
             {
                 ProjectId = id,
                 ProjectName = project.Name,

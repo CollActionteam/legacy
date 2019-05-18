@@ -1,6 +1,6 @@
 ﻿namespace CollAction.Models
 {
-    public class CommitProjectViewModel
+    public class ThankYouCommitViewModel
     {
         public int ProjectId { get; set; }
 
