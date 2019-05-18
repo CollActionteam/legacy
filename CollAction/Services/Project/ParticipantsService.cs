@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CollAction.Services.Project
 {
-  public class ParticipantsService : IParticipantsService
+    public class ParticipantsService : IParticipantsService
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
@@ -36,7 +36,7 @@ namespace CollAction.Services.Project
                 if (!creationResult.Succeeded)
                 {
                     var errors = string.Join(',', creationResult.Errors.Select(e => $"{e.Code}: {e.Description}"));
-                    throw new InvalidOperationException($"Could not create new unregisterd user {email}: {errors}");
+                    throw new InvalidOperationException($"Could not create new unregistered user {email}: {errors}");
                 }
 
                 result.UserCreated = true;

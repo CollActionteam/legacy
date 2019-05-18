@@ -3,7 +3,6 @@
 @using CollAction.Services.Image
 
 @inject IViewLocalizer Localizer
-@inject UserManager<ApplicationUser> userManager;
 
 @model CollAction.Models.DisplayProjectViewModel
 
@@ -13,7 +12,7 @@
 
     ViewData["Title"] = @Model.Project.Name + " Details";
 
-    var user = await userManager.GetUserAsync(User);
+    var user = ViewData["CurrentUser"] as ApplicationUser;
     var active = Model.Project.IsActive;
     var status = Model.ExternalStatus;
 }

@@ -60,7 +60,8 @@ namespace CollAction.Controllers
             DisplayProjectViewModel displayProject = items.First();
             string userId = (await _userManager.GetUserAsync(User))?.Id;
             displayProject.IsUserCommitted = userId != null && (await _participantsService.GetParticipant(userId, displayProject.Project.Id) != null);
-
+            
+            ViewData["CurrentUser"] = await _userManager.GetUserAsync(User);
             return View(displayProject);
         }
 
