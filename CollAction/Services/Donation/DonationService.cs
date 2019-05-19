@@ -1,5 +1,6 @@
 ﻿using CollAction.Data;
 using CollAction.Models;
+using CollAction.Models.EmailViewModels;
 using CollAction.Services.Email;
 using Hangfire;
 using Microsoft.AspNetCore.Identity;
@@ -246,10 +247,11 @@ namespace CollAction.Services.Donation
             });
             await _context.SaveChangesAsync();
 
-            if (await IsFirstSuccessfullChargeOfSource(stripeEvent))
+            if (stripeEvent.Type == EventTypeChargeSucceeded)
             {
                 Charge charge = (Charge)stripeEvent.Data.Object;
-                await SendDonationThankYou(charge.Customer);
+                var subscriptions = await _subscriptionService.ListAsync(new SubscriptionListOptions() { CustomerId = charge.CustomerId });
+                await SendDonationThankYou(charge.Customer, subscriptions.Any());
             }
         }
 
@@ -393,23 +395,8 @@ namespace CollAction.Services.Donation
             }
         }
 
-        private async Task<bool> IsFirstSuccessfullChargeOfSource(Event stripeEvent)
-        {
-            if (stripeEvent.Type == EventTypeChargeSucceeded)
-            {
-                Charge charge = (Charge)stripeEvent.Data.Object;
-                var otherCharges = (await _chargeService.ListAsync(new ChargeListOptions()
-                {
-                    CustomerId = charge.CustomerId
-                })).Where(ch => charge.Source.Id == ch.Source.Id && charge.Id != ch.Id && charge.Status == "succeeded");
-                return !otherCharges.Any();
-            }
-
-            return false;
-        }
-
-        private Task SendDonationThankYou(Customer customer)
-            => _emailSender.SendEmailTemplated(customer.Email, "Thank you for your donation", "DonationThankYou", customer.Name);
+        private Task SendDonationThankYou(Customer customer, bool hasSubscriptions)
+            => _emailSender.SendEmailTemplated(customer.Email, "Thank you for your donation", "DonationThankYou", new DonationThankYouEmailViewModel() { Name = customer.Name, HasSubscription = hasSubscriptions });
 
         private void ValidateDetails(int amount, string name, string email)
         {
