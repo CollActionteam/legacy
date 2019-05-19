@@ -7,6 +7,8 @@ interface IDebitDetailsBoxProps {
     userEmail: string;
     userName: string;
     isRecurring: boolean;
+
+    onRef: (component: DebitDetailsBox) => void;
 }
 
 interface IDebitDetailsBoxState {
@@ -23,8 +25,15 @@ export default class DebitDetailsBox extends React.Component<IDebitDetailsBoxPro
         };
     }
 
-    submitPayment(event: React.FormEvent<HTMLFormElement>) : Promise<void> {
-        event.preventDefault();
+    componentDidMount() {
+        this.props.onRef(this);
+    }
+
+    componentWillUnmount() {
+        this.props.onRef(undefined);
+    }
+
+    submitPayment(): Promise<void> {
         this.setState({ showError: false });
 
         if (this.props.isRecurring) {
@@ -57,7 +66,7 @@ export default class DebitDetailsBox extends React.Component<IDebitDetailsBoxPro
 
         let initializeUrl = `/Donation/InitializeSepaDirect?sourceId=${response.source.id}&name=${encodeURIComponent(this.props.userName)}&email=${encodeURIComponent(this.props.userEmail)}&amount=${this.props.amount}`;
         let initializeResponse = await fetch(initializeUrl, { method: "POST" });
-        if (initializeResponse.status == 200) {
+        if (initializeResponse.status === 200) {
             window.location.href = "/Donation/ThankYou";
         } else {
             console.log("Unable to start SEPA Direct: " + await initializeResponse.text());
@@ -89,7 +98,7 @@ export default class DebitDetailsBox extends React.Component<IDebitDetailsBoxPro
 
         let initializeUrl = `/Donation/InitializeIdealCheckout?sourceId=${response.source.id}&name=${encodeURIComponent(this.props.userName)}&email=${encodeURIComponent(this.props.userEmail)}`;
         let initializeResponse = await fetch(initializeUrl, { method: "POST" });
-        if (initializeResponse.status == 200) {
+        if (initializeResponse.status === 200) {
             window.location.href = response.source.redirect.url;
         } else {
             console.log("Unable to start iDeal: " + await initializeResponse.text());
@@ -100,29 +109,42 @@ export default class DebitDetailsBox extends React.Component<IDebitDetailsBoxPro
     private renderBankElement(): JSX.Element {
         if (this.props.isRecurring) {
             return (
-                <React.Fragment>
+                <div>
                     <div className="alert alert-warning">
                         <i className="fa fa-exclamation-circle" />&nbsp;
-                        By providing your IBAN and confirming this payment, you are authorizing Stichting CollAction and Stripe, our payment service provider, to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions. 
-                        You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. 
+                        By providing your IBAN and confirming this payment, you are authorizing Stichting CollAction and Stripe,
+                        our payment service provider, to send instructions to your bank to debit your account and your bank to debit
+                        your account in accordance with those instructions.
+                        You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank.
                         A refund must be claimed within 8 weeks starting from the date on which your account was debited.
                     </div>
-                    <IbanElement supportedCountries={["SEPA"]} />;
-                </React.Fragment>);
+                    <p>Please enter your IBAN:</p>
+                    <IbanElement supportedCountries={["SEPA"]} />
+                </div>
+            );
         }
         else {
-            return <IdealBankElement />;
+            return (
+                <div className="bank-list">
+                    <p>Please select your bank:</p>
+                    <IdealBankElement style={{
+                        base: {
+                            fontFamily: "Raleway, sans-serif"
+                        }
+                    }}/>
+                </div>
+            );
         }
     }
 
     render(): JSX.Element {
         return (
-            <form onSubmit={(ev) => this.submitPayment(ev)}>
+            <form>
                 <div className="error" hidden={!this.state.showError}>
                     <p>{this.state.error}</p>
                 </div>
                 {this.renderBankElement()}
-                <input type="submit" className="btn btn-default" value="submit" />
-            </form>);
+            </form>
+        );
     }
-} 
+}

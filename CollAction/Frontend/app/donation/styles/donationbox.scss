@@ -1,6 +1,10 @@
 @import "../../colors";
 @import '../../mixins';
 
+.ReactModal__Body--open {
+    overflow-y: hidden;
+}
+  
 #donation-mission {
     height: 450px;
     padding-top: 40px;
@@ -23,20 +27,53 @@
 #donation-modal {
     width: 80vw;
     max-width: 26em;
+    max-height: 100%;
 
     .error {
         color: $coll-action-green;
     }
 
-    .btn {
-        @include coll-action-button;
-        margin-top: 1em;
-        margin-right: 1em;
+    .buttons {
+        display: flex;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
+
+        margin-top: 20px;
+        text-align: center;
+
+        .btn {
+            margin: 10px 0;
+            @include coll-action-button;
+        }
     }
 
-    #name-input {
-        margin-top: 1em;
-        margin-bottom: 1em;
+    @media (max-width: 375px) {
+        .buttons  .btn {
+            width: 100%;
+        }
+    }
+
+    @media (max-height: 320px) {
+        // Crammin' a bit for small iPhones
+        p {
+            margin-bottom: 5px;
+        }
+        .buttons {
+            margin-top: 0px;
+        }
+    }
+
+
+    .bank-list {
+        @media (min-width: 766px) {
+            // Needed so the bank-dropdown will be visible inside the popup.
+            margin-bottom: 120px;
+        }
+    }
+
+    .alert {
+        // Smaller font, so it's visible on mobile devices as well
+        font-size: 0.8em;
     }
 
     .StripeElement {
@@ -57,10 +94,6 @@
 
     .StripeElement--invalid {
         border-color: #fa755a;
-    }
-
-    .StripeElement--webkit-autofill {
-        background-color: #fefde5 !important;
     }
 }
 
@@ -129,54 +162,52 @@
             color: $coll-action-green;
         }
 
-        input[type=radio] {
-            opacity: 0;
-            position: absolute;
-        }
-
-        label {
-            color: $coll-action-green;
-            display: inline-block;
-            cursor: pointer;
-            padding: 10px 0px;
-            border: solid 1px $coll-action-green;
-            width: 100%;
-            text-align: center;
+        .user-details > * {
             margin: 10px 0;
         }
 
-        input[type=radio]:focus + label {
-            border: 1px solid $coll-action-green;
-        }
+        .payment-selection-options {
+            input[type=radio] {
+                opacity: 0;
+                position: absolute;
+            }
 
-        input[type=radio]:checked + label {
-            color: white;
-            background: $coll-action-green;
-        }
-
-        input[type=text] {
-            border: solid 1px $coll-action-green;
-            display: inline-block;
-            width: 100%;
-            height: 44px;
-            margin: 10px 0 10px 0;
-            padding: 0 10px;
-
-            &::placeholder {
-                color: #8a8a8a;
+            label {
+                color: $coll-action-green;
+                display: inline-block;
+                cursor: pointer;
+                padding: 10px 0px;
+                border: solid 1px $coll-action-green;
+                width: 100%;
+                text-align: center;
+                margin: 10px 0;
+            }
+    
+            input[type=radio]:focus + label {
+                border: 1px solid $coll-action-green;
+            }
+    
+            input[type=radio]:checked + label {
+                color: white;
+                background: $coll-action-green;
+            }
+    
+            input[type=text] {
+                border: solid 1px $coll-action-green;
+                display: inline-block;
+                width: 100%;
+                height: 44px;
+                margin: 10px 0 10px 0;
+                padding: 0 10px;
+    
+                &::placeholder {
+                    color: #8a8a8a;
+                }
             }
         }
 
         .error {
             color: $coll-action-green;
-        }
-
-        .donation-period-one-off {
-            padding-left: 0;
-        }
-
-        .donation-period-monthly {
-            padding-right: 0;
         }
 
         .payment-options {

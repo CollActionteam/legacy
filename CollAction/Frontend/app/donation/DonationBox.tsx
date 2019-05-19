@@ -40,9 +40,9 @@ interface IDonationBoxState {
 class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> {
     constructor(props) {
         super(props);
-        this.state = { 
-            amount: 0, 
-            showError: false, 
+        this.state = {
+            amount: 0,
+            showError: false,
             error: "",
             showBankDialog: false,
             isRecurring: false,
@@ -66,12 +66,12 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
     checkFormErrors(): boolean {
         this.clearErrors();
         if (this.state.amount <= 0) {
-            this.setState({ showError: true, error: "Please fill in a valid and positive donation amount" });
+            this.setState({ showError: true, error: "Please select a donation amount" });
             return true;
         }
 
-        if (this.getName() == "" || this.getEmail().match(/.+@.+/) === null) {
-            this.setState({ showError: true, error: "Please fill in your user-details" });
+        if (this.getName() === "" || this.getEmail().match(/.+@.+/) === null) {
+            this.setState({ showError: true, error: "Please provide your personal information" });
             return true;
         }
 
@@ -92,7 +92,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
 
         let checkoutTokenUrl = `/Donation/InitializeCreditCardCheckout?currency=eur&amount=${this.state.amount}&name=${encodeURIComponent(this.getName())}&email=${encodeURIComponent(this.getEmail())}&recurring=${this.state.isRecurring}`;
         let checkoutTokenResponse: Response = await fetch(checkoutTokenUrl, { method: "POST" });
-        if (checkoutTokenResponse.status != 200) {
+        if (checkoutTokenResponse.status !== 200) {
             let responseBody = await checkoutTokenResponse.text();
             console.log("Unable to redirect to checkout: " + responseBody);
             this.setState({ showError: true, error: "We're unable to start your credit-card donation, there is something wrong, sorry" });
@@ -102,7 +102,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         let stripe: any = Stripe(this.props.stripePublicKey); // cast to any because redirectToCheckout is not yet in stripe.js
         let checkoutId = await checkoutTokenResponse.text();
         let checkoutResponse = await stripe.redirectToCheckout({ sessionId: checkoutId });
-        if (checkoutResponse.status != 200) {
+        if (checkoutResponse.status !== 200) {
             let responseBody = await checkoutResponse.text();
             console.log("Unable to redirect to checkout: " + responseBody);
             this.setState({ showError: true, error: "We're unable to start your credit-card donation, there is something wrong, sorry" });
@@ -128,7 +128,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         }
         this.setState({amount: newAmount, showError: false});
     }
-    
+
     setIsOneOff(event: React.ChangeEvent<HTMLInputElement>): void {
         this.setState({ isRecurring: !event.currentTarget.checked });
     }
@@ -155,16 +155,16 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
 
     private renderPeriodSelection(): JSX.Element {
         return (
-            <React.Fragment>
-                <div className="col-xs-12 col-sm-6 donation-period-one-off">
+            <div className="row payment-selection-options">
+                <div className="col-xs-6">
                     <input id="one-off-donation-button" type="radio" name="period" value="one-off" onChange={(event) => this.setIsOneOff(event)} checked={!this.state.isRecurring} />
                     <label htmlFor="one-off-donation-button">One-off</label>
                 </div>
-                <div className="col-xs-12 col-sm-6 donation-period-monthly">
+                <div className="col-xs-6">
                     <input id="monthly-donation-button" type="radio" name="period" value="one-off" onChange={(event) => this.setIsMonthly(event)} checked={!!this.state.isRecurring} />
                     <label htmlFor="monthly-donation-button">Monthly</label>
                 </div>
-            </React.Fragment>
+            </div>
         );
     }
 
@@ -189,36 +189,45 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
     private renderName(): JSX.Element {
         if (this.needsToEnterName()) {
             return (
-                <div id="name-input-box">
+                <div className="col-xs-12">
                     <label htmlFor="name-input">Name</label>
                     <input id="name-input" className="form-control" onChange={(ev) => this.setName(ev)} placeholder="Your name..." type="text" />
-                </div>);
+                </div>
+            );
         }
     }
 
     private renderEmail(): JSX.Element {
         if (this.needsToEnterEmail()) {
             return (
-                <div id="email-input-box">
+                <div className="col-xs-12">
                     <label htmlFor="email-input">E-Mail</label>
                     <input id="email-input" className="form-control" onChange={(ev) => this.setEmail(ev)} placeholder="Your e-mail..." type="text" />
-                </div>);
+                </div>
+            );
         }
     }
 
     private renderUserDetails(): JSX.Element {
         if (this.needsToEnterEmail() || this.needsToEnterName()) {
             return (
-                <div className="user-details">
+                <div className="row user-details">
+                    <div className="col-xs-12">
+                        <span>
+                            If you want to make a donation, please provide your personal information
+                            and select the payment option.
+                        </span>
+                    </div>
                     {this.renderName()}
                     {this.renderEmail()}
-                </div>);
+                </div>
+            );
         }
     }
 
     private renderAmounts(): JSX.Element {
         return (
-            <div className="row">
+            <div className="row payment-selection-options">
                 {this.renderAmount(3)}
                 {this.renderAmount(5)}
                 {this.renderAmount(10)}
@@ -230,16 +239,27 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
             </div>);
     }
 
+    private detailsBox: DebitDetailsBox;
+
     private renderPopup(): JSX.Element {
         return (
             <Modal isOpen={this.state.showBankDialog} onRequestClose={() => this.onCloseDialog()} contentLabel="Donate" style={popupStyles}>
                 <div id="donation-modal">
                     <StripeProvider apiKey={this.props.stripePublicKey}>
                         <Elements>
-                            <InjectedDebitDetailsBox amount={this.state.amount} userEmail={this.getEmail()} userName={this.getName()} isRecurring={this.state.isRecurring} />
+                            <InjectedDebitDetailsBox
+                                onRef={ref => (this.detailsBox = ref)}
+                                amount={this.state.amount}
+                                userEmail={this.getEmail()}
+                                userName={this.getName()}
+                                isRecurring={this.state.isRecurring}
+                            />
                         </Elements>
                     </StripeProvider>
-                    <a className="btn" onClick={() => this.onCloseDialog()}>Close</a>
+                    <div className="buttons">
+                        <input type="button" className="btn btn-default" value="Donate!" onClick={() => this.detailsBox.submitPayment()}></input>
+                        <input type="button" className="btn" value="Close" onClick={() =>  this.onCloseDialog()}></input>
+                    </div>
                 </div>
             </Modal>);
     }
@@ -280,9 +300,6 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
                     By donating to CollAction you help us solve collactive action problems and to make the world a better place. Your donation helps us maintaining and growing the platform and ultimately multiply our impact.
                 </p>
                 <hr />
-                <p>
-                    If you'd like make a one-time donation, please select the amount and payment option.
-                </p>
             </div>);
     }
 
@@ -290,8 +307,8 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         return (
             <div className="donation-box">
                 {this.renderHeader()}
-                {this.renderErrors()}
                 {this.renderUserDetails()}
+                {this.renderErrors()}
                 {this.renderPeriodSelection()}
                 {this.renderAmounts()}
                 {this.renderPopup()}
@@ -300,6 +317,8 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         );
     }
 }
+
+Modal.setAppElement(document.querySelector("#main"));
 
 let donationBox: HTMLElement = document.getElementById("donation-box");
 if (donationBox !== null) {
