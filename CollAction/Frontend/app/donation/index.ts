@@ -1,4 +1,4 @@
 ﻿import "./styles/donationbox.scss";
 
 import "./DonationBox";
-import "./IdealBox";
+import "./DebitDetailsBox";
