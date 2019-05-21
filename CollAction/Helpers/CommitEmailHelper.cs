@@ -112,14 +112,14 @@ namespace CollAction.Helpers
                 "<span style='#share-buttons img {}'>"+
                     "<div id='share-buttons'>"+
                         "<p>Multiply your impact and share the project with the buttons below 🙂</p>"+
-                        $"<a href=https://www.facebook.com/sharer/sharer.php?u={ _projectUrl }>"+
-                            $"<img style='width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;' src=\"{ _systemUrl }/images/social/facebook.png alt='Facebook' />" +
+                        $"<a href='https://www.facebook.com/sharer/sharer.php?u={ _projectUrl }'>"+
+                            $"<img style='width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;' src='{ _systemUrl }/images/social/facebook.png' alt='Facebook' />" +
                         "</a>" +
-                        $"<a href=\"http://www.linkedin.com/shareArticle?mini=true&url={ _projectUrl }&title={ WebUtility.UrlEncode(Project.Name) }\" target=\"_blank\">" +
-                            $"<img style='width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;' src=\"{ _systemUrl }/images/social/linkedin.png alt='LinkedIn' />" +
+                        $"<a href='http://www.linkedin.com/shareArticle?mini=true&url={ _projectUrl }&title={ WebUtility.UrlEncode(Project.Name) }' target='_blank''>" +
+                            $"<img style='width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;' src='{ _systemUrl }/images/social/linkedin.png' alt='LinkedIn' />" +
                         "</a>" +
-                        $"<a href=\"https://twitter.com/intent/tweet?text={ WebUtility.UrlEncode(Project.Name) }&url={_projectUrl}\" target=\"_blank\">" +
-                            $"<img style='width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;' src=\"{ _systemUrl }/images/social/twitter.png\" alt='Twitter' />" +
+                        $"<a href='https://twitter.com/intent/tweet?text={ WebUtility.UrlEncode(Project.Name) }&url={_projectUrl}' target='_blank'>" +
+                            $"<img style='width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;' src='{ _systemUrl }/images/social/twitter.png' alt='Twitter' />" +
                         "</a>" +
                     "</div>" +
                 "</span>" +
