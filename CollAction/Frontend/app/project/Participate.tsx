@@ -86,8 +86,8 @@ renderComponentIf(
 const details = document.getElementById("participate-in-projectdetails");
 renderComponentIf(
   <ParticipateInProject
-    formId={infoCard && infoCard.dataset.formId }
-    email={infoCard && infoCard.dataset.email}
+    formId={details && details.dataset.formId }
+    email={details && details.dataset.email}
     commitUrl={details && details.dataset.commitUrl}
     projectActive={details && details.dataset.projectActive !== "False"}
     projectStatus={details && details.dataset.projectStatus}
