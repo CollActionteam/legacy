@@ -237,6 +237,12 @@ namespace CollAction.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Commit(CommitViewModel model)
         {
+            var loggedInUser = await _userManager.GetUserAsync(User);
+            if (string.IsNullOrEmpty(model.Email) && loggedInUser == null)
+            {
+                ModelState.AddModelError("Email", "Please enter an e-mail address");
+            }
+
             if (!ModelState.IsValid)
             {
                 return RedirectToAction("Details", new { Id = model.ProjectId });
@@ -252,7 +258,6 @@ namespace CollAction.Controllers
             var systemUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.PathBase}";
             var projectUrl = Url.Action("Details", "Projects", new { id = project.Id }, HttpContext.Request.Scheme); 
 
-            var loggedInUser = await _userManager.GetUserAsync(User);
             
             var result = loggedInUser != null
                 ? await _participantsService.AddLoggedInParticipant(model.ProjectId, loggedInUser.Id)
