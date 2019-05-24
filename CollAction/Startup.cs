@@ -114,6 +114,7 @@ namespace CollAction
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddScoped<IProjectService, ProjectService>();
+            services.AddScoped<IParticipantsService, ParticipantsService>();
             services.AddScoped<IImageService, AmazonS3ImageService>();
             services.AddTransient<INewsletterSubscriptionService, NewsletterSubscriptionService>();
             services.AddTransient<IFestivalService, FestivalService>();
@@ -365,6 +366,11 @@ namespace CollAction
                      "api/categories",
                      new { controller = "Projects", action = "GetCategories" }
                  );
+
+                routes.MapRoute("FindProject",
+                     "api/projects/{projectId:int}",
+                     new { controller = "Projects", action = "FindProject" }
+                 );                 
 
                 routes.MapRoute("FindProjects",
                      "api/projects/find",

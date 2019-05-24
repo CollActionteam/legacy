@@ -11,6 +11,10 @@
     var canTrack = consentFeature.CanTrack;
 
     ViewData["Title"] = @Model.Project.Name + " Details";
+
+    var user = ViewData["CurrentUser"] as ApplicationUser;
+    var active = Model.Project.IsActive;
+    var status = Model.ExternalStatus;
 }
 
 @section Meta {
@@ -30,22 +34,6 @@
         </div>
     </div> 
     <div class="container">
-        @{
-            string disableCommit = "";
-            string commitText = "Take Part";
-            if (!Model.Project.IsActive)
-            {
-                disableCommit = "disable-commit";
-            }
-            if (Model.ExternalStatus == ProjectExternalStatus.ComingSoon)
-            {
-                commitText = "Coming soon";
-            }
-            else if (Model.ExternalStatus ==  ProjectExternalStatus.Closed)
-            {
-                commitText = "Project is finished";
-            }
-        }
         <div class="row" id="project-details-row">
             <div class="col-md-6 col-md-push-6 col-xs-12">
                 <div id="project-info-card">
@@ -94,11 +82,20 @@
                     </div>
                     @if (Model.IsUserCommitted)
                     {
-                        <h4 class="participating">You're participating!</h4>
+                        <h4 class="participating">You&apos;re participating!</h4>
                     }
                     else
                     {
-                        <a class="take-part-button @disableCommit" asp-action="Commit" asp-route-id="@Model.Project.Id">@commitText</a>
+                        <form id="infocard-form" asp-action="Commit" asp-route-id="@Model.Project.Id">
+                            <input type="hidden" name="ProjectId" value="@Model.Project.Id" />
+                            <div id="participate-in-projectinfocard" 
+                                data-form-id="infocard-form"
+                                data-email="@user?.Email"
+                                data-project-active="@active"
+                                data-project-status="@status"
+                            ></div>
+                            <div asp-validation-summary="All"></div>                        
+                        </form>
                     }
                 </div>
             </div>
@@ -213,20 +210,28 @@
             </div>
         }
 
-        <div class="row">
-            <div class="col-xs-12 col-md-4 col-md-offset-8 bottom-take-part">
+        <div class="row bottom-take-part">
+            <div class="col-xs-12 col-md-offset-4 col-md-4">
                 @if (Model.IsUserCommitted)
                 {
-                    <h4 class="participating">You're participating!</h4>
+                    <h4 class="participating">You&apos;re participating!</h4>
+
                 }
                 else
                 {
-                    <a class="take-part-button @disableCommit" asp-action="Commit" asp-route-id="@Model.Project.Id">@commitText</a>
+                    <form id="bottom-form" asp-action="Commit" asp-route-id="@Model.Project.Id">
+                        <input type="hidden" name="ProjectId" value="@Model.Project.Id" />
+                        <div id="participate-in-projectdetails" 
+                            data-form-id="bottom-form"
+                            data-email="@user?.Email"
+                            data-project-active="@active"
+                            data-project-status="@status"
+                        ></div>
+                    </form>
                 }
             </div>
         </div>
-
-    </div> 
+    </div>
     
     @if (canTrack)
     {

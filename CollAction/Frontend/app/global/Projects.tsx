@@ -1,5 +1,5 @@
 import * as React from "react";
-import { IProject } from "../project/ProjectList";
+import { IProject } from "../project/ProjectThumb";
 
 export interface IProjectsProps {
 }
