@@ -7,6 +7,18 @@ namespace CollAction.Models
 {
     public class ApplicationUser : IdentityUser
     {
+        public ApplicationUser() 
+        {
+            RepresentsNumberParticipants = 1;        
+        }
+
+        public ApplicationUser(string email) 
+            : base()
+        {
+            UserName = email;
+            Email = email;
+        }
+
         [MaxLength(250)]
         public string FirstName { get; set; }
 
@@ -16,6 +28,10 @@ namespace CollAction.Models
         [NotMapped]
         public string FullName
             => $"{FirstName} {LastName}".Trim();
+
+        [NotMapped]
+        public bool Activated
+            => PasswordHash != null;
 
         public int RepresentsNumberParticipants { get; set; } // Users might represent a business or a school. In that case, one user might represent multiple participants. Only settable by an admin user. Defaults to 1.
 

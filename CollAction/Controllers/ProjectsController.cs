@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CollAction.Data;
 using CollAction.Models;
+using CollAction.Helpers;
 using Microsoft.Extensions.Localization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -27,16 +29,18 @@ namespace CollAction.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly IProjectService _projectService;
+        private readonly IParticipantsService _participantsService;
         private readonly IEmailSender _emailSender;
         private readonly IImageService _imageService;
 
-        public ProjectsController(ApplicationDbContext context, IStringLocalizer<ProjectsController> localizer, UserManager<ApplicationUser> userManager, IHostingEnvironment hostingEnvironment, IProjectService projectService, IEmailSender emailSender, IImageService imageService)
+        public ProjectsController(ApplicationDbContext context, IStringLocalizer<ProjectsController> localizer, UserManager<ApplicationUser> userManager, IHostingEnvironment hostingEnvironment, IProjectService projectService, IParticipantsService participantsService, IEmailSender emailSender, IImageService imageService)
         {
             _context = context;
             _localizer = localizer;
             _userManager = userManager;
             _hostingEnvironment = hostingEnvironment;
             _projectService = projectService;
+            _participantsService = participantsService;
             _emailSender = emailSender;
             _imageService = imageService;
         }
@@ -56,8 +60,9 @@ namespace CollAction.Controllers
             }
             DisplayProjectViewModel displayProject = items.First();
             string userId = (await _userManager.GetUserAsync(User))?.Id;
-            displayProject.IsUserCommitted = userId != null && (await _projectService.GetParticipant(userId, displayProject.Project.Id) != null);
-
+            displayProject.IsUserCommitted = userId != null && (await _participantsService.GetParticipant(userId, displayProject.Project.Id) != null);
+            
+            ViewData["CurrentUser"] = await _userManager.GetUserAsync(User);
             return View(displayProject);
         }
 
@@ -140,7 +145,7 @@ namespace CollAction.Controllers
 
             await _context.SaveChangesAsync();
 
-            await _projectService.RefreshParticipantCountMaterializedView();
+            await _participantsService.RefreshParticipantCountMaterializedView();
 
             // Notify admins and creator through e-mail
             string confirmationEmail =
@@ -228,75 +233,47 @@ namespace CollAction.Controllers
             return RedirectToAction("Find");
         }
 
-        [Authorize]
-        public async Task<IActionResult> Commit(string name, int id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Commit(CommitViewModel model)
         {
-            Project project =  await _projectService.GetProjectById(id); 
+            var loggedInUser = await _userManager.GetUserAsync(User);
+            if (string.IsNullOrEmpty(model.Email) && loggedInUser == null)
+            {
+                ModelState.AddModelError("Email", "Please enter an e-mail address");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Details", new { Id = model.ProjectId });
+            }
+
+            var project =  await _projectService.GetProjectById(model.ProjectId); 
             if (project == null)
             {
                 return NotFound();
             }
 
-            var commitProjectViewModel = new CommitProjectViewModel
-            {
-                ProjectId = project.Id,
-                ProjectName = project.Name,
-                ProjectNameUriPart = _projectService.GetProjectNameNormalized(project.Name),
-                ProjectProposal = project.Proposal,
-                IsUserCommitted = (await _projectService.GetParticipant((await _userManager.GetUserAsync(User)).Id, project.Id) != null),
-                IsActive = project.IsActive
-            };
+            var projectNameUriPart = _projectService.GetProjectNameNormalized(project.Name);
+            var systemUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.PathBase}";
+            var projectUrl = Url.Action("Details", "Projects", new { id = project.Id }, HttpContext.Request.Scheme); 
 
-            return View(commitProjectViewModel);
+            
+            var result = loggedInUser != null
+                ? await _participantsService.AddLoggedInParticipant(model.ProjectId, loggedInUser.Id)
+                : await _participantsService.AddAnonymousParticipant(model.ProjectId, model.Email);
+
+            var emailHelper = new CommitEmailHelper(project, result, loggedInUser, systemUrl, projectUrl);
+
+            var emailAddress = loggedInUser?.Email 
+                ?? model.Email 
+                ?? throw new ArgumentException("No e-mail adres specified");
+
+            _emailSender.SendEmail(emailAddress, emailHelper.GenerateSubject(), emailHelper.GenerateEmail());
+
+            return LocalRedirect($"~/Projects/{projectNameUriPart}/{model.ProjectId}/thankyou");
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize]
-        public async Task<IActionResult> Commit(CommitProjectViewModel commitProjectViewModel)
-        {
-
-            ApplicationUser user = await _userManager.GetUserAsync(User);
-            bool success = await _projectService.AddParticipant(user.Id, commitProjectViewModel.ProjectId);
-
-            if (success)
-            {
-                string projectUrl = Url.Action("Details", "Projects", new { id = commitProjectViewModel.ProjectId }, HttpContext.Request.Scheme); 
-                var systemUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.PathBase}";
-                var userDescription = user?.FirstName ?? "";
-                string confirmationEmail =
-                    $"Hi {userDescription}!<br><br>" +
-                    "Thank you for participating in a CollAction project!<br><br>" +
-                    "In crowdacting, we only act collectively when we meet the target before the deadline, so please feel very welcome to share this project on social media through the social media buttons below and on the <a href="+projectUrl+">project page</a>!<br><br>" +
-                    "We'll keep you updated on the project. Also feel free to Like us on <a href=\"https://www.facebook.com/collaction.org/\">Facebook</a> to stay up to date on everything CollAction!<br><br>" +
-                    "Warm regards,<br>The CollAction team<br><br>" +
-                    "PS: Did you know you can start your own project on <a href=\"https://collaction.org/start\">www.collaction.org/start</a> ?<br><br>"+
-                    "<span style='#share-buttons img {}'>"+
-                    "<div id='share-buttons'>"+
-                    "<p>Multiply your impact and share the project with the buttons below 🙂</p>"+
-                    "<a href=https://www.facebook.com/sharer/sharer.php?u="+projectUrl+">"+
-                    "<img style='width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;' src="+systemUrl+"/images/social/facebook.png alt='Facebook' />"+
-                    "</a>"+
-                    "<a href=\"http://www.linkedin.com/shareArticle?mini=true&url="+projectUrl+"&title="+WebUtility.UrlEncode(commitProjectViewModel.ProjectName)+"\" target=\"_blank\">"+
-                    "<img style='width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;' src="+systemUrl+"/images/social/linkedin.png alt='LinkedIn' />"+
-                    "</a>"+
-                    "<a href=\"https://twitter.com/intent/tweet?text="+WebUtility.UrlEncode(commitProjectViewModel.ProjectName)+"&url="+projectUrl+"\" target=\"_blank\">"+
-                    "<img style='width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;' src="+systemUrl+"/images/social/twitter.png alt='Twitter' />"+
-                    "</a>"+
-                    "</div>"+
-                    "</span>";
-                string subject = $"Thank you for participating in the \"{commitProjectViewModel.ProjectName}\" project on CollAction";
-                _emailSender.SendEmail(user.Email, subject, confirmationEmail);
-                commitProjectViewModel.ProjectNameUriPart = _projectService.GetProjectNameNormalized(commitProjectViewModel.ProjectName);
-                return LocalRedirect($"~/Projects/{commitProjectViewModel.ProjectNameUriPart}/{commitProjectViewModel.ProjectId}/thankyou");
-            }
-            else
-            {
-                return View("Error");
-            }
-        }
-
-        [Authorize]
         [HttpGet]
         public IActionResult ThankYouCommit(int id, string name)
         {
@@ -305,7 +282,8 @@ namespace CollAction.Controllers
             {
                 return NotFound();
             }
-            CommitProjectViewModel model = new CommitProjectViewModel()
+
+            var model = new ThankYouCommitViewModel()
             {
                 ProjectId = id,
                 ProjectName = project.Name,
@@ -313,6 +291,19 @@ namespace CollAction.Controllers
             };
             return View(nameof(ThankYouCommit), model);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> FindProject(int projectId)
+        {
+            var project = await _projectService.FindProject(projectId);
+
+            if (project == null)
+            {
+                return NotFound();
+            }
+
+            return Json(project);
+        }        
 
         [HttpGet]
         public async Task<JsonResult> FindProjects(int? categoryId, int? statusId, int? limit, int? start)
