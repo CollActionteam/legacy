@@ -135,7 +135,7 @@ namespace CollAction.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, RepresentsNumberParticipants = 1 };
+                var user = new ApplicationUser(model.Email) { FirstName = model.FirstName, LastName = model.LastName };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -220,7 +220,7 @@ namespace CollAction.Controllers
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, RepresentsNumberParticipants = 1 };
+                var user = new ApplicationUser(model.Email) { FirstName = model.FirstName, LastName = model.LastName };
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
@@ -325,6 +325,54 @@ namespace CollAction.Controllers
         public IActionResult ResetPasswordConfirmation()
         {
             return View();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult FinishRegistration(string email, string code)
+        {
+            var model = new FinishRegistrationViewModel { Email = email, Code = code };
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> FinishRegistration(FinishRegistrationViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                throw new ArgumentException("User not found");
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
+            if (!result.Succeeded)
+            {
+                AddErrors(result);
+                return View(model);
+            }
+
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                AddErrors(result);
+                return View(model);
+            }
+
+            _newsletterSubscriptionService.SetSubscription(model.Email, model.NewsletterSubscription);
+
+            await _signInManager.SignInAsync(user, isPersistent: false);
+            _logger.LogInformation(3, "User created from anonymous project participant.");
+
+            return RedirectToAction("Index", "Manage");
         }
 
         #region Helpers

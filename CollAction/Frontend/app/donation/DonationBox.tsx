@@ -212,12 +212,6 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         if (this.needsToEnterEmail() || this.needsToEnterName()) {
             return (
                 <div className="row user-details">
-                    <div className="col-xs-12">
-                        <span>
-                            If you want to make a donation, please provide your personal information
-                            and select the payment option.
-                        </span>
-                    </div>
                     {this.renderName()}
                     {this.renderEmail()}
                 </div>
@@ -295,9 +289,12 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
     private renderHeader(): JSX.Element {
         return (
             <div>
-                <h2>Help us reaching our mission by donating!</h2>
+                <h2>Help us reach our mission by donating!</h2>
                 <p>
-                    By donating to CollAction you help us solve collactive action problems and to make the world a better place. Your donation helps us maintaining and growing the platform and ultimately multiply our impact.
+                    CollAction aims to move millions of people to act for good. We're a small team of
+                    passionate volunteers and we keep cost super low - but some costs are involved in
+                    maintaining and growing the platform. With your support we can grow this crowdacting
+                    movement and safeguard our independence. Many thanks for your help!
                 </p>
                 <hr />
             </div>);

@@ -26,6 +26,7 @@ namespace CollAction.Controllers
             IHostingEnvironment hostingEnvironment,
             IEmailSender emailSender,
             IProjectService projectService,
+            IParticipantsService participantsService,
             IImageService imageService,
             ApplicationDbContext context)
         {
@@ -35,6 +36,7 @@ namespace CollAction.Controllers
             _hostingEnvironment = hostingEnvironment;
             _emailSender = emailSender;
             _projectService = projectService;
+            _participantsService = participantsService;
             _imageService = imageService;
         }
 
@@ -44,6 +46,7 @@ namespace CollAction.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSender _emailSender;
         private readonly IProjectService _projectService;
+        private readonly IParticipantsService _participantsService;
         private readonly IImageService _imageService;
 
         [HttpGet]
@@ -160,7 +163,7 @@ namespace CollAction.Controllers
         [HttpGet]
         public async Task<IActionResult> ParticipantsDataExport(int id)
         {
-            string csv = await _projectService.GenerateParticipantsDataExport(id);
+            string csv = await _participantsService.GenerateParticipantsDataExport(id);
             if (csv != null)
                 return Content(csv, "text/csv");
             else
