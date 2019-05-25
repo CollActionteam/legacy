@@ -21,3 +21,4 @@ import "./RichTextEditor";
 import "./CookieMessage";
 import "./Tooltips";
 import "./Faqs";
+import "./RegisterReferer";
