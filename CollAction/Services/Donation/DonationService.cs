@@ -97,7 +97,6 @@ namespace CollAction.Services.Donation
             ValidateDetails(amount, name, email);
 
             ApplicationUser user = await _userManager.FindByEmailAsync(email);
-            Customer customer = await GetOrCreateCustomer(name, email);
 
             var sessionOptions = new SessionCreateOptions()
             {
@@ -111,7 +110,7 @@ namespace CollAction.Services.Donation
 
             if (recurring)
             {
-                sessionOptions.CustomerEmail = customer.Email; // TODO: sessionOptions.CustomerId = customer.Id; // Once supported
+                sessionOptions.CustomerEmail = email; // TODO: sessionOptions.CustomerId = customer.Id; // Once supported
                 sessionOptions.SubscriptionData = new SessionSubscriptionDataOptions()
                 {
                     Items = new List<SessionSubscriptionDataItemOptions>()
@@ -126,6 +125,7 @@ namespace CollAction.Services.Donation
             }
             else
             {
+                Customer customer = await GetOrCreateCustomer(name, email);
                 sessionOptions.CustomerId = customer.Id;
                 sessionOptions.LineItems = new List<SessionLineItemOptions>()
                 {
