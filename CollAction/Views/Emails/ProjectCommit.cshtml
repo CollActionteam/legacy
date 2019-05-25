@@ -2,20 +2,28 @@
 
 @if (Model.LoggedInUser?.FirstName != null)
 {
-    <p>Hi @Model.LoggedInUser.FirstName!</p>
+    <p>
+        Hi @Model.LoggedInUser.FirstName!
+    </p>
 }
 else
 {
-    <p>Hi!</p>
+    <p>
+        Hi!
+    </p>
 }
 
 @if (Model.ShowAlreadyParticipating)
 {
-    <p>Thanks for your interest in the @Model.Project.Name CollAction project, but it appears you are already participating.</p>
+    <p>
+        Thanks for your interest in the @Model.Project.Name CollAction project, but it appears you are already participating.
+    </p>
 }
 else
 {
-    <p>Thank you for participating in a CollAction project!</p>
+    <p>
+        Thank you for participating in a CollAction project!
+    </p>
 
     <p>
         In crowdacting, we only act collectively when we meet the target before the deadline,
@@ -53,7 +61,9 @@ else
 
 <span style="#share-buttons img {}">
     <div id="share-buttons">
-        <p>Multiply your impact and share the project with the buttons below 🙂</p>
+        <p>
+            Multiply your impact and share the project with the buttons below 🙂
+        </p>
         <a href="@Model.FacebookLink">
             <img style="width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;" src="@(Model.PublicAddress)/images/social/facebook.png" alt="Facebook" />
         </a>
@@ -65,8 +75,8 @@ else
         </a>
     </div>
 </span>
-<br>
-<br>
+<br/>
+<br/>
 
 @if (Model.ShowCreateYourOwnProject)
 {
