@@ -1,4 +1,3 @@
-@import '../../mixins';
 @import "../../colors";
 
 #footer {
@@ -60,13 +59,15 @@
     }
 
     #mc_embed_signup {
-        label,
+        label, 
+        #mc-embedded-subscribe,
         .indicates-required {
             display: none;
         }
     }
 
     input[type=email] {
+        width: 250px;
         border: none;
         outline: none;
         background-color: #e6e6e6;
@@ -76,19 +77,13 @@
         padding: 0px 30px 0px 15px;
     }
 
-    .btn {
-        @include coll-action-button;
-        background-color: black;
-        color: white;
-        padding: 0 10px;
-        text-transform: none;
-        transition: transform 100ms ease-in-out;
-
-        &:hover,
-        &:focus {
-            transform: scale(1.05);
-            background-color: black;
-        }
+    .email-icon {
+        position: relative;
+        z-index: 1;
+        left: -25px;
+        top: 1px;
+        width: 0px;
+        color: #7d7d7d;
     }
 
     li {
