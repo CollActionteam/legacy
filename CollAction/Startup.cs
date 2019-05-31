@@ -261,6 +261,14 @@ namespace CollAction
                                                    }.Concat(Configuration["CspScriptSrc"]?.Split(";") ?? new string[0])
                                                     .Concat(env.IsDevelopment() ? new[] { "'unsafe-eval'" } : // In development mode webpack uses eval to load debug information
                                                                                   Enumerable.Empty<string>()));
+
+                        cspBuilder.AddDefaultSrc()
+                                  .Sources.AddRange(new [] 
+                                                    {
+                                                            "https://disqus.com",
+                                                            "https://*.disqus.com",
+                                                            "https://*.disquscdn.com"
+                                                    });
                    })
                 );
             }
