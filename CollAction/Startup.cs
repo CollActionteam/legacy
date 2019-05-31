@@ -213,21 +213,25 @@ namespace CollAction
                                                                        "https://facebook.com/",
                                                                        "https://graph.facebook.com/",
                                                                        "https://dc.services.visualstudio.com/",
-                                                                       "https://api.stripe.com"
+                                                                       "https://api.stripe.com",
+                                                                       "*.disqus.com"
                                                                    }.Concat(Configuration["CspConnectSrc"]?.Split(";") ?? new string[0]));
                        cspBuilder.AddImgSrc().Self() // Only allow self-hosted images, or google analytics (for tracking images), or configured sources
                                              .Data()    // Used for project creation image preview
                                              .Sources.AddRange(new[]
                                                                {
                                                                    "https://www.google-analytics.com",
-                                                                   $"https://s3.{Configuration["S3Region"]}.amazonaws.com"
+                                                                   $"https://s3.{Configuration["S3Region"]}.amazonaws.com",
+                                                                   "*.disquscdn.com",
+                                                                   "*.disqus.com"
                                                                }.Concat(Configuration["CspImgSrc"]?.Split(";") ?? new string[0]));
                        cspBuilder.AddStyleSrc().Self() // Only allow style/css from these sources (note: css injection can actually be dangerous), or configured sources
                                                .UnsafeInline() // Unfortunately this is necessary, the backend passess some things that are directly passed into css style attributes, especially on the project page. TODO: We should try to get rid of this.
                                                .Sources.AddRange(new[]
                                                                  {
                                                                      "https://maxcdn.bootstrapcdn.com/",
-                                                                     "https://fonts.googleapis.com/"
+                                                                     "https://fonts.googleapis.com/",
+                                                                     "*.disquscdn.com"
                                                                  }.Concat(Configuration["CspStyleSrc"]?.Split(";") ?? new string[0]));
                        cspBuilder.AddFontSrc().Self() // Only allow fonts from these sources, or configured sources
                                               .Sources.AddRange(new[]
@@ -246,7 +250,8 @@ namespace CollAction
                                                             {
                                                                 "https://js.stripe.com",
                                                                 "https://hooks.stripe.com",
-                                                                "https://www.youtube.com/"
+                                                                "https://www.youtube.com/",
+                                                                "disqus.com"
                                                             });
                        cspBuilder.AddScriptSrc() // Only allow scripts from our own site, the aspnetcdn site, app insights and google analytics
                                  .Self()
@@ -256,19 +261,14 @@ namespace CollAction
                                                        "https://www.googletagmanager.com",
                                                        "https://www.google-analytics.com",
                                                        "https://js.stripe.com",
+                                                       "disqus.com",
+                                                       "*.disqus.com",
+                                                       "*.disquscdn.com",
                                                        "*.msecnd.net",
                                                        "'sha256-EHA5HNhe/+uz3ph6Fw34N85vHxX87fsJ5cH4KbZKIgU='"
                                                    }.Concat(Configuration["CspScriptSrc"]?.Split(";") ?? new string[0])
                                                     .Concat(env.IsDevelopment() ? new[] { "'unsafe-eval'" } : // In development mode webpack uses eval to load debug information
                                                                                   Enumerable.Empty<string>()));
-
-                        cspBuilder.AddDefaultSrc()
-                                  .Sources.AddRange(new [] 
-                                                    {
-                                                            "https://disqus.com",
-                                                            "https://*.disqus.com",
-                                                            "https://*.disquscdn.com"
-                                                    });
                    })
                 );
             }
