@@ -18,6 +18,9 @@
     var user = ViewData["CurrentUser"] as ApplicationUser;
     var active = Model.Project.IsActive;
     var status = Model.ExternalStatus;
+
+    var disqusSite = @SiteOptions.Value.DisqusSite;
+    var disqusId = $"{@Model.Project.Name}/{@Model.Project.Id}";
 }
 
 @section Meta {
@@ -27,6 +30,9 @@
     <meta property="og:title" content="@Model.Project.Name" />
     <meta property="og:description" content="@Model.Project.Description" />
     <meta property="og:image" content="@Model.BannerImagePath" />
+
+    <meta property="disqus:site" content="@disqusSite" />
+    <meta property="disqus:id" content="@disqusId" />
 }
 
 <div id="project-details">
@@ -233,27 +239,6 @@
                 </div>
             </div>
         </div>
-
-        var identifier = $"{@Model.Project.Name}/{@Model.Project.Id}";
-        var script = $"https://{@SiteOptions.Value.DisqusSite}.disqus.com/embed.js";
-        <script>
-            /**
-            *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-            *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
-            */
-            var disqus_config = function () {
-                this.page.url = window.location.href;
-                this.page.identifier = '@identifier';
-            };
-
-            (function() { // DON'T EDIT BELOW THIS LINE
-                var d = document, s = d.createElement('script');
-                s.src = '@script';
-                s.setAttribute('data-timestamp', +new Date());
-                (d.head || d.body).appendChild(s);
-            })();
-        </script>
-        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
     }
 
     <div class="container">
@@ -290,5 +275,4 @@
             </div> 
         </div>
     }
-</div> 
-
+</div>
