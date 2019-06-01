@@ -18,14 +18,13 @@ export default class ParticipateInProject extends React.Component<IParticipation
 
   displayContactEmail = () => (
     <div>
-      <p>We'll contact you on this e-mail address:</p>
-      <b>{ this.props.email }</b>
+      <p>By clicking ‘Take Part’ you’re signing up with { this.props.email }</p>
     </div>
   )
 
   askContactEmail = () => (
     <div>
-      <p>Please enter your e-mail address so we can contact you with more information on the project:</p>
+      <p>Want to participate? Enter your e-mail address and click 'Take Part'!</p>
       <input className="form-control" name="email" type="email" placeholder="Your e-mail address"></input>
     </div>
   )
@@ -53,12 +52,8 @@ export default class ParticipateInProject extends React.Component<IParticipation
     }
 
     return (
-      <Collapsible
-        transitionTime={300}
-        trigger={<a href="javascript:void(0)" className="take-part-button">{ caption }</a>}
-      >
+      <div>
         <div className="participant-information">
-          <h2>That's awesome!</h2>
           { this.props.email
             ? this.displayContactEmail()
             : this.askContactEmail() }
@@ -66,7 +61,7 @@ export default class ParticipateInProject extends React.Component<IParticipation
         <p>
           <a href="javascript:void(0)" onClick={ () => this.submitForm() } className="take-part-button">Take part</a>
         </p>
-      </Collapsible>
+      </div>
     );
   }
 }
