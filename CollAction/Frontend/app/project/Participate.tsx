@@ -18,7 +18,7 @@ export default class ParticipateInProject extends React.Component<IParticipation
 
   displayContactEmail = () => (
     <div>
-      <p>By clicking ‘Take Part’ you’re signing up with { this.props.email }</p>
+      <p>By clicking ‘Take Part’ you’re signing up with { this.props.email }.</p>
     </div>
   )
 
