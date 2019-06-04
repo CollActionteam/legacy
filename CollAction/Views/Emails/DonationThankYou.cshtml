@@ -1,7 +1,16 @@
 ﻿@model CollAction.Models.EmailViewModels.DonationThankYouEmailViewModel
-<p>
-Hi @Model.Name!,
-</p>
+@if (string.IsNullOrEmpty(Model.Name))
+{
+    <p>
+    Hi!,
+    </p>
+}
+else
+{
+    <p>
+    Hi @Model.Name!,
+    </p>
+}
 <p>
 Thank you so much for your kind donation to CollAction!
 </p>
