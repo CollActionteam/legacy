@@ -397,7 +397,7 @@ namespace CollAction.Services.Donation
         }
 
         private Task SendDonationThankYou(Customer customer, bool hasSubscriptions)
-            => _emailSender.SendEmailTemplated(customer.Email, "Thank you for your donation", "DonationThankYou", new DonationThankYouEmailViewModel() { Name = customer.Name, HasSubscription = hasSubscriptions });
+            => _emailSender.SendEmailTemplated(customer.Email, "Thank you for your donation", "DonationThankYou", hasSubscriptions);
 
         private void ValidateDetails(int amount, string name, string email)
         {
