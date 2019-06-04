@@ -251,7 +251,8 @@ namespace CollAction.Services.Donation
             {
                 Charge charge = (Charge)stripeEvent.Data.Object;
                 var subscriptions = await _subscriptionService.ListAsync(new SubscriptionListOptions() { CustomerId = charge.CustomerId });
-                await SendDonationThankYou(charge.Customer, subscriptions.Any());
+                Customer customer = await _customerService.GetAsync(charge.CustomerId);
+                await SendDonationThankYou(customer, subscriptions.Any());
             }
         }
 
