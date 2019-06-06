@@ -19,6 +19,9 @@ using System.Linq.Expressions;
 using CollAction.Services.Project;
 using CollAction.Services.Email;
 using CollAction.Services.Image;
+using CollAction.Models.EmailViewModels;
+using CollAction.Services;
+using Microsoft.Extensions.Options;
 
 namespace CollAction.Controllers
 {
@@ -32,8 +35,18 @@ namespace CollAction.Controllers
         private readonly IParticipantsService _participantsService;
         private readonly IEmailSender _emailSender;
         private readonly IImageService _imageService;
+        private readonly SiteOptions _siteOptions;
 
-        public ProjectsController(ApplicationDbContext context, IStringLocalizer<ProjectsController> localizer, UserManager<ApplicationUser> userManager, IHostingEnvironment hostingEnvironment, IProjectService projectService, IParticipantsService participantsService, IEmailSender emailSender, IImageService imageService)
+        public ProjectsController(
+            ApplicationDbContext context, 
+            IStringLocalizer<ProjectsController> localizer, 
+            UserManager<ApplicationUser> userManager, 
+            IHostingEnvironment hostingEnvironment, 
+            IProjectService projectService, 
+            IParticipantsService participantsService, 
+            IEmailSender emailSender, 
+            IImageService imageService,
+            IOptions<SiteOptions> siteOptions)
         {
             _context = context;
             _localizer = localizer;
@@ -43,6 +56,7 @@ namespace CollAction.Controllers
             _participantsService = participantsService;
             _emailSender = emailSender;
             _imageService = imageService;
+            _siteOptions = siteOptions.Value;
         }
 
         public ViewResult StartInfo()
@@ -148,33 +162,13 @@ namespace CollAction.Controllers
             await _participantsService.RefreshParticipantCountMaterializedView();
 
             // Notify admins and creator through e-mail
-            string confirmationEmail =
-                "Hi!<br>" +
-                "<br>" +
-                "Thanks for submitting a project on www.collaction.org!<br>" +
-                "The CollAction Team will review your project as soon as possible - if it meets all the criteria we'll publish the project on the website and will let you know, so you can start promoting it! If we have any additional questions or comments, we'll reach out to you by email.<br>" +
-                "Also, did you know we have a <a href=\"https://docs.google.com/document/d/1JK058S_tZXntn3GzFYgiH3LWV5e9qQ0vXmEyV-89Tmw\">Project Starter Handbook</a> with tips and tricks on how to start, run, and finish a project on CollAction?" +
-                "<br>" +
-                "<br>" +
-                "Thanks so much for driving the CollAction / crowdacting movement!<br>" +
-                "<br>" +
-                "Warm regards,<br>" +
-                "The CollAction team";
             string subject = $"Thank you for submitting \"{project.Name}\" on CollAction";
 
             ApplicationUser user = await _userManager.GetUserAsync(User);
-            _emailSender.SendEmail(user.Email, subject, confirmationEmail);
-
-            string confirmationEmailAdmin =
-                "Hi!<br>" +
-                "<br>" +
-                $"There's a new project waiting for approval: {project.Name}<br>" +
-                "Warm regards,<br>" +
-                "The CollAction team";
+            await _emailSender.SendEmailTemplated(user.Email, subject, "ProjectConfirmation");
 
             var administrators = await _userManager.GetUsersInRoleAsync(Constants.AdminRole);
-            foreach (var admin in administrators)
-                _emailSender.SendEmail(admin.Email, subject, confirmationEmailAdmin);
+            await _emailSender.SendEmailsTemplated(administrators.Select(a => a.Email), subject, "ProjectAddedAdmin", project.Name);
 
             return LocalRedirect($"~/Projects/Create/{_projectService.GetProjectNameNormalized(project.Name)}/{project.Id}/thankyou");
         }
@@ -255,21 +249,27 @@ namespace CollAction.Controllers
             }
 
             var projectNameUriPart = _projectService.GetProjectNameNormalized(project.Name);
-            var systemUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.PathBase}";
+            var publicAddress = _siteOptions.PublicAddress;
             var projectUrl = Url.Action("Details", "Projects", new { id = project.Id }, HttpContext.Request.Scheme); 
-
             
             var result = loggedInUser != null
                 ? await _participantsService.AddLoggedInParticipant(model.ProjectId, loggedInUser.Id)
                 : await _participantsService.AddAnonymousParticipant(model.ProjectId, model.Email);
 
-            var emailHelper = new CommitEmailHelper(project, result, loggedInUser, systemUrl, projectUrl);
+            var commitEmailViewModel = new ProjectCommitEmailViewModel()
+            {
+                Project = project,
+                Result = result,
+                LoggedInUser = loggedInUser,
+                PublicAddress = publicAddress,
+                ProjectUrl = projectUrl,
+            };
 
             var emailAddress = loggedInUser?.Email 
                 ?? model.Email 
                 ?? throw new ArgumentException("No e-mail adres specified");
 
-            _emailSender.SendEmail(emailAddress, emailHelper.GenerateSubject(), emailHelper.GenerateEmail());
+            await _emailSender.SendEmailTemplated(emailAddress, $"Thank you for participating in the \"{project.Name}\" project on CollAction", "ProjectCommit", commitEmailViewModel);
 
             return LocalRedirect($"~/Projects/{projectNameUriPart}/{model.ProjectId}/thankyou");
         }

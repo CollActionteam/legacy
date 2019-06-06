@@ -269,8 +269,7 @@ namespace CollAction.Controllers
                     controller: "Account",
                     values: new { user.Id, code },
                     protocol: Request.Scheme);
-                _emailSender.SendEmail(model.Email, "Reset Password",
-                   $"{_localizer["Please reset your password by clicking here"]}: <a href='{callbackUrl}'>{_localizer["link"]}</a>");
+                await _emailSender.SendEmailTemplated(model.Email, "Reset Password", "ResetPassword", callbackUrl);
                 return View(nameof(ForgotPasswordConfirmation));
             }
 
