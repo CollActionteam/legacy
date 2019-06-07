@@ -36,33 +36,35 @@
     @Html.Raw(snippet.FullScript)
 </head>
 <body id="body">
-    @if (canTrack) 
-    {
-        <!-- Google Tag Manager (noscript) -->
-        <noscript>
-            <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NTCKFKM"
-                    height="0" width="0" style="display:none;visibility:hidden"></iframe>
-        </noscript>
-        <!-- End Google Tag Manager (noscript) -->
-    }
+    <div id="main">
+        @if (canTrack) 
+        {
+            <!-- Google Tag Manager (noscript) -->
+            <noscript>
+                <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NTCKFKM"
+                        height="0" width="0" style="display:none;visibility:hidden"></iframe>
+            </noscript>
+            <!-- End Google Tag Manager (noscript) -->
+        }
 
-    <div id="header">
-        <partial name="_NavMenu" />
+        <div id="header">
+            <partial name="_NavMenu" />
+        </div>
+
+        <partial name="_CookieConsentPartial" /> 
+        <div id="site-content">
+        @RenderBody()
+        </div>
+        <partial name="_Footer" />
+
+        @RenderSection("scripts", required: false)
+        
+        <environment names="Development">
+            <script src="~/js/frontend.bundle.js?@DateTime.Now.Ticks.ToString()"></script>
+        </environment>
+        <environment names="Staging,Production">
+            <script src="~/js/frontend.bundle.js"></script>
+        </environment>
     </div>
-
-    <partial name="_CookieConsentPartial" /> 
-    <div id="site-content">
-    @RenderBody()
-    </div>
-    <partial name="_Footer" />
-
-    @RenderSection("scripts", required: false)
-    
-    <environment names="Development">
-        <script src="~/js/frontend.bundle.js?@DateTime.Now.Ticks.ToString()"></script>
-    </environment>
-    <environment names="Staging,Production">
-        <script src="~/js/frontend.bundle.js"></script>
-    </environment>
 </body>
 </html>

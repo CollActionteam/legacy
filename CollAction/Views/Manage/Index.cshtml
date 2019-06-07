@@ -68,22 +68,50 @@
                         </form>
                     </div>
                 </div>
-                @if (!User.IsInRole(Constants.AdminRole))
-                {
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <dt>Delete Account</dt>
-                        </div>
-                        <div class="panel-body">
-                            <p>
-                                We're sorry if you want to leave... however, if you really want to, you can delete your account here.
-                            </p>
-                            <form asp-controller="Account" asp-action="Delete" method="post">
-                                <div id="delete-user"></div>
-                            </form>
-                        </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <dt>Recurring Donations</dt>
                     </div>
-                }
+                    <div class="panel-body">
+                        @if (Model.DonationSubscriptions.Any())
+                        {
+                            <p>
+                                You can cancel your recurring donations here.
+                            </p>
+
+                            <div class="panel-body">
+                                @foreach (var subscription in Model.DonationSubscriptions)
+                                {
+                                    <div class="unsubscribe-donation">
+                                        <form asp-controller="Donation" asp-action="CancelSubscription" method="post">
+                                            <input type="hidden" name="subscriptionId" value="@subscription.Id" />
+                                            <input type="submit" value="Cancel donation started at @subscription.Start.Value.ToShortDateString()" />
+                                        </form>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <p>
+                                You don't have any recurring donations. You can donate <a asp-controller="Donation" asp-action="Donate">here</a>.
+                           </p>
+                        }
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <dt>Delete Account</dt>
+                    </div>
+                    <div class="panel-body">
+                        <p>
+                            We're sorry if you want to leave... however, if you really want to, you can delete your account here.
+                        </p>
+                        <form asp-controller="Account" asp-action="Delete" method="post">
+                            <div id="delete-user"></div>
+                        </form>
+                    </div>
+                </div>
             </div>
             <div class="col-md-7 col-xs-12">
                 <div class="row">

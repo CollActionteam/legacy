@@ -2,6 +2,7 @@ import * as React from "react";
 
 import "./styles/FindProject.scss";
 import "./styles/ProjectDetails.scss";
+import "./styles/ProjectThumb.scss";
 import "./styles/StartInfo.scss";
 import "./styles/ProjectCreate.scss";
 import "./styles/ProjectCommit.scss";
@@ -11,6 +12,9 @@ import "./styles/ProjectSendEmail.scss";
 import "./FindProject";
 
 import "./PieChart";
+import "./Participate";
+
+import "./ProjectPreview";
 
 import "./UploadBanner";
 import "./UploadDescriptiveImage";

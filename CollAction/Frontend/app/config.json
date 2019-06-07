@@ -387,6 +387,7 @@
     "responsive-utilities.less",
     "navs.less",
     "navbar.less",
+    "alerts.less",
     "panels.less",
     "responsive-embed.less",
     "component-animations.less"
