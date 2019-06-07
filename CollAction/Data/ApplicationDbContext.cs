@@ -34,6 +34,7 @@ namespace CollAction.Data
         public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
         public DbSet<ProjectParticipantCount> ProjectParticipantCounts { get; set; }
         public DbSet<UserEvent> UserEvents { get; set; }
+        public DbSet<DonationEventLog> DonationEventLog { get; set; }
 
         /// <summary>
         /// Configure the model (foreign keys, relations, primary keys, etc)
@@ -124,13 +125,7 @@ namespace CollAction.Data
             ApplicationUser admin = await userManager.FindByEmailAsync(adminEmail);
             if (admin == null)
             {
-                admin = new ApplicationUser()
-                {
-                    UserName = adminEmail,
-                    Email = adminEmail,
-                    EmailConfirmed = true,
-                    RepresentsNumberParticipants = 1
-                };
+                admin = new ApplicationUser(adminEmail) { EmailConfirmed = true };
                 IdentityResult result = await userManager.CreateAsync(admin, adminPassword);
                 if (!result.Succeeded)
                     throw new InvalidOperationException($"Error creating user.{Environment.NewLine}{string.Join(Environment.NewLine, result.Errors.Select(e => $"{e.Code}: {e.Description}"))}");

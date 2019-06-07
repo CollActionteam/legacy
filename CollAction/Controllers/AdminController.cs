@@ -26,6 +26,7 @@ namespace CollAction.Controllers
             IHostingEnvironment hostingEnvironment,
             IEmailSender emailSender,
             IProjectService projectService,
+            IParticipantsService participantsService,
             IImageService imageService,
             ApplicationDbContext context)
         {
@@ -35,6 +36,7 @@ namespace CollAction.Controllers
             _hostingEnvironment = hostingEnvironment;
             _emailSender = emailSender;
             _projectService = projectService;
+            _participantsService = participantsService;
             _imageService = imageService;
         }
 
@@ -44,6 +46,7 @@ namespace CollAction.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSender _emailSender;
         private readonly IProjectService _projectService;
+        private readonly IParticipantsService _participantsService;
         private readonly IImageService _imageService;
 
         [HttpGet]
@@ -160,7 +163,7 @@ namespace CollAction.Controllers
         [HttpGet]
         public async Task<IActionResult> ParticipantsDataExport(int id)
         {
-            string csv = await _projectService.GenerateParticipantsDataExport(id);
+            string csv = await _participantsService.GenerateParticipantsDataExport(id);
             if (csv != null)
                 return Content(csv, "text/csv");
             else
@@ -231,57 +234,15 @@ namespace CollAction.Controllers
 
                     if (approved)
                     {
-                        string approvalEmail =
-                            "Hi!<br>" +
-                            "<br>" +
-                            "The CollAction Team has reviewed your project proposal and is very happy to share that your project has been approved and now live on www.collaction.org!<br>" +
-                            "<br>" +
-                            "So feel very welcome to start promoting it! If you have any further questions, feel free to contact the CollAction Team at collactionteam@gmail.com. And don’t forget to tag CollAction in your messages on social media so we can help you spread the word (FB: <a href='https://www.facebook.com/collaction.org/'>@collaction.org</a>, Twitter: @collaction_org)!<br>" +
-                            "<br>" +
-                            "Thanks again for driving the CollAction / crowdacting movement!<br>" +
-                            "<br>" +
-                            "Warm regards,<br>" +
-                            "The CollAction team<br>";
-
-                        string subject = $"Approval - {project.Name}";
-
-                        _emailSender.SendEmail(project.Owner.Email, subject, approvalEmail);
+                        await _emailSender.SendEmailTemplated(project.Owner.Email, $"Approval - {project.Name}", "ProjectApproval");
                     }
                     else if (successfull)
                     {
-                        string successEmail =
-                            "Hi!<br>" +
-                            "<br>" +
-                            "The deadline of the project you have started on www.collaction.org has passed. We're very happy to see that the target you have set has been reached! Congratulations! Now it's time to act collectively!<br>" +
-                            "<br>" +
-                            "The CollAction Team might reach out to you with more specifics (this is an automated message). If you have any further questions yourself, feel free to contact the CollAction Team at collactionteam@gmail.com. And don’t forget to tag CollAction in your messages on social media so we can help you spread the word on your achievement (FB: <a href='https://www.facebook.com/collaction.org/'>@collaction.org</a>, Twitter: @collaction_org)!<br>" +
-                            "<br>" +
-                            "Thanks again for driving the CollAction / crowdacting movement!<br>" +
-                            "<br>" +
-                            "Warm regards,<br>" +
-                            "The CollAction team<br>";
-
-                        string subject = $"Success - {project.Name}";
-
-                        _emailSender.SendEmail(project.Owner.Email, subject, successEmail);
+                        await _emailSender.SendEmailTemplated(project.Owner.Email, $"Success - {project.Name}", "ProjectSuccess");
                     }
                     else if (failed)
                     {
-                        string failedEmail =
-                            "Hi!<br>" +
-                            "<br>" +
-                            "The deadline of the project you have started on www.collaction.org has passed. Unfortunately the target that you have set has not been reached. Great effort though!<br>" +
-                            "<br>" +
-                            "The CollAction Team might reach out to you with more specifics (this is an automated message). If you have any further questions yourself, feel free to contact the CollAction Team at collactionteam@gmail.com.<br>" +
-                            "<br>" +
-                            "Thanks again for driving the CollAction / crowdacting movement and better luck next time!<br>" +
-                            "<br>" +
-                            "Warm regards,<br>" +
-                            "The CollAction team<br>";
-
-                        string subject = $"Failed - {project.Name}";
-
-                        _emailSender.SendEmail(project.Owner.Email, subject, failedEmail);
+                        await _emailSender.SendEmailTemplated(project.Owner.Email, $"Failed - {project.Name}", "ProjectFailed");
                     }
                 }
 

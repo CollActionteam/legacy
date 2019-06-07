@@ -48,12 +48,12 @@ namespace CollAction.Models.AdminViewModels
 
         [Required]
         [DataType(DataType.Date)]
-        [Display(Name = "Start date")]
+        [Display(Name = "Sign up opens")]
         public DateTime Start { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
-        [Display(Name = "Deadline")]
+        [Display(Name = "Sign up closes")]
         [WithinMonthsAfterDateProperty(12, "Start", ErrorMessage = "The deadline must be within a year of the start date.")]
         public DateTime End { get; set; }
 
@@ -64,7 +64,6 @@ namespace CollAction.Models.AdminViewModels
         [Display(Name = "Banner image", Prompt = "2732x864 JPEG, GIF, PNG, BMP")]
         [FileSize(1024000)] // 1MB
         [FileType("jpg", "jpeg", "gif", "png", "bmp")]
-        [MaxImageDimensions(2732, 864)]
         public IFormFile BannerImageUpload { get; set; }
         public ImageFile BannerImageFile { get; set; }
 
@@ -75,7 +74,6 @@ namespace CollAction.Models.AdminViewModels
         [Display(Name = "Description image", Prompt = "1088x518 JPEG, GIF, PNG, BMP")]
         [FileSize(1024000)] // 1MB
         [FileType("jpg", "jpeg", "gif", "png", "bmp")]
-        [MaxImageDimensions(1088, 518)]
         public IFormFile DescriptiveImageUpload { get; set; }
         public ImageFile DescriptiveImageFile { get; set; }
 

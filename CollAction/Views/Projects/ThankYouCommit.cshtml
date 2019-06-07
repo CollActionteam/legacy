@@ -3,7 +3,7 @@
 
 @inject IViewLocalizer Localizer
 
-@model CollAction.Models.CommitProjectViewModel
+@model CollAction.Models.ThankYouCommitViewModel
 
 @{
     ViewData["Title"] = Localizer["Thank You"];
@@ -11,32 +11,34 @@
     var canTrack = consentFeature.CanTrack;
 }
 
-<div id="thank-you-commit-container">
-    <div class="row">
-        <div id="thank-you-commit-box" class="col-xs-12 col-md-6 col-md-offset-3">
-            <div id="close-button-container">
-                <a id="close-button" asp-action="Details" asp-route-id="@Model.ProjectId">
-                    <object id="close-button-img" type="image/svg+xml" data="/images/close-button.svg">
-                        Close
-                    </object>
-                </a>
-            </div>
-            <div id="thank-you-text">
-                <h1>Awesome!</h1>
-                <h2>Thank you for participating</h2>
-                <p>Many thanks for making this world a better place, by supporting <b>@Html.DisplayFor(model => model.ProjectName)</b>!</p>
+<div id="thank-you-commit">
+    <div class="container-fluid">
+        <div id="thank-you" class="row">
+            <div class="col-xs-12 col-md-offset-5 col-md-7">
+                <h1>Thank you for joining this project!</h1>
             </div>
         </div>
+        <div id="share-it" class="row">
+            <div class="hidden-xs hidden-sm col-md-offset-1 col-md-4">
+                <div id="project-preview" data-project-id="@Html.DisplayFor(model => model.ProjectId)"></div>
+            </div>
+            <div class="col-xs-12 col-md-7">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h2>Now go make waves and share it! :)</h2>
+                    </div>
+                    @if (canTrack)
+                    {
+                        <div class="col-xs-offset-3 col-xs-6 col-md-offset-0 col-md-4 col-lg-3">
+                            <div id="project-details-share-buttons-custom" data-title="@Html.DisplayFor(model => model.ProjectName)" data-link="@Context.Request.Scheme://@Context.Request.Host@Html.DisplayFor(model => model.ProjectLink)"></div>
+                        </div>
+                        <div class="hidden-xs hidden-sm">
+                            <img class="arrow" src="/images/thankyoucommit/arrow.png" />
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        @await Html.PartialAsync("_DonationBox")
     </div>
 </div>
-
-@if (canTrack)
-{
-    <div id="project-share">
-        <div class="container">
-            <div class="row">
-                <div id="project-details-share-buttons-custom" data-title="@Html.DisplayFor(model => model.ProjectName)" data-link="@Context.Request.Scheme://@Context.Request.Host@Html.DisplayFor(model => model.ProjectLink)"></div>
-            </div> 
-        </div> 
-    </div>
-}

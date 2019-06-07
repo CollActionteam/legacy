@@ -62,13 +62,13 @@ namespace CollAction.Models
         [Required]
         [DataType(DataType.Date)]
         [WithinMonthsAfterToday(12, ErrorMessage = "Please ensure your project starts within the next 12 months")]
-        [Display(Name = "Start date")]
+        [Display(Name = "Sign up opens")]
         public DateTime Start { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
         [WithinMonthsAfterDateProperty(12, "Start", ErrorMessage = "The deadline must be within a year of the start date")]
-        [Display(Name = "Deadline")]
+        [Display(Name = "Sign up closes")]
         public DateTime End { get; set; }
 
         [MaxLength(50, ErrorMessage = "Keep your description short, no more then 50 characters")]

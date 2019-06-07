@@ -85,7 +85,6 @@
             }
         }
 
-
         h1 {
             text-align: center;
             color: $coll-action-green;
@@ -235,7 +234,14 @@
 
     @media (max-width: 992px) {
         #project-background {
-            padding: 70px 0px;
+            background-size: cover;
         }
     }
+}
+
+.participant-information {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Stripe;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace CollAction.Models.ManageViewModels
@@ -9,5 +10,6 @@ namespace CollAction.Models.ManageViewModels
         public bool NewsletterSubscription { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
+        public IEnumerable<Subscription> DonationSubscriptions { get; set; }
     }
 }

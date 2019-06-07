@@ -1,0 +1,83 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+
+@model FinishRegistrationViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div id="user-register-starting">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h1>Create an account</h1>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+ <div id="user-register-form">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-6 col-md-offset-3">
+                <form asp-controller="Account" asp-action="FinishRegistration" method="post">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <input asp-for="Code" type="hidden" />
+
+                    <div class="form-group">
+                        <input asp-for="Email" type="hidden" />
+                        <label asp-for="Email" class="control-label"></label><br/>
+                        @Model.Email
+                    </div>
+
+
+                    <div class="form-group">
+                        <label asp-for="FirstName" class="control-label"></label>
+                        <input asp-for="FirstName" class="form-control" />
+                        @Html.ValidationMessage("FirstName")
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="LastName" class="control-label"></label>
+                        <input asp-for="LastName" class="form-control" />
+                        @Html.ValidationMessage("LastName")
+                    </div>
+                    
+                    <div class="form-group">
+                        <label asp-for="Password" class="control-label"></label>
+                        <input asp-for="Password" class="form-control" />
+                        @Html.ValidationMessage("Password")
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="ConfirmPassword" class="control-label"></label>
+                        <input asp-for="ConfirmPassword" class="form-control" />
+                        @Html.ValidationMessage("ConfirmPassword")
+                    </div>
+                    
+                    <div class="form-group">
+                        <label asp-for="NewsletterSubscription" class="control-label"></label>
+                        @Html.CheckBoxFor(m => m.NewsletterSubscription)
+                        @Html.ValidationMessage("NewsletterSubscription")
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label" for="AgreedPrivacyPolicy">I've read and agreed to our <a href="/Home/Privacy" target="_blank">privacy policy</a></label>
+                        @Html.CheckBoxFor(m => m.AgreedPrivacyPolicy)
+                        @Html.ValidationMessageFor(m => m.AgreedPrivacyPolicy)
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" value="Register" class="btn btn-default" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div> 
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

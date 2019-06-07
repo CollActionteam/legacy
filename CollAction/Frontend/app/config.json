@@ -383,9 +383,14 @@
   },
   "css": [
     "grid.less",
+    "forms.less",
     "responsive-utilities.less",
-    "responsive-embed.less"
+    "navs.less",
+    "navbar.less",
+    "alerts.less",
+    "panels.less",
+    "responsive-embed.less",
+    "component-animations.less"
   ],
-  "js": [],
-  "customizerUrl": "http://getbootstrap.com/customize/?id=b16cc84fa80d0dc07f50849d5978a251"
+  "js": []
 }

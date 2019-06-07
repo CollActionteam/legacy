@@ -1,6 +1,5 @@
 ﻿﻿@using Microsoft.ApplicationInsights.AspNetCore
 @using Microsoft.AspNetCore.Http.Features
-
 @inject JavaScriptSnippet snippet
 
 @{
@@ -17,14 +16,11 @@
     {
         <script src="~/lib/google/tagmanager.js">
         </script>
+        <script src="https://js.stripe.com/v3/">
+        </script>
     }
-    <environment names="Development">
-        <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
-    </environment>
-    <environment names="Staging,Production">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    </environment>
-    <link href="https://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link href="https://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet" />
 
     <style>
         body { display: none; }
@@ -35,54 +31,33 @@
     @Html.Raw(snippet.FullScript)
 </head>
 <body id="body">
-    @if (canTrack) 
-    {
-        <!-- Google Tag Manager (noscript) -->
-        <noscript>
-            <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NTCKFKM"
-                    height="0" width="0" style="display:none;visibility:hidden"></iframe>
-        </noscript>
-        <!-- End Google Tag Manager (noscript) -->
-    }
+    <div id="main">
+        @if (canTrack) 
+        {
+            <noscript>
+                <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NTCKFKM"
+                        height="0" width="0" style="display:none;visibility:hidden"></iframe>
+            </noscript>
+        }
 
-    <div id="header-container">
-        <div class="container" id="nav-container">
-            <div id="header">
-                <div class="row nav-row">
-                    <div class="col-md-3 col-xs-12 header-logo">
-                        <div class="hidden-md hidden-lg" id="mobile-nav-draw"></div>
-                        <partial name="_logo" />
-                    </div>
-                    <div class="col-md-7 nav-bar hidden-xs hidden-sm">
-                        <ul id="header-menu">
-                            <li><a asp-area="" asp-controller="Projects" asp-action="Find">Find Project</a></li>
-                            <li><a asp-area="" asp-controller="Projects" asp-action="StartInfo">Start Project</a></li>
-                            <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                            @if (User.IsInRole(Constants.AdminRole))
-                            {
-                                <li><a asp-area="" asp-controller="Admin" asp-action="Index">Admin Dashboard</a></li>
-                            }
-                        </ul>
-                    </div>
-                    <div class="col-md-2 nav-bar hidden-xs hidden-sm" id="header-login">
-                        @await Html.PartialAsync("_LoginPartial")
-                    </div>
-                </div>
-            </div>
+        <div id="header">
+            <partial name="_NavMenu" />
         </div>
-    </div>
-    <div id="header-padding"></div>   
-    <partial name="_CookieConsentPartial" /> 
-    @RenderBody()
-    <partial name="_Footer" />
 
-    @RenderSection("scripts", required: false)
-    
-    <environment names="Development">
-        <script src="~/js/frontend.bundle.js?@DateTime.Now.Ticks.ToString()"></script>
-    </environment>
-    <environment names="Staging,Production">
-        <script src="~/js/frontend.bundle.js"></script>
-    </environment>
+        <partial name="_CookieConsentPartial" /> 
+        <div id="site-content">
+        @RenderBody()
+        </div>
+        <partial name="_Footer" />
+
+        @RenderSection("scripts", required: false)
+        
+        <environment names="Development">
+            <script src="~/js/frontend.bundle.js?@DateTime.Now.Ticks.ToString()"></script>
+        </environment>
+        <environment names="Staging,Production">
+            <script src="~/js/frontend.bundle.js"></script>
+        </environment>
+    </div>
 </body>
 </html>
