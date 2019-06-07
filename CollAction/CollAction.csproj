@@ -32,6 +32,6 @@
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition="'$(DISABLE_NPM_BUILD)' != '1'">
-    <Exec Command="npm ci &amp;&amp; npm run build" />
+    <Exec Command="npm install &amp;&amp; npm run build" />
   </Target>
 </Project>
