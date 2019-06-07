@@ -98,7 +98,7 @@ namespace CollAction.Tests.Integration
 
             await _service.DeleteListMemberAsync(_newsletterTestListId, email);
             status = await _service.GetListMemberStatusAsync(_newsletterTestListId, email);
-            Assert.AreEqual(NewsletterSubscriptionService.SubscriptionStatus.NotFound, status);
+            Assert.AreEqual(NewsletterSubscriptionService.NotFound, status);
         }
 
         [TestMethod]
@@ -108,7 +108,7 @@ namespace CollAction.Tests.Integration
 
             await _service.DeleteListMemberAsync(_newsletterTestListId, email);
             NewsletterSubscriptionService.SubscriptionStatus status = await _service.GetListMemberStatusAsync(_newsletterTestListId, email);
-            Assert.AreEqual(NewsletterSubscriptionService.SubscriptionStatus.NotFound, status);
+            Assert.AreEqual(NewsletterSubscriptionService.SubscriptionStatus.Unknown, status);
         }
 
         private string GetTestEmail()
