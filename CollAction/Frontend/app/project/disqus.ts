@@ -14,4 +14,3 @@ if (site && id) {
     (d.head || d.body).appendChild(s);
   })();
 }
-
