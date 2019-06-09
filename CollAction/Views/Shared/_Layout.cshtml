@@ -19,13 +19,8 @@
         <script src="https://js.stripe.com/v3/">
         </script>
     }
-    <environment names="Development">
-        <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
-    </environment>
-    <environment names="Staging,Production">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    </environment>
-    <link href="https://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link href="https://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet" />
 
     <style>
         body { display: none; }
@@ -39,12 +34,10 @@
     <div id="main">
         @if (canTrack) 
         {
-            <!-- Google Tag Manager (noscript) -->
             <noscript>
                 <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NTCKFKM"
                         height="0" width="0" style="display:none;visibility:hidden"></iframe>
             </noscript>
-            <!-- End Google Tag Manager (noscript) -->
         }
 
         <div id="header">

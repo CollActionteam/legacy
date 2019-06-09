@@ -1,5 +1,7 @@
 ﻿using CollAction.Data;
 using CollAction.Models;
+using CollAction.Models.EmailViewModels;
+using CollAction.Services.Email;
 using Hangfire;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -43,6 +45,7 @@ namespace CollAction.Services.Donation
         const string StatusChargeable = "chargeable";
         const string StatusConsumed = "consumed";
         const string EventTypeChargeableSource = "source.chargeable";
+        const string EventTypeChargeSucceeded = "charge.succeeded";
         const string NameKey = "name";
         const string RecurringDonationProduct = "Recurring Donation Stichting CollAction";
 
@@ -57,10 +60,11 @@ namespace CollAction.Services.Donation
         private readonly StripeSignatures _stripeSignatures;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IEmailSender _emailSender;
         private readonly RequestOptions _requestOptions;
         private readonly SiteOptions _siteOptions;
 
-        public DonationService(IOptions<RequestOptions> requestOptions, IOptions<SiteOptions> siteOptions, UserManager<ApplicationUser> userManager, ApplicationDbContext context, IBackgroundJobClient backgroundJobClient, IOptions<StripeSignatures> stripeSignatures)
+        public DonationService(IOptions<RequestOptions> requestOptions, IOptions<SiteOptions> siteOptions, UserManager<ApplicationUser> userManager, ApplicationDbContext context, IBackgroundJobClient backgroundJobClient, IOptions<StripeSignatures> stripeSignatures, IEmailSender emailSender)
         {
             _requestOptions = requestOptions.Value;
             _siteOptions = siteOptions.Value;
@@ -75,6 +79,7 @@ namespace CollAction.Services.Donation
             _stripeSignatures = stripeSignatures.Value;
             _context = context;
             _userManager = userManager;
+            _emailSender = emailSender;
         }
 
         public async Task<bool> HasIdealPaymentSucceeded(string sourceId, string clientSecret)
@@ -219,8 +224,8 @@ namespace CollAction.Services.Donation
             Event stripeEvent = EventUtility.ConstructEvent(json, signature, _stripeSignatures.StripeChargeableWebhookSecret);
             if (stripeEvent.Type == EventTypeChargeableSource)
             {
-                string sourceId = ((Source)stripeEvent.Data.Object)?.Id;
-                _backgroundJobClient.Enqueue(() => Charge(sourceId));
+                Source source = (Source)stripeEvent.Data.Object;
+                _backgroundJobClient.Enqueue(() => Charge(source.Id));
             }
             else
             {
@@ -234,12 +239,21 @@ namespace CollAction.Services.Donation
         public async Task LogPaymentEvent(string json, string signature)
         {
             Event stripeEvent = EventUtility.ConstructEvent(json, signature, _stripeSignatures.StripePaymentEventWebhookSecret);
+
             _context.DonationEventLog.Add(new DonationEventLog()
             {
                 Type = DonationEventType.External,
                 EventData = stripeEvent.ToJson()
             });
             await _context.SaveChangesAsync();
+
+            if (stripeEvent.Type == EventTypeChargeSucceeded)
+            {
+                Charge charge = (Charge)stripeEvent.Data.Object;
+                var subscriptions = await _subscriptionService.ListAsync(new SubscriptionListOptions() { CustomerId = charge.CustomerId });
+                Customer customer = await _customerService.GetAsync(charge.CustomerId);
+                await SendDonationThankYou(customer, subscriptions.Any());
+            }
         }
 
         /*
@@ -381,6 +395,9 @@ namespace CollAction.Services.Donation
                 throw new InvalidOperationException($"Invalid user-details");
             }
         }
+
+        private Task SendDonationThankYou(Customer customer, bool hasSubscriptions)
+            => _emailSender.SendEmailTemplated(customer.Email, "Thank you for your donation", "DonationThankYou", hasSubscriptions);
 
         private void ValidateDetails(int amount, string name, string email)
         {
