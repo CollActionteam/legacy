@@ -1,5 +1,3 @@
-import * as React from "react";
-
 import "./styles/FindProject.scss";
 import "./styles/ProjectDetails.scss";
 import "./styles/ProjectThumb.scss";
@@ -18,3 +16,5 @@ import "./ProjectPreview";
 
 import "./UploadBanner";
 import "./UploadDescriptiveImage";
+
+import "./disqus";

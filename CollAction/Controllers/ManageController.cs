@@ -21,29 +21,23 @@ namespace CollAction.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IDonationService _donationService;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IEmailSender _emailSender;
         private readonly INewsletterSubscriptionService _newsletterSubscriptionService;
         private readonly ILogger _logger;
-        private readonly IStringLocalizer<ManageController> _localizer;
         private readonly IProjectService  _projectService;
 
         public ManageController(
           UserManager<ApplicationUser> userManager,
           SignInManager<ApplicationUser> signInManager,
-          IEmailSender emailSender,
           INewsletterSubscriptionService newsletterSubscriptionService,
           ILoggerFactory loggerFactory,
-          IStringLocalizer<ManageController> localizer,
           IDonationService donationService,
           IProjectService projectService)
         {
             _userManager = userManager;
             _donationService = donationService;
             _signInManager = signInManager;
-            _emailSender = emailSender;
             _newsletterSubscriptionService = newsletterSubscriptionService;
             _logger = loggerFactory.CreateLogger<ManageController>();
-            _localizer = localizer;
             _projectService = projectService;
         }
 

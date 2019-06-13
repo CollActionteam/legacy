@@ -21,31 +21,22 @@ namespace CollAction.Controllers
     public class AdminController: Controller
     {
         public AdminController(
-            UserManager<ApplicationUser> userManager,
             IStringLocalizer<AccountController> localizer,
-            IHostingEnvironment hostingEnvironment,
             IEmailSender emailSender,
-            IProjectService projectService,
             IParticipantsService participantsService,
             IImageService imageService,
             ApplicationDbContext context)
         {
-            _userManager = userManager;
             _localizer = localizer;
             _context = context;
-            _hostingEnvironment = hostingEnvironment;
             _emailSender = emailSender;
-            _projectService = projectService;
             _participantsService = participantsService;
             _imageService = imageService;
         }
 
         private readonly ApplicationDbContext _context;
-        private readonly IHostingEnvironment _hostingEnvironment;
         private readonly IStringLocalizer<AccountController> _localizer;
-        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSender _emailSender;
-        private readonly IProjectService _projectService;
         private readonly IParticipantsService _participantsService;
         private readonly IImageService _imageService;
 
