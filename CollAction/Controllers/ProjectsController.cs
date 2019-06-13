@@ -30,7 +30,6 @@ namespace CollAction.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IStringLocalizer<ProjectsController> _localizer;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IHostingEnvironment _hostingEnvironment;
         private readonly IProjectService _projectService;
         private readonly IParticipantsService _participantsService;
         private readonly IEmailSender _emailSender;
@@ -41,7 +40,6 @@ namespace CollAction.Controllers
             ApplicationDbContext context, 
             IStringLocalizer<ProjectsController> localizer, 
             UserManager<ApplicationUser> userManager, 
-            IHostingEnvironment hostingEnvironment, 
             IProjectService projectService, 
             IParticipantsService participantsService, 
             IEmailSender emailSender, 
@@ -51,7 +49,6 @@ namespace CollAction.Controllers
             _context = context;
             _localizer = localizer;
             _userManager = userManager;
-            _hostingEnvironment = hostingEnvironment;
             _projectService = projectService;
             _participantsService = participantsService;
             _emailSender = emailSender;

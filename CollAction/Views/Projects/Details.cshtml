@@ -5,7 +5,7 @@
 @using Microsoft.Extensions.Options
 
 @inject IViewLocalizer Localizer
-@inject IOptions<SiteOptions> SiteOptions
+@inject IOptions<DisqusOptions> DisqusOptions
 
 @model CollAction.Models.DisplayProjectViewModel
 
@@ -19,7 +19,7 @@
     var active = Model.Project.IsActive;
     var status = Model.ExternalStatus;
 
-    var disqusSite = @SiteOptions.Value.DisqusSite;
+    var disqusSite = @DisqusOptions.Value.DisqusSite;
     var disqusId = $"{@Model.Project.Name}/{@Model.Project.Id}";
 }
 

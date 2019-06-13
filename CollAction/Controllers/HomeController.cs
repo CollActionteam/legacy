@@ -16,16 +16,14 @@ namespace CollAction.Controllers
     {
         private readonly IStringLocalizer<HomeController> _localizer;
         private readonly ApplicationDbContext _context;
-        private readonly IHostingEnvironment _hostingEnvironment;
         private readonly IProjectService _projectService;
         private readonly IImageService _imageService;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(IStringLocalizer<HomeController> localizer, ApplicationDbContext context, IHostingEnvironment hostingEnvironment, IProjectService projectService, IImageService imageService, ILogger<HomeController> logger)
+        public HomeController(IStringLocalizer<HomeController> localizer, ApplicationDbContext context, IProjectService projectService, IImageService imageService, ILogger<HomeController> logger)
         {
             _localizer = localizer;
             _context = context;
-            _hostingEnvironment = hostingEnvironment;
             _projectService = projectService;
             _imageService = imageService;
             _logger = logger;
