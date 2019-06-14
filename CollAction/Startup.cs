@@ -338,16 +338,6 @@ namespace CollAction
                      new { controller = "Home", action = "CrowdActingFestival" }
                  );
 
-                routes.MapRoute("faq",
-                     "faq",
-                     new { controller = "Home", action = "FAQ" }
-                 );
-
-                routes.MapRoute("contact",
-                     "contact",
-                     new { controller = "Home", action = "Contact" }
-                 );
-
                 routes.MapRoute("robots.txt",
                     "robots.txt",
                     new { controller = "Home", action = "Robots" });

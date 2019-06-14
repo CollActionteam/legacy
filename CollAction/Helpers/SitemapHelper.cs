@@ -38,8 +38,6 @@ namespace CollAction.Helpers
                 new XElement(_urlsetNamespace + "url", new XElement(_urlsetNamespace + "loc", _protocol + host + _urlHelper.Action("Index", "Home"))),
                 new XElement(_urlsetNamespace + "url", new XElement(_urlsetNamespace + "loc", _protocol + host + _urlHelper.Action("About", "Home"))),
                 new XElement(_urlsetNamespace + "url", new XElement(_urlsetNamespace + "loc", _protocol + host + _urlHelper.Action("CrowdActingFestival", "Home"))),
-                new XElement(_urlsetNamespace + "url", new XElement(_urlsetNamespace + "loc", _protocol + host + _urlHelper.Action("Contact", "Home"))),
-                new XElement(_urlsetNamespace + "url", new XElement(_urlsetNamespace + "loc", _protocol + host + _urlHelper.Action("FAQ", "Home"))),
                 new XElement(_urlsetNamespace + "url", new XElement(_urlsetNamespace + "loc", _protocol + host + _urlHelper.Action("Find", "Projects")))
             };
 

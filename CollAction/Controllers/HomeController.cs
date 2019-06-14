@@ -37,12 +37,6 @@ namespace CollAction.Controllers
         public IActionResult CrowdActingFestival()
             => View();
 
-        public IActionResult Contact()
-            => View();
-
-        public ViewResult FAQ()
-            => View();
-
         public IActionResult Error()
         {
             var exceptionHandlerPathFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
