@@ -84,6 +84,7 @@ namespace CollAction
             services.AddApplicationInsightsTelemetry(Configuration);
 
             services.AddUrlHelper();
+            services.AddResponseCompression();
 
             services.AddLogging(loggingBuilder =>
             {
@@ -182,6 +183,7 @@ namespace CollAction
                 forwardedHeaderOptions.KnownNetworks.Clear();
                 app.UseForwardedHeaders(forwardedHeaderOptions);
                 app.UseRewriter(new RewriteOptions().AddRedirectToHttpsPermanent());
+                app.UseResponseCompression();
             }
 
             if (!Configuration.GetValue<bool>("CspDisable"))
