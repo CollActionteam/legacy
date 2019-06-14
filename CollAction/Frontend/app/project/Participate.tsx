@@ -52,7 +52,7 @@ export default class ParticipateInProject extends React.Component<IParticipation
 
     submitForm = () => {
         if (this.state.email.match(/^\S+@\S+\.\S+$/) === null) {
-            this.setState({ error: "Invalid e-mail address" });
+            this.setState({ error: "Please provide a valid e-mail address" });
             return;
         }
         const form = document.getElementById(this.props.formId) as HTMLFormElement;
