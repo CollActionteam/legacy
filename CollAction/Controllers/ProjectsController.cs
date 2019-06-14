@@ -1,20 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CollAction.Data;
 using CollAction.Models;
-using CollAction.Helpers;
-using Microsoft.Extensions.Localization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Hosting;
 using CollAction.Models.ProjectViewModels;
-using System.Net;
 using System.Linq.Expressions;
 using CollAction.Services.Project;
 using CollAction.Services.Email;
@@ -28,7 +23,6 @@ namespace CollAction.Controllers
     public class ProjectsController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly IStringLocalizer<ProjectsController> _localizer;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IProjectService _projectService;
         private readonly IParticipantsService _participantsService;
@@ -38,7 +32,6 @@ namespace CollAction.Controllers
 
         public ProjectsController(
             ApplicationDbContext context, 
-            IStringLocalizer<ProjectsController> localizer, 
             UserManager<ApplicationUser> userManager, 
             IProjectService projectService, 
             IParticipantsService participantsService, 
@@ -47,7 +40,6 @@ namespace CollAction.Controllers
             IOptions<SiteOptions> siteOptions)
         {
             _context = context;
-            _localizer = localizer;
             _userManager = userManager;
             _projectService = projectService;
             _participantsService = participantsService;
@@ -100,17 +92,17 @@ namespace CollAction.Controllers
             // Make sure the project name is unique.
             if (await _context.Projects.AnyAsync(p => p.Name == model.Name))
             {
-                ModelState.AddModelError("Name", _localizer["A project with the same name already exists."]);
+                ModelState.AddModelError("Name", "A project with the same name already exists.");
             }
 
             // If there are image descriptions without corresponding image uploads, warn the user.
             if (model.BannerImageUpload == null && !string.IsNullOrWhiteSpace(model.BannerImageDescription))
             {
-                ModelState.AddModelError("BannerImageDescription", _localizer["You can only provide a 'Banner Image Description' if you upload a 'Banner Image'."]);
+                ModelState.AddModelError("BannerImageDescription", "You can only provide a 'Banner Image Description' if you upload a 'Banner Image'.");
             }
             if (model.DescriptiveImageUpload == null && !string.IsNullOrWhiteSpace(model.DescriptiveImageDescription))
             {
-                ModelState.AddModelError("DescriptiveImageDescription", _localizer["You can only provide a 'DescriptiveImage Description' if you upload a 'DescriptiveImage'."]);
+                ModelState.AddModelError("DescriptiveImageDescription", "You can only provide a 'DescriptiveImage Description' if you upload a 'DescriptiveImage'.");
             }
 
             if (!ModelState.IsValid) {

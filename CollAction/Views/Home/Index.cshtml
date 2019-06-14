@@ -1,12 +1,10 @@
-﻿@using Microsoft.AspNetCore.Mvc.Localization
-@using CollAction.Services.Festival;
+﻿@using CollAction.Services.Festival;
 @using Microsoft.AspNetCore.Http.Features
 
-@inject IViewLocalizer Localizer
 @inject IFestivalService FestivalService
 
 @{
-    ViewData["Title"] = Localizer["Home Page"];
+    ViewData["Title"] = "Home Page";
     var consentFeature = Context.Features.Get<ITrackingConsentFeature>();
     var canTrack = consentFeature.CanTrack;
 }
@@ -52,18 +50,18 @@
             <div class="container">
                 <div class="row" id="title-row">
                     <div class="col-xs-12">
-                        <h1>@Localizer["POWER TO THE CROWD"]</h1>
+                        <h1>POWER TO THE CROWD</h1>
                     </div>
                 </div>
                 <div class="row" id="link-row">
                     <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-2 col-md-offset-4">
                         <a class="banner-link" asp-controller="Projects" asp-action="Find">
-                            @Localizer["Find Project"]
+                            Find Project
                         </a>
                     </div>
                     <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-2 col-md-offset-0">
                         <a class="banner-link" asp-controller="Projects" asp-action="StartInfo">
-                            @Localizer["Start Project"]
+                            Start Project
                         </a>
                     </div>
                 </div>
@@ -95,16 +93,16 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-12">
-                    <h2>@Localizer["Crowdacting in 3 steps"]</h2>
+                    <h2>Crowdacting in 3 steps</h2>
                 </div>
 
                 <div class="col-xs-12 col-md-4">
                     <object class="three-step-image" type="image/svg+xml" data="/images/step1.svg">
                         Your browser does not support SVG
                     </object>
-                    <p class="heading">@Localizer["Proposal"]</p>
+                    <p class="heading">Proposal</p>
                     <p class="explanation">
-                        @Localizer["Someone proposes a collective action and sets a target number of participants and a deadline"]
+                        Someone proposes a collective action and sets a target number of participants and a deadline
                     </p>
                 </div>
 
@@ -112,9 +110,9 @@
                     <object class="three-step-image" type="image/svg+xml" data="/images/step2.svg">
                         Your browser does not support SVG
                     </object>
-                    <p class="heading">@Localizer["Crowd"]</p>
+                    <p class="heading">Crowd</p>
                     <p class="explanation">
-                        @Localizer["Supporters pledge to join if the target is met before the deadline"]
+                        Supporters pledge to join if the target is met before the deadline
                     </p>
                 </div>
 
@@ -122,9 +120,9 @@
                     <object class="three-step-image" type="image/svg+xml" data="/images/step3.svg">
                         Your browser does not support SVG
                     </object>
-                    <p class="heading">@Localizer["Act"]</p>
+                    <p class="heading">Act</p>
                     <p class="explanation">
-                        @Localizer["When the target number of supporters is met, we all act!"]
+                        When the target number of supporters is met, we all act!
                     </p>
                 </div>
 
@@ -137,12 +135,12 @@
             <div class="row project-action-buttons">
                 <div class="col-xs-12 col-sm-8 col-sm-offset-2">
                     <a class="project-actions-link" asp-controller="Projects" asp-action="StartInfo">
-                        @Localizer["Starting a Project"]
+                        Starting a Project
                     </a>
                 </div>
                 <div class="col-xs-12 col-sm-8 col-sm-offset-2">
                     <a class="project-actions-link" asp-controller="Projects" asp-action="Find">
-                        @Localizer["Browse Projects"]
+                        Browse Projects
                     </a>
                 </div>
             </div>

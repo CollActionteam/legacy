@@ -1,14 +1,12 @@
-﻿@using Microsoft.AspNetCore.Mvc.Localization
-@using CollAction.Models.AdminViewModels
+﻿@using CollAction.Models.AdminViewModels
 @using CollAction.Services.Image
 
-@inject IViewLocalizer Localizer
 @inject IImageService ImageService
 
 @model ManageProjectViewModel
 
 @{
-    ViewData["Title"] = Localizer["Manage Project"];
+    ViewData["Title"] = "Manage Project";
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -90,18 +88,24 @@
                     @if (Model.BannerImageFile != null)
                     {
                         <div class="form-group">
-                            <label class="control-label">@Localizer["Banner Image"]</label>
-                            <img src="@ImageService.GetUrl(Model.BannerImageFile)" width="@Model.BannerImageFile.Width" height="@Model.BannerImageFile.Height" class="banner-image" alt=@Localizer["Banner image not found."] />
+                            <label class="control-label">Banner Image</label>
+                            <img src="@ImageService.GetUrl(Model.BannerImageFile)" width="@Model.BannerImageFile.Width" height="@Model.BannerImageFile.Height" class="banner-image" alt="Banner image not found." />
                         </div>
                     }
 
                     <div class="form-group">
-                        <label class="control-label">
-                            @if (Model.BannerImageFile != null)
-                            {@Localizer["Change Banner Image"] }
+                        @if (Model.BannerImageFile != null)
+                        {
+                            <label class="control-label">
+                                Change Banner Image
+                            </label>
+                        }
                         else
-                        { @Localizer["Banner Image"]}
-                        </label>
+                        {
+                            <label class="control-label">
+                                Banner Image
+                            </label>
+                        }
                         <input asp-for="BannerImageUpload" class="form-control" />
                         @Html.ValidationMessage("BannerImageUpload")
                     </div>
@@ -114,17 +118,23 @@
                     @if (Model.DescriptiveImageFile != null)
                     {
                         <div class="form-group">
-                            <label class="control-label">@Localizer["Descriptive Image"]</label>
-                            <img src="@ImageService.GetUrl(Model.DescriptiveImageFile)" width="@Model.DescriptiveImageFile.Width" height="@Model.DescriptiveImageFile.Height" class="descriptive-image" alt=@Localizer["Descriptive image not found."] />
+                            <label class="control-label">Descriptive Image</label>
+                            <img src="@ImageService.GetUrl(Model.DescriptiveImageFile)" width="@Model.DescriptiveImageFile.Width" height="@Model.DescriptiveImageFile.Height" class="descriptive-image" alt="Descriptive image not found." />
                         </div>
                     }
                     <div class="form-group">
-                        <label class="control-label">
-                            @if (Model.DescriptiveImageFile != null)
-                            {@Localizer["Change Descriptive Image"] }
+                        @if (Model.DescriptiveImageFile != null)
+                        {
+                            <label class="control-label">
+                                Change Descriptive Image
+                            </label>
+                        }
                         else
-                        { @Localizer["Descriptive Image"]}
-                        </label>
+                        {
+                            <label class="control-label">
+                                Descriptive Image
+                            </label>
+                        }
                         <input asp-for="DescriptiveImageUpload" class="form-control" />
                         @Html.ValidationMessage("DescriptiveImageUpload")
                     </div>

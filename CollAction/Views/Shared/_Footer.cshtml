@@ -1,16 +1,12 @@
-@using Microsoft.AspNetCore.Mvc.Localization
 @using Microsoft.Extensions.Options;
 @using CollAction.Services.Newsletter;
 @using CollAction.Services.Festival;
-
-@inject IViewLocalizer Localizer
 
 @inject IOptions<NewsletterSubscriptionServiceOptions> NewsletterSubscriptionServiceOptions
 @inject IFestivalService FestivalService;
 
 <div id="footer">
   <div class="container">
-
     <div class="logo row">
       <div class="col-xs-12">
         <partial name="_Logo" />
@@ -24,33 +20,33 @@
       </div>
 
       <ul class="nav-list col-md-2 col-xs-12">
-          <li><a asp-controller="Home" asp-action="Index">@Localizer["Home"]</a></li>
-          <li><a asp-controller="Projects" asp-action="Find">@Localizer["Find Project"]</a></li>
-          <li><a asp-controller="Projects" asp-action="Create">@Localizer["Start Project"]</a></li>
-          <li><a asp-controller="Home" asp-action="About" asp-fragment="about-collaction-fragment">@Localizer["About Us"]</a></li>
+          <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+          <li><a asp-controller="Projects" asp-action="Find">Find Project</a></li>
+          <li><a asp-controller="Projects" asp-action="Create">Start Project</a></li>
+          <li><a asp-controller="Home" asp-action="About" asp-fragment="about-collaction-fragment">About Us</a></li>
           @if (FestivalService.CallToActionsVisible) 
           {
-            <li><a asp-controller="Home" asp-action="CrowdActingFestival">@Localizer["Festival"]</a></li>
+            <li><a asp-controller="Home" asp-action="CrowdActingFestival">Festival</a></li>
           }
       </ul>
 
       <ul class="nav-list col-md-2 col-xs-12">
-          <li><a asp-controller="Account" asp-action="Login">@Localizer["Login"]</a></li>
-          <li><a asp-controller="Account" asp-action="Register">@Localizer["Sign Up"]</a></li>
-          <li><a asp-controller="Home" asp-action="About" asp-fragment="about-us-fragment">@Localizer["Mission"]</a></li>
-          <li><a asp-controller="Home" asp-action="About" asp-fragment="meet-the-team-fragment">@Localizer["Team"]</a></li>
+          <li><a asp-controller="Account" asp-action="Login">Login</a></li>
+          <li><a asp-controller="Account" asp-action="Register">Sign Up</a></li>
+          <li><a asp-controller="Home" asp-action="About" asp-fragment="about-us-fragment">Mission</a></li>
+          <li><a asp-controller="Home" asp-action="About" asp-fragment="meet-the-team-fragment">Team</a></li>
       </ul>
 
       <ul class="nav-list col-md-1 col-xs-12">
-          <li><a asp-controller="Donation" asp-action="Donate">@Localizer["Donate"]</a></li>
-          <li><a asp-controller="Home" asp-action="About" asp-fragment="partners-fragment">@Localizer["Partners"]</a></li>
-          <li><a asp-controller="Home" asp-action="About" asp-fragment="press-fragment">@Localizer["Press"]</a></li>
-          <li><a asp-controller="Home" asp-action="About" asp-fragment="faq-fragment">@Localizer["FAQs"]</a></li>
+          <li><a asp-controller="Donation" asp-action="Donate">Donate</a></li>
+          <li><a asp-controller="Home" asp-action="About" asp-fragment="partners-fragment">Partners</a></li>
+          <li><a asp-controller="Home" asp-action="About" asp-fragment="press-fragment">Press</a></li>
+          <li><a asp-controller="Home" asp-action="About" asp-fragment="faq-fragment">FAQs</a></li>
       </ul>
 
 
       <div class="col-md-3 col-xs-12">
-        <h5 class="header">@Localizer["Follow Us"]</h5>
+        <h5 class="header">Follow Us</h5>
         <ul class="social-list">
             <li><a target="_blank" href="https://www.facebook.com/collaction.org/"><div><i class="fa fa-facebook"></i></div></a></li>
             <li><a target="_blank" href="https://www.instagram.com/collaction_org"><div><i class="fa fa-instagram"></i></div></a></li>
@@ -59,7 +55,7 @@
             <li><a target="_blank" href="https://www.linkedin.com/company-beta/15079855/"><div><i class="fa fa-linkedin"></i></div></a></li>
         </ul>
 
-        <h5 class="header">@Localizer["Newsletter"]</h5>
+        <h5 class="header">Newsletter</h5>
 
         <!-- Begin MailChimp Signup Form -->
         <div id="mc_embed_signup">
@@ -86,7 +82,6 @@
           </form>
         </div>
         <!--End mc_embed_signup-->
-
       </div>
     </div>
   </div>

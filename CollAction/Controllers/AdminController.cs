@@ -2,12 +2,9 @@
 using CollAction.Models;
 using CollAction.Models.AdminViewModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Localization;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,13 +18,11 @@ namespace CollAction.Controllers
     public class AdminController: Controller
     {
         public AdminController(
-            IStringLocalizer<AccountController> localizer,
             IEmailSender emailSender,
             IParticipantsService participantsService,
             IImageService imageService,
             ApplicationDbContext context)
         {
-            _localizer = localizer;
             _context = context;
             _emailSender = emailSender;
             _participantsService = participantsService;
@@ -35,7 +30,6 @@ namespace CollAction.Controllers
         }
 
         private readonly ApplicationDbContext _context;
-        private readonly IStringLocalizer<AccountController> _localizer;
         private readonly IEmailSender _emailSender;
         private readonly IParticipantsService _participantsService;
         private readonly IImageService _imageService;
@@ -202,17 +196,17 @@ namespace CollAction.Controllers
             // If the project name changed make sure it is still unique.
             if (project.Name != model.Name && await _context.Projects.AnyAsync(p => p.Name == model.Name))
             {
-                ModelState.AddModelError("Name", _localizer["A project with the same name already exists."]);
+                ModelState.AddModelError("Name", "A project with the same name already exists.");
             }
 
             // If there are image descriptions without corresponding image uploads, warn the user.
             if (project.BannerImage == null && model.BannerImageUpload == null && !string.IsNullOrWhiteSpace(model.BannerImageDescription))
             {
-                ModelState.AddModelError("BannerImageDescription", _localizer["You can only provide a 'Banner Image Description' if you upload a 'Banner Image'."]);
+                ModelState.AddModelError("BannerImageDescription", "You can only provide a 'Banner Image Description' if you upload a 'Banner Image'.");
             }
             if (project.DescriptiveImage == null && model.DescriptiveImageUpload == null && !string.IsNullOrWhiteSpace(model.DescriptiveImageDescription))
             {
-                ModelState.AddModelError("DescriptiveImageDescription", _localizer["You can only provide a 'DescriptiveImage Description' if you upload a 'DescriptiveImage'."]);
+                ModelState.AddModelError("DescriptiveImageDescription", "You can only provide a 'DescriptiveImage Description' if you upload a 'DescriptiveImage'.");
             }
 
             if (ModelState.IsValid)

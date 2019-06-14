@@ -1,16 +1,10 @@
-﻿@using Microsoft.AspNetCore.Mvc.Localization
-@using System.Collections.Generic
-@using Microsoft.AspNetCore.Http
-@using Microsoft.AspNetCore.Http.Authentication
-@using Microsoft.AspNetCore.Http.Features
+﻿@using Microsoft.AspNetCore.Http.Features
 
 @inject SignInManager<ApplicationUser> SignInManager
-@inject IViewLocalizer Localizer
-
 @model LoginViewModel
 
 @{
-    ViewData["Title"] = Localizer["Log in"];
+    ViewData["Title"] = "Log in";
     var consentFeature = Context.Features.Get<ITrackingConsentFeature>();
     var canTrack = consentFeature.CanTrack;
 }

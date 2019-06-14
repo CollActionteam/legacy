@@ -6,9 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using CollAction.Data;
 using CollAction.Models;
-using Microsoft.AspNetCore.Mvc.Razor;
-using System.Globalization;
-using Microsoft.AspNetCore.Localization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Serilog;
@@ -107,11 +104,7 @@ namespace CollAction
                 loggingBuilder.AddSerilog(Log.Logger);
             });
 
-            services.AddLocalization(options => options.ResourcesPath = "Resources");
-
-            services.AddMvc()
-                    .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
-                    .AddDataAnnotationsLocalization();
+            services.AddMvc();
 
             services.AddHangfire(config => config.UsePostgreSqlStorage(connectionString));
 
@@ -164,12 +157,6 @@ namespace CollAction
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime applicationLifetime)
         {
-            var supportedCultures = new[]
-            {
-                new CultureInfo("en-US"),
-                new CultureInfo("nl-NL")
-            };
-
             if (env.IsProduction())
             {
                 // Ensure our middleware handles proxied https, see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-Proto
@@ -278,13 +265,6 @@ namespace CollAction
                    })
                 );
             }
-
-            app.UseRequestLocalization(new RequestLocalizationOptions
-            {
-                DefaultRequestCulture = new RequestCulture("en-US"),
-                SupportedCultures = supportedCultures,
-                SupportedUICultures = supportedCultures,
-            });
 
             applicationLifetime.ApplicationStopping.Register(() => Log.CloseAndFlush());
 

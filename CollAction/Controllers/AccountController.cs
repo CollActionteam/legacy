@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using CollAction.Models;
 using CollAction.Models.AccountViewModels;
-using Microsoft.Extensions.Localization;
 using CollAction.Data;
 using Microsoft.AspNetCore.Authentication;
 using System.Linq;
@@ -25,7 +24,6 @@ namespace CollAction.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
-        private readonly IStringLocalizer<AccountController> _localizer;
         private readonly INewsletterSubscriptionService _newsletterSubscriptionService;
         private readonly ApplicationDbContext _context;
 
@@ -34,7 +32,6 @@ namespace CollAction.Controllers
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
             ILoggerFactory loggerFactory,
-            IStringLocalizer<AccountController> localizer,
             INewsletterSubscriptionService newsletterSubscriptionService,
             ApplicationDbContext context)
         {
@@ -42,7 +39,6 @@ namespace CollAction.Controllers
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
-            _localizer = localizer;
             _newsletterSubscriptionService = newsletterSubscriptionService;
             _context = context;
         }
@@ -71,7 +67,7 @@ namespace CollAction.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation(1, _localizer["User logged in."]);
+                    _logger.LogInformation(1, "User logged in.");
                     return RedirectToLocal(returnUrl);
                 }
                 if (result.IsLockedOut)
@@ -80,7 +76,7 @@ namespace CollAction.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, _localizer["Invalid login attempt."]);
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     return View(model);
                 }
             }
@@ -115,7 +111,7 @@ namespace CollAction.Controllers
         [AllowAnonymous]
         public IActionResult Lockout()
         {
-            _logger.LogWarning(2, _localizer["User account locked out."]);
+            _logger.LogWarning(2, "User account locked out.");
             return View();
         }
 
@@ -177,7 +173,7 @@ namespace CollAction.Controllers
         {
             if (remoteError != null)
             {
-                ModelState.AddModelError(string.Empty, $"{_localizer["Error from external provider"]}: {remoteError}");
+                ModelState.AddModelError(string.Empty, $"Error from external provider: {remoteError}");
                 return View(nameof(Login));
             }
             ExternalLoginInfo info = await _signInManager.GetExternalLoginInfoAsync();
@@ -290,7 +286,7 @@ namespace CollAction.Controllers
         {
             if (code == null)
             {
-                throw new ApplicationException(_localizer["A code must be supplied for password reset."]);
+                throw new ApplicationException("A code must be supplied for password reset.");
             }
             var model = new ResetPasswordViewModel { Code = code };
             return View(model);

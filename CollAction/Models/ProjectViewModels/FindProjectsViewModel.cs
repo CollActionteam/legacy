@@ -1,17 +1,9 @@
-﻿using Microsoft.Extensions.Localization;
-using System;
+﻿using System;
 
 namespace CollAction.Models.ProjectViewModels
 {
     public class FindProjectsViewModel
     {
-        private readonly IStringLocalizer _localizer;
-
-        public FindProjectsViewModel(IStringLocalizer localizer)
-        {
-            _localizer = localizer;
-        }
-
         public int ProjectId { get; set; }
 
         public string ProjectName { get; set; }
@@ -66,9 +58,9 @@ namespace CollAction.Models.ProjectViewModels
             {
                 _remaining = value;
                 if (value.TotalDays < 2)
-                    RemainingTime = String.Format("{0} {1}", (int)value.TotalHours, value.TotalHours == 1 ? _localizer["hour"] : _localizer["hours"]);
+                    RemainingTime = string.Format("{0} {1}", (int)value.TotalHours, value.TotalHours == 1 ? "hour" : "hours");
                 else
-                    RemainingTime = String.Format("{0} {1}", value.Days, _localizer["days"]);
+                    RemainingTime = string.Format("{0} {1}", value.Days, "days");
             }
         }
 
