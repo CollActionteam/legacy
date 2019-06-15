@@ -51,16 +51,20 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         };
     }
 
+    isValidEmail(email: string): boolean {
+        return email.match(/^\S+@\S+\.\S+$/) !== null;
+    }
+
     clearErrors(): void {
         this.setState({ showError: false, error: null });
     }
 
     needsToEnterName(): boolean {
-        return this.props.userName === "";
+        return this.props.userName.trim() === "";
     }
 
     needsToEnterEmail(): boolean {
-        return this.props.userEmail.match(/.+@.+/) === null;
+        return !this.isValidEmail(this.props.userEmail);
     }
 
     checkFormErrors(): boolean {
@@ -70,8 +74,13 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
             return true;
         }
 
-        if (this.getName() === "" || this.getEmail().match(/.+@.+/) === null) {
-            this.setState({ showError: true, error: "Please provide your personal information" });
+        if (this.getName() === "") {
+            this.setState({ showError: true, error: "Please provide your name" });
+            return true;
+        }
+
+        if (!this.isValidEmail(this.getEmail())) {
+            this.setState({ showError: true, error: "Please provide a valid e-mail address" });
             return true;
         }
 
@@ -95,7 +104,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         if (checkoutTokenResponse.status !== 200) {
             let responseBody = await checkoutTokenResponse.text();
             console.log("Unable to redirect to checkout: " + responseBody);
-            this.setState({ showError: true, error: "We're unable to start your credit-card donation, there is something wrong, sorry" });
+            this.setState({ showError: true, error: "We're unable to start your credit-card donation, there is something wrong, sorry. "});
             return;
         }
 
@@ -105,7 +114,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
         if (checkoutResponse.status !== 200) {
             let responseBody = await checkoutResponse.text();
             console.log("Unable to redirect to checkout: " + responseBody);
-            this.setState({ showError: true, error: "We're unable to start your credit-card donation, there is something wrong, sorry" });
+            this.setState({ showError: true, error: "We're unable to start your credit-card donation, there is something wrong, sorry. "});
         }
     }
 
@@ -139,17 +148,17 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
 
     getName(): string {
         if (!this.needsToEnterName()) {
-            return this.props.userName;
+            return this.props.userName.trim();
         } else {
-            return this.state.inputUserName;
+            return this.state.inputUserName.trim();
         }
     }
 
     getEmail(): string {
         if (!this.needsToEnterEmail()) {
-            return this.props.userEmail;
+            return this.props.userEmail.trim();
         } else {
-            return this.state.inputUserEmail;
+            return this.state.inputUserEmail.trim();
         }
     }
 
@@ -191,7 +200,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
             return (
                 <div className="col-xs-12">
                     <label htmlFor="name-input">Name</label>
-                    <input id="name-input" className="form-control" onChange={(ev) => this.setName(ev)} placeholder="Your name..." type="text" />
+                    <input id="name-input" className="form-control" onChange={(ev) => this.setName(ev)} placeholder="Your name..." type="text" required />
                 </div>
             );
         }
@@ -202,7 +211,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
             return (
                 <div className="col-xs-12">
                     <label htmlFor="email-input">E-Mail</label>
-                    <input id="email-input" className="form-control" onChange={(ev) => this.setEmail(ev)} placeholder="Your e-mail..." type="text" />
+                    <input id="email-input" className="form-control" onChange={(ev) => this.setEmail(ev)} placeholder="Your e-mail..." type="email" required />
                 </div>
             );
         }
