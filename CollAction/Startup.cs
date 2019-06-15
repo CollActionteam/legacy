@@ -227,7 +227,7 @@ namespace CollAction
                                              .Sources.AddRange(new[]
                                                                {
                                                                    "https://www.google-analytics.com",
-                                                                   $"https://s3.{Configuration["S3Region"]}.amazonaws.com",
+                                                                   $"https://{Configuration["S3Bucket"]}.s3.{Configuration["S3Region"]}.amazonaws.com",
                                                                    "*.disquscdn.com",
                                                                    "*.disqus.com"
                                                                }.Concat(Configuration["CspImgSrc"]?.Split(";") ?? new string[0]));

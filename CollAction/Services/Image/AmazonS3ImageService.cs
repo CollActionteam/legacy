@@ -65,7 +65,7 @@ namespace CollAction.Services.Image
         }
 
         public string GetUrl(ImageFile imageFile)
-            => $"https://s3.{_region}.amazonaws.com/{_bucket}/{imageFile.Filepath}";
+            => $"https://{_bucket}.s3.{_region}.amazonaws.com/{imageFile.Filepath}";
 
         public async Task DeleteObject(string filePath)
         {
