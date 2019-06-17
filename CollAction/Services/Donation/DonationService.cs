@@ -1,6 +1,5 @@
 ﻿using CollAction.Data;
 using CollAction.Models;
-using CollAction.Models.EmailViewModels;
 using CollAction.Services.Email;
 using Hangfire;
 using Microsoft.AspNetCore.Identity;

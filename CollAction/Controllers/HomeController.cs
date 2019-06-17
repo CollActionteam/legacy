@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Localization;
 using System.Text;
 using CollAction.Data;
-using Microsoft.AspNetCore.Hosting;
 using CollAction.Helpers;
 using System.Threading.Tasks;
 using CollAction.Services.Image;
@@ -14,15 +12,13 @@ namespace CollAction.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IStringLocalizer<HomeController> _localizer;
         private readonly ApplicationDbContext _context;
         private readonly IProjectService _projectService;
         private readonly IImageService _imageService;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(IStringLocalizer<HomeController> localizer, ApplicationDbContext context, IProjectService projectService, IImageService imageService, ILogger<HomeController> logger)
+        public HomeController(ApplicationDbContext context, IProjectService projectService, IImageService imageService, ILogger<HomeController> logger)
         {
-            _localizer = localizer;
             _context = context;
             _projectService = projectService;
             _imageService = imageService;
@@ -30,37 +26,16 @@ namespace CollAction.Controllers
         }
 
         public IActionResult Index()
-        {
-            return View();
-        }
+            => View();
 
         public IActionResult Privacy()
-        {
-            return View();
-        }
+            => View();
 
         public IActionResult About()
-        {
-            ViewData["Title"] = _localizer["About CollAction"];
-            return View();
-        }
+            => View();
 
         public IActionResult CrowdActingFestival()
-        {
-            ViewData["Title"] = _localizer["Make The World Great Again Festival"];
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            return View();
-        }
-
-        public ViewResult FAQ()
-        {
-            ViewData["Title"] = _localizer["Frequently Asked Questions"];
-            return View();
-        }
+            => View();
 
         public IActionResult Error()
         {
