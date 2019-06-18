@@ -40,8 +40,8 @@
         box-shadow: 10px 10px 40px -9px rgba(0,0,0,0.55);
 
         @media (max-width: 991px) {
-            padding: 20px !important;
-            margin: -100px 0px 0px 0px !important;
+            padding: 15px !important;
+            margin: -200px 0px 0px 0px !important;
         }
 
         #more-info {
@@ -53,7 +53,7 @@
         #more-info,
         #project-location {
             text-align: center;
-            width: 80%;
+            width: 100%;
             margin: 0 auto;
             font-size: 1.21em;
             font-weight: bold;
@@ -89,7 +89,8 @@
             text-align: center;
             color: $coll-action-green;
             word-wrap: break-word;
-            margin-bottom: 0px;
+            margin-top: 5px;
+            margin-bottom: 0;
         }
 
 
@@ -234,6 +235,7 @@
 
     @media (max-width: 992px) {
         #project-background {
+            height: 250px;
             background-size: cover;
         }
     }
