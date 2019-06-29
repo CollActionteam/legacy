@@ -32,6 +32,7 @@ using Serilog.Sinks.Slack;
 using Microsoft.ApplicationInsights.Extensibility;
 using CollAction.Services.ViewRender;
 using AspNetCore.IServiceCollection.AddIUrlHelper;
+using CollAction.Services.HashAssetService;
 
 namespace CollAction
 {
@@ -117,6 +118,7 @@ namespace CollAction
             services.AddTransient<IFestivalService, FestivalService>();
             services.AddTransient<IDonationService, DonationService>();
             services.AddTransient<IViewRenderService, ViewRenderService>();
+            services.AddSingleton<IHashAssetService, HashAssetService>();
 
             services.AddDataProtection()
                     .Services.Configure<KeyManagementOptions>(options => options.XmlRepository = new DataProtectionRepository(new DbContextOptionsBuilder<ApplicationDbContext>().UseNpgsql(connectionString).Options));
@@ -285,7 +287,14 @@ namespace CollAction
 
             app.UseAuthentication();
 
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                OnPrepareResponse = ctx =>
+                {
+                    const int cacheDurationSeconds = 60 * 60 * 24 * 7;
+                    ctx.Context.Response.Headers[Microsoft.Net.Http.Headers.HeaderNames.CacheControl] = $"public,max-age={cacheDurationSeconds}";
+                }
+            });
 
             app.UseHangfireServer(new BackgroundJobServerOptions() { WorkerCount = 1 });
 

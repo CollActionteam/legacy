@@ -1,6 +1,9 @@
 ﻿﻿@using Microsoft.ApplicationInsights.AspNetCore
 @using Microsoft.AspNetCore.Http.Features
+@using CollAction.Services.HashAssetService
+
 @inject JavaScriptSnippet snippet
+@inject IHashAssetService hashAsset
 
 @{
     var consentFeature = Context.Features.Get<ITrackingConsentFeature>();
@@ -12,13 +15,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - CollAction</title>
-    @if (canTrack) 
-    {
-        <script src="~/lib/google/tagmanager.js">
-        </script>
-        <script src="https://js.stripe.com/v3/">
-        </script>
-    }
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link href="https://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet" />
 
@@ -32,32 +28,32 @@
 </head>
 <body id="body">
     <div id="main">
-        @if (canTrack) 
-        {
-            <noscript>
-                <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NTCKFKM"
-                        height="0" width="0" style="display:none;visibility:hidden"></iframe>
-            </noscript>
-        }
-
         <div id="header">
             <partial name="_NavMenu" />
         </div>
 
-        <partial name="_CookieConsentPartial" /> 
+        <partial name="_CookieConsentPartial" />
         <div id="site-content">
-        @RenderBody()
+            @RenderBody()
         </div>
         <partial name="_Footer" />
 
         @RenderSection("scripts", required: false)
-        
-        <environment names="Development">
-            <script src="~/js/frontend.bundle.js?@DateTime.Now.Ticks.ToString()"></script>
-        </environment>
-        <environment names="Staging,Production">
-            <script src="~/js/frontend.bundle.js"></script>
-        </environment>
+
+        <script src="~/js/frontend.bundle.js?@(hashAsset.HashAssetBase64("wwwroot", "js", "frontend.bundle.js"))">
+        </script>
+
+        @if (canTrack)
+        {
+            <script src="~/js/tagmanager.bundle.js?@(hashAsset.HashAssetBase64("wwwroot", "js", "tagmanager.bundle.js"))">
+            </script>
+            <script src="https://js.stripe.com/v3/">
+            </script>
+            <noscript>
+                <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NTCKFKM" height="0" width="0" style="display:none;visibility:hidden">
+                </iframe>
+            </noscript>
+        }
     </div>
 </body>
 </html>
