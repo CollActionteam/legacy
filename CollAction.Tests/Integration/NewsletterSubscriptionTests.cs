@@ -9,6 +9,9 @@ using Hangfire.States;
 using System.Linq;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
+using MailChimp.Net;
+using MailChimp.Net.Models;
+using MailChimp.Net.Core;
 
 namespace CollAction.Tests.Integration
 {
@@ -16,8 +19,7 @@ namespace CollAction.Tests.Integration
     [TestCategory("Integration")]
     public sealed class NewsletterSubscriptionServiceTests
     {
-        private string _newsletterTestListId;
-        private NewsletterSubscriptionService _service;
+        private NewsletterSubscriptionService _newsletterSubscriptionService;
         private Mock<IBackgroundJobClient> _jobClient;
 
         [TestInitialize]
@@ -27,30 +29,36 @@ namespace CollAction.Tests.Integration
                 new ConfigurationBuilder().AddUserSecrets<Startup>()
                                           .AddEnvironmentVariables()
                                           .Build();
-            _newsletterTestListId = configuration["MailChimpTestListId"];          
             _jobClient = new Mock<IBackgroundJobClient>();
-            _jobClient.Setup(jc => jc.Create(It.IsAny<Hangfire.Common.Job>(), It.IsAny<IState>()))
+            _jobClient.Setup(jc => jc.Create(It.IsAny<Hangfire.Common.Job>(), It.IsAny<IState>())) // Run the job immediately for easier testing
                       .Returns<Hangfire.Common.Job, IState>(
                           (job, state) => {
-                              Task.Run(() => (Task)job.Method.Invoke(_service, job.Args.ToArray())).Wait();
+                              try
+                              {
+                                  Task.Run(() => (Task)job.Method.Invoke(_newsletterSubscriptionService, job.Args.ToArray())).Wait();
+                              }
+                              catch (Exception)
+                              {
+                                  // Hangfire will only log exceptions
+                              }
                               return string.Empty;
                           });
-            _service = new NewsletterSubscriptionService(
+            _newsletterSubscriptionService = new NewsletterSubscriptionService(
+                new MailChimpManager(configuration["MailChimpKey"]),
                 new OptionsWrapper<NewsletterSubscriptionServiceOptions>(
                     new NewsletterSubscriptionServiceOptions()
                     {
-                        MailChimpKey = configuration["MailChimpKey"],
-                        MailChimpNewsletterListId = _newsletterTestListId
-                    }), new LoggerFactory().CreateLogger<NewsletterSubscriptionService>(), _jobClient.Object);
+                        MailChimpNewsletterListId = configuration["MailChimpTestListId"]
+                }), 
+                new LoggerFactory().CreateLogger<NewsletterSubscriptionService>(), 
+                _jobClient.Object);
         }
 
         [TestMethod]
         public async Task TestGetListMemberStatusOnNonExistentMember()
         {
             string email = GetTestEmail();
-
-            NewsletterSubscriptionService.SubscriptionStatus status = await _service.GetListMemberStatusAsync(_newsletterTestListId, email);
-            Assert.AreEqual(NewsletterSubscriptionService.SubscriptionStatus.NotFound, status);
+            Assert.IsFalse(await _newsletterSubscriptionService.IsSubscribedAsync(email));
         }
 
         [TestMethod]
@@ -60,13 +68,14 @@ namespace CollAction.Tests.Integration
 
             try
             {
-                await _service.AddOrUpdateListMemberAsync(_newsletterTestListId, email, true);
-                NewsletterSubscriptionService.SubscriptionStatus status = await _service.GetListMemberStatusAsync(_newsletterTestListId, email);
-                Assert.AreEqual(NewsletterSubscriptionService.SubscriptionStatus.Pending, status);
+                _newsletterSubscriptionService.SetSubscription(email, true, true);
+                Status status = await _newsletterSubscriptionService.GetListMemberStatusAsync(email);
+                Assert.AreEqual(Status.Pending, status);
+                Assert.IsTrue(await _newsletterSubscriptionService.IsSubscribedAsync(email));
             }
             finally
             {
-                await _service.DeleteListMemberAsync(_newsletterTestListId, email);
+                await _newsletterSubscriptionService.DeleteListMemberAsync(email);
             }
         }
 
@@ -77,13 +86,14 @@ namespace CollAction.Tests.Integration
 
             try
             {
-                await _service.AddOrUpdateListMemberAsync(_newsletterTestListId, email, false);
-                NewsletterSubscriptionService.SubscriptionStatus status = await _service.GetListMemberStatusAsync(_newsletterTestListId, email);
-                Assert.AreEqual(NewsletterSubscriptionService.SubscriptionStatus.Subscribed, status);
+                _newsletterSubscriptionService.SetSubscription(email, true, false);
+                Status status = await _newsletterSubscriptionService.GetListMemberStatusAsync(email);
+                Assert.AreEqual(Status.Subscribed, status);
+                Assert.IsTrue(await _newsletterSubscriptionService.IsSubscribedAsync(email));
             }
             finally
             {
-                await _service.DeleteListMemberAsync(_newsletterTestListId, email);
+                await _newsletterSubscriptionService.DeleteListMemberAsync(email);
             }
         }
 
@@ -92,14 +102,13 @@ namespace CollAction.Tests.Integration
         {
             string email = GetTestEmail();
 
-            await _service.AddOrUpdateListMemberAsync(_newsletterTestListId, email);
-            NewsletterSubscriptionService.SubscriptionStatus status = await _service.GetListMemberStatusAsync(_newsletterTestListId, email);
-            Assert.AreEqual(NewsletterSubscriptionService.SubscriptionStatus.Pending, status);
+            _newsletterSubscriptionService.SetSubscription(email, true, true);
+            Status status = await _newsletterSubscriptionService.GetListMemberStatusAsync(email);
+            Assert.AreEqual(Status.Pending, status);
 
-            await _service.DeleteListMemberAsync(_newsletterTestListId, email);
-            status = await _service.GetListMemberStatusAsync(_newsletterTestListId, email);
-            // Test says Unknown is returned, until you change the expected result to Unknown. Then it's NotFound again...
-            // Assert.AreEqual(NewsletterSubscriptionService.SubscriptionStatus.NotFound, status);
+            _newsletterSubscriptionService.SetSubscription(email, false, false);
+            await Assert.ThrowsExceptionAsync<MailChimpNotFoundException>(() => _newsletterSubscriptionService.GetListMemberStatusAsync(email));
+            Assert.IsFalse(await _newsletterSubscriptionService.IsSubscribedAsync(email));
         }
 
         [TestMethod]
@@ -107,9 +116,9 @@ namespace CollAction.Tests.Integration
         {
             string email = GetTestEmail();
 
-            await _service.DeleteListMemberAsync(_newsletterTestListId, email);
-            NewsletterSubscriptionService.SubscriptionStatus status = await _service.GetListMemberStatusAsync(_newsletterTestListId, email);
-            Assert.AreEqual(NewsletterSubscriptionService.SubscriptionStatus.NotFound, status);
+            _newsletterSubscriptionService.SetSubscription(email, false, false);
+            await Assert.ThrowsExceptionAsync<MailChimpNotFoundException>(() => _newsletterSubscriptionService.GetListMemberStatusAsync(email));
+            Assert.IsFalse(await _newsletterSubscriptionService.IsSubscribedAsync(email));
         }
 
         private string GetTestEmail()
