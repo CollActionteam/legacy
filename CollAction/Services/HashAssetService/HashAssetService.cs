@@ -8,14 +8,26 @@ namespace CollAction.Services.HashAssetService
     public class HashAssetService : IHashAssetService
     {
         private readonly ConcurrentDictionary<string, byte[]> _hashes;
+        private readonly bool _useCaching;
 
-        public HashAssetService()
+        public HashAssetService(bool useCaching)
         {
             _hashes = new ConcurrentDictionary<string, byte[]>();
+            _useCaching = useCaching;
         }
 
         public byte[] HashAsset(string[] location)
-            => _hashes.GetOrAdd(Path.Combine(location), Hash);
+        {
+            string path = Path.Combine(location);
+            if (_useCaching)
+            {
+                return _hashes.GetOrAdd(path, Hash);
+            }
+            else
+            {
+                return Hash(path);
+            }
+        }
 
         public string HashAssetBase64(string[] location)
             => Base64UrlEncoder.Encode(HashAsset(location));
