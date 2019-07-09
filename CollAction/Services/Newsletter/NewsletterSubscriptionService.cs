@@ -27,7 +27,7 @@ namespace CollAction.Services.Newsletter
         {
             try
             {
-                Status status = await GetListMemberStatusAsync(email);
+                Status status = await GetListMemberStatus(email);
                 return status == Status.Pending || status == Status.Subscribed;
             }
             catch (MailChimpNotFoundException)
@@ -36,24 +36,42 @@ namespace CollAction.Services.Newsletter
             }
         }
 
-        public void SetSubscription(string email, bool wantsSubscription, bool requireEmailConfirmationIfSubscribing)
+        public void SetSubscriptionBackground(string email, bool wantsSubscription, bool requireEmailConfirmationIfSubscribing)
+            => _jobClient.Enqueue(() => SetSubscription(email, wantsSubscription, requireEmailConfirmationIfSubscribing));
+
+        public Task SetSubscription(string email, bool wantsSubscription, bool requireEmailConfirmationIfSubscribing)
         {
-            string job = wantsSubscription ? _jobClient.Enqueue(() => AddOrUpdateListMemberAsync(email, requireEmailConfirmationIfSubscribing)) :
-                                             _jobClient.Enqueue(() => DeleteListMemberAsync(email));
-            _logger.LogInformation("changed maillist subscription for {0} setting it to {1} with require email confirmation to {2} and hangfire job {3}", email, wantsSubscription, requireEmailConfirmationIfSubscribing, job);
+            _logger.LogInformation("changed maillist subscription for {0} setting it to {1} with require email confirmation to {2}", email, wantsSubscription, requireEmailConfirmationIfSubscribing);
+            if (wantsSubscription)
+            {
+                return AddOrUpdateListMember(email, requireEmailConfirmationIfSubscribing);
+            }
+            else
+            {
+                 return DeleteListMember(email);
+            }
         }
 
-        public Task AddOrUpdateListMemberAsync(string email, bool usePendingStatusIfNew = true)
+        public Task AddOrUpdateListMember(string email, bool usePendingStatusIfNew = true)
              => _mailChimpManager.Members.AddOrUpdateAsync(_newsletterListId, new Member()
             {
                 EmailAddress = email,
                 StatusIfNew = usePendingStatusIfNew ? Status.Pending : Status.Subscribed
             });
 
-        public Task DeleteListMemberAsync(string email)
-            => _mailChimpManager.Members.PermanentDeleteAsync(_newsletterListId, email);
+        public async Task DeleteListMember(string email)
+        {
+            try
+            {
+                await _mailChimpManager.Members.PermanentDeleteAsync(_newsletterListId, email);
+            }
+            catch(MailChimpNotFoundException)
+            {
+                // That's fine..
+            }
+        }
 
-        public async Task<Status> GetListMemberStatusAsync(string email)
+        public async Task<Status> GetListMemberStatus(string email)
             => (await _mailChimpManager.Members.GetAsync(_newsletterListId, email)).Status;
     }
 }
