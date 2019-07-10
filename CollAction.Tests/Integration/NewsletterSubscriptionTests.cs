@@ -113,11 +113,26 @@ namespace CollAction.Tests.Integration
             {
                 await _newsletterSubscriptionService.SetSubscription(email, true, true);
                 Assert.IsTrue(await _newsletterSubscriptionService.IsSubscribedAsync(email));
+
                 await _newsletterSubscriptionService.SetSubscription(email, false, true);
                 Assert.IsFalse(await _newsletterSubscriptionService.IsSubscribedAsync(email));
+
+                await _newsletterSubscriptionService.SetSubscription(email, true, false);
+                Assert.IsTrue(await _newsletterSubscriptionService.IsSubscribedAsync(email));
+
+                await _newsletterSubscriptionService.SetSubscription(email, false, false);
+                Assert.IsFalse(await _newsletterSubscriptionService.IsSubscribedAsync(email));
+
                 await _newsletterSubscriptionService.SetSubscription(email, true, true);
                 Assert.IsTrue(await _newsletterSubscriptionService.IsSubscribedAsync(email));
+
                 await _newsletterSubscriptionService.SetSubscription(email, false, true);
+                Assert.IsFalse(await _newsletterSubscriptionService.IsSubscribedAsync(email));
+
+                await _newsletterSubscriptionService.SetSubscription(email, true, false);
+                Assert.IsTrue(await _newsletterSubscriptionService.IsSubscribedAsync(email));
+
+                await _newsletterSubscriptionService.SetSubscription(email, false, false);
                 Assert.IsFalse(await _newsletterSubscriptionService.IsSubscribedAsync(email));
             }
             finally
