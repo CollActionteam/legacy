@@ -44,30 +44,44 @@ namespace CollAction.Services.Newsletter
             _logger.LogInformation("changed maillist subscription for {0} setting it to {1} with require email confirmation to {2}", email, wantsSubscription, requireEmailConfirmationIfSubscribing);
             if (wantsSubscription)
             {
-                return AddOrUpdateListMember(email, requireEmailConfirmationIfSubscribing);
+                return SubscribeMember(email, requireEmailConfirmationIfSubscribing);
             }
             else
             {
-                 return DeleteListMember(email);
+                 return UnsubscribeMember(email);
             }
         }
 
-        public Task AddOrUpdateListMember(string email, bool usePendingStatusIfNew = true)
-             => _mailChimpManager.Members.AddOrUpdateAsync(_newsletterListId, new Member()
-            {
-                EmailAddress = email,
-                StatusIfNew = usePendingStatusIfNew ? Status.Pending : Status.Subscribed
-            });
-
-        public async Task DeleteListMember(string email)
+        public async Task SubscribeMember(string email, bool usePendingStatusIfNew = true)
         {
             try
             {
-                await _mailChimpManager.Members.PermanentDeleteAsync(_newsletterListId, email);
+                Member member = await _mailChimpManager.Members.GetAsync(_newsletterListId, email);
+                member.Status = Status.Subscribed;
+                await _mailChimpManager.Members.AddOrUpdateAsync(_newsletterListId, member);
+            }
+            catch (MailChimpNotFoundException) // New member
+            {
+                await _mailChimpManager.Members.AddOrUpdateAsync(_newsletterListId, new Member()
+                {
+                    EmailAddress = email,
+                    StatusIfNew = usePendingStatusIfNew ? Status.Pending : Status.Subscribed,
+                    Status = Status.Subscribed
+                });
+            }
+        }
+
+        public async Task UnsubscribeMember(string email)
+        {
+            try
+            {
+                Member member = await _mailChimpManager.Members.GetAsync(_newsletterListId, email);
+                member.Status = Status.Unsubscribed;
+                await _mailChimpManager.Members.AddOrUpdateAsync(_newsletterListId, member);
             }
             catch(MailChimpNotFoundException)
             {
-                // That's fine..
+                // Doesn't exist, so already unsubscribed
             }
         }
 

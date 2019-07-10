@@ -62,7 +62,7 @@ namespace CollAction.Tests.Integration
         }
 
         [TestMethod]
-        public async Task TestAddListMemberAsPending()
+        public async Task TestSubscribeListMemberAsPending()
         {
             string email = GetTestEmail();
 
@@ -75,12 +75,12 @@ namespace CollAction.Tests.Integration
             }
             finally
             {
-                await _newsletterSubscriptionService.DeleteListMember(email);
+                await _newsletterSubscriptionService.UnsubscribeMember(email);
             }
         }
 
         [TestMethod]
-        public async Task TestAddListMemberAsSubscribed()
+        public async Task TestSubscribeListMemberAsSubscribed()
         {
             string email = GetTestEmail();
 
@@ -93,12 +93,12 @@ namespace CollAction.Tests.Integration
             }
             finally
             {
-                await _newsletterSubscriptionService.DeleteListMember(email);
+                await _newsletterSubscriptionService.UnsubscribeMember(email);
             }
         }
 
         [TestMethod]
-        public async Task TestDeleteExistingListMember()
+        public async Task TestUnsubscribeExistingListMember()
         {
             string email = GetTestEmail();
 
@@ -107,17 +107,30 @@ namespace CollAction.Tests.Integration
             Assert.AreEqual(Status.Pending, status);
 
             await _newsletterSubscriptionService.SetSubscription(email, false, false);
-            await Assert.ThrowsExceptionAsync<MailChimpNotFoundException>(() => _newsletterSubscriptionService.GetListMemberStatus(email));
             Assert.IsFalse(await _newsletterSubscriptionService.IsSubscribedAsync(email));
         }
 
         [TestMethod]
-        public async Task TestDeleteNonExistingListMember()
+        public async Task TestUnsubscribeSubscribeMultiple()
+        {
+            string email = GetTestEmail();
+
+            await _newsletterSubscriptionService.SetSubscription(email, true, true);
+            Assert.IsTrue(await _newsletterSubscriptionService.IsSubscribedAsync(email));
+            await _newsletterSubscriptionService.SetSubscription(email, false, true);
+            Assert.IsFalse(await _newsletterSubscriptionService.IsSubscribedAsync(email));
+            await _newsletterSubscriptionService.SetSubscription(email, true, true);
+            Assert.IsTrue(await _newsletterSubscriptionService.IsSubscribedAsync(email));
+            await _newsletterSubscriptionService.SetSubscription(email, false, true);
+            Assert.IsFalse(await _newsletterSubscriptionService.IsSubscribedAsync(email));
+        }
+
+        [TestMethod]
+        public async Task TestUnsubscribeNonExistingListMember()
         {
             string email = GetTestEmail();
 
             await _newsletterSubscriptionService.SetSubscription(email, false, false);
-            await Assert.ThrowsExceptionAsync<MailChimpNotFoundException>(() => _newsletterSubscriptionService.GetListMemberStatus(email));
             Assert.IsFalse(await _newsletterSubscriptionService.IsSubscribedAsync(email));
         }
 
