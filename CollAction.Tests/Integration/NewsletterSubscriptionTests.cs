@@ -30,19 +30,6 @@ namespace CollAction.Tests.Integration
                                           .AddEnvironmentVariables()
                                           .Build();
             _jobClient = new Mock<IBackgroundJobClient>();
-            _jobClient.Setup(jc => jc.Create(It.IsAny<Hangfire.Common.Job>(), It.IsAny<IState>())) // Run the job immediately for easier testing
-                      .Returns<Hangfire.Common.Job, IState>(
-                          (job, state) => {
-                              try
-                              {
-                                  Task.Run(() => (Task)job.Method.Invoke(_newsletterSubscriptionService, job.Args.ToArray())).Wait();
-                              }
-                              catch (Exception)
-                              {
-                                  // Hangfire will only log exceptions
-                              }
-                              return string.Empty;
-                          });
             _newsletterSubscriptionService = new NewsletterSubscriptionService(
                 new MailChimpManager(configuration["MailChimpKey"]),
                 new OptionsWrapper<NewsletterSubscriptionServiceOptions>(
@@ -102,12 +89,19 @@ namespace CollAction.Tests.Integration
         {
             string email = GetTestEmail();
 
-            await _newsletterSubscriptionService.SetSubscription(email, true, true);
-            Status status = await _newsletterSubscriptionService.GetListMemberStatus(email);
-            Assert.AreEqual(Status.Pending, status);
+            try
+            {
+                await _newsletterSubscriptionService.SetSubscription(email, true, true);
+                Status status = await _newsletterSubscriptionService.GetListMemberStatus(email);
+                Assert.AreEqual(Status.Pending, status);
 
-            await _newsletterSubscriptionService.SetSubscription(email, false, false);
-            Assert.IsFalse(await _newsletterSubscriptionService.IsSubscribedAsync(email));
+                await _newsletterSubscriptionService.SetSubscription(email, false, false);
+                Assert.IsFalse(await _newsletterSubscriptionService.IsSubscribedAsync(email));
+            }
+            finally
+            {
+                await _newsletterSubscriptionService.SetSubscription(email, false, false);
+            }
         }
 
         [TestMethod]
@@ -115,14 +109,21 @@ namespace CollAction.Tests.Integration
         {
             string email = GetTestEmail();
 
-            await _newsletterSubscriptionService.SetSubscription(email, true, true);
-            Assert.IsTrue(await _newsletterSubscriptionService.IsSubscribedAsync(email));
-            await _newsletterSubscriptionService.SetSubscription(email, false, true);
-            Assert.IsFalse(await _newsletterSubscriptionService.IsSubscribedAsync(email));
-            await _newsletterSubscriptionService.SetSubscription(email, true, true);
-            Assert.IsTrue(await _newsletterSubscriptionService.IsSubscribedAsync(email));
-            await _newsletterSubscriptionService.SetSubscription(email, false, true);
-            Assert.IsFalse(await _newsletterSubscriptionService.IsSubscribedAsync(email));
+            try
+            {
+                await _newsletterSubscriptionService.SetSubscription(email, true, true);
+                Assert.IsTrue(await _newsletterSubscriptionService.IsSubscribedAsync(email));
+                await _newsletterSubscriptionService.SetSubscription(email, false, true);
+                Assert.IsFalse(await _newsletterSubscriptionService.IsSubscribedAsync(email));
+                await _newsletterSubscriptionService.SetSubscription(email, true, true);
+                Assert.IsTrue(await _newsletterSubscriptionService.IsSubscribedAsync(email));
+                await _newsletterSubscriptionService.SetSubscription(email, false, true);
+                Assert.IsFalse(await _newsletterSubscriptionService.IsSubscribedAsync(email));
+            }
+            finally
+            {
+                await _newsletterSubscriptionService.SetSubscription(email, false, true);
+            }
         }
 
         [TestMethod]
