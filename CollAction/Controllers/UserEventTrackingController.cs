@@ -27,23 +27,17 @@ namespace CollAction.Controllers
         public async Task<IActionResult> IngestEvent([FromBody] JObject eventData)
         {
             var consentFeature = HttpContext.Features.Get<ITrackingConsentFeature>();
-            if (consentFeature.CanTrack)
+            ApplicationUser user = await _userManager.GetUserAsync(User);
+            string trackedUserId = consentFeature.CanTrack ? user?.Id : null;
+            var userEvent = new UserEvent()
             {
-                ApplicationUser user = await _userManager.GetUserAsync(User);
-                var userEvent = new UserEvent()
-                {
-                    EventLoggedAt = DateTime.UtcNow,
-                    EventData = eventData.ToString(),
-                    UserId = user?.Id
-                };
-                _context.UserEvents.Add(userEvent);
-                await _context.SaveChangesAsync();
-                return Ok(userEvent.Id);
-            }
-            else
-            {
-                return Unauthorized();
-            }
+                EventLoggedAt = DateTime.UtcNow,
+                EventData = eventData.ToString(),
+                UserId = trackedUserId
+            };
+            _context.UserEvents.Add(userEvent);
+            await _context.SaveChangesAsync();
+            return Ok(userEvent.Id);
         }
     }
 }
