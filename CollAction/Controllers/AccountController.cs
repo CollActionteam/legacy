@@ -140,11 +140,42 @@ namespace CollAction.Controllers
                     _logger.LogInformation(3, "User created a new account with password.");
                     return RedirectToLocal(returnUrl);
                 }
-                AddErrors(result);
+
+                await ProcessRegistrationErrors(model.Email, result.Errors);
             }
 
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        private async Task ProcessRegistrationErrors(string email, IEnumerable<IdentityError> errors)
+        {
+            if (errors.Any(e => e.Code == Constants.DuplicateUserNameError)) 
+            {
+                var user = await _userManager.FindByEmailAsync(email);
+                if (user == null)
+                {
+                    throw new InvalidOperationException($"Registration reports {email} already exists, but user with this email cannot be found.");
+                }
+
+                // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
+                // Send an email with this link
+                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+                var completeAccount = !string.IsNullOrEmpty(user.FullName);
+                var callbackUrl = completeAccount 
+                    ? Url.Action(action: nameof(AccountController.ResetPassword), controller: "Account", values: new { user.Id, code }, protocol: Request.Scheme)
+                    : Url.Action(action: nameof(AccountController.FinishRegistration), controller: "Account", values: new { email, code }, protocol: Request.Scheme);
+
+                await _emailSender.SendEmailTemplated(email, "Reactivate your account", "ReactivateAccount", callbackUrl);
+
+                ModelState.AddModelError(Constants.DuplicateUserNameError, "");
+                AddErrors(errors.Where(e => e.Code != Constants.DuplicateUserNameError));
+            }
+            else
+            {
+                AddErrors(errors);
+            }
         }
 
         [HttpPost]
@@ -229,7 +260,10 @@ namespace CollAction.Controllers
                         return RedirectToLocal(returnUrl);
                     }
                 }
-                AddErrors(result);
+
+                // TODO: Duplicate user check
+
+                AddErrors(result.Errors);
             }
 
             ViewData["ReturnUrl"] = returnUrl;
@@ -253,18 +287,19 @@ namespace CollAction.Controllers
                 var user = await _userManager.FindByEmailAsync(model.Email);
                 if (user == null)
                 {
-                    // Don't reveal that the user does not exist
                     return View("ForgotPasswordConfirmation");
                 }
 
                 // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
                 // Send an email with this link
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+
                 var callbackUrl = Url.Action(
                     action: nameof(AccountController.ResetPassword),
                     controller: "Account",
                     values: new { user.Id, code },
                     protocol: Request.Scheme);
+
                 await _emailSender.SendEmailTemplated(model.Email, "Reset Password", "ResetPassword", callbackUrl);
                 return View(nameof(ForgotPasswordConfirmation));
             }
@@ -312,7 +347,7 @@ namespace CollAction.Controllers
             {
                 return RedirectToAction(nameof(ResetPasswordConfirmation));
             }
-            AddErrors(result);
+            AddErrors(result.Errors);
             return View();
         }
 
@@ -350,7 +385,7 @@ namespace CollAction.Controllers
             var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
             if (!result.Succeeded)
             {
-                AddErrors(result);
+                AddErrors(result.Errors);
                 return View(model);
             }
 
@@ -359,7 +394,7 @@ namespace CollAction.Controllers
             result = await _userManager.UpdateAsync(user);
             if (!result.Succeeded)
             {
-                AddErrors(result);
+                AddErrors(result.Errors);
                 return View(model);
             }
 
@@ -373,9 +408,9 @@ namespace CollAction.Controllers
 
         #region Helpers
 
-        private void AddErrors(IdentityResult result)
+        private void AddErrors(IEnumerable<IdentityError> errors)
         {
-            foreach (var error in result.Errors)
+            foreach (var error in errors)
             {
                 ModelState.AddModelError(string.Empty, error.Description);
             }
