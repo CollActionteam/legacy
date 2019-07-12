@@ -148,36 +148,6 @@ namespace CollAction.Controllers
             return View(model);
         }
 
-        private async Task ProcessRegistrationErrors(string email, IEnumerable<IdentityError> errors)
-        {
-            if (errors.Any(e => e.Code == Constants.DuplicateUserNameError)) 
-            {
-                var user = await _userManager.FindByEmailAsync(email);
-                if (user == null)
-                {
-                    throw new InvalidOperationException($"Registration reports {email} already exists, but user with this email cannot be found.");
-                }
-
-                // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
-                // Send an email with this link
-                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-
-                var completeAccount = !string.IsNullOrEmpty(user.FullName);
-                var callbackUrl = completeAccount 
-                    ? Url.Action(action: nameof(AccountController.ResetPassword), controller: "Account", values: new { user.Id, code }, protocol: Request.Scheme)
-                    : Url.Action(action: nameof(AccountController.FinishRegistration), controller: "Account", values: new { email, code }, protocol: Request.Scheme);
-
-                await _emailSender.SendEmailTemplated(email, "Reactivate your account", "ReactivateAccount", callbackUrl);
-
-                ModelState.AddModelError(Constants.DuplicateUserNameError, "");
-                AddErrors(errors.Where(e => e.Code != Constants.DuplicateUserNameError));
-            }
-            else
-            {
-                AddErrors(errors);
-            }
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LogOff()
@@ -261,14 +231,42 @@ namespace CollAction.Controllers
                     }
                 }
 
-                // TODO: Duplicate user check
-
-                AddErrors(result.Errors);
+                await ProcessRegistrationErrors(model.Email, result.Errors);
             }
 
             ViewData["ReturnUrl"] = returnUrl;
             return View(nameof(ExternalLogin), model);
         }
+
+        private async Task ProcessRegistrationErrors(string email, IEnumerable<IdentityError> errors)
+        {
+            if (errors.Any(e => e.Code == Constants.DuplicateUserNameError)) 
+            {
+                var user = await _userManager.FindByEmailAsync(email);
+                if (user == null)
+                {
+                    throw new InvalidOperationException($"Registration reports {email} already exists, but user with this email cannot be found.");
+                }
+
+                // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
+                // Send an email with this link
+                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+                var completeAccount = !string.IsNullOrEmpty(user.FullName);
+                var callbackUrl = completeAccount 
+                    ? Url.Action(action: nameof(AccountController.ResetPassword), controller: "Account", values: new { user.Id, code }, protocol: Request.Scheme)
+                    : Url.Action(action: nameof(AccountController.FinishRegistration), controller: "Account", values: new { email, code }, protocol: Request.Scheme);
+
+                await _emailSender.SendEmailTemplated(email, "Reactivate your account", "ReactivateAccount", callbackUrl);
+
+                ModelState.AddModelError(Constants.DuplicateUserNameError, "");
+                AddErrors(errors.Where(e => e.Code != Constants.DuplicateUserNameError));
+            }
+            else
+            {
+                AddErrors(errors);
+            }
+        }        
 
         [HttpGet]
         [AllowAnonymous]
