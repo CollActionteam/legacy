@@ -1,6 +1,10 @@
 ﻿﻿@using Microsoft.ApplicationInsights.AspNetCore
 @using Microsoft.AspNetCore.Http.Features
 @using CollAction.Services.HashAssetService
+@using Core.Flash2.Mvc
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Core.Flash2
 
 @inject JavaScriptSnippet snippet
 @inject IHashAssetService hashAsset
@@ -34,6 +38,7 @@
 
         <partial name="_CookieConsentPartial" />
         <div id="site-content">
+           <div flashes></div>
             @RenderBody()
         </div>
         <partial name="_Footer" />
