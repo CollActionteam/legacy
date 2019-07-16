@@ -77,7 +77,7 @@
                                     <div class="unsubscribe-donation">
                                         <form asp-controller="Donation" asp-action="CancelSubscription" method="post">
                                             <input type="hidden" name="subscriptionId" value="@subscription.Id" />
-                                            <input type="submit" value="Cancel donation started at @subscription.Start.Value.ToShortDateString()" />
+                                            <input type="submit" value="Cancel donation started at @subscription.StartDate.Value.ToShortDateString()" />
                                         </form>
                                     </div>
                                 }
