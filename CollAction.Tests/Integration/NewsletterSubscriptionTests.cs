@@ -9,6 +9,9 @@ using Hangfire.States;
 using System.Linq;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
+using MailChimp.Net;
+using MailChimp.Net.Models;
+using MailChimp.Net.Core;
 
 namespace CollAction.Tests.Integration
 {
@@ -16,8 +19,7 @@ namespace CollAction.Tests.Integration
     [TestCategory("Integration")]
     public sealed class NewsletterSubscriptionServiceTests
     {
-        private string _newsletterTestListId;
-        private NewsletterSubscriptionService _service;
+        private NewsletterSubscriptionService _newsletterSubscriptionService;
         private Mock<IBackgroundJobClient> _jobClient;
 
         [TestInitialize]
@@ -27,89 +29,114 @@ namespace CollAction.Tests.Integration
                 new ConfigurationBuilder().AddUserSecrets<Startup>()
                                           .AddEnvironmentVariables()
                                           .Build();
-            _newsletterTestListId = configuration["MailChimpTestListId"];          
             _jobClient = new Mock<IBackgroundJobClient>();
-            _jobClient.Setup(jc => jc.Create(It.IsAny<Hangfire.Common.Job>(), It.IsAny<IState>()))
-                      .Returns<Hangfire.Common.Job, IState>(
-                          (job, state) => {
-                              Task.Run(() => (Task)job.Method.Invoke(_service, job.Args.ToArray())).Wait();
-                              return string.Empty;
-                          });
-            _service = new NewsletterSubscriptionService(
+            _newsletterSubscriptionService = new NewsletterSubscriptionService(
+                new MailChimpManager(configuration["MailChimpKey"]),
                 new OptionsWrapper<NewsletterSubscriptionServiceOptions>(
                     new NewsletterSubscriptionServiceOptions()
                     {
-                        MailChimpKey = configuration["MailChimpKey"],
-                        MailChimpNewsletterListId = _newsletterTestListId
-                    }), new LoggerFactory().CreateLogger<NewsletterSubscriptionService>(), _jobClient.Object);
+                        MailChimpNewsletterListId = configuration["MailChimpTestListId"]
+                }), 
+                new LoggerFactory().CreateLogger<NewsletterSubscriptionService>(), 
+                _jobClient.Object);
         }
 
         [TestMethod]
         public async Task TestGetListMemberStatusOnNonExistentMember()
         {
             string email = GetTestEmail();
-
-            NewsletterSubscriptionService.SubscriptionStatus status = await _service.GetListMemberStatusAsync(_newsletterTestListId, email);
-            Assert.AreEqual(NewsletterSubscriptionService.SubscriptionStatus.NotFound, status);
+            Assert.IsFalse(await _newsletterSubscriptionService.IsSubscribedAsync(email));
         }
 
         [TestMethod]
-        public async Task TestAddListMemberAsPending()
+        public async Task TestSubscribeListMemberAsPending()
         {
             string email = GetTestEmail();
 
             try
             {
-                await _service.AddOrUpdateListMemberAsync(_newsletterTestListId, email, true);
-                NewsletterSubscriptionService.SubscriptionStatus status = await _service.GetListMemberStatusAsync(_newsletterTestListId, email);
-                Assert.AreEqual(NewsletterSubscriptionService.SubscriptionStatus.Pending, status);
+                await _newsletterSubscriptionService.SetSubscription(email, true, true);
+                Status status = await _newsletterSubscriptionService.GetListMemberStatus(email);
+                Assert.AreEqual(Status.Pending, status);
+                Assert.IsTrue(await _newsletterSubscriptionService.IsSubscribedAsync(email));
             }
             finally
             {
-                await _service.DeleteListMemberAsync(_newsletterTestListId, email);
+                await _newsletterSubscriptionService.UnsubscribeMember(email);
             }
         }
 
         [TestMethod]
-        public async Task TestAddListMemberAsSubscribed()
+        public async Task TestSubscribeListMemberAsSubscribed()
         {
             string email = GetTestEmail();
 
             try
             {
-                await _service.AddOrUpdateListMemberAsync(_newsletterTestListId, email, false);
-                NewsletterSubscriptionService.SubscriptionStatus status = await _service.GetListMemberStatusAsync(_newsletterTestListId, email);
-                Assert.AreEqual(NewsletterSubscriptionService.SubscriptionStatus.Subscribed, status);
+                await _newsletterSubscriptionService.SetSubscription(email, true, false);
+                Status status = await _newsletterSubscriptionService.GetListMemberStatus(email);
+                Assert.AreEqual(Status.Subscribed, status);
+                Assert.IsTrue(await _newsletterSubscriptionService.IsSubscribedAsync(email));
             }
             finally
             {
-                await _service.DeleteListMemberAsync(_newsletterTestListId, email);
+                await _newsletterSubscriptionService.UnsubscribeMember(email);
             }
         }
 
         [TestMethod]
-        public async Task TestDeleteExistingListMember()
+        public async Task TestUnsubscribeExistingListMember()
         {
             string email = GetTestEmail();
 
-            await _service.AddOrUpdateListMemberAsync(_newsletterTestListId, email);
-            NewsletterSubscriptionService.SubscriptionStatus status = await _service.GetListMemberStatusAsync(_newsletterTestListId, email);
-            Assert.AreEqual(NewsletterSubscriptionService.SubscriptionStatus.Pending, status);
+            try
+            {
+                await _newsletterSubscriptionService.SetSubscription(email, true, true);
+                Status status = await _newsletterSubscriptionService.GetListMemberStatus(email);
+                Assert.AreEqual(Status.Pending, status);
 
-            await _service.DeleteListMemberAsync(_newsletterTestListId, email);
-            status = await _service.GetListMemberStatusAsync(_newsletterTestListId, email);
-            // Test says Unknown is returned, until you change the expected result to Unknown. Then it's NotFound again...
-            // Assert.AreEqual(NewsletterSubscriptionService.SubscriptionStatus.NotFound, status);
+                await _newsletterSubscriptionService.SetSubscription(email, false, false);
+                Assert.IsFalse(await _newsletterSubscriptionService.IsSubscribedAsync(email));
+            }
+            finally
+            {
+                await _newsletterSubscriptionService.SetSubscription(email, false, false);
+            }
         }
 
         [TestMethod]
-        public async Task TestDeleteNonExistingListMember()
+        public async Task TestUnsubscribeSubscribeMultiple()
         {
             string email = GetTestEmail();
 
-            await _service.DeleteListMemberAsync(_newsletterTestListId, email);
-            NewsletterSubscriptionService.SubscriptionStatus status = await _service.GetListMemberStatusAsync(_newsletterTestListId, email);
-            Assert.AreEqual(NewsletterSubscriptionService.SubscriptionStatus.NotFound, status);
+            try
+            {
+                for (int attempt = 0; attempt < 4; attempt++)
+                {
+                    for (bool requireEmail = true; requireEmail; requireEmail = !requireEmail)
+                    {
+                        await _newsletterSubscriptionService.SetSubscription(email, true, requireEmail);
+                        Assert.IsTrue(await _newsletterSubscriptionService.IsSubscribedAsync(email));
+
+                        await _newsletterSubscriptionService.SetSubscription(email, false, requireEmail);
+                        Assert.IsFalse(await _newsletterSubscriptionService.IsSubscribedAsync(email));
+                    }
+                }
+
+            }
+            finally
+            {
+                await _newsletterSubscriptionService.SetSubscription(email, false, true);
+            }
+        }
+
+        [TestMethod]
+        public async Task TestUnsubscribeNonExistingListMember()
+        {
+            string email = GetTestEmail();
+
+            await _newsletterSubscriptionService.SetSubscription(email, false, false);
+            Assert.IsFalse(await _newsletterSubscriptionService.IsSubscribedAsync(email));
         }
 
         private string GetTestEmail()

@@ -32,6 +32,8 @@ using Serilog.Sinks.Slack;
 using Microsoft.ApplicationInsights.Extensibility;
 using CollAction.Services.ViewRender;
 using AspNetCore.IServiceCollection.AddIUrlHelper;
+using MailChimp.Net;
+using MailChimp.Net.Interfaces;
 
 namespace CollAction
 {
@@ -117,6 +119,7 @@ namespace CollAction
             services.AddTransient<IFestivalService, FestivalService>();
             services.AddTransient<IDonationService, DonationService>();
             services.AddTransient<IViewRenderService, ViewRenderService>();
+            services.AddTransient<IMailChimpManager, MailChimpManager>();
 
             services.AddDataProtection()
                     .Services.Configure<KeyManagementOptions>(options => options.XmlRepository = new DataProtectionRepository(new DbContextOptionsBuilder<ApplicationDbContext>().UseNpgsql(connectionString).Options));
@@ -130,6 +133,10 @@ namespace CollAction
             services.Configure<NewsletterSubscriptionServiceOptions>(Configuration);
             services.Configure<FestivalServiceOptions>(Configuration);
             services.Configure<ProjectEmailOptions>(Configuration);
+            services.Configure<MailChimpOptions>(options =>
+            {
+                options.ApiKey = Configuration["MailChimpKey"];
+            });
             services.Configure<RequestOptions>(options =>
             {
                 options.ApiKey = Configuration["StripeSecretApiKey"];
