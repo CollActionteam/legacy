@@ -1,4 +1,0 @@
-wwwroot/js/*.bundle.js
-wwwroot/js/bundle.js
-node_modules
-log*
