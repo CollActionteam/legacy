@@ -69,7 +69,7 @@ export default class CookieMessage extends React.Component<ICookieMessageProps, 
                     <div className="checkbox">
                         <input type="checkbox" name="essential-cookies" id="essential-cookies" checked readOnly disabled />
                         <label htmlFor="essential-cookies">
-                            Essential cookies & anonymous statistics
+                            Essential cookies &amp; anonymous statistics
                         </label>
                     </div>
                     <div className="checkbox">
