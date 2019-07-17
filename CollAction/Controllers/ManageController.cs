@@ -63,7 +63,6 @@ namespace CollAction.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<JsonResult> MyProjects()
         {
@@ -74,7 +73,6 @@ namespace CollAction.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<JsonResult> ParticipatingInProjects()
         {
@@ -190,7 +188,6 @@ namespace CollAction.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ToggleEmailSubscription(int projectId)
         {
@@ -209,7 +206,7 @@ namespace CollAction.Controllers
             }
         }
 
-        public enum ManageMessageId
+        private enum ManageMessageId
         {
             AddPhoneSuccess,
             AddLoginSuccess,
