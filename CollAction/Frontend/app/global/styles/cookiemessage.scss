@@ -1,7 +1,7 @@
 @import "../../colors";
 
-#cookie-message {
-    #cookie-message-banner {
+#cookie-message,#cookie-message-change {
+    .cookie-message-banner {
         background-color: $coll-action-green;
         color: white;
         text-align: center;
@@ -18,6 +18,7 @@
             padding: 5px 10px;
             display: inline-block;
             text-decoration: none;
+            width: 250px;
         }
     }
 }

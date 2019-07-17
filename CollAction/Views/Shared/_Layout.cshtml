@@ -42,11 +42,11 @@
 
         <script src="~/js/frontend.bundle.js?@(hashAsset.HashAssetBase64("wwwroot", "js", "frontend.bundle.js"))">
         </script>
+        <script src="~/js/tagmanager.bundle.js?@(hashAsset.HashAssetBase64("wwwroot", "js", "tagmanager.bundle.js"))">
+        </script>
 
         @if (canTrack)
         {
-            <script src="~/js/tagmanager.bundle.js?@(hashAsset.HashAssetBase64("wwwroot", "js", "tagmanager.bundle.js"))">
-            </script>
             <script src="https://js.stripe.com/v3/">
             </script>
             <noscript>
