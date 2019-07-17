@@ -62,18 +62,20 @@ namespace CollAction.Services.Donation
         private readonly IEmailSender _emailSender;
         private readonly RequestOptions _requestOptions;
         private readonly SiteOptions _siteOptions;
+        private readonly StripeClient _stripeClient;
 
         public DonationService(IOptions<RequestOptions> requestOptions, IOptions<SiteOptions> siteOptions, UserManager<ApplicationUser> userManager, ApplicationDbContext context, IBackgroundJobClient backgroundJobClient, IOptions<StripeSignatures> stripeSignatures, IEmailSender emailSender)
         {
             _requestOptions = requestOptions.Value;
             _siteOptions = siteOptions.Value;
-            _customerService = new CustomerService(_requestOptions.ApiKey);
-            _sourceService = new SourceService(_requestOptions.ApiKey);
-            _chargeService = new ChargeService(_requestOptions.ApiKey);
-            _sessionService = new SessionService(_requestOptions.ApiKey);
-            _subscriptionService = new SubscriptionService(_requestOptions.ApiKey);
-            _planService = new PlanService(_requestOptions.ApiKey);
-            _productService = new ProductService(_requestOptions.ApiKey);
+            _stripeClient = new StripeClient(_requestOptions.ApiKey);
+            _customerService = new CustomerService(_stripeClient);
+            _sourceService = new SourceService(_stripeClient);
+            _chargeService = new ChargeService(_stripeClient);
+            _sessionService = new SessionService(_stripeClient);
+            _subscriptionService = new SubscriptionService(_stripeClient);
+            _planService = new PlanService(_stripeClient);
+            _productService = new ProductService(_stripeClient);
             _backgroundJobClient = backgroundJobClient;
             _stripeSignatures = stripeSignatures.Value;
             _context = context;
@@ -107,9 +109,10 @@ namespace CollAction.Services.Donation
                 }
             };
 
+            Customer customer = await GetOrCreateCustomer(name, email);
             if (recurring)
             {
-                sessionOptions.CustomerEmail = email; // TODO: sessionOptions.CustomerId = customer.Id; // Once supported
+                sessionOptions.CustomerId = customer.Id;
                 sessionOptions.SubscriptionData = new SessionSubscriptionDataOptions()
                 {
                     Items = new List<SessionSubscriptionDataItemOptions>()
@@ -124,7 +127,6 @@ namespace CollAction.Services.Donation
             }
             else
             {
-                Customer customer = await GetOrCreateCustomer(name, email);
                 sessionOptions.CustomerId = customer.Id;
                 sessionOptions.LineItems = new List<SessionLineItemOptions>()
                 {
@@ -169,7 +171,7 @@ namespace CollAction.Services.Donation
             Subscription subscription = await _subscriptionService.CreateAsync(new SubscriptionCreateOptions()
             {
                 DefaultSource = source.Id,
-                Billing = Billing.ChargeAutomatically,
+                CollectionMethod = "charge_automatically",
                 CustomerId = customer.Id,
                 Items = new List<SubscriptionItemOption>()
                 {
@@ -267,7 +269,7 @@ namespace CollAction.Services.Donation
                 {
                     Amount = source.Amount,
                     Currency = source.Currency,
-                    SourceId = sourceId,
+                    Source = sourceId,
                     CustomerId = source.Customer,
                     Description = "A donation to Stichting CollAction"
                 });
@@ -331,7 +333,7 @@ namespace CollAction.Services.Donation
             Product product = await GetOrCreateRecurringDonationProduct();
             return await _planService.CreateAsync(new PlanCreateOptions()
             {
-                ProductId = product.Id,
+                Product = product.Id,
                 Active = true,
                 Amount = amount * 100,
                 Currency = currency,
