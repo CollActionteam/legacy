@@ -32,6 +32,9 @@ using Serilog.Sinks.Slack;
 using Microsoft.ApplicationInsights.Extensibility;
 using CollAction.Services.ViewRender;
 using AspNetCore.IServiceCollection.AddIUrlHelper;
+using MailChimp.Net;
+using MailChimp.Net.Interfaces;
+using CollAction.Services.HashAssetService;
 
 namespace CollAction
 {
@@ -117,6 +120,8 @@ namespace CollAction
             services.AddTransient<IFestivalService, FestivalService>();
             services.AddTransient<IDonationService, DonationService>();
             services.AddTransient<IViewRenderService, ViewRenderService>();
+            services.AddTransient<IMailChimpManager, MailChimpManager>();
+            services.AddSingleton<IHashAssetService, HashAssetService>(provider => new HashAssetService(!Environment.IsDevelopment()));
 
             services.AddDataProtection()
                     .Services.Configure<KeyManagementOptions>(options => options.XmlRepository = new DataProtectionRepository(new DbContextOptionsBuilder<ApplicationDbContext>().UseNpgsql(connectionString).Options));
@@ -130,6 +135,10 @@ namespace CollAction
             services.Configure<NewsletterSubscriptionServiceOptions>(Configuration);
             services.Configure<FestivalServiceOptions>(Configuration);
             services.Configure<ProjectEmailOptions>(Configuration);
+            services.Configure<MailChimpOptions>(options =>
+            {
+                options.ApiKey = Configuration["MailChimpKey"];
+            });
             services.Configure<RequestOptions>(options =>
             {
                 options.ApiKey = Configuration["StripeSecretApiKey"];
@@ -285,7 +294,14 @@ namespace CollAction
 
             app.UseAuthentication();
 
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                OnPrepareResponse = ctx =>
+                {
+                    const int cacheDurationSeconds = 60 * 60 * 24 * 7;
+                    ctx.Context.Response.Headers[Microsoft.Net.Http.Headers.HeaderNames.CacheControl] = $"public,max-age={cacheDurationSeconds}";
+                }
+            });
 
             app.UseHangfireServer(new BackgroundJobServerOptions() { WorkerCount = 1 });
 
