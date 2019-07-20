@@ -48,18 +48,12 @@
                                 <p>
                                     We won't spam you, we'll just send you an update from CollAction every once in a while. But if you just want to keep your inbox as clean as possible, you can unsubscribe here.
                                 </p>
-                                <p>
-                                    Note: it'll take a few seconds to process your change.
-                                </p>
                                 <input type="submit" value="Unsubscribe" /> 
                             } 
                             else 
                             {
                                 <p>
                                     Subscribe to our newsletter if you would like to receive an update from CollAction every once in a while - don't worry, we like spam as little as you do! 🙂 
-                                </p>
-                                <p>
-                                    Note: it'll take a few seconds to process your change.
                                 </p>
                                 <input type="submit" value="Subscribe" /> 
                             }
@@ -83,7 +77,7 @@
                                     <div class="unsubscribe-donation">
                                         <form asp-controller="Donation" asp-action="CancelSubscription" method="post">
                                             <input type="hidden" name="subscriptionId" value="@subscription.Id" />
-                                            <input type="submit" value="Cancel donation started at @subscription.Start.Value.ToShortDateString()" />
+                                            <input type="submit" value="Cancel donation started at @subscription.StartDate.Value.ToShortDateString()" />
                                         </form>
                                     </div>
                                 }

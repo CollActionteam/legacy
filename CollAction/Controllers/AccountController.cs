@@ -135,7 +135,7 @@ namespace CollAction.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    _newsletterSubscriptionService.SetSubscription(model.Email, model.NewsletterSubscription);
+                    _newsletterSubscriptionService.SetSubscriptionBackground(model.Email, model.NewsletterSubscription);
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
                     return RedirectToLocal(returnUrl);
@@ -221,7 +221,7 @@ namespace CollAction.Controllers
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
-                    _newsletterSubscriptionService.SetSubscription(model.Email, model.NewsletterSubscription);
+                    _newsletterSubscriptionService.SetSubscriptionBackground(model.Email, model.NewsletterSubscription);
                     result = await _userManager.AddLoginAsync(user, info);
                     if (result.Succeeded)
                     {
@@ -396,7 +396,7 @@ namespace CollAction.Controllers
                 return View(model);
             }
 
-            _newsletterSubscriptionService.SetSubscription(model.Email, model.NewsletterSubscription);
+            _newsletterSubscriptionService.SetSubscriptionBackground(model.Email, model.NewsletterSubscription);
 
             await _signInManager.SignInAsync(user, isPersistent: false);
             _logger.LogInformation(3, "User created from anonymous project participant.");
