@@ -61,9 +61,7 @@ namespace CollAction.Models
         [ForeignKey("DescriptiveImageFileId")]
         public ImageFile DescriptiveImage { get; set; }
 
-        public int? DescriptionVideoLinkId { get; set; }
-        [ForeignKey("DescriptionVideoLinkId")]
-        public VideoLink DescriptionVideoLink { get; set; }
+        public string DescriptionVideoLink { get; set; }
         
         public ProjectDisplayPriority DisplayPriority { get; set; }
 
@@ -92,7 +90,9 @@ namespace CollAction.Models
         }
 
         public List<ProjectTag> Tags { get; set; }
+
         public List<ProjectParticipant> Participants { get; set; }
+
         public int AnonymousUserParticipants { get; set; }
         
         [NotMapped]
@@ -122,29 +122,6 @@ namespace CollAction.Models
                 context.ProjectTags.RemoveRange(redundantTags);
                 context.ProjectTags.AddRange(newProjectTags);
                 await context.SaveChangesAsync();
-            }
-        }
-
-        public void SetDescriptionVideoLink(ApplicationDbContext context, String videoLink)
-        {
-            // If the video link has changed...
-            if (DescriptionVideoLink?.Link != videoLink)
-            {
-                // Remove the project's previously recorded video link if it exists.
-                if (DescriptionVideoLink != null)
-                {
-                    context.VideoLinks.Remove(DescriptionVideoLink);
-                }
-
-                // If a new video link was specified add it to the VideoLinks table.
-                if (videoLink != null)
-                {
-                    DescriptionVideoLink = new VideoLink
-                    {
-                        Link = videoLink,
-                        Date = DateTime.UtcNow
-                    };
-                }
             }
         }
     }

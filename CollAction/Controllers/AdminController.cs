@@ -126,7 +126,7 @@ namespace CollAction.Controllers
                 Description = project.Description,
                 CategoryId = project.CategoryId,
                 CreatorComments = project.CreatorComments,
-                DescriptionVideoLink = project.DescriptionVideoLink?.Link,
+                DescriptionVideoLink = project.DescriptionVideoLink,
                 BannerImageFile = project.BannerImage,
                 BannerImageDescription = project.BannerImage?.Description,
                 DescriptiveImageFile = project.DescriptiveImage,
@@ -274,7 +274,7 @@ namespace CollAction.Controllers
 
                 await project.SetTags(_context, model.Hashtag?.Split(';') ?? new string[0]);
 
-                project.SetDescriptionVideoLink(_context, model.DescriptionVideoLink);
+                project.DescriptionVideoLink = model.DescriptionVideoLink;
 
                 await _context.SaveChangesAsync();
                 return RedirectToAction("ManageProjectsIndex");

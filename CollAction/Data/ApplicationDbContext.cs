@@ -22,7 +22,6 @@ namespace CollAction.Data
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<ImageFile> ImageFiles { get; set; }
-        public DbSet<VideoLink> VideoLinks { get; set; }
         public DbSet<Job> Jobs { get; set; }
         public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
         public DbSet<ProjectParticipantCount> ProjectParticipantCounts { get; set; }
