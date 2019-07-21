@@ -3,11 +3,11 @@
 .banner {
   background-repeat: no-repeat;
   background-position: center;
+  background-size: cover;
 }
 
 @media (max-width: 991px) {
   .banner {
-    background-size: cover;
     background-size: 230%;
   }
 }
