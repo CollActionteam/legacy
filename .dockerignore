@@ -10,5 +10,5 @@ CollAction/bin
 CollAction/obj
 CollAction/node_modules
 CollAction/*.txt
-CollAction/wwwroot/usercontent
+CollAction/wwwroot/js
 CollAction/CollAction.csproj.user
