@@ -16,8 +16,6 @@ namespace CollAction.Models.ProjectViewModels
 
         public string CategoryColorHex { get; set; }
 
-        public string LocationName { get; set; }
-
         public string BannerImagePath { get; set; }
 
         public string BannerImageDescription { get; set; }

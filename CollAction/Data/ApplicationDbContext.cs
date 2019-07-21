@@ -7,7 +7,6 @@ using CollAction.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using CollAction.Data.Geonames;
 
 namespace CollAction.Data
 {
@@ -22,12 +21,6 @@ namespace CollAction.Data
         public DbSet<ProjectTag> ProjectTags { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<Location> Locations { get; set; }
-        public DbSet<LocationContinent> LocationContinents { get; set; }
-        public DbSet<LocationCountry> LocationCountries { get; set; }
-        public DbSet<LocationAlternateName> LocationAlternateNames { get; set; }
-        public DbSet<LocationLevel1> LocationLevel1 { get; set; }
-        public DbSet<LocationLevel2> LocationLevel2 { get; set; }
         public DbSet<ImageFile> ImageFiles { get; set; }
         public DbSet<VideoLink> VideoLinks { get; set; }
         public DbSet<Job> Jobs { get; set; }
@@ -65,24 +58,6 @@ namespace CollAction.Data
                    .HasOne(p => p.ParticipantCounts)
                    .WithOne(p => p.Project)
                    .HasForeignKey<ProjectParticipantCount>(p => p.ProjectId);
-            builder.Entity<Location>()
-                   .HasOne(l => l.Country)
-                   .WithMany(c => c.Locations)
-                   .HasForeignKey(l => l.CountryId)
-                   .OnDelete(DeleteBehavior.SetNull);
-            builder.Entity<LocationCountry>()
-                   .HasOne(c => c.Location);
-            builder.Entity<Location>()
-                   .HasOne(l => l.Level1)
-                   .WithMany(l => l.Locations)
-                   .HasForeignKey(l => l.Level1Id)
-                   .OnDelete(DeleteBehavior.SetNull);
-            builder.Entity<LocationLevel1>().HasOne(l => l.Location);
-            builder.Entity<Location>().HasOne(l => l.Level2)
-                                      .WithMany(l => l.Locations)
-                                      .HasForeignKey(l => l.Level2Id)
-                                      .OnDelete(DeleteBehavior.SetNull);
-            builder.Entity<LocationLevel2>().HasOne(l => l.Location);
             builder.Entity<ApplicationUser>().Property(u => u.RepresentsNumberParticipants).HasDefaultValue(1);
         }
 
@@ -98,13 +73,6 @@ namespace CollAction.Data
             ChangeTracker.AutoDetectChangesEnabled = false;
             await CreateAdminRoleAndUser(configuration, userManager, roleManager);
             await CreateCategories();
-            await ImportLocationData(configuration);
-        }
-
-        private async Task ImportLocationData(IConfiguration configuration)
-        {
-            if (configuration["ImportLocationData"].Equals("1", StringComparison.Ordinal))
-                await new GeonamesImporter(this).ImportLocationData();
         }
 
         private async Task CreateAdminRoleAndUser(IConfiguration configuration, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)

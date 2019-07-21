@@ -26,10 +26,6 @@ namespace CollAction.Models
         [ForeignKey("CategoryId")]
         public Category Category { get; set; }
 
-        public int? LocationId { get; set; }
-        [ForeignKey("LocationId")]
-        public Location Location { get; set; }
-
         public string OwnerId { get; set; }
         [ForeignKey("OwnerId")]
         public ApplicationUser Owner { get; set; }

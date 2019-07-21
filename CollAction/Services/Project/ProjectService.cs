@@ -50,7 +50,6 @@ namespace CollAction.Services.Project
             return _context.Projects
                 .Where(filter)
                 .Include(p => p.Category)
-                .Include(p => p.Location)
                 .Include(p => p.BannerImage)
                 .Include(p => p.DescriptiveImage)
                 .Include(p => p.DescriptionVideoLink)
@@ -184,7 +183,6 @@ namespace CollAction.Services.Project
             var project =  await _context
                 .Projects
                 .Include(p => p.Category)
-                .Include(p => p.Location)
                 .Include(p => p.BannerImage)
                 .Include(p => p.ParticipantCounts)
                 .FirstOrDefaultAsync(p => p.Id == projectId);
@@ -199,7 +197,6 @@ namespace CollAction.Services.Project
             IQueryable<Models.Project> projects = _context
                 .Projects
                 .Include(p => p.Category)
-                .Include(p => p.Location)
                 .Include(p => p.BannerImage)
                 .Include(p => p.ParticipantCounts)
                 .Where(filter)
@@ -220,7 +217,6 @@ namespace CollAction.Services.Project
                 .Projects
                 .Where(p => p.OwnerId == userId && p.Status != ProjectStatus.Deleted)
                 .Include(p => p.Category)
-                .Include(p => p.Location)
                 .Include(p => p.BannerImage)
                 .Include(p => p.ParticipantCounts)                
                 .OrderBy(p => p.DisplayPriority)
@@ -244,7 +240,6 @@ namespace CollAction.Services.Project
                 .Where(pa => pa.UserId == userId && pa.Project.Status != ProjectStatus.Deleted)
                 .Select(pa => pa.Project)
                 .Include(p => p.Category)
-                .Include(p => p.Location)
                 .Include(p => p.BannerImage)
                 .Include(p => p.ParticipantCounts)
                 .Include(p => p.Participants)
@@ -274,7 +269,6 @@ namespace CollAction.Services.Project
                 ProjectProposal = project.Proposal,
                 CategoryName = project.Category.Name,
                 CategoryColorHex = project.Category.ColorHex,
-                LocationName = project.Location != null ? project.Location.Name : string.Empty,
                 BannerImagePath = project.BannerImage != null ? _imageService.GetUrl(project.BannerImage) : $"/images/default_banners/{project.Category.Name}.jpg",
                 BannerImageDescription = project.BannerImage != null ? project.BannerImage.Description : string.Empty,
                 Target = project.Target,

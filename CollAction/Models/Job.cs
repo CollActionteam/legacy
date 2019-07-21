@@ -17,10 +17,6 @@ namespace CollAction.Models
         [Required]
         [MaxLength(500)]
         public string Description { get; set; }
-        
-        public int? LocationId { get; set; }
-        [ForeignKey("LocationId")]
-        public Location Location { get; set; }
 
         [Required]
         public DateTime PostDate { get; set; }

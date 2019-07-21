@@ -88,7 +88,6 @@ namespace CollAction
             services.AddLogging(loggingBuilder =>
             {
                 LoggerConfiguration configuration = new LoggerConfiguration()
-                       .WriteTo.RollingFile("log-{Date}.txt", LogEventLevel.Information)
                        .WriteTo.Console(LogEventLevel.Information) 
                        .WriteTo.ApplicationInsights(TelemetryConfiguration.Active, TelemetryConverter.Traces);
 
@@ -96,11 +95,6 @@ namespace CollAction
                 if (slackHook != null)
                 {
                     configuration.WriteTo.Slack(slackHook, restrictedToMinimumLevel: LogEventLevel.Error);
-                }
-
-                if (Environment.IsDevelopment())
-                {
-                    configuration.WriteTo.Trace();
                 }
 
                 Log.Logger = configuration.CreateLogger();

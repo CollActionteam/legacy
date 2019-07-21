@@ -10,14 +10,15 @@
   <ItemGroup>
     <PackageReference Include="AspNetCore.IServiceCollection.AddIUrlHelper" Version="1.1.0" />
     <PackageReference Include="AutoMapper" Version="8.1.1" />
-    <PackageReference Include="AWSSDK.S3" Version="3.3.102.22" />
-    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.101.11" />
-    <PackageReference Include="Hangfire.AspNetCore" Version="1.7.4" />
+    <PackageReference Include="AWSSDK.S3" Version="3.3.104.1" />
+    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.101.19" />
+    <PackageReference Include="GraphQL" Version="2.4.0" />
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.7.5" />
     <PackageReference Include="Hangfire.PostgreSql" Version="1.6.0" />
     <PackageReference Include="HtmlSanitizer" Version="4.0.217" />
     <PackageReference Include="MailChimp.Net.V3" Version="4.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.4" PrivateAssets="all">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.6" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" PrivateAssets="All" />
@@ -26,9 +27,7 @@
     <PackageReference Include="Serilog.Extensions.Logging" Version="2.0.4" />
     <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="3.0.3" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
-    <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
     <PackageReference Include="Serilog.Sinks.Slack" Version="1.2.63" />
-    <PackageReference Include="Serilog.Sinks.Trace" Version="2.1.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0006" />
     <PackageReference Include="Stripe.net" Version="26.0.0" />
   </ItemGroup>

@@ -119,7 +119,6 @@ namespace CollAction.Controllers
                 Goal = model.Goal,
                 CreatorComments = model.CreatorComments,
                 CategoryId = model.CategoryId,
-                LocationId = model.LocationId,
                 Target = model.Target,
                 Start = model.Start,
                 End = model.End.Date.AddHours(23).AddMinutes(59).AddSeconds(59),

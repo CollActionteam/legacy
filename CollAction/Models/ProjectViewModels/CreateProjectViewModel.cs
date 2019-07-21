@@ -56,9 +56,6 @@ namespace CollAction.Models
         [Display(Name = "Other comments", Prompt = "e.g. Background, process, FAQs, about the initiator")]
         public string CreatorComments { get; set; }
 
-        [Display(Name = "Location")]
-        public int? LocationId { get; set; }
-
         [Required]
         [DataType(DataType.Date)]
         [WithinMonthsAfterToday(12, ErrorMessage = "Please ensure your project starts within the next 12 months")]
