@@ -25,7 +25,6 @@ namespace CollAction.Models
         public int CategoryId { get; set; }
 
         [Required(ErrorMessage = "Please specify the target number of collaborators required for your project to be deemed a success")]
-        [DataType(DataType.Text)] // Force this to text rather than .Int to prevent browsers displaying spin buttons (up down arrows) by default.
         [Range(1, 1000000, ErrorMessage = "You can choose up to a maximum of one million participants as your target number")]
         [Display(Prompt = "Target")]
         public int Target { get; set; }
