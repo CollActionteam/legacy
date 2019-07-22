@@ -7,6 +7,7 @@ using CollAction.Services.Image;
 using CollAction.Services.Project;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Diagnostics;
+using CollAction.Services.Sitemap;
 
 namespace CollAction.Controllers
 {
@@ -15,13 +16,15 @@ namespace CollAction.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IProjectService _projectService;
         private readonly IImageService _imageService;
+        private readonly ISitemapService _sitemapService;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ApplicationDbContext context, IProjectService projectService, IImageService imageService, ILogger<HomeController> logger)
+        public HomeController(ApplicationDbContext context, IProjectService projectService, IImageService imageService, ILogger<HomeController> logger, ISitemapService sitemapService)
         {
             _context = context;
             _projectService = projectService;
             _imageService = imageService;
+            _sitemapService = sitemapService;
             _logger = logger;
         }
 
@@ -58,6 +61,6 @@ namespace CollAction.Controllers
         }
 
         public async Task<ContentResult> Sitemap()
-            => Content((await new SitemapHelper(_context, Url, _projectService, _imageService).GetSitemap()).ToString(), "text/xml", Encoding.UTF8);
+            => Content((await _sitemapService.GetSitemap()).ToString(), "text/xml", Encoding.UTF8);
     }
 }

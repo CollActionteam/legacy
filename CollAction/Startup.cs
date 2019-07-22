@@ -35,6 +35,7 @@ using AspNetCore.IServiceCollection.AddIUrlHelper;
 using MailChimp.Net;
 using MailChimp.Net.Interfaces;
 using CollAction.Services.HashAssetService;
+using CollAction.Services.Sitemap;
 
 namespace CollAction
 {
@@ -115,6 +116,7 @@ namespace CollAction
             services.AddTransient<IDonationService, DonationService>();
             services.AddTransient<IViewRenderService, ViewRenderService>();
             services.AddTransient<IMailChimpManager, MailChimpManager>();
+            services.AddTransient<ISitemapService, SitemapService>();
             services.AddSingleton<IHashAssetService, HashAssetService>(provider => new HashAssetService(!Environment.IsDevelopment()));
 
             services.AddDataProtection()

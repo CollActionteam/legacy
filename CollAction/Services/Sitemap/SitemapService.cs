@@ -10,9 +10,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace CollAction.Helpers
+namespace CollAction.Services.Sitemap
 {
-    public class SitemapHelper
+    public class SitemapService : ISitemapService
     {
         private static XNamespace _urlsetNamespace = "http://www.sitemaps.org/schemas/sitemap/0.9";
         private static XNamespace _imageNamespace = "http://www.google.com/schemas/sitemap-image/1.1";
@@ -22,7 +22,7 @@ namespace CollAction.Helpers
         private readonly IProjectService _projectService;
         private readonly IImageService _imageService;
 
-        public SitemapHelper(ApplicationDbContext context, IUrlHelper urlHelper, IProjectService projectService, IImageService imageService)
+        public SitemapService(ApplicationDbContext context, IUrlHelper urlHelper, IProjectService projectService, IImageService imageService)
         {
             _context = context;
             _urlHelper = urlHelper;
@@ -59,7 +59,7 @@ namespace CollAction.Helpers
                 new XElement(_urlsetNamespace + "urlset", rootContent));
         }
 
-        private XElement GetSitemapProjectEntry(Project project)
+        private XElement GetSitemapProjectEntry(Models.Project project)
         {
             HostString host = _urlHelper.ActionContext.HttpContext.Request.Host;
             List<XElement> projectElements = new List<XElement>(3)
