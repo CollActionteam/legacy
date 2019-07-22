@@ -85,6 +85,8 @@ namespace CollAction
 
             services.AddUrlHelper();
 
+            services.AddFlashes();
+
             services.AddLogging(loggingBuilder =>
             {
                 LoggerConfiguration configuration = new LoggerConfiguration()

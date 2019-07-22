@@ -5,13 +5,10 @@ using CollAction.Services.Newsletter;
 using System;
 using Moq;
 using Hangfire;
-using Hangfire.States;
-using System.Linq;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 using MailChimp.Net;
 using MailChimp.Net.Models;
-using MailChimp.Net.Core;
 
 namespace CollAction.Tests.Integration
 {

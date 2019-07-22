@@ -10,6 +10,7 @@ using CollAction.Services.Newsletter;
 using CollAction.Services.Project;
 using CollAction.Services.Donation;
 using System.Linq;
+using Core.Flash2;
 
 namespace CollAction.Controllers
 {
@@ -21,6 +22,7 @@ namespace CollAction.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly INewsletterSubscriptionService _newsletterSubscriptionService;
         private readonly ILogger _logger;
+        private readonly IFlasher _flasher;
         private readonly IProjectService  _projectService;
 
         public ManageController(
@@ -29,13 +31,15 @@ namespace CollAction.Controllers
           INewsletterSubscriptionService newsletterSubscriptionService,
           ILoggerFactory loggerFactory,
           IDonationService donationService,
-          IProjectService projectService)
+          IProjectService projectService,
+          IFlasher flasher)
         {
             _userManager = userManager;
             _donationService = donationService;
             _signInManager = signInManager;
             _newsletterSubscriptionService = newsletterSubscriptionService;
             _logger = loggerFactory.CreateLogger<ManageController>();
+            _flasher = flasher;
             _projectService = projectService;
         }
 
@@ -59,7 +63,6 @@ namespace CollAction.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<JsonResult> MyProjects()
         {
@@ -70,7 +73,6 @@ namespace CollAction.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<JsonResult> ParticipatingInProjects()
         {
@@ -113,10 +115,15 @@ namespace CollAction.Controllers
         public async Task<IActionResult> NewsletterSubscription([Bind("NewsletterSubscription")]IndexViewModel model)
         {
             var user = await GetCurrentUserAsync();
-            if (user != null)
+            try
             {
                 await _newsletterSubscriptionService.SetSubscription(user.Email, model.NewsletterSubscription, false);
             }
+            catch (NeedsToResubscribeException)
+            {
+                _flasher.Flash("danger", "Your e-mail address was permanently deleted from the mailing-list. Please use the newsletter form at the bottom of the page to re-subscribe");
+            }
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -181,7 +188,6 @@ namespace CollAction.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ToggleEmailSubscription(int projectId)
         {
@@ -200,7 +206,7 @@ namespace CollAction.Controllers
             }
         }
 
-        public enum ManageMessageId
+        private enum ManageMessageId
         {
             AddPhoneSuccess,
             AddLoginSuccess,

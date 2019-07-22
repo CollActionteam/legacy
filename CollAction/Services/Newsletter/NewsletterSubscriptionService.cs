@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Hangfire;
 using MailChimp.Net.Core;
 using MailChimp.Net.Interfaces;
@@ -62,12 +63,24 @@ namespace CollAction.Services.Newsletter
             }
             catch (MailChimpNotFoundException) // New member
             {
-                await _mailChimpManager.Members.AddOrUpdateAsync(_newsletterListId, new Member()
+                try
                 {
-                    EmailAddress = email,
-                    StatusIfNew = usePendingStatusIfNew ? Status.Pending : Status.Subscribed,
-                    Status = Status.Subscribed
-                });
+                    await _mailChimpManager.Members.AddOrUpdateAsync(_newsletterListId, new Member()
+                    {
+                        EmailAddress = email,
+                        StatusIfNew = usePendingStatusIfNew ? Status.Pending : Status.Subscribed,
+                        Status = Status.Subscribed
+                    });
+                }
+                catch (MailChimpException e)
+                {
+                    if (e.Status == 400 && e.Title.Equals("Forgotten Email Not Subscribed", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        throw new NeedsToResubscribeException(e);
+                    }
+
+                    throw;
+                }
             }
         }
 
