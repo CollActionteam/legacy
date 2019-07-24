@@ -1,0 +1,27 @@
+//Global custom properties
+:root {
+    --spacing: 12px;
+
+    //Font
+    --font-family: 'Raleway';
+    --font-size: 16px;
+
+    //Colors
+    --c-green: #23D884;
+    --c-black: #000000;
+    --c-white: #FFFFFF;
+    --c-blue: #3762AE;
+    --c-orange: #E88424;
+    --c-purple: #7B2164;
+}
+
+html,
+body { 
+    padding: 0;
+    margin: 0;
+    font-family: var(--font-family);
+}
+
+h1 {
+    margin: 0;
+}
