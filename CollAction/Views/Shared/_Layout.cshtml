@@ -1,9 +1,7 @@
 ﻿﻿@using Microsoft.ApplicationInsights.AspNetCore
 @using Microsoft.AspNetCore.Http.Features
-@using CollAction.Services.HashAssetService
 
 @inject JavaScriptSnippet snippet
-@inject IHashAssetService hashAsset
 
 @{
     var consentFeature = Context.Features.Get<ITrackingConsentFeature>();
@@ -40,9 +38,9 @@
 
         @RenderSection("scripts", required: false)
 
-        <script src="~/js/frontend.bundle.js?@(hashAsset.HashAssetBase64("wwwroot", "js", "frontend.bundle.js"))">
+        <script src="~/js/frontend.bundle.js">
         </script>
-        <script src="~/js/tagmanager.bundle.js?@(hashAsset.HashAssetBase64("wwwroot", "js", "tagmanager.bundle.js"))">
+        <script src="~/js/tagmanager.bundle.js">
         </script>
 
         @if (canTrack)

@@ -1,10 +1,2 @@
 @using Microsoft.AspNetCore.Http.Features
 @using CollAction.Helpers
-
-@{
-    var consentFeature = Context.Features.Get<ITrackingConsentFeature>();
-    string cookieAccept = consentFeature.CreateConsentCookie();
-    string cookieDeny = consentFeature.CreateDenyCookie();
-    bool showCookieDialog = consentFeature.ShowCookieDialog(Context.Request);
-}
-<div id="cookie-message" data-show-cookie-dialog="@showCookieDialog" data-cookie-accept="@cookieAccept" data-cookie-reject="@cookieDeny"></div> 
