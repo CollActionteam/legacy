@@ -448,25 +448,24 @@ namespace CollAction
                     c => (ApplicationDbContext)c);
             }
 
+            Type[] baseClasses = new[]
+            {
+                typeof(ComplexGraphType<>),
+                typeof(EnumerationGraphType<>)
+            };
+
             foreach (var type in GetGraphQlTypes())
             {
                 services.AddSingleton(type);
-
-                Type source = null;
-                if (type.IsAssignableToGenericType(typeof(ComplexGraphType<>)))
+                foreach (var baseClass in baseClasses)
                 {
-                    Type generic = type.GetGenericBaseClass(typeof(ComplexGraphType<>));
-                    source = generic.GenericTypeArguments[0];
-                }
-                if (type.IsAssignableToGenericType(typeof(EnumerationGraphType<>)))
-                {
-                    Type generic = type.GetGenericBaseClass(typeof(EnumerationGraphType<>));
-                    source = generic.GenericTypeArguments[0];
-                }
-
-                if (source != null)
-                {
-                    GraphTypeTypeRegistry.Register(source, type);
+                    if (type.IsAssignableToGenericType(baseClass))
+                    {
+                        Type generic = type.GetGenericBaseClass(baseClass);
+                        Type source = generic.GenericTypeArguments[0];
+                        GraphTypeTypeRegistry.Register(source, type);
+                        break;
+                    }
                 }
             }
         }
