@@ -38,11 +38,12 @@ using CollAction.Services.HashAssetService;
 using CollAction.Services.Sitemap;
 using GraphiQl;
 using GraphQL.Utilities;
-using CollAction.GraphQl;
 using GraphQL.EntityFramework;
 using GraphQL;
 using Microsoft.AspNetCore.Mvc;
 using GraphQL.Types;
+using System.Collections.Generic;
+using System;
 
 namespace CollAction
 {
@@ -64,46 +65,7 @@ namespace CollAction
         {
             string connectionString = $"Host={Configuration["DbHost"]};Username={Configuration["DbUser"]};Password={Configuration["DbPassword"]};Database={Configuration["Db"]};Port={Configuration["DbPort"]}";
 
-            GraphTypeTypeRegistry.Register<Category, CategoryGraph>();
-            services.AddSingleton<CategoryGraph>();
-            GraphTypeTypeRegistry.Register<Project, ProjectGraph>();
-            services.AddSingleton<ProjectGraph>();
-            GraphTypeTypeRegistry.Register<ProjectStatus, ProjectStatusGraph>();
-            services.AddSingleton<ProjectStatusGraph>();
-            GraphTypeTypeRegistry.Register<ProjectDisplayPriority, ProjectDisplayPriorityGraph>();
-            services.AddSingleton<ProjectDisplayPriorityGraph>();
-            GraphTypeTypeRegistry.Register<ImageFile, ImageFileGraph>();
-            services.AddSingleton<ImageFileGraph>();
-            GraphTypeTypeRegistry.Register<ApplicationUser, ApplicationUserGraph>();
-            services.AddSingleton<ApplicationUserGraph>();
-            GraphTypeTypeRegistry.Register<ProjectExternalStatus, ProjectExternalStatusGraph>();
-            services.AddSingleton<ProjectExternalStatusGraph>();
-            GraphTypeTypeRegistry.Register<ProjectParticipantCount, ProjectParticipantCountGraph>();
-            services.AddSingleton<ProjectParticipantCountGraph>();
-            GraphTypeTypeRegistry.Register<ProjectParticipant, ProjectParticipantGraph>();
-            services.AddSingleton<ProjectParticipantGraph>();
-            GraphTypeTypeRegistry.Register<ProjectTag, ProjectTagGraph>();
-            services.AddSingleton<ProjectTagGraph>();
-            GraphTypeTypeRegistry.Register<Tag, TagGraph>();
-            services.AddSingleton<TagGraph>();
-
-            services.AddSingleton<Query>();
-
-            services.AddSingleton<IDependencyResolver>(
-                provider => new FuncDependencyResolver(provider.GetRequiredService));
-            services.AddSingleton<ISchema, GraphQl.Schema>();
-
-            // Ensure queries are executed in serial instead of parallel
-            services.AddSingleton<IDocumentExecuter, EfDocumentExecuter>();
-
-            // Register the 
-            using (var context = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseNpgsql(connectionString).Options))
-            {
-                EfGraphQLConventions.RegisterInContainer(
-                    services,
-                    context,
-                    c => (ApplicationDbContext)c);
-            }
+            AddGraphQl(services);
 
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -467,5 +429,57 @@ namespace CollAction
                    })
             );
         }
+
+        private static void AddGraphQl(IServiceCollection services)
+        {
+            services.AddSingleton<IDependencyResolver>(
+                provider => new FuncDependencyResolver(provider.GetRequiredService));
+            services.AddSingleton<ISchema, GraphQl.Schema>();
+
+            // Ensure queries are executed in serial instead of parallel
+            services.AddSingleton<IDocumentExecuter, EfDocumentExecuter>();
+
+            // Register the context
+            using (var context = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseNpgsql("_").Options))
+            {
+                EfGraphQLConventions.RegisterInContainer(
+                    services,
+                    context,
+                    c => (ApplicationDbContext)c);
+            }
+
+            foreach (var type in GetGraphQlTypes())
+            {
+                services.AddSingleton(type);
+
+                Type source = null;
+                if (type.IsAssignableToGenericType(typeof(ComplexGraphType<>)))
+                {
+                    Type generic = type.GetGenericBaseClass(typeof(ComplexGraphType<>));
+                    source = generic.GenericTypeArguments[0];
+                }
+                if (type.IsAssignableToGenericType(typeof(EnumerationGraphType<>)))
+                {
+                    Type generic = type.GetGenericBaseClass(typeof(EnumerationGraphType<>));
+                    source = generic.GenericTypeArguments[0];
+                }
+
+                if (source != null)
+                {
+                    GraphTypeTypeRegistry.Register(source, type);
+                }
+            }
+        }
+
+        private static IEnumerable<Type> GetGraphQlTypes()
+        {
+            return typeof(Startup).Assembly
+                .GetTypes()
+                .Where(x => !x.IsAbstract &&
+                            (typeof(IObjectGraphType).IsAssignableFrom(x) ||
+                             typeof(IInputObjectGraphType).IsAssignableFrom(x)) ||
+                             typeof(EnumerationGraphType).IsAssignableFrom(x));
+        }
+
     }
 }

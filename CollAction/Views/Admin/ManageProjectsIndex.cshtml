@@ -39,9 +39,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.DisplayPriority)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Tags)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -78,9 +75,6 @@
                 </td>
                 <td>
                     @Html.DisplayFor(context => item.DisplayPriority)
-                </td>
-                <td>
-                    @Html.DisplayFor(context => item.HashTags)
                 </td>
                 <td>
                     <a asp-action="ManageProject" asp-route-id="@item.Id">Manage</a>

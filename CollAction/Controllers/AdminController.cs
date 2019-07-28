@@ -121,7 +121,6 @@ namespace CollAction.Controllers
                 CategoryList = new SelectList(await _context.Categories.ToListAsync(), "Id", "Name", null),
                 DisplayPriorityList = new SelectList(Enum.GetValues(typeof(ProjectDisplayPriority))),
                 StatusList = new SelectList(Enum.GetValues(typeof(ProjectStatus))),
-                Hashtag = project.HashTags,
                 Name = project.Name,
                 Description = project.Description,
                 CategoryId = project.CategoryId,

@@ -88,10 +88,6 @@ namespace CollAction.Models
         public List<ProjectTag> Tags { get; set; }
 
         [NotMapped]
-        public string HashTags
-            => string.Join(";", Tags?.Select(tag => tag.Tag.Name) ?? Enumerable.Empty<string>());
-
-        [NotMapped]
         public ProjectExternalStatus ExternalStatus
         {
             get
