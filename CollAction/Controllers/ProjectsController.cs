@@ -143,7 +143,6 @@ namespace CollAction.Controllers
 
             // Save project related items (now that we've got a project id)
             project.DescriptionVideoLink = model.DescriptionVideoLink;
-            await project.SetTags(_context, model.Hashtag?.Split(';') ?? new string[0]);
 
             await _context.SaveChangesAsync();
 

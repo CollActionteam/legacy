@@ -272,8 +272,6 @@ namespace CollAction.Controllers
                     project.DescriptiveImage.Description = model.DescriptiveImageDescription ?? string.Empty;
                 }
 
-                await project.SetTags(_context, model.Hashtag?.Split(';') ?? new string[0]);
-
                 project.DescriptionVideoLink = model.DescriptionVideoLink;
 
                 await _context.SaveChangesAsync();

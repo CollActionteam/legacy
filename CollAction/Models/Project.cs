@@ -1,11 +1,8 @@
-﻿using CollAction.Data;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace CollAction.Models
 {
@@ -21,7 +18,6 @@ namespace CollAction.Models
 
         public ProjectStatus Status { get; set; }
 
-        [Required]
         public int CategoryId { get; set; }
         [ForeignKey("CategoryId")]
         public Category Category { get; set; }
@@ -91,38 +87,26 @@ namespace CollAction.Models
 
         public List<ProjectTag> Tags { get; set; }
 
-        public List<ProjectParticipant> Participants { get; set; }
-
-        public int AnonymousUserParticipants { get; set; }
-        
         [NotMapped]
         public string HashTags
             => string.Join(";", Tags?.Select(tag => tag.Tag.Name) ?? Enumerable.Empty<string>());
 
-        public async Task SetTags(ApplicationDbContext context, params string[] tagNames)
+        [NotMapped]
+        public ProjectExternalStatus ExternalStatus
         {
-            List<Tag> tags = await context.Tags.Where(tag => tagNames.Contains(tag.Name)).ToListAsync();
-            IEnumerable<string> missingTags = tagNames.Where(tagName => !tags.Any(tag => tag.Name.Equals(tagName, StringComparison.Ordinal))).Distinct();
-            if (missingTags.Any())
+            get
             {
-                List<Tag> newTags = missingTags.Select(tagName => new Tag() { Name = tagName }).ToList();
-                context.Tags.AddRange(newTags);
-                tags.AddRange(newTags);
-                await context.SaveChangesAsync();
-            }
-
-            List<ProjectTag> projectTags = await context.ProjectTags.Where(projectTag => projectTag.ProjectId == Id).ToListAsync();
-            IEnumerable<ProjectTag> redundantTags = projectTags.Where(projectTag => !tags.Any(tag => tag.Id == projectTag.TagId));
-
-            IEnumerable<ProjectTag> newProjectTags = tags.Where(tag => !projectTags.Any(projectTag => tag.Id == projectTag.TagId))
-                                                         .Select(tag => new ProjectTag() { TagId = tag.Id, ProjectId = Id });
-
-            if (redundantTags.Any() || newProjectTags.Any())
-            {
-                context.ProjectTags.RemoveRange(redundantTags);
-                context.ProjectTags.AddRange(newProjectTags);
-                await context.SaveChangesAsync();
+                if (Status == ProjectStatus.Running && Start <= DateTime.UtcNow && End >= DateTime.UtcNow)
+                    return ProjectExternalStatus.Open;
+                else if (Status == ProjectStatus.Running && Start > DateTime.UtcNow)
+                    return ProjectExternalStatus.ComingSoon;
+                else
+                    return ProjectExternalStatus.Closed;
             }
         }
+
+        public List<ProjectParticipant> Participants { get; set; }
+
+        public int AnonymousUserParticipants { get; set; }
     }
 }

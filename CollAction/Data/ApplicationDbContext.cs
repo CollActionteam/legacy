@@ -22,11 +22,10 @@ namespace CollAction.Data
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<ImageFile> ImageFiles { get; set; }
-        public DbSet<Job> Jobs { get; set; }
-        public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
         public DbSet<ProjectParticipantCount> ProjectParticipantCounts { get; set; }
         public DbSet<UserEvent> UserEvents { get; set; }
         public DbSet<DonationEventLog> DonationEventLog { get; set; }
+        public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 
         /// <summary>
         /// Configure the model (foreign keys, relations, primary keys, etc)
@@ -115,13 +114,13 @@ namespace CollAction.Data
             if (!(await Categories.AnyAsync()))
             {
                 Categories.AddRange(new[] {
-                    new Category() { Name = "Environment", ColorHex = "E88424", Description = "Environment", File = "" },
-                    new Category() { Name = "Community", ColorHex = "7B2164", Description = "Community", File = "" },
-                    new Category() { Name = "Consumption", ColorHex = "9D1D20", Description = "Consumption", File = "" },
-                    new Category() { Name = "Well-being", ColorHex = "3762AE", Description = "Well-being", File = "" },
-                    new Category() { Name = "Governance", ColorHex = "29ABE2", Description = "Governance", File = "" },
-                    new Category() { Name = "Health", ColorHex = "EB078C", Description = "Health", File = "" },
-                    new Category() { Name = "Other", ColorHex = "007D43", Description = "Other", File = "" },
+                    new Category() { Name = "Environment", ColorHex = "E88424" },
+                    new Category() { Name = "Community", ColorHex = "7B2164" },
+                    new Category() { Name = "Consumption", ColorHex = "9D1D20" },
+                    new Category() { Name = "Well-being", ColorHex = "3762AE" },
+                    new Category() { Name = "Governance", ColorHex = "29ABE2" },
+                    new Category() { Name = "Health", ColorHex = "EB078C" },
+                    new Category() { Name = "Other", ColorHex = "007D43" },
                 });
                 await SaveChangesAsync();
                 DetachAll();

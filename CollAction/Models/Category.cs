@@ -15,15 +15,7 @@ namespace CollAction.Models
         public string Name { get; set; }
 
         [Required]
-        [MaxLength(120)]
-        public string Description { get; set; }
-
-        [Required]
         public int Color { get; set; }
-
-        [Required]
-        [MaxLength(255)]
-        public string File { get; set; }
 
         [NotMapped]
         public string ColorHex

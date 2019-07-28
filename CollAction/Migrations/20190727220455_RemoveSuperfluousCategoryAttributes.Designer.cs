@@ -3,15 +3,17 @@ using System;
 using CollAction.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace CollAction.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190727220455_RemoveSuperfluousCategoryAttributes")]
+    partial class RemoveSuperfluousCategoryAttributes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -148,6 +150,26 @@ namespace CollAction.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ImageFiles");
+                });
+
+            modelBuilder.Entity("CollAction.Models.Job", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500);
+
+                    b.Property<DateTime>("PostDate");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Jobs");
                 });
 
             modelBuilder.Entity("CollAction.Models.Project", b =>

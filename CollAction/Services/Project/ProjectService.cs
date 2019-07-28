@@ -54,7 +54,6 @@ namespace CollAction.Services.Project
                 .Include(p => p.DescriptiveImage)
                 .Include(p => p.DescriptionVideoLink)
                 .Include(p => p.Owner)
-                .Include(p => p.Tags).ThenInclude(t => t.Tag)
                 .Include(p => p.ParticipantCounts)
                 .Select(project =>
                             new DisplayProjectViewModel
