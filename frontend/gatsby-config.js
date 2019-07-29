@@ -49,14 +49,14 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        path: `${__dirname}/content/blog`,
+        path: `${__dirname}/static/blog`,
         name: `blog`,
       },
     },
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        path: `${__dirname}/content/assets`,
+        path: `${__dirname}/static/assets`,
         name: `assets`,
       },
     },
@@ -94,7 +94,7 @@ module.exports = {
         background_color: `#ffffff`,
         theme_color: `#000000`,
         display: `minimal-ui`,
-        icon: `content/assets/manifest.svg`,
+        icon: `static/assets/manifest.svg`,
       },
     },
     `gatsby-plugin-offline`,

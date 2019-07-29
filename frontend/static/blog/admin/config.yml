@@ -1,5 +1,8 @@
 backend:
   name: test-repo
+# backend:
+#   name: github
+#   repo: CollActionteam/CollAction
 media_folder: static/assets
 public_folder: assets
 collections:
