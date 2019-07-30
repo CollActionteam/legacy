@@ -2,7 +2,7 @@
 using CollAction.Models;
 using GraphQL.EntityFramework;
 
-namespace CollAction.GraphQl
+namespace CollAction.GraphQl.Queries
 {
     public class TagGraph : EfObjectGraphType<ApplicationDbContext, Tag>
     {
@@ -10,7 +10,7 @@ namespace CollAction.GraphQl
         {
             Field(x => x.Id);
             Field(x => x.Name);
-            AddNavigationField(nameof(Tag.ProjectTags), c => c.Source.ProjectTags);
+            AddNavigationListField(nameof(Tag.ProjectTags), c => c.Source.ProjectTags);
         }
     }
 }

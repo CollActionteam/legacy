@@ -19,14 +19,14 @@ namespace CollAction.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IDonationService _donationService;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly INewsletterSubscriptionService _newsletterSubscriptionService;
+        private readonly INewsletterService _newsletterSubscriptionService;
         private readonly ILogger _logger;
         private readonly IProjectService  _projectService;
 
         public ManageController(
           UserManager<ApplicationUser> userManager,
           SignInManager<ApplicationUser> signInManager,
-          INewsletterSubscriptionService newsletterSubscriptionService,
+          INewsletterService newsletterSubscriptionService,
           ILoggerFactory loggerFactory,
           IDonationService donationService,
           IProjectService projectService)

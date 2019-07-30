@@ -2,7 +2,7 @@
 using CollAction.Models;
 using GraphQL.EntityFramework;
 
-namespace CollAction.GraphQl
+namespace CollAction.GraphQl.Queries
 {
     public class ProjectGraph : EfObjectGraphType<ApplicationDbContext, Project>
     {
@@ -37,9 +37,7 @@ namespace CollAction.GraphQl
             AddNavigationField(nameof(Project.ParticipantCounts), c => c.Source.ParticipantCounts);
             AddNavigationField(nameof(Project.Owner), c => c.Source.Owner);
             AddNavigationListField(nameof(Project.Participants), c => c.Source.Participants);
-            /*
             AddNavigationListField(nameof(Project.Tags), c => c.Source.Tags);
-            */
         }
     }
 }

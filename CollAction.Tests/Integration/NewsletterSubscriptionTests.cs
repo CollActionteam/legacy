@@ -16,7 +16,7 @@ namespace CollAction.Tests.Integration
     [TestCategory("Integration")]
     public sealed class NewsletterSubscriptionServiceTests
     {
-        private NewsletterSubscriptionService _newsletterSubscriptionService;
+        private NewsletterService _newsletterSubscriptionService;
         private Mock<IBackgroundJobClient> _jobClient;
 
         [TestInitialize]
@@ -27,14 +27,14 @@ namespace CollAction.Tests.Integration
                                           .AddEnvironmentVariables()
                                           .Build();
             _jobClient = new Mock<IBackgroundJobClient>();
-            _newsletterSubscriptionService = new NewsletterSubscriptionService(
+            _newsletterSubscriptionService = new NewsletterService(
                 new MailChimpManager(configuration["MailChimpKey"]),
-                new OptionsWrapper<NewsletterSubscriptionServiceOptions>(
-                    new NewsletterSubscriptionServiceOptions()
+                new OptionsWrapper<NewsletterServiceOptions>(
+                    new NewsletterServiceOptions()
                     {
                         MailChimpNewsletterListId = configuration["MailChimpTestListId"]
                 }), 
-                new LoggerFactory().CreateLogger<NewsletterSubscriptionService>(), 
+                new LoggerFactory().CreateLogger<NewsletterService>(), 
                 _jobClient.Object);
         }
 

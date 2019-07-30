@@ -24,7 +24,7 @@ namespace CollAction.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
-        private readonly INewsletterSubscriptionService _newsletterSubscriptionService;
+        private readonly INewsletterService _newsletterSubscriptionService;
         private readonly ApplicationDbContext _context;
 
         public AccountController(
@@ -32,7 +32,7 @@ namespace CollAction.Controllers
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
             ILoggerFactory loggerFactory,
-            INewsletterSubscriptionService newsletterSubscriptionService,
+            INewsletterService newsletterSubscriptionService,
             ApplicationDbContext context)
         {
             _userManager = userManager;

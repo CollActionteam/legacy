@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CollAction.Controllers
 {
-    [Route("v1/[controller]")]
+    [Route("v1/graphql")]
     [ApiController]
     public class GraphQlController :
         Controller
@@ -52,7 +52,7 @@ namespace CollAction.Controllers
             return Execute(dbContext, query, operationName, jObject, cancellation);
         }
 
-        Task<ExecutionResult> Execute(
+        private Task<ExecutionResult> Execute(
             ApplicationDbContext dbContext,
             string query,
             string operationName,
@@ -76,7 +76,7 @@ namespace CollAction.Controllers
             return executer.ExecuteAsync(options);
         }
 
-        static JObject ParseVariables(string variables)
+        private static JObject ParseVariables(string variables)
         {
             if (variables == null)
             {

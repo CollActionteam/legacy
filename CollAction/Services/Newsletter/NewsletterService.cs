@@ -8,14 +8,14 @@ using Microsoft.Extensions.Options;
 
 namespace CollAction.Services.Newsletter
 {
-    public class NewsletterSubscriptionService : INewsletterSubscriptionService
+    public class NewsletterService : INewsletterService
     {
         private readonly string _newsletterListId;
         private readonly IMailChimpManager _mailChimpManager;
         private readonly IBackgroundJobClient _jobClient;
-        private readonly ILogger<NewsletterSubscriptionService> _logger;
+        private readonly ILogger<NewsletterService> _logger;
 
-        public NewsletterSubscriptionService(IMailChimpManager mailChimpManager, IOptions<NewsletterSubscriptionServiceOptions> options, ILogger<NewsletterSubscriptionService> logger, IBackgroundJobClient jobClient)
+        public NewsletterService(IMailChimpManager mailChimpManager, IOptions<NewsletterServiceOptions> options, ILogger<NewsletterService> logger, IBackgroundJobClient jobClient)
         {
             _newsletterListId = options.Value.MailChimpNewsletterListId;
             _mailChimpManager = mailChimpManager;

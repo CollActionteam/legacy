@@ -44,6 +44,8 @@ using Microsoft.AspNetCore.Mvc;
 using GraphQL.Types;
 using System.Collections.Generic;
 using System;
+using CollAction.GraphQl.Queries;
+using CollAction.GraphQl.Mutations;
 
 namespace CollAction
 {
@@ -122,16 +124,17 @@ namespace CollAction
             services.AddScoped<IProjectService, ProjectService>();
             services.AddScoped<IParticipantsService, ParticipantsService>();
             services.AddScoped<IImageService, AmazonS3ImageService>();
-            services.AddTransient<INewsletterSubscriptionService, NewsletterSubscriptionService>();
-            services.AddTransient<IFestivalService, FestivalService>();
+            services.AddTransient<INewsletterService, NewsletterService>();
             services.AddTransient<IDonationService, DonationService>();
             services.AddTransient<IViewRenderService, ViewRenderService>();
             services.AddTransient<IMailChimpManager, MailChimpManager>();
             services.AddTransient<ISitemapService, SitemapService>();
+            services.AddTransient<IFestivalService, FestivalService>();
             services.AddSingleton<IHashAssetService, HashAssetService>(provider => new HashAssetService(!Environment.IsDevelopment()));
 
             services.AddDataProtection()
-                    .Services.Configure<KeyManagementOptions>(options => options.XmlRepository = new DataProtectionRepository(new DbContextOptionsBuilder<ApplicationDbContext>().UseNpgsql(connectionString).Options));
+                    .Services
+                    .Configure<KeyManagementOptions>(options => options.XmlRepository = new DataProtectionRepository(new DbContextOptionsBuilder<ApplicationDbContext>().UseNpgsql(connectionString).Options));
 
             services.Configure<StripeSignatures>(Configuration);
             services.Configure<SiteOptions>(Configuration);
@@ -139,7 +142,7 @@ namespace CollAction
             services.Configure<AuthMessageSenderOptions>(Configuration);
             services.Configure<ImageServiceOptions>(Configuration);
             services.Configure<ImageProcessingOptions>(Configuration);
-            services.Configure<NewsletterSubscriptionServiceOptions>(Configuration);
+            services.Configure<NewsletterServiceOptions>(Configuration);
             services.Configure<FestivalServiceOptions>(Configuration);
             services.Configure<ProjectEmailOptions>(Configuration);
             services.Configure<MailChimpOptions>(options =>
@@ -230,90 +233,7 @@ namespace CollAction
                 }
             });
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute("find",
-                     "find",
-                     new { controller = "Projects", action = "Find" }
-                );
-
-                routes.MapRoute("details",
-                     "Projects/{name}/{id}/details",
-                     new { controller = "Projects", action = "Details" }
-                 );
-
-                routes.MapRoute("participate",
-                     "Projects/{name}/{id}/participate",
-                     new { controller = "Projects", action = "Commit" }
-                 );
-
-                routes.MapRoute("thankyoucommit",
-                     "Projects/{name}/{id}/thankyou",
-                     new { controller = "Projects", action = "ThankYouCommit" }
-                 );
-
-                routes.MapRoute("thankyoucreate",
-                     "Projects/Create/{name}/{id}/thankyou",
-                     new { controller = "Projects", action = "ThankYouCreate" }
-                 );
-
-                routes.MapRoute("start",
-                     "start",
-                     new { controller = "Projects", action = "StartInfo" }
-                );
-
-                routes.MapRoute("about",
-                     "about",
-                     new { controller = "Home", action = "About" }
-                 );
-
-                routes.MapRoute("crowdactingfestival",
-                     "crowdactingfestival",
-                     new { controller = "Home", action = "CrowdActingFestival" }
-                 );
-
-                routes.MapRoute("robots.txt",
-                    "robots.txt",
-                    new { controller = "Home", action = "Robots" });
-
-                routes.MapRoute("sitemap.xml",
-                    "sitemap.xml",
-                    new { controller = "Home", action = "Sitemap" });
-
-                routes.MapRoute("GetCategories",
-                     "api/categories",
-                     new { controller = "Projects", action = "GetCategories" }
-                 );
-
-                routes.MapRoute("FindProject",
-                     "api/projects/{projectId:int}",
-                     new { controller = "Projects", action = "FindProject" }
-                 );                 
-
-                routes.MapRoute("FindProjects",
-                     "api/projects/find",
-                     new { controller = "Projects", action = "FindProjects" }
-                 );
-
-                routes.MapRoute("GetStatuses",
-                     "api/status",
-                     new { controller = "Projects", action = "GetStatuses" }
-                 );
-
-                routes.MapRoute("MyProjects",
-                     "api/manage/myprojects",
-                     new { controller = "Manage", action = "MyProjects" }
-                 );
-
-                routes.MapRoute("ParticipatingInProjects",
-                     "api/manage/participating",
-                     new { controller = "Manage", action = "ParticipatingInProjects" }
-                 );
-
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseMvc();
 
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             using (var userManager = serviceScope.ServiceProvider.GetService<UserManager<ApplicationUser>>())
@@ -432,8 +352,7 @@ namespace CollAction
 
         private static void AddGraphQl(IServiceCollection services)
         {
-            services.AddSingleton<IDependencyResolver>(
-                provider => new FuncDependencyResolver(provider.GetRequiredService));
+            services.AddSingleton<IDependencyResolver>(provider => new FuncDependencyResolver(provider.GetRequiredService));
             services.AddSingleton<ISchema, GraphQl.Schema>();
 
             // Ensure queries are executed in serial instead of parallel
@@ -457,6 +376,7 @@ namespace CollAction
             foreach (var type in GetGraphQlTypes())
             {
                 services.AddSingleton(type);
+
                 foreach (var baseClass in baseClasses)
                 {
                     if (type.IsAssignableToGenericType(baseClass))

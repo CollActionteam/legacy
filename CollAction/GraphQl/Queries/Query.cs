@@ -2,7 +2,7 @@
 using CollAction.Models;
 using GraphQL.EntityFramework;
 
-namespace CollAction.GraphQl
+namespace CollAction.GraphQl.Queries
 {
     public class Query :
         QueryGraphType<ApplicationDbContext>

@@ -1,6 +1,6 @@
 ﻿namespace CollAction.Services.Newsletter
 {
-    public class NewsletterSubscriptionServiceOptions
+    public class NewsletterServiceOptions
     {
         public string MailChimpNewsletterListId { get; set; }
     }
