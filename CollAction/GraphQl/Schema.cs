@@ -9,7 +9,7 @@ namespace CollAction.GraphQl
         public Schema(IDependencyResolver resolver) : base(resolver)
         {
             Query = resolver.Resolve<Query>();
-            //Mutation = resolver.Resolve<Mutation>();
+            Mutation = resolver.Resolve<Mutation>();
         }
     }
 }
