@@ -4,8 +4,7 @@ using GraphQL.EntityFramework;
 
 namespace CollAction.GraphQl.Queries
 {
-    public class Query :
-        QueryGraphType<ApplicationDbContext>
+    public class Query : QueryGraphType<ApplicationDbContext>
     {
         public Query(IEfGraphQLService<ApplicationDbContext> efGraphQlService) : base(efGraphQlService)
         {
@@ -20,10 +19,6 @@ namespace CollAction.GraphQl.Queries
             AddQueryField(
                 nameof(ApplicationDbContext.Categories),
                 c => c.DbContext.Categories);
-
-            AddSingleField(
-                name: nameof(Category),
-                resolve: c => c.DbContext.Categories);
 
             AddQueryField(
                 nameof(ApplicationDbContext.Users),

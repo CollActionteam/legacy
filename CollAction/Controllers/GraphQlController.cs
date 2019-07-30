@@ -1,6 +1,7 @@
 ﻿using CollAction.Data;
 using GraphQL;
 using GraphQL.Types;
+using GraphQL.Validation.Complexity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Newtonsoft.Json.Linq;
@@ -66,6 +67,10 @@ namespace CollAction.Controllers
                 OperationName = operationName,
                 Inputs = variables?.ToInputs(),
                 UserContext = dbContext,
+                ComplexityConfiguration = new ComplexityConfiguration()
+                {
+                    MaxDepth = 20
+                },
                 CancellationToken = cancellation,
 #if (DEBUG)
                 ExposeExceptions = true,

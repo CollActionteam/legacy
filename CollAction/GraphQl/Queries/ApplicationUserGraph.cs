@@ -22,7 +22,7 @@ namespace CollAction.GraphQl.Queries
             Field(x => x.RepresentsNumberParticipants);
             Field(x => x.UserName);
             FieldAsync<BooleanGraphType>(
-                "IsSubscribed", 
+                "IsSubscribedNewsletter", 
                 resolve: async c =>
                 {
                     return await dependencyResolver.Resolve<INewsletterService>().IsSubscribedAsync(c.Source.Email);
@@ -38,6 +38,8 @@ namespace CollAction.GraphQl.Queries
                 });
             AddNavigationListField(nameof(ApplicationUser.Projects), c => c.Source.Projects);
             AddNavigationListField(nameof(ApplicationUser.Participates), c => c.Source.Participates);
+            AddNavigationListField(nameof(ApplicationUser.UserEvents), c => c.Source.UserEvents);
+            AddNavigationListField(nameof(ApplicationUser.DonationEvents), c => c.Source.DonationEvents);
         }
     }
 }

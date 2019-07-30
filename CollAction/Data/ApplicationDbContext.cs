@@ -57,6 +57,10 @@ namespace CollAction.Data
                    .WithOne(p => p.Project)
                    .HasForeignKey<ProjectParticipantCount>(p => p.ProjectId);
             builder.Entity<ApplicationUser>().Property(u => u.RepresentsNumberParticipants).HasDefaultValue(1);
+            builder.Entity<UserEvent>()
+                   .HasOne(e => e.User)
+                   .WithMany(u => u.UserEvents)
+                   .HasForeignKey(e => e.UserId);
         }
 
         /// <summary>

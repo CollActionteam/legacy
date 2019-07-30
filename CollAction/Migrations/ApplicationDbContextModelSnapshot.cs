@@ -466,7 +466,7 @@ namespace CollAction.Migrations
             modelBuilder.Entity("CollAction.Models.UserEvent", b =>
                 {
                     b.HasOne("CollAction.Models.ApplicationUser", "User")
-                        .WithMany()
+                        .WithMany("UserEvents")
                         .HasForeignKey("UserId");
                 });
 
