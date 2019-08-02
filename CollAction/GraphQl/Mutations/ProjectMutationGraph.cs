@@ -2,6 +2,7 @@
 using CollAction.GraphQl.Queries;
 using CollAction.Services.Projects;
 using CollAction.Services.Projects.Models;
+using GraphQL.Authorization;
 using GraphQL.Types;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -36,7 +37,7 @@ namespace CollAction.GraphQl.Mutations
                     {
                         return await scope.ServiceProvider.GetRequiredService<IProjectService>().UpdateProject(project, ((UserContext)c.UserContext).User);
                     }
-                });
+                }).AuthorizeWith(Constants.AdminRole);
 
             FieldAsync<AddParticipantResultGraph>(
                 "commitToProject",
