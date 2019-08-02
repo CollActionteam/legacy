@@ -44,6 +44,10 @@ using System.Collections.Generic;
 using System;
 using CollAction.GraphQl;
 using CollAction.Services.User;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using GraphQL.Validation;
+using GraphQL.Authorization;
+using System.Security.Claims;
 
 namespace CollAction
 {
@@ -65,6 +69,7 @@ namespace CollAction
             string connectionString = $"Host={Configuration["DbHost"]};Username={Configuration["DbUser"]};Password={Configuration["DbPassword"]};Database={Configuration["Db"]};Port={Configuration["DbPort"]}";
 
             AddGraphQl(services);
+            AddGraphQlAuth(services);
 
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -147,7 +152,7 @@ namespace CollAction
             {
                 options.ApiKey = Configuration["StripeSecretApiKey"];
             });
-            services.Configure<StripeJavascriptOptions>(options =>
+            services.Configure<StripePublicOptions>(options =>
             {
                 options.StripePublicKey = Configuration["StripePublicApiKey"];
             });
@@ -158,12 +163,6 @@ namespace CollAction
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredLength = 8;
-            });
-
-            services.Configure<CookiePolicyOptions>(options => 
-            {
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
             });
         }
 
@@ -195,7 +194,7 @@ namespace CollAction
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
                 app.UseBrowserLink();
-                app.UseGraphiQl("/graphiql", "/v1/graphql");
+                app.UseGraphiQl("/graphiql", "/graphql");
             }
             else
             {
@@ -204,8 +203,6 @@ namespace CollAction
 
             app.UseStatusCodePages();
             
-            app.UseCookiePolicy();
-
             app.UseAuthentication();
 
             app.UseStaticFiles(new StaticFileOptions()
@@ -228,11 +225,11 @@ namespace CollAction
 
             app.UseMvc(routes =>
             {
-                routes.MapRoute("Robots.txt",
+                routes.MapRoute("Robots",
                     "robots.txt",
                     new { controller = "Home", action = "Robots" });
 
-                routes.MapRoute("Sitemap.xml",
+                routes.MapRoute("Sitemap",
                     "sitemap.xml",
                     new { controller = "Home", action = "Sitemap" });
 
@@ -399,6 +396,22 @@ namespace CollAction
                     }
                 }
             }
+        }
+
+        private static void AddGraphQlAuth(IServiceCollection services)
+        {
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.TryAddSingleton<IAuthorizationEvaluator, AuthorizationEvaluator>();
+            services.AddTransient<IValidationRule, AuthorizationValidationRule>();
+
+            services.TryAddSingleton(s =>
+            {
+                var authSettings = new AuthorizationSettings();
+
+                authSettings.AddPolicy(Constants.GraphQlAdminPolicy, _ => _.RequireClaim(ClaimTypes.Role, Constants.AdminRole));
+
+                return authSettings;
+            });
         }
 
         private static IEnumerable<Type> GetGraphQlTypes()

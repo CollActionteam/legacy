@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace CollAction.Controllers
 {
-    [Route("v1/graphql")]
+    [Route("graphql")]
     [ApiController]
     public class GraphQlController : Controller
     {

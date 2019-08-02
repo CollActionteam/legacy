@@ -5,13 +5,14 @@ namespace CollAction.Services.Festival
 {
     public class FestivalService : IFestivalService
     {
-        private readonly FestivalServiceOptions _festivalOptions;
+        private readonly FestivalServiceOptions festivalOptions;
 
         public FestivalService(IOptions<FestivalServiceOptions> festivalOptions)
         {
-            _festivalOptions = festivalOptions.Value;
+            this.festivalOptions = festivalOptions.Value;
         }
 
-        public bool CallToActionsVisible => _festivalOptions.FestivalEndDate.HasValue && _festivalOptions.FestivalEndDate >= DateTime.Now;
+        public bool FestivalCallToActionsVisible 
+            => festivalOptions.FestivalEndDate.HasValue && festivalOptions.FestivalEndDate >= DateTime.Now;
     }
 }

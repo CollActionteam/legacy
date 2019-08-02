@@ -4,7 +4,7 @@
     {
         Hidden = 0,
         Running = 1,
-        Successful = 2,
+        Successfull = 2,
         Failed = 3,
         Deleted = 4
     }

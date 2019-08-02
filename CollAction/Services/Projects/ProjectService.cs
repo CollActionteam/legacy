@@ -116,7 +116,7 @@ namespace CollAction.Services.Projects
             }
 
             bool approved = updatedProject.Status == ProjectStatus.Running && updatedProject.Status == ProjectStatus.Hidden;
-            bool successfull = updatedProject.Status == ProjectStatus.Successful && updatedProject.Status == ProjectStatus.Running;
+            bool successfull = updatedProject.Status == ProjectStatus.Successfull && updatedProject.Status == ProjectStatus.Running;
             bool failed = updatedProject.Status == ProjectStatus.Failed && updatedProject.Status == ProjectStatus.Running;
             bool deleted = updatedProject.Status == ProjectStatus.Deleted;
 

@@ -108,20 +108,6 @@ namespace CollAction.Models
             }
         }
 
-        [NotMapped]
-        public ProjectExternalStatus ExternalStatus
-        {
-            get
-            {
-                if (IsActive)
-                    return ProjectExternalStatus.IsActive;
-                else if (IsComingSoon)
-                    return ProjectExternalStatus.ComingSoon;
-                else
-                    return ProjectExternalStatus.Closed;
-            }
-        }
-
         private static string ToUrlSlug(string value)
         {
             Regex spaceRemoveRegex = new Regex(@"\s");

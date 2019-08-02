@@ -1,13 +1,10 @@
-﻿using System;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using CollAction.Models;
-using CollAction.Data;
-using CollAction.Services.Email;
 using CollAction.Services.Newsletter;
 using CollAction.ViewModels.Account;
 

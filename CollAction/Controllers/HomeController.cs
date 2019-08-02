@@ -9,13 +9,13 @@ namespace CollAction.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ISitemapService _sitemapService;
-        private readonly ILogger<HomeController> _logger;
+        private readonly ISitemapService sitemapService;
+        private readonly ILogger<HomeController> logger;
 
         public HomeController(ILogger<HomeController> logger, ISitemapService sitemapService)
         {
-            _sitemapService = sitemapService;
-            _logger = logger;
+            this.sitemapService = sitemapService;
+            this.logger = logger;
         }
 
         public IActionResult Index()
@@ -24,7 +24,7 @@ namespace CollAction.Controllers
         public IActionResult Error()
         {
             var exceptionHandlerPathFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
-            _logger.LogError(exceptionHandlerPathFeature.Error, "An error has occurred at: {0}", exceptionHandlerPathFeature.Path);
+            logger.LogError(exceptionHandlerPathFeature.Error, "An error has occurred at: {0}", exceptionHandlerPathFeature.Path);
             return View();
         }
 
@@ -42,6 +42,6 @@ namespace CollAction.Controllers
         }
 
         public async Task<ContentResult> Sitemap()
-            => Content((await _sitemapService.GetSitemap()).ToString(), "text/xml", Encoding.UTF8);
+            => Content((await sitemapService.GetSitemap()).ToString(), "text/xml", Encoding.UTF8);
     }
 }

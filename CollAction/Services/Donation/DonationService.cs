@@ -49,42 +49,43 @@ namespace CollAction.Services.Donation
         const string NameKey = "name";
         const string RecurringDonationProduct = "Recurring Donation Stichting CollAction";
 
-        private readonly CustomerService _customerService;
-        private readonly SourceService _sourceService;
-        private readonly ChargeService _chargeService;
-        private readonly SessionService _sessionService;
-        private readonly SubscriptionService _subscriptionService;
-        private readonly PlanService _planService;
-        private readonly ProductService _productService;
-        private readonly IBackgroundJobClient _backgroundJobClient;
-        private readonly StripeSignatures _stripeSignatures;
-        private readonly ApplicationDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IEmailSender _emailSender;
-        private readonly RequestOptions _requestOptions;
-        private readonly SiteOptions _siteOptions;
+        private readonly CustomerService customerService;
+        private readonly SourceService sourceService;
+        private readonly ChargeService chargeService;
+        private readonly SessionService sessionService;
+        private readonly SubscriptionService subscriptionService;
+        private readonly PlanService planService;
+        private readonly ProductService productService;
+
+        private readonly IBackgroundJobClient backgroundJobClient;
+        private readonly IEmailSender emailSender;
+        private readonly StripeSignatures stripeSignatures;
+        private readonly ApplicationDbContext context;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly RequestOptions requestOptions;
+        private readonly SiteOptions siteOptions;
 
         public DonationService(IOptions<RequestOptions> requestOptions, IOptions<SiteOptions> siteOptions, UserManager<ApplicationUser> userManager, ApplicationDbContext context, IBackgroundJobClient backgroundJobClient, IOptions<StripeSignatures> stripeSignatures, IEmailSender emailSender)
         {
-            _requestOptions = requestOptions.Value;
-            _siteOptions = siteOptions.Value;
-            _customerService = new CustomerService(_requestOptions.ApiKey);
-            _sourceService = new SourceService(_requestOptions.ApiKey);
-            _chargeService = new ChargeService(_requestOptions.ApiKey);
-            _sessionService = new SessionService(_requestOptions.ApiKey);
-            _subscriptionService = new SubscriptionService(_requestOptions.ApiKey);
-            _planService = new PlanService(_requestOptions.ApiKey);
-            _productService = new ProductService(_requestOptions.ApiKey);
-            _backgroundJobClient = backgroundJobClient;
-            _stripeSignatures = stripeSignatures.Value;
-            _context = context;
-            _userManager = userManager;
-            _emailSender = emailSender;
+            this.requestOptions = requestOptions.Value;
+            this.siteOptions = siteOptions.Value;
+            customerService = new CustomerService(this.requestOptions.ApiKey);
+            sourceService = new SourceService(this.requestOptions.ApiKey);
+            chargeService = new ChargeService(this.requestOptions.ApiKey);
+            sessionService = new SessionService(this.requestOptions.ApiKey);
+            subscriptionService = new SubscriptionService(this.requestOptions.ApiKey);
+            planService = new PlanService(this.requestOptions.ApiKey);
+            productService = new ProductService(this.requestOptions.ApiKey);
+            this.backgroundJobClient = backgroundJobClient;
+            this.stripeSignatures = stripeSignatures.Value;
+            this.context = context;
+            this.userManager = userManager;
+            this.emailSender = emailSender;
         }
 
-        public async Task<bool> HasIdealPaymentSucceeded(string sourceId, string clientSecret)
+        public async Task<bool> HasIDealPaymentSucceeded(string sourceId, string clientSecret)
         {
-            Source source = await _sourceService.GetAsync(sourceId);
+            Source source = await sourceService.GetAsync(sourceId);
             return (source.Status == StatusChargeable || source.Status == StatusConsumed) && 
                    clientSecret == source.ClientSecret;
         }
@@ -96,12 +97,12 @@ namespace CollAction.Services.Donation
         {
             ValidateDetails(amount, name, email);
 
-            ApplicationUser user = await _userManager.FindByEmailAsync(email);
+            ApplicationUser user = await userManager.FindByEmailAsync(email);
 
             var sessionOptions = new SessionCreateOptions()
             {
-                SuccessUrl = $"{_siteOptions.PublicAddress}/Donation/ThankYou",
-                CancelUrl = $"{_siteOptions.PublicAddress}/Donation/Donate",
+                SuccessUrl = $"{siteOptions.PublicAddress}/Donation/ThankYou",
+                CancelUrl = $"{siteOptions.PublicAddress}/Donation/Donate",
                 PaymentMethodTypes = new List<string>
                 {
                     "card",
@@ -140,15 +141,15 @@ namespace CollAction.Services.Donation
                 };
             }
 
-            Session session = await _sessionService.CreateAsync(sessionOptions);
+            Session session = await sessionService.CreateAsync(sessionOptions);
 
-            _context.DonationEventLog.Add(new DonationEventLog()
+            context.DonationEventLog.Add(new DonationEventLog()
             {
                 UserId = user?.Id,
                 Type = DonationEventType.Internal,
                 EventData = session.ToJson()
             });
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
 
             return session.Id;
         }
@@ -160,14 +161,14 @@ namespace CollAction.Services.Donation
         {
             ValidateDetails(amount, name, email);
 
-            ApplicationUser user = await _userManager.FindByEmailAsync(email);
+            ApplicationUser user = await userManager.FindByEmailAsync(email);
             Customer customer = await GetOrCreateCustomer(name, email);
-            Source source = await _sourceService.AttachAsync(customer.Id, new SourceAttachOptions()
+            Source source = await sourceService.AttachAsync(customer.Id, new SourceAttachOptions()
             {
                 Source = sourceId
             });
             Plan plan = await CreateRecurringPlan(amount, "eur");
-            Subscription subscription = await _subscriptionService.CreateAsync(new SubscriptionCreateOptions()
+            Subscription subscription = await subscriptionService.CreateAsync(new SubscriptionCreateOptions()
             {
                 DefaultSource = source.Id,
                 Billing = Billing.ChargeAutomatically,
@@ -182,13 +183,13 @@ namespace CollAction.Services.Donation
                 }
             });
 
-            _context.DonationEventLog.Add(new DonationEventLog()
+            context.DonationEventLog.Add(new DonationEventLog()
             {
                 UserId = user?.Id,
                 Type = DonationEventType.Internal,
                 EventData = subscription.ToJson()
             });
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
         }
 
         /*
@@ -199,20 +200,20 @@ namespace CollAction.Services.Donation
         {
             ValidateDetails(name, email);
 
-            ApplicationUser user = await _userManager.FindByEmailAsync(email);
+            ApplicationUser user = await userManager.FindByEmailAsync(email);
             Customer customer = await GetOrCreateCustomer(name, email);
-            Source source = await _sourceService.AttachAsync(customer.Id, new SourceAttachOptions()
+            Source source = await sourceService.AttachAsync(customer.Id, new SourceAttachOptions()
             {
                 Source = sourceId
             });
 
-            _context.DonationEventLog.Add(new DonationEventLog()
+            context.DonationEventLog.Add(new DonationEventLog()
             {
                 UserId = user?.Id,
                 Type = DonationEventType.Internal,
                 EventData = source.ToJson()
             });
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
         }
 
         /*
@@ -221,11 +222,11 @@ namespace CollAction.Services.Donation
          */
         public void HandleChargeable(string json, string signature)
         {
-            Event stripeEvent = EventUtility.ConstructEvent(json, signature, _stripeSignatures.StripeChargeableWebhookSecret);
+            Event stripeEvent = EventUtility.ConstructEvent(json, signature, stripeSignatures.StripeChargeableWebhookSecret);
             if (stripeEvent.Type == EventTypeChargeableSource)
             {
                 Source source = (Source)stripeEvent.Data.Object;
-                _backgroundJobClient.Enqueue(() => Charge(source.Id));
+                backgroundJobClient.Enqueue(() => Charge(source.Id));
             }
             else
             {
@@ -238,20 +239,20 @@ namespace CollAction.Services.Donation
          */
         public async Task LogPaymentEvent(string json, string signature)
         {
-            Event stripeEvent = EventUtility.ConstructEvent(json, signature, _stripeSignatures.StripePaymentEventWebhookSecret);
+            Event stripeEvent = EventUtility.ConstructEvent(json, signature, stripeSignatures.StripePaymentEventWebhookSecret);
 
-            _context.DonationEventLog.Add(new DonationEventLog()
+            context.DonationEventLog.Add(new DonationEventLog()
             {
                 Type = DonationEventType.External,
                 EventData = stripeEvent.ToJson()
             });
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
 
             if (stripeEvent.Type == EventTypeChargeSucceeded)
             {
                 Charge charge = (Charge)stripeEvent.Data.Object;
-                var subscriptions = await _subscriptionService.ListAsync(new SubscriptionListOptions() { CustomerId = charge.CustomerId });
-                Customer customer = await _customerService.GetAsync(charge.CustomerId);
+                var subscriptions = await subscriptionService.ListAsync(new SubscriptionListOptions() { CustomerId = charge.CustomerId });
+                Customer customer = await customerService.GetAsync(charge.CustomerId);
                 await SendDonationThankYou(customer, subscriptions.Any());
             }
         }
@@ -261,10 +262,10 @@ namespace CollAction.Services.Donation
          */
         public async Task Charge(string sourceId)
         {
-            Source source = await _sourceService.GetAsync(sourceId);
+            Source source = await sourceService.GetAsync(sourceId);
             if (source.Status == StatusChargeable)
             {
-                Charge charge = await _chargeService.CreateAsync(new ChargeCreateOptions()
+                Charge charge = await chargeService.CreateAsync(new ChargeCreateOptions()
                 {
                     Amount = source.Amount,
                     Currency = source.Currency,
@@ -273,15 +274,15 @@ namespace CollAction.Services.Donation
                     Description = "A donation to Stichting CollAction"
                 });
 
-                Customer customer = await _customerService.GetAsync(source.Customer);
-                ApplicationUser user = customer != null ? await _userManager.FindByEmailAsync(customer.Email) : null;
-                _context.DonationEventLog.Add(new DonationEventLog()
+                Customer customer = await customerService.GetAsync(source.Customer);
+                ApplicationUser user = customer != null ? await userManager.FindByEmailAsync(customer.Email) : null;
+                context.DonationEventLog.Add(new DonationEventLog()
                 {
                     UserId = user?.Id,
                     Type = DonationEventType.Internal,
                     EventData = charge.ToJson()
                 });
-                await _context.SaveChangesAsync();
+                await context.SaveChangesAsync();
             }
             else
             {
@@ -291,14 +292,14 @@ namespace CollAction.Services.Donation
 
         public async Task<IEnumerable<Subscription>> GetSubscriptionsFor(ApplicationUser userFor)
         {
-            var customers = await _customerService.ListAsync(new CustomerListOptions()
+            var customers = await customerService.ListAsync(new CustomerListOptions()
             {
                 Email = userFor.Email
             });
 
             var subscriptions = await Task.WhenAll(
                 customers.Select(c =>
-                    _subscriptionService.ListAsync(new SubscriptionListOptions()
+                    subscriptionService.ListAsync(new SubscriptionListOptions()
                     {
                         CustomerId = c.Id
                     })));
@@ -308,30 +309,30 @@ namespace CollAction.Services.Donation
 
         public async Task CancelSubscription(string subscriptionId, ClaimsPrincipal userFor)
         {
-            var user = await _userManager.GetUserAsync(userFor);
-            Subscription subscription = await _subscriptionService.GetAsync(subscriptionId);
-            Customer customer = await _customerService.GetAsync(subscription.CustomerId);
+            var user = await userManager.GetUserAsync(userFor);
+            Subscription subscription = await subscriptionService.GetAsync(subscriptionId);
+            Customer customer = await customerService.GetAsync(subscription.CustomerId);
 
             if (!customer.Email.Equals(user.Email, StringComparison.OrdinalIgnoreCase))
             {
                 throw new InvalidOperationException($"User {user.Email} doesn't match subscription e-mail {subscription.Customer.Email}");
             }
 
-            subscription = await _subscriptionService.CancelAsync(subscriptionId, new SubscriptionCancelOptions());
+            subscription = await subscriptionService.CancelAsync(subscriptionId, new SubscriptionCancelOptions());
 
-            _context.DonationEventLog.Add(new DonationEventLog()
+            context.DonationEventLog.Add(new DonationEventLog()
             {
                 UserId = user.Id,
                 Type = DonationEventType.Internal,
                 EventData = subscription.ToJson()
             });
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
         }
 
         private async Task<Plan> CreateRecurringPlan(int amount, string currency)
         {
             Product product = await GetOrCreateRecurringDonationProduct();
-            return await _planService.CreateAsync(new PlanCreateOptions()
+            return await planService.CreateAsync(new PlanCreateOptions()
             {
                 ProductId = product.Id,
                 Active = true,
@@ -346,7 +347,7 @@ namespace CollAction.Services.Donation
 
         private async Task<Product> GetOrCreateRecurringDonationProduct()
         {
-            var products = await _productService.ListAsync(new ProductListOptions()
+            var products = await productService.ListAsync(new ProductListOptions()
             {
                 Active = true,
                 Type = "service"
@@ -354,7 +355,7 @@ namespace CollAction.Services.Donation
             Product product = products.FirstOrDefault(p => p.Name == RecurringDonationProduct);
             if (product == null)
             {
-                product = await _productService.CreateAsync(new ProductCreateOptions()
+                product = await productService.CreateAsync(new ProductCreateOptions()
                 {
                     Active = true,
                     Name = RecurringDonationProduct,
@@ -367,13 +368,13 @@ namespace CollAction.Services.Donation
 
         private async Task<Customer> GetOrCreateCustomer(string name, string email)
         {
-            Customer customer = (await _customerService.ListAsync(new CustomerListOptions() { Email = email, Limit = 1 }, _requestOptions)).FirstOrDefault();
+            Customer customer = (await customerService.ListAsync(new CustomerListOptions() { Email = email, Limit = 1 }, requestOptions)).FirstOrDefault();
             string metadataName = null;
             customer?.Metadata?.TryGetValue(NameKey, out metadataName);
             var metadata = new Dictionary<string, string>() { { NameKey, name } };
             if (customer == null)
             {
-                customer = await _customerService.CreateAsync(new CustomerCreateOptions()
+                customer = await customerService.CreateAsync(new CustomerCreateOptions()
                 {
                     Email = email,
                     Metadata = metadata
@@ -381,7 +382,7 @@ namespace CollAction.Services.Donation
             }
             else if (!name.Equals(metadataName, StringComparison.Ordinal))
             {
-                customer = await _customerService.UpdateAsync(customer.Id, new CustomerUpdateOptions()
+                customer = await customerService.UpdateAsync(customer.Id, new CustomerUpdateOptions()
                 {
                     Metadata = metadata
                 });
@@ -398,7 +399,7 @@ namespace CollAction.Services.Donation
         }
 
         private Task SendDonationThankYou(Customer customer, bool hasSubscriptions)
-            => _emailSender.SendEmailTemplated(customer.Email, "Thank you for your donation", "DonationThankYou", hasSubscriptions);
+            => emailSender.SendEmailTemplated(customer.Email, "Thank you for your donation", "DonationThankYou", hasSubscriptions);
 
         private void ValidateDetails(int amount, string name, string email)
         {

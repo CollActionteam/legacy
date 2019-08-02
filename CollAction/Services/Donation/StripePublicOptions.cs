@@ -1,6 +1,6 @@
 ﻿namespace CollAction.Services.Donation
 {
-    public class StripeJavascriptOptions
+    public class StripePublicOptions
     {
         public string StripePublicKey { get; set; }
     }

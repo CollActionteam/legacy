@@ -3,6 +3,7 @@ using CollAction.Models;
 using CollAction.Services.Donation;
 using CollAction.Services.Newsletter;
 using GraphQL;
+using GraphQL.Authorization;
 using GraphQL.EntityFramework;
 using GraphQL.Types;
 using Microsoft.AspNetCore.Identity;
@@ -23,6 +24,9 @@ namespace CollAction.GraphQl.Queries
             Field(x => x.RepresentsNumberParticipants);
             Field(x => x.UserName);
             Field(x => x.Activated);
+            Field<BooleanGraphType>(
+                "isAdmin", 
+                resolve: c => ((UserContext)c.UserContext).User.IsInRole(Constants.AdminRole));
             FieldAsync<BooleanGraphType>(
                 "isSubscribedNewsletter", 
                 resolve: async c =>
@@ -39,16 +43,6 @@ namespace CollAction.GraphQl.Queries
                     }
                 });
             FieldAsync<ListGraphType<StringGraphType>>(
-                "roles", 
-                resolve: async c =>
-                {
-                    using (var scope = serviceScopeFactory.CreateScope())
-                    {
-                        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-                        return await userManager.GetRolesAsync(c.Source);
-                    }
-                });
-            FieldAsync<ListGraphType<StringGraphType>>(
                 "loginProviders",
                 resolve: async c =>
                 {
@@ -61,8 +55,8 @@ namespace CollAction.GraphQl.Queries
                 });
             AddNavigationListField(nameof(ApplicationUser.Projects), c => c.Source.Projects);
             AddNavigationListField(nameof(ApplicationUser.Participates), c => c.Source.Participates);
-            AddNavigationListField(nameof(ApplicationUser.UserEvents), c => c.Source.UserEvents);
-            AddNavigationListField(nameof(ApplicationUser.DonationEvents), c => c.Source.DonationEvents);
+            AddNavigationListField(nameof(ApplicationUser.UserEvents), c => c.Source.UserEvents).AuthorizeWith(Constants.GraphQlAdminPolicy);
+            AddNavigationListField(nameof(ApplicationUser.DonationEvents), c => c.Source.DonationEvents).AuthorizeWith(Constants.GraphQlAdminPolicy);
         }
     }
 }

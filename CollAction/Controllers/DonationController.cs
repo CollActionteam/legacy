@@ -7,11 +7,11 @@ namespace CollAction.Controllers
 {
     public class DonationController : Controller
     {
-        private IDonationService _donationService;
+        private IDonationService donationService;
 
         public DonationController(IDonationService donationService)
         {
-            _donationService = donationService;
+            this.donationService = donationService;
         }
 
         [HttpPost]
@@ -21,7 +21,7 @@ namespace CollAction.Controllers
             {
                 string json = await streamReader.ReadToEndAsync();
                 string signature = Request.Headers["Stripe-Signature"];
-                await _donationService.LogPaymentEvent(json, signature);
+                await donationService.LogPaymentEvent(json, signature);
                 return Ok();
             }
         }
@@ -33,7 +33,7 @@ namespace CollAction.Controllers
             {
                 string json = await streamReader.ReadToEndAsync();
                 string signature = Request.Headers["Stripe-Signature"];
-                _donationService.HandleChargeable(json, signature);
+                donationService.HandleChargeable(json, signature);
                 return Ok();
             }
         }

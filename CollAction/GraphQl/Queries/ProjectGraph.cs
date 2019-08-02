@@ -1,6 +1,7 @@
 ﻿using CollAction.Data;
 using CollAction.Models;
 using CollAction.Services.Projects;
+using GraphQL.Authorization;
 using GraphQL.EntityFramework;
 using GraphQL.Types;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,7 +22,6 @@ namespace CollAction.GraphQl.Queries
             Field(x => x.DescriptiveImageFileId, true);
             Field(x => x.DisplayPriority);
             Field(x => x.End);
-            Field(x => x.ExternalStatus);
             Field(x => x.Goal);
             Field(x => x.IsActive);
             Field(x => x.IsClosed);
@@ -49,8 +49,8 @@ namespace CollAction.GraphQl.Queries
             AddNavigationField(nameof(Project.DescriptiveImage), c => c.Source.DescriptiveImage);
             AddNavigationField(nameof(Project.BannerImage), c => c.Source.BannerImage);
             AddNavigationField(nameof(Project.ParticipantCounts), c => c.Source.ParticipantCounts);
-            AddNavigationField(nameof(Project.Owner), c => c.Source.Owner);
-            AddNavigationListField(nameof(Project.Participants), c => c.Source.Participants);
+            AddNavigationField(nameof(Project.Owner), c => c.Source.Owner).AuthorizeWith(Constants.GraphQlAdminPolicy);
+            AddNavigationListField(nameof(Project.Participants), c => c.Source.Participants).AuthorizeWith(Constants.GraphQlAdminPolicy);
             AddNavigationListField(nameof(Project.Tags), c => c.Source.Tags);
         }
     }

@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using CollAction.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace CollAction.Data
 {
@@ -72,7 +71,6 @@ namespace CollAction.Data
         /// <param name="token">Cancellation token</param>
         public async Task Seed(IConfiguration configuration, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
-            ChangeTracker.AutoDetectChangesEnabled = false;
             await CreateAdminRoleAndUser(configuration, userManager, roleManager);
             await CreateCategories();
         }
@@ -108,8 +106,6 @@ namespace CollAction.Data
                 if (!result.Succeeded)
                     throw new InvalidOperationException($"Error assigning admin role.{Environment.NewLine}{string.Join(Environment.NewLine, result.Errors.Select(e => $"{e.Code}: {e.Description}"))}");
             }
-
-            DetachAll();
         }
 
         private async Task CreateCategories()
@@ -127,15 +123,7 @@ namespace CollAction.Data
                     new Category() { Name = "Other", ColorHex = "007D43" },
                 });
                 await SaveChangesAsync();
-                DetachAll();
             }
-        }
-
-        public void DetachAll()
-        {
-            foreach (EntityEntry entry in ChangeTracker.Entries().ToArray())
-                if (entry.Entity != null)
-                    entry.State = EntityState.Detached;
         }
     }
 }

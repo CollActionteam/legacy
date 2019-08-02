@@ -17,19 +17,19 @@ namespace CollAction.Services.Image
 {
     public class AmazonS3ImageService : IImageService
     {
-        private readonly AmazonS3Client _client;
-        private readonly string _bucket;
-        private readonly string _region;
-        private readonly IBackgroundJobClient _jobClient;
-        private readonly int _imageResizeThreshold;
+        private readonly AmazonS3Client client;
+        private readonly string bucket;
+        private readonly string region;
+        private readonly IBackgroundJobClient jobClient;
+        private readonly int imageResizeThreshold;
 
         public AmazonS3ImageService(IOptions<ImageServiceOptions> options, IOptions<ImageProcessingOptions> processingOptions, IBackgroundJobClient jobClient)
         {
-            _client = new AmazonS3Client(options.Value.S3AwsAccessKeyID, options.Value.S3AwsAccessKey, RegionEndpoint.GetBySystemName(options.Value.S3Region));
-            _bucket = options.Value.S3Bucket;
-            _region = options.Value.S3Region;
-            _jobClient = jobClient;
-            _imageResizeThreshold = processingOptions.Value.MaxImageDimensionPixels;
+            client = new AmazonS3Client(options.Value.S3AwsAccessKeyID, options.Value.S3AwsAccessKey, RegionEndpoint.GetBySystemName(options.Value.S3Region));
+            bucket = options.Value.S3Bucket;
+            region = options.Value.S3Region;
+            this.jobClient = jobClient;
+            imageResizeThreshold = processingOptions.Value.MaxImageDimensionPixels;
         }
 
         public async Task<ImageFile> UploadImage(ImageFile currentImage, IFormFile fileUploaded, string imageDescription)
@@ -50,7 +50,7 @@ namespace CollAction.Services.Image
                 currentImage.Width = image.Width;
 
                 byte[] imageBytes = ConvertImageToPng(image);
-                _jobClient.Enqueue(() => 
+                jobClient.Enqueue(() => 
                     UploadToS3(imageBytes, currentImage.Filepath));
 
                 return currentImage;
@@ -60,22 +60,22 @@ namespace CollAction.Services.Image
         public void DeleteImage(ImageFile imageFile)
         {
             if (imageFile != null)
-                _jobClient.Enqueue(() => 
+                jobClient.Enqueue(() => 
                     DeleteObject(imageFile.Filepath));
         }
 
         public string GetUrl(ImageFile imageFile)
-            => $"https://{_bucket}.s3.{_region}.amazonaws.com/{imageFile.Filepath}";
+            => $"https://{bucket}.s3.{region}.amazonaws.com/{imageFile.Filepath}";
 
         public async Task DeleteObject(string filePath)
         {
             var deleteRequest = new DeleteObjectRequest()
             {
-                BucketName = _bucket,
+                BucketName = bucket,
                 Key = filePath
             };
 
-            DeleteObjectResponse response = await _client.DeleteObjectAsync(deleteRequest);
+            DeleteObjectResponse response = await client.DeleteObjectAsync(deleteRequest);
             if (!response.HttpStatusCode.IsSuccess())
                 throw new InvalidOperationException($"failed to delete S3 object {filePath}, {response.HttpStatusCode}");
         }
@@ -86,7 +86,7 @@ namespace CollAction.Services.Image
             {
                 var putRequest = new PutObjectRequest()
                 {
-                    BucketName = _bucket,
+                    BucketName = bucket,
                     ContentType = "image/png",
                     Key = path,
                     InputStream = ms,
@@ -94,7 +94,7 @@ namespace CollAction.Services.Image
                     AutoCloseStream = false
                 };
 
-                PutObjectResponse response = await _client.PutObjectAsync(putRequest);
+                PutObjectResponse response = await client.PutObjectAsync(putRequest);
                 if (!response.HttpStatusCode.IsSuccess())
                     throw new InvalidOperationException($"failed to upload S3 object {path}, {response.HttpStatusCode}");
             }
@@ -131,15 +131,15 @@ namespace CollAction.Services.Image
 
         private double GetScaleRatioForImage(Image<Rgba32> image)
         {
-            if (image.Width > _imageResizeThreshold || image.Height > _imageResizeThreshold)
+            if (image.Width > imageResizeThreshold || image.Height > imageResizeThreshold)
             {
                 if (image.Width > image.Height) 
                 {
-                    return ( (double)_imageResizeThreshold/(double)image.Width);
+                    return ( (double)imageResizeThreshold/(double)image.Width);
                 }
                 else
                 {
-                    return ( (double)_imageResizeThreshold/(double)image.Height);
+                    return ( (double)imageResizeThreshold/(double)image.Height);
                 }
             }
 
@@ -148,7 +148,7 @@ namespace CollAction.Services.Image
     
         public void Dispose()
         {
-            _client.Dispose();
+            client.Dispose();
         }
     }
 }
