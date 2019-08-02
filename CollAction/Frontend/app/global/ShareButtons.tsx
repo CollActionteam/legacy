@@ -83,35 +83,47 @@ class ShareButtons extends React.Component<IShareButtonsProps, IShareButtonsStat
     return `whatsapp://send?text=${this.getTitle()}%20${this.getUrl()}`;
   }
 
+  getEmailUrl() {
+    const body = `Hi! I am participating in the '${this.getTitle()}' project on CollAction - do you want to join too? Together we make waves! You can find more information on ${this.getUrl()}`;
+    return `mailto:?subject=${this.getTitle()}&body=${body}`;
+  }
+
   render() {
     return (
       <div className="share-buttons">
         <div className="row">
-          <div className="col-xs-3 col-sm-4">
+          <div className="col-xs-offset-1 col-xs-2 col-sm-offset-0 col-sm-3">
             <a href={this.getFacebookUrl()} target="_blank">
               <div className="social-media-share-buttons social-media-share-button-facebook">
                 <i className="fa fa-facebook"></i>
               </div>
             </a>
           </div>
-          <div className="col-xs-3 col-sm-4">
-            <a href={this.getTwitterUrl()}>
+          <div className="col-xs-2 col-sm-3">
+            <a href={this.getTwitterUrl()} target="_blank">
               <div className="social-media-share-buttons social-media-share-button-twitter">
                 <i className="fa fa-twitter"></i>
               </div>
             </a>
           </div>
-          <div className="col-xs-3 col-sm-4">
-            <a href={this.getLinkedInUrl()}>
+          <div className="col-xs-2 col-sm-3">
+            <a href={this.getLinkedInUrl()} target="_blank">
               <div className="social-media-share-buttons social-media-share-button-linkedin">
                 <i className="fa fa-linkedin"></i>
               </div>
             </a>
           </div>
-          <div className="col-xs-3 visible-xs">
-            <a href={this.getWhatsappUrl()}>
+          <div className="col-xs-2 visible-xs">
+            <a href={this.getWhatsappUrl()} target="_blank">
               <div className="social-media-share-buttons social-media-share-button-whatsapp">
                 <i className="fa fa-whatsapp"></i>
+              </div>
+            </a>
+          </div>
+          <div className="col-xs-2 col-sm-3">
+            <a href={this.getEmailUrl()} target="_blank">
+              <div className="social-media-share-buttons social-media-share-button-email">
+                <i className="fa fa-at"></i>
               </div>
             </a>
           </div>
