@@ -32,17 +32,14 @@ namespace CollAction.Services.Image
             imageResizeThreshold = processingOptions.Value.MaxImageDimensionPixels;
         }
 
-        public async Task<ImageFile> UploadImage(ImageFile currentImage, IFormFile fileUploaded, string imageDescription)
+        public async Task<ImageFile> UploadImage(IFormFile fileUploaded, string imageDescription)
         {
             using (Image<Rgba32> image = await UploadToImage(fileUploaded))
             {
-                if (currentImage == null)
+                var currentImage = new ImageFile()
                 {
-                    currentImage = new ImageFile()
-                    {
-                        Filepath = $"{Guid.NewGuid()}.png"
-                    };
-                }
+                    Filepath = $"{Guid.NewGuid()}.png"
+                };
 
                 currentImage.Date = DateTime.UtcNow;
                 currentImage.Description = imageDescription;

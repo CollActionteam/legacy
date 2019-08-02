@@ -61,7 +61,7 @@ namespace CollAction.Tests.Integration
         [TestMethod]
         public async Task TestUpload()
         {
-            Models.ImageFile imageFile = await _imageService.UploadImage(null, _upload.Object, "test");
+            Models.ImageFile imageFile = await _imageService.UploadImage(_upload.Object, "test");
 
             Assert.IsNotNull(imageFile);
             Assert.IsNotNull(imageFile.Filepath);
@@ -78,7 +78,7 @@ namespace CollAction.Tests.Integration
         [TestMethod]
         public async Task TestDelete()
         {
-            Models.ImageFile imageFile = await _imageService.UploadImage(null, _upload.Object, "test");
+            Models.ImageFile imageFile = await _imageService.UploadImage(_upload.Object, "test");
             _imageService.DeleteImage(imageFile);
 
             _upload.Verify(f => f.OpenReadStream());

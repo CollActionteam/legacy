@@ -19,7 +19,7 @@ namespace CollAction.Controllers
         [HttpPost]
         public async Task<IActionResult> UploadImage(UploadImageViewModel uploadImage)
         {
-            var image = await imageService.UploadImage(null, uploadImage.ImageUpload, uploadImage.ImageDescription);
+            var image = await imageService.UploadImage(uploadImage.ImageUpload, uploadImage.ImageDescription);
             return Ok(image.Id);
         }
     }

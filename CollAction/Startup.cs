@@ -201,8 +201,6 @@ namespace CollAction
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseStatusCodePages();
-            
             app.UseAuthentication();
 
             app.UseStaticFiles(new StaticFileOptions()
@@ -416,7 +414,8 @@ namespace CollAction
 
         private static IEnumerable<Type> GetGraphQlTypes()
         {
-            return typeof(Startup).Assembly
+            return typeof(Startup)
+                .Assembly
                 .GetTypes()
                 .Where(x => !x.IsAbstract &&
                             (typeof(IObjectGraphType).IsAssignableFrom(x) ||
