@@ -8,8 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AspNetCore.IServiceCollection.AddIUrlHelper" Version="1.1.0" />
-    <PackageReference Include="AutoMapper" Version="8.1.1" />
     <PackageReference Include="AWSSDK.S3" Version="3.3.104.1" />
     <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.101.19" />
     <PackageReference Include="GraphiQL" Version="1.2.0" />

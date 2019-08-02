@@ -2,7 +2,7 @@
 {
     public enum ProjectExternalStatus
     {
-        Open = 1,
+        IsActive = 1,
         Closed = 2,
         ComingSoon = 3
     };

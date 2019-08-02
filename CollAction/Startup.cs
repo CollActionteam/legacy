@@ -18,7 +18,7 @@ using Hangfire.PostgreSql;
 using CollAction.Helpers;
 using Hangfire.Dashboard;
 using CollAction.Services.Email;
-using CollAction.Services.Project;
+using CollAction.Services.Projects;
 using CollAction.Services.Newsletter;
 using CollAction.Services.Festival;
 using CollAction.Services.DataProtection;
@@ -31,10 +31,8 @@ using Serilog.Events;
 using Serilog.Sinks.Slack;
 using Microsoft.ApplicationInsights.Extensibility;
 using CollAction.Services.ViewRender;
-using AspNetCore.IServiceCollection.AddIUrlHelper;
 using MailChimp.Net;
 using MailChimp.Net.Interfaces;
-using CollAction.Services.HashAssetService;
 using CollAction.Services.Sitemap;
 using GraphiQl;
 using GraphQL.Utilities;
@@ -44,8 +42,8 @@ using Microsoft.AspNetCore.Mvc;
 using GraphQL.Types;
 using System.Collections.Generic;
 using System;
-using CollAction.GraphQl.Queries;
-using CollAction.GraphQl.Mutations;
+using CollAction.GraphQl;
+using CollAction.Services.User;
 
 namespace CollAction
 {
@@ -62,7 +60,6 @@ namespace CollAction
         public IConfiguration Configuration { get; }
         public IHostingEnvironment Environment { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             string connectionString = $"Host={Configuration["DbHost"]};Username={Configuration["DbUser"]};Password={Configuration["DbPassword"]};Database={Configuration["Db"]};Port={Configuration["DbPort"]}";
@@ -96,8 +93,6 @@ namespace CollAction
 
             services.AddApplicationInsightsTelemetry(Configuration);
 
-            services.AddUrlHelper();
-
             services.AddLogging(loggingBuilder =>
             {
                 LoggerConfiguration configuration = new LoggerConfiguration()
@@ -120,17 +115,16 @@ namespace CollAction
             services.AddHangfire(config => config.UsePostgreSqlStorage(connectionString));
 
             // Add application services.
-            services.AddTransient<IEmailSender, EmailSender>();
-            services.AddScoped<IProjectService, ProjectService>();
-            services.AddScoped<IParticipantsService, ParticipantsService>();
             services.AddScoped<IImageService, AmazonS3ImageService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<INewsletterService, NewsletterService>();
             services.AddTransient<IDonationService, DonationService>();
             services.AddTransient<IViewRenderService, ViewRenderService>();
             services.AddTransient<IMailChimpManager, MailChimpManager>();
             services.AddTransient<ISitemapService, SitemapService>();
             services.AddTransient<IFestivalService, FestivalService>();
-            services.AddSingleton<IHashAssetService, HashAssetService>(provider => new HashAssetService(!Environment.IsDevelopment()));
+            services.AddTransient<IHtmlInputValidator, HtmlInputValidator>();
 
             services.AddDataProtection()
                     .Services
@@ -173,7 +167,6 @@ namespace CollAction
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime applicationLifetime)
         {
             if (env.IsProduction())
@@ -233,7 +226,25 @@ namespace CollAction
                 }
             });
 
-            app.UseMvc();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute("Robots.txt",
+                    "robots.txt",
+                    new { controller = "Home", action = "Robots" });
+
+                routes.MapRoute("Sitemap.xml",
+                    "sitemap.xml",
+                    new { controller = "Home", action = "Sitemap" });
+
+                routes.MapRoute(
+                    name: "Default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+
+                routes.MapRoute(
+                    name: "CatchAll",
+                    "{*url}",
+                    new { controller = "Home", action = "Index" });
+            });
 
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             using (var userManager = serviceScope.ServiceProvider.GetService<UserManager<ApplicationUser>>())
@@ -364,7 +375,7 @@ namespace CollAction
                 EfGraphQLConventions.RegisterInContainer(
                     services,
                     context,
-                    c => (ApplicationDbContext)c);
+                    c => ((UserContext)c).Context);
             }
 
             Type[] baseClasses = new[]

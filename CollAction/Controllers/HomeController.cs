@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Text;
-using CollAction.Data;
 using System.Threading.Tasks;
-using CollAction.Services.Image;
-using CollAction.Services.Project;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Diagnostics;
 using CollAction.Services.Sitemap;
@@ -12,31 +9,16 @@ namespace CollAction.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ApplicationDbContext _context;
-        private readonly IProjectService _projectService;
-        private readonly IImageService _imageService;
         private readonly ISitemapService _sitemapService;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ApplicationDbContext context, IProjectService projectService, IImageService imageService, ILogger<HomeController> logger, ISitemapService sitemapService)
+        public HomeController(ILogger<HomeController> logger, ISitemapService sitemapService)
         {
-            _context = context;
-            _projectService = projectService;
-            _imageService = imageService;
             _sitemapService = sitemapService;
             _logger = logger;
         }
 
         public IActionResult Index()
-            => View();
-
-        public IActionResult Privacy()
-            => View();
-
-        public IActionResult About()
-            => View();
-
-        public IActionResult CrowdActingFestival()
             => View();
 
         public IActionResult Error()

@@ -1,4 +1,5 @@
 ﻿using CollAction.Data;
+using CollAction.GraphQl;
 using GraphQL;
 using GraphQL.Types;
 using GraphQL.Validation.Complexity;
@@ -13,8 +14,7 @@ namespace CollAction.Controllers
 {
     [Route("v1/graphql")]
     [ApiController]
-    public class GraphQlController :
-        Controller
+    public class GraphQlController : Controller
     {
         IDocumentExecuter executer;
         ISchema schema;
@@ -66,7 +66,11 @@ namespace CollAction.Controllers
                 Query = query,
                 OperationName = operationName,
                 Inputs = variables?.ToInputs(),
-                UserContext = dbContext,
+                UserContext = new UserContext()
+                {
+                    Context = dbContext,
+                    User = User
+                },
                 ComplexityConfiguration = new ComplexityConfiguration()
                 {
                     MaxDepth = 20

@@ -16,37 +16,37 @@ namespace CollAction.Services.Email
 {
     public class EmailSender : IEmailSender
     {
-        private readonly AuthMessageSenderOptions _authOptions;
-        private readonly IServiceProvider _serviceProvider;
-        private readonly ILogger<EmailSender> _logger;
-        private readonly IBackgroundJobClient _jobClient;
+        private readonly AuthMessageSenderOptions authOptions;
+        private readonly IServiceProvider serviceProvider;
+        private readonly ILogger<EmailSender> logger;
+        private readonly IBackgroundJobClient jobClient;
 
-        public EmailSender(IOptions<AuthMessageSenderOptions> authOptions, IBackgroundJobClient jobClient, ILoggerFactory loggerFactory, IServiceProvider serviceProvider)
+        public EmailSender(IOptions<AuthMessageSenderOptions> authOptions, IBackgroundJobClient jobClient, ILogger<EmailSender> logger, IServiceProvider serviceProvider)
         {
-            _authOptions = authOptions.Value;
-            _serviceProvider = serviceProvider;
-            _logger = loggerFactory.CreateLogger<EmailSender>();
-            _jobClient = jobClient;
+            this.authOptions = authOptions.Value;
+            this.serviceProvider = serviceProvider;
+            this.logger = logger;
+            this.jobClient = jobClient;
         }
 
         public void SendEmails(IEnumerable<string> emails, string subject, string message)
         {
-            string job = _jobClient.Enqueue(() => SendEmailQueued(emails, subject, message));
-            _logger.LogInformation("sending email to {0} with subject {1} with hangfire job {2}", string.Join(", ", emails), subject, job);
+            string job = jobClient.Enqueue(() => SendEmailQueued(emails, subject, message));
+            logger.LogInformation("sending email to {0} with subject {1} with hangfire job {2}", string.Join(", ", emails), subject, job);
         }
 
         public void SendEmail(string email, string subject, string message)
             => SendEmails(new[] { email }, subject, message);
 
         public Task SendEmailsTemplated(IEnumerable<string> emails, string subject, string emailTemplate)
-            => SendEmailsTemplated<object>(emails, subject, emailTemplate, new object());
+            => SendEmailsTemplated(emails, subject, emailTemplate, new object());
 
         public Task SendEmailTemplated(string email, string subject, string emailTemplate)
-            => SendEmailTemplated<object>(email, subject, emailTemplate, new object());
+            => SendEmailTemplated(email, subject, emailTemplate, new object());
 
         public async Task SendEmailsTemplated<TModel>(IEnumerable<string> emails, string subject, string emailTemplate, TModel model)
         {
-            var viewRenderer = _serviceProvider.GetService<IViewRenderService>(); // This dependency is not available from tasks, so we have to inject it like this
+            var viewRenderer = serviceProvider.GetService<IViewRenderService>(); // This dependency is not available from tasks, so we have to inject it like this
             string message = await viewRenderer.Render($"Views/Emails/{emailTemplate}.cshtml", model);
             SendEmails(emails, subject, message);
         }
@@ -58,7 +58,7 @@ namespace CollAction.Services.Email
         {
             SendEmailRequest emailRequest = new SendEmailRequest()
             {
-                Source = _authOptions.FromAddress,
+                Source = authOptions.FromAddress,
                 Destination = new Destination(emails.ToList()),
                 Message = new Message()
                 {
@@ -67,16 +67,16 @@ namespace CollAction.Services.Email
                 }
             };
 
-            using (AmazonSimpleEmailServiceClient client = new AmazonSimpleEmailServiceClient(_authOptions.SesAwsAccessKeyID, _authOptions.SesAwsAccessKey, RegionEndpoint.GetBySystemName(_authOptions.SesRegion)))
+            using (AmazonSimpleEmailServiceClient client = new AmazonSimpleEmailServiceClient(authOptions.SesAwsAccessKeyID, authOptions.SesAwsAccessKey, RegionEndpoint.GetBySystemName(authOptions.SesRegion)))
             {
                 SendEmailResponse response = await client.SendEmailAsync(emailRequest);
                 if (!response.HttpStatusCode.IsSuccess())
                 {
-                    _logger.LogError("failed to send email to {0}", string.Join(", ", emails));
+                    logger.LogError("failed to send email to {0}", string.Join(", ", emails));
                     throw new InvalidOperationException($"failed to send email to {string.Join(", ", emails)}, {response.HttpStatusCode}");
                 }
 
-                _logger.LogInformation("successfully send email to {0}", string.Join(", ", emails));
+                logger.LogInformation("successfully send email to {0}", string.Join(", ", emails));
             }
         }
     }

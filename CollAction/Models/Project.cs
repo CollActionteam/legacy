@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace CollAction.Models
 {
@@ -48,6 +51,8 @@ namespace CollAction.Models
         [MaxLength(20000)]
         public string CreatorComments { get; set; }
 
+        public int AnonymousUserParticipants { get; set; }
+
         public int? BannerImageFileId { get; set; }
         [ForeignKey("BannerImageFileId")]
         public ImageFile BannerImage { get; set; }
@@ -62,6 +67,10 @@ namespace CollAction.Models
 
         public ProjectParticipantCount ParticipantCounts { get; set; }
 
+        public List<ProjectParticipant> Participants { get; set; }
+
+        public List<ProjectTag> Tags { get; set; }
+
         [NotMapped]
         public bool IsActive
             => Status == ProjectStatus.Running && Start <= DateTime.UtcNow && End >= DateTime.UtcNow;
@@ -75,33 +84,77 @@ namespace CollAction.Models
             => Status == ProjectStatus.Running && End < DateTime.UtcNow;
 
         [NotMapped]
+        public string NameNormalized
+            => ToUrlSlug(RemoveDiacriticsFromString(Name));
+
+        [NotMapped]
+        public string Url
+            => $"/#/Projects/{NameNormalized}/{Id}";
+
+        [NotMapped]
         public TimeSpan RemainingTime
         {
             get
             {
                 DateTime now = DateTime.UtcNow;
-                return now >= End ? TimeSpan.Zero : End - (now > Start ? now : Start);
+                if (now >= End)
+                {
+                    return TimeSpan.Zero;
+                }
+                else
+                {
+                    return End - (now > Start ? now : Start);
+                }
             }
         }
-
-        public List<ProjectTag> Tags { get; set; }
 
         [NotMapped]
         public ProjectExternalStatus ExternalStatus
         {
             get
             {
-                if (Status == ProjectStatus.Running && Start <= DateTime.UtcNow && End >= DateTime.UtcNow)
-                    return ProjectExternalStatus.Open;
-                else if (Status == ProjectStatus.Running && Start > DateTime.UtcNow)
+                if (IsActive)
+                    return ProjectExternalStatus.IsActive;
+                else if (IsComingSoon)
                     return ProjectExternalStatus.ComingSoon;
                 else
                     return ProjectExternalStatus.Closed;
             }
         }
 
-        public List<ProjectParticipant> Participants { get; set; }
+        private static string ToUrlSlug(string value)
+        {
+            Regex spaceRemoveRegex = new Regex(@"\s");
+            Regex invalidCharRemoveRegex = new Regex(@"[^a-z0-9\s-_]");
+            Regex doubleDashRemoveRegex = new Regex(@"([-_]){2,}");
+            value = value.ToLowerInvariant();
+            value = spaceRemoveRegex.Replace(value, "-");
+            value = invalidCharRemoveRegex.Replace(value, "");
+            value = value.Trim('-', '_');
+            value = doubleDashRemoveRegex.Replace(value, "$1");
+            if (value.Length == 0)
+            {
+                value = "-";
+            }
 
-        public int AnonymousUserParticipants { get; set; }
+            return value;
+        }
+
+        private static string RemoveDiacriticsFromString(string text)
+        {
+            var normalizedString = text.Normalize(NormalizationForm.FormD);
+            var stringBuilder = new StringBuilder();
+
+            foreach (var c in normalizedString)
+            {
+                var unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
+                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+                {
+                    stringBuilder.Append(c);
+                }
+            }
+
+            return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
+        }
     }
 }

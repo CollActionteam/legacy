@@ -6,14 +6,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using CollAction.Models;
-using CollAction.Models.AccountViewModels;
 using CollAction.Data;
-using Microsoft.AspNetCore.Authentication;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using CollAction.Services.Email;
 using CollAction.Services.Newsletter;
+using CollAction.ViewModels.Account;
 
 namespace CollAction.Controllers
 {
@@ -22,36 +18,19 @@ namespace CollAction.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
         private readonly INewsletterService _newsletterSubscriptionService;
-        private readonly ApplicationDbContext _context;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IEmailSender emailSender,
             ILoggerFactory loggerFactory,
-            INewsletterService newsletterSubscriptionService,
-            ApplicationDbContext context)
+            INewsletterService newsletterSubscriptionService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _emailSender = emailSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
             _newsletterSubscriptionService = newsletterSubscriptionService;
-            _context = context;
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public async Task<IActionResult> Login(string returnUrl = null)
-        {
-            // Clear the existing external cookie to ensure a clean login process
-            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-
-            ViewData["ReturnUrl"] = returnUrl;
-            return View();
         }
 
         [HttpPost]
@@ -72,75 +51,13 @@ namespace CollAction.Controllers
                 }
                 if (result.IsLockedOut)
                 {
-                    return RedirectToAction(nameof(Lockout));
+                    return RedirectToAction("#/Lockout");
                 }
                 else
                 {
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     return View(model);
                 }
-            }
-
-            // If we got this far, something failed, redisplay form
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete()
-        {
-            ApplicationUser user = await _userManager.GetUserAsync(HttpContext.User);
-            List<Project> projects =
-                await _context.ProjectParticipants
-                              .Include(p => p.Project)
-                              .Where(p => p.UserId == user.Id && p.Project.End < DateTime.UtcNow)
-                              .Select(p => p.Project)
-                              .ToListAsync();
-
-            foreach (Project p in projects)
-                p.AnonymousUserParticipants += 1;
-
-            await _context.SaveChangesAsync();
-            await _userManager.DeleteAsync(user);
-            await _signInManager.SignOutAsync();
-
-            return RedirectToAction(nameof(HomeController.Index), "Home");
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult Lockout()
-        {
-            _logger.LogWarning(2, "User account locked out.");
-            return View();
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult Register(string returnUrl = null)
-        {
-            ViewData["ReturnUrl"] = returnUrl;
-            return View();
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
-        {
-            ViewData["ReturnUrl"] = returnUrl;
-            if (ModelState.IsValid)
-            {
-                var user = new ApplicationUser(model.Email) { FirstName = model.FirstName, LastName = model.LastName };
-                var result = await _userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    _newsletterSubscriptionService.SetSubscriptionBackground(model.Email, model.NewsletterSubscription);
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    _logger.LogInformation(3, "User created a new account with password.");
-                    return RedirectToLocal(returnUrl);
-                }
-                AddErrors(result);
             }
 
             // If we got this far, something failed, redisplay form
@@ -191,7 +108,7 @@ namespace CollAction.Controllers
             }
             if (result.IsLockedOut)
             {
-                return RedirectToAction(nameof(Lockout));
+                return RedirectToAction("#/Lockout");
             }
             else
             {
@@ -236,140 +153,6 @@ namespace CollAction.Controllers
             return View(nameof(ExternalLogin), model);
         }
 
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult ForgotPassword()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = await _userManager.FindByEmailAsync(model.Email);
-                if (user == null)
-                {
-                    // Don't reveal that the user does not exist
-                    return View("ForgotPasswordConfirmation");
-                }
-
-                // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
-                // Send an email with this link
-                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                var callbackUrl = Url.Action(
-                    action: nameof(AccountController.ResetPassword),
-                    controller: "Account",
-                    values: new { user.Id, code },
-                    protocol: Request.Scheme);
-                await _emailSender.SendEmailTemplated(model.Email, "Reset Password", "ResetPassword", callbackUrl);
-                return View(nameof(ForgotPasswordConfirmation));
-            }
-
-            // If we got this far, something failed, redisplay form
-            return View(model);
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult ForgotPasswordConfirmation()
-        {
-            return View();
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult ResetPassword(string code = null)
-        {
-            if (code == null)
-            {
-                throw new ApplicationException("A code must be supplied for password reset.");
-            }
-            var model = new ResetPasswordViewModel { Code = code };
-            return View(model);
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null)
-            {
-                // Don't reveal that the user does not exist
-                return RedirectToAction(nameof(ResetPasswordConfirmation));
-            }
-            var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
-            if (result.Succeeded)
-            {
-                return RedirectToAction(nameof(ResetPasswordConfirmation));
-            }
-            AddErrors(result);
-            return View();
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult ResetPasswordConfirmation()
-        {
-            return View();
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult FinishRegistration(string email, string code)
-        {
-            var model = new FinishRegistrationViewModel { Email = email, Code = code };
-            return View(model);
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> FinishRegistration(FinishRegistrationViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null)
-            {
-                throw new ArgumentException("User not found");
-            }
-
-            var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
-            if (!result.Succeeded)
-            {
-                AddErrors(result);
-                return View(model);
-            }
-
-            user.FirstName = model.FirstName;
-            user.LastName = model.LastName;
-            result = await _userManager.UpdateAsync(user);
-            if (!result.Succeeded)
-            {
-                AddErrors(result);
-                return View(model);
-            }
-
-            _newsletterSubscriptionService.SetSubscriptionBackground(model.Email, model.NewsletterSubscription);
-
-            await _signInManager.SignInAsync(user, isPersistent: false);
-            _logger.LogInformation(3, "User created from anonymous project participant.");
-
-            return RedirectToAction("Index", "Manage");
-        }
 
         #region Helpers
 

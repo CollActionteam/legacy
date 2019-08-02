@@ -9,6 +9,7 @@ using Stripe.Checkout;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace CollAction.Services.Donation
@@ -305,21 +306,22 @@ namespace CollAction.Services.Donation
             return subscriptions.SelectMany(s => s);
         }
 
-        public async Task CancelSubscription(string subscriptionId, ApplicationUser userFor)
+        public async Task CancelSubscription(string subscriptionId, ClaimsPrincipal userFor)
         {
+            var user = await _userManager.GetUserAsync(userFor);
             Subscription subscription = await _subscriptionService.GetAsync(subscriptionId);
             Customer customer = await _customerService.GetAsync(subscription.CustomerId);
 
-            if (!customer.Email.Equals(userFor.Email, StringComparison.OrdinalIgnoreCase))
+            if (!customer.Email.Equals(user.Email, StringComparison.OrdinalIgnoreCase))
             {
-                throw new InvalidOperationException($"User {userFor.Email} doesn't match subscription e-mail {subscription.Customer.Email}");
+                throw new InvalidOperationException($"User {user.Email} doesn't match subscription e-mail {subscription.Customer.Email}");
             }
 
             subscription = await _subscriptionService.CancelAsync(subscriptionId, new SubscriptionCancelOptions());
 
             _context.DonationEventLog.Add(new DonationEventLog()
             {
-                UserId = userFor.Id,
+                UserId = user.Id,
                 Type = DonationEventType.Internal,
                 EventData = subscription.ToJson()
             });

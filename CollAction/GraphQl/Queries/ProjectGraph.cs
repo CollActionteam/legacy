@@ -1,12 +1,15 @@
 ﻿using CollAction.Data;
 using CollAction.Models;
+using CollAction.Services.Projects;
 using GraphQL.EntityFramework;
+using GraphQL.Types;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CollAction.GraphQl.Queries
 {
     public class ProjectGraph : EfObjectGraphType<ApplicationDbContext, Project>
     {
-        public ProjectGraph(IEfGraphQLService<ApplicationDbContext> efGraphQlService) : base(efGraphQlService)
+        public ProjectGraph(IEfGraphQLService<ApplicationDbContext> efGraphQlService, IServiceScopeFactory serviceScopeFactory) : base(efGraphQlService)
         {
             Field(x => x.Id);
             Field(x => x.AnonymousUserParticipants);
@@ -31,6 +34,17 @@ namespace CollAction.GraphQl.Queries
             Field(x => x.Start);
             Field(x => x.Status);
             Field(x => x.Target);
+            Field(x => x.NameNormalized);
+            Field(x => x.Url);
+            Field<BooleanGraphType>(
+                "canSendProjectEmail",
+                resolve: c =>
+                {
+                    using (var scope = serviceScopeFactory.CreateScope())
+                    {
+                        return scope.ServiceProvider.GetRequiredService<IProjectService>().CanSendProjectEmail(c.Source);
+                    }
+                });
             AddNavigationField(nameof(Project.Category), c => c.Source.Category);
             AddNavigationField(nameof(Project.DescriptiveImage), c => c.Source.DescriptiveImage);
             AddNavigationField(nameof(Project.BannerImage), c => c.Source.BannerImage);
