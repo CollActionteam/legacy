@@ -40,9 +40,8 @@ namespace CollAction.Data
         /// Seed the database with initialization data here
         /// </summary>
         /// <param name="configuration">Configuration</param>
-        /// <param name="roleManager">Role managers to create and query roles</param>
         /// <param name="userManager">User manager to create and query users</param>
-        /// <param name="token">Cancellation token</param>
+        /// <param name="roleManager">Role managers to create and query roles</param>
         public async Task Seed(IConfiguration configuration, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             await CreateAdminRoleAndUser(configuration, userManager, roleManager);

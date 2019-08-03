@@ -22,12 +22,12 @@ namespace CollAction.Models
         {
             get
             {
-                return (unchecked((uint)Color)).ToString("X6");
+                return unchecked((uint)Color).ToString("X6");
             }
 
             set
             {
-                Color = unchecked((int) uint.Parse(value, NumberStyles.HexNumber));
+                Color = unchecked((int)uint.Parse(value, NumberStyles.HexNumber));
             }
         }
     }
