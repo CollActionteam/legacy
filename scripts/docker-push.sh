@@ -8,7 +8,7 @@ CA_REGEX='(CA-[[:digit:]]+)'
 if [[ "$TRAVIS_BRANCH" =~ $CA_REGEX ]]; then
     # Use the CA-number as image tag
     TAG=${BASH_REMATCH[1]}
-elif [[ "$TRAVIS_BRANCH" == "master"  || "$TRAVIS_BRANCH" == "Friesland" ]]; then
+elif [[ "$TRAVIS_BRANCH" == "master" ]]; then
     echo "Building branch '$TRAVIS_BRANCH'"
 
     # Use the branch name as image tag

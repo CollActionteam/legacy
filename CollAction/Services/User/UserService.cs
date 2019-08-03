@@ -46,6 +46,23 @@ namespace CollAction.Services.User
             this.siteOptions = siteOptions.Value;
         }
 
+        public async Task<UserResult> CreateUser(string email)
+        {
+            ApplicationUser user = new ApplicationUser()
+            {
+                Email = email
+            };
+            IdentityResult result = await userManager.CreateAsync(user);
+            if (result.Succeeded)
+            {
+                return new UserResult() { User = user, Result = result };
+            }
+            else
+            {
+                return new UserResult() { Result = result };
+            }
+        }
+
         public async Task<UserResult> CreateUser(NewUser newUser)
         {
             ApplicationUser user = new ApplicationUser()
