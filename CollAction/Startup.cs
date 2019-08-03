@@ -38,6 +38,7 @@ using Microsoft.AspNetCore.Mvc;
 using CollAction.GraphQl;
 using CollAction.Services.User;
 using System;
+using AspNetCore.IServiceCollection.AddIUrlHelper;
 
 namespace CollAction
 {
@@ -114,6 +115,7 @@ namespace CollAction
             // Add application services.
             services.AddScoped<IImageService, AmazonS3ImageService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IProjectService, ProjectService>();
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<INewsletterService, NewsletterService>();
             services.AddTransient<IDonationService, DonationService>();
@@ -122,6 +124,7 @@ namespace CollAction
             services.AddTransient<ISitemapService, SitemapService>();
             services.AddTransient<IFestivalService, FestivalService>();
             services.AddTransient<IHtmlInputValidator, HtmlInputValidator>();
+            services.AddUrlHelper();
 
             services.AddDataProtection()
                     .Services
