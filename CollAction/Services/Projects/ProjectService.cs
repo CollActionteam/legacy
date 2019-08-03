@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using CollAction.Models;
 using CollAction.Helpers;
 using System.ComponentModel.DataAnnotations;
+using System.Threading;
 
 namespace CollAction.Services.Projects
 {
@@ -46,13 +47,41 @@ namespace CollAction.Services.Projects
             this.htmlInputValidator = htmlInputValidator;
         }
 
-        public async Task<Project> CreateProject(NewProject newProject, ClaimsPrincipal user)
+        public async Task<Project> CreateProject(NewProject newProject, ClaimsPrincipal user, CancellationToken cancellationToken)
         {
             ApplicationUser owner = await userManager.GetUserAsync(user);
             if (owner == null)
             {
                 throw new ValidationException("User not found");
             }
+
+            var tagMap = new Dictionary<string, int>();
+            if (newProject.Tags.Any())
+            {
+                var missingTags = newProject
+                    .Tags
+                    .Except(
+                        await context.Tags
+                                     .Where(t => newProject.Tags.Contains(t.Name))
+                                     .Select(t => t.Name)
+                                     .ToListAsync(cancellationToken))
+                    .Select(t => new Tag() { Name = t });
+
+                if (missingTags.Any())
+                {
+                    context.Tags.AddRange(missingTags);
+                    await context.SaveChangesAsync(cancellationToken);
+                }
+
+                tagMap = await context.Tags
+                                    .Where(t => newProject.Tags.Contains(t.Name))
+                                    .ToDictionaryAsync(t => t.Name, t => t.Id, cancellationToken);
+            }
+
+            List<ProjectTag> projectTags =
+                newProject.Tags
+                          .Select(t => new ProjectTag() { TagId = tagMap[t] })
+                          .ToList();
 
             var project = new Project
             {
@@ -68,37 +97,14 @@ namespace CollAction.Services.Projects
                 End = newProject.End.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
                 BannerImageFileId = newProject.BannerImageFileId,
                 DescriptiveImageFileId = newProject.DescriptiveImageFileId,
-                DescriptionVideoLink = newProject.DescriptionVideoLink
+                DescriptionVideoLink = newProject.DescriptionVideoLink,
+                Tags = projectTags
             };
 
             context.Projects.Add(project);
-            await context.SaveChangesAsync();
+            await context.SaveChangesAsync(cancellationToken);
 
-            if (newProject.Tags.Any())
-            {
-                IEnumerable<string> missingTags = newProject.Tags.Except(
-                    await context.Tags
-                                 .Where(t => newProject.Tags.Contains(t.Name))
-                                 .Select(t => t.Name)
-                                 .ToListAsync());
-
-                if (missingTags.Any())
-                {
-                    context.Tags.AddRange(missingTags.Select(t => new Tag() { Name = t }));
-                    await context.SaveChangesAsync();
-                }
-
-                Dictionary<string, int> tags = await context.Tags
-                                        .Where(t => newProject.Tags.Contains(t.Name))
-                                        .ToDictionaryAsync(t => t.Name, t => t.Id);
-                IEnumerable<ProjectTag> projectTags =
-                    newProject.Tags
-                              .Select(t => new ProjectTag() { ProjectId = project.Id, TagId = tags[t] });
-                context.ProjectTags.AddRange(projectTags);
-                await context.SaveChangesAsync();
-            }
-
-            await RefreshParticipantCountMaterializedView();
+            await RefreshParticipantCountMaterializedView(cancellationToken);
 
             await emailSender.SendEmailTemplated(owner.Email, $"Thank you for submitting \"{project.Name}\" on CollAction", "ProjectConfirmation");
 
@@ -108,7 +114,7 @@ namespace CollAction.Services.Projects
             return project;
         }
 
-        public async Task<Project> UpdateProject(UpdatedProject updatedProject, ClaimsPrincipal user)
+        public async Task<Project> UpdateProject(UpdatedProject updatedProject, ClaimsPrincipal user, CancellationToken cancellationToken)
         {
             if (user.IsInRole(Constants.AdminRole))
             {
@@ -123,7 +129,7 @@ namespace CollAction.Services.Projects
             Project project = await context
                 .Projects
                 .Include(p => p.Tags).ThenInclude(t => t.Tag)
-                .FirstOrDefaultAsync(p => p.Id == updatedProject.Id);
+                .FirstOrDefaultAsync(p => p.Id == updatedProject.Id, cancellationToken);
 
             if (project == null)
             {
@@ -151,31 +157,35 @@ namespace CollAction.Services.Projects
             var projectTags = project.Tags.Select(t => t.Tag.Name);
             if (!Enumerable.SequenceEqual(updatedProject.Tags.OrderBy(t => t), projectTags.OrderBy(t => t)))
             {
-                IEnumerable<string> missingTags = updatedProject.Tags.Except(
-                    await context.Tags
-                                 .Where(t => updatedProject.Tags.Contains(t.Name))
-                                 .Select(t => t.Name)
-                                 .ToListAsync());
+                IEnumerable<string> missingTags =
+                    updatedProject.Tags
+                                  .Except(
+                                      await context.Tags
+                                                   .Where(t => updatedProject.Tags.Contains(t.Name))
+                                                   .Select(t => t.Name)
+                                                   .ToListAsync(cancellationToken));
 
                 if (missingTags.Any())
                 {
                     context.Tags.AddRange(missingTags.Select(t => new Tag() { Name = t }));
-                    await context.SaveChangesAsync();
+                    await context.SaveChangesAsync(cancellationToken);
                 }
 
-                Dictionary<string, int> tags = await context.Tags
-                                        .Where(t => updatedProject.Tags.Contains(t.Name) || projectTags.Contains(t.Name))
-                                        .ToDictionaryAsync(t => t.Name, t => t.Id);
+                var tagMap = 
+                    await context.Tags
+                                 .Where(t => updatedProject.Tags.Contains(t.Name) || projectTags.Contains(t.Name))
+                                 .ToDictionaryAsync(t => t.Name, t => t.Id, cancellationToken);
 
                 IEnumerable<ProjectTag> newTags =
                     updatedProject.Tags
                                   .Except(projectTags)
-                                  .Select(t => new ProjectTag() { ProjectId = project.Id, TagId = tags[t] });
+                                  .Select(t => new ProjectTag() { ProjectId = project.Id, TagId = tagMap[t] });
                 IEnumerable<ProjectTag> removedTags =
-                    project.Tags.Where(t => projectTags.Except(updatedProject.Tags).Contains(t.Tag.Name));
+                    project.Tags
+                           .Where(t => projectTags.Except(updatedProject.Tags).Contains(t.Tag.Name));
                 context.ProjectTags.AddRange(newTags);
                 context.ProjectTags.RemoveRange(removedTags);
-                await context.SaveChangesAsync();
+                await context.SaveChangesAsync(cancellationToken);
             }
 
             ApplicationUser owner = await userManager.FindByIdAsync(project.OwnerId);
@@ -200,9 +210,9 @@ namespace CollAction.Services.Projects
             return project;
         }
 
-        public async Task<Project> SendProjectEmail(int projectId, string subject, string message, ClaimsPrincipal performingUser)
+        public async Task<Project> SendProjectEmail(int projectId, string subject, string message, ClaimsPrincipal performingUser, CancellationToken cancellationToken)
         {
-            Project project = await context.Projects.FindAsync(projectId);
+            Project project = await context.Projects.FindAsync(projectId, cancellationToken);
             if (project == null)
             {
                 throw new ValidationException("Project not found");
@@ -223,7 +233,7 @@ namespace CollAction.Services.Projects
                 await context.ProjectParticipants
                              .Include(part => part.User)
                              .Where(part => part.ProjectId == project.Id && part.SubscribedToProjectEmails)
-                             .ToListAsync();
+                             .ToListAsync(cancellationToken);
 
             logger.LogInformation("sending project email for '{0}' on {1} to {2} users", project.Name, subject, participants.Count());
 
@@ -242,7 +252,7 @@ namespace CollAction.Services.Projects
             emailSender.SendEmail(project.Owner.Email, subject, FormatEmailMessage(message, project.Owner, null));
 
             project.NumberProjectEmailsSend += 1;
-            await context.SaveChangesAsync();
+            await context.SaveChangesAsync(cancellationToken);
 
             logger.LogInformation("done sending project email for '{0}' on {1} to {2} users", project.Name, subject, participants.Count());
             return project;
@@ -259,7 +269,7 @@ namespace CollAction.Services.Projects
                    now >= project.Start;
         }
 
-        public async Task<ProjectParticipant> SetProjectSubscription(int projectId, string userId, Guid token, bool isSubscribed)
+        public async Task<ProjectParticipant> SetProjectSubscription(int projectId, string userId, Guid token, bool isSubscribed, CancellationToken cancellationToken)
         {
             ProjectParticipant participant = await context
                  .ProjectParticipants
@@ -269,7 +279,7 @@ namespace CollAction.Services.Projects
             if (participant != null && participant.UnsubscribeToken == token)
             {
                 participant.SubscribedToProjectEmails = isSubscribed;
-                await context.SaveChangesAsync();
+                await context.SaveChangesAsync(cancellationToken);
             }
             else
             {
@@ -279,7 +289,7 @@ namespace CollAction.Services.Projects
             return participant;
         }
 
-        public async Task<AddParticipantResult> CommitToProject(string email, int projectId, ClaimsPrincipal user)
+        public async Task<AddParticipantResult> CommitToProject(string email, int projectId, ClaimsPrincipal user, CancellationToken cancellationToken)
         {
             ApplicationUser applicationUser = await userManager.GetUserAsync(user);
             if (applicationUser == null && string.IsNullOrEmpty(email))
@@ -290,7 +300,7 @@ namespace CollAction.Services.Projects
                 };
             }
 
-            Project project = await context.Projects.FindAsync(projectId);
+            Project project = await context.Projects.FindAsync(new object[] { projectId }, cancellationToken);
             if (project == null)
             {
                 return new AddParticipantResult()
@@ -300,8 +310,8 @@ namespace CollAction.Services.Projects
             }
 
             AddParticipantResult result = applicationUser != null
-                ? await AddLoggedInParticipant(project, applicationUser)
-                : await AddAnonymousParticipant(project, applicationUser, email);
+                ? await AddLoggedInParticipant(project, applicationUser, cancellationToken)
+                : await AddAnonymousParticipant(project, applicationUser, email, cancellationToken);
 
             if (result.Scenario != AddParticipantScenario.Error &&
                 result.Scenario != AddParticipantScenario.AnonymousNotRegisteredPresentAndAlreadyParticipating &&
@@ -322,7 +332,7 @@ namespace CollAction.Services.Projects
             return result;
         }
 
-        private async Task<AddParticipantResult> AddAnonymousParticipant(Project project, ApplicationUser user, string email)
+        private async Task<AddParticipantResult> AddAnonymousParticipant(Project project, ApplicationUser user, string email, CancellationToken cancellationToken)
         {
             var result = new AddParticipantResult();
             if (user == null)
@@ -341,7 +351,7 @@ namespace CollAction.Services.Projects
                 result.UserCreated = true;
             }
 
-            result.UserAdded = await InsertParticipant(project.Id, user.Id);
+            result.UserAdded = await InsertParticipant(project.Id, user.Id, cancellationToken);
             result.UserAlreadyActive = user.Activated;
 
             if (!result.UserAlreadyActive)
@@ -353,9 +363,9 @@ namespace CollAction.Services.Projects
             return result;
         }
 
-        private async Task<AddParticipantResult> AddLoggedInParticipant(Project project, ApplicationUser user)
+        private async Task<AddParticipantResult> AddLoggedInParticipant(Project project, ApplicationUser user, CancellationToken cancellationToken)
         {
-            bool added = await InsertParticipant(project.Id, user.Id);
+            bool added = await InsertParticipant(project.Id, user.Id, cancellationToken);
             if (!added)
             {
                 // This is not a valid scenario
@@ -368,8 +378,8 @@ namespace CollAction.Services.Projects
             return new AddParticipantResult { LoggedIn = true, UserAdded = true };
         }
 
-        private Task RefreshParticipantCountMaterializedView()
-            => context.Database.ExecuteSqlCommandAsync("REFRESH MATERIALIZED VIEW CONCURRENTLY \"ProjectParticipantCounts\";");
+        private Task RefreshParticipantCountMaterializedView(CancellationToken cancellationToken)
+            => context.Database.ExecuteSqlCommandAsync("REFRESH MATERIALIZED VIEW CONCURRENTLY \"ProjectParticipantCounts\";", cancellationToken);
 
         private string FormatEmailMessage(string message, ApplicationUser user, string unsubscribeLink)
         {
@@ -401,7 +411,7 @@ namespace CollAction.Services.Projects
             return message;
         }
 
-        private async Task<bool> InsertParticipant(int projectId, string userId)
+        private async Task<bool> InsertParticipant(int projectId, string userId, CancellationToken cancellationToken)
         {
             ProjectParticipant participant = new ProjectParticipant
             {
@@ -415,9 +425,9 @@ namespace CollAction.Services.Projects
             {
                 context.ProjectParticipants.Add(participant);
 
-                await context.SaveChangesAsync();
+                await context.SaveChangesAsync(cancellationToken);
 
-                await RefreshParticipantCountMaterializedView();
+                await RefreshParticipantCountMaterializedView(cancellationToken);
 
                 return true;
             }

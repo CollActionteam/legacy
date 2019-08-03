@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CollAction.Services.User
@@ -159,7 +160,7 @@ namespace CollAction.Services.User
             return await userManager.ChangePasswordAsync(user, currentPassword, newPassword);
         }
 
-        public async Task<int> IngestUserEvent(ClaimsPrincipal trackedUser, JObject eventData, bool canTrack)
+        public async Task<int> IngestUserEvent(ClaimsPrincipal trackedUser, JObject eventData, bool canTrack, CancellationToken cancellationToken)
         {
             ApplicationUser user = await userManager.GetUserAsync(trackedUser);
             string trackedUserId = canTrack ? user?.Id : null;
@@ -170,7 +171,7 @@ namespace CollAction.Services.User
                 UserId = trackedUserId
             };
             context.UserEvents.Add(userEvent);
-            await context.SaveChangesAsync();
+            await context.SaveChangesAsync(cancellationToken);
             return userEvent.Id;
         }
 

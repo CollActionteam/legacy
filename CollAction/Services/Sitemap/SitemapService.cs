@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
@@ -25,7 +26,7 @@ namespace CollAction.Services.Sitemap
             this.siteOptions = siteOptions.Value;
         }
 
-        public async Task<XDocument> GetSitemap()
+        public async Task<XDocument> GetSitemap(CancellationToken cancellationToken)
         {
             object[] homepageUrls = new[]
             {
@@ -39,7 +40,7 @@ namespace CollAction.Services.Sitemap
                 .Where(p => p.Status != ProjectStatus.Deleted && p.Status != ProjectStatus.Hidden)
                 .Include(p => p.BannerImage)
                 .Select(project => GetSitemapProjectEntry(project))
-                .ToArrayAsync();
+                .ToArrayAsync(cancellationToken);
 
             object[] rootContent = homepageUrls
                 .Concat(projectUrls)

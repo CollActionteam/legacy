@@ -23,7 +23,7 @@ namespace CollAction.GraphQl.Mutations
                     var project = c.GetArgument<NewProject>("project");
                     using (var scope = serviceScopeFactory.CreateScope())
                     {
-                        return await scope.ServiceProvider.GetRequiredService<IProjectService>().CreateProject(project, ((UserContext)c.UserContext).User);
+                        return await scope.ServiceProvider.GetRequiredService<IProjectService>().CreateProject(project, ((UserContext)c.UserContext).User, c.CancellationToken);
                     }
                 });
 
@@ -36,7 +36,7 @@ namespace CollAction.GraphQl.Mutations
                     var project = c.GetArgument<UpdatedProject>("project");
                     using (var scope = serviceScopeFactory.CreateScope())
                     {
-                        return await scope.ServiceProvider.GetRequiredService<IProjectService>().UpdateProject(project, ((UserContext)c.UserContext).User);
+                        return await scope.ServiceProvider.GetRequiredService<IProjectService>().UpdateProject(project, ((UserContext)c.UserContext).User, c.CancellationToken);
                     }
                 }).AuthorizeWith(Constants.GraphQlAdminPolicy);
 
@@ -51,7 +51,7 @@ namespace CollAction.GraphQl.Mutations
                     string email = c.GetArgument<string>("email");
                     using (var scope = serviceScopeFactory.CreateScope())
                     {
-                        return await scope.ServiceProvider.GetRequiredService<IProjectService>().CommitToProject(email, projectId, ((UserContext)c.UserContext).User);
+                        return await scope.ServiceProvider.GetRequiredService<IProjectService>().CommitToProject(email, projectId, ((UserContext)c.UserContext).User, c.CancellationToken);
                     }
                 });
 
@@ -70,7 +70,7 @@ namespace CollAction.GraphQl.Mutations
                     {
                         return await scope.ServiceProvider
                                           .GetRequiredService<IProjectService>()
-                                          .SendProjectEmail(projectId, subject, message, ((UserContext)c.UserContext).User);
+                                          .SendProjectEmail(projectId, subject, message, ((UserContext)c.UserContext).User, c.CancellationToken);
                     }
                 });
 
@@ -91,7 +91,7 @@ namespace CollAction.GraphQl.Mutations
                     {
                         return await scope.ServiceProvider
                                           .GetRequiredService<IProjectService>()
-                                          .SetProjectSubscription(projectId, userId, Guid.Parse(token), isSubscribed);
+                                          .SetProjectSubscription(projectId, userId, Guid.Parse(token), isSubscribed, c.CancellationToken);
                     }
                 });
         }

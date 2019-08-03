@@ -14,9 +14,9 @@ namespace CollAction.Tests.Integration
 {
     [TestClass]
     [TestCategory("Integration")]
-    public sealed class NewsletterSubscriptionServiceTests
+    public sealed class NewsletterServiceTests
     {
-        private NewsletterService newsletterSubscriptionService;
+        private NewsletterService newsletterService;
         private Mock<IBackgroundJobClient> jobClient;
 
         [TestInitialize]
@@ -27,7 +27,7 @@ namespace CollAction.Tests.Integration
                                           .AddEnvironmentVariables()
                                           .Build();
             jobClient = new Mock<IBackgroundJobClient>();
-            newsletterSubscriptionService = new NewsletterService(
+            newsletterService = new NewsletterService(
                 new MailChimpManager(configuration["MailChimpKey"]),
                 new OptionsWrapper<NewsletterServiceOptions>(
                     new NewsletterServiceOptions()
@@ -42,7 +42,7 @@ namespace CollAction.Tests.Integration
         public async Task TestGetListMemberStatusOnNonExistentMember()
         {
             string email = GetTestEmail();
-            Assert.IsFalse(await newsletterSubscriptionService.IsSubscribedAsync(email));
+            Assert.IsFalse(await newsletterService.IsSubscribedAsync(email));
         }
 
         [TestMethod]
@@ -52,14 +52,14 @@ namespace CollAction.Tests.Integration
 
             try
             {
-                await newsletterSubscriptionService.SetSubscription(email, true, true);
-                Status status = await newsletterSubscriptionService.GetListMemberStatus(email);
+                await newsletterService.SetSubscription(email, true, true);
+                Status status = await newsletterService.GetListMemberStatus(email);
                 Assert.AreEqual(Status.Pending, status);
-                Assert.IsTrue(await newsletterSubscriptionService.IsSubscribedAsync(email));
+                Assert.IsTrue(await newsletterService.IsSubscribedAsync(email));
             }
             finally
             {
-                await newsletterSubscriptionService.UnsubscribeMember(email);
+                await newsletterService.UnsubscribeMember(email);
             }
         }
 
@@ -70,14 +70,14 @@ namespace CollAction.Tests.Integration
 
             try
             {
-                await newsletterSubscriptionService.SetSubscription(email, true, false);
-                Status status = await newsletterSubscriptionService.GetListMemberStatus(email);
+                await newsletterService.SetSubscription(email, true, false);
+                Status status = await newsletterService.GetListMemberStatus(email);
                 Assert.AreEqual(Status.Subscribed, status);
-                Assert.IsTrue(await newsletterSubscriptionService.IsSubscribedAsync(email));
+                Assert.IsTrue(await newsletterService.IsSubscribedAsync(email));
             }
             finally
             {
-                await newsletterSubscriptionService.UnsubscribeMember(email);
+                await newsletterService.UnsubscribeMember(email);
             }
         }
 
@@ -88,16 +88,16 @@ namespace CollAction.Tests.Integration
 
             try
             {
-                await newsletterSubscriptionService.SetSubscription(email, true, true);
-                Status status = await newsletterSubscriptionService.GetListMemberStatus(email);
+                await newsletterService.SetSubscription(email, true, true);
+                Status status = await newsletterService.GetListMemberStatus(email);
                 Assert.AreEqual(Status.Pending, status);
 
-                await newsletterSubscriptionService.SetSubscription(email, false, false);
-                Assert.IsFalse(await newsletterSubscriptionService.IsSubscribedAsync(email));
+                await newsletterService.SetSubscription(email, false, false);
+                Assert.IsFalse(await newsletterService.IsSubscribedAsync(email));
             }
             finally
             {
-                await newsletterSubscriptionService.SetSubscription(email, false, false);
+                await newsletterService.SetSubscription(email, false, false);
             }
         }
 
@@ -112,17 +112,17 @@ namespace CollAction.Tests.Integration
                 {
                     for (bool requireEmail = true; requireEmail; requireEmail = !requireEmail)
                     {
-                        await newsletterSubscriptionService.SetSubscription(email, true, requireEmail);
-                        Assert.IsTrue(await newsletterSubscriptionService.IsSubscribedAsync(email));
+                        await newsletterService.SetSubscription(email, true, requireEmail);
+                        Assert.IsTrue(await newsletterService.IsSubscribedAsync(email));
 
-                        await newsletterSubscriptionService.SetSubscription(email, false, requireEmail);
-                        Assert.IsFalse(await newsletterSubscriptionService.IsSubscribedAsync(email));
+                        await newsletterService.SetSubscription(email, false, requireEmail);
+                        Assert.IsFalse(await newsletterService.IsSubscribedAsync(email));
                     }
                 }
             }
             finally
             {
-                await newsletterSubscriptionService.SetSubscription(email, false, true);
+                await newsletterService.SetSubscription(email, false, true);
             }
         }
 
@@ -131,8 +131,8 @@ namespace CollAction.Tests.Integration
         {
             string email = GetTestEmail();
 
-            await newsletterSubscriptionService.SetSubscription(email, false, false);
-            Assert.IsFalse(await newsletterSubscriptionService.IsSubscribedAsync(email));
+            await newsletterService.SetSubscription(email, false, false);
+            Assert.IsFalse(await newsletterService.IsSubscribedAsync(email));
         }
 
         private string GetTestEmail()

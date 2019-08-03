@@ -25,7 +25,7 @@ namespace CollAction.GraphQl.Mutations
                     bool recurring = c.GetArgument<bool>("recurring");
                     using (var scope = serviceScopeFactory.CreateScope())
                     {
-                        return await scope.ServiceProvider.GetRequiredService<IDonationService>().InitializeCreditCardCheckout(currency, amount, name, email, recurring);
+                        return await scope.ServiceProvider.GetRequiredService<IDonationService>().InitializeCreditCardCheckout(currency, amount, name, email, recurring, c.CancellationToken);
                     }
                 });
 
@@ -44,7 +44,7 @@ namespace CollAction.GraphQl.Mutations
                     string email = c.GetArgument<string>("email");
                     using (var scope = serviceScopeFactory.CreateScope())
                     {
-                        await scope.ServiceProvider.GetRequiredService<IDonationService>().InitializeSepaDirect(sourceId, name, email, amount);
+                        await scope.ServiceProvider.GetRequiredService<IDonationService>().InitializeSepaDirect(sourceId, name, email, amount, c.CancellationToken);
                         return sourceId;
                     }
                 });
@@ -62,7 +62,7 @@ namespace CollAction.GraphQl.Mutations
                     string email = c.GetArgument<string>("email");
                     using (var scope = serviceScopeFactory.CreateScope())
                     {
-                        await scope.ServiceProvider.GetRequiredService<IDonationService>().InitializeIdealCheckout(sourceId, name, email);
+                        await scope.ServiceProvider.GetRequiredService<IDonationService>().InitializeIdealCheckout(sourceId, name, email, c.CancellationToken);
                         return sourceId;
                     }
                 });
@@ -76,7 +76,7 @@ namespace CollAction.GraphQl.Mutations
                     string subscriptionId = c.GetArgument<string>("subscriptionId");
                     using (var scope = serviceScopeFactory.CreateScope())
                     {
-                        await scope.ServiceProvider.GetRequiredService<IDonationService>().CancelSubscription(subscriptionId, ((UserContext)c.UserContext).User);
+                        await scope.ServiceProvider.GetRequiredService<IDonationService>().CancelSubscription(subscriptionId, ((UserContext)c.UserContext).User, c.CancellationToken);
                         return subscriptionId;
                     }
                 });

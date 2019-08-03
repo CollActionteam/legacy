@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using CollAction.Services.Donation;
 using Microsoft.AspNetCore.Mvc;
@@ -15,13 +16,13 @@ namespace CollAction.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PaymentEvent()
+        public async Task<IActionResult> PaymentEvent(CancellationToken cancellationToken)
         {
             using (var streamReader = new StreamReader(HttpContext.Request.Body))
             {
                 string json = await streamReader.ReadToEndAsync();
                 string signature = Request.Headers["Stripe-Signature"];
-                await donationService.LogPaymentEvent(json, signature);
+                await donationService.LogPaymentEvent(json, signature, cancellationToken);
                 return Ok();
             }
         }

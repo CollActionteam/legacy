@@ -12,7 +12,7 @@ namespace CollAction.Services.Festival
             this.festivalOptions = festivalOptions.Value;
         }
 
-        public bool FestivalCallToActionsVisible 
+        public bool FestivalCallToActionVisible 
             => festivalOptions.FestivalEndDate.HasValue && festivalOptions.FestivalEndDate >= DateTime.Now;
     }
 }

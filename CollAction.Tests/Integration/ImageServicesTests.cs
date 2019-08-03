@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CollAction.Tests.Integration
@@ -62,7 +63,7 @@ namespace CollAction.Tests.Integration
         [TestMethod]
         public async Task TestUpload()
         {
-            Models.ImageFile imageFile = await imageService.UploadImage(upload.Object, "test");
+            Models.ImageFile imageFile = await imageService.UploadImage(upload.Object, "test", CancellationToken.None);
 
             Assert.IsNotNull(imageFile);
             Assert.IsNotNull(imageFile.Filepath);
@@ -79,7 +80,7 @@ namespace CollAction.Tests.Integration
         [TestMethod]
         public async Task TestDelete()
         {
-            Models.ImageFile imageFile = await imageService.UploadImage(upload.Object, "test");
+            Models.ImageFile imageFile = await imageService.UploadImage(upload.Object, "test", CancellationToken.None);
             imageService.DeleteImage(imageFile);
 
             upload.Verify(f => f.OpenReadStream());

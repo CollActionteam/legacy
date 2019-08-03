@@ -12,6 +12,7 @@ using Amazon;
 using Hangfire;
 using CollAction.Helpers;
 using SixLabors.ImageSharp.Processing;
+using System.Threading;
 
 namespace CollAction.Services.Image
 {
@@ -25,16 +26,16 @@ namespace CollAction.Services.Image
 
         public AmazonS3ImageService(IOptions<ImageServiceOptions> options, IOptions<ImageProcessingOptions> processingOptions, IBackgroundJobClient jobClient)
         {
+            this.jobClient = jobClient;
             client = new AmazonS3Client(options.Value.S3AwsAccessKeyID, options.Value.S3AwsAccessKey, RegionEndpoint.GetBySystemName(options.Value.S3Region));
             bucket = options.Value.S3Bucket;
             region = options.Value.S3Region;
-            this.jobClient = jobClient;
             imageResizeThreshold = processingOptions.Value.MaxImageDimensionPixels;
         }
 
-        public async Task<ImageFile> UploadImage(IFormFile fileUploaded, string imageDescription)
+        public async Task<ImageFile> UploadImage(IFormFile fileUploaded, string imageDescription, CancellationToken cancellationToken)
         {
-            using (Image<Rgba32> image = await UploadToImage(fileUploaded))
+            using (Image<Rgba32> image = await UploadToImage(fileUploaded, cancellationToken))
             {
                 var currentImage = new ImageFile()
                 {
@@ -103,13 +104,13 @@ namespace CollAction.Services.Image
             }
         }
 
-        public async Task<Image<Rgba32>> UploadToImage(IFormFile fileUploaded)
+        public async Task<Image<Rgba32>> UploadToImage(IFormFile fileUploaded, CancellationToken cancellationToken)
         {
             using (Stream uploadStream = fileUploaded.OpenReadStream())
             {
                 using (MemoryStream ms = new MemoryStream())
                 {
-                    await uploadStream.CopyToAsync(ms);
+                    await uploadStream.CopyToAsync(ms, cancellationToken);
                     var image = SixLabors.ImageSharp.Image.Load(ms.ToArray());
                     var scaleRatio = GetScaleRatioForImage(image);
                     if (scaleRatio != 1.0)

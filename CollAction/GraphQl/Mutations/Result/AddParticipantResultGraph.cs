@@ -10,7 +10,6 @@ namespace CollAction.GraphQl.Mutations
             Field(x => x.Error);
             Field(x => x.LoggedIn);
             Field(x => x.ParticipantEmail);
-            Field(x => x.PasswordResetToken);
             Field(x => x.Scenario);
             Field(x => x.UserAdded);
             Field(x => x.UserAlreadyActive);

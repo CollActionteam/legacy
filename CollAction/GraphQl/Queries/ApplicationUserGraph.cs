@@ -39,7 +39,7 @@ namespace CollAction.GraphQl.Queries
                 {
                     using (var scope = serviceScopeFactory.CreateScope())
                     {
-                        return await scope.ServiceProvider.GetRequiredService<IDonationService>().GetSubscriptionsFor(c.Source);
+                        return await scope.ServiceProvider.GetRequiredService<IDonationService>().GetSubscriptionsFor(c.Source, c.CancellationToken);
                     }
                 });
             FieldAsync<ListGraphType<StringGraphType>>(

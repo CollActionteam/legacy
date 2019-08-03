@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Diagnostics;
 using CollAction.Services.Sitemap;
+using System.Threading;
 
 namespace CollAction.Controllers
 {
@@ -43,7 +44,7 @@ namespace CollAction.Controllers
         }
 
         [Route("sitemap.xml")]
-        public async Task<ContentResult> Sitemap()
-            => Content((await sitemapService.GetSitemap()).ToString(), "text/xml", Encoding.UTF8);
+        public async Task<ContentResult> Sitemap(CancellationToken cancellationToken)
+            => Content((await sitemapService.GetSitemap(cancellationToken)).ToString(), "text/xml", Encoding.UTF8);
     }
 }

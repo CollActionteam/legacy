@@ -20,7 +20,7 @@ namespace CollAction.GraphQl.Queries
                     string clientSecret = c.GetArgument<string>("clientSecret");
                     using (var scope = serviceScopeFactory.CreateScope())
                     {
-                        return await scope.ServiceProvider.GetRequiredService<IDonationService>().HasIDealPaymentSucceeded(source, clientSecret);
+                        return await scope.ServiceProvider.GetRequiredService<IDonationService>().HasIDealPaymentSucceeded(source, clientSecret, c.CancellationToken);
                     }
                 });
 

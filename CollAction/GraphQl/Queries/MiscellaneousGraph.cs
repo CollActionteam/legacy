@@ -10,8 +10,8 @@ namespace CollAction.GraphQl.Queries
         public MiscellaneousGraph(IFestivalService festivalService, IOptions<DisqusOptions> disqusOptions)
         {
             Field<BooleanGraphType>(
-                nameof(IFestivalService.FestivalCallToActionsVisible), 
-                resolve: c => festivalService.FestivalCallToActionsVisible);
+                nameof(IFestivalService.FestivalCallToActionVisible), 
+                resolve: c => festivalService.FestivalCallToActionVisible);
 
             Field<StringGraphType>(
                 nameof(DisqusOptions.DisqusSite),

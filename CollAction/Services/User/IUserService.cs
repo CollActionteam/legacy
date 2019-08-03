@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 using CollAction.Services.User.Models;
 using Microsoft.AspNetCore.Identity;
@@ -22,6 +23,6 @@ namespace CollAction.Services.User
 
         Task<IdentityResult> FinishRegistration(NewUser newUser, string code);
 
-        Task<int> IngestUserEvent(ClaimsPrincipal trackedUser, JObject eventData, bool canTrack);
+        Task<int> IngestUserEvent(ClaimsPrincipal trackedUser, JObject eventData, bool canTrack, CancellationToken cancellationToken);
     }
 }

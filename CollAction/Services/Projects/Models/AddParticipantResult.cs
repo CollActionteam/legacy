@@ -16,8 +16,6 @@ namespace CollAction.Services.Projects.Models
 
         public string ParticipantEmail { get; set; }
 
-        public string PasswordResetToken { get; set; }
-
         public AddParticipantScenario Scenario
         {
             get
@@ -56,5 +54,7 @@ namespace CollAction.Services.Projects.Models
                 }
             }
         }
+
+        public string PasswordResetToken { get; internal set; }
     }
 }

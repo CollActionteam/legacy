@@ -99,7 +99,7 @@ namespace CollAction.GraphQl.Mutations
                     bool canTrack = c.GetArgument<bool>("canTrack");
                     using (var scope = serviceScopeFactory.CreateScope())
                     {
-                        return await scope.ServiceProvider.GetRequiredService<IUserService>().IngestUserEvent(((UserContext)c.UserContext).User, eventData, canTrack);
+                        return await scope.ServiceProvider.GetRequiredService<IUserService>().IngestUserEvent(((UserContext)c.UserContext).User, eventData, canTrack, c.CancellationToken);
                     }
                 });
         }

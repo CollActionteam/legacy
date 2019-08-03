@@ -10,4 +10,4 @@ RUN dotnet publish CollAction.csproj --no-build -c Release -o /app
 FROM microsoft/dotnet:2.2-aspnetcore-runtime-alpine
 WORKDIR /app
 COPY --from=build /app .
-ENTRYPOINT ["dotnet", "CollAction.dll"]
+ENTRYPOINT ["dotnet", "CollAction.dll"] 
