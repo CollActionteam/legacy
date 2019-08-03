@@ -37,6 +37,7 @@ using GraphiQl;
 using Microsoft.AspNetCore.Mvc;
 using CollAction.GraphQl;
 using CollAction.Services.User;
+using System;
 
 namespace CollAction
 {
@@ -226,7 +227,12 @@ namespace CollAction
                     new { controller = "Home", action = "Index" });
             });
 
-            using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            InitializeDatabase(app.ApplicationServices);
+        }
+
+        public void InitializeDatabase(IServiceProvider serviceProvider)
+        {
+            using (var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
                 var userManager = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
                 var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();

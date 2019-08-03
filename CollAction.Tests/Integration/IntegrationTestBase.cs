@@ -32,6 +32,7 @@ namespace CollAction.Tests.Integration
             configureReplacements?.Invoke(sc);
             using (ServiceProvider serviceProvider = sc.BuildServiceProvider())
             {
+                startup.InitializeDatabase(serviceProvider);
                 using (IServiceScope scope = serviceProvider.CreateScope())
                 {
                     await executeTests(scope);

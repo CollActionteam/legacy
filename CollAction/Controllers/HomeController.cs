@@ -5,8 +5,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Diagnostics;
 using CollAction.Services.Sitemap;
 using System.Threading;
-using Microsoft.Extensions.Options;
-using CollAction.Services;
 
 namespace CollAction.Controllers
 {
