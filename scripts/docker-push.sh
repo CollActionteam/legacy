@@ -31,4 +31,4 @@ eval $(aws ecr get-login --no-include-email --region eu-central-1)
 echo "Pushing image $ECR_REPO:$TAG"
 docker push $ECR_REPO:$TAG
 
-echo "Done!"
+echo "Done!" 

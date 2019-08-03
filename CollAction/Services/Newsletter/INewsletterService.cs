@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using MailChimp.Net.Models;
 
 namespace CollAction.Services.Newsletter
 {
@@ -9,5 +10,9 @@ namespace CollAction.Services.Newsletter
         void SetSubscriptionBackground(string email, bool wantsSubscription, bool requireEmailConfirmationIfSubscribing = true);
 
         Task<bool> IsSubscribedAsync(string email);
+
+        Task<Status> GetListMemberStatus(string email);
+
+        Task UnsubscribeMember(string email);
     }
 }
