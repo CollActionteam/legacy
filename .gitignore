@@ -240,7 +240,7 @@ ModelManifest.xml
 .fake/
 
 # Vscode
-**/*.vscode
+#**/*.vscode
 
 # DS_Store
 .DS_Store

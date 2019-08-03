@@ -8,7 +8,6 @@ services:
 script:
 - dotnet test CollAction.Tests
 - docker build . -f CollAction/Dockerfile -t collaction:latest
-after_success:
 - pip install --user awscli
 - export PATH=$PATH:$HOME/.local/bin
 - chmod +x scripts/docker-push.sh
