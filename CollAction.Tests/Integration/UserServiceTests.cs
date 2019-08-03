@@ -4,7 +4,7 @@ namespace CollAction.Tests.Integration
 {
     [TestClass]
     [TestCategory("Integration")]
-    class UserServiceTests // TODO
+    public class UserServiceTests // TODO
     {
     }
 }

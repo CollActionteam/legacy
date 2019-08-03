@@ -65,6 +65,7 @@ namespace CollAction.Services.User
                 {
                     logger.LogInformation("Created user from external login");
                 }
+
                 return new UserResult() { User = user, Result = result };
             }
             else

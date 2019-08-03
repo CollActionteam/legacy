@@ -59,7 +59,7 @@ namespace CollAction
         {
             string connectionString = $"Host={Configuration["DbHost"]};Username={Configuration["DbUser"]};Password={Configuration["DbPassword"]};Database={Configuration["Db"]};Port={Configuration["DbPort"]}";
 
-            services.AddGraphQl(); ;
+            services.AddGraphQl();
             services.AddGraphQlAuth();
 
             // Add framework services.

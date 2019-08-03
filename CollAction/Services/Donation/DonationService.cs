@@ -342,7 +342,8 @@ namespace CollAction.Services.Donation
                 new CustomerListOptions()
                 {
                     Email = userFor.Email
-                }, cancellationToken: cancellationToken);
+                }, 
+                cancellationToken: cancellationToken);
 
             var subscriptions = await Task.WhenAll(
                 customers.Select(c =>
