@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,15 +19,15 @@ namespace CollAction.Controllers
     public class GraphQlController : Controller
     {
         private readonly IDocumentExecuter executer;
-        private readonly IValidationRule authorizationValidationRule;
+        private readonly IEnumerable<IValidationRule> validationRules;
         private readonly ApplicationDbContext context;
         private readonly ISchema schema;
 
-        public GraphQlController(ISchema schema, IDocumentExecuter executer, IValidationRule authorizationValidationRule, ApplicationDbContext context)
+        public GraphQlController(ISchema schema, IDocumentExecuter executer, IEnumerable<IValidationRule> validationRules, ApplicationDbContext context)
         {
             this.schema = schema;
             this.executer = executer;
-            this.authorizationValidationRule = authorizationValidationRule;
+            this.validationRules = validationRules;
             this.context = context;
         }
 
@@ -72,8 +73,6 @@ namespace CollAction.Controllers
             JObject variables,
             CancellationToken cancellation)
         {
-            var validationRules = DocumentValidator.CoreRules();
-            validationRules.Add(authorizationValidationRule);
             var options = new ExecutionOptions
             {
                 Schema = schema,

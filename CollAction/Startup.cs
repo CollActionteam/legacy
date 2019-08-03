@@ -393,17 +393,23 @@ namespace CollAction
 
         private static void AddGraphQlAuth(IServiceCollection services)
         {
-            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.TryAddSingleton<IAuthorizationEvaluator, AuthorizationEvaluator>();
-            services.AddTransient<IValidationRule, AuthorizationValidationRule>();
-
-            services.TryAddSingleton(s =>
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IAuthorizationEvaluator, AuthorizationEvaluator>();
+            services.AddTransient<AuthorizationValidationRule>();
+            services.AddSingleton(s =>
             {
                 var authSettings = new AuthorizationSettings();
 
                 authSettings.AddPolicy(Constants.GraphQlAdminPolicy, _ => _.RequireClaim(ClaimTypes.Role, Constants.AdminRole));
 
                 return authSettings;
+            });
+            services.AddSingleton<IEnumerable<IValidationRule>>(s =>
+            {
+                List<IValidationRule> validationRules = DocumentValidator.CoreRules();
+                AuthorizationValidationRule authorizationRule = s.GetRequiredService<AuthorizationValidationRule>();
+                validationRules.Add(authorizationRule);
+                return validationRules;
             });
         }
 
