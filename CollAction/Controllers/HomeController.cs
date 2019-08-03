@@ -5,6 +5,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Diagnostics;
 using CollAction.Services.Sitemap;
 using System.Threading;
+using Microsoft.Extensions.Options;
+using CollAction.Services;
 
 namespace CollAction.Controllers
 {
@@ -22,29 +24,20 @@ namespace CollAction.Controllers
         public IActionResult Index()
             => View();
 
+        [Route("robots.txt")]
+        public ContentResult Robots()
+            => Content(sitemapService.RobotsTxt, "text/plain", Encoding.UTF8);
+
+        [Route("sitemap.xml")]
+        public async Task<ContentResult> Sitemap(CancellationToken cancellationToken)
+            => Content((await sitemapService.GetSitemap(cancellationToken)).ToString(), "text/xml", Encoding.UTF8);
+
+        [Route("error")]
         public IActionResult Error()
         {
             var exceptionHandlerPathFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
             logger.LogError(exceptionHandlerPathFeature.Error, "An error has occurred at: {0}", exceptionHandlerPathFeature.Path);
             return View();
         }
-
-        [Route("robots.txt")]
-        public ContentResult Robots()
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine("User-agent: *");
-            sb.Append("Sitemap: https://");
-            sb.Append(Url.ActionContext.HttpContext.Request.Host);
-            sb.AppendLine(Url.Action("Sitemap"));
-            sb.AppendLine("Disallow: /Admin/");
-            sb.AppendLine("Disallow: /Account/");
-            sb.AppendLine("Disallow: /Manage/");
-            return Content(sb.ToString(), "text/plain", Encoding.UTF8);
-        }
-
-        [Route("sitemap.xml")]
-        public async Task<ContentResult> Sitemap(CancellationToken cancellationToken)
-            => Content((await sitemapService.GetSitemap(cancellationToken)).ToString(), "text/xml", Encoding.UTF8);
     }
 }

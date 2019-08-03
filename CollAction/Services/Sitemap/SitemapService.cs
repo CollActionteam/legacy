@@ -26,6 +26,13 @@ namespace CollAction.Services.Sitemap
             this.siteOptions = siteOptions.Value;
         }
 
+        public string RobotsTxt
+            => $@"User-agent: *
+Sitemap: https://{siteOptions.PublicAddress}/sitemap.xml
+Disallow: /Admin/
+Disallow: /Account/
+Disallow: /Manage/";
+
         public async Task<XDocument> GetSitemap(CancellationToken cancellationToken)
         {
             object[] homepageUrls = new[]

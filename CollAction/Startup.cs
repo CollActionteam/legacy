@@ -189,7 +189,7 @@ namespace CollAction
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("error");
             }
 
             app.UseAuthentication();
