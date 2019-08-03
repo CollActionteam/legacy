@@ -39,8 +39,7 @@ namespace CollAction.Controllers
                     logger.LogInformation("User logged in");
                     return RedirectToLocal(returnUrl);
                 }
-
-                if (result.IsLockedOut)
+                else if (result.IsLockedOut)
                 {
                     logger.LogInformation("User is locked out");
                     return Redirect("#/LoginFailure?error=lockout");
@@ -52,7 +51,7 @@ namespace CollAction.Controllers
                 }
             }
 
-            return RedirectToLocal(returnUrl);
+            return Redirect("#/LoginFailure?error=validation");
         }
 
         [HttpPost]
@@ -97,8 +96,7 @@ namespace CollAction.Controllers
                 logger.LogInformation("User logged in with {0} provider.", info.LoginProvider);
                 return RedirectToLocal(returnUrl);
             }
-
-            if (result.IsLockedOut)
+            else if (result.IsLockedOut)
             {
                 logger.LogInformation("User is locked out");
                 return Redirect("#/LoginFailure?error=lockout");
