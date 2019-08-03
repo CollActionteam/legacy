@@ -23,7 +23,6 @@ using CollAction.Services.Newsletter;
 using CollAction.Services.Festival;
 using CollAction.Services.DataProtection;
 using CollAction.Services.Image;
-using Microsoft.AspNetCore.Http;
 using Stripe;
 using CollAction.Services.Donation;
 using CollAction.Services;
@@ -35,19 +34,9 @@ using MailChimp.Net;
 using MailChimp.Net.Interfaces;
 using CollAction.Services.Sitemap;
 using GraphiQl;
-using GraphQL.Utilities;
-using GraphQL.EntityFramework;
-using GraphQL;
 using Microsoft.AspNetCore.Mvc;
-using GraphQL.Types;
-using System.Collections.Generic;
-using System;
 using CollAction.GraphQl;
 using CollAction.Services.User;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using GraphQL.Validation;
-using GraphQL.Authorization;
-using System.Security.Claims;
 
 namespace CollAction
 {
@@ -70,8 +59,8 @@ namespace CollAction
         {
             string connectionString = $"Host={Configuration["DbHost"]};Username={Configuration["DbUser"]};Password={Configuration["DbPassword"]};Database={Configuration["Db"]};Port={Configuration["DbPort"]}";
 
-            AddGraphQl(services);
-            AddGraphQlAuth(services);
+            services.AddGraphQl(); ;
+            services.AddGraphQlAuth();
 
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -349,79 +338,6 @@ namespace CollAction
                                                                                   } 
                                                                                 : Enumerable.Empty<string>()));
                    }));
-        }
-
-        private static void AddGraphQl(IServiceCollection services)
-        {
-            services.AddSingleton<IDependencyResolver>(provider => new FuncDependencyResolver(provider.GetRequiredService));
-            services.AddSingleton<ISchema, GraphQl.Schema>();
-
-            // Ensure queries are executed in serial instead of parallel
-            services.AddSingleton<IDocumentExecuter, EfDocumentExecuter>();
-
-            // Register the context
-            using (var context = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseNpgsql("_").Options))
-            {
-                EfGraphQLConventions.RegisterInContainer(
-                    services,
-                    context,
-                    c => ((UserContext)c).Context);
-            }
-
-            Type[] baseClasses = new[]
-            {
-                typeof(ComplexGraphType<>),
-                typeof(EnumerationGraphType<>)
-            };
-
-            foreach (var type in GetGraphQlTypes())
-            {
-                services.AddSingleton(type);
-
-                foreach (var baseClass in baseClasses)
-                {
-                    if (type.IsAssignableToGenericType(baseClass))
-                    {
-                        Type generic = type.GetGenericBaseClass(baseClass);
-                        Type source = generic.GenericTypeArguments[0];
-                        GraphTypeTypeRegistry.Register(source, type);
-                        break;
-                    }
-                }
-            }
-        }
-
-        private static void AddGraphQlAuth(IServiceCollection services)
-        {
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddSingleton<IAuthorizationEvaluator, AuthorizationEvaluator>();
-            services.AddTransient<AuthorizationValidationRule>();
-            services.AddSingleton(s =>
-            {
-                var authSettings = new AuthorizationSettings();
-
-                authSettings.AddPolicy(Constants.GraphQlAdminPolicy, _ => _.RequireClaim(ClaimTypes.Role, Constants.AdminRole));
-
-                return authSettings;
-            });
-            services.AddSingleton<IEnumerable<IValidationRule>>(s =>
-            {
-                List<IValidationRule> validationRules = DocumentValidator.CoreRules();
-                AuthorizationValidationRule authorizationRule = s.GetRequiredService<AuthorizationValidationRule>();
-                validationRules.Add(authorizationRule);
-                return validationRules;
-            });
-        }
-
-        private static IEnumerable<Type> GetGraphQlTypes()
-        {
-            return typeof(Startup)
-                .Assembly
-                .GetTypes()
-                .Where(x => !x.IsAbstract &&
-                            (typeof(IObjectGraphType).IsAssignableFrom(x) ||
-                             typeof(IInputObjectGraphType).IsAssignableFrom(x) ||
-                             typeof(EnumerationGraphType).IsAssignableFrom(x)));
         }
     }
 }

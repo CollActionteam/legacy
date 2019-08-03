@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CollAction.Tests.Integration
 {
-    class UserServiceTests
+    [TestClass]
+    [TestCategory("Integration")]
+    class UserServiceTests // TODO
     {
     }
 }

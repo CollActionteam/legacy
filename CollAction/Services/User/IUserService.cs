@@ -9,6 +9,8 @@ namespace CollAction.Services.User
 {
     public interface IUserService
     {
+        Task<UserResult> CreateUser(string email, ExternalLoginInfo info);
+
         Task<UserResult> CreateUser(NewUser newUser);
 
         Task<UserResult> UpdateUser(UpdatedUser updatedUser, ClaimsPrincipal loggedInUser);

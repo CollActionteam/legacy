@@ -17,7 +17,7 @@ namespace CollAction.Services.Projects
 
         Task<Project> SendProjectEmail(int projectId, string subject, string message, ClaimsPrincipal performingUser, CancellationToken cancellationToken);
 
-        Task<ProjectParticipant> SetProjectSubscription(int projectId, string userId, Guid token, bool isSubscribed, CancellationToken cancellationToken);
+        Task<ProjectParticipant> SetEmailProjectSubscription(int projectId, string userId, Guid token, bool isSubscribed, CancellationToken cancellationToken);
 
         bool CanSendProjectEmail(Project project);
     }

@@ -91,7 +91,7 @@ namespace CollAction.GraphQl.Mutations
                     {
                         return await scope.ServiceProvider
                                           .GetRequiredService<IProjectService>()
-                                          .SetProjectSubscription(projectId, userId, Guid.Parse(token), isSubscribed, c.CancellationToken);
+                                          .SetEmailProjectSubscription(projectId, userId, Guid.Parse(token), isSubscribed, c.CancellationToken);
                     }
                 });
         }

@@ -3,6 +3,7 @@ using CollAction.Models;
 using CollAction.Services.Email;
 using Hangfire;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Stripe;
 using Stripe.Checkout;
@@ -60,13 +61,22 @@ namespace CollAction.Services.Donation
 
         private readonly IBackgroundJobClient backgroundJobClient;
         private readonly IEmailSender emailSender;
+        private readonly ILogger<DonationService> logger;
         private readonly StripeSignatures stripeSignatures;
         private readonly ApplicationDbContext context;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RequestOptions requestOptions;
         private readonly SiteOptions siteOptions;
 
-        public DonationService(IOptions<RequestOptions> requestOptions, IOptions<SiteOptions> siteOptions, UserManager<ApplicationUser> userManager, ApplicationDbContext context, IBackgroundJobClient backgroundJobClient, IOptions<StripeSignatures> stripeSignatures, IEmailSender emailSender)
+        public DonationService(
+            IOptions<RequestOptions> requestOptions,
+            IOptions<SiteOptions> siteOptions, 
+            UserManager<ApplicationUser> userManager,
+            ApplicationDbContext context, 
+            IBackgroundJobClient backgroundJobClient,
+            IOptions<StripeSignatures> stripeSignatures,
+            IEmailSender emailSender,
+            ILogger<DonationService> logger)
         {
             this.requestOptions = requestOptions.Value;
             this.siteOptions = siteOptions.Value;
@@ -75,6 +85,7 @@ namespace CollAction.Services.Donation
             this.context = context;
             this.userManager = userManager;
             this.emailSender = emailSender;
+            this.logger = logger;
             customerService = new CustomerService(this.requestOptions.ApiKey);
             sourceService = new SourceService(this.requestOptions.ApiKey);
             chargeService = new ChargeService(this.requestOptions.ApiKey);
@@ -112,6 +123,7 @@ namespace CollAction.Services.Donation
 
             if (recurring)
             {
+                logger.LogInformation("Initializing recurring credit card checkout session");
                 sessionOptions.CustomerEmail = email; // TODO: sessionOptions.CustomerId = customer.Id; // Once supported
                 sessionOptions.SubscriptionData = new SessionSubscriptionDataOptions()
                 {
@@ -127,6 +139,7 @@ namespace CollAction.Services.Donation
             }
             else
             {
+                logger.LogInformation("Initializing credit card checkout session");
                 Customer customer = await GetOrCreateCustomer(name, email, cancellationToken);
                 sessionOptions.CustomerId = customer.Id;
                 sessionOptions.LineItems = new List<SessionLineItemOptions>()
@@ -151,6 +164,7 @@ namespace CollAction.Services.Donation
                 EventData = session.ToJson()
             });
             await context.SaveChangesAsync(cancellationToken);
+            logger.LogInformation("Done initializing credit card checkout session");
 
             return session.Id;
         }
@@ -162,6 +176,7 @@ namespace CollAction.Services.Donation
         {
             ValidateDetails(amount, name, email);
 
+            logger.LogInformation("Initializing sepa direct");
             ApplicationUser user = await userManager.FindByEmailAsync(email);
             Customer customer = await GetOrCreateCustomer(name, email, cancellationToken);
             Source source = await sourceService.AttachAsync(
@@ -196,6 +211,7 @@ namespace CollAction.Services.Donation
                 EventData = subscription.ToJson()
             });
             await context.SaveChangesAsync(cancellationToken);
+            logger.LogInformation("Done initializing sepa direct");
         }
 
         /*
@@ -204,6 +220,7 @@ namespace CollAction.Services.Donation
          */
         public async Task InitializeIdealCheckout(string sourceId, string name, string email, CancellationToken cancellationToken)
         {
+            logger.LogInformation("Initializing iDeal");
             ValidateDetails(name, email);
 
             ApplicationUser user = await userManager.FindByEmailAsync(email);
@@ -224,6 +241,7 @@ namespace CollAction.Services.Donation
                     EventData = source.ToJson()
                 });
             await context.SaveChangesAsync(cancellationToken);
+            logger.LogInformation("Done initializing iDeal");
         }
 
         /*
@@ -232,6 +250,7 @@ namespace CollAction.Services.Donation
          */
         public void HandleChargeable(string json, string signature)
         {
+            logger.LogInformation("Received chargeable");
             Event stripeEvent = EventUtility.ConstructEvent(json, signature, stripeSignatures.StripeChargeableWebhookSecret);
             if (stripeEvent.Type == EventTypeChargeableSource)
             {
@@ -249,6 +268,7 @@ namespace CollAction.Services.Donation
          */
         public async Task LogPaymentEvent(string json, string signature, CancellationToken cancellationToken)
         {
+            logger.LogInformation("Received payment event");
             Event stripeEvent = EventUtility.ConstructEvent(json, signature, stripeSignatures.StripePaymentEventWebhookSecret);
 
             context.DonationEventLog.Add(new DonationEventLog()
@@ -277,17 +297,27 @@ namespace CollAction.Services.Donation
          */
         public async Task Charge(string sourceId)
         {
+            logger.LogInformation("Processing chargeable");
             Source source = await sourceService.GetAsync(sourceId);
             if (source.Status == StatusChargeable)
             {
-                Charge charge = await chargeService.CreateAsync(new ChargeCreateOptions()
+                Charge charge;
+                try
                 {
-                    Amount = source.Amount,
-                    Currency = source.Currency,
-                    SourceId = sourceId,
-                    CustomerId = source.Customer,
-                    Description = "A donation to Stichting CollAction"
-                });
+                    charge = await chargeService.CreateAsync(new ChargeCreateOptions()
+                    {
+                        Amount = source.Amount,
+                        Currency = source.Currency,
+                        SourceId = sourceId,
+                        CustomerId = source.Customer,
+                        Description = "A donation to Stichting CollAction"
+                    });
+                }
+                catch (StripeException e)
+                {
+                    logger.LogError(e, "Error processing chargeable");
+                    throw;
+                }
 
                 Customer customer = await customerService.GetAsync(source.Customer);
                 ApplicationUser user = customer != null ? await userManager.FindByEmailAsync(customer.Email) : null;
@@ -301,6 +331,7 @@ namespace CollAction.Services.Donation
             }
             else
             {
+                logger.LogError("Invalid chargeable received");
                 throw new InvalidOperationException($"source: {source.Id} is not chargeable, something went wrong in the payment flow");
             }
         }

@@ -13,6 +13,8 @@ using Hangfire;
 using CollAction.Helpers;
 using SixLabors.ImageSharp.Processing;
 using System.Threading;
+using Microsoft.Extensions.Logging;
+using CollAction.Data;
 
 namespace CollAction.Services.Image
 {
@@ -22,11 +24,15 @@ namespace CollAction.Services.Image
         private readonly string bucket;
         private readonly string region;
         private readonly IBackgroundJobClient jobClient;
+        private readonly ILogger<AmazonS3ImageService> logger;
+        private readonly ApplicationDbContext context;
         private readonly int imageResizeThreshold;
 
-        public AmazonS3ImageService(IOptions<ImageServiceOptions> options, IOptions<ImageProcessingOptions> processingOptions, IBackgroundJobClient jobClient)
+        public AmazonS3ImageService(IOptions<ImageServiceOptions> options, IOptions<ImageProcessingOptions> processingOptions, IBackgroundJobClient jobClient, ApplicationDbContext context, ILogger<AmazonS3ImageService> logger)
         {
             this.jobClient = jobClient;
+            this.logger = logger;
+            this.context = context;
             client = new AmazonS3Client(options.Value.S3AwsAccessKeyID, options.Value.S3AwsAccessKey, RegionEndpoint.GetBySystemName(options.Value.S3Region));
             bucket = options.Value.S3Bucket;
             region = options.Value.S3Region;
@@ -35,30 +41,42 @@ namespace CollAction.Services.Image
 
         public async Task<ImageFile> UploadImage(IFormFile fileUploaded, string imageDescription, CancellationToken cancellationToken)
         {
+            logger.LogInformation("Uploading image");
             using (Image<Rgba32> image = await UploadToImage(fileUploaded, cancellationToken))
             {
                 var currentImage = new ImageFile()
                 {
-                    Filepath = $"{Guid.NewGuid()}.png"
+                    Filepath = $"{Guid.NewGuid()}.png",
+                    Date = DateTime.UtcNow,
+                    Description = imageDescription,
+                    Height = image.Height,
+                    Width = image.Width
                 };
 
-                currentImage.Date = DateTime.UtcNow;
-                currentImage.Description = imageDescription;
-                currentImage.Height = image.Height;
-                currentImage.Width = image.Width;
-
+                logger.LogInformation("Queuing for s3 upload");
                 byte[] imageBytes = ConvertImageToPng(image);
                 jobClient.Enqueue(() => 
                     UploadToS3(imageBytes, currentImage.Filepath));
+
+                logger.LogInformation("Saving image information to database");
+                context.ImageFiles.Add(currentImage);
+                await context.SaveChangesAsync(cancellationToken);
+
+                logger.LogInformation("Done uploading image");
 
                 return currentImage;
             }
         }
 
-        public void DeleteImage(ImageFile imageFile)
+        public async Task DeleteImage(ImageFile imageFile, CancellationToken cancellationToken)
         {
             if (imageFile != null)
             {
+                logger.LogInformation("Deleting image");
+                context.ImageFiles.Remove(imageFile);
+                await context.SaveChangesAsync(cancellationToken);
+                
+                logger.LogInformation("Queueing image removal from s3");
                 jobClient.Enqueue(() =>
                     DeleteObject(imageFile.Filepath));
             }
@@ -75,15 +93,20 @@ namespace CollAction.Services.Image
                 Key = filePath
             };
 
+            logger.LogInformation("Deleting image from s3");
             DeleteObjectResponse response = await client.DeleteObjectAsync(deleteRequest);
             if (!response.HttpStatusCode.IsSuccess())
             {
+                logger.LogError("Error removing image from s3");
                 throw new InvalidOperationException($"failed to delete S3 object {filePath}, {response.HttpStatusCode}");
             }
+
+            logger.LogInformation("Successfully removed image from s3");
         }
 
         public async Task UploadToS3(byte[] image, string path)
         {
+            logger.LogInformation("Adding image to s3");
             using (MemoryStream ms = new MemoryStream(image))
             {
                 var putRequest = new PutObjectRequest()
@@ -99,12 +122,20 @@ namespace CollAction.Services.Image
                 PutObjectResponse response = await client.PutObjectAsync(putRequest);
                 if (!response.HttpStatusCode.IsSuccess())
                 {
+                    logger.LogError("Error uploading image to s3");
                     throw new InvalidOperationException($"failed to upload S3 object {path}, {response.HttpStatusCode}");
                 }
+
+                logger.LogInformation("Successfully added image to s3");
             }
         }
+    
+        public void Dispose()
+        {
+            client.Dispose();
+        }
 
-        public async Task<Image<Rgba32>> UploadToImage(IFormFile fileUploaded, CancellationToken cancellationToken)
+        private async Task<Image<Rgba32>> UploadToImage(IFormFile fileUploaded, CancellationToken cancellationToken)
         {
             using (Stream uploadStream = fileUploaded.OpenReadStream())
             {
@@ -122,11 +153,6 @@ namespace CollAction.Services.Image
                     return image;
                 }
             }
-        }
-    
-        public void Dispose()
-        {
-            client.Dispose();
         }
 
         private byte[] ConvertImageToPng(Image<Rgba32> image)

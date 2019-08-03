@@ -1,9 +1,13 @@
-﻿using CollAction.Services.Image;
+﻿using CollAction.Data;
+using CollAction.Services.Image;
+using CollAction.Services.Newsletter;
 using Hangfire;
 using Hangfire.Common;
 using Hangfire.States;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -49,7 +53,17 @@ namespace CollAction.Tests.Integration
                               Task.Run(() => (Task)job.Method.Invoke(imageService, job.Args.ToArray())).Wait();
                               return string.Empty;
                           });
-            imageService = new AmazonS3ImageService(new OptionsWrapper<ImageServiceOptions>(options), new OptionsWrapper<ImageProcessingOptions>(imageProcessingOptions), jobClient.Object);
+            IConfiguration configuration =
+                new ConfigurationBuilder().AddUserSecrets<Startup>()
+                                          .AddEnvironmentVariables()
+                                          .Build();
+            string connectionString = $"Host={configuration["DbHost"]};Username={configuration["DbUser"]};Password={configuration["DbPassword"]};Database={configuration["Db"]};Port={configuration["DbPort"]}";
+            imageService = new AmazonS3ImageService(
+                new OptionsWrapper<ImageServiceOptions>(options),
+                new OptionsWrapper<ImageProcessingOptions>(imageProcessingOptions),
+                jobClient.Object, 
+                new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseNpgsql(connectionString).Options),
+                new LoggerFactory().CreateLogger<AmazonS3ImageService>()); 
             upload = new Mock<IFormFile>();
             upload.Setup(u => u.OpenReadStream()).Returns(new MemoryStream(testImage));
         }
@@ -74,14 +88,14 @@ namespace CollAction.Tests.Integration
             jobClient.VerifyNoOtherCalls();
             Assert.AreEqual(HttpStatusCode.OK, await CheckUrl(imageService.GetUrl(imageFile)));
 
-            imageService.DeleteImage(imageFile);
+            await imageService.DeleteImage(imageFile, CancellationToken.None);
         }
 
         [TestMethod]
         public async Task TestDelete()
         {
             Models.ImageFile imageFile = await imageService.UploadImage(upload.Object, "test", CancellationToken.None);
-            imageService.DeleteImage(imageFile);
+            await imageService.DeleteImage(imageFile, CancellationToken.None);
 
             upload.Verify(f => f.OpenReadStream());
             upload.VerifyNoOtherCalls();

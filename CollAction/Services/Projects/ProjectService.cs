@@ -49,6 +49,7 @@ namespace CollAction.Services.Projects
 
         public async Task<Project> CreateProject(NewProject newProject, ClaimsPrincipal user, CancellationToken cancellationToken)
         {
+            logger.LogInformation("Creating project: {0}", newProject.Name);
             ApplicationUser owner = await userManager.GetUserAsync(user);
             if (owner == null)
             {
@@ -111,6 +112,8 @@ namespace CollAction.Services.Projects
             IList<ApplicationUser> administrators = await userManager.GetUsersInRoleAsync(Constants.AdminRole);
             await emailSender.SendEmailsTemplated(administrators.Select(a => a.Email), $"A new project was submitted on CollAction: \"{project.Name}\"", "ProjectAddedAdmin", project.Name);
 
+            logger.LogInformation("Created project: {0}", newProject.Name);
+
             return project;
         }
 
@@ -120,6 +123,8 @@ namespace CollAction.Services.Projects
             {
                 throw new ValidationException("Not allowed to update project");
             }
+
+            logger.LogInformation("Updating project: {0}", updatedProject.Name);
 
             bool approved = updatedProject.Status == ProjectStatus.Running && updatedProject.Status == ProjectStatus.Hidden;
             bool successfull = updatedProject.Status == ProjectStatus.Successfull && updatedProject.Status == ProjectStatus.Running;
@@ -207,6 +212,8 @@ namespace CollAction.Services.Projects
                 await emailSender.SendEmailTemplated(owner.Email, $"Deleted - {project.Name}", "ProjectDeleted");
             }
 
+            logger.LogInformation("Updated project: {0}", updatedProject.Name);
+
             return project;
         }
 
@@ -269,7 +276,7 @@ namespace CollAction.Services.Projects
                    now >= project.Start;
         }
 
-        public async Task<ProjectParticipant> SetProjectSubscription(int projectId, string userId, Guid token, bool isSubscribed, CancellationToken cancellationToken)
+        public async Task<ProjectParticipant> SetEmailProjectSubscription(int projectId, string userId, Guid token, bool isSubscribed, CancellationToken cancellationToken)
         {
             ProjectParticipant participant = await context
                  .ProjectParticipants
@@ -278,11 +285,13 @@ namespace CollAction.Services.Projects
 
             if (participant != null && participant.UnsubscribeToken == token)
             {
+                logger.LogInformation("Setting project subscription for user");
                 participant.SubscribedToProjectEmails = isSubscribed;
                 await context.SaveChangesAsync(cancellationToken);
             }
             else
             {
+                logger.LogError("Unable to set project subscription for user, invalid token");
                 throw new InvalidOperationException("Not authorized");
             }
 
@@ -309,6 +318,8 @@ namespace CollAction.Services.Projects
                 };
             }
 
+            logger.LogInformation("Adding participant to project");
+
             AddParticipantResult result = applicationUser != null
                 ? await AddLoggedInParticipant(project, applicationUser, cancellationToken)
                 : await AddAnonymousParticipant(project, applicationUser, email, cancellationToken);
@@ -327,6 +338,16 @@ namespace CollAction.Services.Projects
                 };
 
                 await emailSender.SendEmailTemplated(email, $"Thank you for participating in the \"{project.Name}\" project on CollAction", "ProjectCommit", commitEmailViewModel);
+
+                logger.LogInformation("Added participant to project");
+            }
+            else if (result.Error != null)
+            {
+                logger.LogError("Error adding participant to project: {0}", result.Error);
+            }
+            else
+            {
+                logger.LogInformation("Participation adding ended with: {0}", result.Scenario);
             }
 
             return result;

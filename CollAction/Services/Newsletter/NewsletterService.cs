@@ -41,7 +41,7 @@ namespace CollAction.Services.Newsletter
 
         public Task SetSubscription(string email, bool wantsSubscription, bool requireEmailConfirmationIfSubscribing)
         {
-            logger.LogInformation("changed maillist subscription for {0} setting it to {1} with require email confirmation to {2}", email, wantsSubscription, requireEmailConfirmationIfSubscribing);
+            logger.LogInformation("Changing maillist subscription for user, setting it to {1} with require email confirmation to {2}", email, wantsSubscription, requireEmailConfirmationIfSubscribing);
             if (wantsSubscription)
             {
                 return SubscribeMember(email, requireEmailConfirmationIfSubscribing);
@@ -72,6 +72,8 @@ namespace CollAction.Services.Newsletter
                         Status = Status.Subscribed
                     });
             }
+
+            logger.LogInformation("Successfully subscribed to newsletter");
         }
 
         public async Task UnsubscribeMember(string email)
@@ -86,6 +88,8 @@ namespace CollAction.Services.Newsletter
             {
                 // Doesn't exist, so already unsubscribed
             }
+
+            logger.LogInformation("Successfully unsubscribed from newsletter");
         }
 
         public async Task<Status> GetListMemberStatus(string email)
