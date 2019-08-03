@@ -90,6 +90,7 @@ namespace CollAction.Tests.Integration
                               Task.Run(() => (Task)job.Method.Invoke(imageService, job.Args.ToArray())).Wait();
                               return string.Empty;
                           });
+            sc.AddScoped(s => jobClient.Object);
         }
     }
 }
