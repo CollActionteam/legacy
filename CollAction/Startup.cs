@@ -157,7 +157,7 @@ namespace CollAction
             });
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime applicationLifetime)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime applicationLifetime)
         {
             if (env.IsProduction())
             {
@@ -171,14 +171,14 @@ namespace CollAction
                 forwardedHeaderOptions.KnownNetworks.Clear();
                 app.UseForwardedHeaders(forwardedHeaderOptions);
                 app.UseRewriter(new RewriteOptions().AddRedirectToHttpsPermanent());
+
+                applicationLifetime.ApplicationStopping.Register(() => Log.CloseAndFlush());
             }
 
             if (!Configuration.GetValue<bool>("CspDisable"))
             {
                 ConfigureCsp(app, env, Configuration);
             }
-
-            applicationLifetime.ApplicationStopping.Register(() => Log.CloseAndFlush());
 
             if (env.IsDevelopment())
             {

@@ -62,11 +62,7 @@ namespace CollAction.Controllers
             }
         }
 
-        private Task<ExecutionResult> Execute(
-            string query,
-            string operationName,
-            JObject variables,
-            CancellationToken cancellation)
+        private Task<ExecutionResult> Execute(string query, string operationName, JObject variables, CancellationToken cancellation)
         {
             var options = new ExecutionOptions
             {
