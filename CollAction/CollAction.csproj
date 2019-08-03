@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="AWSSDK.S3" Version="3.3.104.8" />
-    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.101.19" />
+    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.101.26" />
     <PackageReference Include="GraphiQL" Version="1.2.0" />
     <PackageReference Include="GraphQL" Version="2.4.0" />
     <PackageReference Include="GraphQL.Authorization" Version="2.1.29" />
@@ -17,7 +17,7 @@
     <PackageReference Include="Hangfire.AspNetCore" Version="1.7.5" />
     <PackageReference Include="Hangfire.PostgreSql" Version="1.6.0" />
     <PackageReference Include="HtmlSanitizer" Version="4.0.217" />
-    <PackageReference Include="MailChimp.Net.V3" Version="4.1.0" />
+    <PackageReference Include="MailChimp.Net.V3" Version="4.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.6" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
@@ -26,7 +26,7 @@
     <PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" Version="0.9.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.2.4" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="2.0.4" />
-    <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="3.0.3" />
+    <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="3.0.4" />
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
     <PackageReference Include="Serilog.Sinks.Slack" Version="1.2.63" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0006" />
