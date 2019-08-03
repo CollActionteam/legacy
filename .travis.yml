@@ -1,7 +1,7 @@
 language: csharp
 dotnet: 2.2
 mono: none
-dist: xenial
+dist: bionic
 sudo: required
 services:
 - docker
