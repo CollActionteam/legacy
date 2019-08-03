@@ -1,6 +1,5 @@
 ﻿using CollAction.Data;
 using CollAction.Services.Image;
-using CollAction.Services.Newsletter;
 using Hangfire;
 using Hangfire.Common;
 using Hangfire.States;

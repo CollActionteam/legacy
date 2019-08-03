@@ -1,5 +1,6 @@
 ﻿using CollAction.Data;
 using CollAction.GraphQl;
+using CollAction.ViewModels.GraphQl;
 using GraphQL;
 using GraphQL.Types;
 using GraphQL.Validation;
@@ -32,19 +33,13 @@ namespace CollAction.Controllers
         }
 
         [HttpPost]
-        public Task<ExecutionResult> Post(
-            [BindRequired, FromBody] PostBody body,
-            CancellationToken cancellation)
+        public Task<ExecutionResult> Post([BindRequired, FromBody] PostBody body, CancellationToken cancellation)
         {
             return Execute(body.Query, body.OperationName, body.Variables, cancellation);
         }
 
         [HttpGet]
-        public Task<ExecutionResult> Get(
-            [FromQuery] string query,
-            [FromQuery] string variables,
-            [FromQuery] string operationName,
-            CancellationToken cancellation)
+        public Task<ExecutionResult> Get([FromQuery] string query, [FromQuery] string variables, [FromQuery] string operationName, CancellationToken cancellation)
         {
             var jsonVariables = ParseVariables(variables);
             return Execute(query, operationName, jsonVariables, cancellation);
@@ -97,15 +92,6 @@ namespace CollAction.Controllers
             };
 
             return executer.ExecuteAsync(options);
-        }
-
-        public class PostBody
-        {
-            public string OperationName { get; set; }
-
-            public string Query { get; set; }
-
-            public JObject Variables { get; set; }
         }
     }
 }
