@@ -6,6 +6,7 @@ using CollAction.Services.User.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -24,8 +25,16 @@ namespace CollAction.Services.User
         private readonly IEmailSender emailSender;
         private readonly ILogger<UserService> logger;
         private readonly ApplicationDbContext context;
+        private readonly SiteOptions siteOptions;
 
-        public UserService(INewsletterService newsletterService, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, IEmailSender emailSender, ILogger<UserService> logger, ApplicationDbContext context)
+        public UserService(
+            INewsletterService newsletterService, 
+            SignInManager<ApplicationUser> signInManager, 
+            UserManager<ApplicationUser> userManager,
+            IEmailSender emailSender,
+            ILogger<UserService> logger,
+            ApplicationDbContext context,
+            IOptions<SiteOptions> siteOptions)
         {
             this.newsletterService = newsletterService;
             this.signInManager = signInManager;
@@ -33,6 +42,7 @@ namespace CollAction.Services.User
             this.emailSender = emailSender;
             this.logger = logger;
             this.context = context;
+            this.siteOptions = siteOptions.Value;
         }
 
         public async Task<UserResult> CreateUser(NewUser newUser)
@@ -66,7 +76,7 @@ namespace CollAction.Services.User
             }
 
             string code = await userManager.GeneratePasswordResetTokenAsync(user);
-            string callbackUrl = $"https://collaction.org/#/resetpassword?code={WebUtility.UrlEncode(code)}&email={WebUtility.UrlEncode(email)}";
+            string callbackUrl = $"{siteOptions.PublicAddress}/#/resetpassword?code={WebUtility.UrlEncode(code)}&email={WebUtility.UrlEncode(email)}";
             await emailSender.SendEmailTemplated(email, "Reset Password", "ResetPassword", callbackUrl);
             return IdentityResult.Success;
         }
@@ -175,7 +185,9 @@ namespace CollAction.Services.User
                              .ToListAsync();
 
             foreach (Project p in projects)
+            {
                 p.AnonymousUserParticipants += 1;
+            }
 
             await context.SaveChangesAsync();
             var result = await userManager.DeleteAsync(applicationUser);

@@ -2,6 +2,7 @@
 using CollAction.Services.User;
 using CollAction.Services.User.Models;
 using GraphQL.Types;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 
@@ -11,7 +12,7 @@ namespace CollAction.GraphQl.Mutations
     {
         public ApplicationUserMutationGraph(IServiceScopeFactory serviceScopeFactory)
         {
-            FieldAsync<UserResultGraph>(
+            FieldAsync<UserResultGraph, UserResult>(
                 "createUser",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<NewUserInputGraph>>() { Name = "user" }),
@@ -25,7 +26,7 @@ namespace CollAction.GraphQl.Mutations
                     }
                 });
             
-            FieldAsync<UserResultGraph>(
+            FieldAsync<UserResultGraph, UserResult>(
                 "updateUser",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<UpdatedUserInputGraph>>() { Name = "user" }),
@@ -39,7 +40,7 @@ namespace CollAction.GraphQl.Mutations
                     }
                 });
 
-            FieldAsync<IdentityResultGraph>(
+            FieldAsync<IdentityResultGraph, IdentityResult>(
                 "changePassword",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "currentPassword" },
@@ -55,7 +56,7 @@ namespace CollAction.GraphQl.Mutations
                     }
                 });
 
-            FieldAsync<IdentityResultGraph>(
+            FieldAsync<IdentityResultGraph, IdentityResult>(
                 "forgotPassword",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "email" }),
@@ -69,7 +70,7 @@ namespace CollAction.GraphQl.Mutations
                     }
                 });
 
-            FieldAsync<IdentityResultGraph>(
+            FieldAsync<IdentityResultGraph, IdentityResult>(
                 "resetPassword",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "email" },
@@ -87,10 +88,10 @@ namespace CollAction.GraphQl.Mutations
                     }
                 });
 
-            FieldAsync<IntGraphType>(
+            FieldAsync<IntGraphType, int>(
                 "ingestUserEvent",
                 arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<StringGraphType>>{ Name = "eventData" },
+                    new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "eventData" },
                     new QueryArgument<NonNullGraphType<BooleanGraphType>> { Name = "canTrack" }),
                 resolve: async c =>
                 {

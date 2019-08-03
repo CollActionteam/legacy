@@ -6,7 +6,7 @@ namespace CollAction.GraphQl.Queries
 {
     public class CategoryGraph : EfObjectGraphType<ApplicationDbContext, Category>
     {
-        public CategoryGraph(IEfGraphQLService<ApplicationDbContext> efGraphQlService) : base(efGraphQlService)
+        public CategoryGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService) : base(entityFrameworkGraphQlService)
         {
             Field(x => x.Id);
             Field(x => x.Color);

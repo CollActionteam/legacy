@@ -8,7 +8,7 @@ namespace CollAction.GraphQl.Queries
     [GraphQLAuthorize(Policy = Constants.GraphQlAdminPolicy)]
     public class UserEventGraph : EfObjectGraphType<ApplicationDbContext, UserEvent>
     {
-        public UserEventGraph(IEfGraphQLService<ApplicationDbContext> efGraphQlService) : base(efGraphQlService)
+        public UserEventGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService) : base(entityFrameworkGraphQlService)
         {
             Field(x => x.Id);
             Field(x => x.EventData);

@@ -28,6 +28,7 @@ namespace CollAction.Controllers
             return View();
         }
 
+        [Route("robots.txt")]
         public ContentResult Robots()
         {
             StringBuilder sb = new StringBuilder();
@@ -41,6 +42,7 @@ namespace CollAction.Controllers
             return Content(sb.ToString(), "text/plain", Encoding.UTF8);
         }
 
+        [Route("sitemap.xml")]
         public async Task<ContentResult> Sitemap()
             => Content((await sitemapService.GetSitemap()).ToString(), "text/xml", Encoding.UTF8);
     }

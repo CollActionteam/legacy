@@ -17,7 +17,7 @@ namespace CollAction.Services.Donation
     /// <summary>
     /// There are 4 donation flows:
     /// * Non-recurring iDeal payments
-    ///   - The flow is started at DebitDetails.tsx where a source with the relevant details is created client-side
+    ///   - The flow is started at DebitDetails.tsx where a source with/the relevant details is created client-side
     ///   - This source is sent to /Donation/InitializeIdealCheckout, where this source is attached to a customer-id (this can't be done with the public stripe API keys)
     ///   - After that, the DebitDetails component will redirect the user to the source redirect-url, where the user will get his bank iDeal dialog
     ///   - On success, the user will be redirected to the return page, which will redirect the user to the thank-you page if successfull, otherwise the user will be redirected to the donation-page
@@ -42,12 +42,12 @@ namespace CollAction.Services.Donation
     /// </summary>
     public class DonationService : IDonationService
     {
-        const string StatusChargeable = "chargeable";
-        const string StatusConsumed = "consumed";
-        const string EventTypeChargeableSource = "source.chargeable";
-        const string EventTypeChargeSucceeded = "charge.succeeded";
-        const string NameKey = "name";
-        const string RecurringDonationProduct = "Recurring Donation Stichting CollAction";
+        private const string StatusChargeable = "chargeable";
+        private const string StatusConsumed = "consumed";
+        private const string EventTypeChargeableSource = "source.chargeable";
+        private const string EventTypeChargeSucceeded = "charge.succeeded";
+        private const string NameKey = "name";
+        private const string RecurringDonationProduct = "Recurring Donation Stichting CollAction";
 
         private readonly CustomerService customerService;
         private readonly SourceService sourceService;
@@ -163,25 +163,28 @@ namespace CollAction.Services.Donation
 
             ApplicationUser user = await userManager.FindByEmailAsync(email);
             Customer customer = await GetOrCreateCustomer(name, email);
-            Source source = await sourceService.AttachAsync(customer.Id, new SourceAttachOptions()
-            {
-                Source = sourceId
-            });
-            Plan plan = await CreateRecurringPlan(amount, "eur");
-            Subscription subscription = await subscriptionService.CreateAsync(new SubscriptionCreateOptions()
-            {
-                DefaultSource = source.Id,
-                Billing = Billing.ChargeAutomatically,
-                CustomerId = customer.Id,
-                Items = new List<SubscriptionItemOption>()
+            Source source = await sourceService.AttachAsync(
+                customer.Id,
+                new SourceAttachOptions()
                 {
-                    new SubscriptionItemOption()
+                    Source = sourceId
+                });
+            Plan plan = await CreateRecurringPlan(amount, "eur");
+            Subscription subscription = await subscriptionService.CreateAsync(
+                new SubscriptionCreateOptions()
+                {
+                    DefaultSource = source.Id,
+                    Billing = Billing.ChargeAutomatically,
+                    CustomerId = customer.Id,
+                    Items = new List<SubscriptionItemOption>()
                     {
-                        PlanId = plan.Id,
-                        Quantity = 1
+                        new SubscriptionItemOption()
+                        {
+                            PlanId = plan.Id,
+                            Quantity = 1
+                        }
                     }
-                }
-            });
+                });
 
             context.DonationEventLog.Add(new DonationEventLog()
             {
@@ -202,17 +205,20 @@ namespace CollAction.Services.Donation
 
             ApplicationUser user = await userManager.FindByEmailAsync(email);
             Customer customer = await GetOrCreateCustomer(name, email);
-            Source source = await sourceService.AttachAsync(customer.Id, new SourceAttachOptions()
-            {
-                Source = sourceId
-            });
+            Source source = await sourceService.AttachAsync(
+                customer.Id, 
+                new SourceAttachOptions()
+                {
+                    Source = sourceId
+                });
 
-            context.DonationEventLog.Add(new DonationEventLog()
-            {
-                UserId = user?.Id,
-                Type = DonationEventType.Internal,
-                EventData = source.ToJson()
-            });
+            context.DonationEventLog.Add(
+                new DonationEventLog()
+                {
+                    UserId = user?.Id,
+                    Type = DonationEventType.Internal,
+                    EventData = source.ToJson()
+                });
             await context.SaveChangesAsync();
         }
 
@@ -363,6 +369,7 @@ namespace CollAction.Services.Donation
                     Type = "service"
                 });
             }
+
             return product;
         }
 
@@ -374,19 +381,23 @@ namespace CollAction.Services.Donation
             var metadata = new Dictionary<string, string>() { { NameKey, name } };
             if (customer == null)
             {
-                customer = await customerService.CreateAsync(new CustomerCreateOptions()
-                {
-                    Email = email,
-                    Metadata = metadata
-                });
+                customer = await customerService.CreateAsync(
+                    new CustomerCreateOptions()
+                    {
+                        Email = email,
+                        Metadata = metadata
+                    });
             }
             else if (!name.Equals(metadataName, StringComparison.Ordinal))
             {
-                customer = await customerService.UpdateAsync(customer.Id, new CustomerUpdateOptions()
-                {
-                    Metadata = metadata
-                });
+                customer = await customerService.UpdateAsync(
+                    customer.Id, 
+                    new CustomerUpdateOptions()
+                    {
+                        Metadata = metadata
+                    });
             }
+
             return customer;
         }
 

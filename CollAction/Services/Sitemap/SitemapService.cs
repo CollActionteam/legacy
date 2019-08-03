@@ -61,12 +61,16 @@ namespace CollAction.Services.Sitemap
             };
             if (project.BannerImageFileId != null)
             {
-                projectElements.Add(new XElement(imageNamespace + "image", new[]
-                {
-                    new XElement(imageNamespace + "loc", "https://" + siteOptions.PublicAddress + imageService.GetUrl(project.BannerImage)),
-                    new XElement(imageNamespace + "caption", project.BannerImage.Description)
-                }));
+                projectElements.Add(
+                    new XElement(
+                        imageNamespace + "image", 
+                        new[]
+                        {
+                            new XElement(imageNamespace + "loc", "https://" + siteOptions.PublicAddress + imageService.GetUrl(project.BannerImage)),
+                            new XElement(imageNamespace + "caption", project.BannerImage.Description)
+                        }));
             }
+
             return new XElement(urlsetNamespace + "url", projectElements.ToArray());
         }
     }

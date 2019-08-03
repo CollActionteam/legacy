@@ -8,7 +8,7 @@ namespace CollAction.GraphQl.Mutations
     {
         public DonationMutationGraph(IServiceScopeFactory serviceScopeFactory)
         {
-            FieldAsync<StringGraphType>(
+            FieldAsync<StringGraphType, string>(
                 "initializeCreditCardCheckout",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "currency" },
@@ -29,7 +29,7 @@ namespace CollAction.GraphQl.Mutations
                     }
                 });
 
-            FieldAsync<StringGraphType>(
+            FieldAsync<StringGraphType, string>(
                 "initializeSepaDirect",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "sourceId" },
@@ -49,7 +49,7 @@ namespace CollAction.GraphQl.Mutations
                     }
                 });
 
-            FieldAsync<StringGraphType>(
+            FieldAsync<StringGraphType, string>(
                 "initializeIdealCheckout",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "sourceId" },
@@ -67,7 +67,7 @@ namespace CollAction.GraphQl.Mutations
                     }
                 });
 
-            FieldAsync<StringGraphType>(
+            FieldAsync<StringGraphType, string>(
                 "cancelSubscription",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "subscriptionId" }),

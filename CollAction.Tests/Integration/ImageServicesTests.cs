@@ -19,12 +19,12 @@ namespace CollAction.Tests.Integration
     [TestCategory("Integration")]
     public sealed class ImageServicesTests
     {
-        private readonly byte[] _image = new byte[] { 0x42, 0x4D, 0x1E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1A, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x00, 0xFF, 0x00 };
-        private readonly ImageServiceOptions _options;
-        private readonly ImageProcessingOptions _imageProcessingOptions;
-        private Mock<IBackgroundJobClient> _jobClient;
-        private AmazonS3ImageService _imageService;
-        private Mock<IFormFile> _upload;
+        private readonly byte[] testImage = new byte[] { 0x42, 0x4D, 0x1E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1A, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x00, 0xFF, 0x00 };
+        private readonly ImageServiceOptions options;
+        private readonly ImageProcessingOptions imageProcessingOptions;
+        private Mock<IBackgroundJobClient> jobClient;
+        private AmazonS3ImageService imageService;
+        private Mock<IFormFile> upload;
 
         public ImageServicesTests()
         {
@@ -32,67 +32,72 @@ namespace CollAction.Tests.Integration
                 new ConfigurationBuilder().AddUserSecrets<Startup>()
                                           .AddEnvironmentVariables()
                                           .Build();
-            _options = new ImageServiceOptions();
-            _imageProcessingOptions = new ImageProcessingOptions();
-            configuration.Bind(_options);
+            options = new ImageServiceOptions();
+            imageProcessingOptions = new ImageProcessingOptions();
+            configuration.Bind(options);
         }
 
-        [TestInitialize()]
+        [TestInitialize]
         public void Initialize()
         {
-            _jobClient = new Mock<IBackgroundJobClient>();
-            _jobClient.Setup(jc => jc.Create(It.IsAny<Job>(), It.IsAny<IState>()))
+            jobClient = new Mock<IBackgroundJobClient>();
+            jobClient.Setup(jc => jc.Create(It.IsAny<Job>(), It.IsAny<IState>()))
                       .Returns<Job, IState>(
-                          (job, state) => {
-                              Task.Run(() => (Task)job.Method.Invoke(_imageService, job.Args.ToArray())).Wait();
+                          (job, state) =>
+                          {
+                              Task.Run(() => (Task)job.Method.Invoke(imageService, job.Args.ToArray())).Wait();
                               return string.Empty;
                           });
-            _imageService = new AmazonS3ImageService(new OptionsWrapper<ImageServiceOptions>(_options), new OptionsWrapper<ImageProcessingOptions>(_imageProcessingOptions), _jobClient.Object);
-            _upload = new Mock<IFormFile>();
-            _upload.Setup(u => u.OpenReadStream()).Returns(new MemoryStream(_image));
+            imageService = new AmazonS3ImageService(new OptionsWrapper<ImageServiceOptions>(options), new OptionsWrapper<ImageProcessingOptions>(imageProcessingOptions), jobClient.Object);
+            upload = new Mock<IFormFile>();
+            upload.Setup(u => u.OpenReadStream()).Returns(new MemoryStream(testImage));
         }
 
-        [TestCleanup()]
+        [TestCleanup]
         public void Cleanup()
         {
-            _imageService.Dispose();
+            imageService.Dispose();
         }
 
         [TestMethod]
         public async Task TestUpload()
         {
-            Models.ImageFile imageFile = await _imageService.UploadImage(_upload.Object, "test");
+            Models.ImageFile imageFile = await imageService.UploadImage(upload.Object, "test");
 
             Assert.IsNotNull(imageFile);
             Assert.IsNotNull(imageFile.Filepath);
             Assert.AreEqual("test", imageFile.Description);
-            _upload.Verify(f => f.OpenReadStream());
-            _upload.VerifyNoOtherCalls();
-            _jobClient.Verify(jc => jc.Create(It.IsAny<Job>(), It.IsAny<IState>()));
-            _jobClient.VerifyNoOtherCalls();
-            Assert.AreEqual(HttpStatusCode.OK, await CheckUrl(_imageService.GetUrl(imageFile)));
+            upload.Verify(f => f.OpenReadStream());
+            upload.VerifyNoOtherCalls();
+            jobClient.Verify(jc => jc.Create(It.IsAny<Job>(), It.IsAny<IState>()));
+            jobClient.VerifyNoOtherCalls();
+            Assert.AreEqual(HttpStatusCode.OK, await CheckUrl(imageService.GetUrl(imageFile)));
 
-            _imageService.DeleteImage(imageFile);
+            imageService.DeleteImage(imageFile);
         }
 
         [TestMethod]
         public async Task TestDelete()
         {
-            Models.ImageFile imageFile = await _imageService.UploadImage(_upload.Object, "test");
-            _imageService.DeleteImage(imageFile);
+            Models.ImageFile imageFile = await imageService.UploadImage(upload.Object, "test");
+            imageService.DeleteImage(imageFile);
 
-            _upload.Verify(f => f.OpenReadStream());
-            _upload.VerifyNoOtherCalls();
-            _jobClient.Verify(jc => jc.Create(It.IsAny<Job>(), It.IsAny<IState>()));
-            _jobClient.VerifyNoOtherCalls();
-            Assert.AreEqual(HttpStatusCode.Forbidden, await CheckUrl(_imageService.GetUrl(imageFile)));
+            upload.Verify(f => f.OpenReadStream());
+            upload.VerifyNoOtherCalls();
+            jobClient.Verify(jc => jc.Create(It.IsAny<Job>(), It.IsAny<IState>()));
+            jobClient.VerifyNoOtherCalls();
+            Assert.AreEqual(HttpStatusCode.Forbidden, await CheckUrl(imageService.GetUrl(imageFile)));
         }
 
         private async Task<HttpStatusCode> CheckUrl(string url)
         {
             using (HttpClient client = new HttpClient())
+            {
                 using (HttpResponseMessage response = await client.GetAsync(url))
+                {
                     return response.StatusCode;
+                }
+            }
         }
     }
 }

@@ -13,18 +13,41 @@ namespace CollAction.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
-        { }
+        {
+        }
 
         public DbSet<Project> Projects { get; set; }
+
         public DbSet<ProjectParticipant> ProjectParticipants { get; set; }
+
         public DbSet<ProjectTag> ProjectTags { get; set; }
+
         public DbSet<Tag> Tags { get; set; }
+
         public DbSet<Category> Categories { get; set; }
+
         public DbSet<ImageFile> ImageFiles { get; set; }
+
         public DbSet<ProjectParticipantCount> ProjectParticipantCounts { get; set; }
+
         public DbSet<UserEvent> UserEvents { get; set; }
+
         public DbSet<DonationEventLog> DonationEventLog { get; set; }
+
         public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
+
+        /// <summary>
+        /// Seed the database with initialization data here
+        /// </summary>
+        /// <param name="configuration">Configuration</param>
+        /// <param name="roleManager">Role managers to create and query roles</param>
+        /// <param name="userManager">User manager to create and query users</param>
+        /// <param name="token">Cancellation token</param>
+        public async Task Seed(IConfiguration configuration, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        {
+            await CreateAdminRoleAndUser(configuration, userManager, roleManager);
+            await CreateCategories();
+        }
 
         /// <summary>
         /// Configure the model (foreign keys, relations, primary keys, etc)
@@ -62,19 +85,6 @@ namespace CollAction.Data
                    .HasForeignKey(e => e.UserId);
         }
 
-        /// <summary>
-        /// Seed the database with initialisation data here
-        /// </summary>
-        /// <param name="configuration">Configuration</param>
-        /// <param name="roleManager">Role managers to create and query roles</param>
-        /// <param name="userManager">User manager to create and query users</param>
-        /// <param name="token">Cancellation token</param>
-        public async Task Seed(IConfiguration configuration, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
-        {
-            await CreateAdminRoleAndUser(configuration, userManager, roleManager);
-            await CreateCategories();
-        }
-
         private async Task CreateAdminRoleAndUser(IConfiguration configuration, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             // Create admin role if not exists
@@ -84,7 +94,9 @@ namespace CollAction.Data
                 adminRole = new IdentityRole(Constants.AdminRole) { NormalizedName = Constants.AdminRole };
                 IdentityResult result = await roleManager.CreateAsync(adminRole);
                 if (!result.Succeeded)
+                {
                     throw new InvalidOperationException($"Error creating role.{Environment.NewLine}{string.Join(Environment.NewLine, result.Errors.Select(e => $"{e.Code}: {e.Description}"))}");
+                }
             }
 
             // Create admin user if not exists
@@ -96,7 +108,9 @@ namespace CollAction.Data
                 admin = new ApplicationUser(adminEmail) { EmailConfirmed = true };
                 IdentityResult result = await userManager.CreateAsync(admin, adminPassword);
                 if (!result.Succeeded)
+                {
                     throw new InvalidOperationException($"Error creating user.{Environment.NewLine}{string.Join(Environment.NewLine, result.Errors.Select(e => $"{e.Code}: {e.Description}"))}");
+                }
             }
 
             // Assign admin role if not assigned
@@ -104,7 +118,9 @@ namespace CollAction.Data
             {
                 IdentityResult result = await userManager.AddToRoleAsync(admin, Constants.AdminRole);
                 if (!result.Succeeded)
+                {
                     throw new InvalidOperationException($"Error assigning admin role.{Environment.NewLine}{string.Join(Environment.NewLine, result.Errors.Select(e => $"{e.Code}: {e.Description}"))}");
+                }
             }
         }
 
@@ -113,15 +129,17 @@ namespace CollAction.Data
             // Initialize categories
             if (!(await Categories.AnyAsync()))
             {
-                Categories.AddRange(new[] {
-                    new Category() { Name = "Environment", ColorHex = "E88424" },
-                    new Category() { Name = "Community", ColorHex = "7B2164" },
-                    new Category() { Name = "Consumption", ColorHex = "9D1D20" },
-                    new Category() { Name = "Well-being", ColorHex = "3762AE" },
-                    new Category() { Name = "Governance", ColorHex = "29ABE2" },
-                    new Category() { Name = "Health", ColorHex = "EB078C" },
-                    new Category() { Name = "Other", ColorHex = "007D43" },
-                });
+                Categories.AddRange(
+                    new[] 
+                    {
+                        new Category() { Name = "Environment", ColorHex = "E88424" },
+                        new Category() { Name = "Community", ColorHex = "7B2164" },
+                        new Category() { Name = "Consumption", ColorHex = "9D1D20" },
+                        new Category() { Name = "Well-being", ColorHex = "3762AE" },
+                        new Category() { Name = "Governance", ColorHex = "29ABE2" },
+                        new Category() { Name = "Health", ColorHex = "EB078C" },
+                        new Category() { Name = "Other", ColorHex = "007D43" },
+                    });
                 await SaveChangesAsync();
             }
         }

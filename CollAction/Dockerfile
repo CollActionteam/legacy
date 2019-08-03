@@ -1,14 +1,10 @@
 FROM microsoft/dotnet:2.2-sdk AS build
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
-RUN apt-get update && apt-get install -y nodejs build-essential
 WORKDIR /src
 COPY CollAction/CollAction.csproj CollAction/
 RUN dotnet restore CollAction/CollAction.csproj
 COPY . .
 WORKDIR /src/CollAction
-RUN npm ci
-RUN NODE_ENV=production npm run build
-RUN DISABLE_NPM_BUILD=1 dotnet build CollAction.csproj --no-restore -c Release -o /app
+RUN dotnet build CollAction.csproj --no-restore -c Release -o /app
 RUN dotnet publish CollAction.csproj --no-build -c Release -o /app
 
 FROM microsoft/dotnet:2.2-aspnetcore-runtime-alpine

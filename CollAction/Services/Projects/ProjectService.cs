@@ -200,7 +200,7 @@ namespace CollAction.Services.Projects
             return project;
         }
 
-        public async Task SendProjectEmail(int projectId, string subject, string message, ClaimsPrincipal performingUser)
+        public async Task<Project> SendProjectEmail(int projectId, string subject, string message, ClaimsPrincipal performingUser)
         {
             Project project = await context.Projects.FindAsync(projectId);
             if (project == null)
@@ -212,6 +212,7 @@ namespace CollAction.Services.Projects
             {
                 throw new ValidationException("Unsafe html");
             }
+
             ApplicationUser user = await userManager.GetUserAsync(performingUser);
             if (project.OwnerId != user.Id)
             {
@@ -226,10 +227,9 @@ namespace CollAction.Services.Projects
 
             logger.LogInformation("sending project email for '{0}' on {1} to {2} users", project.Name, subject, participants.Count());
 
-            string baseUrl = $"https://collaction.org";
             foreach (ProjectParticipant participant in participants)
             {
-                string unsubscribeLink = $"{baseUrl}#/ChangeSubscription?userId={WebUtility.UrlEncode(participant.UserId)}&projectId={project.Id}&token={WebUtility.UrlEncode(participant.UnsubscribeToken.ToString())}";
+                string unsubscribeLink = $"{siteOptions.PublicAddress}/#/ChangeSubscription?userId={WebUtility.UrlEncode(participant.UserId)}&projectId={project.Id}&token={WebUtility.UrlEncode(participant.UnsubscribeToken.ToString())}";
                 emailSender.SendEmail(participant.User.Email, subject, FormatEmailMessage(message, participant.User, unsubscribeLink));
             }
 
@@ -245,6 +245,7 @@ namespace CollAction.Services.Projects
             await context.SaveChangesAsync();
 
             logger.LogInformation("done sending project email for '{0}' on {1} to {2} users", project.Name, subject, participants.Count());
+            return project;
         }
 
         public bool CanSendProjectEmail(Project project)
@@ -258,7 +259,7 @@ namespace CollAction.Services.Projects
                    now >= project.Start;
         }
 
-        public async Task ChangeProjectSubscription(int projectId, string userId, Guid token)
+        public async Task<ProjectParticipant> SetProjectSubscription(int projectId, string userId, Guid token, bool isSubscribed)
         {
             ProjectParticipant participant = await context
                  .ProjectParticipants
@@ -267,13 +268,15 @@ namespace CollAction.Services.Projects
 
             if (participant != null && participant.UnsubscribeToken == token)
             {
-                participant.SubscribedToProjectEmails = !participant.SubscribedToProjectEmails;
+                participant.SubscribedToProjectEmails = isSubscribed;
                 await context.SaveChangesAsync();
             }
             else
             {
                 throw new InvalidOperationException("Not authorized");
             }
+
+            return participant;
         }
 
         public async Task<AddParticipantResult> CommitToProject(string email, int projectId, ClaimsPrincipal user)
@@ -371,19 +374,29 @@ namespace CollAction.Services.Projects
         private string FormatEmailMessage(string message, ApplicationUser user, string unsubscribeLink)
         {
             if (!string.IsNullOrEmpty(unsubscribeLink))
+            {
                 message = message + $"<br><a href=\"{unsubscribeLink}\">Unsubscribe</a>";
+            }
 
             if (string.IsNullOrEmpty(user.FirstName))
+            {
                 message = message.Replace(" {firstname}", string.Empty)
                                  .Replace("{firstname}", string.Empty);
+            }
             else
+            {
                 message = message.Replace("{firstname}", user.FirstName);
+            }
 
             if (string.IsNullOrEmpty(user.LastName))
+            {
                 message = message.Replace(" {lastname}", string.Empty)
                                  .Replace("{lastname}", string.Empty);
+            }
             else
+            {
                 message = message.Replace("{lastname}", user.LastName);
+            }
 
             return message;
         }

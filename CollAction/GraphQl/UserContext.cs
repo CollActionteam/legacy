@@ -6,6 +6,7 @@ namespace CollAction.GraphQl
     public class UserContext
     {
         public ClaimsPrincipal User { get; set; }
+
         public ApplicationDbContext Context { get; set; }
     }
 }

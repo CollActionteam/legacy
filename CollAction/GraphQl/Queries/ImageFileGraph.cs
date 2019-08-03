@@ -6,7 +6,7 @@ namespace CollAction.GraphQl.Queries
 {
     public class ImageFileGraph : EfObjectGraphType<ApplicationDbContext, ImageFile>
     {
-        public ImageFileGraph(IEfGraphQLService<ApplicationDbContext> efGraphQlService) : base(efGraphQlService)
+        public ImageFileGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService) : base(entityFrameworkGraphQlService)
         {
             Field(x => x.Id);
             Field(x => x.Date);

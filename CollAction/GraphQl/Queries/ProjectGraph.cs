@@ -10,7 +10,7 @@ namespace CollAction.GraphQl.Queries
 {
     public class ProjectGraph : EfObjectGraphType<ApplicationDbContext, Project>
     {
-        public ProjectGraph(IEfGraphQLService<ApplicationDbContext> efGraphQlService, IServiceScopeFactory serviceScopeFactory) : base(efGraphQlService)
+        public ProjectGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService, IServiceScopeFactory serviceScopeFactory) : base(entityFrameworkGraphQlService)
         {
             Field(x => x.Id);
             Field(x => x.AnonymousUserParticipants);

@@ -1,5 +1,6 @@
 ﻿using CollAction.GraphQl.Mutations.Input;
 using CollAction.GraphQl.Queries;
+using CollAction.Models;
 using CollAction.Services.Projects;
 using CollAction.Services.Projects.Models;
 using GraphQL.Authorization;
@@ -13,7 +14,7 @@ namespace CollAction.GraphQl.Mutations
     {
         public ProjectMutationGraph(IServiceScopeFactory serviceScopeFactory)
         {
-            FieldAsync<ProjectGraph>(
+            FieldAsync<ProjectGraph, Project>(
                 "createProject",
                 arguments: new QueryArguments(
                     new QueryArgument<NewProjectInputGraph>() { Name = "project" }),
@@ -26,7 +27,7 @@ namespace CollAction.GraphQl.Mutations
                     }
                 });
 
-            FieldAsync<ProjectGraph>(
+            FieldAsync<ProjectGraph, Project>(
                 "updateProject",
                 arguments: new QueryArguments(
                     new QueryArgument<UpdatedProjectInputGraph>() { Name = "project" }),
@@ -39,7 +40,7 @@ namespace CollAction.GraphQl.Mutations
                     }
                 }).AuthorizeWith(Constants.GraphQlAdminPolicy);
 
-            FieldAsync<AddParticipantResultGraph>(
+            FieldAsync<AddParticipantResultGraph, AddParticipantResult>(
                 "commitToProject",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IntGraphType>>() { Name = "projectId" },
@@ -54,7 +55,7 @@ namespace CollAction.GraphQl.Mutations
                     }
                 });
 
-            FieldAsync<BooleanGraphType>(
+            FieldAsync<ProjectGraph, Project>(
                 "sendProjectEmail",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IntGraphType>>() { Name = "projectId" },
@@ -67,26 +68,30 @@ namespace CollAction.GraphQl.Mutations
                     string message = c.GetArgument<string>("message");
                     using (var scope = serviceScopeFactory.CreateScope())
                     {
-                        await scope.ServiceProvider.GetRequiredService<IProjectService>().SendProjectEmail(projectId, subject, message, ((UserContext)c.UserContext).User);
-                        return true;
+                        return await scope.ServiceProvider
+                                          .GetRequiredService<IProjectService>()
+                                          .SendProjectEmail(projectId, subject, message, ((UserContext)c.UserContext).User);
                     }
                 });
 
-            FieldAsync<BooleanGraphType>(
+            FieldAsync<ProjectParticipantGraph, ProjectParticipant>(
                 "changeProjectSubscription",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IntGraphType>>() { Name = "projectId" },
                     new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "userId" },
-                    new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "token" }),
+                    new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "token" },
+                    new QueryArgument<NonNullGraphType<BooleanGraphType>>() { Name = "isSubscribed" }),
                 resolve: async c =>
                 {
                     int projectId = c.GetArgument<int>("projectId");
                     string userId = c.GetArgument<string>("userId");
                     string token = c.GetArgument<string>("token");
+                    bool isSubscribed = c.GetArgument<bool>("isSubscribed");
                     using (var scope = serviceScopeFactory.CreateScope())
                     {
-                        await scope.ServiceProvider.GetRequiredService<IProjectService>().ChangeProjectSubscription(projectId, userId, Guid.Parse(token));
-                        return true;
+                        return await scope.ServiceProvider
+                                          .GetRequiredService<IProjectService>()
+                                          .SetProjectSubscription(projectId, userId, Guid.Parse(token), isSubscribed);
                     }
                 });
         }

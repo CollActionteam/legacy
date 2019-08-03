@@ -8,7 +8,7 @@ namespace CollAction.GraphQl.Queries
     [GraphQLAuthorize(Policy = Constants.GraphQlAdminPolicy)]
     public class DonationEventLogGraph : EfObjectGraphType<ApplicationDbContext, DonationEventLog>
     {
-        public DonationEventLogGraph(IEfGraphQLService<ApplicationDbContext> efGraphQlService) : base(efGraphQlService)
+        public DonationEventLogGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService) : base(entityFrameworkGraphQlService)
         {
             Field(x => x.Id);
             Field(x => x.User);

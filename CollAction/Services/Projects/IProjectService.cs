@@ -9,10 +9,15 @@ namespace CollAction.Services.Projects
     public interface IProjectService
     {
         Task<Project> CreateProject(NewProject newProject, ClaimsPrincipal user);
+
         Task<Project> UpdateProject(UpdatedProject updatedProject, ClaimsPrincipal user);
+
         Task<AddParticipantResult> CommitToProject(string email, int projectId, ClaimsPrincipal user);
-        Task SendProjectEmail(int projectId, string subject, string message, ClaimsPrincipal performingUser);
-        Task ChangeProjectSubscription(int projectId, string userId, Guid token);
+
+        Task<Project> SendProjectEmail(int projectId, string subject, string message, ClaimsPrincipal performingUser);
+
+        Task<ProjectParticipant> SetProjectSubscription(int projectId, string userId, Guid token, bool isSubscribed);
+
         bool CanSendProjectEmail(Project project);
     }
 }

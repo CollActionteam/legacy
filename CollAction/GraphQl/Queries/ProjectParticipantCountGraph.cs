@@ -6,7 +6,7 @@ namespace CollAction.GraphQl.Queries
 {
     public class ProjectParticipantCountGraph : EfObjectGraphType<ApplicationDbContext, ProjectParticipantCount>
     {
-        public ProjectParticipantCountGraph(IEfGraphQLService<ApplicationDbContext> efGraphQlService) : base(efGraphQlService)
+        public ProjectParticipantCountGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService) : base(entityFrameworkGraphQlService)
         {
             Field(x => x.Count);
         }

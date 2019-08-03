@@ -12,7 +12,7 @@ namespace CollAction.GraphQl.Queries
 {
     public class QueryGraph : QueryGraphType<ApplicationDbContext>
     {
-        public QueryGraph(IEfGraphQLService<ApplicationDbContext> efGraphQlService, IServiceScopeFactory serviceScopeFactory, IFestivalService festivalService, IOptions<DisqusOptions> disqusOptions) : base(efGraphQlService)
+        public QueryGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService, IServiceScopeFactory serviceScopeFactory, IFestivalService festivalService, IOptions<DisqusOptions> disqusOptions) : base(entityFrameworkGraphQlService)
         {
             AddQueryField(
                 nameof(ApplicationDbContext.Projects),

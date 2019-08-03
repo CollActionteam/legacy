@@ -36,7 +36,9 @@ namespace CollAction.Services.Email
         }
 
         public void SendEmail(string email, string subject, string message)
-            => SendEmails(new[] { email }, subject, message);
+        {
+            SendEmails(new[] { email }, subject, message);
+        }
 
         public Task SendEmailsTemplated(IEnumerable<string> emails, string subject, string emailTemplate)
             => SendEmailsTemplated(emails, subject, emailTemplate, new object());
@@ -52,7 +54,9 @@ namespace CollAction.Services.Email
         }
 
         public Task SendEmailTemplated<TModel>(string email, string subject, string emailTemplate, TModel model)
-            => SendEmailsTemplated(new[] { email }, subject, emailTemplate, model);
+        {
+            return SendEmailsTemplated(new[] { email }, subject, emailTemplate, model);
+        }
 
         public async Task SendEmailQueued(IEnumerable<string> emails, string subject, string message) // Not part of the interface, but needs to be public so that hangfire can queue it
         {

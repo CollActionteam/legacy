@@ -57,8 +57,10 @@ namespace CollAction.Services.Image
         public void DeleteImage(ImageFile imageFile)
         {
             if (imageFile != null)
-                jobClient.Enqueue(() => 
+            {
+                jobClient.Enqueue(() =>
                     DeleteObject(imageFile.Filepath));
+            }
         }
 
         public string GetUrl(ImageFile imageFile)
@@ -74,7 +76,9 @@ namespace CollAction.Services.Image
 
             DeleteObjectResponse response = await client.DeleteObjectAsync(deleteRequest);
             if (!response.HttpStatusCode.IsSuccess())
+            {
                 throw new InvalidOperationException($"failed to delete S3 object {filePath}, {response.HttpStatusCode}");
+            }
         }
 
         public async Task UploadToS3(byte[] image, string path)
@@ -93,7 +97,9 @@ namespace CollAction.Services.Image
 
                 PutObjectResponse response = await client.PutObjectAsync(putRequest);
                 if (!response.HttpStatusCode.IsSuccess())
+                {
                     throw new InvalidOperationException($"failed to upload S3 object {path}, {response.HttpStatusCode}");
+                }
             }
         }
 
@@ -109,12 +115,17 @@ namespace CollAction.Services.Image
                     if (scaleRatio != 1.0)
                     {
                         image.Mutate(x => x
-                            .Resize((int)(image.Width*scaleRatio), (int)(image.Height*scaleRatio))
-                            );
+                            .Resize((int)(image.Width * scaleRatio), (int)(image.Height * scaleRatio)));
                     }
+
                     return image;
                 }
             }
+        }
+    
+        public void Dispose()
+        {
+            client.Dispose();
         }
 
         private byte[] ConvertImageToPng(Image<Rgba32> image)
@@ -132,20 +143,15 @@ namespace CollAction.Services.Image
             {
                 if (image.Width > image.Height) 
                 {
-                    return ( (double)imageResizeThreshold/(double)image.Width);
+                    return (double)imageResizeThreshold / image.Width;
                 }
                 else
                 {
-                    return ( (double)imageResizeThreshold/(double)image.Height);
+                    return (double)imageResizeThreshold / image.Height;
                 }
             }
 
             return 1.0;
-        }
-    
-        public void Dispose()
-        {
-            client.Dispose();
         }
     }
 }

@@ -8,23 +8,27 @@ namespace CollAction.ValidationAttributes
 {
     public class FileTypeAttribute : ValidationAttribute
     {
-        private readonly string[] _types;
+        private readonly string[] types;
 
         public FileTypeAttribute(params string[] types)
         {
-            _types = types;
+            this.types = types;
         }
 
         public override bool IsValid(object value)
         {
-            if (value == null) return true;
+            if (value == null)
+            {
+                return true;
+            }
+
             var extension = Path.GetExtension((value as IFormFile).FileName).ToLower().Substring(1); // Strip off the preceeding dot.
-            return _types.Contains(extension);
+            return types.Contains(extension);
         }
 
         public override string FormatErrorMessage(string name)
         {
-            return string.Format("Invalid file type. Only files of type {0} are accepted.", String.Join(", ", _types));
+            return string.Format("Invalid file type. Only files of type {0} are accepted.", string.Join(", ", types));
         }
     }
 }

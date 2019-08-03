@@ -6,7 +6,7 @@ namespace CollAction.GraphQl.Queries
 {
     public class ProjectParticipantGraph : EfObjectGraphType<ApplicationDbContext, ProjectParticipant>
     {
-        public ProjectParticipantGraph(IEfGraphQLService<ApplicationDbContext> efGraphQlService) : base(efGraphQlService)
+        public ProjectParticipantGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService) : base(entityFrameworkGraphQlService)
         {
             Field(x => x.SubscribedToProjectEmails);
             Field(x => x.UnsubscribeToken);

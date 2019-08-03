@@ -60,14 +60,17 @@ namespace CollAction.Services.Newsletter
                 member.Status = Status.Subscribed;
                 await mailChimpManager.Members.AddOrUpdateAsync(newsletterListId, member);
             }
-            catch (MailChimpNotFoundException) // New member
-            {
-                await mailChimpManager.Members.AddOrUpdateAsync(newsletterListId, new Member()
-                {
-                    EmailAddress = email,
-                    StatusIfNew = usePendingStatusIfNew ? Status.Pending : Status.Subscribed,
-                    Status = Status.Subscribed
-                });
+            catch (MailChimpNotFoundException)
+            { 
+                // New member
+                await mailChimpManager.Members.AddOrUpdateAsync(
+                    newsletterListId, 
+                    new Member()
+                    {
+                        EmailAddress = email,
+                        StatusIfNew = usePendingStatusIfNew ? Status.Pending : Status.Subscribed,
+                        Status = Status.Subscribed
+                    });
             }
         }
 
@@ -79,7 +82,7 @@ namespace CollAction.Services.Newsletter
                 member.Status = Status.Unsubscribed;
                 await mailChimpManager.Members.AddOrUpdateAsync(newsletterListId, member);
             }
-            catch(MailChimpNotFoundException)
+            catch (MailChimpNotFoundException)
             {
                 // Doesn't exist, so already unsubscribed
             }

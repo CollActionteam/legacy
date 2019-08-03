@@ -115,7 +115,7 @@ namespace CollAction.Models
             Regex doubleDashRemoveRegex = new Regex(@"([-_]){2,}");
             value = value.ToLowerInvariant();
             value = spaceRemoveRegex.Replace(value, "-");
-            value = invalidCharRemoveRegex.Replace(value, "");
+            value = invalidCharRemoveRegex.Replace(value, string.Empty);
             value = value.Trim('-', '_');
             value = doubleDashRemoveRegex.Replace(value, "$1");
             if (value.Length == 0)

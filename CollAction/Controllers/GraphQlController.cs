@@ -19,29 +19,23 @@ namespace CollAction.Controllers
     {
         private readonly IDocumentExecuter executer;
         private readonly IValidationRule authorizationValidationRule;
+        private readonly ApplicationDbContext context;
         private readonly ISchema schema;
 
-        public GraphQlController(ISchema schema, IDocumentExecuter executer, IValidationRule authorizationValidationRule)
+        public GraphQlController(ISchema schema, IDocumentExecuter executer, IValidationRule authorizationValidationRule, ApplicationDbContext context)
         {
             this.schema = schema;
             this.executer = executer;
             this.authorizationValidationRule = authorizationValidationRule;
+            this.context = context;
         }
 
         [HttpPost]
         public Task<ExecutionResult> Post(
             [BindRequired, FromBody] PostBody body,
-            [FromServices] ApplicationDbContext dbContext,
             CancellationToken cancellation)
         {
-            return Execute(dbContext, body.Query, body.OperationName, body.Variables, cancellation);
-        }
-
-        public class PostBody
-        {
-            public string OperationName;
-            public string Query;
-            public JObject Variables;
+            return Execute(body.Query, body.OperationName, body.Variables, cancellation);
         }
 
         [HttpGet]
@@ -49,46 +43,10 @@ namespace CollAction.Controllers
             [FromQuery] string query,
             [FromQuery] string variables,
             [FromQuery] string operationName,
-            [FromServices] ApplicationDbContext dbContext,
             CancellationToken cancellation)
         {
-            var jObject = ParseVariables(variables);
-            return Execute(dbContext, query, operationName, jObject, cancellation);
-        }
-
-        private Task<ExecutionResult> Execute(
-            ApplicationDbContext dbContext,
-            string query,
-            string operationName,
-            JObject variables,
-            CancellationToken cancellation)
-        {
-            var validationRules = DocumentValidator.CoreRules();
-            validationRules.Add(authorizationValidationRule);
-            var options = new ExecutionOptions
-            {
-                Schema = schema,
-                Query = query,
-                OperationName = operationName,
-                Inputs = variables?.ToInputs(),
-                UserContext = new UserContext()
-                {
-                    Context = dbContext,
-                    User = User
-                },
-                ComplexityConfiguration = new ComplexityConfiguration()
-                {
-                    MaxDepth = 20
-                },
-                ValidationRules = validationRules,
-                CancellationToken = cancellation,
-#if (DEBUG)
-                ExposeExceptions = true,
-                EnableMetrics = true,
-#endif
-            };
-
-            return executer.ExecuteAsync(options);
+            var jsonVariables = ParseVariables(variables);
+            return Execute(query, operationName, jsonVariables, cancellation);
         }
 
         private static JObject ParseVariables(string variables)
@@ -106,6 +64,49 @@ namespace CollAction.Controllers
             {
                 throw new Exception("Could not parse variables.", exception);
             }
+        }
+
+        private Task<ExecutionResult> Execute(
+            string query,
+            string operationName,
+            JObject variables,
+            CancellationToken cancellation)
+        {
+            var validationRules = DocumentValidator.CoreRules();
+            validationRules.Add(authorizationValidationRule);
+            var options = new ExecutionOptions
+            {
+                Schema = schema,
+                Query = query,
+                OperationName = operationName,
+                Inputs = variables?.ToInputs(),
+                UserContext = new UserContext()
+                {
+                    Context = context,
+                    User = User
+                },
+                ComplexityConfiguration = new ComplexityConfiguration()
+                {
+                    MaxDepth = 20
+                },
+                ValidationRules = validationRules,
+                CancellationToken = cancellation,
+#if (DEBUG)
+                ExposeExceptions = true,
+                EnableMetrics = true,
+#endif
+            };
+
+            return executer.ExecuteAsync(options);
+        }
+
+        public class PostBody
+        {
+            public string OperationName { get; set; }
+
+            public string Query { get; set; }
+
+            public JObject Variables { get; set; }
         }
     }
 }
