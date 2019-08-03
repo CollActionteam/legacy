@@ -2,6 +2,7 @@
 using CollAction.GraphQl;
 using GraphQL;
 using GraphQL.Types;
+using GraphQL.Validation;
 using GraphQL.Validation.Complexity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -16,13 +17,15 @@ namespace CollAction.Controllers
     [ApiController]
     public class GraphQlController : Controller
     {
-        IDocumentExecuter executer;
-        ISchema schema;
+        private readonly IDocumentExecuter executer;
+        private readonly IValidationRule authorizationValidationRule;
+        private readonly ISchema schema;
 
-        public GraphQlController(ISchema schema, IDocumentExecuter executer)
+        public GraphQlController(ISchema schema, IDocumentExecuter executer, IValidationRule authorizationValidationRule)
         {
             this.schema = schema;
             this.executer = executer;
+            this.authorizationValidationRule = authorizationValidationRule;
         }
 
         [HttpPost]
@@ -60,6 +63,8 @@ namespace CollAction.Controllers
             JObject variables,
             CancellationToken cancellation)
         {
+            var validationRules = DocumentValidator.CoreRules();
+            validationRules.Add(authorizationValidationRule);
             var options = new ExecutionOptions
             {
                 Schema = schema,
@@ -75,6 +80,7 @@ namespace CollAction.Controllers
                 {
                     MaxDepth = 20
                 },
+                ValidationRules = validationRules,
                 CancellationToken = cancellation,
 #if (DEBUG)
                 ExposeExceptions = true,
