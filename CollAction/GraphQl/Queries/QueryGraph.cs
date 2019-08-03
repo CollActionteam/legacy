@@ -32,11 +32,11 @@ namespace CollAction.GraphQl.Queries
 
             AddQueryField(
                 nameof(ApplicationDbContext.Users),
-                c => c.DbContext.Users).AuthorizeWith(Constants.AdminRole);
+                c => c.DbContext.Users).AuthorizeWith(Constants.GraphQlAdminPolicy);
 
             AddSingleField(
                 name: "user",
-                resolve: c => c.DbContext.Users).AuthorizeWith(Constants.AdminRole);
+                resolve: c => c.DbContext.Users).AuthorizeWith(Constants.GraphQlAdminPolicy);
 
             FieldAsync<ApplicationUserGraph>(
                 name: "currentUser",

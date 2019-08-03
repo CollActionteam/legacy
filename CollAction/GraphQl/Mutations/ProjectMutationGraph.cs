@@ -37,7 +37,7 @@ namespace CollAction.GraphQl.Mutations
                     {
                         return await scope.ServiceProvider.GetRequiredService<IProjectService>().UpdateProject(project, ((UserContext)c.UserContext).User);
                     }
-                }).AuthorizeWith(Constants.AdminRole);
+                }).AuthorizeWith(Constants.GraphQlAdminPolicy);
 
             FieldAsync<AddParticipantResultGraph>(
                 "commitToProject",
