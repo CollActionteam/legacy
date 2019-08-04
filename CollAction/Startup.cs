@@ -136,7 +136,8 @@ namespace CollAction
                         builder.AllowAnyMethod()
                                .AllowAnyHeader()
                                .AllowCredentials()
-                               .SetIsOriginAllowed(o => o == publicAddress));
+                               .SetIsOriginAllowed(o => o == publicAddress)
+                               .WithOrigins(publicAddress));
             });
 
             services.Configure<StripeSignatures>(Configuration);
