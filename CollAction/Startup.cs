@@ -42,6 +42,8 @@ namespace CollAction
 {
     public class Startup
     {
+        private readonly string CorsPolicy = "FrontendCors";
+
         public Startup(IHostingEnvironment env, IConfiguration configuration, ILogger<Startup> logger)
         {
             Configuration = configuration;
@@ -130,7 +132,8 @@ namespace CollAction
             services.AddCors(c =>
             {
                 string publicAddress = Configuration["PublicAddress"];
-                c.AddDefaultPolicy(
+                c.AddPolicy(
+                    CorsPolicy,
                     builder =>
                         builder.AllowAnyMethod()
                                .AllowAnyHeader()
@@ -172,6 +175,8 @@ namespace CollAction
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime applicationLifetime)
         {
+            app.UseCors(CorsPolicy);
+
             if (env.IsProduction())
             {
                 // Ensure our middleware handles proxied https, see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-Proto
@@ -184,13 +189,9 @@ namespace CollAction
                 forwardedHeaderOptions.KnownNetworks.Clear();
                 app.UseForwardedHeaders(forwardedHeaderOptions);
                 app.UseRewriter(new RewriteOptions().AddRedirectToHttpsPermanent());
+                app.UseHsts();
 
                 applicationLifetime.ApplicationStopping.Register(() => Log.CloseAndFlush());
-            }
-
-            if (!Configuration.GetValue<bool>("CspDisable"))
-            {
-                ConfigureCsp(app, env, Configuration);
             }
 
             if (env.IsDevelopment())
@@ -204,8 +205,6 @@ namespace CollAction
             {
                 app.UseExceptionHandler("error");
             }
-
-            app.UseCors();
 
             app.UseAuthentication();
 
@@ -255,16 +254,6 @@ namespace CollAction
                     Logger.LogInformation("done starting up");
                 }).Wait();
             }
-        }
-
-        private static void ConfigureCsp(IApplicationBuilder app, IHostingEnvironment env, IConfiguration configuration)
-        {
-            app.UseSecurityHeaders(
-                new HeaderPolicyCollection() // See https://www.owasp.org/index.php/OWASP_Secure_Headers_Project
-                   .AddStrictTransportSecurityMaxAgeIncludeSubDomains() // Add a HSTS header, making sure browsers connect to collaction + subdomains with https from now on
-                   .AddContentTypeOptionsNoSniff() // Ensure the browser doesn't guess/sniff content-types
-                   .AddReferrerPolicyStrictOriginWhenCrossOrigin() // Send a full URL when performing a same-origin request, only send the origin of the document to a-priori as-much-secure destination (HTTPS->HTTPS), and send no header to a less secure destination (HTTPS->HTTP) 
-                   .AddFrameOptionsDeny()); // No framing allowed (put us inside a frame tag)
         }
     }
 }
