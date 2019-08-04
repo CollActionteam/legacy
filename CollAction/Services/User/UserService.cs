@@ -51,7 +51,8 @@ namespace CollAction.Services.User
             logger.LogInformation("Creating user from external login");
             ApplicationUser user = new ApplicationUser()
             {
-                Email = email
+                Email = email,
+                UserName = email
             };
             IdentityResult result = await userManager.CreateAsync(user);
             if (result.Succeeded)

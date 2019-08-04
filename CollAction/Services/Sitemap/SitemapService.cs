@@ -37,10 +37,10 @@ Disallow: /Manage/";
         {
             object[] homepageUrls = new[]
             {
-                new XElement(urlsetNamespace + "url", new XElement(urlsetNamespace + "loc", "https://" + siteOptions.PublicAddress + "#/Home")),
-                new XElement(urlsetNamespace + "url", new XElement(urlsetNamespace + "loc", "https://" + siteOptions.PublicAddress + "#/About")),
-                new XElement(urlsetNamespace + "url", new XElement(urlsetNamespace + "loc", "https://" + siteOptions.PublicAddress + "#/Find")),
-                new XElement(urlsetNamespace + "url", new XElement(urlsetNamespace + "loc", "https://" + siteOptions.PublicAddress + "#/CrowdActingFestival"))
+                new XElement(urlsetNamespace + "url", new XElement(urlsetNamespace + "loc", "https://" + siteOptions.PublicAddress + "/Home")),
+                new XElement(urlsetNamespace + "url", new XElement(urlsetNamespace + "loc", "https://" + siteOptions.PublicAddress + "/About")),
+                new XElement(urlsetNamespace + "url", new XElement(urlsetNamespace + "loc", "https://" + siteOptions.PublicAddress + "/Find")),
+                new XElement(urlsetNamespace + "url", new XElement(urlsetNamespace + "loc", "https://" + siteOptions.PublicAddress + "/CrowdActingFestival"))
             };
 
             object[] projectUrls = await context.Projects
