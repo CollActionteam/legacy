@@ -7,12 +7,11 @@ public_folder: assets
 collections:
   - name: blog
     label: Blog
-    folder: frontend/src/pages/blog
+    folder: frontend/src/content/blog
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     preview: false
     create: true
     fields:
-      - { name: path, label: Path }
       - { name: date, label: Date, widget: date }
       - { name: title, label: Title }
       - { name: body, label: Body, widget: markdown }
