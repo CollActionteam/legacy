@@ -1,18 +1,10 @@
 import React from "react";
-import { graphql } from "gatsby";
 import Layout from "../../components/Layout";
+import Find from "../../components/Find";
 
-export default ({ data }) => (
+export default () => (
   <Layout>
-    <h1>Find Project</h1>
-    <p>This will be the find project page.</p>
+      <h2>Find project</h2>
+      <Find />
   </Layout>
 );
-
-export const query = graphql`
-  query {
-    site {
-      id
-    }
-  }
-`;

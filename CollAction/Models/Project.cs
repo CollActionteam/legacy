@@ -89,7 +89,7 @@ namespace CollAction.Models
 
         [NotMapped]
         public string Url
-            => $"/#/Projects/{NameNormalized}/{Id}";
+            => $"/Projects/{NameNormalized}/{Id}";
 
         [NotMapped]
         public TimeSpan RemainingTime
