@@ -1,17 +1,17 @@
 backend:
-  name: test-repo
-# backend:
-#   name: github
-#   repo: CollActionteam/CollAction
-media_folder: static/assets
+  name: github
+  repo: CollActionteam/CollAction
+  branch: CA-707
+media_folder: frontend/static/assets
 public_folder: assets
 collections:
   - name: blog
     label: Blog
-    folder: blog
+    folder: frontend/src/content/blog
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    preview: false
     create: true
     fields:
-      - { name: path, label: Path }
       - { name: date, label: Date, widget: date }
       - { name: title, label: Title }
       - { name: body, label: Body, widget: markdown }
