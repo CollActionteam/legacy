@@ -3,6 +3,19 @@ module.exports = {
     title: "CollAction",
     author: "CollAction",
     description: "CollAction",
+    backendUrl: "https://localhost:44301/",
+    frontendUrl: "http://localhost:8000/",
+    loginProviders: [ 
+      {
+        name: "Google"
+      },
+      { 
+        name: "Twitter"
+      },
+      {
+         name: "Facebook"
+      }
+    ],
     menuLinks: [
       {
         name: "Home",
@@ -23,6 +36,10 @@ module.exports = {
       {
         name: "About",
         link: "/about",
+      },
+      {
+        name: "Login",
+        link: "/login",
       },
     ],
   },

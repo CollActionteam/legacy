@@ -30,7 +30,7 @@ namespace CollAction.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel model, string errorUrl, string returnUrl)
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -38,22 +38,22 @@ namespace CollAction.Controllers
                 if (result.Succeeded)
                 {
                     logger.LogInformation("User logged in");
-                    return Redirect(returnUrl);
+                    return Redirect(model.ReturnUrl);
                 }
                 else if (result.IsLockedOut)
                 {
                     logger.LogInformation("User is locked out");
-                    return Redirect($"{errorUrl}?error=lockout");
+                    return Redirect($"{model.ErrorUrl}?error=lockout");
                 }
                 else
                 {
                     logger.LogInformation("User is unable to log in");
-                    return Redirect($"{errorUrl}?error=other");
+                    return Redirect($"{model.ErrorUrl}?error=other");
                 }
             }
             else
             {
-                return Redirect($"{errorUrl}?error=validation");
+                return Redirect($"{model.ErrorUrl}?error=validation");
             }
         }
 
@@ -67,21 +67,21 @@ namespace CollAction.Controllers
         }
 
         [HttpPost]
-        public IActionResult ExternalLogin(string provider, string errorUrl, string returnUrl = null)
+        public IActionResult ExternalLogin(ExternalLoginViewModel model)
         {
-            string redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { ErrorUrl = errorUrl, ReturnUrl = returnUrl });
-            var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
-            return Challenge(properties, provider);
+            string redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { model.ErrorUrl, model.ReturnUrl, model.RememberMe });
+            var properties = signInManager.ConfigureExternalAuthenticationProperties(model.Provider, redirectUrl);
+            return Challenge(properties, model.Provider);
         }
 
         [HttpGet]
-        public async Task<IActionResult> ExternalLoginCallback(string errorUrl, string returnUrl = null, string remoteError = null)
+        public async Task<IActionResult> ExternalLoginCallback(ExternalLoginCallbackViewModel model)
         {
-            if (remoteError != null)
+            if (model.RemoteError != null)
             {
-                string error = $"Error from external login: {remoteError}";
+                string error = $"Error from external login: {model.RemoteError}";
                 logger.LogError(error);
-                return Redirect($"{errorUrl}?error={WebUtility.UrlEncode(error)}");
+                return Redirect($"{model.ErrorUrl}?error={WebUtility.UrlEncode(error)}");
             }
 
             ExternalLoginInfo info = await signInManager.GetExternalLoginInfoAsync();
@@ -89,7 +89,7 @@ namespace CollAction.Controllers
             {
                 string error = $"Error from external login: unable to retrieve user data";
                 logger.LogError(error);
-                return Redirect($"{errorUrl}?error={WebUtility.UrlEncode(error)}");
+                return Redirect($"{model.ErrorUrl}?error={WebUtility.UrlEncode(error)}");
             }
 
             // Sign in the user with this external login provider if the user already has a login.
@@ -97,12 +97,12 @@ namespace CollAction.Controllers
             if (result.Succeeded)
             {
                 logger.LogInformation("User logged in with {0} provider.", info.LoginProvider);
-                return Redirect(returnUrl);
+                return Redirect(model.ReturnUrl);
             }
             else if (result.IsLockedOut)
             {
                 logger.LogInformation("User is locked out");
-                return Redirect($"{errorUrl}?error=lockout");
+                return Redirect($"{model.ErrorUrl}?error=lockout");
             }
             else
             {
@@ -111,13 +111,13 @@ namespace CollAction.Controllers
                 var newUserResult = await userService.CreateUser(email, info);
                 if (newUserResult.Result.Succeeded)
                 {
-                    return Redirect(returnUrl);
+                    return Redirect(model.ReturnUrl);
                 }
                 else
                 {
                     string error = string.Join(", ", newUserResult.Result.Errors.Select(e => e.Description));
                     logger.LogError(error);
-                    return Redirect($"{errorUrl}?error={WebUtility.UrlEncode(error)}");
+                    return Redirect($"{model.ErrorUrl}?error={WebUtility.UrlEncode(error)}");
                 }
             }
         }
