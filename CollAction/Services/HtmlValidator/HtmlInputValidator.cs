@@ -61,7 +61,7 @@ namespace CollAction.Helpers
             string output = sanitizer.Sanitize(inputHtml);
 
             // Check assertion, if sanitized, output must change, and other way around
-            if ((output == inputHtml) == isSafe) 
+            if ((output == inputHtml) != isSafe) 
             {
                 throw new ValidationException("Html sanitized but no event handler fired");
             }

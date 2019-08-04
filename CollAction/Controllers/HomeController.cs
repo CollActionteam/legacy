@@ -23,11 +23,11 @@ namespace CollAction.Controllers
             => View();
 
         [Route("robots.txt")]
-        public ContentResult Robots()
+        public IActionResult Robots()
             => Content(sitemapService.RobotsTxt, "text/plain", Encoding.UTF8);
 
         [Route("sitemap.xml")]
-        public async Task<ContentResult> Sitemap(CancellationToken cancellationToken)
+        public async Task<IActionResult> Sitemap(CancellationToken cancellationToken)
             => Content((await sitemapService.GetSitemap(cancellationToken)).ToString(), "text/xml", Encoding.UTF8);
 
         [Route("error")]

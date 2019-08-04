@@ -119,7 +119,7 @@ namespace CollAction.Services.Projects
 
         public async Task<Project> UpdateProject(UpdatedProject updatedProject, ClaimsPrincipal user, CancellationToken cancellationToken)
         {
-            if (user.IsInRole(Constants.AdminRole))
+            if (!user.IsInRole(Constants.AdminRole))
             {
                 throw new ValidationException("Not allowed to update project");
             }
@@ -219,7 +219,7 @@ namespace CollAction.Services.Projects
 
         public async Task<Project> SendProjectEmail(int projectId, string subject, string message, ClaimsPrincipal performingUser, CancellationToken cancellationToken)
         {
-            Project project = await context.Projects.FindAsync(projectId, cancellationToken);
+            Project project = await context.Projects.FindAsync(new object[] { projectId }, cancellationToken);
             if (project == null)
             {
                 throw new ValidationException("Project not found");
@@ -434,6 +434,11 @@ namespace CollAction.Services.Projects
 
         private async Task<bool> InsertParticipant(int projectId, string userId, CancellationToken cancellationToken)
         {
+            if (await context.ProjectParticipants.AnyAsync(part => part.UserId == userId && part.ProjectId == projectId))
+            {
+                return false;
+            }
+
             ProjectParticipant participant = new ProjectParticipant
             {
                 UserId = userId,
@@ -454,7 +459,7 @@ namespace CollAction.Services.Projects
             }
             catch (DbUpdateException)
             {
-                // User is already participanting
+                // User is already participating
                 return false;
             }
         }
