@@ -20,7 +20,7 @@ namespace CollAction.ViewModels.Email
             => $"{PublicAddress}/Start";
 
         public string FinishRegistrationLink
-            => $"{PublicAddress}/account/FinishRegistration?email={WebUtility.UrlEncode(Result.ParticipantEmail)}&code={WebUtility.UrlEncode(Result.PasswordResetToken)}";
+            => $"{PublicAddress}/Account/FinishRegistration?email={WebUtility.UrlEncode(Result.ParticipantEmail)}&code={WebUtility.UrlEncode(Result.PasswordResetToken)}";
 
         public string FacebookLink
             => $"https://www.facebook.com/sharer/sharer.php?u={ProjectUrl}";

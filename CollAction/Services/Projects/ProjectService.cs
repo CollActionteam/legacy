@@ -246,7 +246,7 @@ namespace CollAction.Services.Projects
 
             foreach (ProjectParticipant participant in participants)
             {
-                string unsubscribeLink = $"{siteOptions.PublicAddress}/#/ChangeSubscription?userId={WebUtility.UrlEncode(participant.UserId)}&projectId={project.Id}&token={WebUtility.UrlEncode(participant.UnsubscribeToken.ToString())}";
+                string unsubscribeLink = $"{siteOptions.PublicAddress}/Manage/ChangeSubscription?userId={WebUtility.UrlEncode(participant.UserId)}&projectId={project.Id}&token={WebUtility.UrlEncode(participant.UnsubscribeToken.ToString())}";
                 emailSender.SendEmail(participant.User.Email, subject, FormatEmailMessage(message, participant.User, unsubscribeLink));
             }
 

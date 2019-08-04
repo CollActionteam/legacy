@@ -1,41 +1,37 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Diagnostics;
-using CollAction.Services.Sitemap;
-using System.Threading;
+using CollAction.Helpers;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 
 namespace CollAction.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ISitemapService sitemapService;
         private readonly ILogger<HomeController> logger;
+        private readonly IHostingEnvironment hostingEnvironment;
 
-        public HomeController(ILogger<HomeController> logger, ISitemapService sitemapService)
+        public HomeController(IHostingEnvironment hostingEnvironment, ILogger<HomeController> logger)
         {
-            this.sitemapService = sitemapService;
             this.logger = logger;
+            this.hostingEnvironment = hostingEnvironment;
         }
-
-        public IActionResult Index()
-            => View();
-
-        [Route("robots.txt")]
-        public IActionResult Robots()
-            => Content(sitemapService.RobotsTxt, "text/plain", Encoding.UTF8);
-
-        [Route("sitemap.xml")]
-        public async Task<IActionResult> Sitemap(CancellationToken cancellationToken)
-            => Content((await sitemapService.GetSitemap(cancellationToken)).ToString(), "text/xml", Encoding.UTF8);
 
         [Route("error")]
         public IActionResult Error()
         {
             var exceptionHandlerPathFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
             logger.LogError(exceptionHandlerPathFeature.Error, "An error has occurred at: {0}", exceptionHandlerPathFeature.Path);
-            return View();
+            Response.StatusCode = StatusCodes.Status500InternalServerError;
+            if (hostingEnvironment.IsDevelopment())
+            {
+                return Json(new { error = $"An internal error has occured: {exceptionHandlerPathFeature.Error.GetExceptionDetails()}" });
+            }
+            else
+            {
+                return Json(new { error = "An internal error has occured" });
+            }
         }
     }
 }

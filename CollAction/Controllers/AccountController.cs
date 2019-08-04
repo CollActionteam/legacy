@@ -30,7 +30,7 @@ namespace CollAction.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
+        public async Task<IActionResult> Login(LoginViewModel model, string errorUrl, string returnUrl)
         {
             if (ModelState.IsValid)
             {
@@ -38,21 +38,23 @@ namespace CollAction.Controllers
                 if (result.Succeeded)
                 {
                     logger.LogInformation("User logged in");
-                    return RedirectToLocal(returnUrl);
+                    return Redirect(returnUrl);
                 }
                 else if (result.IsLockedOut)
                 {
                     logger.LogInformation("User is locked out");
-                    return Redirect("/LoginFailure?error=lockout");
+                    return Redirect($"{errorUrl}?error=lockout");
                 }
                 else
                 {
                     logger.LogInformation("User is unable to log in");
-                    return Redirect("/LoginFailure?error=other");
+                    return Redirect($"{errorUrl}?error=other");
                 }
             }
-
-            return Redirect("/LoginFailure?error=validation");
+            else
+            {
+                return Redirect($"{errorUrl}?error=validation");
+            }
         }
 
         [HttpPost]
@@ -65,21 +67,21 @@ namespace CollAction.Controllers
         }
 
         [HttpPost]
-        public IActionResult ExternalLogin(string provider, string returnUrl = null)
+        public IActionResult ExternalLogin(string provider, string errorUrl, string returnUrl = null)
         {
-            string redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { ReturnUrl = returnUrl });
+            string redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { ErrorUrl = errorUrl, ReturnUrl = returnUrl });
             var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
             return Challenge(properties, provider);
         }
 
         [HttpGet]
-        public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
+        public async Task<IActionResult> ExternalLoginCallback(string errorUrl, string returnUrl = null, string remoteError = null)
         {
             if (remoteError != null)
             {
                 string error = $"Error from external login: {remoteError}";
                 logger.LogError(error);
-                return Redirect($"/LoginFailure?error={WebUtility.UrlEncode(error)}");
+                return Redirect($"{errorUrl}?error={WebUtility.UrlEncode(error)}");
             }
 
             ExternalLoginInfo info = await signInManager.GetExternalLoginInfoAsync();
@@ -87,7 +89,7 @@ namespace CollAction.Controllers
             {
                 string error = $"Error from external login: unable to retrieve user data";
                 logger.LogError(error);
-                return Redirect($"/LoginFailure?error={WebUtility.UrlEncode(error)}");
+                return Redirect($"{errorUrl}?error={WebUtility.UrlEncode(error)}");
             }
 
             // Sign in the user with this external login provider if the user already has a login.
@@ -95,12 +97,12 @@ namespace CollAction.Controllers
             if (result.Succeeded)
             {
                 logger.LogInformation("User logged in with {0} provider.", info.LoginProvider);
-                return RedirectToLocal(returnUrl);
+                return Redirect(returnUrl);
             }
             else if (result.IsLockedOut)
             {
                 logger.LogInformation("User is locked out");
-                return Redirect("/LoginFailure?error=lockout");
+                return Redirect($"{errorUrl}?error=lockout");
             }
             else
             {
@@ -109,26 +111,14 @@ namespace CollAction.Controllers
                 var newUserResult = await userService.CreateUser(email, info);
                 if (newUserResult.Result.Succeeded)
                 {
-                    return RedirectToLocal(returnUrl);
+                    return Redirect(returnUrl);
                 }
                 else
                 {
                     string error = string.Join(", ", newUserResult.Result.Errors.Select(e => e.Description));
                     logger.LogError(error);
-                    return Redirect($"/LoginFailure?error={WebUtility.UrlEncode(error)}");
+                    return Redirect($"{errorUrl}?error={WebUtility.UrlEncode(error)}");
                 }
-            }
-        }
-
-        private IActionResult RedirectToLocal(string returnUrl)
-        {
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-            else
-            {
-                return RedirectToAction(nameof(HomeController.Index), "Home");
             }
         }
     }

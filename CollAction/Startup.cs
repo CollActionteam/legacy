@@ -32,7 +32,6 @@ using Microsoft.ApplicationInsights.Extensibility;
 using CollAction.Services.ViewRender;
 using MailChimp.Net;
 using MailChimp.Net.Interfaces;
-using CollAction.Services.Sitemap;
 using GraphiQl;
 using Microsoft.AspNetCore.Mvc;
 using CollAction.GraphQl;
@@ -121,7 +120,6 @@ namespace CollAction
             services.AddTransient<IDonationService, DonationService>();
             services.AddTransient<IViewRenderService, ViewRenderService>();
             services.AddTransient<IMailChimpManager, MailChimpManager>();
-            services.AddTransient<ISitemapService, SitemapService>();
             services.AddTransient<IFestivalService, FestivalService>();
             services.AddTransient<IHtmlInputValidator, HtmlInputValidator>();
             services.AddUrlHelper();
@@ -129,6 +127,17 @@ namespace CollAction
             services.AddDataProtection()
                     .Services
                     .Configure<KeyManagementOptions>(options => options.XmlRepository = new DataProtectionRepository(new DbContextOptionsBuilder<ApplicationDbContext>().UseNpgsql(connectionString).Options));
+
+            services.AddCors(c =>
+            {
+                string publicAddress = Configuration["PublicAddress"];
+                c.AddDefaultPolicy(
+                    builder =>
+                        builder.AllowAnyMethod()
+                               .AllowAnyHeader()
+                               .AllowCredentials()
+                               .SetIsOriginAllowed(o => o == publicAddress));
+            });
 
             services.Configure<StripeSignatures>(Configuration);
             services.Configure<SiteOptions>(Configuration);
@@ -196,6 +205,8 @@ namespace CollAction
                 app.UseExceptionHandler("error");
             }
 
+            app.UseCors();
+
             app.UseAuthentication();
 
             app.UseStaticFiles(new StaticFileOptions()
@@ -218,17 +229,7 @@ namespace CollAction
                     }
                 });
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "Default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-
-                routes.MapRoute(
-                    name: "CatchAll",
-                    "{*url}",
-                    new { controller = "Home", action = "Index" });
-            });
+            app.UseMvc();
 
             InitializeDatabase(app.ApplicationServices);
         }

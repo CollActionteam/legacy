@@ -111,7 +111,7 @@ namespace CollAction.Services.User
 
             logger.LogInformation("Sending reset password for user");
             string code = await userManager.GeneratePasswordResetTokenAsync(user);
-            string callbackUrl = $"{siteOptions.PublicAddress}/#/resetpassword?code={WebUtility.UrlEncode(code)}&email={WebUtility.UrlEncode(email)}";
+            string callbackUrl = $"{siteOptions.PublicAddress}/Manage/ResetPassword?code={WebUtility.UrlEncode(code)}&email={WebUtility.UrlEncode(email)}";
             await emailSender.SendEmailTemplated(email, "Reset Password", "ResetPassword", callbackUrl);
             return IdentityResult.Success;
         }
