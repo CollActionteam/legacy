@@ -230,7 +230,12 @@ namespace CollAction
                     }
                 });
 
-            app.UseMvc();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "Default",
+                    template: "{controller}/{action}");
+            });
 
             InitializeDatabase(app.ApplicationServices);
         }
