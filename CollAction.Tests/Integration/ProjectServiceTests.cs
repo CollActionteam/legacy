@@ -155,6 +155,7 @@ namespace CollAction.Tests.Integration
                        {
                            await projectService.SendProjectEmail(newProject.Id, "test", "test", claimsUser, CancellationToken.None);
                        }
+
                        Assert.AreEqual(4, newProject.NumberProjectEmailsSend);
                        Assert.IsFalse(projectService.CanSendProjectEmail(newProject));
                    });

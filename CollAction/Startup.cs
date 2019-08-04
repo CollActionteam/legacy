@@ -9,7 +9,6 @@ using CollAction.Models;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Serilog;
-using System.Linq;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;

@@ -8,8 +8,8 @@ using CollAction.Models;
 using CollAction.ViewModels.Account;
 using System.Net;
 using CollAction.Services.User;
-using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 using System.Linq;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace CollAction.Controllers
 {

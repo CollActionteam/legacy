@@ -17,12 +17,13 @@ namespace CollAction.Helpers
                                  string value;
                                  if (property.Name == nameof(Exception.InnerException))
                                  {
-                                     value = GetExceptionDetails((Exception)propertyValue);
+                                     value = $"{{{Environment.NewLine}{GetExceptionDetails((Exception)propertyValue)}{Environment.NewLine}}}";
                                  }
                                  else
                                  {
                                      value = propertyValue.ToString();
                                  }
+
                                  return $"{property.Name} = {value}";
                              });
             return string.Join(Environment.NewLine, fields);
