@@ -18,7 +18,7 @@ env:
   - DISABLE_NPM_BUILD=1
   # Test account
   - AdminEmail=test-collaction@collaction.org
-  - AdminPassword=test
+  - AdminPassword=Test_0_tesT
   # Test database settings
   - Db=CollActionDb
   - DbUser=postgres
