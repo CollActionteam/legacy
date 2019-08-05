@@ -42,7 +42,7 @@ namespace CollAction
 {
     public class Startup
     {
-        private readonly string CorsPolicy = "FrontendCors";
+        private readonly string corsPolicy = "FrontendCors";
 
         public Startup(IHostingEnvironment env, IConfiguration configuration, ILogger<Startup> logger)
         {
@@ -133,7 +133,7 @@ namespace CollAction
             {
                 string publicAddress = Configuration["PublicAddress"];
                 c.AddPolicy(
-                    CorsPolicy,
+                    corsPolicy,
                     builder =>
                         builder.AllowAnyMethod()
                                .AllowAnyHeader()
@@ -175,7 +175,7 @@ namespace CollAction
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime applicationLifetime)
         {
-            app.UseCors(CorsPolicy);
+            app.UseCors(corsPolicy);
 
             if (env.IsProduction())
             {

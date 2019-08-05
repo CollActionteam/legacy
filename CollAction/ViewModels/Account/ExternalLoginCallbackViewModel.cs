@@ -4,7 +4,6 @@ namespace CollAction.ViewModels.Account
 {
     public class ExternalLoginCallbackViewModel
     {
-
         [Required]
         public string ReturnUrl { get; set; }
 

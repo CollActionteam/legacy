@@ -32,28 +32,26 @@ namespace CollAction.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                SignInResult result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: true);
-                if (result.Succeeded)
-                {
-                    logger.LogInformation("User logged in");
-                    return Redirect(model.ReturnUrl);
-                }
-                else if (result.IsLockedOut)
-                {
-                    logger.LogInformation("User is locked out");
-                    return Redirect($"{model.ErrorUrl}?error=lockout");
-                }
-                else
-                {
-                    logger.LogInformation("User is unable to log in");
-                    return Redirect($"{model.ErrorUrl}?error=other");
-                }
+                return Redirect($"{model.ErrorUrl}?error=validation");
+            }
+
+            SignInResult result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: true);
+            if (result.Succeeded)
+            {
+                logger.LogInformation("User logged in");
+                return Redirect(model.ReturnUrl);
+            }
+            else if (result.IsLockedOut)
+            {
+                logger.LogInformation("User is locked out");
+                return Redirect($"{model.ErrorUrl}?error=lockout");
             }
             else
             {
-                return Redirect($"{model.ErrorUrl}?error=validation");
+                logger.LogInformation("User is unable to log in");
+                return Redirect($"{model.ErrorUrl}?error=other");
             }
         }
 
@@ -104,21 +102,19 @@ namespace CollAction.Controllers
                 logger.LogInformation("User is locked out");
                 return Redirect($"{model.ErrorUrl}?error=lockout");
             }
+
+            // If the user does not have an account, create one
+            string email = info.Principal.FindFirstValue(ClaimTypes.Email);
+            var newUserResult = await userService.CreateUser(email, info);
+            if (newUserResult.Result.Succeeded)
+            {
+                return Redirect(model.ReturnUrl);
+            }
             else
             {
-                // If the user does not have an account, create one
-                string email = info.Principal.FindFirstValue(ClaimTypes.Email);
-                var newUserResult = await userService.CreateUser(email, info);
-                if (newUserResult.Result.Succeeded)
-                {
-                    return Redirect(model.ReturnUrl);
-                }
-                else
-                {
-                    string error = string.Join(", ", newUserResult.Result.Errors.Select(e => e.Description));
-                    logger.LogError(error);
-                    return Redirect($"{model.ErrorUrl}?error={WebUtility.UrlEncode(error)}");
-                }
+                string error = string.Join(", ", newUserResult.Result.Errors.Select(e => e.Description));
+                logger.LogError(error);
+                return Redirect($"{model.ErrorUrl}?error={WebUtility.UrlEncode(error)}");
             }
         }
     }
