@@ -141,6 +141,6 @@ namespace CollAction.Tests.Integration
         }
 
         private string GetTestEmail()
-            => $"collaction-test-email-{Guid.NewGuid()}@outlook.com";
+            => $"collaction-test-email-{Guid.NewGuid()}@collaction.org";
     }
 }
