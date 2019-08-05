@@ -14,7 +14,7 @@ namespace CollAction.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20180130150206_migration_to_aspnetcore2")]
-    partial class migration_to_aspnetcore2
+    partial class MigrationToAspnetcore2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

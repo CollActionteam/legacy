@@ -11,7 +11,7 @@ namespace CollAction.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20170317071553_creatorCommentsNotRequired")]
-    partial class creatorCommentsNotRequired
+    partial class CreatorCommentsNotRequired
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

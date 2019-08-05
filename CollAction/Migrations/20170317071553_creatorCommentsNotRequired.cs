@@ -2,7 +2,7 @@
 
 namespace CollAction.Migrations
 {
-    public partial class creatorCommentsNotRequired : Migration
+    public partial class CreatorCommentsNotRequired : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

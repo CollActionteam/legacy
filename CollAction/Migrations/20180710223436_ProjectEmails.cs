@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CollAction.Migrations
 {
-    public partial class unsubscribetoken : Migration
+    public partial class Unsubscribetoken : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

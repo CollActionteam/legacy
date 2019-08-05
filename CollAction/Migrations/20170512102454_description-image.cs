@@ -2,7 +2,7 @@
 
 namespace CollAction.Migrations
 {
-    public partial class descriptionimage : Migration
+    public partial class Descriptionimage : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

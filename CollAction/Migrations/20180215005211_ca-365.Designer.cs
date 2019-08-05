@@ -14,7 +14,7 @@ namespace CollAction.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20180215005211_ca-365")]
-    partial class ca365
+    partial class CA365
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

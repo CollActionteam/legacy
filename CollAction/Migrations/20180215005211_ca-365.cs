@@ -2,7 +2,7 @@
 
 namespace CollAction.Migrations
 {
-    public partial class ca365 : Migration
+    public partial class CA365 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
