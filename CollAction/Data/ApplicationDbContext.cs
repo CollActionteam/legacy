@@ -145,7 +145,7 @@ namespace CollAction.Data
 
         private async Task SeedTestProjects(IConfiguration configuration, UserManager<ApplicationUser> userManager)
         {
-            if (configuration.GetValue<bool>("SeedTestProjects"))
+            if (configuration.GetValue<bool>("SeedTestProjects") && !(await Projects.AnyAsync()))
             {
                 Random r = new Random();
                 ApplicationUser admin = await userManager.FindByEmailAsync(configuration["AdminEmail"]);
