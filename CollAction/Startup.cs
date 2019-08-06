@@ -37,6 +37,7 @@ using CollAction.GraphQl;
 using CollAction.Services.User;
 using System;
 using AspNetCore.IServiceCollection.AddIUrlHelper;
+using CollAction.Services.HtmlValidator;
 
 namespace CollAction
 {

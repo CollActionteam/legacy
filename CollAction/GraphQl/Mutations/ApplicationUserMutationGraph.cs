@@ -1,4 +1,5 @@
 ﻿using CollAction.GraphQl.Mutations.Input;
+using CollAction.Models;
 using CollAction.Services.User;
 using CollAction.Services.User.Models;
 using GraphQL.Types;
@@ -22,7 +23,15 @@ namespace CollAction.GraphQl.Mutations
                     using (var scope = serviceScopeFactory.CreateScope())
                     {
                         var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
-                        return await userService.CreateUser(newUser);
+                        var signInManager = scope.ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>();
+
+                        var result = await userService.CreateUser(newUser);
+                        if (result.Result.Succeeded)
+                        {
+                            await signInManager.SignInAsync(result.User, isPersistent: true);
+                        }
+
+                        return result;
                     }
                 });
             
@@ -37,6 +46,20 @@ namespace CollAction.GraphQl.Mutations
                     {
                         var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
                         return await userService.UpdateUser(updatedUser, ((UserContext)c.UserContext).User);
+                    }
+                });
+            
+            FieldAsync<IdentityResultGraph, IdentityResult>(
+                "deleteUser",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "userId" }),
+                resolve: async c =>
+                {
+                    string userId = c.GetArgument<string>("userId");
+                    using (var scope = serviceScopeFactory.CreateScope())
+                    {
+                        var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
+                        return await userService.DeleteUser(userId, ((UserContext)c.UserContext).User);
                     }
                 });
 
@@ -66,7 +89,7 @@ namespace CollAction.GraphQl.Mutations
                     using (var scope = serviceScopeFactory.CreateScope())
                     {
                         var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
-                        return await userService.ForgotPassword(email);
+                        return (await userService.ForgotPassword(email)).Result;
                     }
                 });
 

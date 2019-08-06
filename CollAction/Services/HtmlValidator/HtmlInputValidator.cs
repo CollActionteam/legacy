@@ -1,7 +1,7 @@
 using Ganss.XSS;
 using System.ComponentModel.DataAnnotations;
 
-namespace CollAction.Helpers
+namespace CollAction.Services.HtmlValidator
 {
     public class HtmlInputValidator : IHtmlInputValidator
     {

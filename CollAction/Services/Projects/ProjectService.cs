@@ -13,9 +13,9 @@ using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using CollAction.Models;
-using CollAction.Helpers;
 using System.ComponentModel.DataAnnotations;
 using System.Threading;
+using CollAction.Services.HtmlValidator;
 
 namespace CollAction.Services.Projects
 {

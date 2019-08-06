@@ -10,6 +10,8 @@
 
         public string LastName { get; set; }
 
+        public int RepresentsNumberUsers { get; set; }
+
         public bool IsSubscribedNewsletter { get; set; }
     }
 }

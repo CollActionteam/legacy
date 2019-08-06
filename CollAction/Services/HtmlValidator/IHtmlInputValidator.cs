@@ -1,4 +1,4 @@
-﻿namespace CollAction.Helpers
+﻿namespace CollAction.Services.HtmlValidator
 {
     public interface IHtmlInputValidator
     {

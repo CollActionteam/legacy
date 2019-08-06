@@ -89,7 +89,6 @@ namespace CollAction.Services.User
             if (result.Succeeded)
             {
                 newsletterService.SetSubscriptionBackground(newUser.Email, newUser.IsSubscribedNewsletter);
-                await signInManager.SignInAsync(user, isPersistent: false);
                 return new UserResult() { User = user, Result = result };
             }
             else
@@ -99,21 +98,21 @@ namespace CollAction.Services.User
             }
         }
 
-        public async Task<IdentityResult> ForgotPassword(string email)
+        public async Task<(IdentityResult Result, string ResetCode)> ForgotPassword(string email)
         {
             ApplicationUser user = await userManager.FindByEmailAsync(email);
             if (user == null)
             {
                 var result = IdentityResult.Failed(new IdentityError() { Code = "NOUSER", Description = "This user doesn't exist" });
                 LogErrors("Forgot password", result);
-                return result;
+                return (result, null);
             }
 
             logger.LogInformation("Sending reset password for user");
             string code = await userManager.GeneratePasswordResetTokenAsync(user);
             string callbackUrl = $"{siteOptions.PublicAddress}/Manage/ResetPassword?code={WebUtility.UrlEncode(code)}&email={WebUtility.UrlEncode(email)}";
             await emailSender.SendEmailTemplated(email, "Reset Password", "ResetPassword", callbackUrl);
-            return IdentityResult.Success;
+            return (IdentityResult.Success, code);
         }
 
         public async Task<IdentityResult> ResetPassword(string email, string code, string password)
@@ -184,7 +183,8 @@ namespace CollAction.Services.User
             }
 
             var loggedInUser = await userManager.GetUserAsync(loggedIn);
-            if (!(loggedIn.IsInRole(Constants.AdminRole) || loggedInUser.Id == user.Id))
+            if (!(loggedIn.IsInRole(Constants.AdminRole) || loggedInUser.Id == user.Id) || // need to be logged in as either admin, or the user being updated
+                (!loggedIn.IsInRole(Constants.AdminRole) && updatedUser.RepresentsNumberUsers != user.RepresentsNumberParticipants)) // only admins can update RepresentsNumberUsers
             {
                 return new UserResult() { Result = IdentityResult.Failed(new IdentityError() { Code = "NOPERM", Description = "You don't have permission to update this user" }) };
             }
@@ -193,6 +193,7 @@ namespace CollAction.Services.User
             user.Email = updatedUser.Email;
             user.FirstName = updatedUser.FirstName;
             user.LastName = updatedUser.LastName;
+            user.RepresentsNumberParticipants = updatedUser.RepresentsNumberUsers;
             var result = await userManager.UpdateAsync(user);
             if (!result.Succeeded)
             {
@@ -255,14 +256,23 @@ namespace CollAction.Services.User
             return userEvent.Id;
         }
 
-        public async Task<IdentityResult> DeleteUser(ClaimsPrincipal user)
+        public async Task<IdentityResult> DeleteUser(string userId, ClaimsPrincipal loggedInUser)
         {
             logger.LogInformation("Deleting user permanently");
-            ApplicationUser applicationUser = await userManager.GetUserAsync(user);
+            ApplicationUser user = await userManager.FindByIdAsync(userId);
+            ApplicationUser loggedIn = await userManager.GetUserAsync(loggedInUser);
+
+            if (!loggedInUser.IsInRole(Constants.AdminRole) && user.Id != loggedIn?.Id)
+            {
+                var permissionResult = IdentityResult.Failed(new IdentityError() { Code = "NOPERM", Description = "You don't have permission to delete this user" });
+                LogErrors("Deleting user", permissionResult);
+                return permissionResult;
+            }
+
             List<Project> projects =
                 await context.ProjectParticipants
                              .Include(p => p.Project)
-                             .Where(p => p.UserId == applicationUser.Id && p.Project.End < DateTime.UtcNow)
+                             .Where(p => p.UserId == userId && p.Project.End < DateTime.UtcNow)
                              .Select(p => p.Project)
                              .ToListAsync();
 
@@ -272,7 +282,7 @@ namespace CollAction.Services.User
             }
 
             await context.SaveChangesAsync();
-            var result = await userManager.DeleteAsync(applicationUser);
+            var result = await userManager.DeleteAsync(user);
 
             if (result.Succeeded)
             {
@@ -283,7 +293,6 @@ namespace CollAction.Services.User
                 LogErrors("Deleting user", result);
             }
 
-            await signInManager.SignOutAsync();
             return result;
         }
 
