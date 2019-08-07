@@ -2,11 +2,16 @@ import React from "react";
 import Helmet from "react-helmet";
 import Header from "../Header";
 import Footer from "../Footer";
+
+// Material-UI
+import { ThemeProvider } from "@material-ui/styles";
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Container from "@material-ui/core/Container";
+import theme from "../../theme";
+
 import { graphql, StaticQuery } from "gatsby";
-import { Container, Row, Col } from 'reactstrap';
 
 //Styling
-import "bootstrap/dist/css/bootstrap.min.css";
 import "./style.scss";
 
 export default ({ children }) => (
@@ -33,15 +38,14 @@ export default ({ children }) => (
             { name: "keywords", content: "collaction" },
           ]}
         ></Helmet>
-        <Container>
-          <Header menuLinks={data.site.siteMetadata.menuLinks} />
-          <Row>
-            <Col>
-              <div style={{ padding: "1rem" }}>{children}</div>
-            </Col>
-          </Row>
-          <Footer></Footer>
-        </Container>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Container>
+            <Header menuLinks={data.site.siteMetadata.menuLinks} />
+            <div style={{ padding: "1rem" }}>{children}</div>
+            <Footer></Footer>
+          </Container>
+        </ThemeProvider>
       </React.Fragment>
     )}
   />
