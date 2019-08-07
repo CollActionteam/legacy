@@ -1,9 +1,7 @@
 import React from "react";
 import { Link, graphql } from "gatsby";
 
-import Bio from "../../components/bio";
 import Layout from "../../components/Layout";
-import SEO from "../../components/seo";
 import { rhythm } from "../../utils/typography";
 
 export default ({ data }) => {
@@ -11,8 +9,6 @@ export default ({ data }) => {
 
   return (
     <Layout title={data.site.siteMetadata.title}>
-      <SEO title="All posts" />
-      <Bio />
       {posts.map(({ node }) => {
         const title = node.frontmatter.title || node.fields.slug;
         return (

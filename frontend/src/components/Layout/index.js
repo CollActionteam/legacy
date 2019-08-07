@@ -3,8 +3,10 @@ import Helmet from "react-helmet";
 import Header from "../Header";
 import Footer from "../Footer";
 import { graphql, StaticQuery } from "gatsby";
+import { Container, Row, Col } from 'reactstrap';
 
 //Styling
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./style.scss";
 
 export default ({ children }) => (
@@ -27,13 +29,19 @@ export default ({ children }) => (
         <Helmet
           title={data.site.siteMetadata.title}
           meta={[
-            { name: "description", content: "Sample" },
-            { name: "keywords", content: "sample, something" },
+            { name: "description", content: "CollAction" },
+            { name: "keywords", content: "collaction" },
           ]}
         ></Helmet>
-        <Header menuLinks={data.site.siteMetadata.menuLinks} />
-        <div style={{ padding: "1rem" }}>{children}</div>
-        <Footer></Footer>
+        <Container>
+          <Header menuLinks={data.site.siteMetadata.menuLinks} />
+          <Row>
+            <Col>
+              <div style={{ padding: "1rem" }}>{children}</div>
+            </Col>
+          </Row>
+          <Footer></Footer>
+        </Container>
       </React.Fragment>
     )}
   />
