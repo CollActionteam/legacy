@@ -1,6 +1,6 @@
 import React from "react";
 
 export default () => {
-    let err = new URLSearchParams(window.location.search).get("error");
-    return <h2>An error has occured: {err}</h2>;
+    // let err = new URLSearchParams(window.location.search).get("error");
+    return <h2>An unknown error has occured!</h2>;
 };
