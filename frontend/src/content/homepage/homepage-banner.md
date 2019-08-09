@@ -8,3 +8,8 @@ And Luuk said:
 > This is a banner.
 
 * With some **rich** formatting
+
+
+```
+Obviously, since this is in the blog space, it's not working yet...
+```
