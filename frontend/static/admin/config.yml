@@ -5,11 +5,22 @@ backend:
 media_folder: frontend/static/assets
 public_folder: assets
 collections:
+  - name: homepage-banner
+    label: Homepage banner
+    folder: frontend/src/content/homepage
+    preview: true
+    create: false
+    fields:
+      - { name: title, label: Title }
+      - { name: fromDate, label: Visible after, widget: datetime }
+      - { name: toDate, label: Visible until, widget: datetime }
+      - { name: body, label: Body, widget: markdown }
+
   - name: blog
     label: Blog
     folder: frontend/src/content/blog
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
-    preview: false
+    preview: true
     create: true
     fields:
       - { name: date, label: Date, widget: date }
