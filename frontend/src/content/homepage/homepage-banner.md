@@ -1,6 +1,10 @@
 ---
 title: test
-fromDate: 2019-08-04T00:00:00Z
-toDate: 2020-08-04T23:59:59Z
+fromDate: 2019-08-09T23:00:00.000Z
+toDate: 2020-08-10T10:59:59.000Z
 ---
-Test banner
+And Luuk said:
+
+> This is a banner.
+
+* With some **rich** formatting
