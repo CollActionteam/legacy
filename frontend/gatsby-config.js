@@ -3,8 +3,8 @@ module.exports = {
     title: "CollAction",
     author: "CollAction",
     description: "CollAction",
-    backendUrl: "https://localhost:44301/",
-    frontendUrl: "http://localhost:8000/",
+    backendUrl: "https://localhost:44301",
+    frontendUrl: "http://localhost:8000",
     loginProviders: [ 
       {
         name: "Google"

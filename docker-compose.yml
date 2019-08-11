@@ -4,11 +4,13 @@ volumes:
   images:
 
 services:
-  collaction:
-    image: collaction
+  backend:
+    image: collaction-backend
     build:
       context: .
       dockerfile: CollAction/Dockerfile
+      args:
+        WITH_TEST_SSL: 1
     env_file:
       - env_collaction
     depends_on:
@@ -16,12 +18,26 @@ services:
     links:
       - db:db
     ports:
-      - "5000:5000"
-    volumes:
-      - images:/app/wwwroot/usercontent
+      - "44301:44301"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=http://*:5000
+      - DbHost=db
+      - PublicAddress=http://localhost:8000
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://*:44301
+      - Kestrel__Certificates__Default__Path=/app/collaction.pfx
+      - Kestrel__Certificates__Default__Password=test
+
+  frontend:
+    image: collaction-frontend
+    build:
+      context: Frontend
+      dockerfile: Dockerfile
+    depends_on:
+      - backend
+    links:
+      - backend:backend
+    ports:
+      - "8000:80"
 
   db:
     image: postgres

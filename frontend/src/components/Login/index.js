@@ -20,7 +20,7 @@ export default () => (
             let actionLogin = data.site.siteMetadata.backendUrl + "/account/login";
             let actionExternalLogin = data.site.siteMetadata.backendUrl + "/account/externalLogin";
             let returnUrl = data.site.siteMetadata.frontendUrl;
-            let errorUrl = data.site.siteMetadata.frontendUrl + "error";
+            let errorUrl = data.site.siteMetadata.frontendUrl + "/error";
             return (
                 <div>
                     <h2>Login</h2>

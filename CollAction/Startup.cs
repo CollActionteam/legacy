@@ -38,6 +38,7 @@ using CollAction.Services.User;
 using System;
 using AspNetCore.IServiceCollection.AddIUrlHelper;
 using CollAction.Services.HtmlValidator;
+using Microsoft.AspNetCore.Http;
 
 namespace CollAction
 {
@@ -73,6 +74,13 @@ namespace CollAction
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddDefaultTokenProviders();
 
+            // Identity/Auth cookie
+            services.ConfigureApplicationCookie(o =>
+            {
+                o.Cookie.HttpOnly = false;
+                o.Cookie.SameSite = SameSiteMode.None;
+            });
+
             services.AddAuthentication()
                     .AddFacebook(options =>
                     {
@@ -95,7 +103,7 @@ namespace CollAction
             services.AddLogging(loggingBuilder =>
             {
                 LoggerConfiguration configuration = new LoggerConfiguration()
-                       .WriteTo.Console(LogEventLevel.Information) 
+                       .WriteTo.Console(LogEventLevel.Information)
                        .WriteTo.ApplicationInsights(TelemetryConfiguration.Active, TelemetryConverter.Traces);
 
                 string slackHook = Configuration["SlackHook"];
@@ -208,15 +216,6 @@ namespace CollAction
             }
 
             app.UseAuthentication();
-
-            app.UseStaticFiles(new StaticFileOptions()
-            {
-                OnPrepareResponse = ctx =>
-                {
-                    const int cacheDurationSeconds = 60 * 60 * 24 * 7;
-                    ctx.Context.Response.Headers[Microsoft.Net.Http.Headers.HeaderNames.CacheControl] = $"public,max-age={cacheDurationSeconds}";
-                }
-            });
 
             app.UseHangfireServer(new BackgroundJobServerOptions() { WorkerCount = 1 });
 

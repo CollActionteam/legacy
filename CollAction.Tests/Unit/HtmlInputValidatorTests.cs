@@ -1,5 +1,4 @@
-﻿using CollAction.Helpers;
-using CollAction.Services.HtmlValidator;
+﻿using CollAction.Services.HtmlValidator;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CollAction.Tests.Unit

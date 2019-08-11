@@ -9,13 +9,13 @@
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.IServiceCollection.AddIUrlHelper" Version="1.1.0" />
-    <PackageReference Include="AWSSDK.S3" Version="3.3.104.8" />
-    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.101.26" />
+    <PackageReference Include="AWSSDK.S3" Version="3.3.104.12" />
+    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.101.30" />
     <PackageReference Include="GraphiQL" Version="1.2.0" />
     <PackageReference Include="GraphQL" Version="2.4.0" />
     <PackageReference Include="GraphQL.Authorization" Version="2.1.29" />
     <PackageReference Include="GraphQL.EntityFramework" Version="6.5.0" />
-    <PackageReference Include="Hangfire.AspNetCore" Version="1.7.5" />
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.7.6" />
     <PackageReference Include="Hangfire.PostgreSql" Version="1.6.0" />
     <PackageReference Include="HtmlSanitizer" Version="4.0.217" />
     <PackageReference Include="MailChimp.Net.V3" Version="4.2.0" />

@@ -1,18 +1,15 @@
 ﻿using CollAction.Data;
 using CollAction.Models;
-using CollAction.Services;
-using CollAction.Services.Festival;
 using GraphQL.Authorization;
 using GraphQL.EntityFramework;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+using System.Linq;
+using System.Security.Claims;
 
 namespace CollAction.GraphQl.Queries
 {
     public class QueryGraph : QueryGraphType<ApplicationDbContext>
     {
-        public QueryGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService, IServiceScopeFactory serviceScopeFactory, IFestivalService festivalService, IOptions<DisqusOptions> disqusOptions) : base(entityFrameworkGraphQlService)
+        public QueryGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService) : base(entityFrameworkGraphQlService)
         {
             AddQueryField(
                 nameof(ApplicationDbContext.Projects),
@@ -38,22 +35,19 @@ namespace CollAction.GraphQl.Queries
                 name: "user",
                 resolve: c => c.DbContext.Users).AuthorizeWith(Constants.GraphQlAdminPolicy);
 
-            FieldAsync<ApplicationUserGraph>(
+            AddSingleField(
                 name: "currentUser",
-                resolve: async c =>
+                resolve: c =>
                 {
-                    var user = ((UserContext)c.UserContext).User;
-                    if (user != null)
+                    var userContext = (UserContext)c.UserContext;
+                    if (userContext.User != null)
                     {
-                        using (var scope = serviceScopeFactory.CreateScope())
-                        {
-                            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-                            return await userManager.GetUserAsync(user);
-                        }
+                        string userId = userContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                        return userContext.Context.Users.Where(u => u.Id == userId);
                     }
                     else
                     {
-                        return null;
+                        return userContext.Context.Users.Where(u => u.Id == null);
                     }
                 });
 

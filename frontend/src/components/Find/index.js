@@ -66,18 +66,18 @@ class Find extends React.Component {
 
     async getGraphQl(query, variables) {
         let url = this.props.backendUrl + 
-                  `graphql?query=${encodeURIComponent(query)}`;
+                  `/graphql?query=${encodeURIComponent(query)}`;
         if (variables !== null) {
             url += `&variables=${encodeURIComponent(variables)}`;
         }
         console.info(url);
-        let result = await fetch(url, { method: "GET" });
+        let result = await fetch(url, { method: "GET", credentials: "include" });
         console.info(result);
         return result.json();
     }
 
     async postGraphQl(query, variables) {
-        let url = this.props.backendUrl + "graphql";
+        let url = this.props.backendUrl + "/graphql";
         let body =
         {
             query: query,
@@ -88,6 +88,7 @@ class Find extends React.Component {
             url, 
             {
                 method: 'POST',
+                credentials: "include",
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
