@@ -74,7 +74,7 @@ namespace CollAction
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddDefaultTokenProviders();
 
-            // Identity/Auth cookie
+            // Identity/Auth cookie, allow it to be used from different sites
             services.ConfigureApplicationCookie(o =>
             {
                 o.Cookie.HttpOnly = false;

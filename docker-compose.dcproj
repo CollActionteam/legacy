@@ -9,6 +9,7 @@
     <ProjectVersion>2.1</ProjectVersion>
   </PropertyGroup>
   <ItemGroup>
+    <None Include=".dockerignore" />
     <None Include="docker-compose.yml" />
     <None Include="env_collaction" />
     <None Include="env_collaction.template" />

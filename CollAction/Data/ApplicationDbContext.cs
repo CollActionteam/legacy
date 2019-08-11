@@ -150,7 +150,7 @@ namespace CollAction.Data
                 Random r = new Random();
                 ApplicationUser admin = await userManager.FindByEmailAsync(configuration["AdminEmail"]);
                 Projects.AddRange(
-                    Enumerable.Range(0, 100)
+                    Enumerable.Range(0, r.Next(20, 200))
                               .Select(i =>
                                   new Project()
                                   {
