@@ -7,7 +7,6 @@ using GraphQL.Validation;
 using GraphQL.Validation.Complexity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using System;
@@ -97,6 +96,9 @@ namespace CollAction.Controllers
             logger.LogInformation("graphql: {0}, {1}", query, operationName);
             logger.LogDebug("variables: {0}", variables);
 
+#if (Debug)
+            DateTime start = DateTime.Now;
+#endif
             ExecutionResult result = await executer.ExecuteAsync(options);
 
             if (result.Errors != null)
@@ -106,6 +108,10 @@ namespace CollAction.Controllers
                     logger.LogError(error, "Error occurred while executing graphql");
                 }
             }
+
+#if (Debug)
+            result.EnrichWithApolloTracing(start);
+#endif
 
             return result;
         }

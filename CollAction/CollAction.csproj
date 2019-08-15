@@ -6,6 +6,9 @@
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
     <TypeScriptToolsVersion>3.3</TypeScriptToolsVersion>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.IServiceCollection.AddIUrlHelper" Version="1.1.0" />

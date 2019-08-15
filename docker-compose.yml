@@ -10,7 +10,7 @@ services:
       context: .
       dockerfile: CollAction/Dockerfile
       args:
-        WITH_TEST_SSL: 1
+        BUILD_CONFIG: Debug
     env_file:
       - env_collaction
     depends_on:

@@ -12,3 +12,6 @@ CollAction/bin
 CollAction/obj
 CollAction/*.txt
 CollAction/CollAction.csproj.user
+CollAction.Tests
+scripts
+Frontend
