@@ -2,6 +2,7 @@
 using CollAction.GraphQl;
 using CollAction.ViewModels.GraphQl;
 using GraphQL;
+using GraphQL.Instrumentation;
 using GraphQL.Types;
 using GraphQL.Validation;
 using GraphQL.Validation.Complexity;
@@ -96,7 +97,7 @@ namespace CollAction.Controllers
             logger.LogInformation("graphql: {0}, {1}", query, operationName);
             logger.LogDebug("variables: {0}", variables);
 
-#if (Debug)
+#if (DEBUG)
             DateTime start = DateTime.Now;
 #endif
             ExecutionResult result = await executer.ExecuteAsync(options);
@@ -109,7 +110,7 @@ namespace CollAction.Controllers
                 }
             }
 
-#if (Debug)
+#if (DEBUG)
             result.EnrichWithApolloTracing(start);
 #endif
 
