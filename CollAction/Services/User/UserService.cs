@@ -183,8 +183,9 @@ namespace CollAction.Services.User
             }
 
             var loggedInUser = await userManager.GetUserAsync(loggedIn);
-            if (!(loggedIn.IsInRole(Constants.AdminRole) || loggedInUser.Id == user.Id) || // need to be logged in as either admin, or the user being updated
-                (!loggedIn.IsInRole(Constants.AdminRole) && updatedUser.RepresentsNumberUsers != user.RepresentsNumberParticipants)) // only admins can update RepresentsNumberUsers
+
+            // need to be logged in as either admin, or the user being updated, only admins can update RepresentsNumberUsers
+            if (!(loggedIn.IsInRole(Constants.AdminRole) || loggedInUser.Id == user.Id) || (!loggedIn.IsInRole(Constants.AdminRole) && updatedUser.RepresentsNumberUsers != user.RepresentsNumberParticipants)) 
             {
                 return new UserResult() { Result = IdentityResult.Failed(new IdentityError() { Code = "NOPERM", Description = "You don't have permission to update this user" }) };
             }

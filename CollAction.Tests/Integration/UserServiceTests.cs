@@ -86,7 +86,8 @@ namespace CollAction.Tests.Integration
                             Email = result.User.Email,
                             IsSubscribedNewsletter = false,
                             Id = result.User.Id
-                        }, principal);
+                        },
+                        principal);
                     Assert.IsTrue(result.Result.Succeeded);
 
                     result = await userService.UpdateUser(
@@ -98,7 +99,8 @@ namespace CollAction.Tests.Integration
                             Email = result.User.Email,
                             IsSubscribedNewsletter = false,
                             Id = result.User.Id
-                        }, principal);
+                        },
+                        principal);
                     Assert.IsFalse(result.Result.Succeeded);
 
                     var deleteResult = await userService.DeleteUser(user.Id, new ClaimsPrincipal());
