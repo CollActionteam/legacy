@@ -139,12 +139,12 @@ namespace CollAction.Services.User
             return result;
         }
 
-        public async Task<IdentityResult> FinishRegistration(NewUser newUser, string code)
+        public async Task<UserResult> FinishRegistration(NewUser newUser, string code)
         {
             var user = await userManager.FindByEmailAsync(newUser.Email);
             if (user == null)
             {
-                return IdentityResult.Failed(new IdentityError() { Code = "NOUSER", Description = "This user doesn't exist" });
+                return new UserResult() { Result = IdentityResult.Failed(new IdentityError() { Code = "NOUSER", Description = "This user doesn't exist" }) };
             }
 
             logger.LogInformation("Finishing user registration");
@@ -152,7 +152,7 @@ namespace CollAction.Services.User
             if (!result.Succeeded)
             {
                 LogErrors("Finishing registration, resetting password", result);
-                return result;
+                return new UserResult { Result = result };
             }
 
             user.FirstName = newUser.FirstName;
@@ -162,8 +162,6 @@ namespace CollAction.Services.User
             if (result.Succeeded)
             {
                 newsletterService.SetSubscriptionBackground(newUser.Email, newUser.IsSubscribedNewsletter);
-
-                await signInManager.SignInAsync(user, isPersistent: false);
                 logger.LogInformation("User created from anonymous project participant.");
             }
             else
@@ -171,7 +169,7 @@ namespace CollAction.Services.User
                 LogErrors("Finishing registration, updating user", result);
             }
 
-            return result;
+            return new UserResult() { Result = result, User = user };
         }
 
         public async Task<UserResult> UpdateUser(UpdatedUser updatedUser, ClaimsPrincipal loggedIn)

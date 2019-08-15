@@ -135,7 +135,8 @@ namespace CollAction.Tests.Integration
                             Password = "Test_0_tesT"
                         },
                         commitResult.PasswordResetToken);
-                    Assert.IsTrue(finishRegistrationResult.Succeeded);
+                    Assert.IsTrue(finishRegistrationResult.Result.Succeeded);
+                    Assert.IsNotNull(finishRegistrationResult.User);
                 });
 
         private void ConfigureReplacementServices(ServiceCollection sc)

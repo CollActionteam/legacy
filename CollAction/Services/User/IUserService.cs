@@ -23,7 +23,7 @@ namespace CollAction.Services.User
 
         Task<IdentityResult> ChangePassword(ClaimsPrincipal user, string currentPassword, string newPassword);
 
-        Task<IdentityResult> FinishRegistration(NewUser newUser, string code);
+        Task<UserResult> FinishRegistration(NewUser newUser, string code);
 
         Task<int> IngestUserEvent(ClaimsPrincipal trackedUser, JObject eventData, bool canTrack, CancellationToken cancellationToken);
     }

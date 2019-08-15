@@ -72,6 +72,28 @@ namespace CollAction.GraphQl.Mutations
                     return await userService.ChangePassword(((UserContext)c.UserContext).User, currentPassword, newPassword);
                 });
 
+            FieldAsync<UserResultGraph, UserResult>(
+                "finishRegistration",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<NewUserInputGraph>>() { Name = "user" },
+                    new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "code" }),
+                resolve: async c =>
+                {
+                    var newUser = c.GetArgument<NewUser>("user");
+                    string code = c.GetArgument<string>("code");
+                    var provider = c.GetUserContext().ServiceProvider;
+                    var userService = provider.GetRequiredService<IUserService>();
+                    var result = await userService.FinishRegistration(newUser, code);
+
+                    if (result.Result.Succeeded)
+                    {
+                        await provider.GetRequiredService<SignInManager<ApplicationUser>>()
+                                      .SignInAsync(result.User, isPersistent: true);
+                    }
+
+                    return result;
+                });
+
             FieldAsync<IdentityResultGraph, IdentityResult>(
                 "forgotPassword",
                 arguments: new QueryArguments(
