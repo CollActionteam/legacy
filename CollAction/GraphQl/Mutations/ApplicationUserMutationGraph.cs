@@ -41,9 +41,9 @@ namespace CollAction.GraphQl.Mutations
                 resolve: async c =>
                 {
                     var updatedUser = c.GetArgument<UpdatedUser>("user");
-                    var provider = c.GetUserContext().ServiceProvider;
-                    var userService = provider.GetRequiredService<IUserService>();
-                    return await userService.UpdateUser(updatedUser, ((UserContext)c.UserContext).User);
+                    var context = c.GetUserContext();
+                    var userService = context.ServiceProvider.GetRequiredService<IUserService>();
+                    return await userService.UpdateUser(updatedUser, context.User);
                 });
             
             FieldAsync<IdentityResultGraph, IdentityResult>(
@@ -53,9 +53,9 @@ namespace CollAction.GraphQl.Mutations
                 resolve: async c =>
                 {
                     string userId = c.GetArgument<string>("userId");
-                    var provider = c.GetUserContext().ServiceProvider;
-                    var userService = provider.GetRequiredService<IUserService>();
-                    return await userService.DeleteUser(userId, ((UserContext)c.UserContext).User);
+                    var context = c.GetUserContext();
+                    var userService = context.ServiceProvider.GetRequiredService<IUserService>();
+                    return await userService.DeleteUser(userId, context.User);
                 });
 
             FieldAsync<IdentityResultGraph, IdentityResult>(
@@ -67,9 +67,9 @@ namespace CollAction.GraphQl.Mutations
                 {
                     string currentPassword = c.GetArgument<string>("currentPassword");
                     string newPassword = c.GetArgument<string>("newPassword");
-                    var provider = c.GetUserContext().ServiceProvider;
-                    var userService = provider.GetRequiredService<IUserService>();
-                    return await userService.ChangePassword(((UserContext)c.UserContext).User, currentPassword, newPassword);
+                    var context = c.GetUserContext();
+                    var userService = context.ServiceProvider.GetRequiredService<IUserService>();
+                    return await userService.ChangePassword(context.User, currentPassword, newPassword);
                 });
 
             FieldAsync<UserResultGraph, UserResult>(
@@ -131,8 +131,9 @@ namespace CollAction.GraphQl.Mutations
                 {
                     JObject eventData = JObject.Parse(c.GetArgument<string>("eventData"));
                     bool canTrack = c.GetArgument<bool>("canTrack");
-                    var provider = c.GetUserContext().ServiceProvider;
-                    return await provider.GetRequiredService<IUserService>().IngestUserEvent(((UserContext)c.UserContext).User, eventData, canTrack, c.CancellationToken);
+                    var context = c.GetUserContext();
+                    var provider = context.ServiceProvider;
+                    return await provider.GetRequiredService<IUserService>().IngestUserEvent(context.User, eventData, canTrack, c.CancellationToken);
                 });
         }
     }

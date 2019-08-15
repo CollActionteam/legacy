@@ -72,9 +72,10 @@ namespace CollAction.GraphQl.Mutations
                 resolve: async c =>
                 {
                     string subscriptionId = c.GetArgument<string>("subscriptionId");
-                    var provider = c.GetUserContext().ServiceProvider;
+                    var context = c.GetUserContext();
+                    var provider = context.ServiceProvider;
                     await provider.GetRequiredService<IDonationService>()
-                                  .CancelSubscription(subscriptionId, ((UserContext)c.UserContext).User, c.CancellationToken);
+                                  .CancelSubscription(subscriptionId, context.User, c.CancellationToken);
                     return subscriptionId;
                 });
         }
