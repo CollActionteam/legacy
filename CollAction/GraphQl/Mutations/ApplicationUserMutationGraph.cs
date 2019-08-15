@@ -132,8 +132,7 @@ namespace CollAction.GraphQl.Mutations
                     JObject eventData = JObject.Parse(c.GetArgument<string>("eventData"));
                     bool canTrack = c.GetArgument<bool>("canTrack");
                     var context = c.GetUserContext();
-                    var provider = context.ServiceProvider;
-                    return await provider.GetRequiredService<IUserService>().IngestUserEvent(context.User, eventData, canTrack, c.CancellationToken);
+                    return await context.ServiceProvider.GetRequiredService<IUserService>().IngestUserEvent(context.User, eventData, canTrack, c.CancellationToken);
                 });
         }
     }

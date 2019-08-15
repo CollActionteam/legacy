@@ -73,9 +73,9 @@ namespace CollAction.GraphQl.Mutations
                 {
                     string subscriptionId = c.GetArgument<string>("subscriptionId");
                     var context = c.GetUserContext();
-                    var provider = context.ServiceProvider;
-                    await provider.GetRequiredService<IDonationService>()
-                                  .CancelSubscription(subscriptionId, context.User, c.CancellationToken);
+                    await context.ServiceProvider
+                                 .GetRequiredService<IDonationService>()
+                                 .CancelSubscription(subscriptionId, context.User, c.CancellationToken);
                     return subscriptionId;
                 });
         }
