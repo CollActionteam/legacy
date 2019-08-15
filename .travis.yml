@@ -7,7 +7,7 @@ services:
 - docker
 script:
 - docker run -d --name $Db -e POSTGRES_PASSWORD=$DbPassword -e POSTGRES_USER=$DbUser -e POSTGRES_DB=$Db -p 5432:5432 postgres
-- dotnet test CollAction.Tests
+- dotnet test --filter 'TestCategory!=CantRunInTravis' CollAction.Tests
 - docker build . -f CollAction/Dockerfile -t collaction:latest
 - pip install --user awscli
 - export PATH=$PATH:$HOME/.local/bin
