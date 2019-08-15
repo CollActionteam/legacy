@@ -102,6 +102,7 @@ namespace CollAction.Controllers
 #endif
             ExecutionResult result = await executer.ExecuteAsync(options);
 
+#if (DEBUG)
             if (result.Errors != null)
             {
                 foreach (ExecutionError error in result.Errors)
@@ -110,7 +111,6 @@ namespace CollAction.Controllers
                 }
             }
 
-#if (DEBUG)
             result.EnrichWithApolloTracing(start);
 #endif
 
