@@ -1,4 +1,5 @@
-﻿using CollAction.Services.Donation;
+﻿using CollAction.Helpers;
+using CollAction.Services.Donation;
 using GraphQL.Types;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -6,7 +7,7 @@ namespace CollAction.GraphQl.Mutations
 {
     public class DonationMutationGraph : ObjectGraphType
     {
-        public DonationMutationGraph(IServiceScopeFactory serviceScopeFactory)
+        public DonationMutationGraph()
         {
             FieldAsync<StringGraphType, string>(
                 "initializeCreditCardCheckout",
@@ -23,10 +24,9 @@ namespace CollAction.GraphQl.Mutations
                     string name = c.GetArgument<string>("name");
                     string email = c.GetArgument<string>("email");
                     bool recurring = c.GetArgument<bool>("recurring");
-                    using (var scope = serviceScopeFactory.CreateScope())
-                    {
-                        return await scope.ServiceProvider.GetRequiredService<IDonationService>().InitializeCreditCardCheckout(currency, amount, name, email, recurring, c.CancellationToken);
-                    }
+                    var provider = c.GetUserContext().ServiceProvider;
+                    return await provider.GetRequiredService<IDonationService>()
+                                         .InitializeCreditCardCheckout(currency, amount, name, email, recurring, c.CancellationToken);
                 });
 
             FieldAsync<StringGraphType, string>(
@@ -42,11 +42,10 @@ namespace CollAction.GraphQl.Mutations
                     int amount = c.GetArgument<int>("amount");
                     string name = c.GetArgument<string>("name");
                     string email = c.GetArgument<string>("email");
-                    using (var scope = serviceScopeFactory.CreateScope())
-                    {
-                        await scope.ServiceProvider.GetRequiredService<IDonationService>().InitializeSepaDirect(sourceId, name, email, amount, c.CancellationToken);
-                        return sourceId;
-                    }
+                    var provider = c.GetUserContext().ServiceProvider;
+                    await provider.GetRequiredService<IDonationService>()
+                                  .InitializeSepaDirect(sourceId, name, email, amount, c.CancellationToken);
+                    return sourceId;
                 });
 
             FieldAsync<StringGraphType, string>(
@@ -60,11 +59,10 @@ namespace CollAction.GraphQl.Mutations
                     string sourceId = c.GetArgument<string>("sourceId");
                     string name = c.GetArgument<string>("name");
                     string email = c.GetArgument<string>("email");
-                    using (var scope = serviceScopeFactory.CreateScope())
-                    {
-                        await scope.ServiceProvider.GetRequiredService<IDonationService>().InitializeIdealCheckout(sourceId, name, email, c.CancellationToken);
-                        return sourceId;
-                    }
+                    var provider = c.GetUserContext().ServiceProvider;
+                    await provider.GetRequiredService<IDonationService>()
+                                  .InitializeIdealCheckout(sourceId, name, email, c.CancellationToken);
+                    return sourceId;
                 });
 
             FieldAsync<StringGraphType, string>(
@@ -74,11 +72,10 @@ namespace CollAction.GraphQl.Mutations
                 resolve: async c =>
                 {
                     string subscriptionId = c.GetArgument<string>("subscriptionId");
-                    using (var scope = serviceScopeFactory.CreateScope())
-                    {
-                        await scope.ServiceProvider.GetRequiredService<IDonationService>().CancelSubscription(subscriptionId, ((UserContext)c.UserContext).User, c.CancellationToken);
-                        return subscriptionId;
-                    }
+                    var provider = c.GetUserContext().ServiceProvider;
+                    await provider.GetRequiredService<IDonationService>()
+                                  .CancelSubscription(subscriptionId, ((UserContext)c.UserContext).User, c.CancellationToken);
+                    return subscriptionId;
                 });
         }
     }

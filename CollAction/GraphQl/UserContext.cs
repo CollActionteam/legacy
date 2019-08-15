@@ -1,5 +1,7 @@
 ﻿using CollAction.Data;
 using GraphQL.Authorization;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Security.Claims;
 
 namespace CollAction.GraphQl
@@ -9,5 +11,7 @@ namespace CollAction.GraphQl
         public ClaimsPrincipal User { get; set; }
 
         public ApplicationDbContext Context { get; set; }
+
+        public IServiceProvider ServiceProvider { get; set; }
     }
 }

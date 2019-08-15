@@ -7,6 +7,8 @@ using GraphQL.Validation;
 using GraphQL.Validation.Complexity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -22,14 +24,18 @@ namespace CollAction.Controllers
         private readonly IDocumentExecuter executer;
         private readonly IEnumerable<IValidationRule> validationRules;
         private readonly ApplicationDbContext context;
+        private readonly ILogger<GraphQlController> logger;
+        private readonly IServiceProvider serviceProvider;
         private readonly ISchema schema;
 
-        public GraphQlController(ISchema schema, IDocumentExecuter executer, IEnumerable<IValidationRule> validationRules, ApplicationDbContext context)
+        public GraphQlController(ISchema schema, IDocumentExecuter executer, IEnumerable<IValidationRule> validationRules, ApplicationDbContext context, ILogger<GraphQlController> logger, IServiceProvider serviceProvider)
         {
             this.schema = schema;
             this.executer = executer;
             this.validationRules = validationRules;
             this.context = context;
+            this.logger = logger;
+            this.serviceProvider = serviceProvider;
         }
 
         [HttpPost]
@@ -62,7 +68,7 @@ namespace CollAction.Controllers
             }
         }
 
-        private Task<ExecutionResult> Execute(string query, string operationName, JObject variables, CancellationToken cancellation)
+        private async Task<ExecutionResult> Execute(string query, string operationName, JObject variables, CancellationToken cancellation)
         {
             var options = new ExecutionOptions
             {
@@ -73,7 +79,8 @@ namespace CollAction.Controllers
                 UserContext = new UserContext()
                 {
                     Context = context,
-                    User = User
+                    User = User,
+                    ServiceProvider = serviceProvider
                 },
                 ComplexityConfiguration = new ComplexityConfiguration()
                 {
@@ -87,7 +94,20 @@ namespace CollAction.Controllers
 #endif
             };
 
-            return executer.ExecuteAsync(options);
+            logger.LogInformation("graphql: {0}, {1}", query, operationName);
+            logger.LogDebug("variables: {0}", variables);
+
+            ExecutionResult result = await executer.ExecuteAsync(options);
+
+            if (result.Errors != null)
+            {
+                foreach (ExecutionError error in result.Errors)
+                {
+                    logger.LogError(error, "Error occurred while executing graphql");
+                }
+            }
+
+            return result;
         }
     }
 }
