@@ -1,5 +1,5 @@
 ---
-about: |
+content: >
   Do you sometimes have the feeling that your actions are only a drop in the
   ocean? Well, not anymore, because we are introducing crowdacting: taking
   action knowing that you are one of many. We revamp the neighbourhood with a
