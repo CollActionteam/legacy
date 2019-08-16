@@ -3,7 +3,7 @@ import Layout from "../components/Layout";
 import { Link, graphql } from "gatsby";
 
 export default function Blogs({ data }) {
-  const { edges: posts } = data.allMarkdownRemark;
+  const { edges: posts } = data.allFile;
 
   return (
     <Layout>
@@ -11,8 +11,9 @@ export default function Blogs({ data }) {
       <p>Available blogs:</p>
       <ul>
         { posts
-          .filter(post => post.node.frontmatter.title.length > 0)
-          .map(( { node: post }) => {
+          .filter(post => post.node.childMarkdownRemark !== null)
+          .map(post => post.node.childMarkdownRemark)
+          .map(post => {
             return (
               <li>
                 <Link to={ post.fields.slug }>{ post.frontmatter.title }</Link><br/>
@@ -28,17 +29,18 @@ export default function Blogs({ data }) {
 
 export const pageQuery = graphql`
   query BlogsQuery {
-    allMarkdownRemark(sort: { order: DESC, fields: [frontmatter___date] }) {
+    allFile(filter: {sourceInstanceName: {eq: "blogs"}}, sort: {fields: childMarkdownRemark___frontmatter___date, order: DESC}) {
       edges {
         node {
-          excerpt(pruneLength: 100)
-          id
-          frontmatter {
-            title
-            date(formatString: "MMMM DD, YYYY")
-          }
-          fields {
-            slug
+          childMarkdownRemark {
+            frontmatter {
+              title
+              date(formatString: "MMMM DD, YYYY")
+            }
+            excerpt(pruneLength: 100)
+            fields {
+              slug
+            }
           }
         }
       }
