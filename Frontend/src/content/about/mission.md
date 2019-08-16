@@ -1,4 +1,5 @@
 ---
+type: about
 content: >
   > We help people solve collective action problems through crowdacting
 
