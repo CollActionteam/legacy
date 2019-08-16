@@ -8,7 +8,7 @@ collections:
   - name: blogs
     label: Blog posts
     folder: Frontend/src/content/blogs
-    slug: "{{ year }}-{{ month }}-{{ day }}-{{ slug }}"
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     create: true
     fields: 
       - { name: title, label: Title }
