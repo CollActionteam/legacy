@@ -1,4 +1,5 @@
 ---
+type: about
 content: >-
   We couldn’t do what we’re doing without the support of our great partners,
   including the ones below. Please [send us an

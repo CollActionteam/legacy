@@ -15,14 +15,14 @@ collections:
         file: Frontend/src/content/about/mission.md
         fields:
           - { name: type, default: about, widget: hidden }
-          - { name: content, label: Content, widget: markdown }
+          - { name: content, label: Mission statement, widget: markdown }
       - name: about
         label: About CollAction
         delete: false
         file: Frontend/src/content/about/about.md
         fields:
           - { name: type, default: about, widget: hidden }
-          - { name: content, label: Content, widget: markdown }
+          - { name: content, label: About CollAction, widget: markdown }
       - name: team
         label: Meet the team
         file: Frontend/src/content/about/team.yml
@@ -32,22 +32,22 @@ collections:
             label: Team members
             widget: list
             fields:
-              - { name: name, label: "Name", widget: string }
-              - { name: photo, label: "Photo", widget: image }
+              - { name: name, label: Name, widget: hidden }
+              - { name: photo, label: Photo, widget: image }
       - name: join
         label: Join the team
         delete: false
         file: Frontend/src/content/about/join.md
         fields:
           - { name: type, default: about, widget: hidden }
-          - { name: content, label: Content, widget: markdown }
+          - { name: content, label: Join the team, widget: markdown }
       - name: partners
         label: Partners
         delete: false
         file: Frontend/src/content/about/partners.md
         fields:
           - { name: type, default: about, widget: hidden }
-          - { name: content, label: Content, widget: markdown }
+          - { name: content, label: Partners, widget: markdown }
 
   - name: blogs
     label: Blog posts

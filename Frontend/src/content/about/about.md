@@ -1,4 +1,5 @@
 ---
+type: about
 content: >
   Do you sometimes have the feeling that your actions are only a drop in the
   ocean? Well, not anymore, because we are introducing crowdacting: taking

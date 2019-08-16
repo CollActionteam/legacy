@@ -15,8 +15,8 @@ export default function Blogs({ data }) {
           .map(post => post.node.childMarkdownRemark)
           .map(post => {
             return (
-              <li>
-                <Link to={ post.fields.slug }>{ post.frontmatter.title }</Link><br/>
+              <li key={ post.fields.slug }>
+                <Link to={ `/blogs${post.fields.slug}` }>{ post.frontmatter.title }</Link><br/>
                 <p>{ post.excerpt }</p>
               </li>
             )

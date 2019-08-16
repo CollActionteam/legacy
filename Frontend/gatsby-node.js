@@ -5,39 +5,42 @@ exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions;
   const blogPostTemplate = path.resolve('src/templates/blog-post.js');
 
-  const posts = await graphql(`
+  const blogposts = await graphql(`
     {
-      allMarkdownRemark(sort: {order: DESC, fields: frontmatter___date}) {
+      allFile(filter: {sourceInstanceName: {eq: "blogs"}}) {
         edges {
           node {
-            frontmatter {
-              title
-              date
+            childMarkdownRemark {
+              fields {
+                slug
+              }
+              html
             }
-            fields {
-              slug
-            }
-            html
           }
         }
       }
     }
   `);
 
-  if (posts.errors) {
+  if (blogposts.errors) {
     reporter.panicOnBuild('Error while running blog post GraphQL query.');
     return;
   }
 
-  posts.data.allMarkdownRemark.edges.forEach(( { node: post }) => {
-    createPage({
-      path: post.fields.slug,
-      component: blogPostTemplate,
-      context: {
-        slug: post.fields.slug
-      }
+  blogposts.data.allFile.edges
+    .map(blog => blog.node)
+    .filter(blog => blog.childMarkdownRemark !== null)
+    .map(blog => blog.childMarkdownRemark)
+    .forEach(blog => {
+      const path = `blogs${blog.fields.slug}`;
+      createPage({
+        path,
+        component: blogPostTemplate,
+        context: {
+          slug: blog.fields.slug
+        }
+      });
     });
-  });
 };
 
 exports.onCreateNode = ({ node, actions, getNode }) => {
@@ -46,13 +49,12 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
   if (node.internal.type === `MarkdownRemark`) {
     const slug = createFilePath({
       node,
-      getNode,
-      basePath: 'blogs'
+      getNode
     });
     createNodeField({
       name: 'slug',
       node,
-      value: `blogs${slug}`
+      value: slug
     });
   }
 };
