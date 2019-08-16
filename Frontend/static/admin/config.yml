@@ -25,6 +25,7 @@ collections:
         name: team
         file: Frontend/src/content/about/team.yml
         fields:
+          - { name: title, label: Title, widget: string }
           - name: team
             label: Team members
             widget: list
