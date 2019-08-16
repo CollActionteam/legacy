@@ -6,12 +6,12 @@ content: >-
   early adopters.
 
 
-  * \[SIDN Fonds](https://www.sidnfonds.nl/)
+  * [SIDN Fonds](https://www.sidnfonds.nl/)
 
-  * \[Essense](http://essense.eu/)
+  * [Essense](http://essense.eu/)
 
-  * \[Social Coder](http://socialcoder.org/Home/Index)
+  * [Social Coder](http://socialcoder.org/Home/Index)
 
-  * \[De Ceuvel](http://deceuvel.nl/en/)
+  * [De Ceuvel](http://deceuvel.nl/en/)
 ---
 
