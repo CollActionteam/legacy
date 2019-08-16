@@ -8,46 +8,29 @@ collections:
   - name: about
     label: About page
     description: Content blocks for the site's about page
+    folder: Frontend/src/content/about
+    create: false
+    delete: false
+    fields:
+      - { name: type, default: about, widget: hidden }
+      - { name: name, widget: hidden }
+      - { name: title, label: Title, widget: string }
+      - { name: body, label: Content, widget: markdown }
+
+  - name: team
+    label: Team overview
+    delete: false
     files:
-      - name: mission
-        label: Mission statement
-        delete: false
-        file: Frontend/src/content/about/mission.md
-        fields:
-          - { name: type, default: about, widget: hidden }
-          - { name: content, label: Mission statement, widget: markdown }
-      - name: about
-        label: About CollAction
-        delete: false
-        file: Frontend/src/content/about/about.md
-        fields:
-          - { name: type, default: about, widget: hidden }
-          - { name: content, label: About CollAction, widget: markdown }
-      - name: team
-        label: Meet the team
+      - label: Meet the team
+        name: team
         file: Frontend/src/content/about/team.yml
-        delete: false
         fields:
           - name: team
             label: Team members
             widget: list
             fields:
-              - { name: name, label: Name, widget: hidden }
+              - { name: name, label: Name, widget: string }
               - { name: photo, label: Photo, widget: image }
-      - name: join
-        label: Join the team
-        delete: false
-        file: Frontend/src/content/about/join.md
-        fields:
-          - { name: type, default: about, widget: hidden }
-          - { name: content, label: Join the team, widget: markdown }
-      - name: partners
-        label: Partners
-        delete: false
-        file: Frontend/src/content/about/partners.md
-        fields:
-          - { name: type, default: about, widget: hidden }
-          - { name: content, label: Partners, widget: markdown }
 
   - name: blogs
     label: Blog posts
