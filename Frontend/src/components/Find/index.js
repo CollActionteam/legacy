@@ -35,7 +35,7 @@ class Find extends React.Component {
     async setCategory(e) {
         let categoryId = e.currentTarget.value.toString();
         var fetched = [];
-        if (categoryId == "") {
+        if (categoryId === "") {
             fetched = 
                 await this.getGraphQl(`
                     query {
