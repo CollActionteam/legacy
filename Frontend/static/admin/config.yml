@@ -14,8 +14,15 @@ collections:
         delete: false
         file: Frontend/src/content/about/mission.md
         fields:
-          - { name: mission, label: Mission statement, widget: markdown }
-
+          - { name: type, default: about, widget: hidden }
+          - { name: content, label: Content, widget: markdown }
+      - name: about
+        label: About CollAction
+        delete: false
+        file: Frontend/src/content/about/about.md
+        fields:
+          - { name: type, default: about, widget: hidden }
+          - { name: content, label: Content, widget: markdown }
       - name: team
         label: Meet the team
         file: Frontend/src/content/about/team.yml
@@ -27,6 +34,20 @@ collections:
             fields:
               - { name: name, label: "Name", widget: string }
               - { name: photo, label: "Photo", widget: image }
+      - name: join
+        label: Join the team
+        delete: false
+        file: Frontend/src/content/about/join.md
+        fields:
+          - { name: type, default: about, widget: hidden }
+          - { name: content, label: Content, widget: markdown }
+      - name: partners
+        label: Partners
+        delete: false
+        file: Frontend/src/content/about/partners.md
+        fields:
+          - { name: type, default: about, widget: hidden }
+          - { name: content, label: Content, widget: markdown }
 
   - name: blogs
     label: Blog posts
@@ -35,6 +56,7 @@ collections:
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     create: true
     fields: 
+      - { name: type, default: blogpost, widget: hidden }
       - { name: title, label: Title }
       - { name: date, label: Date, widget: date }
       - { name: body, label: Content, widget: markdown }
