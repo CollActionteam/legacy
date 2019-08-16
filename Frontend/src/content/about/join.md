@@ -1,5 +1,5 @@
 ---
-join: |
+content: >
   CollAction is always looking for fun people who want to make a difference by
   making CollAction the next big thing! Please note that these are all volunteer
   positions for now (all current team members are volunteers as well :) )
