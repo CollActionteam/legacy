@@ -7,14 +7,14 @@ exports.createPages = async ({ graphql, actions }) => {
 
   const blogposts = await graphql(`
     {
-      allFile(filter: {sourceInstanceName: {eq: "blogs"}}) {
+      allMarkdownRemark(filter: {frontmatter: {type: {eq: "blogs"}}}) {
         edges {
           node {
-            childMarkdownRemark {
-              fields {
-                slug
-              }
-              html
+            frontmatter {
+              type
+            }
+            fields {
+              slug
             }
           }
         }
@@ -27,12 +27,10 @@ exports.createPages = async ({ graphql, actions }) => {
     return;
   }
 
-  blogposts.data.allFile.edges
-    .map(blog => blog.node)
-    .filter(blog => blog.childMarkdownRemark !== null)
-    .map(blog => blog.childMarkdownRemark)
+  blogposts.data.allMarkdownRemark.edges
+    .map(e => e.node)
     .forEach(blog => {
-      const path = `blogs${blog.fields.slug}`;
+      const path = `/${blog.frontmatter.type}${blog.fields.slug}`;
       createPage({
         path,
         component: blogPostTemplate,

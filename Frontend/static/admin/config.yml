@@ -56,7 +56,7 @@ collections:
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     create: true
     fields: 
-      - { name: type, default: blogpost, widget: hidden }
+      - { name: type, default: blogs, widget: hidden }
       - { name: title, label: Title }
       - { name: date, label: Date, widget: date }
       - { name: body, label: Content, widget: markdown }
