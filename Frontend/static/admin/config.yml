@@ -5,17 +5,6 @@ backend:
 media_folder: Frontend/static/assets
 public_folder: assets
 collections:
-  - name: blogs
-    label: Blog posts
-    description: Entries created here will appear on the blogs page.
-    folder: Frontend/src/content/blogs
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
-    create: true
-    fields: 
-      - { name: title, label: Title }
-      - { name: date, label: Date, widget: date }
-      - { name: body, label: Content, widget: markdown }
-
   - name: pages
     label: Page content
     description: Content blocks for the site's pages
@@ -26,11 +15,22 @@ collections:
         fields:
           - { name: mission, label: "Our mission", widget: markdown }
           - { name: about, label: "About CollAction", widget: markdown }
-          - { name: join, label: "Join our team", widget: markdown }
-          - { name: partners, label: "Partners", widget: markdown }
           - name: team
             label: "Meet the team"
             widget: list
             fields:
               - { name: name, label: "Name", widget: string }
               - { name: photo, label: "Photo", widget: image }
+          - { name: join, label: "Join our team", widget: markdown }
+          - { name: partners, label: "Partners", widget: markdown }
+
+  - name: blogs
+    label: Blog posts
+    description: Entries created here will appear on the blogs page.
+    folder: Frontend/src/content/blogs
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    create: true
+    fields: 
+      - { name: title, label: Title }
+      - { name: date, label: Date, widget: date }
+      - { name: body, label: Content, widget: markdown }
