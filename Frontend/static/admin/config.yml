@@ -9,12 +9,20 @@ collections:
     label: About page
     description: Content blocks for the site's about page
     files:
+      - name: mission
+        label: Mission statement
+        delete: false
+        file: Frontend/src/content/about/mission.md
+        fields:
+          - { name: mission, label: Mission statement, widget: markdown }
+
       - name: team
         label: Meet the team
         file: Frontend/src/content/about/team.yml
+        delete: false
         fields:
           - name: team
-            label: "Team members"
+            label: Team members
             widget: list
             fields:
               - { name: name, label: "Name", widget: string }

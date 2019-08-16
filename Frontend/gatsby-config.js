@@ -59,9 +59,7 @@ module.exports = {
         name: 'blogs',
       },
     },
-    {
-      resolve: 'gatsby-transformer-yaml-full',
-    },
+    'gatsby-transformer-yaml',
     {
       resolve: 'gatsby-source-filesystem',
       options: {
