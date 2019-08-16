@@ -5,24 +5,20 @@ backend:
 media_folder: Frontend/static/assets
 public_folder: assets
 collections:
-  - name: pages
-    label: Page content
-    description: Content blocks for the site's pages
+  - name: about
+    label: About page
+    description: Content blocks for the site's about page
     files:
-      - name: about
-        label: About page
-        file: Frontend/src/content/contentblocks/about.yml
+      - name: team
+        label: Meet the team
+        file: Frontend/src/content/about/team.yml
         fields:
-          - { name: mission, label: "Our mission", widget: markdown }
-          - { name: about, label: "About CollAction", widget: markdown }
           - name: team
-            label: "Meet the team"
+            label: "Team members"
             widget: list
             fields:
               - { name: name, label: "Name", widget: string }
               - { name: photo, label: "Photo", widget: image }
-          - { name: join, label: "Join our team", widget: markdown }
-          - { name: partners, label: "Partners", widget: markdown }
 
   - name: blogs
     label: Blog posts

@@ -60,6 +60,16 @@ module.exports = {
       },
     },
     {
+      resolve: 'gatsby-transformer-yaml-full',
+    },
+    {
+      resolve: 'gatsby-source-filesystem',
+      options: {
+        path: `${__dirname}/src/content/about`,
+        name: 'about',
+      },
+    },
+    {
       resolve: 'gatsby-source-filesystem',
       options: {
         path: `${__dirname}/static/assets`,
