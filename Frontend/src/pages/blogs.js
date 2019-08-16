@@ -14,7 +14,10 @@ export default function Blogs({ data }) {
           .filter(post => post.node.frontmatter.title.length > 0)
           .map(( { node: post }) => {
             return (
-              <li><Link to={post.frontmatter.path}>{post.frontmatter.title }</Link></li>
+              <li>
+                <Link to={ post.fields.slug }>{ post.frontmatter.title }</Link><br/>
+                <p>{ post.excerpt }</p>
+              </li>
             )
           })
         }
@@ -28,12 +31,14 @@ export const pageQuery = graphql`
     allMarkdownRemark(sort: { order: DESC, fields: [frontmatter___date] }) {
       edges {
         node {
-          excerpt(pruneLength: 250)
+          excerpt(pruneLength: 100)
           id
           frontmatter {
             title
             date(formatString: "MMMM DD, YYYY")
-            path
+          }
+          fields {
+            slug
           }
         }
       }
