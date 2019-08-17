@@ -9,7 +9,7 @@ export default function About({ data }) {
   
   const generateVideo = (className) => {
     return (
-      <div>
+      <div className={ className }>
         <a href={ videos.mainvideo }>{ videos.mainvideo }</a>
       </div>
     )
@@ -23,7 +23,7 @@ export default function About({ data }) {
 
   const generateSection = (section, className) => {
     return (
-      <div class={ className }>
+      <div className={ className }>
         <h1>{ section.frontmatter.title }</h1>
         <div dangerouslySetInnerHTML={{ __html: section.html }}></div>
       </div>
@@ -36,19 +36,21 @@ export default function About({ data }) {
 
   const generateTeamMembers = (className) => {
     return (
-      <div class={ className }>
+      <div className={ className }>
         <h1>{ teamSection.title }</h1>
-        { teamSection.team.map(generateMemberPhoto) }
+        <ul>
+          { teamSection.team.map(generateMemberPhoto) }
+        </ul>
       </div>
     )
   }
 
   const generateMemberPhoto = (member) => {
     return (
-      <div>            
+      <li key={ member.name }>            
         <img src={ member.photo } alt={ member.name } title={ member.name} />
         <span>{ member.name }</span>
-      </div>
+      </li>
     );
   }
 
