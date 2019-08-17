@@ -111,7 +111,10 @@ namespace CollAction.Controllers
             }
 
 #if (DEBUG)
-            result.EnrichWithApolloTracing(start);
+            if (query != null)
+            {
+                result.EnrichWithApolloTracing(start);
+            }
 #endif
 
             return result;
