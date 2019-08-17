@@ -1,0 +1,35 @@
+name: team
+title: Meet the team
+team:
+  - name: Abhinay Kondamreddy
+    photo: /assets/nophoto.png
+  - name: Christa Brouwer
+    photo: /assets/nophoto.png
+  - name: Daniela Becker
+    photo: /assets/daniela-becker.png
+  - name: Dominik Guz
+    photo: /assets/nophoto.png
+  - name: Edoardo Felici
+    photo: /assets/edoardo-felici.png
+  - name: Luuk Boschker
+    photo: /assets/luuk-boschker.png
+  - name: Laura Wennekes
+    photo: /assets/nophoto.png
+  - name: Martijn de Haan
+    photo: /assets/martijn-de-haan.png
+  - name: Melchior Jong
+    photo: /assets/melchior-jong.png
+  - name: Mina Yao
+    photo: /assets/nophoto.png
+  - name: Nikie van Thiel
+    photo: /assets/nophoto.png
+  - name: Ron van den Akker
+    photo: /assets/ron-van-den-akker.png
+  - name: Spencer Heijnen
+    photo: /assets/spencer-heijnen.png
+  - name: Tim Stokman
+    photo: /assets/tim-stokman.png
+  - name: Vivian Vos
+    photo: /assets/vivian-vos.png
+  - name: Brian Russell
+    photo: /assets/nophoto.png

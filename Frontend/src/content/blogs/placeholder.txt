@@ -1,0 +1,1 @@
+Needed because netlify cms will not work if there are no more blogposts

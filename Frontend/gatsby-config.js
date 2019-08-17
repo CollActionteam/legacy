@@ -31,7 +31,7 @@ module.exports = {
       },
       {
         name: "Blog",
-        link: "/blog",
+        link: "/blogs",
       },
       {
         name: "About",
@@ -55,15 +55,16 @@ module.exports = {
     {
       resolve: 'gatsby-source-filesystem',
       options: {
-        path: `${__dirname}/src/content/blog`,
-        name: 'blog',
+        path: `${__dirname}/src/content/blogs`,
+        name: 'blogs',
       },
     },
+    'gatsby-transformer-yaml',
     {
       resolve: 'gatsby-source-filesystem',
       options: {
-        path: `${__dirname}/src/content/homepage`,
-        name: 'homepage',
+        path: `${__dirname}/src/content/about`,
+        name: 'about',
       },
     },
     {
