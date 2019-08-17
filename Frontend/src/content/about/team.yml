@@ -1,4 +1,3 @@
-name: team
 title: Meet the team
 team:
   - name: Abhinay Kondamreddy
@@ -11,7 +10,7 @@ team:
     photo: /assets/nophoto.png
   - name: Edoardo Felici
     photo: /assets/edoardo-felici.png
-  - name: Luukie Boschker
+  - name: Luuk Boschker
     photo: /assets/luuk-boschker.png
   - name: Laura Wennekes
     photo: /assets/nophoto.png
