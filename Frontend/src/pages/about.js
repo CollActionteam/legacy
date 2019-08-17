@@ -10,29 +10,47 @@ export default function About({ data }) {
   const join = sections.find(s => s.frontmatter.name === "join");
   const partners = sections.find(s => s.frontmatter.name === "partners");
 
+  const generateSection = (section, className) => {
+    return (
+      <div class={ className }>
+        <h1>{ section.frontmatter.title }</h1>
+        <div dangerouslySetInnerHTML={{ __html: section.html }}></div>
+      </div>
+    )
+  }
+
+  const generateMemberPhoto = (member) => {
+    return (
+      <div>            
+        <img src={ member.photo } alt={ member.name } title={ member.name} />
+        <span>{ member.name }</span>
+      </div>
+    );
+  }
+
+  const team = data.aboutYaml;
+  const generateTeamMembers = (className) => {
+    return (
+      <div class={ className }>
+        <h1>{ team.title }</h1>
+        { team.team.map(generateMemberPhoto) }
+      </div>
+    )
+  }
+
   return (
     <Layout>
       <div>
-        <div>
-          <h1>{ mission.frontmatter.title }</h1>
-          <div dangerouslySetInnerHTML={{ __html: mission.html }}></div>
-        </div>
-        <div>
-          <h1>{ about.frontmatter.title }</h1>
-          <div dangerouslySetInnerHTML={{ __html: about.html }}></div>
-        </div>
-        <div>
-          <h1>{ join.frontmatter.title }</h1>
-          <div dangerouslySetInnerHTML={{ __html: join.html }}></div>
-        </div>
-        <div>
-          <h1>{ partners.frontmatter.title }</h1>
-          <div dangerouslySetInnerHTML={{ __html: partners.html }}></div>
-        </div>
+        { generateSection(mission, "green") }
+        { generateSection(about, "white") }
+        { generateSection(join, "grey") }
+        { generateTeamMembers("white")}
+        { generateSection(partners, "grey") }
       </div>
     </Layout>  
   );
 }
+
 export const pageQuery = graphql`
   query AboutPageQuery {
     allMarkdownRemark(filter: {frontmatter: {type: {eq: "about"}}}) {
@@ -46,5 +64,12 @@ export const pageQuery = graphql`
         }
       }
     }
+    aboutYaml {
+      title
+      team {
+        name
+        photo
+      }
+    }  
   }
 `
