@@ -3,8 +3,19 @@ import Layout from "../components/Layout";
 import { graphql } from "gatsby";
 
 export default function About({ data }) {
-  const sections = data.allMarkdownRemark.edges.map(e => e.node);
+  const videos = data.videos.edges
+    .map(e => e.node)
+    .find(n => n.name === "videos");
+  
+  const generateVideo = (className) => {
+    return (
+      <div>
+        <a href={ videos.mainvideo }>{ videos.mainvideo }</a>
+      </div>
+    )
+  }
 
+  const sections = data.allMarkdownRemark.edges.map(e => e.node);
   const mission = sections.find(s => s.frontmatter.name === "mission");
   const about = sections.find(s => s.frontmatter.name === "about");
   const join = sections.find(s => s.frontmatter.name === "join");
@@ -19,6 +30,19 @@ export default function About({ data }) {
     )
   }
 
+  const teamSection = data.team.edges
+    .map(e => e.node)
+    .find(n => n.name === "team");    
+
+  const generateTeamMembers = (className) => {
+    return (
+      <div class={ className }>
+        <h1>{ teamSection.title }</h1>
+        { teamSection.team.map(generateMemberPhoto) }
+      </div>
+    )
+  }
+
   const generateMemberPhoto = (member) => {
     return (
       <div>            
@@ -28,19 +52,10 @@ export default function About({ data }) {
     );
   }
 
-  const team = data.aboutYaml;
-  const generateTeamMembers = (className) => {
-    return (
-      <div class={ className }>
-        <h1>{ team.title }</h1>
-        { team.team.map(generateMemberPhoto) }
-      </div>
-    )
-  }
-
   return (
     <Layout>
       <div>
+        { generateVideo("white") }
         { generateSection(mission, "green") }
         { generateSection(about, "white") }
         { generateSection(join, "grey") }
@@ -64,12 +79,25 @@ export const pageQuery = graphql`
         }
       }
     }
-    aboutYaml {
-      title
-      team {
-        name
-        photo
+    team: allAboutYaml(filter: {name: {eq: "team"}}) {
+      edges {
+        node {
+          name
+          title
+          team {
+            photo
+            name
+          }
+        }
       }
-    }  
+    }
+    videos: allAboutYaml(filter: {name: {eq: "videos"}}) {
+      edges {
+        node {
+          name
+          mainvideo
+        }
+      }
+    }
   }
 `
