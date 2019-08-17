@@ -5,8 +5,8 @@ backend:
 media_folder: Frontend/static/assets
 public_folder: assets
 collections:
-  - name: about
-    label: About page
+  - name: about_content
+    label: About page content
     description: Content blocks for the site's about page
     folder: Frontend/src/content/about
     create: false
@@ -17,10 +17,16 @@ collections:
       - { name: title, label: Title, widget: string }
       - { name: body, label: Content, widget: markdown }
 
-  - name: team
-    label: Team overview
+  - name: about_settings
+    label: About page settings
     delete: false
     files:
+      - label: Videos
+        name: videos
+        file: Frontend/src/content/about/video.yml
+        fields:
+          - { name: video, label: Main video, hint: Link to YouTube video, widget: string }
+
       - label: Meet the team
         name: team
         file: Frontend/src/content/about/team.yml
