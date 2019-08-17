@@ -25,7 +25,7 @@ collections:
         name: videos
         file: Frontend/src/content/about/video.yml
         fields:
-          - { name: video, label: Main video, hint: Link to YouTube video, widget: string }
+          - { name: mainvideo, label: Main video, hint: Link to YouTube video, widget: string }
 
       - label: Meet the team
         name: team
