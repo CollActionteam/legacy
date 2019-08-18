@@ -103,16 +103,13 @@ namespace CollAction.Controllers
             ExecutionResult result = await executer.ExecuteAsync(options);
 
 #if (DEBUG)
-            if (query != null)
+            try
             {
-                try
-                {
-                    result.EnrichWithApolloTracing(start);
-                }
-                catch (Exception e)
-                {
-                    logger.LogError(e, "error creating apollo trace");
-                }
+                result.EnrichWithApolloTracing(start);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "error creating apollo trace");
             }
 #endif
 
