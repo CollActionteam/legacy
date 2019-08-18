@@ -1,6 +1,7 @@
 //Global custom properties
 :root {
     --spacing: 12px;
+    --spacing-lg: calc(var(--spacing) * 2);
 
     //Font
     --font-family: 'Raleway';

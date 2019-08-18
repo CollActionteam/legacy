@@ -1,7 +1,6 @@
 import React from "react";
 import Layout from "../components/Layout";
-// import { Query } from 'react-apollo';
-// import gql from 'graphql-tag';
+import ProjectsList from "../components/ProjectsList";
 import { graphql } from "gatsby";
 
 // This query is executed at build time by Gatsby.
@@ -43,6 +42,6 @@ export default ({ data }) => (
         return <div>{data.projects}</div>;
       }}
     </Query> */}
-
+    <ProjectsList></ProjectsList>
   </Layout>
 );

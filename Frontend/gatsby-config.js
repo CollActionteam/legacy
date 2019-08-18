@@ -37,10 +37,6 @@ module.exports = {
         name: "About",
         link: "/about",
       },
-      {
-        name: "Login",
-        link: "/login",
-      },
     ],
   },
   plugins: [

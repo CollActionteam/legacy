@@ -1,39 +1,48 @@
 import React from "react";
-import { Link } from "gatsby";
+import logo from "../../../static/assets/logo.svg";
+import { Link, useStaticQuery, graphql } from "gatsby";
 
-const Header = ({ menuLinks }) => (
-  <header>
-    <div>
-      <div
-        style={{
-          width: "100%",
-          display: "flex",
-          justifyItems: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <div>
-          <nav>
-            <ul style={{ display: "flex", flex: 1, padding: 0 }}>
-              {menuLinks.map(link => (
-                <li
-                  key={link.name}
-                  style={{
-                    listStyleType: `none`,
-                    padding: `1rem`,
-                  }}
-                >
-                  <Link style={{ color: `black` }} to={link.link}>
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        </div>
-      </div>
-    </div>
-  </header>
-);
+import styles from "./style.module.scss";
 
-export default Header;
+export default () => {
+  const data = useStaticQuery(query);
+
+  return (
+    <header className={styles.header}>
+      <img alt="CollAction" className={styles.logo} src={logo}></img>
+      <nav className={styles.navigation}>
+        <ul className={styles.navigationList}>
+          {data.site.siteMetadata.menuLinks.map(link => (
+            <li key={link.name} className={styles.navigationItem}>
+              <Link className={styles.navigationLink} to={link.link}>
+                {link.name}
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <ul className={styles.navigationList}>
+          <li class={styles.navigationItem}>
+            <button>Donate</button>
+          </li>
+          <li class={styles.navigationItem}>
+            <Link to="/login">Login</Link>
+          </li>
+        </ul>
+      </nav>
+    </header>
+  );
+};
+
+const query = graphql`
+  query HeaderQuery {
+    site {
+      siteMetadata {
+        title
+        menuLinks {
+          name
+          link
+        }
+      }
+    }
+  }
+`;
