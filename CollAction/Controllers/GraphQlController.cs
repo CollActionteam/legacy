@@ -102,6 +102,20 @@ namespace CollAction.Controllers
 #endif
             ExecutionResult result = await executer.ExecuteAsync(options);
 
+#if (DEBUG)
+            if (query != null)
+            {
+                try
+                {
+                    result.EnrichWithApolloTracing(start);
+                }
+                catch (Exception e)
+                {
+                    logger.LogError(e, "error creating apollo trace");
+                }
+            }
+#endif
+
             if (result.Errors != null)
             {
                 foreach (ExecutionError error in result.Errors)
@@ -109,13 +123,6 @@ namespace CollAction.Controllers
                     logger.LogError(error, "Error occurred while executing graphql");
                 }
             }
-
-#if (DEBUG)
-            if (query != null)
-            {
-                result.EnrichWithApolloTracing(start);
-            }
-#endif
 
             return result;
         }
