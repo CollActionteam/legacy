@@ -41,7 +41,7 @@ export default ({ children }) => (
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Container>
-            <Header menuLinks={data.site.siteMetadata.menuLinks} />
+            <Header />
             <div style={{ padding: "1rem" }}>{children}</div>
             <Footer></Footer>
           </Container>

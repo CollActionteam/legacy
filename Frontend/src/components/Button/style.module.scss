@@ -1,0 +1,15 @@
+.button {
+    background: var(--c-green);
+    padding: var(--spacing) var(--spacing-lg);
+    border-radius: var(--border-radius);
+    border: none;
+    color: var(--c-white);
+    font-size: var(--font-size);
+    transition: transform var(--transition-duration);
+
+    &:hover,
+    &:focus {
+        transform: scale(1.05);
+        cursor: pointer;
+    }
+}
