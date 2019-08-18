@@ -1,6 +1,7 @@
 import React from "react";
 import logo from "../../../static/assets/logo.svg";
 import { Link, useStaticQuery, graphql } from "gatsby";
+import Button from "../Button";
 
 import styles from "./style.module.scss";
 
@@ -21,11 +22,11 @@ export default () => {
           ))}
         </ul>
         <ul className={styles.navigationList}>
-          <li class={styles.navigationItem}>
-            <button>Donate</button>
+          <li className={styles.navigationItem}>
+            <Button to="/donate">Donate</Button>
           </li>
-          <li class={styles.navigationItem}>
-            <Link to="/login">Login</Link>
+          <li className={styles.navigationItem}>
+            <Button to="/login">Login</Button>
           </li>
         </ul>
       </nav>

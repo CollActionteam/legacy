@@ -18,6 +18,8 @@
 }
 
 .navigationList {
+    display: flex;
+    align-items: center;
     list-style-type: none;
     padding: 1rem;
 }
@@ -30,4 +32,10 @@
 .navigationLink {
     color: var(--c-black);
     text-decoration: none;
+    font-weight: bold;
+
+    &:hover,
+    &:focus {
+        text-decoration: underline;
+    }
 }

@@ -5,16 +5,16 @@ module.exports = {
     description: "CollAction",
     backendUrl: "https://localhost:44301",
     frontendUrl: "http://localhost:8000",
-    loginProviders: [ 
+    loginProviders: [
       {
-        name: "Google"
-      },
-      { 
-        name: "Twitter"
+        name: "Google",
       },
       {
-         name: "Facebook"
-      }
+        name: "Twitter",
+      },
+      {
+        name: "Facebook",
+      },
     ],
     menuLinks: [
       {
@@ -41,7 +41,7 @@ module.exports = {
   },
   plugins: [
     {
-      resolve: 'gatsby-plugin-sass',
+      resolve: "gatsby-plugin-sass",
       options: {
         cssLoaderOptions: {
           camelCase: false,
@@ -49,53 +49,60 @@ module.exports = {
       },
     },
     {
-      resolve: 'gatsby-source-filesystem',
+      resolve: "gatsby-plugin-google-fonts",
+      options: {
+        fonts: ["Raleway"],
+        display: "swap",
+      },
+    },
+    {
+      resolve: "gatsby-source-filesystem",
       options: {
         path: `${__dirname}/src/content/blogs`,
-        name: 'blogs',
+        name: "blogs",
       },
     },
-    'gatsby-transformer-yaml',
+    "gatsby-transformer-yaml",
     {
-      resolve: 'gatsby-source-filesystem',
+      resolve: "gatsby-source-filesystem",
       options: {
         path: `${__dirname}/src/content/about`,
-        name: 'about',
+        name: "about",
       },
     },
     {
-      resolve: 'gatsby-source-filesystem',
+      resolve: "gatsby-source-filesystem",
       options: {
         path: `${__dirname}/static/assets`,
-        name: 'assets',
+        name: "assets",
       },
     },
     {
-      resolve: 'gatsby-transformer-remark',
+      resolve: "gatsby-transformer-remark",
       options: {
         plugins: [
           {
-            resolve: 'gatsby-remark-images',
+            resolve: "gatsby-remark-images",
             options: {
               maxWidth: 590,
             },
           },
           {
-            resolve: 'gatsby-remark-responsive-iframe',
+            resolve: "gatsby-remark-responsive-iframe",
             options: {
-              wrapperStyle: 'margin-bottom: 1.0725rem',
+              wrapperStyle: "margin-bottom: 1.0725rem",
             },
           },
-          'gatsby-remark-prismjs',
-          'gatsby-remark-copy-linked-files',
-          'gatsby-remark-smartypants',
+          "gatsby-remark-prismjs",
+          "gatsby-remark-copy-linked-files",
+          "gatsby-remark-smartypants",
         ],
       },
     },
-    'gatsby-transformer-sharp',
-    'gatsby-plugin-sharp',
-    'gatsby-plugin-offline',
-    'gatsby-plugin-react-helmet',
-    'gatsby-plugin-netlify-cms'
-  ]
+    "gatsby-transformer-sharp",
+    "gatsby-plugin-sharp",
+    "gatsby-plugin-offline",
+    "gatsby-plugin-react-helmet",
+    "gatsby-plugin-netlify-cms",
+  ],
 };
