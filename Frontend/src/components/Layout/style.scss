@@ -1,24 +1,38 @@
 //Global custom properties
 :root {
-    --spacing: 12px;
-    --spacing-lg: calc(var(--spacing) * 2);
+    --spacing: 1rem;
+    --spacing-sm: calc(var(--spacing) * 0.5);
+    --spacing-md: calc(var(--spacing) * 0.75);
+    --spacing-lg: calc(var(--spacing) * 1.5);
+    --spacing-xlg: calc(var(--spacing) * 2);
 
     //Font
+    --font-family: 'Raleway', sans-serif;
+
     --font-size: 16px;
+    --font-size-ratio: 1.2;
+    --font-size-sm: calc(var(--font-size) * var(--font-size-ratio) * 0.5);
+    --font-size-md: calc(var(--font-size) * var(--font-size-ratio) * 0.75);
+    --font-size-lg: calc(var(--font-size) * var(--font-size-ratio) * 1.25);
+    --font-size-xl: calc(var(--font-size) * var(--font-size-ratio) * 1.5);
 
     //Colors
-    --c-green: #23D884;
+    --c-green: #23d884;
+    --c-green-d10: #14be6f;
     --c-black: #000000;
-    --c-white: #FFFFFF;
-    --c-blue: #3762AE;
-    --c-orange: #E88424;
-    --c-purple: #7B2164;
+    --c-white: #ffffff;
+    --c-gray: #f7f7f7;
+    --c-blue: #3762ae;
+    --c-orange: #e88424;
+    --c-purple: #7b2164;
 
     //Transitions
     --transition-duration: 200ms;
+    --transition-ease: ease;
     
     //Other
     --border-radius: var(--spacing-lg);
+    --line-height: 1.5;
 }
 
 html,
@@ -28,6 +42,15 @@ body {
     font-size: var(--font-size);
 }
 
-h1 {
+h1,
+h2,
+h3,
+h4,
+h5 {
     margin: 0;
+}
+
+p {
+    margin: 0;
+    padding: 0;
 }
