@@ -247,7 +247,9 @@ namespace CollAction
                        cspBuilder.AddFrameAncestors().Sources.AddRange(Configuration["CspFrameAncestors"]?.Split(";") ?? new string[0]); // Only allow configured sources
                        cspBuilder.AddMediaSrc().Self()
                                                .Sources.AddRange(Configuration["CspMediaSrc"]?.Split(";") ?? new string[0]); // Only allow self-hosted videos, or configured sources
-                       cspBuilder.AddFrameAncestors().None(); // No framing allowed here (put us inside a frame tag)
+                       cspBuilder.AddFrameAncestors()
+                                 .Sources
+                                 .AddRange(Configuration["CspFrameAncestors"]?.Split(";") ?? new string[0]);
                        cspBuilder.AddFrameSource().Self() // Workaround for chrome bug, apparently chrome can't uses images with svg src, so we have to use object tags. Additionally, apparently "obj" tags count as frames for chrome.. so we have to allow them through the CSP.. nice.
                                                   .Sources
                                                   .AddRange(new[]
@@ -372,6 +374,11 @@ namespace CollAction
                 routes.MapRoute("FindProject",
                      "api/projects/{projectId:int}",
                      new { controller = "Projects", action = "FindProject" }
+                 );                 
+
+                routes.MapRoute("EmbedProject",
+                     "/projects/embed/{projectId:int}",
+                     new { controller = "Projects", action = "Embed" }
                  );                 
 
                 routes.MapRoute("FindProjects",

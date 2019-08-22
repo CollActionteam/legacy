@@ -99,6 +99,7 @@ namespace CollAction.Data
             await CreateAdminRoleAndUser(configuration, userManager, roleManager);
             await CreateCategories();
             await ImportLocationData(configuration);
+            await SeedTestProjects(configuration, userManager);
         }
 
         private async Task ImportLocationData(IConfiguration configuration)
@@ -158,6 +159,37 @@ namespace CollAction.Data
                 });
                 await SaveChangesAsync();
                 DetachAll();
+            }
+        }
+
+        private async Task SeedTestProjects(IConfiguration configuration, UserManager<ApplicationUser> userManager)
+        {
+            if (configuration.GetValue<bool>("SeedTestProjects") && !(await Projects.AnyAsync()))
+            {
+                Random r = new Random();
+                ApplicationUser admin = await userManager.FindByEmailAsync(configuration["AdminEmail"]);
+                Projects.AddRange(
+                    Enumerable.Range(0, r.Next(20, 200))
+                              .Select(i =>
+                                  new Project()
+                                  {
+                                      Name = Guid.NewGuid().ToString(),
+                                      Description = Guid.NewGuid().ToString(),
+                                      Start = DateTime.Now.AddDays(r.Next(-10, 10)),
+                                      End = DateTime.Now.AddDays(r.Next(20, 30)),
+                                      AnonymousUserParticipants = r.Next(0, 5),
+                                      CategoryId = r.Next(1, 5),
+                                      CreatorComments = Guid.NewGuid().ToString(),
+                                      DisplayPriority = (ProjectDisplayPriority)r.Next(0, 2),
+                                      Goal = Guid.NewGuid().ToString(),
+                                      OwnerId = admin.Id,
+                                      Proposal = Guid.NewGuid().ToString(),
+                                      Status = (ProjectStatus)r.Next(0, 4),
+                                      Target = r.Next(1, 10000),
+                                      NumberProjectEmailsSend = r.Next(0, 3)
+                                  }));
+                await SaveChangesAsync();
+                await Database.ExecuteSqlCommandAsync(@"REFRESH MATERIALIZED VIEW CONCURRENTLY ""ProjectParticipantCounts"";");
             }
         }
 

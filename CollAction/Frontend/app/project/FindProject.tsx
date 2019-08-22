@@ -7,6 +7,7 @@ import renderComponentIf from "../global/renderComponentIf";
 interface IFindProjectProps extends IProjectsProps {
   controller: boolean;
   projectListContainerElement?: any;
+  projectId?: number;
 }
 
 interface IFindProjectState extends IProjectsState {
@@ -69,8 +70,9 @@ export default class FindProject extends Projects<IFindProjectProps, IFindProjec
 
     this.setState({ projectFetching: true });
 
-    // Fetch projects with out filters set
-    const getUrl = `/api/projects/find?start=${start}&limit=${start + this.fetchNumberOfProjectsOnScroll}`;
+      // Fetch projects with out filters set
+    const getUrl = this.props.projectId == null ? `/api/projects/find?start=${start}&limit=${start + this.fetchNumberOfProjectsOnScroll}`
+                                                : `/api/projects/${this.props.projectId}`;
 
     try {
       const searchProjectRequest: Request = new Request(getUrl);
@@ -150,3 +152,12 @@ renderComponentIf(
   <FindProject controller={false} />,
   document.getElementById("projects-container")
 );
+
+let embeddedProject = document.getElementById("embedded-project");
+if (embeddedProject !== null) {
+  let projectId = parseInt(embeddedProject.getAttribute("data-project-id"));
+  renderComponentIf(
+      <FindProject controller={false} projectId={projectId} />,
+      document.getElementById("embedded-project")
+  );
+}
