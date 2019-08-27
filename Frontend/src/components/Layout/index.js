@@ -11,11 +11,8 @@ import Header from "../Header";
 import Footer from "../Footer";
 
 // Material-UI
-import { ThemeProvider } from "@material-ui/styles";
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
-import theme from "../../theme";
 
 // FontAwesome
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -48,18 +45,15 @@ export default ({ children }) => (
             { name: "keywords", content: "collaction" },
           ]}
         ></Helmet>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Header />
-          <Container>
-            <Grid container>
-              <Grid item xs={12}>
-                {children}
-              </Grid>
+        <Header />
+        <Container>
+          <Grid container>
+            <Grid item xs={12}>
+              {children}
             </Grid>
-          </Container>
-          <Footer></Footer>
-        </ThemeProvider>
+          </Grid>
+        </Container>
+        <Footer></Footer>
       </React.Fragment>
     )}
   />

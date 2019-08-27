@@ -38,8 +38,29 @@
     text-decoration: none;
     font-weight: bold;
 
+    svg {
+        padding-right: var(--spacing);
+    }
+
     &:hover,
     &:focus {
         text-decoration: underline;
+    }
+}
+
+.donationLink {
+    color: var(--c-green);
+    text-decoration: none;
+    
+    svg {
+        padding-right: var(--spacing-xs);
+        transition: transform var(--transition-duration);
+    }
+
+    &:hover,
+    &:focus {
+        svg {
+            transform: scale(1.1);
+        }
     }
 }

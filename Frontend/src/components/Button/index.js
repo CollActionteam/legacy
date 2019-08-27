@@ -2,10 +2,28 @@ import React from "react";
 import { Link } from "gatsby";
 import styles from "./style.module.scss";
 
-export default ({ to, children }) => (
-  <Link to={to}>
-    <button className={styles.button}>
+export const Button = ({ children, variant = "primary", onClick, to }) => {
+  if(to) {
+    return (
+      <Link className={styles[variant]} to={to}>
         {children}
+      </Link>
+    );
+  };
+
+  return (
+    <button className={styles[variant]} onClick={onClick}>
+      {children}
     </button>
-  </Link>
-);
+  )
+};
+
+export const SecondaryButton = ({ children, ...props }) =>
+  <Button variant="secondary" {...props}>
+    {children}
+  </Button>;
+
+export const TertiaryButton = ({ children, ...props }) =>
+  <Button variant="tertiary" {...props}>
+    {children}
+  </Button>;

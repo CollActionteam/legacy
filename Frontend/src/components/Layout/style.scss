@@ -1,6 +1,7 @@
 //Global custom properties
 :root {
     --spacing: 1rem;
+    --spacing-xs: calc(var(--spacing) * 0.25);
     --spacing-sm: calc(var(--spacing) * 0.5);
     --spacing-md: calc(var(--spacing) * 0.75);
     --spacing-lg: calc(var(--spacing) * 1.5);
@@ -10,11 +11,11 @@
     --font-family: 'Raleway', sans-serif;
 
     --font-size: 16px;
-    --font-size-ratio: 1.2;
+    --font-size-ratio: 1.4;
     --font-size-sm: calc(var(--font-size) * var(--font-size-ratio) * 0.5);
     --font-size-md: calc(var(--font-size) * var(--font-size-ratio) * 0.75);
-    --font-size-lg: calc(var(--font-size) * var(--font-size-ratio) * 1.25);
-    --font-size-xl: calc(var(--font-size) * var(--font-size-ratio) * 1.5);
+    --font-size-lg: calc(var(--font-size) * var(--font-size-ratio) * 1.5);
+    --font-size-xl: calc(var(--font-size) * var(--font-size-ratio) * 2);
 
     //Colors
     --c-green: #23d884;
@@ -23,8 +24,11 @@
     --c-white: #ffffff;
     --c-gray: #f7f7f7;
     --c-blue: #3762ae;
+    --c-blue-d10: #295196;
     --c-orange: #e88424;
+    --c-orange-d10: #db7413;
     --c-purple: #7b2164;
+    --c-purple-d10: #6d1a58;
 
     //Transitions
     --transition-duration: 200ms;
@@ -40,6 +44,7 @@ body {
     padding: 0;
     margin: 0;
     font-size: var(--font-size);
+    font-family: var(--font-family);
 }
 
 h1,

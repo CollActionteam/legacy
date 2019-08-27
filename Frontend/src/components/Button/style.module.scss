@@ -1,15 +1,42 @@
-.button {
-    background: var(--c-green);
-    padding: var(--spacing) var(--spacing-lg);
+@mixin button {
+    background-color: var(--c-green);
+    padding: calc(var(--spacing-sm) * 1.5) calc(var(--spacing-lg) * 1.5);
     border-radius: var(--border-radius);
     border: none;
     color: var(--c-white);
     font-size: var(--font-size);
-    transition: transform var(--transition-duration);
+    text-decoration: none;
+    transition: transform var(--transition-duration),
+                background-color var(--transition-duration);
 
     &:hover,
     &:focus {
         transform: scale(1.05);
         cursor: pointer;
+        background-color: var(--c-green-d10);
+    }
+}
+
+.primary {
+    @include button();
+}
+
+.secondary {
+    @include button();
+    background-color: var(--c-blue);
+
+    &:hover,
+    &:focus {
+        background-color: var(--c-blue-d10);
+    }
+}
+
+.tertiary {
+    @include button();
+    background-color: var(--c-orange);
+
+    &:hover,
+    &:focus {
+        background-color: var(--c-orange-d10);
     }
 }

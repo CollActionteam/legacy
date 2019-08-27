@@ -1,9 +1,10 @@
 import React from "react";
 import logo from "../../../static/assets/logo.svg";
 import { Link, useStaticQuery, graphql } from "gatsby";
-import Button from "../Button";
+import { Button } from "../Button";
 import Container from '@material-ui/core/Container';
 import styles from "./style.module.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default () => {
   const data = useStaticQuery(query);
@@ -25,12 +26,13 @@ export default () => {
             </ul>
             <ul className={styles.navigationList}>
               <li className={styles.navigationItem}>
-                <Link to="/donate" className="donationLink">
+                <Link className={styles.donationLink} to="/donate">
+                  <FontAwesomeIcon icon="heart" />
                   Donate
                 </Link>
               </li>
               <li className={styles.navigationItem}>
-                <Button to="/login" className="secondary">Login</Button>
+                <Button to="/login">Login</Button>
               </li>
             </ul>
           </nav>
