@@ -45,9 +45,9 @@ export default ({ children }) => (
             { name: "keywords", content: "collaction" },
           ]}
         ></Helmet>
-        <div class="site">
-          <Header class="header" />
-          <div class="site-content">
+        <div className="site">
+          <Header />
+          <div className="site-content">
             <Container>
               <Grid container>
                 <Grid item xs={12}>
