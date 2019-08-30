@@ -5,10 +5,10 @@ backend:
 media_folder: Frontend/static/assets
 public_folder: assets
 collections:
-  - name: home_settings
+  - name: home_content
     label: Home page content
     folder: Frontend/src/content/home
-    create: false
+    create: true
     delete: false
     fields:
       - { name: type, default: home, widget: hidden }
@@ -24,7 +24,8 @@ collections:
         name: photos
         file: Frontend/src/content/home/photos.yml
         fields:
-          - { name: name, default: videos, widget: hidden }
+          - { name: name, default: photos, widget: hidden }
+          - { name: bannertitle, label: Banner title, widget: string }
           - { name: bannerphoto, label: Banner photo, widget: image }      
 
   - name: about_content
