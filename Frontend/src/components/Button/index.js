@@ -27,3 +27,15 @@ export const TertiaryButton = ({ children, ...props }) =>
   <Button variant="tertiary" {...props}>
     {children}
   </Button>;
+
+export const CircleButtonContainer = ({ children }) =>
+  <div className={styles.circleContainer}>
+    {children}
+  </div>
+
+export const CircleButton = ({ children, ...props }) =>
+  <Button variant="circle" { ...props}>
+    <div className={styles.circleContent}>
+      {children}
+    </div>
+  </Button>;

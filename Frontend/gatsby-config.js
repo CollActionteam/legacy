@@ -51,7 +51,7 @@ module.exports = {
     {
       resolve: "gatsby-plugin-google-fonts",
       options: {
-        fonts: ["Raleway"],
+        fonts: ["Raleway\:400,700"],
         display: "swap",
       },
     },
@@ -68,6 +68,14 @@ module.exports = {
       options: {
         path: `${__dirname}/src/content/about`,
         name: "about",
+      },
+    },
+    "gatsby-transformer-yaml",
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        path: `${__dirname}/src/content/home`,
+        name: "home",
       },
     },
     {

@@ -5,7 +5,7 @@
     --spacing-sm: calc(var(--spacing) * 0.5);
     --spacing-md: calc(var(--spacing) * 0.75);
     --spacing-lg: calc(var(--spacing) * 1.5);
-    --spacing-xlg: calc(var(--spacing) * 2);
+    --spacing-xl: calc(var(--spacing) * 2);
 
     //Font
     --font-family: 'Raleway', sans-serif;
@@ -16,6 +16,7 @@
     --font-size-md: calc(var(--font-size) * var(--font-size-ratio) * 0.75);
     --font-size-lg: calc(var(--font-size) * var(--font-size-ratio) * 1.5);
     --font-size-xl: calc(var(--font-size) * var(--font-size-ratio) * 2);
+    --font-size-hg: calc(var(--font-size) * var(--font-size-ratio) * 3);
 
     //Colors
     --c-green: #23d884;

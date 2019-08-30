@@ -1,0 +1,36 @@
+@import '../../components/Styles/responsive.scss';
+
+.container {
+  flex-grow: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: radial-gradient(rgba(255, 255, 255, 0.25) 3px, transparent 5px), rgba(147, 148, 148, 0);
+  background-position: 0 0, 30px 30px;
+  background-size: 60px 60px;
+}
+
+.title {
+  color: var(--c-green);
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: var(--font-size-xl);
+  @include md {
+    font-size: var(--font-size-hg);
+  }
+  padding-bottom: var(--spacing-xl);
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  a {
+    margin-bottom: var(--spacing-xl);
+    text-align: center;
+  }
+}

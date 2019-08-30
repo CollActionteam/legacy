@@ -1,23 +1,52 @@
 import React from "react";
 import Layout from "../components/Layout";
-import ProjectsList from "../components/ProjectsList";
 import { graphql } from "gatsby";
+import { Banner } from "../components/Banner";
+import { Container } from "@material-ui/core";
+import { CallToAction } from "./home/call-to-action";
 
 export const query = graphql`
-  query {
-    site {
-      siteMetadata {
-        title
+query HomePageQuery {
+  site {
+    siteMetadata {
+      title
+    }
+  }
+  photos: allHomeYaml(filter: {name: {eq: "photos"}}) {
+    edges {
+      node {
+        bannertitle
+        bannerphoto
+        name
       }
     }
   }
-`;
+  content: allMarkdownRemark(filter: {frontmatter: {type: {eq: "home"}}}) {
+    edges {
+      node {
+        html
+        frontmatter {
+          title
+          name
+        }
+      }
+    }
+  }
+}`;
 
-export default ({ data }) => (
-  <Layout>
-    <h1>Homepage</h1>
-    <p>This will be the homepage.</p>
-    <h2>{ data.site.siteMetadata.title }</h2>
-    <ProjectsList></ProjectsList>
-  </Layout>
-);
+export default ({ data }) => {
+  const photos = data.photos.edges
+    .map(e => e.node)
+    .find(n => n.name = "photos");
+    
+  return (
+    <Layout>
+      <Banner photo={ photos.bannerphoto } style={ { height: '530px' } }>
+        <CallToAction title={ photos.bannertitle }></CallToAction>
+      </Banner>
+      <Container>
+        <p>Hello peoples</p>
+      </Container>
+    </Layout>
+  );
+}

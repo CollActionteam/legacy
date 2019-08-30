@@ -11,8 +11,7 @@ import Header from "../Header";
 import Footer from "../Footer";
 
 // Material-UI
-import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
+import { Box } from "@material-ui/core";
 
 // FontAwesome
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -46,13 +45,9 @@ export default ({ children }) => (
           ]}
         ></Helmet>
         <Header />
-        <Container>
-          <Grid container>
-            <Grid item xs={12}>
-              {children}
-            </Grid>
-          </Grid>
-        </Container>
+        <Box>
+            {children}
+        </Box>
         <Footer></Footer>
       </React.Fragment>
     )}
