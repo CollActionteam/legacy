@@ -16,7 +16,9 @@ export default () => {
           <img alt="CollAction" className={styles.logo} src={logo}></img>
           <nav className={styles.navigation}>
             <ul className={styles.navigationList}>
-              {data.site.siteMetadata.menuLinks.map(link => (
+              {data.site.siteMetadata.menuLinks
+              .filter(link => !!link.showInPrimaryNavigation)
+              .map(link => (
                 <li key={link.name} className={styles.navigationItem}>
                   <Link className={styles.navigationLink} to={link.link}>
                     {link.name}
@@ -50,6 +52,7 @@ const query = graphql`
         menuLinks {
           name
           link
+          showInPrimaryNavigation
         }
       }
     }

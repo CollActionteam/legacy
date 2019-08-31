@@ -9,3 +9,19 @@
 .logo {
     padding-bottom: var(--spacing-md);
 }
+
+.navigationList {
+    margin: 0;
+    padding: 0;
+    column-count: 3;
+}
+
+.navigationItem {
+    padding-bottom: var(--spacing-sm);
+}
+
+.navigationLink {
+    color: var(--color-black);
+    font-weight: 700;
+    text-decoration: none;
+}

@@ -17,6 +17,10 @@
     --font-size-lg: calc(var(--font-size) * var(--font-size-ratio) * 1.5);
     --font-size-xl: calc(var(--font-size) * var(--font-size-ratio) * 2);
 
+    --font-weight-light: 200;
+    --font-weight-regular: 400;
+    --font-weight-bold: 600;
+
     //Colors
     --c-green: #23d884;
     --c-green-d10: #14be6f;
@@ -58,4 +62,21 @@ h5 {
 p {
     margin: 0;
     padding: 0;
+}
+
+ul,
+ol {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.site {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;    
+
+    .site-content {
+        flex-grow: 1;
+    }
 }

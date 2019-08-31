@@ -27,3 +27,8 @@ export const TertiaryButton = ({ children, ...props }) =>
   <Button variant="tertiary" {...props}>
     {children}
   </Button>;
+
+  export const IconButton = ({ children, ...props }) =>
+    <Button variant="icon" {...props}>
+      {children}
+    </Button>;

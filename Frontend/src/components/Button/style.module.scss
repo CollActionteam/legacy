@@ -1,4 +1,5 @@
 @mixin button {
+    display: inline-block;
     background-color: var(--c-green);
     padding: calc(var(--spacing-sm) * 1.5) calc(var(--spacing-lg) * 1.5);
     border-radius: var(--border-radius);
@@ -39,4 +40,15 @@
     &:focus {
         background-color: var(--c-orange-d10);
     }
+}
+
+.icon {
+    @include button();
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 1.2rem;
+    height: 1.2rem;
+    padding: var(--spacing-sm);
+    border-radius: 50%;
 }
