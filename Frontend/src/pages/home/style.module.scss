@@ -3,7 +3,7 @@
 .callToActionContainer {
   flex-grow: 1;
 
-  margin: 120px 0;
+  margin: calc(var(--spacing-hg) * 2) auto;
 
   display: flex;
   align-items: center;
@@ -34,5 +34,24 @@
   a {
     margin-bottom: var(--spacing-xl);
     text-align: center;
+  }
+}
+
+.introContainer {
+  margin: var(--spacing-hg) auto;
+
+  div {
+    margin: var(--spacing-md) auto;
+    text-align: center;
+  }
+
+  line-height: var(--spacing-xl);
+
+  h2 {
+    color: var(--c-green);
+  }
+
+  p {
+    font-size: var(--font-size-md)
   }
 }

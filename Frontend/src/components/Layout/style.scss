@@ -6,6 +6,7 @@
     --spacing-md: calc(var(--spacing) * 0.75);
     --spacing-lg: calc(var(--spacing) * 1.5);
     --spacing-xl: calc(var(--spacing) * 2);
+    --spacing-hg: calc(var(--spacing) * 3);
 
     //Font
     --font-family: 'Raleway', sans-serif;
@@ -59,4 +60,14 @@ h5 {
 p {
     margin: 0;
     padding: 0;
+}
+
+a {
+    color: var(--c-green);
+    font-weight: bold;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
 }
