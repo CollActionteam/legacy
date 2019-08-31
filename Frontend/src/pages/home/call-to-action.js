@@ -1,6 +1,5 @@
 import React from "react";
 
-import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 
 import { Hidden } from "@material-ui/core";
@@ -11,7 +10,7 @@ import styles from './style.module.scss';
 
 export const CallToAction = ({ title }) => {
   return (
-    <div className={ styles.container }>
+    <div className={ styles.callToActionContainer }>
       <Grid container>
         <Grid item xs={12}>
           <h1 className={ styles.title }>{ title }</h1>

@@ -38,10 +38,12 @@ export default ({ data }) => {
   const photos = data.photos.edges
     .map(e => e.node)
     .find(n => n.name = "photos");
+
+  
     
   return (
     <Layout>
-      <Banner photo={ photos.bannerphoto } style={ { height: '530px' } }>
+      <Banner photo={ photos.bannerphoto }>
         <CallToAction title={ photos.bannertitle }></CallToAction>
       </Banner>
       <Container>

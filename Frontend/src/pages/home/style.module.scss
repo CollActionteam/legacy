@@ -1,7 +1,9 @@
 @import '../../components/Styles/responsive.scss';
 
-.container {
+.callToActionContainer {
   flex-grow: 1;
+
+  margin: 120px 0;
 
   display: flex;
   align-items: center;
