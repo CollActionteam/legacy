@@ -5,7 +5,7 @@ import styles from './style.module.scss';
 
 export const Intro = ({ title, content }) => {
   return (
-    <Container className={ styles.introContainer }>
+    <Container className={ styles.intro }>
       <Grid container>
         <Grid item xs={12}>
           <h2>{title}</h2>
@@ -15,5 +15,5 @@ export const Intro = ({ title, content }) => {
         </Grid>
       </Grid>
     </Container>
-);
+  );
 };

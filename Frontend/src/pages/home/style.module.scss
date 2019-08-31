@@ -1,9 +1,11 @@
 @import '../../components/Styles/responsive.scss';
 
-.callToActionContainer {
-  flex-grow: 1;
-
+.banner {
   margin: calc(var(--spacing-hg) * 2) auto;
+}
+
+.callToAction {
+  flex-grow: 1;
 
   display: flex;
   align-items: center;
@@ -12,18 +14,18 @@
   background: radial-gradient(rgba(255, 255, 255, 0.25) 3px, transparent 5px), rgba(147, 148, 148, 0);
   background-position: 0 0, 30px 30px;
   background-size: 60px 60px;
-}
 
-.title {
-  color: var(--c-green);
-  font-weight: 700;
-  text-align: center;
-  text-transform: uppercase;
-  font-size: var(--font-size-xl);
-  @include md {
-    font-size: var(--font-size-hg);
+  h1 {
+    color: var(--c-green);
+    font-weight: 700;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: var(--font-size-xl);
+    @include md {
+      font-size: var(--font-size-hg);
+    }
+    padding-bottom: var(--spacing-xl);
   }
-  padding-bottom: var(--spacing-xl);
 }
 
 .buttons {
@@ -37,7 +39,7 @@
   }
 }
 
-.introContainer {
+.intro {
   margin: var(--spacing-hg) auto;
 
   div {

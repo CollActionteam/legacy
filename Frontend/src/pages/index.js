@@ -1,9 +1,8 @@
 import React from "react";
 import Layout from "../components/Layout";
 import { graphql } from "gatsby";
-import { Banner } from "../components/Banner";
-import { CallToAction } from "./home/call-to-action";
 import { Intro } from "./home/intro";
+import { HomepageBanner } from "./home/homepage-banner";
 
 export const query = graphql`
   query HomePageQuery {
@@ -47,9 +46,7 @@ export default ({ data }) => {
 
   return (
     <Layout>
-      <Banner photo={photos.bannerphoto}>
-        <CallToAction title={photos.bannertitle}></CallToAction>
-      </Banner>
+      <HomepageBanner photo={ photos.bannerphoto } title={ photos.bannertitle }></HomepageBanner>
       <Intro title={intro.frontmatter.title} content={intro.html}></Intro> 
     </Layout>
   );

@@ -10,10 +10,10 @@ import styles from './style.module.scss';
 
 export const CallToAction = ({ title }) => {
   return (
-    <div className={ styles.callToActionContainer }>
+    <section className={ styles.callToAction }>
       <Grid container>
         <Grid item xs={12}>
-          <h1 className={ styles.title }>{ title }</h1>
+          <h1>{ title }</h1>
         </Grid>
         <Hidden smDown>
           <Grid item xs={12}>
@@ -33,6 +33,6 @@ export const CallToAction = ({ title }) => {
           </Grid>
         </Hidden>
       </Grid>
-    </div>
+    </section>
   )
 };
