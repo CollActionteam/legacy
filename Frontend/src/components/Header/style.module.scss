@@ -24,8 +24,7 @@
 .navigationList {
     display: flex;
     align-items: center;
-    list-style-type: none;
-    padding: 1rem;
+    padding: var(--spacing-xlg) 0;
 }
 
 .navigationItem {
@@ -36,7 +35,7 @@
 .navigationLink {
     color: var(--c-black);
     text-decoration: none;
-    font-weight: bold;
+    font-weight: var(--font-weight-bold);
 
     svg {
         padding-right: var(--spacing);

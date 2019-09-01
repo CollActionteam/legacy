@@ -20,24 +20,68 @@ module.exports = {
       {
         name: "Home",
         link: "",
+        showInPrimaryNavigation: true
       },
       {
         name: "Find Project",
         link: "/projects/find",
+        showInPrimaryNavigation: true
       },
       {
         name: "Start Project",
         link: "/projects/start",
+        showInPrimaryNavigation: true
       },
       {
         name: "Blog",
         link: "/blogs",
+        showInPrimaryNavigation: true
       },
       {
         name: "About",
         link: "/about",
+        showInPrimaryNavigation: true
       },
+      {
+        name: "Login",
+        link: "/account/login"
+      },
+      {
+        name: "Sign Up",
+        link: "/account/register"
+      },
+      {
+        name: "Donate",
+        link: "/donate"
+      }
     ],
+    socialMedia: [
+      {
+        name: "Facebook",
+        url: "https://www.facebook.com/collaction.org",
+        icon: "facebook-f"
+      },
+      {
+        name: "Instagram",
+        url: "https://www.instagram.com/collaction_org",
+        icon: "instagram"
+      },
+      {
+        name: "Twitter",
+        url: "https://twitter.com/CollAction_org",
+        icon: "twitter"
+      },
+      {
+        name: "YouTube",
+        url: "https://www.youtube.com/channel/UCC2SBF4mbeKXrHqnMuN6Iew",
+        icon: "youtube"
+      },
+      {
+        name: "LinkedIn",
+        url: "https://www.linkedin.com/company-beta/15079855",
+        icon: "linkedin-in"
+      }
+    ]
   },
   plugins: [
     {
@@ -51,7 +95,7 @@ module.exports = {
     {
       resolve: "gatsby-plugin-google-fonts",
       options: {
-        fonts: ["Raleway"],
+        fonts: ["Raleway\:300,400,500,600"],
         display: "swap",
       },
     },
