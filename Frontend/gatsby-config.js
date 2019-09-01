@@ -39,7 +39,7 @@ module.exports = {
       },
       {
         name: "About",
-        link: "/about"
+        link: "/about",
         showInPrimaryNavigation: true
       },
       {
