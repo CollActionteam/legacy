@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "gatsby";
 import styles from "./style.module.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const Button = ({ children, variant = "primary", onClick, to }) => {
   if(to) {
@@ -30,5 +31,5 @@ export const TertiaryButton = ({ children, ...props }) =>
 
   export const IconButton = ({ children, ...props }) =>
     <Button variant="icon" {...props}>
-      {children}
+      <FontAwesomeIcon icon={props.icon}></FontAwesomeIcon>
     </Button>;
