@@ -10,7 +10,7 @@ export default () => {
     <ul className={styles.list}>
       {data.site.siteMetadata.socialMedia.map(item => (
         <li className={styles.listItem}>
-          <IconButton to={item.url} icon={['fab', item.icon]}></IconButton>
+          <IconButton url={item.url} icon={['fab', item.icon]}></IconButton>
         </li>
       ))}
     </ul>

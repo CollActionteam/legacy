@@ -3,7 +3,17 @@ import { Link } from "gatsby";
 import styles from "./style.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export const Button = ({ children, variant = "primary", onClick, to }) => {
+export const Button = ({ children, variant = "primary", onClick, to, url }) => {
+  // External link
+  if(url) {
+    return (
+      <a className={styles[variant]} href={url}>
+        {children}
+      </a>
+    )
+  }
+  
+  // Internal link
   if(to) {
     return (
       <Link className={styles[variant]} to={to}>
@@ -12,6 +22,7 @@ export const Button = ({ children, variant = "primary", onClick, to }) => {
     );
   };
 
+  // onClick
   return (
     <button className={styles[variant]} onClick={onClick}>
       {children}
