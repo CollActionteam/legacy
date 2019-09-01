@@ -1,19 +1,12 @@
 import React from "react";
 import Layout from "../components/Layout";
 import { graphql } from "gatsby";
+import Section from "../components/Section";
 
 export default function About({ data }) {
   const videos = data.videos.edges
     .map(e => e.node)
     .find(n => n.name === "videos");
-  
-  const generateVideo = (className) => {
-    return (
-      <div className={ className }>
-        <a href={ videos.mainvideo }>{ videos.mainvideo }</a>
-      </div>
-    )
-  }
 
   const sections = data.allMarkdownRemark.edges.map(e => e.node);
   const mission = sections.find(s => s.frontmatter.name === "mission");
@@ -21,56 +14,54 @@ export default function About({ data }) {
   const join = sections.find(s => s.frontmatter.name === "join");
   const partners = sections.find(s => s.frontmatter.name === "partners");
 
-  const generateSection = (section, className) => {
-    return (
-      <div className={ className }>
-        <h1>{ section.frontmatter.title }</h1>
-        <div dangerouslySetInnerHTML={{ __html: section.html }}></div>
-      </div>
-    )
-  }
-
   const teamSection = data.team.edges
     .map(e => e.node)
-    .find(n => n.name === "team");    
+    .find(n => n.name === "team");
 
-  const generateTeamMembers = (className) => {
+  const generateVideo = className => {
     return (
-      <div className={ className }>
-        <h1>{ teamSection.title }</h1>
-        <ul>
-          { teamSection.team.map(generateMemberPhoto) }
-        </ul>
+      <div className={className}>
+        <a href={videos.mainvideo}>{videos.mainvideo}</a>
       </div>
-    )
-  }
-
-  const generateMemberPhoto = (member) => {
-    return (
-      <li key={ member.name }>            
-        <img src={ member.photo } alt={ member.name } title={ member.name} />
-        <span>{ member.name }</span>
-      </li>
     );
-  }
+  };
+
+  const generateSection = (section, color) => (
+    <Section color={color} title={section.frontmatter.title}>
+      <div dangerouslySetInnerHTML={{ __html: section.html }}></div>
+    </Section>
+  );
+
+  const generateTeamMembers = color => (
+    <Section color={color} title={teamSection.title}>
+      <ul>{teamSection.team.map(generateMemberPhoto)}</ul>
+    </Section>
+  );
+
+  const generateMemberPhoto = member => (
+    <li key={member.name}>
+      <img src={member.photo} alt={member.name} title={member.name} />
+      <span>{member.name}</span>
+    </li>
+  );
 
   return (
     <Layout>
       <div>
-        { generateVideo("white") }
-        { generateSection(mission, "green") }
-        { generateSection(about, "white") }
-        { generateSection(join, "grey") }
-        { generateTeamMembers("white")}
-        { generateSection(partners, "grey") }
+        {generateVideo("white")}
+        {generateSection(mission, "green")}
+        {generateSection(about)}
+        {generateTeamMembers("grey")}
+        {generateSection(join)}
+        {generateSection(partners, "grey")}
       </div>
-    </Layout>  
+    </Layout>
   );
 }
 
 export const pageQuery = graphql`
   query AboutPageQuery {
-    allMarkdownRemark(filter: {frontmatter: {type: {eq: "about"}}}) {
+    allMarkdownRemark(filter: { frontmatter: { type: { eq: "about" } } }) {
       edges {
         node {
           html
@@ -81,7 +72,7 @@ export const pageQuery = graphql`
         }
       }
     }
-    team: allAboutYaml(filter: {name: {eq: "team"}}) {
+    team: allAboutYaml(filter: { name: { eq: "team" } }) {
       edges {
         node {
           name
@@ -93,7 +84,7 @@ export const pageQuery = graphql`
         }
       }
     }
-    videos: allAboutYaml(filter: {name: {eq: "videos"}}) {
+    videos: allAboutYaml(filter: { name: { eq: "videos" } }) {
       edges {
         node {
           name
@@ -102,4 +93,4 @@ export const pageQuery = graphql`
       }
     }
   }
-`
+`;
