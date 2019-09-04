@@ -3,20 +3,20 @@ import { Link } from "gatsby";
 import styles from "./style.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export const Button = ({ children, variant = "primary", onClick, to, url }) => {
+export const Button = ({ children, variant = "primary", ...props }) => {
   // External link
-  if(url) {
+  if(props.url) {
     return (
-      <a className={styles[variant]} href={url}>
+      <a className={styles[variant]} href={props.url}>
         {children}
       </a>
     )
   }
   
   // Internal link
-  if(to) {
+  if(props.to) {
     return (
-      <Link className={styles[variant]} to={to}>
+      <Link className={styles[variant]} to={props.to}>
         {children}
       </Link>
     );
@@ -24,7 +24,7 @@ export const Button = ({ children, variant = "primary", onClick, to, url }) => {
 
   // onClick
   return (
-    <button className={styles[variant]} onClick={onClick}>
+    <button className={styles[variant]} {...props}>
       {children}
     </button>
   )

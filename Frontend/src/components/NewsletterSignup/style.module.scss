@@ -1,0 +1,27 @@
+.wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+input {
+    border-radius: var(--border-radius);
+    padding: calc(var(--spacing-sm) * 1.5) var(--spacing);
+    margin-right: var(--spacing-sm);
+    border: 1px solid var(--c-grey-d10);
+    background-color: var(--c-grey-d10);
+    transition: background-color var(--transition-duration),
+                color var(--transition-duration);
+
+    &:hover,
+    &:focus {
+        border-color: var(--c-grey-d20);
+    }
+}
+
+.error {
+    color: white;
+    background-color: rgba(red, 0.6);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    margin-bottom: var(--spacing-xs);
+    border-radius: 0.3rem;
+}

@@ -5,6 +5,7 @@ import { Link } from "gatsby";
 import logo from "../../../static/assets/logo.svg";
 import styles from "./style.module.scss";
 import SocialMedia from "../SocialMedia";
+import NewsletterSignup from "../NewsletterSignup";
 
 const navigation = [
   {
@@ -63,7 +64,7 @@ export default () => (
       <Link to="/">
         <img alt="CollAction" className={styles.logo} src={logo}></img>
       </Link>
-      <Grid container spacing={5}>
+      <Grid container>
         <Grid item md={4}>
           <p>
             Any questions, comments, or would you like to work together?
@@ -92,8 +93,9 @@ export default () => (
         </Grid>
         <Grid item md={3}>
           <h3>Follow us</h3>
-          <SocialMedia></SocialMedia>
+          <SocialMedia />
           <h3>Newsletter</h3>
+          <NewsletterSignup />
         </Grid>
       </Grid>
     </Container>
