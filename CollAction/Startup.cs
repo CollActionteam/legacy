@@ -190,7 +190,6 @@ namespace CollAction
                    .AddXssProtectionEnabled() // Enable browser xss protection
                    .AddContentTypeOptionsNoSniff() // Ensure the browser doesn't guess/sniff content-types
                    .AddReferrerPolicyStrictOriginWhenCrossOrigin() // Send a full URL when performing a same-origin request, only send the origin of the document to a-priori as-much-secure destination (HTTPS->HTTPS), and send no header to a less secure destination (HTTPS->HTTP) 
-                   .AddFrameOptionsDeny() // No framing allowed (put us inside a frame tag)
                    .AddContentSecurityPolicy(cspBuilder =>
                    {
                        cspBuilder.AddBlockAllMixedContent(); // Block mixed http/https content
@@ -244,7 +243,6 @@ namespace CollAction
                                                                    "https://fonts.googleapis.com/",
                                                                    "https://fonts.gstatic.com"
                                                                }.Concat(Configuration["CspFontSrc"]?.Split(";") ?? new string[0]));
-                       cspBuilder.AddFrameAncestors().Sources.AddRange(Configuration["CspFrameAncestors"]?.Split(";") ?? new string[0]); // Only allow configured sources
                        cspBuilder.AddMediaSrc().Self()
                                                .Sources.AddRange(Configuration["CspMediaSrc"]?.Split(";") ?? new string[0]); // Only allow self-hosted videos, or configured sources
                        cspBuilder.AddFrameAncestors()
