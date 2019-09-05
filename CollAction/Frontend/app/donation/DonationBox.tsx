@@ -110,7 +110,7 @@ class DonationBox extends React.Component<IDonationBoxProps, IDonationBoxState> 
 
         let stripe: any = Stripe(this.props.stripePublicKey); // cast to any because redirectToCheckout is not yet in stripe.js
         let checkoutId = await checkoutTokenResponse.text();
-        let checkoutResponse = await stripe.redirectToCheckout({ sessionId: checkoutId });
+        let checkoutResponse = await stripe.redirectToCheckout({ sessionId: checkoutId, allowIncompleteSubscriptions: true });
         if (checkoutResponse.status !== 200) {
             let responseBody = await checkoutResponse.text();
             console.log("Unable to redirect to checkout: " + responseBody);

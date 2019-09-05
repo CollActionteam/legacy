@@ -107,7 +107,7 @@ namespace CollAction.Services.Donation
             };
 
             Customer customer = await GetOrCreateCustomer(name, email);
-            sessionOptions.CustomerId = customer.Id; // Once supported
+            sessionOptions.CustomerId = customer.Id;
 
             if (recurring)
             {
@@ -122,6 +122,7 @@ namespace CollAction.Services.Donation
                         }
                     }
                 };
+                sessionOptions.AddExtraParam("subscription_data[payment_behavior]", "allow_incomplete");
             }
             else
             {
