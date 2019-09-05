@@ -107,10 +107,10 @@ namespace CollAction.Services.Donation
             };
 
             Customer customer = await GetOrCreateCustomer(name, email);
+            sessionOptions.CustomerId = customer.Id; // Once supported
 
             if (recurring)
             {
-                sessionOptions.CustomerId = customer.Id; // Once supported
                 sessionOptions.SubscriptionData = new SessionSubscriptionDataOptions()
                 {
                     Items = new List<SessionSubscriptionDataItemOptions>()
@@ -125,7 +125,6 @@ namespace CollAction.Services.Donation
             }
             else
             {
-                sessionOptions.CustomerId = customer.Id;
                 sessionOptions.LineItems = new List<SessionLineItemOptions>()
                 {
                     new SessionLineItemOptions()
@@ -169,7 +168,7 @@ namespace CollAction.Services.Donation
             Subscription subscription = await _subscriptionService.CreateAsync(new SubscriptionCreateOptions()
             {
                 DefaultSource = source.Id,
-                Billing = Billing.ChargeAutomatically,
+                CollectionMethod = "charge_automatically",
                 CustomerId = customer.Id,
                 Items = new List<SubscriptionItemOption>()
                 {
