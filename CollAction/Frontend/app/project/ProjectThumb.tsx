@@ -17,6 +17,7 @@ export interface IProject {
   subscribedToEmails: boolean | null;
   canSendProjectEmail: boolean | null;
   tileClassName: string;
+  isEmbedded: boolean;
 }
 
 interface IThumbState {
@@ -63,9 +64,10 @@ export default class ProjectThumb extends React.Component<IProject, IThumbState>
     if (!this.state.busy) {
       return (
         <div className="email-subscription">
-          <a  href="javascript:void(0)"
-              onClick={this.toggleSubscription}
-              className={`btn-${this.props.subscribedToEmails ? "unsubscribe" : "subscribe"}`}>
+          <a href="javascript:void(0)"
+             onClick={this.toggleSubscription}
+             target={this.props.isEmbedded ? "_blank" : "_self"}
+             className={`btn-${this.props.subscribedToEmails ? "unsubscribe" : "subscribe"}`}>
             {this.props.subscribedToEmails ? "Unsubscribe from news" : "Subscribe to news"}
           </a>
         </div>
@@ -89,7 +91,7 @@ export default class ProjectThumb extends React.Component<IProject, IThumbState>
     else if (this.props.canSendProjectEmail === true) {
       return (
         <div className="mail-to-participants">
-            <a href={`/Projects/SendProjectEmail/${this.props.projectId}`} className="btn-send-email">
+            <a href={`/Projects/SendProjectEmail/${this.props.projectId}`} className="btn-send-email" target={this.props.isEmbedded ? "_blank" : "_self"}>
               Send project e-mail
             </a>
         </div>
@@ -105,7 +107,7 @@ export default class ProjectThumb extends React.Component<IProject, IThumbState>
   }
 
   openProject = () => {
-    window.location.href = `/projects/${this.props.projectNameUriPart}/${this.props.projectId}/details`;
+    window.open(`/projects/${this.props.projectNameUriPart}/${this.props.projectId}/details`, this.props.isEmbedded ? "_blank" : "_self");
   }
 
   render () {
@@ -147,7 +149,7 @@ export default class ProjectThumb extends React.Component<IProject, IThumbState>
               </div>
             </div>
             <div className="project-thumb-button">
-              <a href={link} style={{backgroundColor: `#${this.props.categoryColorHex}`}}>Read More</a>
+              <a href={link} style={{backgroundColor: `#${this.props.categoryColorHex}`}} target={this.props.isEmbedded ? "_blank" : "_self"}>Read More</a>
             </div>
           </div>
 

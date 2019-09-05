@@ -39,7 +39,7 @@ export default class ParticipatingInProjects extends Projects<IProjectsProps, IP
       return (
         <div>
           <h2>Projects you're participating in</h2>
-          <ProjectList projectList={this.state.projectList} tileClassName="col-xs-12 col-md-6" />
+          <ProjectList projectList={this.state.projectList} tileClassName="col-xs-12 col-md-6" isEmbedded={false} />
         </div>
       );
     }
