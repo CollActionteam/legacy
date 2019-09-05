@@ -31,7 +31,7 @@
     <PackageReference Include="Serilog.Sinks.Slack" Version="1.2.63" />
     <PackageReference Include="Serilog.Sinks.Trace" Version="2.1.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0006" />
-    <PackageReference Include="Stripe.net" Version="26.0.0" />
+    <PackageReference Include="Stripe.net" Version="28.10.0" />
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition="'$(DISABLE_NPM_BUILD)' != '1'">

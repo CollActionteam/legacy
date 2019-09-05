@@ -60,22 +60,21 @@ namespace CollAction.Services.Donation
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSender _emailSender;
-        private readonly RequestOptions _requestOptions;
         private readonly SiteOptions _siteOptions;
 
         public DonationService(IOptions<RequestOptions> requestOptions, IOptions<SiteOptions> siteOptions, UserManager<ApplicationUser> userManager, ApplicationDbContext context, IBackgroundJobClient backgroundJobClient, IOptions<StripeSignatures> stripeSignatures, IEmailSender emailSender)
         {
-            _requestOptions = requestOptions.Value;
-            _siteOptions = siteOptions.Value;
-            _customerService = new CustomerService(_requestOptions.ApiKey);
-            _sourceService = new SourceService(_requestOptions.ApiKey);
-            _chargeService = new ChargeService(_requestOptions.ApiKey);
-            _sessionService = new SessionService(_requestOptions.ApiKey);
-            _subscriptionService = new SubscriptionService(_requestOptions.ApiKey);
-            _planService = new PlanService(_requestOptions.ApiKey);
-            _productService = new ProductService(_requestOptions.ApiKey);
+            var stripeClient = new StripeClient(requestOptions.Value.ApiKey);
+            _customerService = new CustomerService(stripeClient);
+            _sourceService = new SourceService(stripeClient);
+            _chargeService = new ChargeService(stripeClient);
+            _sessionService = new SessionService(stripeClient);
+            _subscriptionService = new SubscriptionService(stripeClient);
+            _planService = new PlanService(stripeClient);
+            _productService = new ProductService(stripeClient);
             _backgroundJobClient = backgroundJobClient;
             _stripeSignatures = stripeSignatures.Value;
+            _siteOptions = siteOptions.Value;
             _context = context;
             _userManager = userManager;
             _emailSender = emailSender;
@@ -107,9 +106,11 @@ namespace CollAction.Services.Donation
                 }
             };
 
+            Customer customer = await GetOrCreateCustomer(name, email);
+
             if (recurring)
             {
-                sessionOptions.CustomerEmail = email; // TODO: sessionOptions.CustomerId = customer.Id; // Once supported
+                sessionOptions.CustomerId = customer.Id; // Once supported
                 sessionOptions.SubscriptionData = new SessionSubscriptionDataOptions()
                 {
                     Items = new List<SessionSubscriptionDataItemOptions>()
@@ -124,7 +125,6 @@ namespace CollAction.Services.Donation
             }
             else
             {
-                Customer customer = await GetOrCreateCustomer(name, email);
                 sessionOptions.CustomerId = customer.Id;
                 sessionOptions.LineItems = new List<SessionLineItemOptions>()
                 {
@@ -267,7 +267,7 @@ namespace CollAction.Services.Donation
                 {
                     Amount = source.Amount,
                     Currency = source.Currency,
-                    SourceId = sourceId,
+                    Source = sourceId,
                     CustomerId = source.Customer,
                     Description = "A donation to Stichting CollAction"
                 });
@@ -331,7 +331,7 @@ namespace CollAction.Services.Donation
             Product product = await GetOrCreateRecurringDonationProduct();
             return await _planService.CreateAsync(new PlanCreateOptions()
             {
-                ProductId = product.Id,
+                Product = product.Id,
                 Active = true,
                 Amount = amount * 100,
                 Currency = currency,
@@ -365,7 +365,7 @@ namespace CollAction.Services.Donation
 
         private async Task<Customer> GetOrCreateCustomer(string name, string email)
         {
-            Customer customer = (await _customerService.ListAsync(new CustomerListOptions() { Email = email, Limit = 1 }, _requestOptions)).FirstOrDefault();
+            Customer customer = (await _customerService.ListAsync(new CustomerListOptions() { Email = email, Limit = 1 })).FirstOrDefault();
             string metadataName = null;
             customer?.Metadata?.TryGetValue(NameKey, out metadataName);
             var metadata = new Dictionary<string, string>() { { NameKey, name } };
