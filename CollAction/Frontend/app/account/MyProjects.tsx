@@ -39,7 +39,7 @@ export default class MyProjects extends Projects<IProjectsProps, IProjectsState>
       return (
         <div>
           <h2>Projects you've created</h2>
-          <ProjectList projectList={this.state.projectList} tileClassName="col-xs-12 col-md-6" />
+          <ProjectList projectList={this.state.projectList} tileClassName="col-xs-12 col-md-6" isEmbedded={false} />
         </div>
       );
     }

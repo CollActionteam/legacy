@@ -7,6 +7,8 @@ import renderComponentIf from "../global/renderComponentIf";
 interface IFindProjectProps extends IProjectsProps {
   controller: boolean;
   projectListContainerElement?: any;
+  projectId?: number;
+  isEmbedded: boolean;
 }
 
 interface IFindProjectState extends IProjectsState {
@@ -69,8 +71,9 @@ export default class FindProject extends Projects<IFindProjectProps, IFindProjec
 
     this.setState({ projectFetching: true });
 
-    // Fetch projects with out filters set
-    const getUrl = `/api/projects/find?start=${start}&limit=${start + this.fetchNumberOfProjectsOnScroll}`;
+      // Fetch projects with out filters set
+    const getUrl = this.props.projectId == null ? `/api/projects/find?start=${start}&limit=${start + this.fetchNumberOfProjectsOnScroll}`
+                                                : `/api/projects/${this.props.projectId}`;
 
     try {
       const searchProjectRequest: Request = new Request(getUrl);
@@ -133,8 +136,8 @@ export default class FindProject extends Projects<IFindProjectProps, IFindProjec
     return (
       <div id="find-project">
         { this.props.controller ?  controller : null }
-        <div className="container" ref={this.projectListContainerElement}>
-          <ProjectList projectList={this.state.projectList} tileClassName="col-xs-12 col-md-4" />
+            <div className="container" ref={this.projectListContainerElement}>
+            <ProjectList isEmbedded={this.props.isEmbedded} projectList={this.state.projectList} tileClassName="col-xs-12 col-md-4" />
         </div>
       </div>
     );
@@ -142,11 +145,20 @@ export default class FindProject extends Projects<IFindProjectProps, IFindProjec
 }
 
 renderComponentIf(
-  <FindProject controller={true} />,
+  <FindProject controller={true} isEmbedded={false} />,
   document.getElementById("project-controller")
 );
 
 renderComponentIf(
-  <FindProject controller={false} />,
+  <FindProject controller={false} isEmbedded={false} />,
   document.getElementById("projects-container")
 );
+
+let embeddedProject = document.getElementById("embedded-project");
+if (embeddedProject !== null) {
+  let projectId = parseInt(embeddedProject.getAttribute("data-project-id"));
+  renderComponentIf(
+      <FindProject controller={false} projectId={projectId} isEmbedded={true} />,
+      document.getElementById("embedded-project")
+  );
+}
