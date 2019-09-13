@@ -52,3 +52,31 @@
     padding: var(--spacing-sm);
     border-radius: 50%;
 }
+
+.circle {
+    @include button();
+    background-color: var(--c-green);
+    width: 9.3em;
+    height: 9.3em;
+    border-radius: 50%;
+    margin: var(--spacing-sm);
+    padding: 0;
+}
+
+.circleContainer {
+    display: flex;
+    justify-content: center;
+    align-content: flex-start;
+    -webkit-flex-flow: row wrap;
+    flex-flow: row wrap;  
+  }
+  
+  
+.circleContent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+}
+  

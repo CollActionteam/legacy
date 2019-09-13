@@ -1,0 +1,20 @@
+// These values are equal to Material-UI default theme
+$sizes: (
+  xs: 0px, 
+  sm: 600px,
+  md: 960px,
+  lg: 1280px,
+  xl: 1980px
+);
+
+@mixin breakpoint-up($size) {
+  @media (min-width: map-get($sizes, $size)) {
+    @content;
+  }
+}
+
+@mixin breakpoint-down($size) {
+  @media (max-width: map-get($sizes, $size)) {
+    @content;
+  }
+}

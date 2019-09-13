@@ -1,0 +1,46 @@
+.main {
+  > *:not(:first-child) {
+    margin-top: var(--spacing-xl);
+  }
+
+  > * {
+    margin-bottom: var(--spacing-xl);
+  }
+}
+
+.bannerContent {
+  display: flex;
+  flex-grow: 1;
+  padding: calc(var(--spacing-xlg) * 3) 0;  
+  background: radial-gradient(rgba(255, 255, 255, 0.25) 3px, transparent 5px), rgba(147, 148, 148, 0);
+  background-position: 0 0, 30px 30px;
+  background-size: 60px 60px;
+
+  > * {
+    width: 100%;
+  }
+}
+
+.intro {
+  line-height: var(--spacing-xl);
+  padding: var(--spacing-xl) 0;
+
+  div {
+    margin: var(--spacing-md) auto;
+    text-align: center;
+  }
+
+
+  h2 {
+    color: var(--c-green);
+  }
+
+  p {
+    font-size: var(--font-size-md)
+  }
+}
+
+.threeSteps {
+  padding: var(--spacing-xl) 0;
+  background-color: var(--c-gray)
+}

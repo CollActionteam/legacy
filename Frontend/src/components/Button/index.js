@@ -44,3 +44,15 @@ export const TertiaryButton = ({ children, ...props }) =>
     <Button variant="icon" {...props}>
       <FontAwesomeIcon icon={props.icon}></FontAwesomeIcon>
     </Button>;
+
+export const CircleButtonContainer = ({ children }) =>
+  <div className={styles.circleContainer}>
+    {children}
+  </div>
+
+export const CircleButton = ({ children, ...props }) =>
+  <Button variant="circle" { ...props}>
+    <span className={styles.circleContent}>
+      {children}
+    </span>
+  </Button>;

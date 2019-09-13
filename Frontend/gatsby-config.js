@@ -99,6 +99,14 @@ module.exports = {
         display: "swap",
       },
     },
+    "gatsby-transformer-yaml",
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        path: `${__dirname}/src/content/home`,
+        name: "home",
+      },
+    },
     {
       resolve: "gatsby-source-filesystem",
       options: {

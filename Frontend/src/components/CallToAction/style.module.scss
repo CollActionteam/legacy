@@ -1,0 +1,27 @@
+@import '../Styles/responsive.scss';
+
+.callToAction {
+  h1 {
+    color: var(--c-green);
+    font-size: var(--font-size-xlg);
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    padding-bottom: var(--spacing-xl);
+
+    @include breakpoint-down(md) {
+      font-size: var(--font-size-hg);
+    }
+  }
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;  
+
+  a {
+    margin-bottom: var(--spacing-xl);
+    text-align: center;
+  }
+}
