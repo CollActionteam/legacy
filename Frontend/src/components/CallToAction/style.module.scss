@@ -11,10 +11,11 @@
     text-align: center;
     text-transform: uppercase;
     font-size: var(--font-size-xl);
-    @include md {
+    padding-bottom: var(--spacing-xl);
+
+    @include breakpoint-down(md) {
       font-size: var(--font-size-hg);
     }
-    padding-bottom: var(--spacing-xl);
   }
 }
 

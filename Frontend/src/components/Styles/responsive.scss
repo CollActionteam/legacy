@@ -1,45 +1,20 @@
 // These values are equal to Material-UI default theme
+$sizes: (
+  xs: 0px, 
+  sm: 600px,
+  md: 960px,
+  lg: 1280px,
+  xl: 1980px
+);
 
-$screen-xs-min: 0px;
-
-// Small tablets and large smartphones (landscape view)
-$screen-sm-min: 600px;
-
-// Small tablets (portrait view)
-$screen-md-min: 960px;
-
-// Tablets and small desktops
-$screen-lg-min: 1280px;
-
-// Large tablets and desktops
-$screen-xl-min: 1980px;
-
-@mixin xs {
-  @media (min-width: #{$screen-xs-min}) {
-      @content;
+@mixin breakpoint-up($size) {
+  @media (min-width: map-get($sizes, $size)) {
+    @content;
   }
 }
 
-@mixin sm {
-  @media (min-width: #{$screen-sm-min}) {
-      @content;
-  }
-}
-
-@mixin md {
-  @media (min-width: #{$screen-md-min}) {
-      @content;
-  }
-}
-
-@mixin lg {
-  @media (min-width: #{$screen-lg-min}) {
-      @content;
-  }
-}
-
-@mixin xl {
-  @media (min-width: #{$screen-xl-min}) {
-      @content;
+@mixin breakpoint-down($size) {
+  @media (max-width: map-get($sizes, $size)) {
+    @content;
   }
 }
