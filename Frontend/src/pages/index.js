@@ -36,18 +36,6 @@ export const query = graphql`
         }
       }
     }
-    steps: allHomeYaml(filter: {name: {eq: "crowdactingsteps"}}) {
-      edges {
-        node {
-          title
-          steps {
-            body
-            name
-            photo
-          }
-        }
-      }
-    }  
   }
 `;
 
