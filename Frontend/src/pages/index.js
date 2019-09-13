@@ -3,7 +3,7 @@ import Layout from "../components/Layout";
 import { Banner } from "../components/Banner";
 
 import { graphql } from "gatsby";
-import CallToAction from "../components/CallToAction/call-to-action";
+import { CallToAction } from "../components/CallToAction";
 import { Grid, Container } from "@material-ui/core";
 
 import styles from "./index.module.scss";

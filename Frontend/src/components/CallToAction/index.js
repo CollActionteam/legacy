@@ -8,7 +8,7 @@ import { CircleButton, CircleButtonContainer, Button } from "../Button";
 
 import styles from './style.module.scss';
 
-const CallToAction = ({ title }) => {
+export const CallToAction = ({ title }) => {
   return (
     <div className={ styles.callToAction }>
       <Grid container>
@@ -36,5 +36,3 @@ const CallToAction = ({ title }) => {
     </div>
   )
 };
-
-export default CallToAction;
