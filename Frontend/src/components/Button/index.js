@@ -35,7 +35,7 @@ export const CircleButtonContainer = ({ children }) =>
 
 export const CircleButton = ({ children, ...props }) =>
   <Button variant="circle" { ...props}>
-    <div className={styles.circleContent}>
+    <span className={styles.circleContent}>
       {children}
-    </div>
+    </span>
   </Button>;

@@ -1,16 +1,12 @@
 @import '../Styles/responsive.scss';
 
 .callToAction {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
   h1 {
     color: var(--c-green);
     font-weight: bold;
     text-align: center;
     text-transform: uppercase;
-    font-size: var(--font-size-xl);
+    font-size: var(--font-size-hg);
     padding-bottom: var(--spacing-xl);
 
     @include breakpoint-down(md) {
@@ -32,13 +28,13 @@
 
 .intro {
   margin: var(--spacing-hg) auto;
+  line-height: var(--spacing-xl);
 
   div {
     margin: var(--spacing-md) auto;
     text-align: center;
   }
 
-  line-height: var(--spacing-xl);
 
   h2 {
     color: var(--c-green);

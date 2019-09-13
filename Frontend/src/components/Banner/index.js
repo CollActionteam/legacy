@@ -1,14 +1,9 @@
 import React from "react";
 import styles from "./style.module.scss";
 
-export const Banner = ({ children, photo, style }) => {
-  const bannerStyle = {
-    ...style,
-    backgroundImage: `url(${photo})`
-  };
-
+export const Banner = ({ children, photo }) => {
   return (
-    <div className={styles.banner} style={ bannerStyle }>
+    <div className={styles.banner} style={{ backgroundImage: `url(${photo})` }}>
       {children}
     </div>
   )
