@@ -7,10 +7,10 @@
     font-weight: bold;
     text-align: center;
     text-transform: uppercase;
-    padding-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-xlg);
 
-    @include breakpoint-down(md) {
-      font-size: var(--font-size-hg);
+    @include breakpoint-down(sm) {
+      font-size: var(--font-size-xl);
     }
   }
 }
@@ -21,7 +21,7 @@
   justify-content: center;  
 
   a {
-    margin-bottom: var(--spacing-xl);
+    margin-bottom: var(--spacing-xlg);
     text-align: center;
   }
 }

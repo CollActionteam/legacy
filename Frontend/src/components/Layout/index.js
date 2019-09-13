@@ -11,7 +11,6 @@ import Header from "../Header";
 import Footer from "../Footer";
 
 // Material-UI
-import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 
 // FontAwesome
