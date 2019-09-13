@@ -25,8 +25,7 @@ export const query = graphql`
       }
     }
     content: allMarkdownRemark(
-      filter: { frontmatter: { type: { eq: "home" } } }
-    ) {
+      filter: { frontmatter: { type: { eq: "home" } } }) {
       edges {
         node {
           html
@@ -37,6 +36,18 @@ export const query = graphql`
         }
       }
     }
+    steps: allHomeYaml(filter: {name: {eq: "crowdactingsteps"}}) {
+      edges {
+        node {
+          title
+          steps {
+            body
+            name
+            photo
+          }
+        }
+      }
+    }  
   }
 `;
 
