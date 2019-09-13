@@ -51,18 +51,16 @@ const Index = ({ data} ) => {
   return (
     <Layout>
       <Banner photo={ photos.bannerphoto }>
-        <div className={ styles.bannerContent }>
-          <CallToAction title={ photos.bannertitle }></CallToAction>
-        </div>
+          <Container className={ styles.bannerContent }>
+            <CallToAction title={ photos.bannertitle }></CallToAction>
+          </Container>
       </Banner>
       <Container>
-        <Grid container>
-          <Grid item xs={12}>
-            <h2>{ intro.frontmatter.title }</h2>
-          </Grid>
-          <Grid item xs={12}>
-            <p dangerouslySetInnerHTML={{ __html: intro.html }}></p>
-          </Grid>
+        <Grid item xs={12}>
+          <h2>{ intro.frontmatter.title }</h2>
+        </Grid>
+        <Grid item xs={12}>
+          <p dangerouslySetInnerHTML={{ __html: intro.html }}></p>
         </Grid>
       </Container>      
     </Layout>
