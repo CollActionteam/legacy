@@ -4,13 +4,13 @@ import Grid from "@material-ui/core/Grid";
 
 import { Hidden } from "@material-ui/core";
 
-import { CircleButton, CircleButtonContainer, Button } from "../../components/Button";
+import { CircleButton, CircleButtonContainer, Button } from "../Button";
 
 import styles from './style.module.scss';
 
-export const CallToAction = ({ title }) => {
+const CallToAction = ({ title }) => {
   return (
-    <section className={ styles.callToAction }>
+    <div className={ styles.callToAction }>
       <Grid container>
         <Grid item xs={12}>
           <h1>{ title }</h1>
@@ -26,13 +26,15 @@ export const CallToAction = ({ title }) => {
         <Hidden mdUp>
           <Grid item xs={2}></Grid>
           <Grid item xs={8}>
-            <div className={ styles.buttons }>
+            <div className={ styles.buttonContainer }>
               <Button to="projects/find">Find Project</Button>
               <Button to="projects/start">Start Project</Button>
             </div>
           </Grid>
         </Hidden>
       </Grid>
-    </section>
+    </div>
   )
 };
+
+export default CallToAction;

@@ -1,11 +1,15 @@
 import React from "react";
 import Layout from "../components/Layout";
+import { Banner } from "../components/Banner";
+
 import { graphql } from "gatsby";
-import { Intro } from "./home/intro";
-import { HomepageBanner } from "./home/homepage-banner";
+import CallToAction from "../components/CallToAction/call-to-action";
+import { Grid, Container } from "@material-ui/core";
+
+import styles from "./index.module.scss";
 
 export const query = graphql`
-  query HomePageQuery {
+  query {
     site {
       siteMetadata {
         title
@@ -36,7 +40,7 @@ export const query = graphql`
   }
 `;
 
-export default ({ data }) => {
+const Index = ({ data} ) => {
   const photos = data.photos.edges
     .map(e => e.node)
     .find(n => (n.name = "photos"));
@@ -46,8 +50,23 @@ export default ({ data }) => {
 
   return (
     <Layout>
-      <HomepageBanner photo={ photos.bannerphoto } title={ photos.bannertitle }></HomepageBanner>
-      <Intro title={intro.frontmatter.title} content={intro.html}></Intro> 
+      <Banner photo={ photos.bannerphoto }>
+        <div className={ styles.bannerContent }>
+          <CallToAction title={ photos.bannertitle }></CallToAction>
+        </div>
+      </Banner>
+      <Container>
+        <Grid container>
+          <Grid item xs={12}>
+            <h2>{ intro.frontmatter.title }</h2>
+          </Grid>
+          <Grid item xs={12}>
+            <p dangerouslySetInnerHTML={{ __html: intro.html }}></p>
+          </Grid>
+        </Grid>
+      </Container>      
     </Layout>
   );
-};
+}
+
+export default Index;

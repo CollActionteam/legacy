@@ -1,19 +1,9 @@
-@import '../../components/Styles/responsive.scss';
-
-.banner {
-  margin: calc(var(--spacing-hg) * 2) auto;
-}
+@import '../Styles/responsive.scss';
 
 .callToAction {
-  flex-grow: 1;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
-  background: radial-gradient(rgba(255, 255, 255, 0.25) 3px, transparent 5px), rgba(147, 148, 148, 0);
-  background-position: 0 0, 30px 30px;
-  background-size: 60px 60px;
 
   h1 {
     color: var(--c-green);
@@ -28,10 +18,10 @@
   }
 }
 
-.buttons {
+.buttonContainer {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: center;  
 
   a {
     margin-bottom: var(--spacing-xl);
