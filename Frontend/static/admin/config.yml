@@ -8,11 +8,11 @@ collections:
   - name: home_content
     label: Home page content
     folder: Frontend/src/content/home
-    create: true
+    create: false
     delete: false
     fields:
       - { name: type, default: home, widget: hidden }
-      - { name: name, widget: hidden }
+      - { name: name, widget: string }
       - { name: title, label: Title, widget: string }
       - { name: body, label: Content, widget: markdown }
 
@@ -26,7 +26,20 @@ collections:
         fields:
           - { name: name, default: photos, widget: hidden }
           - { name: bannertitle, label: Banner title, widget: string }
-          - { name: bannerphoto, label: Banner photo, widget: image }      
+          - { name: bannerphoto, label: Banner photo, widget: image }
+      - label: Crowdacting Steps
+        name: crowdacting_steps
+        file: Frontend/src/content/home/crowdacting-steps.yml
+        fields:
+          - { name: name, default: crowdactingsteps, widget: hidden }
+          - { name: title, label: Title, widget: string }
+          - label: Steps
+            name: steps
+            widget: list
+            fields:
+              - { label: Photo, name: photo, widget: image }
+              - { label: Title, name: name, widget: string }
+              - { label: Body, name: body, widget: markdown }
 
   - name: about_content
     label: About page content
