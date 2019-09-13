@@ -7,6 +7,7 @@ import { CallToAction } from "../components/CallToAction";
 import { Grid, Container } from "@material-ui/core";
 
 import styles from "./index.module.scss";
+import { ThreeSteps } from "../components/ThreeSteps";
 
 export const query = graphql`
   query {
@@ -64,6 +65,11 @@ const Index = ({ data} ) => {
             <p dangerouslySetInnerHTML={{ __html: intro.html }}></p>
           </Grid>
         </Container>
+        <div className={ styles.threeSteps }>
+          <Container>
+            <ThreeSteps></ThreeSteps>
+          </Container>
+        </div>
       </div>
     </Layout>
   );

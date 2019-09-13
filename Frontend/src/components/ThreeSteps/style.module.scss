@@ -1,0 +1,12 @@
+.main {
+  text-align: center;
+  
+  h2 {
+    color: var(--c-green);
+  }
+
+  p {
+    margin-top: var(--spacing-xl);
+    line-height: var(--spacing-xl);
+  }
+}
