@@ -83,3 +83,13 @@ ol {
         flex-grow: 1;
     }
 }
+
+a {
+    color: var(--c-green);
+    font-weight: bold;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}

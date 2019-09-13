@@ -1,10 +1,10 @@
 .main {
   > *:not(:first-child) {
-    margin-top: var(--spacing-xl);
+    margin-top: var(--spacing-xlg);
   }
 
   > * {
-    margin-bottom: var(--spacing-xl);
+    margin-bottom: var(--spacing-xlg);
   }
 }
 
@@ -21,9 +21,9 @@
   }
 }
 
-.intro {
-  line-height: var(--spacing-xl);
-  padding: var(--spacing-xl) 0;
+.introduction {
+  line-height: var(--spacing-xlg);
+  padding: var(--spacing-xlg) 0;
 
   div {
     margin: var(--spacing-md) auto;
@@ -38,9 +38,4 @@
   p {
     font-size: var(--font-size-md)
   }
-}
-
-.threeSteps {
-  padding: var(--spacing-xl) 0;
-  background-color: var(--c-gray)
 }

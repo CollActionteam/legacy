@@ -4,7 +4,7 @@ import { Banner } from "../components/Banner";
 
 import { graphql } from "gatsby";
 import { CallToAction } from "../components/CallToAction";
-import { Container } from "@material-ui/core";
+import { Container, Grid } from "@material-ui/core";
 
 import styles from "./index.module.scss";
 
@@ -24,6 +24,19 @@ export const query = graphql`
         }
       }
     }
+    content: allMarkdownRemark(
+      filter: { frontmatter: { type: { eq: "home" } } }
+    ) {
+      edges {
+        node {
+          html
+          frontmatter {
+            title
+            name
+          }
+        }
+      }
+    }
   }
 `;
 
@@ -32,18 +45,26 @@ const Index = ({ data} ) => {
     .map(e => e.node)
     .find(n => (n.name = "photos"));
 
-  // const sections = data.content.edges.map(e => e.node);
-  // const intro = sections.find(s => s.frontmatter.name === "intro");
+  const sections = data.content.edges.map(e => e.node);
+  const intro = sections.find(s => s.frontmatter.name === "intro");
 
   return (
     <Layout>
-      <div className={ styles.main }>
+      <Grid container className={ styles.main }>
         <Banner photo={ photos.bannerphoto }>
           <Container className={ styles.bannerContent }>
             <CallToAction title={ photos.bannertitle }></CallToAction>
           </Container>
         </Banner>
-      </div>
+      </Grid>
+      <Container className={ styles.introduction }>
+          <Grid item xs={12}>
+            <h2>{ intro.frontmatter.title }</h2>
+          </Grid>
+          <Grid item xs={12}>
+            <span dangerouslySetInnerHTML={{ __html: intro.html }}></span>
+          </Grid>
+        </Container>
     </Layout>
   );
 }
