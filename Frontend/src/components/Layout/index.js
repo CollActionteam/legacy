@@ -56,7 +56,7 @@ export default ({ children }) => (
               </Grid>
             </Container>
           </div>
-            <Footer></Footer>
+          <Footer></Footer>
         </div>
       </React.Fragment>
     )}
