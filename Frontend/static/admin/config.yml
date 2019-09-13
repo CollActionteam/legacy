@@ -35,9 +35,9 @@ collections:
     delete: true
     fields:
       - { name: type, default: crowdactingsteps, widget: hidden }
+      - { name: sequence, label: Sequence, widget: number }
       - { name: name, widget: string }
       - { name: image, label: Image, widget: image }
-      - { name: title, label: Title, widget: string }
       - { name: body, label: Content, widget: markdown }
 
   - name: about_content
