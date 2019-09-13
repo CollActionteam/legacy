@@ -5,3 +5,9 @@ steps:
       participants and a deadline
     name: Proposal
     photo: /assets/step1.svg
+  - body: Supporters pledge to join if the target is met before the deadline
+    name: Crowd
+    photo: /assets/step2.svg
+  - body: 'When the target number of supporters is met, we all act!'
+    name: Act
+    photo: /assets/step3.svg
