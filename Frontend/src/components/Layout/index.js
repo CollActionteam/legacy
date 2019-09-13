@@ -46,13 +46,11 @@ export default ({ children }) => (
           ]}
         ></Helmet>
         <Header />
-        <Container>
-          <Grid container>
-            <Grid item xs={12}>
-              {children}
-            </Grid>
+        <Grid container>
+          <Grid item xs={12}>
+            {children}
           </Grid>
-        </Container>
+        </Grid>
         <Footer></Footer>
       </React.Fragment>
     )}
