@@ -7,6 +7,7 @@ import { CallToAction } from "../components/CallToAction";
 import { Container, Grid } from "@material-ui/core";
 
 import styles from "./index.module.scss";
+import { CrowdactingSteps } from "../components/CrowdactingSteps";
 
 export const query = graphql`
   query {
@@ -56,7 +57,8 @@ const Index = ({ data} ) => {
           </Container>
         </Banner>
       </Grid>
-      <Container className={ styles.introduction }>
+      <Grid className={ styles.introduction }>
+        <Container>
           <Grid item xs={12}>
             <h2>{ intro.frontmatter.title }</h2>
           </Grid>
@@ -64,6 +66,12 @@ const Index = ({ data} ) => {
             <span dangerouslySetInnerHTML={{ __html: intro.html }}></span>
           </Grid>
         </Container>
+      </Grid>
+      <Grid className={ styles.crowdactingsteps }>
+        <Container>
+          <CrowdactingSteps></CrowdactingSteps>
+        </Container>
+      </Grid>
     </Layout>
   );
 }
