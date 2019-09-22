@@ -41,15 +41,16 @@ collections:
       - { name: body, label: Content, widget: markdown }
 
   - name: startproject_steps
+    identifier_field: name
     label: Starting a project
     folder: Frontend/src/content/startproject
     create: true
     delete: true
     fields:
       - { name: type, default: startprojectsteps, widget: hidden }
-      - { name: sequence, label: Sequence, widget: number }
-      - { name: name, widget: string, hint: '\"intro\" contains the introduction text, others are converted to steps' }
-      - { name: image, label: Image, widget: image }
+      - { name: sequence, label: Sequence, widget: number, hint: Use "0" for the introduction text. }
+      - { name: name, widget: string }
+      - { name: image, label: Image, widget: image, required: false, hint: Image is not supported for the introduction text (sequence 0) }
       - { name: body, label: Content, widget: markdown }
 
   - name: about_content
