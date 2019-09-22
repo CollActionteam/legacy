@@ -32,4 +32,9 @@
 
 .crowdactingsteps {
   background-color: var(--c-grey);
+
+  > * {
+    padding-top: calc(var(--spacing-xlg) * 2);
+    padding-bottom: calc(var(--spacing-xlg) * 2);
+  }
 }

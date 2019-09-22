@@ -1,7 +1,13 @@
 .main {
   text-align: center;
 
+  h2 {
+    margin-bottom: var(--spacing-xlg);
+  }
+
   .step {
+    text-align: center;
+    
     > * {
       margin: var(--spacing-md) auto;
     }

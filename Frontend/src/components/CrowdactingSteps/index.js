@@ -24,7 +24,7 @@ export const CrowdactingSteps = () => {
   console.log(steps);
   
   return (
-    <Grid container className={styles.main} spacing={5}>
+    <Grid container className={styles.main}>
       <Grid item xs={12}>
         <h2>Crowdacting in { steps.length } steps</h2>
       </Grid>
