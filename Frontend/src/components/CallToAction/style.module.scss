@@ -1,13 +1,12 @@
-@import '../Styles/responsive.scss';
+@import '../Styles/responsive';
+@import '../Styles/typography';
 
 .callToAction {
   h1 {
+    @include large-title();
     color: var(--c-green);
-    font-size: var(--font-size-xlg);
-    font-weight: bold;
-    text-align: center;
-    text-transform: uppercase;
     padding-bottom: var(--spacing-xlg);
+    text-align: center;
 
     @include breakpoint-down(sm) {
       font-size: var(--font-size-xl);

@@ -1,26 +1,36 @@
+@import '../Styles/typography';
+
 .main {
   text-align: center;
 
+  h1 {
+    @include large-title();
+    color: var(--c-green);
+  }
+
   h2 {
+    letter-spacing: 0.8rem;
+  }
+
+  > div {
     margin-bottom: var(--spacing-xlg);
   }
 
   .step {
     text-align: center;
-    
     padding: 0 var(--spacing-md);
     
     > * {
       margin: var(--spacing-md) auto;
     }
-
-    h1 {
-      color: var(--c-green);
-    }
   
     img {
-      width: 57px;
-      height: 72px;
+      height: 40px;
+    }
+
+    h2 {
+      color: inherit;
+      letter-spacing: inherit;
     }
     
     p {

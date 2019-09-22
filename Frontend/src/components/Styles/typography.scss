@@ -1,0 +1,6 @@
+@mixin large-title {
+    color: var(--c-green);
+    font-size: var(--font-size-xlg);
+    font-weight: bold;
+    text-transform: uppercase;
+}

@@ -4,10 +4,11 @@ import { Banner } from "../components/Banner";
 
 import { graphql } from "gatsby";
 import { CallToAction } from "../components/CallToAction";
-import { Container, Grid } from "@material-ui/core";
+import { Container, Grid, Hidden } from "@material-ui/core";
 
 import styles from "./index.module.scss";
 import { CrowdactingSteps } from "../components/CrowdactingSteps";
+import { StartProjectSteps } from "../components/StartProjectSteps";
 import { Button } from "../components/Button";
 
 export const query = graphql`
@@ -60,7 +61,7 @@ const Index = ({ data} ) => {
           </Grid>
         </Banner>
       </Grid>
-      <Grid className={ styles.text }>
+      <Grid className={ styles.introduction }>
         <Container>
             <h2>{ intro.frontmatter.title }</h2>
             <p dangerouslySetInnerHTML={{ __html: intro.html }}></p>
@@ -71,13 +72,20 @@ const Index = ({ data} ) => {
           <CrowdactingSteps></CrowdactingSteps>
         </Container>
       </Grid>
-      <Grid className={ styles.text }>
+      <Grid className={ styles.findproject }>
         <Container>
           <h1>Join a project</h1>
           <p>&lt;We'll put a project list here, with projects you can select using the CMS.&gt;</p>
           <Button to="/projects/find">Find more projects...</Button>
         </Container>
       </Grid>
+      <Hidden smDown>
+        <Grid className={ styles.startproject }>
+          <Container>
+            <StartProjectSteps></StartProjectSteps>
+          </Container>
+        </Grid>
+      </Hidden>
     </Layout>
   );
 }

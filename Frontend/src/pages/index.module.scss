@@ -1,3 +1,6 @@
+@import '../components/Styles/layout';
+@import '../components/Styles/typography';
+
 .banner {
   > * > * {
     padding-top: calc(var(--spacing-xlg) * 3);
@@ -11,34 +14,42 @@
   background-size: 60px 60px;
 }
 
-.text {
-  line-height: var(--spacing-xlg);
+.introduction {
+  @include text-paragraph();
   text-align: center;
-  
+  line-height: var(--spacing-xlg);
+
   > * {
     padding-top: calc(var(--spacing-xlg) * 2);
     padding-bottom: calc(var(--spacing-xlg) * 2);
   }
-  
-  > * > *:not(:last-child) {
-    margin-bottom: var(--spacing-lg);
-  }
+}
+
+.findproject {
+  @include text-paragraph();
+  text-align: center;
 
   h1 {
-    color: var(--c-green);
+    @include large-title();
   }
 
-  h2 {
-    color: var(--c-green);
-  }
-  
-  p {
-    font-size: var(--font-size-md)
+  > * {
+    padding-top: calc(var(--spacing-xlg) * 2);
+    padding-bottom: calc(var(--spacing-xlg) * 2);
   }
 }
 
 .crowdactingsteps {
   background-color: var(--c-grey);
+
+  > * {
+    padding-top: calc(var(--spacing-xlg) * 2);
+    padding-bottom: calc(var(--spacing-xlg) * 2);
+  }
+}
+
+.startproject {
+  background-color: var(--c-grey-d10);
 
   > * {
     padding-top: calc(var(--spacing-xlg) * 2);

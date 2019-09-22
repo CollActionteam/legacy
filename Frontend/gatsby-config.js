@@ -111,7 +111,14 @@ module.exports = {
       resolve: "gatsby-source-filesystem",
       options: {
         path: `${__dirname}/src/content/crowdactingsteps`,
-        name: "blogs",
+        name: "crowdactingsteps",
+      },
+    },
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        path: `${__dirname}/src/content/startproject`,
+        name: "startproject",
       },
     },
     {

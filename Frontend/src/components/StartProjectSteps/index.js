@@ -6,10 +6,11 @@ import { graphql, useStaticQuery } from "gatsby";
 
 const query = graphql`
   query {
-    steps: allMarkdownRemark(filter: {frontmatter: {type: {eq: "crowdactingsteps"}}}, sort: {fields: frontmatter___sequence}) {
+    steps: allMarkdownRemark(filter: {frontmatter: {type: {eq: "startprojectsteps"}}}, sort: {fields: frontmatter___sequence}) {
       nodes {
         html
         frontmatter {
+          sequence
           name
           image
         }
@@ -18,19 +19,20 @@ const query = graphql`
   }
 `;
 
-export const CrowdactingSteps = () => {
+export const StartProjectSteps = () => {
   const data = useStaticQuery(query);
-  const steps = data.steps.nodes;
+  const intro = data.steps.nodes.find(n => n.frontmatter.sequence === 0);
+  const steps = data.steps.nodes.filter(n => n.frontmatter.sequence > 0);
   
   return (
     <Grid container className={styles.main}>
       <Grid item xs={12}>
-        <h2>Crowdacting in { steps.length } steps</h2>
+        <span dangerouslySetInnerHTML={{ __html: intro.html }}></span>
       </Grid>
       { steps.map((step, index) => (
         <Grid key={index} item xs={12} md={4} className={styles.step}>
           <img alt={ step.frontmatter.name } title={ step.frontmatter.name } src={ step.frontmatter.image }></img>
-          <h1>{ step.frontmatter.name }</h1>
+          <h2>{ step.frontmatter.name }</h2>
           <span dangerouslySetInnerHTML={{ __html: step.html }}></span>
         </Grid>
       ))}
