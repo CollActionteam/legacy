@@ -5,6 +5,7 @@ module.exports = {
     mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
     entry: {
         frontend: './Frontend/app/index.ts',
+        polyfills: './Frontend/app/polyfills.ts',
         validation: './Frontend/app/validation.ts',
         tagmanager: './Frontend/app/tagmanager.ts'
     },
