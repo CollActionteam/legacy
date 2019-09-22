@@ -1,37 +1,27 @@
-.main {
-  > *:not(:first-child) {
-    margin-top: var(--spacing-xlg);
-  }
-
-  > * {
-    margin-bottom: var(--spacing-xlg);
+.banner {
+  > * > * {
+    padding-top: calc(var(--spacing-xlg) * 3);
+    padding-bottom: calc(var(--spacing-xlg) * 3);
   }
 }
 
-.bannerContent {
-  display: flex;
-  flex-grow: 1;
-  padding: calc(var(--spacing-xlg) * 3) 0;  
+.dots {
   background: radial-gradient(rgba(255, 255, 255, 0.25) 3px, transparent 5px), rgba(147, 148, 148, 0);
   background-position: 0 0, 30px 30px;
   background-size: 60px 60px;
-
-  > * {
-    width: 100%;
-  }
 }
 
 .introduction {
   line-height: var(--spacing-xlg);
-  padding: var(--spacing-xlg) 0;
+  text-align: center;
 
-  div {
-    margin: var(--spacing-md) auto;
-    text-align: center;
+  > * {
+    padding-top: calc(var(--spacing-xlg) * 2);
+    padding-bottom: calc(var(--spacing-xlg) * 2);
   }
 
-
   h2 {
+    margin-bottom: var(--spacing-xlg);
     color: var(--c-green);
   }
 

@@ -1,10 +1,9 @@
 .main {
   text-align: center;
-  padding: var(--spacing-xlg) 0;
 
   .step {
     > * {
-      margin: var(--spacing-lg) auto;
+      margin: var(--spacing-md) auto;
     }
 
     h1 {

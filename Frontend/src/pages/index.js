@@ -50,21 +50,19 @@ const Index = ({ data} ) => {
 
   return (
     <Layout>
-      <Grid container className={ styles.main }>
+      <Grid className={ styles.banner }>
         <Banner photo={ photos.bannerphoto }>
-          <Container className={ styles.bannerContent }>
-            <CallToAction title={ photos.bannertitle }></CallToAction>
-          </Container>
+          <Grid container className={ styles.dots }>
+            <Container>
+              <CallToAction title={ photos.bannertitle }></CallToAction>
+            </Container>
+          </Grid>
         </Banner>
       </Grid>
       <Grid className={ styles.introduction }>
         <Container>
-          <Grid item xs={12}>
             <h2>{ intro.frontmatter.title }</h2>
-          </Grid>
-          <Grid item xs={12}>
-            <span dangerouslySetInnerHTML={{ __html: intro.html }}></span>
-          </Grid>
+            <p dangerouslySetInnerHTML={{ __html: intro.html }}></p>
         </Container>
       </Grid>
       <Grid className={ styles.crowdactingsteps }>
