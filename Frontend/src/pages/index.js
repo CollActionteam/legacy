@@ -8,6 +8,7 @@ import { Container, Grid } from "@material-ui/core";
 
 import styles from "./index.module.scss";
 import { CrowdactingSteps } from "../components/CrowdactingSteps";
+import { Button } from "../components/Button";
 
 export const query = graphql`
   query {
@@ -59,7 +60,7 @@ const Index = ({ data} ) => {
           </Grid>
         </Banner>
       </Grid>
-      <Grid className={ styles.introduction }>
+      <Grid className={ styles.text }>
         <Container>
             <h2>{ intro.frontmatter.title }</h2>
             <p dangerouslySetInnerHTML={{ __html: intro.html }}></p>
@@ -68,6 +69,13 @@ const Index = ({ data} ) => {
       <Grid className={ styles.crowdactingsteps }>
         <Container>
           <CrowdactingSteps></CrowdactingSteps>
+        </Container>
+      </Grid>
+      <Grid className={ styles.text }>
+        <Container>
+          <h1>Join a project</h1>
+          <p>&lt;We'll put a project list here, with projects you can select using the CMS.&gt;</p>
+          <Button to="/projects/find">Find more projects...</Button>
         </Container>
       </Grid>
     </Layout>
