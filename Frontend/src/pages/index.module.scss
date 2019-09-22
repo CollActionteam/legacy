@@ -56,3 +56,10 @@
     padding-bottom: calc(var(--spacing-xlg) * 2);
   }
 }
+
+.calltoaction {
+  > * {
+    padding-top: calc(var(--spacing-xlg) * 2);
+    padding-bottom: calc(var(--spacing-xlg) * 2);
+  }
+}

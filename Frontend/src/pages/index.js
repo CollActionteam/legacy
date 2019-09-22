@@ -72,19 +72,24 @@ const Index = ({ data} ) => {
           <CrowdactingSteps></CrowdactingSteps>
         </Container>
       </Grid>
-      <Grid className={ styles.findproject }>
-        <Container>
-          <h1>Join a project</h1>
-          <p>&lt;We'll put a project list here, with projects you can select using the CMS.&gt;</p>
-          <Button to="/projects/find">Find more projects...</Button>
-        </Container>
-      </Grid>
       <Hidden smDown>
+        <Grid className={ styles.findproject }>
+          <Container>
+            <h1>Join a project</h1>
+            <p>&lt;We'll put a project list here, with projects you can select using the CMS.&gt;</p>
+            <Button to="/projects/find">Find more projects...</Button>
+          </Container>
+        </Grid>
         <Grid className={ styles.startproject }>
           <Container>
             <StartProjectSteps></StartProjectSteps>
           </Container>
         </Grid>
+      </Hidden>
+      <Hidden mdUp>
+        <Container className={ styles.calltoaction }>
+          <CallToAction></CallToAction>
+        </Container>
       </Hidden>
     </Layout>
   );

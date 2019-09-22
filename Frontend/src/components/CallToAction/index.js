@@ -12,10 +12,12 @@ export const CallToAction = ({ title }) => {
   return (
     <div className={ styles.callToAction }>
       <Grid container>
-        <Grid item xs={12}>
-          <h1>{ title }</h1>
-        </Grid>
-        <Hidden xsDown>
+        { title !== undefined &&
+          <Grid item xs={12}>
+            <h1>{ title }</h1>
+          </Grid>
+        }
+        <Hidden smDown>
           <Grid item xs={12}>
             <CircleButtonContainer>
               <CircleButton to="/projects/find">Find Project</CircleButton>
@@ -23,7 +25,7 @@ export const CallToAction = ({ title }) => {
             </CircleButtonContainer>
           </Grid>
         </Hidden>
-        <Hidden smUp>
+        <Hidden mdUp>
           <Grid item xs={2}></Grid>
           <Grid item xs={8}>
             <div className={ styles.buttonContainer }>
