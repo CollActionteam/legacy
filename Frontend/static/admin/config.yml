@@ -40,6 +40,18 @@ collections:
       - { name: image, label: Image, widget: image }
       - { name: body, label: Content, widget: markdown }
 
+  - name: startproject_steps
+    label: Starting a project
+    folder: Frontend/src/content/startproject
+    create: true
+    delete: true
+    fields:
+      - { name: type, default: startprojectsteps, widget: hidden }
+      - { name: sequence, label: Sequence, widget: number }
+      - { name: name, widget: string, hint: '\"intro\" contains the introduction text, others are converted to steps' }
+      - { name: image, label: Image, widget: image }
+      - { name: body, label: Content, widget: markdown }
+
   - name: about_content
     label: About page content
     description: Content blocks for the site's about page
