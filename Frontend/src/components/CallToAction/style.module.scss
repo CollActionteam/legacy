@@ -7,10 +7,6 @@
     color: var(--c-green);
     padding-bottom: var(--spacing-xlg);
     text-align: center;
-
-    @include breakpoint-down(sm) {
-      font-size: var(--font-size-xl);
-    }
   }
 }
 
