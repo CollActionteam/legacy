@@ -30,7 +30,7 @@ export const CrowdactingSteps = () => {
       </Grid>
       { steps.map((step, index) => (
         <Grid key={index} item xs={12} md={4} className={styles.step}>
-          <img src={ step.frontmatter.image }></img>
+          <img alt={ step.frontmatter.name } title={ step.frontmatter.name } src={ step.frontmatter.image }></img>
           <h1>{ step.frontmatter.name }</h1>
           <span dangerouslySetInnerHTML={{ __html: step.html }}></span>
         </Grid>
