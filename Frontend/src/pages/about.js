@@ -1,7 +1,9 @@
 import React from "react";
 import Layout from "../components/Layout";
 import { graphql } from "gatsby";
-import Section from "../components/Section";
+import { Grid, Container } from "@material-ui/core";
+
+import styles from './about.module.scss';
 
 export default function About({ data }) {
   const videos = data.videos.edges
@@ -14,47 +16,56 @@ export default function About({ data }) {
   const join = sections.find(s => s.frontmatter.name === "join");
   const partners = sections.find(s => s.frontmatter.name === "partners");
 
-  const teamSection = data.team.edges
+  const meetTheTeam = data.team.edges
     .map(e => e.node)
     .find(n => n.name === "team");
 
-  const generateVideo = className => {
-    return (
-      <div className={className}>
-        <a href={videos.mainvideo}>{videos.mainvideo}</a>
-      </div>
-    );
-  };
-
-  const generateSection = (section, color) => (
-    <Section color={color} title={section.frontmatter.title}>
-      <div dangerouslySetInnerHTML={{ __html: section.html }}></div>
-    </Section>
-  );
-
-  const generateTeamMembers = color => (
-    <Section color={color} title={teamSection.title}>
-      <ul>{teamSection.team.map(generateMemberPhoto)}</ul>
-    </Section>
-  );
-
   const generateMemberPhoto = member => (
     <li key={member.name}>
-      <img src={member.photo} alt={member.name} title={member.name} />
-      <span>{member.name}</span>
+      <div>
+        <img src={member.photo} alt={member.name} title={member.name} />
+        <p>{member.name}</p>
+      </div>
     </li>
   );
 
   return (
     <Layout>
-      <div>
-        {generateVideo("white")}
-        {generateSection(mission, "green")}
-        {generateSection(about)}
-        {generateTeamMembers("grey")}
-        {generateSection(join)}
-        {generateSection(partners, "grey")}
-      </div>
+      <Grid className={ styles.video }>
+        <iframe title="Collective actions" src={videos.mainvideo} frameborder="0" allowFullScreen></iframe>
+      </Grid>
+      <Grid className={ styles.mission }>
+        <Container className={ styles.missionContainer } >
+          <span dangerouslySetInnerHTML={{ __html: mission.html }}></span>
+        </Container>
+      </Grid>
+      <Grid className={ styles.about}>
+        <Container className={ styles.aboutContainer }>
+          <span dangerouslySetInnerHTML={{ __html: about.html }}></span>
+        </Container>
+      </Grid>
+      <Grid className={ styles.team}>
+        <Container>
+          <h2>{ meetTheTeam.title }</h2>
+          <ul>{ meetTheTeam.team.map(generateMemberPhoto) }</ul>
+        </Container>
+      </Grid>
+      <Grid className={ styles.join }>
+        <Container className={ styles.joinContainer }>
+          <span dangerouslySetInnerHTML={{ __html: join.html }}></span>
+        </Container>
+      </Grid>
+      <Grid className={ styles.partners }>
+        <Container className={ styles.partnersContainer }>
+          <span dangerouslySetInnerHTML={{ __html: partners.html }}></span>
+        </Container>
+      </Grid>
+      <Grid className={ styles.faq }>
+        <Container>
+          <h2>Frequently Asked Questions</h2>
+          <p>&lt;Loaded from the CMS...&gt;</p>
+        </Container>
+      </Grid>
     </Layout>
   );
 }

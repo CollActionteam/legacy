@@ -10,12 +10,9 @@
     margin-bottom: var(--spacing-lg);
   }
 
-  h1 {
-    color: var(--c-green);
-  }
-  
   p {
-    font-size: var(--font-size-md)
+    font-size: var(--font-size-md);
+    line-height: var(--line-height);
   }
 }
 
