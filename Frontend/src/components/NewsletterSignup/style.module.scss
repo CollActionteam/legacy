@@ -26,18 +26,17 @@ input {
     top: 1px;
     right: .5rem;
     border: 0;
-    border-radius: 100%;
-    width: 2.3rem;
+    border-radius: 2.3rem;
+    min-width: 2.3rem;
     height: 2.3rem;
     cursor: pointer;
     color: var(--c-white);
-    background-color: var(--c-green);
-    transition: background-color var(--transition-duration),
-                color var(--transition-duration);
+    background-color: var(--c-black);
+    transition: background-color var(--transition-duration);
 
     &:hover,
     &:focus {
-        background-color: var(--c-green-d10);
+        background-color: var(--c-black);
     }
 
     &:disabled {
@@ -45,4 +44,17 @@ input {
         opacity: .5;
         background-color: transparent;
     }
+}
+
+.submitIcon {
+    padding-left: var(--spacing-sm);
+    padding-right: var(--spacing-xs);
+
+    .submit:disabled & {
+        padding-right: var(--spacing-sm);
+    }
+}
+
+.submitLabel {
+    padding-right: var(--spacing-sm);
 }
