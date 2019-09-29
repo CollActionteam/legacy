@@ -95,7 +95,7 @@ const Index = ({ data} ) => {
       </Hidden>
       <Grid className={ styles.spread }>
         <Container className={ styles.spreadContainer }>
-          <Grid item xs={4} className={ styles.spreadBlock }>
+          <Grid item xs={12} md={5} className={ styles.spreadBlock }>
             <h2>Spread it further!</h2>
             <ul>
               <li><Facebook url="https://www.collaction.org"></Facebook></li>
