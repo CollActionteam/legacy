@@ -19,6 +19,15 @@
   @include text-paragraph();
   text-align: center;
   line-height: var(--spacing-xlg);
+
+  h2 {
+    color: var(--c-green);
+  }
+}
+
+.crowdactingsteps {
+  @include section();
+  background-color: var(--c-grey);
 }
 
 .findproject {
@@ -31,14 +40,11 @@
   }
 }
 
-.crowdactingsteps {
-  @include section();
-  background-color: var(--c-grey);
-}
-
 .startproject {
   @include section();
+  @include text-paragraph();
   background-color: var(--c-grey-d10);
+  text-align: center;
 }
 
 .calltoaction {
