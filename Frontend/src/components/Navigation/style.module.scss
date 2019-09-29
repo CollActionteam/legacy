@@ -15,15 +15,15 @@
         flex-direction: column;
         background-color: var(--c-white);
         padding-bottom: var(--spacing-md);
-        transform: scaleY(.9) translate3d(0, -2rem, 0);
-        opacity: 0;
+        transform: scaleY(1) translate3d(0, 0, 0);
+        opacity: 1;
         transition: opacity 100ms,
                     transform 150ms;
     }
 
     .collapsed & {
-        opacity: 1;
-        transform: scaleY(1) translate3d(0, 0, 0);
+        opacity: 0;
+        transform: scaleY(.9) translate3d(0, -2rem, 0);
     }
 }
 

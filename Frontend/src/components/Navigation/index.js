@@ -48,7 +48,7 @@ export default class Navigation extends React.Component {
         </nav>
         <Hidden mdUp>
           <button className={styles.navigationToggle} onClick={this.toggleNavigation}>
-            {this.state.collapsed ? <FontAwesomeIcon icon="times" /> : <FontAwesomeIcon icon="bars" /> }
+            {this.state.collapsed ? <FontAwesomeIcon icon="bars" /> : <FontAwesomeIcon icon="times" /> }
           </button>
         </Hidden>
       </div>
