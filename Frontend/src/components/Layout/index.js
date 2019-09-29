@@ -17,8 +17,9 @@ import Grid from "@material-ui/core/Grid";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 
-library.add(fab, faHeart);
+library.add(fab, faHeart, faEnvelope);
 
 export default ({ children }) => (
   <StaticQuery
