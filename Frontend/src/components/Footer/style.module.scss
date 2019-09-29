@@ -1,3 +1,5 @@
+@import '../Styles/responsive';
+
 .footer {
     padding-top: var(--spacing-xlg);
     padding-bottom: var(--spacing-xlg);
@@ -8,6 +10,15 @@
 
 .logo {
     padding-bottom: var(--spacing-md);
+}
+
+.description {
+    margin-bottom: var(--spacing);
+    
+    @include breakpoint-up(md) {
+        margin: 0;
+        padding-right: var(--spacing-lg);
+    }
 }
 
 .navigationList {
