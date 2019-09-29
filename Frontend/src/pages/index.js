@@ -10,6 +10,7 @@ import styles from "./index.module.scss";
 import { CrowdactingSteps } from "../components/CrowdactingSteps";
 import { StartProjectSteps } from "../components/StartProjectSteps";
 import { Button } from "../components/Button";
+import { Facebook, Twitter, LinkedIn, Email } from "../components/Share";
 
 export const query = graphql`
   query {
@@ -91,6 +92,19 @@ const Index = ({ data} ) => {
           <CallToAction></CallToAction>
         </Container>
       </Hidden>
+      <Grid className={ styles.spread }>
+        <Container className={ styles.spreadContainer }>
+          <Grid item xs={4} className={ styles.spreadBlock }>
+            <h2>Spread it further!</h2>
+            <ul>
+              <li><Facebook url="https://www.collaction.org"></Facebook></li>
+              <li><Twitter url="https://www.collaction.org"></Twitter></li>
+              <li><LinkedIn url="https://www.collaction.org"></LinkedIn></li>
+              <li><Email subject="CollAction"></Email></li>
+            </ul>          
+          </Grid>
+        </Container>
+      </Grid>
     </Layout>
   );
 }

@@ -15,51 +15,64 @@
 }
 
 .introduction {
+  @include section();
   @include text-paragraph();
   text-align: center;
   line-height: var(--spacing-xlg);
-
-  > * {
-    padding-top: calc(var(--spacing-xlg) * 2);
-    padding-bottom: calc(var(--spacing-xlg) * 2);
-  }
 }
 
 .findproject {
+  @include section();
   @include text-paragraph();
   text-align: center;
 
   h1 {
     @include large-title();
   }
-
-  > * {
-    padding-top: calc(var(--spacing-xlg) * 2);
-    padding-bottom: calc(var(--spacing-xlg) * 2);
-  }
 }
 
 .crowdactingsteps {
+  @include section();
   background-color: var(--c-grey);
-
-  > * {
-    padding-top: calc(var(--spacing-xlg) * 2);
-    padding-bottom: calc(var(--spacing-xlg) * 2);
-  }
 }
 
 .startproject {
+  @include section();
   background-color: var(--c-grey-d10);
-
-  > * {
-    padding-top: calc(var(--spacing-xlg) * 2);
-    padding-bottom: calc(var(--spacing-xlg) * 2);
-  }
 }
 
 .calltoaction {
-  > * {
-    padding-top: calc(var(--spacing-xlg) * 2);
-    padding-bottom: calc(var(--spacing-xlg) * 2);
+  @include section();
+}
+
+.spread {
+  @include section();
+  background-color: var(--c-grey);  
+}
+
+.spreadContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.spreadBlock {
+  background: white;
+  text-align: center;
+  padding: var(--spacing-xlg);
+  border: 1px solid var(--c-grey-d10);
+  border-radius: var(--border-radius);
+
+  h2 {
+    color: var(--c-green);
+  }
+
+  ul {
+    display: flex;
+    justify-content: space-evenly;
+    padding-top: var(--spacing-xlg);
+
+    li {
+      display: inline-block;
+    }
   }
 }
