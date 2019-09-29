@@ -1,11 +1,14 @@
 .wrapper {
+    position: relative;
     display: flex;
     justify-content: space-between;
 }
 
 input {
+    width: 100%;
     border-radius: var(--border-radius);
-    padding: calc(var(--spacing-sm) * 1.5) var(--spacing);
+    height: 2.3rem;
+    padding: 0 var(--spacing);
     margin-right: var(--spacing-sm);
     border: 1px solid var(--c-grey-d10);
     background-color: var(--c-grey-d10);
@@ -18,10 +21,40 @@ input {
     }
 }
 
-.error {
-    color: white;
-    background-color: rgba(red, 0.6);
-    padding: var(--spacing-xs) var(--spacing-sm);
-    margin-bottom: var(--spacing-xs);
-    border-radius: 0.3rem;
+.submit {
+    position: absolute;
+    top: 1px;
+    right: .5rem;
+    border: 0;
+    border-radius: 2.3rem;
+    min-width: 2.3rem;
+    height: 2.3rem;
+    cursor: pointer;
+    color: var(--c-white);
+    background-color: var(--c-black);
+    transition: background-color var(--transition-duration);
+
+    &:hover,
+    &:focus {
+        background-color: var(--c-black);
+    }
+
+    &:disabled {
+        color: var(--c-black);
+        opacity: .5;
+        background-color: transparent;
+    }
+}
+
+.submitIcon {
+    padding-left: var(--spacing-sm);
+    padding-right: var(--spacing-xs);
+
+    .submit:disabled & {
+        padding-right: var(--spacing-sm);
+    }
+}
+
+.submitLabel {
+    padding-right: var(--spacing-sm);
 }

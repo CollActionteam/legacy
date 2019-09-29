@@ -65,8 +65,8 @@ export default () => (
         <img alt="CollAction" className={styles.logo} src={logo}></img>
       </Link>
       <Grid container>
-        <Grid item md={4}>
-          <p>
+        <Grid item xs={12} md={4}>
+          <div className={styles.description}>
             Any questions, comments, or would you like to work together?
             Awesome! Email us at{" "}
             <Link to="mailto:collactionteam@gmail.com">
@@ -76,9 +76,9 @@ export default () => (
             Would you like to get an occasional update on CollAction and
             crowdacting? Sign up for our newsletter (to your right)! We will be
             careful with your data, see our Privacy Policy.
-          </p>
+          </div>
         </Grid>
-        <Grid item md={5}>
+        <Grid item xs={12} sm={6} md={5}>
           <nav className={styles.navigation}>
             <ul className={styles.navigationList}>
               {navigation.map(link => (
@@ -91,7 +91,7 @@ export default () => (
             </ul>
           </nav>
         </Grid>
-        <Grid item md={3}>
+        <Grid item xs={12} sm={6} md={3}>
           <h3>Follow us</h3>
           <SocialMedia />
           <h3>Newsletter</h3>
