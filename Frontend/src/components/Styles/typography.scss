@@ -5,6 +5,7 @@
   font-size: var(--font-size-xlg);
   font-weight: bold;
   text-transform: uppercase;
+  letter-spacing: 0.1em;
 
   @include breakpoint-down(sm) {
     font-size: var(--font-size-xl);

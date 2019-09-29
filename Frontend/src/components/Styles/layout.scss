@@ -1,3 +1,10 @@
+@mixin section() {
+  > * {
+    padding-top: calc(var(--spacing-xlg) * 2);
+    padding-bottom: calc(var(--spacing-xlg) * 2);
+  }
+}
+
 @mixin text-paragraph() {  
   > * > *:not(:last-child) {
     margin-bottom: var(--spacing-lg);
@@ -6,12 +13,9 @@
   h1 {
     color: var(--c-green);
   }
-
-  h2 {
-    color: var(--c-green);
-  }
   
   p {
     font-size: var(--font-size-md)
   }
 }
+

@@ -1,0 +1,34 @@
+$size: var(--font-size);
+
+@mixin shareButton() {
+  padding: var(--spacing-md);
+  border-radius: 50%;
+  height: $size;
+  width: $size;
+  color: white;
+}
+
+.icon {
+  width: $size !important;
+  height: $size !important;
+}
+
+.facebook {
+  @include shareButton();
+  background-color: #3b5998;
+}
+
+.twitter {
+  @include shareButton();
+  background-color: #00aced;
+}
+
+.linkedin {
+  @include shareButton();
+  background-color: #007bb6;
+}
+
+.email {
+  @include shareButton();
+  background-color: black;
+}

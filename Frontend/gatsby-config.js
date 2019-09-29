@@ -20,67 +20,67 @@ module.exports = {
       {
         name: "Home",
         link: "",
-        showInPrimaryNavigation: true
+        showInPrimaryNavigation: true,
       },
       {
         name: "Find Project",
         link: "/projects/find",
-        showInPrimaryNavigation: true
+        showInPrimaryNavigation: true,
       },
       {
         name: "Start Project",
         link: "/projects/start",
-        showInPrimaryNavigation: true
+        showInPrimaryNavigation: true,
       },
       {
         name: "Blog",
         link: "/blogs",
-        showInPrimaryNavigation: true
+        showInPrimaryNavigation: true,
       },
       {
         name: "About",
         link: "/about",
-        showInPrimaryNavigation: true
+        showInPrimaryNavigation: true,
       },
       {
         name: "Login",
-        link: "/account/login"
+        link: "/account/login",
       },
       {
         name: "Sign Up",
-        link: "/account/register"
+        link: "/account/register",
       },
       {
         name: "Donate",
-        link: "/donate"
-      }
+        link: "/donate",
+      },
     ],
     socialMedia: [
       {
         name: "Facebook",
         url: "https://www.facebook.com/collaction.org",
-        icon: "facebook-f"
+        icon: "facebook-f",
       },
       {
         name: "Instagram",
         url: "https://www.instagram.com/collaction_org",
-        icon: "instagram"
+        icon: "instagram",
       },
       {
         name: "Twitter",
         url: "https://twitter.com/CollAction_org",
-        icon: "twitter"
+        icon: "twitter",
       },
       {
         name: "YouTube",
         url: "https://www.youtube.com/channel/UCC2SBF4mbeKXrHqnMuN6Iew",
-        icon: "youtube"
+        icon: "youtube",
       },
       {
         name: "LinkedIn",
         url: "https://www.linkedin.com/company-beta/15079855",
-        icon: "linkedin-in"
-      }
+        icon: "linkedin-in",
+      },
     ]
   },
   plugins: [
