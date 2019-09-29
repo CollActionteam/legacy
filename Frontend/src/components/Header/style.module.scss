@@ -1,3 +1,8 @@
+@import '../Styles/responsive.scss';
+:root {
+    --header-height: 5.5rem;
+
+}
 .header {
     width: 100%;
     background-color: var(--c-white);
@@ -7,59 +12,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    height: var(--header-height);
 }
 
 .logo {
     max-width: 250px;
-}
-
-.navigation {
-    display: flex;
-    flex: 1;
-    padding: 0;
-    justify-content: space-between;
-    width: 100%;
-}
-
-.navigationList {
-    display: flex;
-    align-items: center;
-    padding: var(--spacing-xlg) 0;
-}
-
-.navigationItem {
-    display: inline-block;
-    padding-left: var(--spacing-xlg);
-}
-
-.navigationLink {
-    color: var(--c-black);
-    text-decoration: none;
-    font-weight: var(--font-weight-bold);
-
-    svg {
-        padding-right: var(--spacing);
-    }
-
-    &:hover,
-    &:focus {
-        text-decoration: underline;
-    }
-}
-
-.donationLink {
-    color: var(--c-green);
-    text-decoration: none;
-    
-    svg {
-        padding-right: var(--spacing-xs);
-        transition: transform var(--transition-duration);
-    }
-
-    &:hover,
-    &:focus {
-        svg {
-            transform: scale(1.1);
-        }
-    }
+    z-index: 1;
 }
