@@ -13,7 +13,9 @@ export default () => {
     <div className={styles.header}>
       <Container>
         <div className={styles.wrapper}>
-          <img alt="CollAction" className={styles.logo} src={logo}></img>
+          <Link to="/">
+            <img alt="CollAction" className={styles.logo} src={logo}></img>
+          </Link>
           <nav className={styles.navigation}>
             <ul className={styles.navigationList}>
               {data.site.siteMetadata.menuLinks
