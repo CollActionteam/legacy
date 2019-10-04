@@ -21,6 +21,11 @@ input {
     }
 }
 
+.hidden {
+    position: absolute; 
+    left: -5000px;
+}
+
 .submit {
     position: absolute;
     top: 1px;

@@ -29,18 +29,20 @@ export default class NewsletterSignup extends React.Component {
   }
 
   handleSubmit(event) {
-    event.preventDefault();
-    this.submitForm();
-  }
-
-  submitForm() {
-    console.log("Submitted");
-    this.setState({ error: "Signup could not be completed." });
+    if(this.state.error) {
+      event.preventDefault();
+    }
   }
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit} onKeyUp={this.handleKeyUp}>
+      <form
+        action={`//collaction.us14.list-manage.com/subscribe/post?u=48e9b2f8f522cf59b9d5ffa8d&amp;id=${process.env.MailChimpNewsletterListId}`}
+        id="mc-embedded-subscribe-form"
+        name="mc-embedded-subscribe-form"
+        onSubmit={this.handleSubmit}
+        onKeyUp={this.handleKeyUp}
+      >
         {this.state.error ? (
           <Alert type="error" text={this.state.error} />
         ) : null}
@@ -48,18 +50,31 @@ export default class NewsletterSignup extends React.Component {
           <input
             type="email"
             placeholder="Fill in your e-mail"
+            name="EMAIL"
+            id="mce-EMAIL"
             value={this.state.email}
             onFocus={this.handleChange}
             onChange={this.handleChange}
           />
+          <div className={styles.hidden} aria-hidden="true">
+            <input
+              type="text"
+              place-holder="e-Mail"
+              name="b_48e9b2f8f522cf59b9d5ffa8d_@NewsletterSubscriptionServiceOptions.Value.MailChimpNewsletterListId"
+              tabindex="-1"
+              value=""
+            ></input>
+          </div>
           <button
+            name="subscribe"
+            id="mc-embedded-subscribe"
             className={styles.submit}
             disabled={this.state.error || !this.state.email}
           >
             <FontAwesomeIcon
               className={styles.submitIcon}
               icon={["far", "envelope"]}
-              />
+            />
             {this.state.email ? (
               <span className={styles.submitLabel}>Sign up</span>
             ) : null}

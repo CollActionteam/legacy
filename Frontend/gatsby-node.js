@@ -1,6 +1,11 @@
 const path = require(`path`);
 const { createFilePath } = require(`gatsby-source-filesystem`);
 
+// Add environment variables to process.env
+require("dotenv").config({
+  path: `../env_frontend`,
+})
+
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions;
   const blogPostTemplate = path.resolve('src/templates/blog-post.js');
