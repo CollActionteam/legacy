@@ -59,7 +59,13 @@ export const LinkedIn = ({ url }) => {
   );
 };
 
-export const Email = ({ subject, body }) => {
+export const Email = ({
+  subject,
+  body,
+}: {
+  subject: string;
+  body?: string;
+}) => {
   return (
     <a
       target="_blank"

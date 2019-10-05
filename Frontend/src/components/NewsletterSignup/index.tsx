@@ -8,7 +8,10 @@ interface INewsletterSignupState {
   error: string;
 }
 
-export default class NewsletterSignup extends React.Component<{}, INewsletterSignupState> {
+export default class NewsletterSignup extends React.Component<
+  {},
+  INewsletterSignupState
+> {
   constructor(props) {
     super(props);
     this.state = {

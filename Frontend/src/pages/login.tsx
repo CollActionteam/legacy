@@ -7,4 +7,4 @@ export default () => (
     <h1>Login</h1>
     <Login />
   </Layout>
-); 
+);

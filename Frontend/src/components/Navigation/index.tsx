@@ -13,7 +13,10 @@ interface INavigationState {
   collapsed: boolean;
 }
 
-export default class Navigation extends React.Component<INavigationProps, INavigationState> {
+export default class Navigation extends React.Component<
+  INavigationProps,
+  INavigationState
+> {
   constructor(props) {
     super(props);
     this.toggleNavigation = this.toggleNavigation.bind(this);
