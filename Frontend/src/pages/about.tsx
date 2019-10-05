@@ -3,7 +3,7 @@ import Layout from "../components/Layout";
 import { graphql } from "gatsby";
 import { Grid, Container } from "@material-ui/core";
 
-import styles from './about.module.scss';
+import styles from "./about.module.scss";
 
 export default function About({ data }) {
   const videos = data.videos.edges
@@ -31,36 +31,41 @@ export default function About({ data }) {
 
   return (
     <Layout>
-      <Grid className={ styles.video }>
-        <iframe title="Collective actions" src={videos.mainvideo} frameborder="0" allowFullScreen></iframe>
+      <Grid className={styles.video}>
+        <iframe
+          title="Collective actions"
+          src={videos.mainvideo}
+          frameborder="0"
+          allowFullScreen
+        ></iframe>
       </Grid>
-      <Grid className={ styles.mission }>
-        <Container className={ styles.missionContainer } >
+      <Grid className={styles.mission}>
+        <Container className={styles.missionContainer}>
           <span dangerouslySetInnerHTML={{ __html: mission.html }}></span>
         </Container>
       </Grid>
-      <Grid className={ styles.about}>
-        <Container className={ styles.aboutContainer }>
+      <Grid className={styles.about}>
+        <Container className={styles.aboutContainer}>
           <span dangerouslySetInnerHTML={{ __html: about.html }}></span>
         </Container>
       </Grid>
-      <Grid className={ styles.team}>
+      <Grid className={styles.team}>
         <Container>
-          <h2>{ meetTheTeam.title }</h2>
-          <ul>{ meetTheTeam.team.map(generateMemberPhoto) }</ul>
+          <h2>{meetTheTeam.title}</h2>
+          <ul>{meetTheTeam.team.map(generateMemberPhoto)}</ul>
         </Container>
       </Grid>
-      <Grid className={ styles.join }>
-        <Container className={ styles.joinContainer }>
+      <Grid className={styles.join}>
+        <Container className={styles.joinContainer}>
           <span dangerouslySetInnerHTML={{ __html: join.html }}></span>
         </Container>
       </Grid>
-      <Grid className={ styles.partners }>
-        <Container className={ styles.partnersContainer }>
+      <Grid className={styles.partners}>
+        <Container className={styles.partnersContainer}>
           <span dangerouslySetInnerHTML={{ __html: partners.html }}></span>
         </Container>
       </Grid>
-      <Grid className={ styles.faq }>
+      <Grid className={styles.faq}>
         <Container>
           <h2>Frequently Asked Questions</h2>
           <p>&lt;Loaded from the CMS...&gt;</p>

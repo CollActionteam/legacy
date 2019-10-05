@@ -1,7 +1,7 @@
 import React from "react";
 import logo from "../../../static/assets/logo.svg";
 import { Link, useStaticQuery, graphql } from "gatsby";
-import Container from '@material-ui/core/Container';
+import Container from "@material-ui/core/Container";
 import styles from "./style.module.scss";
 import Navigation from "../Navigation";
 
@@ -15,8 +15,11 @@ export default () => {
           <Link to="/">
             <img alt="CollAction" className={styles.logo} src={logo}></img>
           </Link>
-          <Navigation items={data.site.siteMetadata.menuLinks
-              .filter(link => !!link.showInPrimaryNavigation)} />
+          <Navigation
+            items={data.site.siteMetadata.menuLinks.filter(
+              link => !!link.showInPrimaryNavigation
+            )}
+          />
         </div>
       </Container>
     </div>

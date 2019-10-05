@@ -3,7 +3,12 @@ import { Alert } from "../Alert";
 import styles from "./style.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export default class NewsletterSignup extends React.Component {
+interface INewsletterSignupState {
+  email: string;
+  error: string;
+}
+
+export default class NewsletterSignup extends React.Component<{}, INewsletterSignupState> {
   constructor(props) {
     super(props);
     this.state = {
@@ -15,21 +20,21 @@ export default class NewsletterSignup extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentDidMount() {}
-
   handleChange(event) {
     this.setState({
       email: event.target.value,
-      error: null,
+      error: "",
     });
   }
 
   handleKeyUp(event) {
-    if (event.keyCode === 13) return this.submitForm();
+    if (event.keyCode === 13) {
+      return this.handleSubmit(event);
+    }
   }
 
   handleSubmit(event) {
-    if(this.state.error) {
+    if (this.state.error) {
       event.preventDefault();
     }
   }
@@ -61,7 +66,6 @@ export default class NewsletterSignup extends React.Component {
               type="text"
               place-holder="e-Mail"
               name="b_48e9b2f8f522cf59b9d5ffa8d_@NewsletterSubscriptionServiceOptions.Value.MailChimpNewsletterListId"
-              tabindex="-1"
               value=""
             ></input>
           </div>
@@ -69,7 +73,7 @@ export default class NewsletterSignup extends React.Component {
             name="subscribe"
             id="mc-embedded-subscribe"
             className={styles.submit}
-            disabled={this.state.error || !this.state.email}
+            disabled={!!this.state.error || !this.state.email}
           >
             <FontAwesomeIcon
               className={styles.submitIcon}

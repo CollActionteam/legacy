@@ -14,7 +14,12 @@
         "no-boolean-literal-compare" : false,
         "ordered-imports" : false,
         "jsx-boolean-value" : false,
-        "jsx-self-close" : false
+        "jsx-self-close" : false,
+        "member-access" : false,
+        "no-console" : false,
+        "object-literal-shorthand" : false,
+        "object-literal-sort-keys" : false,
+        "max-line-length": false
     },
     "rulesDirectory": ["tslint-plugin-prettier"]
 }

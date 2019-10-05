@@ -9,11 +9,10 @@ import { onError } from "apollo-link-error";
 import { createUploadLink } from "apollo-upload-client";
 
 export default ({ children }) => {
-
   const httpLink = createUploadLink({
     fetch,
     // uri: process.env.GATSBY_GRAPHQL_API,
-    uri: "https://localhost:44301/graphql"
+    uri: "https://localhost:44301/graphql",
   });
 
   const errorLink = onError(({ networkError, graphQLErrors }) => {

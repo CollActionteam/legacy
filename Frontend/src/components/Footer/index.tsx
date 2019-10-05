@@ -9,52 +9,52 @@ import NewsletterSignup from "../NewsletterSignup";
 
 const navigation = [
   {
-    name: "Home",
     link: "/",
+    name: "Home",
   },
   {
-    name: "Find Project",
     link: "/projects/find",
+    name: "Find Project",
   },
   {
-    name: "Start Project",
     link: "/projects/start",
+    name: "Start Project",
   },
   {
+    link: "/about",
     name: "About Us",
-    link: "/about",
   },
   {
-    name: "Login",
     link: "/login",
+    name: "Login",
   },
   {
-    name: "Sign Up",
     link: "/signup",
+    name: "Sign Up",
   },
   {
+    link: "/about",
     name: "Mission",
-    link: "/about",
   },
   {
+    link: "/about",
     name: "Team",
-    link: "/about",
   },
   {
-    name: "Donate",
     link: "/donate",
+    name: "Donate",
   },
   {
+    link: "/about",
     name: "Partners",
-    link: "/about",
   },
   {
+    link: "/about",
     name: "Press",
-    link: "/about",
   },
   {
-    name: "FAQs",
     link: "/about",
+    name: "FAQs",
   },
 ];
 
@@ -81,8 +81,8 @@ export default () => (
         <Grid item xs={12} sm={6} md={5}>
           <nav className={styles.navigation}>
             <ul className={styles.navigationList}>
-              {navigation.map(link => (
-                <li className={styles.navigationItem}>
+              {navigation.map((link, index) => (
+                <li key={index} className={styles.navigationItem}>
                   <Link className={styles.navigationLink} to={link.link}>
                     {link.name}
                   </Link>

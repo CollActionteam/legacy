@@ -4,7 +4,7 @@ import Find from "../../components/Find";
 
 export default () => (
   <Layout>
-      <h2>Find project</h2>
-      <Find />
+    <h2>Find project</h2>
+    <Find />
   </Layout>
 );

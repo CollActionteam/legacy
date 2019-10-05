@@ -5,19 +5,26 @@ import { Hidden } from "@material-ui/core";
 import styles from "./style.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export default class Navigation extends React.Component {
+interface INavigationProps {
+  items: any;
+}
 
+interface INavigationState {
+  collapsed: boolean;
+}
+
+export default class Navigation extends React.Component<INavigationProps, INavigationState> {
   constructor(props) {
     super(props);
-      this.toggleNavigation = this.toggleNavigation.bind(this);
-      this.state = {
-        collapsed: true,
-      };
+    this.toggleNavigation = this.toggleNavigation.bind(this);
+    this.state = {
+      collapsed: true,
+    };
   }
 
-  toggleNavigation(){
+  toggleNavigation() {
     this.setState({
-      collapsed: !this.state.collapsed
+      collapsed: !this.state.collapsed,
     });
   }
 
@@ -47,11 +54,18 @@ export default class Navigation extends React.Component {
           </ul>
         </nav>
         <Hidden mdUp>
-          <button className={styles.navigationToggle} onClick={this.toggleNavigation}>
-            {this.state.collapsed ? <FontAwesomeIcon icon="bars" /> : <FontAwesomeIcon icon="times" /> }
+          <button
+            className={styles.navigationToggle}
+            onClick={this.toggleNavigation}
+          >
+            {this.state.collapsed ? (
+              <FontAwesomeIcon icon="bars" />
+            ) : (
+              <FontAwesomeIcon icon="times" />
+            )}
           </button>
         </Hidden>
       </div>
     );
   }
-};
+}

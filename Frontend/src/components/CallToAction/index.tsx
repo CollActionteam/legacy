@@ -6,17 +6,17 @@ import { Hidden } from "@material-ui/core";
 
 import { CircleButton, CircleButtonContainer, Button } from "../Button";
 
-import styles from './style.module.scss';
+import styles from "./style.module.scss";
 
 export const CallToAction = ({ title }) => {
   return (
-    <div className={ styles.callToAction }>
+    <div className={styles.callToAction}>
       <Grid container>
-        { title !== undefined &&
+        {title !== undefined && (
           <Grid item xs={12}>
-            <h1>{ title }</h1>
+            <h1>{title}</h1>
           </Grid>
-        }
+        )}
         <Hidden smDown>
           <Grid item xs={12}>
             <CircleButtonContainer>
@@ -28,7 +28,7 @@ export const CallToAction = ({ title }) => {
         <Hidden mdUp>
           <Grid item xs={2}></Grid>
           <Grid item xs={8}>
-            <div className={ styles.buttonContainer }>
+            <div className={styles.buttonContainer}>
               <Button to="projects/find">Find Project</Button>
               <Button to="projects/start">Start Project</Button>
             </div>
@@ -36,5 +36,5 @@ export const CallToAction = ({ title }) => {
         </Hidden>
       </Grid>
     </div>
-  )
+  );
 };

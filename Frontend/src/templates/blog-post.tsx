@@ -7,10 +7,10 @@ export default function Template({ data }) {
 
   return (
     <Layout>
-      <h1>{ post.frontmatter.title }</h1>
+      <h1>{post.frontmatter.title}</h1>
       <p dangerouslySetInnerHTML={{ __html: post.html }}></p>
     </Layout>
-  )
+  );
 }
 
 export const pageQuery = graphql`
@@ -22,4 +22,4 @@ export const pageQuery = graphql`
       }
     }
   }
-`
+`;

@@ -10,18 +10,19 @@ export default function Blogs({ data }) {
       <h1>Here be blogs</h1>
       <p>Available blogs:</p>
       <ul>
-        { 
-          posts
-            .map(e => e.node)
-            .map(p => {
-              return (
-                <li key={ p.fields.slug }>
-                  <Link to={ `${p.frontmatter.type}/${p.fields.slug}` }>{ p.frontmatter.title }</Link><br/>
-                  <span>{ p.excerpt }</span>
-                </li>
-              )
-            })
-        }
+        {posts
+          .map(e => e.node)
+          .map(p => {
+            return (
+              <li key={p.fields.slug}>
+                <Link to={`${p.frontmatter.type}/${p.fields.slug}`}>
+                  {p.frontmatter.title}
+                </Link>
+                <br />
+                <span>{p.excerpt}</span>
+              </li>
+            );
+          })}
       </ul>
     </Layout>
   );
@@ -29,7 +30,10 @@ export default function Blogs({ data }) {
 
 export const pageQuery = graphql`
   query BlogsQuery {
-    allMarkdownRemark(filter: {frontmatter: {type: {eq: "blogs"}}}, sort: {order: DESC, fields: frontmatter___date}) {
+    allMarkdownRemark(
+      filter: { frontmatter: { type: { eq: "blogs" } } }
+      sort: { order: DESC, fields: frontmatter___date }
+    ) {
       edges {
         node {
           frontmatter {
@@ -44,4 +48,4 @@ export const pageQuery = graphql`
       }
     }
   }
-`
+`;
