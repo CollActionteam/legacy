@@ -29,7 +29,8 @@ export const query = graphql`
       }
     }
     content: allMarkdownRemark(
-      filter: { frontmatter: { type: { eq: "home" } } }) {
+      filter: { frontmatter: { type: { eq: "home" } } }
+    ) {
       edges {
         node {
           html
@@ -43,7 +44,7 @@ export const query = graphql`
   }
 `;
 
-const Index = ({ data} ) => {
+const Index = ({ data }) => {
   const photos = data.photos.edges
     .map(e => e.node)
     .find(n => (n.name = "photos"));
@@ -53,61 +54,72 @@ const Index = ({ data} ) => {
 
   return (
     <Layout>
-      <Grid className={ styles.banner }>
-        <Banner photo={ photos.bannerphoto }>
-          <Grid container className={ styles.dots }>
+      <Grid className={styles.banner}>
+        <Banner photo={photos.bannerphoto}>
+          <Grid container className={styles.dots}>
             <Container>
-              <CallToAction title={ photos.bannertitle }></CallToAction>
+              <CallToAction title={photos.bannertitle} />
             </Container>
           </Grid>
         </Banner>
       </Grid>
-      <Grid className={ styles.introduction }>
+      <Grid className={styles.introduction}>
         <Container>
-            <h2>{ intro.frontmatter.title }</h2>
-            <p dangerouslySetInnerHTML={{ __html: intro.html }}></p>
+          <h2>{intro.frontmatter.title}</h2>
+          <p dangerouslySetInnerHTML={{ __html: intro.html }}></p>
         </Container>
       </Grid>
-      <Grid className={ styles.crowdactingsteps }>
+      <Grid className={styles.crowdactingsteps}>
         <Container>
-          <CrowdactingSteps></CrowdactingSteps>
+          <CrowdactingSteps />
         </Container>
       </Grid>
       <Hidden smDown>
-        <Grid className={ styles.findproject }>
+        <Grid className={styles.findproject}>
           <Container>
             <h1>Join a project</h1>
-            <p>&lt;We'll put a project list here, with projects you can select using the CMS.&gt;</p>
+            <p>
+              &lt;We'll put a project list here, with projects you can select
+              using the CMS.&gt;
+            </p>
             <Button to="/projects/find">Find more projects</Button>
           </Container>
         </Grid>
-        <Grid className={ styles.startproject }>
+        <Grid className={styles.startproject}>
           <Container>
-            <StartProjectSteps></StartProjectSteps>
+            <StartProjectSteps />
             <Button to="/projects/find">Start a project</Button>
           </Container>
         </Grid>
       </Hidden>
       <Hidden mdUp>
-        <Container className={ styles.calltoaction }>
-          <CallToAction></CallToAction>
+        <Container className={styles.calltoaction}>
+          <CallToAction />
         </Container>
       </Hidden>
-      <Grid className={ styles.spread }>
-        <Container className={ styles.spreadContainer }>
-          <Grid item xs={12} md={5} className={ styles.spreadBlock }>
+      <Grid className={styles.spread}>
+        <Container className={styles.spreadContainer}>
+          <Grid item xs={12} md={5} className={styles.spreadBlock}>
             <h2>Spread it further!</h2>
             <ul>
-              <li><Facebook url="https://www.collaction.org"></Facebook></li>
-              <li><Twitter url="https://www.collaction.org"></Twitter></li>
-              <li><LinkedIn url="https://www.collaction.org"></LinkedIn></li>
-              <li><Email subject="CollAction"></Email></li>
-            </ul>          
+              <li>
+                <Facebook url="https://www.collaction.org" />
+              </li>
+              <li>
+                <Twitter url="https://www.collaction.org" />
+              </li>
+              <li>
+                <LinkedIn url="https://www.collaction.org" />
+              </li>
+              <li>
+                <Email subject="CollAction" />
+              </li>
+            </ul>
           </Grid>
         </Container>
       </Grid>
     </Layout>
   );
-}
+};
 
 export default Index;
