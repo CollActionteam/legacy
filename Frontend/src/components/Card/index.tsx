@@ -1,40 +1,8 @@
 import React from "react";
 import styles from "./style.module.scss";
+import { IProject } from "../../api/types";
 
-interface IParticipantCount {
-  count: number;
-}
-interface ICategory {
-  color: number;
-  colorHex: string;
-  id: number;
-  name: string;
-}
-
-interface IImageFile {
-  date: Date;
-  description: string;
-  filepath: string;
-  height: number;
-  id: number;
-  url: string;
-  width: number;
-}
-interface IProjectProps {
-  category: ICategory;
-  description: string;
-  descriptiveImage: IImageFile;
-  end: Date;
-  goal: string;
-  name: string;
-  participantCounts: IParticipantCount;
-  status: string;
-  remainingTime: any;
-  url: string;
-  target: number;
-}
-
-export default ({ project }: { project: IProjectProps }) => {
+export default ({ project }: { project: IProject }) => {
   return (
     <div className={styles.card}>
       {project.descriptiveImage && (
