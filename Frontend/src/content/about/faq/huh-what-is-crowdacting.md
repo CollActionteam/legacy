@@ -1,6 +1,7 @@
 ---
 type: about_faq
 name: Huh? What is crowdacting?
+sequence: 2
 ---
 The term Crowdacting, as it is used here, is a term that has been introduced by CollAction. Basically, it means: ‘taking action collectively and conditionally with the purpose of achieving positive impact on the world and its inhabitants’. Simply put, with crowdacting we ask: ‘Would you take action if you knew that a hundred/a thousand/a million/a billion others would do so too?’ An example of a crowdacting project: ‘If we can find 10,000 people that commit to switch to renewable energy if 9,999 others would do the same, we will all switch together’. As a result, we form a critical mass of people that has a huge impact on making this world a better place. The concept is very similar to crowdfunding, but people commit to actions, instead of money.
 

@@ -1,6 +1,7 @@
 ---
 type: about_faq
 name: What are collective action problems?
+sequence: 4
 ---
 Collective action problems are situations where it is in the interest of the group to work together, but in which coordination is a challenge. Because of this, every individual has an incentive to act in their own interest. This [video](https://www.youtube.com/watch?v=p3KlgxYhDbk) explains it clearly.
 

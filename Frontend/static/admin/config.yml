@@ -91,14 +91,15 @@ collections:
 
   - name: about_faq
     label: About page FAQs
+    identifier_field: name
     description: Frequently asked questions on the site's about page
     folder: Frontend/src/content/about/faq
     create: true
     delete: true
     fields:
       - { name: type, default: about_faq, widget: hidden }
-      - { name: name, label: Name, widget: string }
-      - { name: title, label: Title, widget: string }
+      - { name: name, label: Title, widget: string }
+      - { name: sequence, label: Sequence, widget: number }
       - { name: body, label: Content, widget: markdown }
 
   - name: blogs

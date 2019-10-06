@@ -1,6 +1,7 @@
 ---
 type: about_faq
 name: How do I know that other people will really take action?
+sequence: 10
 ---
 You can never be 100% sure. In the first place, crowdacting is about trust. Trusting that people want to work together to create a better world. Trusting that people are attached to their personal ideals. And trusting that people will keep their promises. We hope to build a community of people that take their commitments seriously and try to create a culture in which agreement=agreement.
 

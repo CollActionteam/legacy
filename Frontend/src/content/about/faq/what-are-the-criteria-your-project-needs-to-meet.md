@@ -1,6 +1,7 @@
 ---
 type: about_faq
 name: What are the criteria your project needs to meet?
+sequence: 7
 ---
 A project can only be listed when it meets the following criteria:
 
