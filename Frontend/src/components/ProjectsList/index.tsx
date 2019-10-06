@@ -2,8 +2,9 @@ import React, { Fragment } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import Card from "../Card";
 import gql from "graphql-tag";
+import { Grid } from "@material-ui/core";
 
-export default ({ categoryId }) => {
+export default ({ categoryId }: { categoryId: string }) => {
   const query = categoryId
     ? useQuery(FIND_PROJECTS, {
         variables: { categoryId },
@@ -23,13 +24,17 @@ export default ({ categoryId }) => {
 
   return (
     <Fragment>
-      {data.projects && data.projects.length ? (
-        data.projects.map((project, index) => (
-          <Card key={index} project={project}></Card>
-        ))
-      ) : (
-        <div>No projects here yet.</div>
-      )}
+      <Grid container spacing={3}>
+        {data.projects && data.projects.length ? (
+          data.projects.map((project, index) => (
+            <Grid item xs={12} sm={6} md={4} key={index}>
+              <Card project={project} />
+            </Grid>
+          ))
+        ) : (
+          <div>No projects here yet.</div>
+        )}
+      </Grid>
     </Fragment>
   );
 };
@@ -38,8 +43,25 @@ const GET_PROJECTS = gql`
   query {
     projects {
       id
+      description
       name
       url
+      category {
+        colorHex
+        name
+      }
+      descriptiveImage {
+        filepath
+        url
+      }
+      goal
+      end
+      remainingTime
+      target
+      participantCounts {
+        count
+      }
+      status
     }
   }
 `;
@@ -51,7 +73,24 @@ const FIND_PROJECTS = gql`
     ) {
       id
       name
+      description
       url
+      category {
+        colorHex
+        name
+      }
+      descriptiveImage {
+        filepath
+        url
+      }
+      goal
+      end
+      target
+      remainingTime
+      participantCounts {
+        count
+      }
+      status
     }
   }
 `;
