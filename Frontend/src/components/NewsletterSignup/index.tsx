@@ -70,6 +70,7 @@ export default class NewsletterSignup extends React.Component<
               place-holder="e-Mail"
               name="b_48e9b2f8f522cf59b9d5ffa8d_@NewsletterSubscriptionServiceOptions.Value.MailChimpNewsletterListId"
               value=""
+              readOnly={true}
             ></input>
           </div>
           <button

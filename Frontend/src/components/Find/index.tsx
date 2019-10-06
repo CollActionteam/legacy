@@ -1,160 +1,40 @@
-import React from "react";
-import { graphql, StaticQuery } from "gatsby";
+import React, { useState } from "react";
+import ProjectsList from "../ProjectsList";
+import { useQuery } from "@apollo/react-hooks";
+import gql from "graphql-tag";
 
-interface IFindProps {
-  backendUrl: string;
-}
+export default () => {
+  const [category, setCategory] = useState(null);
+  const { data, loading } = useQuery(GET_CATEGORIES);
 
-interface IFindState {
-  categories: any[];
-  projects: any[];
-  category: any;
-  loaded: boolean;
-}
+  const handleCategoryChange = (e: React.ChangeEvent) => {
+    setCategory((e.target as any).value.toString());
+  };
 
-class Find extends React.Component<IFindProps, IFindState> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      categories: [],
-      projects: [],
-      category: null,
-      loaded: false,
-    };
-  }
-
-  async componentDidMount() {
-    const fetched = await this.getGraphQl(
-      `
-                query {
-                    categories {
-                        id,
-                        name
-                    },
-                    projects {
-                        id,
-                        name,
-                        url
-                    }
-                }
-            `,
-      null
-    );
-
-    console.info(fetched);
-    this.setState({
-      categories: [{ id: null, name: "" }].concat(fetched.data.categories),
-      projects: fetched.data.projects,
-      loaded: true,
-    });
-  }
-
-  async setCategory(e) {
-    const categoryId = e.currentTarget.value.toString();
-    let fetched: any = [];
-    if (categoryId === "") {
-      fetched = await this.getGraphQl(
-        `
-                    query {
-                        projects {
-                            id,
-                            name,
-                            url
-                        }
-                    }`,
-        null
-      );
-    } else {
-      fetched = await this.getGraphQl(
-        `
-                    query FindProjects($categoryId: [String]) {
-                        projects(where: { path: "categoryId", comparison:equal, value: $categoryId}) {
-                            id,
-                            name,
-                            url
-                        }
-                    }`,
-        JSON.stringify({ categoryId: categoryId })
-      );
-    }
-
-    console.info(fetched);
-    this.setState({
-      projects: fetched.data.projects,
-      category: categoryId,
-      loaded: true,
-    });
-  }
-
-  async getGraphQl(query, variables) {
-    let url =
-      this.props.backendUrl + `/graphql?query=${encodeURIComponent(query)}`;
-    if (variables !== null) {
-      url += `&variables=${encodeURIComponent(variables)}`;
-    }
-    console.info(url);
-    const result = await fetch(url, { method: "GET", credentials: "include" });
-    console.info(result);
-    return result.json();
-  }
-
-  async postGraphQl(query, variables) {
-    const url = this.props.backendUrl + "/graphql";
-    const body = {
-      query: query,
-      variables: variables,
-    };
-    console.info(url);
-    const result = await fetch(url, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
-    console.info(result);
-    return result.json();
-  }
-
-  render() {
-    if (this.state.loaded) {
-      return (
-        <div>
-          <label>Categories</label>
-          <select onChange={s => this.setCategory(s)}>
-            {this.state.categories.map((c, i) => (
-              <option key={i} value={c.id}>
-                {c.name}
-              </option>
-            ))}
-            }
-          </select>
-          {this.state.projects.map((p, i) => (
-            <div key={i}>
-              <a href={p.url}>{p.name}</a>
-            </div>
+  return (
+    <div>
+      {loading ? (
+        <div>loading</div>
+      ) : (
+        <select onChange={handleCategoryChange}>
+          <option value="">All</option>
+          {data.categories.map((c, i) => (
+            <option key={i} value={c.id}>
+              {c.name}
+            </option>
           ))}
-        </div>
-      );
-    } else {
-      return <div></div>;
+        </select>
+      )}
+      <ProjectsList categoryId={category} />
+    </div>
+  );
+};
+
+const GET_CATEGORIES = gql`
+  query {
+    categories {
+      id
+      name
     }
   }
-}
-
-export default () => (
-  <StaticQuery
-    query={graphql`
-      query {
-        site {
-          siteMetadata {
-            backendUrl
-          }
-        }
-      }
-    `}
-    render={({ site }) => <Find backendUrl={site.siteMetadata.backendUrl} />}
-  />
-);
+`;
