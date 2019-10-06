@@ -10,7 +10,7 @@ export default function About({ data }) {
     .map(e => e.node)
     .find(n => n.name === "videos");
 
-  const sections = data.allMarkdownRemark.edges.map(e => e.node);
+  const sections = data.sections.edges.map(e => e.node);
   const mission = sections.find(s => s.frontmatter.name === "mission");
   const about = sections.find(s => s.frontmatter.name === "about");
   const join = sections.find(s => s.frontmatter.name === "join");
@@ -20,6 +20,8 @@ export default function About({ data }) {
     .map(e => e.node)
     .find(n => n.name === "team");
 
+  const faqs = data.faqs.edges.map(e => e.node);
+
   const generateMemberPhoto = member => (
     <li key={member.name}>
       <div className={styles.teamMember}>
@@ -27,6 +29,13 @@ export default function About({ data }) {
         <p>{member.name}</p>
       </div>
     </li>
+  );
+
+  const generateFaq = faq => (
+    <div className={styles.faq}>
+      <h3>{faq.frontmatter.name}</h3>
+      <span dangerouslySetInnerHTML={{ __html: faq.html }}></span>
+    </div>
   );
 
   return (
@@ -66,9 +75,10 @@ export default function About({ data }) {
         </Container>
       </Grid>
       <Grid>
-        <Container className={styles.faq}>
+        <Container className={styles.faqs}>
+          <a name="faqs"></a>
           <h2>Frequently Asked Questions</h2>
-          <p>&lt;Loaded from the CMS...&gt;</p>
+          {faqs.map(generateFaq)}
         </Container>
       </Grid>
     </Layout>
@@ -77,7 +87,9 @@ export default function About({ data }) {
 
 export const pageQuery = graphql`
   query AboutPageQuery {
-    allMarkdownRemark(filter: { frontmatter: { type: { eq: "about" } } }) {
+    sections: allMarkdownRemark(
+      filter: { frontmatter: { type: { eq: "about" } } }
+    ) {
       edges {
         node {
           html
@@ -105,6 +117,19 @@ export const pageQuery = graphql`
         node {
           name
           mainvideo
+        }
+      }
+    }
+    faqs: allMarkdownRemark(
+      filter: { frontmatter: { type: { eq: "about_faq" } } }
+      sort: { fields: frontmatter___sequence }
+    ) {
+      edges {
+        node {
+          html
+          frontmatter {
+            name
+          }
         }
       }
     }

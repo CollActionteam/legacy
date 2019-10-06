@@ -58,13 +58,14 @@ $indent: calc(var(--spacing-xlg) * 8);
   }
 }
 
-$image-size: 7rem;
+$image-size: 6rem;
 .teamMember {
   display: flex;
   flex-direction: column;
   text-align: center;
 
-  padding: 0 var(--spacing-xlg) var(--spacing-xlg) 0;
+  $space: calc(var(--spacing) * 3);
+  padding: 0 $space $space 0;
   width: $image-size;
 
   img {
@@ -82,13 +83,7 @@ $image-size: 7rem;
   @include indent();
 
   ul {
-    list-style-type: inherit;
-    margin-left: var(--spacing-xlg);
-    
-    li {
-      margin-bottom: var(--spacing-lg);
-      line-height: var(--line-height);
-    }
+    @include list(disc);
   }
 }
 
@@ -104,8 +99,20 @@ $image-size: 7rem;
   }
 }
 
-.faq {
+.faqs {
   @include section();
-  @include text-content();
   @include indent();
+  @include text-content();
+}
+
+.faq {
+  @include text-content();
+
+  ol {
+    @include list(decimal);
+  }
+
+  ul {
+    @include list(disc);
+  }
 }

@@ -23,3 +23,16 @@
     padding-left: $indent !important;
   }
 }
+
+@mixin list($type) {
+  list-style: $type;
+  margin-left: var(--spacing-lg);
+
+  li {
+    line-height: var(--line-height);
+    
+    &:not(:last-child) {
+      padding-bottom: var(--spacing-sm);
+    }
+  }
+}
