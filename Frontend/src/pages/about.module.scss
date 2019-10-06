@@ -20,100 +20,77 @@ $indent: calc(var(--spacing-xlg) * 8);
     width: 100%;
     height: 100%;
     border: 0;
+    z-index: -1; // Render below mobile menu
   }
+}
+
+.green {
+  background-color: var(--c-green);
+  color: white;
+}
+
+.grey {
+  background-color: var(--c-grey);
 }
 
 .mission {
   @include section();
-  background-color: var(--c-green);
-  color: white;
-
-  @include breakpoint-up(md) {
-    padding-left: $indent;
-  }
-}
-
-.missionContainer {
-  @include text-paragraph();
+  @include text-content();
+  @include indent();
 }
 
 .about {
   @include section();
-
-  @include breakpoint-up(md) {
-    padding-left: $indent;
-  }
-}
-
-.aboutContainer {
-  @include text-paragraph();
+  @include text-content();
+  @include indent();
 }
 
 .team {
   @include section();
-  @include text-paragraph();
-  background-color: var(--c-grey);
-
-  @include breakpoint-up(md) {
-    padding-left: $indent;
-  }
+  @include text-content();
+  @include indent();
 
   ul {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-evenly;
-    
-    $spacing: calc(var(--spacing-xlg) * 2);
-    li {
-      padding: 0 $spacing $spacing 0;
-      display: inline-block;
-      width: 100px;
-      text-align: center;
+    justify-content: flex-start;
+    margin-bottom: calc(var(--spacing) * -1);
+  }
+}
 
-      img {
-        width: 100%;
-        height: 100%;
-        background-color: #666;
-        border-radius: 50px;
-      }
-    }
+$image-size: 6rem;
+.teamMember {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+
+  $space: calc(var(--spacing) * 3);
+  padding: 0 $space $space 0;
+  width: $image-size;
+
+  img {
+    width: 100%;
+    height: $image-size;
+    background-color: #666;
+    border-radius: 50px;
+    margin-bottom: var(--spacing)
   }
 }
 
 .join {
   @include section();
-  
-  @include breakpoint-up(md) {
-    padding-left: $indent;
-  }
-}
-
-.joinContainer {
-  @include text-paragraph();
+  @include text-content();
+  @include indent();
 
   ul {
-    list-style-type: inherit;
-    margin-left: var(--spacing-xlg);
-    
-    li {
-      margin-bottom: var(--spacing-lg);
-      line-height: var(--line-height);
-    }
-
+    @include list(disc);
   }
 }
 
 .partners {
   @include section();
-  background-color: var(--c-grey);
-  
-  @include breakpoint-up(md) {
-    padding-left: $indent;
-  }
-}
-
-.partnersContainer {
-  @include text-paragraph();
+  @include text-content();
+  @include indent();
 
   ul {   
     li {
@@ -122,11 +99,20 @@ $indent: calc(var(--spacing-xlg) * 8);
   }
 }
 
-.faq {
+.faqs {
   @include section();
-  @include text-paragraph();
-  
-  @include breakpoint-up(md) {
-    padding-left: $indent;
+  @include indent();
+  @include text-content();
+}
+
+.faq {
+  @include text-content();
+
+  ol {
+    @include list(decimal);
+  }
+
+  ul {
+    @include list(disc);
   }
 }

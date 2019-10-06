@@ -54,29 +54,29 @@ const Index = ({ data }) => {
 
   return (
     <Layout>
-      <Grid className={styles.banner}>
+      <Grid>
         <Banner photo={photos.bannerphoto}>
           <Grid container className={styles.dots}>
-            <Container>
+            <Container className={styles.banner}>
               <CallToAction title={photos.bannertitle} />
             </Container>
           </Grid>
         </Banner>
       </Grid>
-      <Grid className={styles.introduction}>
-        <Container>
+      <Grid>
+        <Container className={styles.introduction}>
           <h2>{intro.frontmatter.title}</h2>
           <p dangerouslySetInnerHTML={{ __html: intro.html }}></p>
         </Container>
       </Grid>
-      <Grid className={styles.crowdactingsteps}>
-        <Container>
+      <Grid className={styles.grey}>
+        <Container className={styles.crowdactingsteps}>
           <CrowdactingSteps />
         </Container>
       </Grid>
       <Hidden smDown>
-        <Grid className={styles.findproject}>
-          <Container>
+        <Grid>
+          <Container className={styles.findproject}>
             <h1>Join a project</h1>
             <p>
               &lt;We'll put a project list here, with projects you can select
@@ -85,8 +85,8 @@ const Index = ({ data }) => {
             <Button to="/projects/find">Find more projects</Button>
           </Container>
         </Grid>
-        <Grid className={styles.startproject}>
-          <Container>
+        <Grid className={styles.greyD10}>
+          <Container className={styles.startproject}>
             <StartProjectSteps />
             <Button to="/projects/find">Start a project</Button>
           </Container>
@@ -94,11 +94,11 @@ const Index = ({ data }) => {
       </Hidden>
       <Hidden mdUp>
         <Container className={styles.calltoaction}>
-          <CallToAction />
+          <CallToAction title="" />
         </Container>
       </Hidden>
-      <Grid className={styles.spread}>
-        <Container className={styles.spreadContainer}>
+      <Grid className={styles.grey}>
+        <Container className={styles.spread}>
           <Grid item xs={12} md={5} className={styles.spreadBlock}>
             <h2>Spread it further!</h2>
             <ul>

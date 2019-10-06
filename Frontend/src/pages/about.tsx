@@ -10,7 +10,7 @@ export default function About({ data }) {
     .map(e => e.node)
     .find(n => n.name === "videos");
 
-  const sections = data.allMarkdownRemark.edges.map(e => e.node);
+  const sections = data.sections.edges.map(e => e.node);
   const mission = sections.find(s => s.frontmatter.name === "mission");
   const about = sections.find(s => s.frontmatter.name === "about");
   const join = sections.find(s => s.frontmatter.name === "join");
@@ -20,13 +20,22 @@ export default function About({ data }) {
     .map(e => e.node)
     .find(n => n.name === "team");
 
+  const faqs = data.faqs.edges.map(e => e.node);
+
   const generateMemberPhoto = member => (
     <li key={member.name}>
-      <div>
+      <div className={styles.teamMember}>
         <img src={member.photo} alt={member.name} title={member.name} />
         <p>{member.name}</p>
       </div>
     </li>
+  );
+
+  const generateFaq = faq => (
+    <div className={styles.faq}>
+      <h3>{faq.frontmatter.name}</h3>
+      <span dangerouslySetInnerHTML={{ __html: faq.html }}></span>
+    </div>
   );
 
   return (
@@ -35,40 +44,41 @@ export default function About({ data }) {
         <iframe
           title="Collective actions"
           src={videos.mainvideo}
-          frameborder="0"
+          frameBorder="0"
           allowFullScreen
         ></iframe>
       </Grid>
-      <Grid className={styles.mission}>
-        <Container className={styles.missionContainer}>
+      <Grid className={styles.green}>
+        <Container className={styles.mission}>
           <span dangerouslySetInnerHTML={{ __html: mission.html }}></span>
         </Container>
       </Grid>
-      <Grid className={styles.about}>
-        <Container className={styles.aboutContainer}>
+      <Grid>
+        <Container className={styles.about}>
           <span dangerouslySetInnerHTML={{ __html: about.html }}></span>
         </Container>
       </Grid>
-      <Grid className={styles.team}>
-        <Container>
+      <Grid className={styles.grey}>
+        <Container className={styles.team}>
           <h2>{meetTheTeam.title}</h2>
           <ul>{meetTheTeam.team.map(generateMemberPhoto)}</ul>
         </Container>
       </Grid>
-      <Grid className={styles.join}>
-        <Container className={styles.joinContainer}>
+      <Grid>
+        <Container className={styles.join}>
           <span dangerouslySetInnerHTML={{ __html: join.html }}></span>
         </Container>
       </Grid>
-      <Grid className={styles.partners}>
-        <Container className={styles.partnersContainer}>
+      <Grid className={styles.grey}>
+        <Container className={styles.partners}>
           <span dangerouslySetInnerHTML={{ __html: partners.html }}></span>
         </Container>
       </Grid>
-      <Grid className={styles.faq}>
-        <Container>
+      <Grid>
+        <Container className={styles.faqs}>
+          <a name="faqs"></a>
           <h2>Frequently Asked Questions</h2>
-          <p>&lt;Loaded from the CMS...&gt;</p>
+          {faqs.map(generateFaq)}
         </Container>
       </Grid>
     </Layout>
@@ -77,7 +87,9 @@ export default function About({ data }) {
 
 export const pageQuery = graphql`
   query AboutPageQuery {
-    allMarkdownRemark(filter: { frontmatter: { type: { eq: "about" } } }) {
+    sections: allMarkdownRemark(
+      filter: { frontmatter: { type: { eq: "about" } } }
+    ) {
       edges {
         node {
           html
@@ -105,6 +117,19 @@ export const pageQuery = graphql`
         node {
           name
           mainvideo
+        }
+      }
+    }
+    faqs: allMarkdownRemark(
+      filter: { frontmatter: { type: { eq: "about_faq" } } }
+      sort: { fields: frontmatter___sequence }
+    ) {
+      edges {
+        node {
+          html
+          frontmatter {
+            name
+          }
         }
       }
     }

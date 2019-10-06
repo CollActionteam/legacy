@@ -1,22 +1,27 @@
 @import '../components/Styles/layout';
 @import '../components/Styles/typography';
 
-.banner {
-  > * > * {
-    padding-top: calc(var(--spacing-xlg) * 3);
-    padding-bottom: calc(var(--spacing-xlg) * 3);
-  }
-}
-
 .dots {
   background: radial-gradient(rgba(255, 255, 255, 0.25) 3px, transparent 5px), rgba(147, 148, 148, 0);
   background-position: 0 0, 30px 30px;
   background-size: 60px 60px;
 }
 
+.banner {
+  @include section();
+}
+
+.grey {
+  background-color: var(--c-grey);
+}
+
+.greyD10 {
+  background-color: var(--c-grey-d10);
+}
+
 .introduction {
   @include section();
-  @include text-paragraph();
+  @include text-content();
   text-align: center;
 
   h2 {
@@ -26,12 +31,11 @@
 
 .crowdactingsteps {
   @include section();
-  background-color: var(--c-grey);
 }
 
 .findproject {
   @include section();
-  @include text-paragraph();
+  @include text-content();
   text-align: center;
 
   h1 {
@@ -41,8 +45,7 @@
 
 .startproject {
   @include section();
-  @include text-paragraph();
-  background-color: var(--c-grey-d10);
+  @include text-content();
   text-align: center;
 }
 
@@ -52,10 +55,6 @@
 
 .spread {
   @include section();
-  background-color: var(--c-grey);  
-}
-
-.spreadContainer {
   display: flex;
   justify-content: center;
 }
