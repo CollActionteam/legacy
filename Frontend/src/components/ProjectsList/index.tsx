@@ -13,21 +13,23 @@ export default ({ categoryId }) => {
   const { data, loading, error } = query;
 
   if (loading) {
-    return <div>Loading</div>;
+    return <div>Loading projects...</div>;
   }
 
   if (error) {
-    return <p>ERROR</p>;
+    console.error(error);
+    return;
   }
-
-  console.log(data);
 
   return (
     <Fragment>
-      {data.projects &&
+      {data.projects && data.projects.length ? (
         data.projects.map((project, index) => (
           <Card key={index} project={project}></Card>
-        ))}
+        ))
+      ) : (
+        <div>No projects here yet.</div>
+      )}
     </Fragment>
   );
 };
