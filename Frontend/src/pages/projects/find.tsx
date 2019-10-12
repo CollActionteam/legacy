@@ -12,7 +12,7 @@ export default () => (
   <StaticQuery
     query={graphql`
       query FindQuery {
-        photos: allHomeYaml(filter: { name: { eq: "photos" } }) {
+        photos: allHomeYaml(filter: { name: { eq: "homepagephotos" } }) {
           edges {
             node {
               bannerphoto
@@ -22,9 +22,7 @@ export default () => (
       }
     `}
     render={staticData => {
-      const photos = staticData.photos.edges
-        .map(e => e.node)
-        .find(n => (n.name = "photos"));
+      const photos = staticData.photos.edges.map(e => e.node);
 
       const [category, setCategory] = useState(null);
       const { data, loading } = useQuery(GET_CATEGORIES);
