@@ -5,6 +5,7 @@ import { Grid, Container } from "@material-ui/core";
 
 import styles from "./about.module.scss";
 import { Section } from "../components/Section";
+import { Faq } from "../components/Faq";
 
 export default function About({ data }) {
   const videos = data.videos.edges
@@ -30,13 +31,6 @@ export default function About({ data }) {
         <p>{member.name}</p>
       </div>
     </li>
-  );
-
-  const generateFaq = faq => (
-    <div className={styles.faq}>
-      <h3>{faq.frontmatter.name}</h3>
-      <span dangerouslySetInnerHTML={{ __html: faq.html }}></span>
-    </div>
   );
 
   return (
@@ -69,7 +63,13 @@ export default function About({ data }) {
       </Section>
       <Section indent>
         <h2>Frequently Asked Questions</h2>
-        {faqs.map(generateFaq)}
+        {faqs.map(faq => (
+          <Faq
+            key={faq.frontmatter.name}
+            title={faq.frontmatter.name}
+            content={faq.html}
+          ></Faq>
+        ))}
       </Section>
     </Layout>
   );

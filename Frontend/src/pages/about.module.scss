@@ -21,15 +21,6 @@
   }
 }
 
-.green {
-  background-color: var(--c-green);
-  color: white;
-}
-
-.grey {
-  background-color: var(--c-grey);
-}
-
 ul.team {
   list-style: none;
   display: flex;
@@ -55,9 +46,4 @@ $image-size: 6rem;
     border-radius: 50px;
     margin-bottom: var(--spacing)
   }
-}
-
-.faq {
-  margin-bottom: var(--spacing-lg);
-  border-top: solid 1px var(--c-grey-d20)
 }

@@ -4,10 +4,61 @@
   height: 450px;
 }
 
+.intro {
+  display: flex;
+  width: 100%;
+  background-color: var(--c-grey);
+}
+
+.introBlock {
+  background-color: var(--c-green);
+  color: var(--c-white);
+  padding: var(--spacing);
+  border-radius: var(--border-radius);
+  width: 450px;
+  
+  @include breakpoint-up(md) {
+    margin-top: -345px;
+    margin-right: calc(var(--spacing-xlg) * 4);
+    margin-left: auto;
+  }
+
+  @include breakpoint-down(md) {
+    margin-top: -300px;
+    margin-right: var(--spacing);
+    margin-left: var(--spacing);
+    width: unset;
+  }
+
+  h1 {
+    margin-bottom: 0 !important;
+  }
+}
+
+.cta {
+  text-align: center;
+
+  a {
+    margin-top: var(--spacing);
+    background-color: var(--c-white);
+    color: var(--c-green);
+
+    &:hover, &:focus {
+      background-color: var(--c-white);
+    }
+  }
+}
+
 .howItWorks {
   text-align: center;
   
   h1 {
     @include large-title();
+  }
+}
+
+.faq {
+  h2 {
+    color: var(--c-green);
   }
 }
