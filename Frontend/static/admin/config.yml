@@ -47,8 +47,7 @@ collections:
         file: Frontend/src/content/startproject/photos.yml
         fields:
           - { name: name, default: photos, widget: hidden }
-          - { name: bannertitle, label: Banner title, widget: string }
-          - { name: bannerphoto, label: Banner photo, widget: image }
+          - { name: startprojectphoto, label: Banner photo, widget: image }
 
   - name: startproject_steps
     identifier_field: name
@@ -75,16 +74,16 @@ collections:
       - { name: image, label: Image, widget: image }
       - { name: body, label: Content, widget: markdown }
 
-- name: find_content
-  label: Find page content
-  folder: Frontend/src/content/find
-  create: false
-  delete: false
-  fields:
-    - { name: type, default: find, widget: hidden }
-    - { name: name, widget: string }
-    - { name: title, label: Title, widget: string }
-    - { name: body, label: Content, widget: markdown }
+  - name: find_content
+    label: Find page content
+    folder: Frontend/src/content/find
+    create: false
+    delete: false
+    fields:
+      - { name: type, default: find, widget: hidden }
+      - { name: name, widget: string }
+      - { name: title, label: Title, widget: string }
+      - { name: body, label: Content, widget: markdown }
 
   - name: find_settings
     label: Find page settings
