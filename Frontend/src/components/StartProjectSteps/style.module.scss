@@ -3,16 +3,6 @@
 .main {
   text-align: center;
 
-  h1 {
-    @include large-title();
-    color: var(--c-green);
-  }
-
-  h2 {
-    letter-spacing: 0.8rem;
-    margin-bottom: var(--spacing-xlg);  
-  }
-
   .step {
     text-align: center;
     padding: 0 var(--spacing-md);

@@ -25,6 +25,16 @@
 
 .startproject {
   text-align: center;
+  
+  h1 {
+    @include large-title();
+    color: var(--c-green);
+  }
+
+  h2 {
+    letter-spacing: 0.8rem;
+    margin-bottom: var(--spacing-xlg);  
+  }
 }
 
 .spread {

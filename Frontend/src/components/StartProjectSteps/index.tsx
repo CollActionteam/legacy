@@ -24,14 +24,10 @@ const query = graphql`
 
 export const StartProjectSteps = () => {
   const data = useStaticQuery(query);
-  const intro = data.steps.nodes.find(n => n.frontmatter.sequence === 0);
-  const steps = data.steps.nodes.filter(n => n.frontmatter.sequence > 0);
+  const steps = data.steps.nodes;
 
   return (
     <Grid container className={styles.main}>
-      <Grid item xs={12}>
-        <span dangerouslySetInnerHTML={{ __html: intro.html }}></span>
-      </Grid>
       {steps.map((step, index) => (
         <Grid key={index} item xs={12} md={4} className={styles.step}>
           <img

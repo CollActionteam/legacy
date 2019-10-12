@@ -2,6 +2,10 @@ import React from "react";
 import Layout from "../../components/Layout";
 import { graphql } from "gatsby";
 import { Banner } from "../../components/Banner";
+import styles from "./start.module.scss";
+import { Section } from "../../components/Section";
+import { StartProjectSteps } from "../../components/StartProjectSteps";
+import { Button } from "../../components/Button";
 
 export const query = graphql`
   query {
@@ -43,8 +47,13 @@ const StartProject = ({ data }) => {
   return (
     <Layout>
       <Banner photo={photos.startprojectphoto}>
-        Hello
+        <div className={styles.banner}></div>>
       </Banner>
+      <Section color="grey" className={styles.howItWorks}>
+        <h1>How it works</h1>
+        <StartProjectSteps></StartProjectSteps>
+        <Button to="/projects/start">Start a project</Button>
+      </Section>
     </Layout>
   );
 };

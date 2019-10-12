@@ -1,0 +1,13 @@
+@import '../../components/Styles/typography.scss';
+
+.banner {
+  height: 450px;
+}
+
+.howItWorks {
+  text-align: center;
+  
+  h1 {
+    @include large-title();
+  }
+}

@@ -28,16 +28,6 @@ collections:
           - { name: bannertitle, label: Banner title, widget: string }
           - { name: bannerphoto, label: Banner photo, widget: image }
 
-  - name: startproject_content
-    label: Start project page content
-    folder: Frontend/src/content/startproject
-    create: false
-    delete: false
-    fields:
-      - { name: type, default: start, widget: hidden }
-      - { name: name, widget: string }
-      - { name: body, label: Content, widget: markdown }
-
   - name: startproject_settings
     label: Start project page settings
     delete: false

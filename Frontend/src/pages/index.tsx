@@ -79,6 +79,8 @@ const Index = ({ data }) => {
           <Button to="/projects/find">Find more projects</Button>
         </Section>
         <Section color="grey" className={styles.startproject}>
+          <h1>Starting a project</h1>
+          <h2>(is super easy)</h2>
           <StartProjectSteps />
           <Button to="/projects/start">Start a project</Button>
         </Section>
