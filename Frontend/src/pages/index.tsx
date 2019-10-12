@@ -20,7 +20,7 @@ export const query = graphql`
         title
       }
     }
-    photos: allHomeYaml(filter: { name: { eq: "photos" } }) {
+    photos: allHomeYaml(filter: { name: { eq: "homepagephotos" } }) {
       edges {
         node {
           bannertitle

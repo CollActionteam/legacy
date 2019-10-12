@@ -99,7 +99,6 @@ module.exports = {
         display: "swap",
       },
     },
-    "gatsby-transformer-yaml",
     {
       resolve: "gatsby-source-filesystem",
       options: {
@@ -128,7 +127,6 @@ module.exports = {
         name: "blogs",
       },
     },
-    "gatsby-transformer-yaml",
     {
       resolve: "gatsby-source-filesystem",
       options: {
@@ -165,6 +163,7 @@ module.exports = {
         ],
       },
     },
+    "gatsby-transformer-yaml",
     "gatsby-transformer-sharp",
     "gatsby-plugin-sharp",
     "gatsby-plugin-offline",

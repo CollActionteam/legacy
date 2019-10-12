@@ -28,6 +28,41 @@ collections:
           - { name: bannertitle, label: Banner title, widget: string }
           - { name: bannerphoto, label: Banner photo, widget: image }
 
+  - name: startproject_content
+    label: Start project page content
+    folder: Frontend/src/content/startproject
+    create: false
+    delete: false
+    fields:
+      - { name: type, default: start, widget: hidden }
+      - { name: name, widget: string }
+      - { name: body, label: Content, widget: markdown }
+
+  - name: startproject_settings
+    label: Start project page settings
+    delete: false
+    files:
+      - label: Photos
+        name: photos
+        file: Frontend/src/content/startproject/photos.yml
+        fields:
+          - { name: name, default: photos, widget: hidden }
+          - { name: bannertitle, label: Banner title, widget: string }
+          - { name: bannerphoto, label: Banner photo, widget: image }
+
+  - name: startproject_steps
+    identifier_field: name
+    label: Steps to start a project
+    folder: Frontend/src/content/startproject/steps
+    create: true
+    delete: true
+    fields:
+      - { name: type, default: startprojectsteps, widget: hidden }
+      - { name: sequence, label: Sequence, widget: number, hint: Use "0" for the introduction text. }
+      - { name: name, widget: string }
+      - { name: image, label: Image, widget: image, required: false, hint: Image is not supported for the introduction text (sequence 0) }
+      - { name: body, label: Content, widget: markdown }
+
   - name: crowdacting_steps
     label: Crowdacting steps
     folder: Frontend/src/content/crowdactingsteps
@@ -61,19 +96,6 @@ collections:
         fields:
           - { name: name, default: photos, widget: hidden }
           - { name: bannerphoto, label: Banner photo, widget: image }
-
-  - name: startproject_steps
-    identifier_field: name
-    label: Starting a project
-    folder: Frontend/src/content/startproject
-    create: true
-    delete: true
-    fields:
-      - { name: type, default: startprojectsteps, widget: hidden }
-      - { name: sequence, label: Sequence, widget: number, hint: Use "0" for the introduction text. }
-      - { name: name, widget: string }
-      - { name: image, label: Image, widget: image, required: false, hint: Image is not supported for the introduction text (sequence 0) }
-      - { name: body, label: Content, widget: markdown }
 
   - name: about_content
     label: About page content

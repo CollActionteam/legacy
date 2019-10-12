@@ -1,8 +1,4 @@
 ---
-type: startprojectsteps
-sequence: 0
+type: startproject
 name: intro
 ---
-# Starting a project
-
-## (is super easy)
