@@ -4,13 +4,14 @@ import { Banner } from "../components/Banner";
 
 import { graphql } from "gatsby";
 import { CallToAction } from "../components/CallToAction";
-import { Container, Grid, Hidden } from "@material-ui/core";
+import { Grid, Hidden, Container } from "@material-ui/core";
 
 import styles from "./index.module.scss";
 import { CrowdactingSteps } from "../components/CrowdactingSteps";
 import { StartProjectSteps } from "../components/StartProjectSteps";
 import { Button } from "../components/Button";
 import { Facebook, Twitter, LinkedIn, Email } from "../components/Share";
+import { Section } from "../components/Section";
 
 export const query = graphql`
   query {
@@ -54,52 +55,42 @@ const Index = ({ data }) => {
 
   return (
     <Layout>
-      <Grid>
-        <Banner photo={photos.bannerphoto}>
-          <Grid container className={styles.dots}>
-            <Container className={styles.banner}>
-              <CallToAction title={photos.bannertitle} />
-            </Container>
-          </Grid>
-        </Banner>
-      </Grid>
-      <Grid>
-        <Container className={styles.introduction}>
-          <h2>{intro.frontmatter.title}</h2>
-          <p dangerouslySetInnerHTML={{ __html: intro.html }}></p>
-        </Container>
-      </Grid>
-      <Grid className={styles.grey}>
-        <Container className={styles.crowdactingsteps}>
-          <CrowdactingSteps />
-        </Container>
-      </Grid>
+      <Banner photo={photos.bannerphoto}>
+        <div className={styles.dots}>
+          <Section>
+            <CallToAction title={photos.bannertitle} />
+          </Section>
+        </div>
+      </Banner>
+      <Section className={styles.introduction}>
+        <h2>{intro.frontmatter.title}</h2>
+        <p dangerouslySetInnerHTML={{ __html: intro.html }}></p>
+      </Section>
+      <Section color="grey">
+        <CrowdactingSteps />
+      </Section>
       <Hidden smDown>
-        <Grid>
-          <Container className={styles.findproject}>
-            <h1>Join a project</h1>
-            <p>
-              &lt;We'll put a project list here, with projects you can select
-              using the CMS.&gt;
-            </p>
-            <Button to="/projects/find">Find more projects</Button>
-          </Container>
-        </Grid>
-        <Grid className={styles.greyD10}>
-          <Container className={styles.startproject}>
-            <StartProjectSteps />
-            <Button to="/projects/find">Start a project</Button>
-          </Container>
-        </Grid>
+        <Section className={styles.findProject}>
+          <h1>Join a project</h1>
+          <p>
+            &lt;We'll put a project list here, with projects you can select
+            using the CMS.&gt;
+          </p>
+          <Button to="/projects/find">Find more projects</Button>
+        </Section>
+        <Section color="grey" className={styles.startproject}>
+          <StartProjectSteps />
+          <Button to="/projects/start">Start a project</Button>
+        </Section>
       </Hidden>
       <Hidden mdUp>
-        <Container className={styles.calltoaction}>
+        <Section>
           <CallToAction title="" />
-        </Container>
+        </Section>
       </Hidden>
-      <Grid className={styles.grey}>
-        <Container className={styles.spread}>
-          <Grid item xs={12} md={5} className={styles.spreadBlock}>
+      <Section color="grey">
+        <div className={styles.spread}>
+          <div className={styles.spreadBlock}>
             <h2>Spread it further!</h2>
             <ul>
               <li>
@@ -115,9 +106,9 @@ const Index = ({ data }) => {
                 <Email subject="CollAction" />
               </li>
             </ul>
-          </Grid>
-        </Container>
-      </Grid>
+          </div>
+        </div>
+      </Section>
     </Layout>
   );
 };

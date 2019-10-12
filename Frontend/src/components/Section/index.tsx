@@ -7,11 +7,18 @@ interface ISectionProps {
   indent?: boolean;
   color?: string;
   title?: string;
+  className?: string;
 }
 
-export const Section = ({ children, indent, color, title }: ISectionProps) => {
+export const Section = ({
+  children,
+  indent,
+  color,
+  title,
+  className,
+}: ISectionProps) => {
   // tslint:disable-next-line: prettier
-  const classes = `${color ? styles[color] : ""} ${indent ? styles.indent : ""}`;
+  const classes = `${color ? styles[color] : ""} ${indent ? styles.indent : ""} ${className ? className : ""}`.trim();
   return (
     <section className={classes}>
       <Container>

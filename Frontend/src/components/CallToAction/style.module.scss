@@ -16,7 +16,9 @@
   justify-content: center;  
 
   a {
-    margin-bottom: var(--spacing-xlg);
     text-align: center;
+    &:not(:last-child) {
+      margin-bottom: var(--spacing-xlg);
+    }
   }
 }
