@@ -2,8 +2,6 @@
 @import '../components/Styles/typography';
 @import '../components/Styles/responsive.scss';
 
-$indent: calc(var(--spacing-xlg) * 8);
-
 .video {
   position: relative;
   display: block;
@@ -33,29 +31,13 @@ $indent: calc(var(--spacing-xlg) * 8);
   background-color: var(--c-grey);
 }
 
-.mission {
-  @include section();
-  @include text-content();
-  @include indent();
-}
-
-.about {
-  @include section();
-  @include text-content();
-  @include indent();
-}
-
-.team {
-  @include section();
-  @include text-content();
-  @include indent();
-
-  ul {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    margin-bottom: calc(var(--spacing) * -1);
-  }
+ul.team {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-left: 0;
+  margin-bottom: calc(var(--spacing) * -1);
 }
 
 $image-size: 6rem;
@@ -64,8 +46,7 @@ $image-size: 6rem;
   flex-direction: column;
   text-align: center;
 
-  $space: calc(var(--spacing) * 3);
-  padding: 0 $space $space 0;
+  padding: 0 calc(var(--spacing) * 3) var(--spacing) 0;
   width: $image-size;
 
   img {
@@ -77,42 +58,7 @@ $image-size: 6rem;
   }
 }
 
-.join {
-  @include section();
-  @include text-content();
-  @include indent();
-
-  ul {
-    @include list(disc);
-  }
-}
-
-.partners {
-  @include section();
-  @include text-content();
-  @include indent();
-
-  ul {   
-    li {
-      line-height: var(--line-height);
-    }
-  }
-}
-
-.faqs {
-  @include section();
-  @include indent();
-  @include text-content();
-}
-
 .faq {
-  @include text-content();
-
-  ol {
-    @include list(decimal);
-  }
-
-  ul {
-    @include list(disc);
-  }
+  margin-bottom: var(--spacing-lg);
+  border-top: solid 1px var(--c-grey-d20)
 }

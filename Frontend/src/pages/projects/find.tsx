@@ -6,7 +6,7 @@ import { graphql, StaticQuery } from "gatsby";
 import { useQuery } from "react-apollo";
 import ProjectsList from "../../components/ProjectsList";
 import gql from "graphql-tag";
-import Section from "../../components/Section";
+import { Section } from "../../components/Section";
 
 export default () => (
   <StaticQuery

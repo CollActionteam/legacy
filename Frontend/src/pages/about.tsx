@@ -4,6 +4,7 @@ import { graphql } from "gatsby";
 import { Grid, Container } from "@material-ui/core";
 
 import styles from "./about.module.scss";
+import { Section } from "../components/Section";
 
 export default function About({ data }) {
   const videos = data.videos.edges
@@ -48,39 +49,28 @@ export default function About({ data }) {
           allowFullScreen
         ></iframe>
       </Grid>
-      <Grid className={styles.green}>
-        <Container className={styles.mission}>
-          <span dangerouslySetInnerHTML={{ __html: mission.html }}></span>
-        </Container>
-      </Grid>
-      <Grid>
-        <Container className={styles.about}>
-          <span dangerouslySetInnerHTML={{ __html: about.html }}></span>
-        </Container>
-      </Grid>
-      <Grid className={styles.grey}>
-        <Container className={styles.team}>
-          <h2>{meetTheTeam.title}</h2>
-          <ul>{meetTheTeam.team.map(generateMemberPhoto)}</ul>
-        </Container>
-      </Grid>
-      <Grid>
-        <Container className={styles.join}>
-          <span dangerouslySetInnerHTML={{ __html: join.html }}></span>
-        </Container>
-      </Grid>
-      <Grid className={styles.grey}>
-        <Container className={styles.partners}>
-          <span dangerouslySetInnerHTML={{ __html: partners.html }}></span>
-        </Container>
-      </Grid>
-      <Grid>
-        <Container className={styles.faqs}>
-          <a name="faqs"></a>
-          <h2>Frequently Asked Questions</h2>
-          {faqs.map(generateFaq)}
-        </Container>
-      </Grid>
+      <Section indent color="green">
+        <span dangerouslySetInnerHTML={{ __html: mission.html }}></span>
+      </Section>
+      <Section indent>
+        <span dangerouslySetInnerHTML={{ __html: about.html }}></span>
+      </Section>
+      <Section indent color="grey">
+        <h2>{meetTheTeam.title}</h2>
+        <ul className={styles.team}>
+          {meetTheTeam.team.map(generateMemberPhoto)}
+        </ul>
+      </Section>
+      <Section indent>
+        <span dangerouslySetInnerHTML={{ __html: join.html }}></span>
+      </Section>
+      <Section indent color="grey">
+        <span dangerouslySetInnerHTML={{ __html: partners.html }}></span>
+      </Section>
+      <Section indent>
+        <h2>Frequently Asked Questions</h2>
+        {faqs.map(generateFaq)}
+      </Section>
     </Layout>
   );
 }
