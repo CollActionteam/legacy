@@ -39,6 +39,19 @@ collections:
           - { name: name, default: photos, widget: hidden }
           - { name: startprojectphoto, label: Banner photo, widget: image }
 
+  - name: startproject_faq
+    label: Start project page FAQs
+    identifier_field: name
+    description: Frequently asked questions on the site's start project page
+    folder: Frontend/src/content/startproject/faq
+    create: true
+    delete: true
+    fields:
+      - { name: type, default: startproject_faq, widget: hidden }
+      - { name: name, label: Title, widget: string }
+      - { name: sequence, label: Sequence, widget: number }
+      - { name: body, label: Content, widget: markdown }
+
   - name: startproject_steps
     identifier_field: name
     label: Steps to start a project
