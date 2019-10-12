@@ -1,35 +1,96 @@
+@import "../../components/Styles/responsive";
+
 section {
-    position: relative;
-    padding-top: calc(var(--spacing-lg) * 2); //@TODO: replace with -hg
-    padding-bottom: calc(var(--spacing-xlg) * 2); //@TODO: replace with -hg
-    
-    &::after {
-        position: absolute;
-        content: "";
-        width: 100vw;
-        height: 100%;
-        top: 0;
-        left: 50%;
-        transform: translate3d(-50%, 0, 0);
-        z-index: -1;
+  position: relative;
+  padding-top: calc(var(--spacing-lg) * 2); //@TODO: replace with -hg
+  padding-bottom: calc(var(--spacing-xlg) * 2); //@TODO: replace with -hg
+
+  &::after {
+    position: absolute;
+    content: "";
+    width: 100vw;
+    height: 100%;
+    top: 0;
+    left: 50%;
+    transform: translate3d(-50%, 0, 0);
+    z-index: -1;
+  }
+
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  h7 {
+    line-height: var(--line-height);
+
+    &:not(:last-child) {
+      margin-bottom: var(--spacing-lg);
     }
+  }
+
+  p {
+    font-size: var(--font-size-md);
+  }
+
+  ul,
+  ol {
+    margin-left: var(--spacing-lg);
+
+    &:not(:last-child) {
+      margin-bottom: var(--spacing-lg);
+    }
+
+    li {
+      line-height: var(--line-height);
+
+      &:not(:last-child) {
+        padding-bottom: var(--spacing-sm);      
+      }
+    }
+  }
+
+  ul {
+    list-style: disc;
+  }
+
+  ol {
+    list-style: decimal;
+  }
 }
 
+// .textContent {
+//   > *:not(:last-child),
+//   // CMS content is wrapped in a span
+//   > span > *:not(:last-child),
+//   // FAQs are wrapped in a div
+//   > div > span > *:not(:last-child) { 
+//   }
+// }
+
 .title {
-    font-weight: bold; //@TODO: replace with font-weight variable
-    margin-bottom: var(--spacing-lg);
+  font-weight: bold; //@TODO: replace with font-weight variable
+  margin-bottom: var(--spacing-lg);
+}
+
+.indent {
+  @include breakpoint-up(md) {
+    padding-left: calc(var(--spacing-xlg) * 7);
+  }
 }
 
 .green {
-    color: var(--c-white);
+  color: var(--c-white);
 
-    &::after {
-        background-color: var(--c-green);
-    }
+  &::after {
+    background-color: var(--c-green);
+  }
 }
 
 .grey {
-    &::after {
-        background-color: var(--c-grey);
-    }
+  &::after {
+    background-color: var(--c-grey);
+  }
 }
