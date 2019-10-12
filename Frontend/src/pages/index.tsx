@@ -4,7 +4,7 @@ import { Banner } from "../components/Banner";
 
 import { graphql } from "gatsby";
 import { CallToAction } from "../components/CallToAction";
-import { Grid, Hidden, Container } from "@material-ui/core";
+import { Hidden } from "@material-ui/core";
 
 import styles from "./index.module.scss";
 import { CrowdactingSteps } from "../components/CrowdactingSteps";
