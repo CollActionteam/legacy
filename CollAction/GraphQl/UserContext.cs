@@ -1,6 +1,5 @@
 ﻿using CollAction.Data;
 using GraphQL.Authorization;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Security.Claims;
 

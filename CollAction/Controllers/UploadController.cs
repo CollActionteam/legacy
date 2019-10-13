@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CollAction.Controllers
 {
-    [Route("[controller]")]
+    [Route("upload")]
     [ApiController]
     public class UploadController : Controller
     {

@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Hosting.Internal;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace CollAction.Tests.Integration
@@ -12,12 +10,6 @@ namespace CollAction.Tests.Integration
     {
         public async Task WithServiceProvider(Action<ServiceCollection> configureReplacements, Func<IServiceScope, Task> executeTests)
         {
-            HostingEnvironment env = new HostingEnvironment()
-            {
-                ContentRootPath = Directory.GetCurrentDirectory(),
-                EnvironmentName = "Development"
-            };
-
             IConfiguration configuration = new ConfigurationBuilder()
                 .AddEnvironmentVariables()
                 .AddUserSecrets<Startup>()
@@ -25,7 +17,7 @@ namespace CollAction.Tests.Integration
 
             ILogger<Startup> logger = new LoggerFactory().CreateLogger<Startup>();
 
-            Startup startup = new Startup(env, configuration, logger);
+            Startup startup = new Startup(null, configuration, logger);
 
             ServiceCollection sc = new ServiceCollection();
             startup.ConfigureServices(sc);
