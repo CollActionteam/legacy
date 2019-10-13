@@ -191,7 +191,7 @@ namespace CollAction
             app.UseRouting();
             app.UseCors(corsPolicy);
 
-            if (env?.IsProduction() ?? false)
+            if (env.IsProduction())
             {
                 // Ensure our middleware handles proxied https, see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-Proto
                 var forwardedHeaderOptions = new ForwardedHeadersOptions()
@@ -208,7 +208,7 @@ namespace CollAction
                 applicationLifetime.ApplicationStopping.Register(() => Log.CloseAndFlush());
             }
 
-            if (env?.IsDevelopment() ?? true)
+            if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseGraphiQl("/graphiql", "/graphql");
