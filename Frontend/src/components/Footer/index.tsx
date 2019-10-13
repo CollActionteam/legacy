@@ -6,6 +6,7 @@ import logo from "../../../static/assets/logo.svg";
 import styles from "./style.module.scss";
 import SocialMedia from "../SocialMedia";
 import NewsletterSignup from "../NewsletterSignup";
+import { graphql, StaticQuery } from "gatsby";
 
 const navigation = [
   {
@@ -95,7 +96,19 @@ export default () => (
           <h3>Follow us</h3>
           <SocialMedia />
           <h3>Newsletter</h3>
-          <NewsletterSignup />
+          <StaticQuery
+              query={graphql`
+                query  {
+                  site {
+                    siteMetadata {
+                      mailchimpListId
+                    }
+                  }
+                }
+              `}
+              render={data => {
+                return <NewsletterSignup mailchimpListId={data.site.siteMetadata.mailchimpListId} />;
+              }} />
         </Grid>
       </Grid>
     </Container>

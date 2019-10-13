@@ -8,10 +8,11 @@ interface INewsletterSignupState {
   error: string;
 }
 
-export default class NewsletterSignup extends React.Component<
-  {},
-  INewsletterSignupState
-> {
+interface INewsletterSignupProps {
+  mailchimpListId: string;
+}
+
+export default class NewsletterSignup extends React.Component<INewsletterSignupProps, INewsletterSignupState> {
   constructor(props) {
     super(props);
     this.state = {
@@ -45,7 +46,7 @@ export default class NewsletterSignup extends React.Component<
   render() {
     return (
       <form
-        action={`//collaction.us14.list-manage.com/subscribe/post?u=48e9b2f8f522cf59b9d5ffa8d&amp;id=${process.env.MailChimpNewsletterListId}`}
+        action={`//collaction.us14.list-manage.com/subscribe/post?u=48e9b2f8f522cf59b9d5ffa8d&amp;id=${this.props.mailchimpListId}`}
         id="mc-embedded-subscribe-form"
         name="mc-embedded-subscribe-form"
         onSubmit={this.handleSubmit}

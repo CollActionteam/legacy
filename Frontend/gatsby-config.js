@@ -5,6 +5,7 @@ module.exports = {
     description: "CollAction",
     backendUrl: "https://localhost:44301",
     frontendUrl: "http://localhost:8000",
+    mailchimpListId: "1a035c45ca",
     loginProviders: [
       {
         name: "Google",
