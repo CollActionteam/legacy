@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using CollAction.Data;
 using CollAction.Models;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Serilog;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -35,7 +34,6 @@ using GraphiQl;
 using Microsoft.AspNetCore.Mvc;
 using CollAction.GraphQl;
 using CollAction.Services.User;
-using System;
 using AspNetCore.IServiceCollection.AddIUrlHelper;
 using CollAction.Services.HtmlValidator;
 using Microsoft.AspNetCore.Http;
@@ -236,26 +234,6 @@ namespace CollAction
                 endpoints.MapControllerRoute("Default", "{controller}/{action}");
                 endpoints.MapHealthChecks("/health");
             });
-
-            InitializeDatabase(app.ApplicationServices);
-        }
-
-        public void InitializeDatabase(IServiceProvider serviceProvider)
-        {
-            using (var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            {
-                var userManager = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
-                var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
-                var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                Task.Run(async () =>
-                {
-                    Logger.LogInformation("migrating database");
-                    await context.Database.MigrateAsync();
-                    Logger.LogInformation("seeding database");
-                    await context.Seed(Configuration, userManager, roleManager);
-                    Logger.LogInformation("done starting up");
-                }).Wait();
-            }
         }
     }
 }

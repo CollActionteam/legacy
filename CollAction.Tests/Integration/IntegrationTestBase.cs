@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.TestHost;
+using CollAction.Data;
 
 namespace CollAction.Tests.Integration
 {
@@ -25,6 +26,7 @@ namespace CollAction.Tests.Integration
             using (IWebHost host = hostBuilder.Build())
             using (IServiceScope scope = host.Services.CreateScope())
             {
+                await ApplicationDbContext.InitializeDatabase(scope);
                 await executeTests(scope);
             }
         }
