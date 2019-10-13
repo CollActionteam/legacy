@@ -135,7 +135,7 @@ namespace CollAction.Tests.Integration
                        Assert.IsFalse(await newsletterService.IsSubscribedAsync(email));
                    });
 
-        private void ConfigureReplacementServices(ServiceCollection sc)
+        private void ConfigureReplacementServices(IServiceCollection sc)
         {
             var jobClient = new Mock<IBackgroundJobClient>();
             sc.AddScoped(s => jobClient.Object);

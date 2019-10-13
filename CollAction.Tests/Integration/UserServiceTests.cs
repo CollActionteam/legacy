@@ -139,7 +139,7 @@ namespace CollAction.Tests.Integration
                     Assert.IsNotNull(finishRegistrationResult.User);
                 });
 
-        private void ConfigureReplacementServices(ServiceCollection sc)
+        private void ConfigureReplacementServices(IServiceCollection sc)
         {
             sc.AddTransient(s => new Mock<IEmailSender>().Object);
         }

@@ -160,7 +160,7 @@ namespace CollAction.Tests.Integration
                        Assert.IsFalse(projectService.CanSendProjectEmail(newProject));
                    });
 
-        private void ConfigureReplacementServices(ServiceCollection sc)
+        private void ConfigureReplacementServices(IServiceCollection sc)
         {
             sc.AddTransient(s => new Mock<IEmailSender>().Object);
         }

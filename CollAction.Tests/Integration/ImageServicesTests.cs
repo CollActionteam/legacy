@@ -73,7 +73,7 @@ namespace CollAction.Tests.Integration
             }
         }
 
-        private void ConfigureReplacementServices(ServiceCollection sc)
+        private void ConfigureReplacementServices(IServiceCollection sc)
         {
             upload = new Mock<IFormFile>();
             upload.Setup(u => u.OpenReadStream()).Returns(new MemoryStream(testImage));
