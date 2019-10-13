@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.TestHost;
 
 namespace CollAction.Tests.Integration
 {
@@ -17,8 +18,9 @@ namespace CollAction.Tests.Integration
                        {
                            builder.AddUserSecrets<Startup>();
                        })
-                       .UseStartup<Startup>()
-                       .ConfigureServices(configureReplacements);
+                       .ConfigureTestServices(configureReplacements)
+                       .UseStartup<Startup>();
+                       
 
             using (IWebHost host = hostBuilder.Build())
             using (IServiceScope scope = host.Services.CreateScope())
