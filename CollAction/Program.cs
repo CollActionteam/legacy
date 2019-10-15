@@ -1,23 +1,31 @@
-﻿using Microsoft.AspNetCore;
+﻿using CollAction.Data;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 
 namespace CollAction
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            BuildWebHost(args).Run();
-        }
-
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
+            IWebHost host =
+                WebHost.CreateDefaultBuilder(args)
                    .ConfigureAppConfiguration(builder =>
                    {
                        builder.AddUserSecrets<Startup>();
                    })
                    .UseStartup<Startup>()
                    .Build();
+
+            using (IServiceScope scope = host.Services.CreateScope())
+            {
+                await ApplicationDbContext.InitializeDatabase(scope);
+            }
+
+            await host.RunAsync();
+        }
     }
 }

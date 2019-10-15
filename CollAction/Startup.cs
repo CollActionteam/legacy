@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using CollAction.Data;
 using CollAction.Models;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Serilog;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -35,10 +34,10 @@ using GraphiQl;
 using Microsoft.AspNetCore.Mvc;
 using CollAction.GraphQl;
 using CollAction.Services.User;
-using System;
 using AspNetCore.IServiceCollection.AddIUrlHelper;
 using CollAction.Services.HtmlValidator;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
 
 namespace CollAction
 {
@@ -46,7 +45,7 @@ namespace CollAction
     {
         private readonly string corsPolicy = "FrontendCors";
 
-        public Startup(IHostingEnvironment env, IConfiguration configuration, ILogger<Startup> logger)
+        public Startup(IWebHostEnvironment env, IConfiguration configuration, ILogger<Startup> logger)
         {
             Configuration = configuration;
             Environment = env;
@@ -57,7 +56,7 @@ namespace CollAction
 
         public IConfiguration Configuration { get; }
 
-        public IHostingEnvironment Environment { get; }
+        public IWebHostEnvironment Environment { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -117,22 +116,9 @@ namespace CollAction
             });
 
             services.AddMvc()
-                    .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+                    .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.AddHangfire(config => config.UsePostgreSqlStorage(connectionString));
-
-            // Add application services.
-            services.AddScoped<IImageService, AmazonS3ImageService>();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IProjectService, ProjectService>();
-            services.AddTransient<IEmailSender, EmailSender>();
-            services.AddTransient<INewsletterService, NewsletterService>();
-            services.AddTransient<IDonationService, DonationService>();
-            services.AddTransient<IViewRenderService, ViewRenderService>();
-            services.AddTransient<IMailChimpManager, MailChimpManager>();
-            services.AddTransient<IFestivalService, FestivalService>();
-            services.AddTransient<IHtmlInputValidator, HtmlInputValidator>();
-            services.AddUrlHelper();
 
             services.AddDataProtection()
                     .Services
@@ -151,6 +137,22 @@ namespace CollAction
                                .WithOrigins(publicAddress));
             });
 
+            services.AddUrlHelper();
+            services.AddHealthChecks();
+
+            // Add application services.
+            services.AddScoped<IImageService, AmazonS3ImageService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IProjectService, ProjectService>();
+            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<INewsletterService, NewsletterService>();
+            services.AddTransient<IDonationService, DonationService>();
+            services.AddTransient<IViewRenderService, ViewRenderService>();
+            services.AddTransient<IMailChimpManager, MailChimpManager>();
+            services.AddTransient<IFestivalService, FestivalService>();
+            services.AddTransient<IHtmlInputValidator, HtmlInputValidator>();
+
+            // Configure application options
             services.Configure<StripeSignatures>(Configuration);
             services.Configure<SiteOptions>(Configuration);
             services.Configure<DisqusOptions>(Configuration);
@@ -182,8 +184,9 @@ namespace CollAction
             });
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime applicationLifetime)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime applicationLifetime)
         {
+            app.UseRouting();
             app.UseCors(corsPolicy);
 
             if (env.IsProduction())
@@ -206,8 +209,6 @@ namespace CollAction
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
-                app.UseBrowserLink();
                 app.UseGraphiQl("/graphiql", "/graphql");
             }
             else
@@ -228,32 +229,11 @@ namespace CollAction
                     }
                 });
 
-            app.UseMvc(routes =>
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
-                    name: "Default",
-                    template: "{controller}/{action}");
+                endpoints.MapControllerRoute("Default", "{controller}/{action}");
+                endpoints.MapHealthChecks("/health");
             });
-
-            InitializeDatabase(app.ApplicationServices);
-        }
-
-        public void InitializeDatabase(IServiceProvider serviceProvider)
-        {
-            using (var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            {
-                var userManager = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
-                var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
-                var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                Task.Run(async () =>
-                {
-                    Logger.LogInformation("migrating database");
-                    await context.Database.MigrateAsync();
-                    Logger.LogInformation("seeding database");
-                    await context.Seed(Configuration, userManager, roleManager);
-                    Logger.LogInformation("done starting up");
-                }).Wait();
-            }
         }
     }
 }

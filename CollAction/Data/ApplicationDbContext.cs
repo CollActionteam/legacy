@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using CollAction.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace CollAction.Data
 {
@@ -47,6 +49,21 @@ namespace CollAction.Data
             await CreateAdminRoleAndUser(configuration, userManager, roleManager);
             await CreateCategories();
             await SeedTestProjects(configuration, userManager);
+        }
+
+        public static async Task InitializeDatabase(IServiceScope scope)
+        {
+            var userManager = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
+            var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
+            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+            var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+
+            logger.LogInformation("migrating database");
+            await context.Database.MigrateAsync();
+            logger.LogInformation("seeding database");
+            await context.Seed(configuration, userManager, roleManager);
+            logger.LogInformation("done starting up");
         }
 
         /// <summary>

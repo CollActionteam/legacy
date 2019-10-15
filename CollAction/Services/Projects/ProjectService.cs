@@ -400,7 +400,7 @@ namespace CollAction.Services.Projects
         }
 
         private Task RefreshParticipantCountMaterializedView(CancellationToken cancellationToken)
-            => context.Database.ExecuteSqlCommandAsync("REFRESH MATERIALIZED VIEW CONCURRENTLY \"ProjectParticipantCounts\";", cancellationToken);
+            => context.Database.ExecuteSqlRawAsync("REFRESH MATERIALIZED VIEW CONCURRENTLY \"ProjectParticipantCounts\";", cancellationToken);
 
         private string FormatEmailMessage(string message, ApplicationUser user, string unsubscribeLink)
         {
