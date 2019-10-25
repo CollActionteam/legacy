@@ -15,7 +15,8 @@
   padding: var(--spacing-xlg);
   border-radius: var(--border-radius);
   width: 450px;
-  margin-top: -345px;
+  margin-top: -400px;
+  margin-bottom: auto;
   
   @include breakpoint-up(md) {
     margin-right: calc(var(--spacing-xlg) * 2);
@@ -23,7 +24,6 @@
   }
 
   @include breakpoint-down(md) {
-    margin-top: -300px;
     margin-right: var(--spacing);
     margin-left: var(--spacing);
     width: auto;
