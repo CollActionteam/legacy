@@ -3,8 +3,22 @@ import Layout from "../../components/Layout";
 import { graphql } from "gatsby";
 import styles from "./create.module.scss";
 import { Section } from "../../components/Section";
-import { Grid, Container } from "@material-ui/core";
+import {
+  Grid,
+  Container,
+  TextField,
+  FormControl,
+  InputLabel,
+  createMuiTheme,
+  MuiThemeProvider,
+} from "@material-ui/core";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
 import { Button } from "../../components/Button";
+import DateFnsUtils from "@date-io/date-fns";
+import MUIRichTextEditor from "mui-rte";
 
 export const query = graphql`
   query {
@@ -17,60 +31,177 @@ export const query = graphql`
 `;
 
 const CreateProject = () => {
+  const [selectedDate, setSelectedDate] = React.useState<Date | null>(
+    new Date("2019-10-25")
+  );
+
+  const handleDateChange = (date: Date | null) => {
+    setSelectedDate(date);
+  };
+
+  const richTextControls = [
+    "bold",
+    "italic",
+    "underline",
+    "numberList",
+    "bulletList",
+    "link",
+  ];
+
+  const defaultTheme = createMuiTheme();
+  Object.assign(defaultTheme, {
+    overrides: {
+      MUIRichTextEditor: {
+        editor: {
+          borderBottom: "1px solid gray",
+          marginBottom: "var(--spacing-lg)",
+        },
+        toolbar: {
+          border: "1px solid var(--c-grey-d10)",
+          borderRadius: "5px",
+        },
+        editorContainer: {
+          width: "100%",
+          height: "120px",
+          overflow: "scroll",
+        },
+      },
+    },
+  });
+
   return (
     <Layout>
-      <div className={styles.projectBanner}>
-        <div className={styles.uploadBanner}>
-          <h3>Drop banner image here</h3>
-          <span>Use pjg, png, gif or bmp. Max. 1MB</span>
+      <form noValidate autoComplete="off">
+        <div className={styles.projectBanner}>
+          <div className={styles.uploadBanner}>
+            <h3>Drop banner image here</h3>
+            <span>Use pjg, png, gif or bmp. Max. 1MB</span>
+          </div>
         </div>
-      </div>
-      <div className={styles.projectInfo}>
-        <Section className={styles.projectInfoBlock}>
-          <h3>Project name</h3>
-          <p>Input box</p>
-          <h3>Category</h3>
-          <p>Select box</p>
-          <h3>Target</h3>
-          <p>Input box</p>
-          <h3>Proposal</h3>
-          <p>Textarea here</p>
-        </Section>
-      </div>
+        <div className={styles.projectInfo}>
+          <Section className={`${styles.projectInfoBlock} ${styles.form}`}>
+            <FormControl>
+              <TextField
+                className={styles.formControl}
+                label="Project name"
+              ></TextField>
+            </FormControl>
+            <FormControl>
+              <TextField
+                className={styles.formControl}
+                label="Category"
+              ></TextField>
+            </FormControl>
+            <FormControl>
+              <TextField
+                className={styles.formControl}
+                label="Target"
+                type="number"
+              ></TextField>
+            </FormControl>
+            <FormControl>
+              <TextField
+                className={styles.formControl}
+                label="Proposal"
+                multiline
+                rows="4"
+                helperText={`e.g. "If X people commit to Y, we'll all do it together!"`}
+              ></TextField>
+            </FormControl>
+          </Section>
+        </div>
 
-      <Container>
-        <Grid container>
-          <Grid item xs={12} md={5}>
-            <Section>
-              <h3>Short description</h3>
-              <p>Rich text here</p>
-              <h3>Sign up opens</h3>
-              <p>Input box</p>
-              <h3>Sign up closes</h3>
-              <p>Input box</p>
-              <h3>Hashtags</h3>
-              <p>Input box</p>
-            </Section>
-          </Grid>
-          <Grid item xs={12} md={7}>
-            <Section>
-              <h3>Goal/impact</h3>
-              <p>Rich text here</p>
-              <h3>Other comments</h3>
-              <p>Rich text here</p>
-              <h3>Descriptive image</h3>
-              <p>File upload component</p>
-              <h3>YouTube Video Link</h3>
-              <p>Input box</p>
-            </Section>
-          </Grid>
-          <Grid item xs={12}>
-            <Section className={styles.submitProject}>
-              <Button type="submit">Submit</Button>
-            </Section>
-          </Grid>
-        </Grid>
-      </Container>
+        <MuiThemeProvider theme={defaultTheme}>
+          <Container>
+            <Grid container>
+              <Grid item xs={12} md={5}>
+                <Section className={styles.form}>
+                  <InputLabel
+                    htmlFor="description"
+                    className={styles.formLabel}
+                  >
+                    Short description
+                  </InputLabel>
+                  <FormControl id="description">
+                    <MUIRichTextEditor
+                      label="E.g. reduce plastic waste and save our oceans!"
+                      controls={richTextControls}
+                    ></MUIRichTextEditor>
+                  </FormControl>
+                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <FormControl>
+                      <KeyboardDatePicker
+                        className={styles.formControl}
+                        label="Sign up opens"
+                        format="dd-MM-yyyy"
+                        value={selectedDate}
+                        onChange={handleDateChange}
+                      ></KeyboardDatePicker>
+                    </FormControl>
+                    <FormControl>
+                      <KeyboardDatePicker
+                        className={styles.formControl}
+                        label="Sign up closes"
+                        format="dd-MM-yyyy"
+                        value={selectedDate}
+                        onChange={handleDateChange}
+                      ></KeyboardDatePicker>
+                    </FormControl>
+                  </MuiPickersUtilsProvider>
+                  <FormControl>
+                    <TextField
+                      className={styles.formControl}
+                      label="Hashtags"
+                      helperText="No #, seperate tags with ; e.g. tag1;tag2"
+                    ></TextField>
+                  </FormControl>
+                </Section>
+              </Grid>
+              <Grid item xs={12} md={7}>
+                <Section className={styles.form}>
+                  <InputLabel htmlFor="goal" className={styles.formLabel}>
+                    Goal/impact
+                  </InputLabel>
+                  <FormControl id="goal">
+                    <MUIRichTextEditor
+                      label="What is the problem you are trying to solve?"
+                      controls={richTextControls}
+                    ></MUIRichTextEditor>
+                  </FormControl>
+                  <InputLabel htmlFor="comments" className={styles.formLabel}>
+                    Other comments
+                  </InputLabel>
+                  <FormControl id="comments">
+                    <MUIRichTextEditor
+                      label="E.g. background, process, FAQs, about the initiator"
+                      controls={richTextControls}
+                    ></MUIRichTextEditor>
+                  </FormControl>
+                  <FormControl>
+                    <TextField
+                      className={styles.formControl}
+                      label="Descriptive image"
+                      helperText="Will be replaced with file upload componentnpm"
+                    ></TextField>
+                  </FormControl>
+                  <FormControl>
+                    <TextField
+                      className={styles.formControl}
+                      label="YouTube Video Link"
+                      helperText="Descriptive video, e.g. http://www.youtube.com/watch?v=-wtIMTCHWuI"
+                    ></TextField>
+                  </FormControl>
+                </Section>
+              </Grid>
+              <Grid item xs={12}>
+                <Section className={styles.submitProject}>
+                  <Button type="submit">Submit</Button>
+                </Section>
+              </Grid>
+            </Grid>
+          </Container>
+        </MuiThemeProvider>
+      </form>
     </Layout>
   );
 };

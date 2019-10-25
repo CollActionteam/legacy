@@ -49,6 +49,23 @@
   }
 }
 
+.form {
+  & > div {
+    // ui-material creates an extra div around the form controls
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.formLabel {
+  font-size: 0.8rem !important;
+  margin-top: var(--spacing-lg);
+}
+
+.formControl {
+  margin: var(--spacing-lg) 0 var(--spacing-lg) 0 !important;
+}
+
 .submitProject {
   text-align: center;
 
