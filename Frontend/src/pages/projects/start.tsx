@@ -7,7 +7,7 @@ import { Section } from "../../components/Section";
 import { StartProjectSteps } from "../../components/StartProjectSteps";
 import { Button, SecondaryButton } from "../../components/Button";
 import { Faq } from "../../components/Faq";
-import { Grid, Container } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 
 export const query = graphql`
   query {
@@ -74,7 +74,9 @@ const StartProject = ({ data }) => {
         <Section className={styles.introBlock}>
           <span dangerouslySetInnerHTML={{ __html: intro.html }}></span>
           <div className={styles.cta}>
-            <Button to="/project/start/create">Start a project</Button>
+            <SecondaryButton to="/projects/create">
+              Start a project
+            </SecondaryButton>
           </div>
         </Section>
       </div>
@@ -82,7 +84,7 @@ const StartProject = ({ data }) => {
       <Section color="grey" className={styles.howItWorks}>
         <h1>How it works</h1>
         <StartProjectSteps></StartProjectSteps>
-        <Button to="/projects/start">Start a project</Button>
+        <Button to="/projects/create">Start a project</Button>
       </Section>
       <Grid container>
         <Grid item md={2}></Grid>

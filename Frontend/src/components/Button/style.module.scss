@@ -24,11 +24,12 @@
 
 .secondary {
     @include button();
-    background-color: var(--c-blue);
+    color: var(--c-green);
+    background-color: var(--c-white);
 
     &:hover,
     &:focus {
-        background-color: var(--c-blue-d10);
+        background-color: var(--c-white);
     }
 }
 
