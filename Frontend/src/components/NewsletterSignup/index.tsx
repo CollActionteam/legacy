@@ -12,7 +12,10 @@ interface INewsletterSignupProps {
   mailchimpListId: string;
 }
 
-export default class NewsletterSignup extends React.Component<INewsletterSignupProps, INewsletterSignupState> {
+export default class NewsletterSignup extends React.Component<
+  INewsletterSignupProps,
+  INewsletterSignupState
+> {
   constructor(props) {
     super(props);
     this.state = {

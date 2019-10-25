@@ -97,18 +97,23 @@ export default () => (
           <SocialMedia />
           <h3>Newsletter</h3>
           <StaticQuery
-              query={graphql`
-                query  {
-                  site {
-                    siteMetadata {
-                      mailchimpListId
-                    }
+            query={graphql`
+              query {
+                site {
+                  siteMetadata {
+                    mailchimpListId
                   }
                 }
-              `}
-              render={data => {
-                return <NewsletterSignup mailchimpListId={data.site.siteMetadata.mailchimpListId} />;
-              }} />
+              }
+            `}
+            render={data => {
+              return (
+                <NewsletterSignup
+                  mailchimpListId={data.site.siteMetadata.mailchimpListId}
+                />
+              );
+            }}
+          />
         </Grid>
       </Grid>
     </Container>
