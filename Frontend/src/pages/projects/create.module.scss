@@ -1,0 +1,59 @@
+@import '../../components/Styles/typography.scss';
+
+.projectBanner {
+  display: flex;
+  height: 450px;
+  background-color: var(--c-grey-d10);
+  background-image: url('./picture.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 120px;
+}
+
+.uploadBanner {
+  background-color: var(--c-white);
+  padding: var(--spacing-xlg);
+  border-radius: var(--border-radius);
+  margin: var(--spacing) auto auto calc(var(--spacing) * 2);
+  text-align: center;
+
+  @include breakpoint-down(md) {
+    margin-right: var(--spacing);
+    margin-left: var(--spacing);
+    width: 100%;
+  }
+}
+
+.projectInfo {
+  display: flex;
+}
+
+.projectInfoBlock {
+  background-color: var(--c-white);
+  box-shadow: var(--box-shadow-lg);
+  padding: var(--spacing-xlg);
+  border-radius: var(--border-radius);
+  width: 450px;
+  margin-top: -300px;
+  margin-bottom: auto;
+  
+  @include breakpoint-up(md) {
+    margin-right: calc(var(--spacing-xlg) * 2);
+    margin-left: auto;
+  }
+
+  @include breakpoint-down(md) {
+    margin-right: var(--spacing);
+    margin-left: var(--spacing);
+    width: 100%;
+  }
+}
+
+.submitProject {
+  text-align: center;
+
+  button {
+    padding-left: calc(var(--spacing-xlg) * 3);
+    padding-right: calc(var(--spacing-xlg) * 3);
+  }
+}
