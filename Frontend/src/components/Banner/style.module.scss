@@ -3,3 +3,10 @@
     background-position: center;
     background-size: cover;
 }
+
+.dots {
+    width: 100%;
+    background: radial-gradient(rgba(255, 255, 255, 0.25) 3px, transparent 5px), rgba(147, 148, 148, 0);
+    background-position: 0 0, 30px 30px;
+    background-size: 60px 60px;
+}

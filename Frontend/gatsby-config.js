@@ -117,6 +117,13 @@ module.exports = {
     {
       resolve: "gatsby-source-filesystem",
       options: {
+        path: `${__dirname}/src/content/findproject`,
+        name: "findproject",
+      },
+    },
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
         path: `${__dirname}/src/content/startproject`,
         name: "startproject",
       },

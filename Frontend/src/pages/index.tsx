@@ -55,12 +55,10 @@ const Index = ({ data }) => {
 
   return (
     <Layout>
-      <Banner photo={photos.bannerphoto}>
-        <div className={styles.dots}>
-          <Section>
-            <CallToAction title={photos.bannertitle} />
-          </Section>
-        </div>
+      <Banner photo={photos.bannerphoto} dots={true}>
+        <Section>
+          <CallToAction title={photos.bannertitle} />
+        </Section>
       </Banner>
       <Section className={styles.introduction}>
         <h2>{intro.frontmatter.title}</h2>
