@@ -12,8 +12,9 @@
 
     --font-size: 16px;
     --font-size-ratio: 1.4;
-    --font-size-sm: calc(var(--font-size) * var(--font-size-ratio) * 0.5);
-    --font-size-md: calc(var(--font-size) * var(--font-size-ratio) * 0.75);
+    --font-size-xs: calc(var(--font-size) * var(--font-size-ratio) * 0.5);
+    --font-size-sm: calc(var(--font-size) * var(--font-size-ratio) * 0.75);
+    --font-size-md: calc(var(--font-size) * var(--font-size-ratio) * 1);
     --font-size-lg: calc(var(--font-size) * var(--font-size-ratio) * 1.5);
     --font-size-xl: calc(var(--font-size) * var(--font-size-ratio) * 2);
     --font-size-xlg: calc(var(--font-size) * var(--font-size-ratio) * 3);

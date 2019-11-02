@@ -7,6 +7,8 @@ import ProjectsList from "../../components/ProjectsList";
 import gql from "graphql-tag";
 import { Section } from "../../components/Section";
 import { ProjectStatusFilter } from "../../api/types";
+import styles from "./find.module.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default () => (
   <StaticQuery
@@ -48,30 +50,36 @@ export default () => (
               {loading ? (
                 <div>Loading dropdown...</div>
               ) : (
-                <h1>
-                  <span>Show me </span>
-                  {category}
-                  <select onChange={handleCategoryChange}>
-                    <option value="">All</option>
-                    {data
-                      ? data.categories.map((c, i) => (
-                          <option key={i} value={c.id}>
-                            {c.name}
-                          </option>
-                        ))
-                      : null}
-                  </select>
+                <div className={styles.filter}>
+                  <span>Show me</span>
+
+                  <div className={styles.selectWrapper}>
+                    <select value={category} onChange={handleCategoryChange}>
+                      <option value="">All</option>
+                      {data
+                        ? data.categories.map((c, i) => (
+                            <option key={i} value={c.id}>
+                              {c.name}
+                            </option>
+                          ))
+                        : null}
+                    </select>
+                    <FontAwesomeIcon icon="angle-down"></FontAwesomeIcon>
+                  </div>
 
                   <span>projects which are</span>
 
-                  <select onChange={handleStatusChange}>
-                    <option value={ProjectStatusFilter.Active}>Open</option>
-                    <option value={ProjectStatusFilter.Closed}>Closed</option>
-                    <option value={ProjectStatusFilter.ComingSoon}>
-                      Coming soon
-                    </option>
-                  </select>
-                </h1>
+                  <div className={styles.selectWrapper}>
+                    <select value={status} onChange={handleStatusChange}>
+                      <option value={ProjectStatusFilter.Active}>Open</option>
+                      <option value={ProjectStatusFilter.Closed}>Closed</option>
+                      <option value={ProjectStatusFilter.ComingSoon}>
+                        Coming soon
+                      </option>
+                    </select>
+                    <FontAwesomeIcon icon="angle-down"></FontAwesomeIcon>
+                  </div>
+                </div>
               )}
             </Section>
           </Banner>
