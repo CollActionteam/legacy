@@ -24,9 +24,6 @@ export const Banner = ({ children, photo, dots = false }) => (
       const image = data.allImageSharp.edges.find(
         edge => edge.node.fluid.originalName === photo
       );
-      if (!image) {
-        return null;
-      }
       return (
         <BackgroundImage fluid={image.node.fluid}>
           {dots ? <div className={styles.dots}></div> : null}
