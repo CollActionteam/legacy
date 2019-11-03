@@ -29,13 +29,6 @@ export const query = graphql`
         }
       }
     }
-    file(relativePath: { eq: "front-page.jpg" }) {
-      childImageSharp {
-        fluid(maxWidth: 1800) {
-          ...GatsbyImageSharpFluid_noBase64
-        }
-      }
-    }
     content: allMarkdownRemark(
       filter: { frontmatter: { type: { eq: "home" } } }
     ) {
