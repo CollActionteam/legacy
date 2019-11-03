@@ -1,11 +1,13 @@
-.banner {
-    background-repeat: no-repeat;
-    background-position: center;
+.backgroundImage {
     background-size: cover;
 }
 
 .dots {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
+    height: 100%;
     background: radial-gradient(rgba(255, 255, 255, 0.25) 3px, transparent 5px), rgba(147, 148, 148, 0);
     background-position: 0 0, 30px 30px;
     background-size: 60px 60px;
