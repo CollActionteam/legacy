@@ -9,6 +9,7 @@ import { Section } from "../../components/Section";
 import { ProjectStatusFilter } from "../../api/types";
 import styles from "./find.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Loader from "../../components/Loader";
 
 export default () => (
   <StaticQuery
@@ -48,7 +49,7 @@ export default () => (
           <Banner photo={photos.findprojectphoto} dots={true}>
             <Section>
               {loading ? (
-                <div>Loading dropdown...</div>
+                <Loader />
               ) : (
                 <div className={styles.filter}>
                   <span>Show me</span>

@@ -21,10 +21,11 @@ import {
   faTimes,
   faBars,
   faAngleDown,
+  faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 
-library.add(fab, faHeart, faEnvelope, faTimes, faBars, faAngleDown);
+library.add(fab, faHeart, faEnvelope, faTimes, faBars, faAngleDown, faSpinner);
 
 export default ({ children }) => (
   <StaticQuery

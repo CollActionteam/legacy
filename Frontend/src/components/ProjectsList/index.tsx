@@ -4,6 +4,7 @@ import Card from "../Card";
 import gql from "graphql-tag";
 import { Grid } from "@material-ui/core";
 import { ProjectStatusFilter } from "../../api/types";
+import Loader from "../Loader";
 
 export default ({
   categoryId,
@@ -26,7 +27,7 @@ export default ({
   const { data, loading, error } = query;
 
   if (loading) {
-    return <div>Loading projects...</div>;
+    return <Loader />;
   }
 
   if (error) {
