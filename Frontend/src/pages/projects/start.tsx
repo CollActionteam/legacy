@@ -26,6 +26,13 @@ export const query = graphql`
         }
       }
     }
+    file(relativePath: { eq: "happy-people.jpg" }) {
+      childImageSharp {
+        fluid(maxWidth: 1800) {
+          ...GatsbyImageSharpFluid_noBase64
+        }
+      }
+    }
     content: allMarkdownRemark(
       filter: { frontmatter: { type: { eq: "startproject" } } }
     ) {
@@ -57,7 +64,7 @@ export const query = graphql`
 const StartProject = ({ data }) => {
   const photos = data.photos.edges
     .map(e => e.node)
-    .find(n => n.name === "startprojectphotos");
+    .find(n => (n.name = "photos"));
 
   const intro = data.content.edges
     .map(e => e.node)

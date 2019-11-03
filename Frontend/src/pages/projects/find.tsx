@@ -15,16 +15,23 @@ export default () => (
   <StaticQuery
     query={graphql`
       query FindQuery {
-        file(relativePath: { eq: "find-projects.jpg" }) {
-          childImageSharp {
-            fluid(maxWidth: 1800) {
-              ...GatsbyImageSharpFluid_noBase64
+        photos: allFindprojectYaml(
+          filter: { name: { eq: "findprojectphotos" } }
+        ) {
+          edges {
+            node {
+              findprojectphoto
+              name
             }
           }
         }
       }
     `}
     render={staticData => {
+      const photos = staticData.photos.edges
+        .map(e => e.node)
+        .find(n => (n.name = "photos"));
+
       const [category, setCategory] = useState("");
       const [status, setStatus] = useState(ProjectStatusFilter.Active);
       const { data, loading } = useQuery(GET_CATEGORIES);
@@ -39,7 +46,7 @@ export default () => (
 
       return (
         <Layout>
-          <Banner photo={staticData.file.childImageSharp.fluid} dots={true}>
+          <Banner photo={photos.findprojectphoto} dots={true}>
             <Section>
               {loading ? (
                 <Loader />
