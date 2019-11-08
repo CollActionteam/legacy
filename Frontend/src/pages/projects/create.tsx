@@ -52,16 +52,14 @@ const CreateProject = () => {
   Object.assign(defaultTheme, {
     overrides: {
       MUIRichTextEditor: {
-        editor: {
-          borderBottom: "1px solid gray",
-          marginBottom: "var(--spacing-lg)",
-        },
-        toolbar: {
+        root: {
           border: "1px solid var(--c-grey-d10)",
-          borderRadius: "5px",
+          borderRadius: "4px",
+          marginTop: "-6px",
         },
         editorContainer: {
-          width: "100%",
+          padding: "var(--spacing-sm)",
+          width: "unset",
           height: "120px",
           overflow: "scroll",
         },
@@ -78,38 +76,40 @@ const CreateProject = () => {
             <span>Use pjg, png, gif or bmp. Max. 1MB</span>
           </div>
         </div>
-        <div className={styles.projectInfo}>
-          <Section className={`${styles.projectInfoBlock} ${styles.form}`}>
-            <FormControl>
-              <TextField
-                className={styles.formControl}
-                label="Project name"
-              ></TextField>
-            </FormControl>
-            <FormControl>
-              <TextField
-                className={styles.formControl}
-                label="Category"
-              ></TextField>
-            </FormControl>
-            <FormControl>
-              <TextField
-                className={styles.formControl}
-                label="Target"
-                type="number"
-              ></TextField>
-            </FormControl>
-            <FormControl>
-              <TextField
-                className={styles.formControl}
-                label="Proposal"
-                multiline
-                rows="4"
-                helperText={`e.g. "If X people commit to Y, we'll all do it together!"`}
-              ></TextField>
-            </FormControl>
-          </Section>
-        </div>
+        <Section className={`${styles.projectInfoBlock} ${styles.form}`}>
+          <FormControl>
+            <TextField
+              className={styles.formControl}
+              label="Project name"
+              variant="outlined"
+            ></TextField>
+          </FormControl>
+          <FormControl>
+            <TextField
+              className={styles.formControl}
+              label="Category"
+              variant="outlined"
+            ></TextField>
+          </FormControl>
+          <FormControl>
+            <TextField
+              className={styles.formControl}
+              label="Target"
+              type="number"
+              variant="outlined"
+            ></TextField>
+          </FormControl>
+          <FormControl>
+            <TextField
+              className={styles.formControl}
+              label="Proposal"
+              multiline
+              rows="4"
+              variant="outlined"
+              helperText={`e.g. "If X people commit to Y, we'll all do it together!"`}
+            ></TextField>
+          </FormControl>
+        </Section>
 
         <MuiThemeProvider theme={defaultTheme}>
           <Container>
@@ -134,6 +134,7 @@ const CreateProject = () => {
                         className={styles.formControl}
                         label="Sign up opens"
                         format="dd-MM-yyyy"
+                        inputVariant="outlined"
                         value={selectedDate}
                         onChange={handleDateChange}
                       ></KeyboardDatePicker>
@@ -142,6 +143,7 @@ const CreateProject = () => {
                       <KeyboardDatePicker
                         className={styles.formControl}
                         label="Sign up closes"
+                        inputVariant="outlined"
                         format="dd-MM-yyyy"
                         value={selectedDate}
                         onChange={handleDateChange}
@@ -152,6 +154,7 @@ const CreateProject = () => {
                     <TextField
                       className={styles.formControl}
                       label="Hashtags"
+                      variant="outlined"
                       helperText="No #, seperate tags with ; e.g. tag1;tag2"
                     ></TextField>
                   </FormControl>
@@ -181,6 +184,7 @@ const CreateProject = () => {
                     <TextField
                       className={styles.formControl}
                       label="Descriptive image"
+                      variant="outlined"
                       helperText="Will be replaced with file upload componentnpm"
                     ></TextField>
                   </FormControl>
@@ -188,6 +192,7 @@ const CreateProject = () => {
                     <TextField
                       className={styles.formControl}
                       label="YouTube Video Link"
+                      variant="outlined"
                       helperText="Descriptive video, e.g. http://www.youtube.com/watch?v=-wtIMTCHWuI"
                     ></TextField>
                   </FormControl>
