@@ -51,9 +51,16 @@
   }
 }
 
-.formLabel {
+.rteFormLabel {
+  // Faking a material-ui label here for the rich text editor
   font-size: 0.8rem !important;
   margin-top: var(--spacing-lg);
+  margin-left: var(--spacing);
+  padding: 0 var(--spacing-xs) !important;
+  background-color: white;
+  margin-bottom: -6px;
+  z-index: 1;
+  width: fit-content;
 }
 
 .formControl {

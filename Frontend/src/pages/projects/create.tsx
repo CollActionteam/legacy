@@ -53,9 +53,8 @@ const CreateProject = () => {
     overrides: {
       MUIRichTextEditor: {
         root: {
-          border: "1px solid var(--c-grey-d10)",
+          border: "1px solid var(--c-grey-d20)",
           borderRadius: "4px",
-          marginTop: "-6px",
         },
         editorContainer: {
           padding: "var(--spacing-sm)",
@@ -118,7 +117,7 @@ const CreateProject = () => {
                 <Section className={styles.form}>
                   <InputLabel
                     htmlFor="description"
-                    className={styles.formLabel}
+                    className={styles.rteFormLabel}
                   >
                     Short description
                   </InputLabel>
@@ -162,7 +161,7 @@ const CreateProject = () => {
               </Grid>
               <Grid item xs={12} md={7}>
                 <Section className={styles.form}>
-                  <InputLabel htmlFor="goal" className={styles.formLabel}>
+                  <InputLabel htmlFor="goal" className={styles.rteFormLabel}>
                     Goal/impact
                   </InputLabel>
                   <FormControl id="goal">
@@ -171,7 +170,7 @@ const CreateProject = () => {
                       controls={richTextControls}
                     ></MUIRichTextEditor>
                   </FormControl>
-                  <InputLabel htmlFor="comments" className={styles.formLabel}>
+                  <InputLabel htmlFor="comments" className={styles.rteFormLabel}>
                     Other comments
                   </InputLabel>
                   <FormControl id="comments">
