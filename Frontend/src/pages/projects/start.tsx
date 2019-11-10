@@ -57,7 +57,7 @@ export const query = graphql`
 const StartProject = ({ data }) => {
   const photos = data.photos.edges
     .map(e => e.node)
-    .find(n => n.name === "startprojectphotos");
+    .find(n => (n.name = "photos"));
 
   const intro = data.content.edges
     .map(e => e.node)
@@ -70,16 +70,14 @@ const StartProject = ({ data }) => {
       <Banner photo={photos.startprojectphoto}>
         <div className={styles.banner}></div>
       </Banner>
-      <div className={styles.intro}>
-        <Section className={styles.introBlock}>
-          <span dangerouslySetInnerHTML={{ __html: intro.html }}></span>
-          <div className={styles.cta}>
-            <SecondaryButton to="/projects/create">
-              Start a project
-            </SecondaryButton>
-          </div>
-        </Section>
-      </div>
+      <Section className={styles.introBlock}>
+        <span dangerouslySetInnerHTML={{ __html: intro.html }}></span>
+        <div className={styles.cta}>
+          <SecondaryButton to="/projects/create">
+            Start a project
+          </SecondaryButton>
+        </div>
+      </Section>
 
       <Section color="grey" className={styles.howItWorks}>
         <h1>How it works</h1>

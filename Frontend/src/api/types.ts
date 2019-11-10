@@ -104,6 +104,12 @@ export enum ProjectStatus {
   DELETED,
 }
 
+export enum ProjectStatusFilter {
+  Active = "isActive",
+  Closed = "isClosed",
+  ComingSoon = "isComingSoon",
+}
+
 export interface IProjectTag {
   project: IProject;
   projectId: number;

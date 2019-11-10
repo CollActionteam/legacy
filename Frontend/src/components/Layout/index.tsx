@@ -16,10 +16,16 @@ import Grid from "@material-ui/core/Grid";
 // FontAwesome
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fab } from "@fortawesome/free-brands-svg-icons";
-import { faHeart, faTimes, faBars } from "@fortawesome/free-solid-svg-icons";
+import {
+  faHeart,
+  faTimes,
+  faBars,
+  faAngleDown,
+  faSpinner,
+} from "@fortawesome/free-solid-svg-icons";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 
-library.add(fab, faHeart, faEnvelope, faTimes, faBars);
+library.add(fab, faHeart, faEnvelope, faTimes, faBars, faAngleDown, faSpinner);
 
 export default ({ children }) => (
   <StaticQuery

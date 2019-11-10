@@ -3,18 +3,31 @@ import { useQuery } from "@apollo/react-hooks";
 import Card from "../Card";
 import gql from "graphql-tag";
 import { Grid } from "@material-ui/core";
+import { ProjectStatusFilter } from "../../api/types";
+import Loader from "../Loader";
 
-export default ({ categoryId }: { categoryId: string }) => {
+export default ({
+  categoryId,
+  status,
+}: {
+  categoryId: string;
+  status: string;
+}) => {
   const query = categoryId
     ? useQuery(FIND_PROJECTS, {
-        variables: { categoryId },
+        variables: {
+          categoryId: categoryId,
+          isActive: `${status === ProjectStatusFilter.Active}`,
+          isClosed: `${status === ProjectStatusFilter.Closed}`,
+          isComingSoon: `${status === ProjectStatusFilter.ComingSoon}`,
+        },
       })
     : useQuery(GET_PROJECTS);
 
   const { data, loading, error } = query;
 
   if (loading) {
-    return <div>Loading projects...</div>;
+    return <Loader />;
   }
 
   if (error) {
@@ -62,14 +75,25 @@ const GET_PROJECTS = gql`
         count
       }
       status
+      url
     }
   }
 `;
 
 const FIND_PROJECTS = gql`
-  query FindProjects($categoryId: [String]) {
+  query FindProjects(
+    $categoryId: [String]
+    $isActive: String = "true"
+    $isClosed: String = "false"
+    $isComingSoon: String = "false"
+  ) {
     projects(
-      where: { path: "categoryId", comparison: equal, value: $categoryId }
+      where: [
+        { path: "categoryId", comparison: equal, value: $categoryId }
+        { path: "isActive", comparison: equal, value: [$isActive] }
+        { path: "isClosed", comparison: equal, value: [$isClosed] }
+        { path: "isComingSoon", comparison: equal, value: [$isComingSoon] }
+      ]
     ) {
       id
       name

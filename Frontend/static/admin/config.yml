@@ -77,27 +77,16 @@ collections:
       - { name: image, label: Image, widget: image }
       - { name: body, label: Content, widget: markdown }
 
-  - name: find_content
-    label: Find page content
-    folder: Frontend/src/content/find
-    create: false
-    delete: false
-    fields:
-      - { name: type, default: find, widget: hidden }
-      - { name: name, widget: string }
-      - { name: title, label: Title, widget: string }
-      - { name: body, label: Content, widget: markdown }
-
-  - name: find_settings
-    label: Find page settings
+  - name: findproject_settings
+    label: Find project page settings
     delete: false
     files:
       - label: Photos
         name: photos
-        file: Frontend/src/content/find/photos.yml
+        file: Frontend/src/content/findproject/photos.yml
         fields:
           - { name: name, default: photos, widget: hidden }
-          - { name: bannerphoto, label: Banner photo, widget: image }
+          - { name: findprojectphoto, label: Banner photo, widget: image }
 
   - name: about_content
     label: About page content

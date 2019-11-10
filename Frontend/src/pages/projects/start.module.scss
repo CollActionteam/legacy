@@ -4,29 +4,22 @@
   height: 450px;
 }
 
-.intro {
-  display: flex;
-  background-color: var(--c-grey);
-}
-
 .introBlock {
+  margin-top: -400px;
+  margin-left: auto;
+  margin-right: var(--spacing-xlg);
+
   background-color: var(--c-green);
   color: var(--c-white);
   padding: var(--spacing-xlg);
   border-radius: var(--border-radius);
   width: 450px;
-  margin-top: -400px;
-  margin-bottom: auto;
   
-  @include breakpoint-up(md) {
-    margin-right: calc(var(--spacing-xlg) * 2);
-    margin-left: auto;
-  }
-
   @include breakpoint-down(md) {
-    margin-right: var(--spacing);
-    margin-left: var(--spacing);
-    width: 100%;
+    margin-top: -350px;
+    margin-left: var(--spacing-xlg);
+    margin-right: var(--spacing-xlg);
+    width: unset;
   }
 
   h1 {
@@ -37,7 +30,6 @@
 .cta {
   text-align: center;
   margin-top: var(--spacing-xlg);
-  // margin-bottom: var(--spacing-xlg);
   
   a {
     display: inherit;

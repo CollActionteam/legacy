@@ -18,34 +18,28 @@
   text-align: center;
 
   @include breakpoint-down(md) {
-    margin-right: var(--spacing);
-    margin-left: var(--spacing);
+    margin-right: var(--spacing-xlg);
+    margin-left: var(--spacing-xlg);
     width: 100%;
   }
 }
 
-.projectInfo {
-  display: flex;
-}
-
 .projectInfoBlock {
+  margin-top: -400px;
+  margin-left: auto;
+  margin-right: var(--spacing-xlg);
+
   background-color: var(--c-white);
   box-shadow: var(--box-shadow-lg);
   padding: var(--spacing-xlg);
   border-radius: var(--border-radius);
   width: 450px;
-  margin-top: -300px;
-  margin-bottom: auto;
   
-  @include breakpoint-up(md) {
-    margin-right: calc(var(--spacing-xlg) * 2);
-    margin-left: auto;
-  }
-
   @include breakpoint-down(md) {
-    margin-right: var(--spacing);
-    margin-left: var(--spacing);
-    width: 100%;
+    margin-top: -250px;
+    margin-left: var(--spacing-xlg);
+    margin-right: var(--spacing-xlg);
+    width: unset;
   }
 }
 
@@ -57,9 +51,16 @@
   }
 }
 
-.formLabel {
+.rteFormLabel {
+  // Faking a material-ui label here for the rich text editor
   font-size: 0.8rem !important;
   margin-top: var(--spacing-lg);
+  margin-left: var(--spacing);
+  padding: 0 var(--spacing-xs) !important;
+  background-color: white;
+  margin-bottom: -6px;
+  z-index: 1;
+  width: fit-content;
 }
 
 .formControl {
