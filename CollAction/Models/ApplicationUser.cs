@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
@@ -10,6 +11,7 @@ namespace CollAction.Models
         public ApplicationUser() 
         {
             RepresentsNumberParticipants = 1;        
+            RegistrationDate = DateTime.UtcNow;
         }
 
         public ApplicationUser(string email) 
@@ -17,6 +19,7 @@ namespace CollAction.Models
         {
             UserName = email;
             Email = email;
+            RegistrationDate = DateTime.UtcNow;
         }
 
         [MaxLength(250)]
@@ -24,6 +27,8 @@ namespace CollAction.Models
 
         [MaxLength(250)]
         public string LastName { get; set; }
+
+        public DateTime RegistrationDate { get; set; }
 
         [NotMapped]
         public string FullName
