@@ -69,6 +69,8 @@ namespace CollAction.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean");
 
+                    b.Property<DateTime>("RegistrationDate");
+
                     b.Property<int>("RepresentsNumberParticipants")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
@@ -276,6 +278,9 @@ namespace CollAction.Migrations
 
                     b.Property<int>("ProjectId")
                         .HasColumnType("integer");
+
+                    b.Property<DateTime>("ParticipationDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<bool>("SubscribedToProjectEmails")
                         .HasColumnType("boolean");
