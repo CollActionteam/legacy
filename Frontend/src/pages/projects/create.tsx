@@ -3,24 +3,21 @@ import Layout from "../../components/Layout";
 import { graphql } from "gatsby";
 import styles from "./create.module.scss";
 import { Section } from "../../components/Section";
+import { Formik, Field, Form } from "formik";
+import * as Yup from "yup";
+import { TextField, Select } from "formik-material-ui";
 import {
-  Grid,
-  Container,
-  TextField,
   FormControl,
   InputLabel,
+  MenuItem,
+  Container,
+  Grid,
+  Button,
+  Theme,
   createMuiTheme,
   MuiThemeProvider,
-  Theme,
 } from "@material-ui/core";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
-import { Button } from "../../components/Button";
-import DateFnsUtils from "@date-io/date-fns";
 import MUIRichTextEditor from "mui-rte";
-import { stateToMarkdown } from "draft-js-export-markdown";
 
 export const query = graphql`
   query {
@@ -33,21 +30,15 @@ export const query = graphql`
 `;
 
 export default class CreateComponent extends React.Component {
-  state = {
-    name: "The project",
-    category: "",
-    number: 0,
-    proposal: "",
-    description: "",
-    startDate: new Date(),
-    endDate: new Date(),
-    hashtags: "",
-    goal: "",
-    comments: "",
-    imageDescription: "",
-    youtube: "",
-  };
   private defaultTheme: Theme;
+  private richTextControls = [
+    "bold",
+    "italic",
+    "underline",
+    "numberList",
+    "bulletList",
+    "link",
+  ];
 
   constructor(props: any) {
     super(props);
@@ -57,8 +48,7 @@ export default class CreateComponent extends React.Component {
       overrides: {
         MUIRichTextEditor: {
           root: {
-            border: "1px solid var(--c-grey-d20)",
-            borderRadius: "4px",
+            borderBottom: "1px solid var(--c-grey-d20)",
           },
           editorContainer: {
             padding: "var(--spacing-sm)",
@@ -71,216 +61,197 @@ export default class CreateComponent extends React.Component {
     });
   }
 
-  handleDateChange(date: Date | null) {
-    console.log(date);
-  }
-
-  handleInputChange = (event: any) => {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
-    this.setState({
-      [name]: value,
-    });
-    // tslint:disable-next-line: prettier
-  }
-
-  handleDescriptionChange = (event: any) => {
-    // TODO: can't update state here??
-    const value = stateToMarkdown(event.getCurrentContent());
-    // tslint:disable-next-line: prettier
-  }
-
-  handleGoalChange = (state: any) => {
-    const value = stateToMarkdown(state.getCurrentContent());
-    this.setState({
-      goal: value,
-    });
-    // tslint:disable-next-line: prettier
-  }
-
-  handleCommentsChange = (state: any) => {
-    const value = stateToMarkdown(state.getCurrentContent());
-    this.setState({
-      description: value,
-    });
-    // tslint:disable-next-line: prettier
-  }
-
-  submit = (event: any) => {
-    event.preventDefault();
-    console.log(this.state);
-    // tslint:disable-next-line: prettier
-  }
-
   render() {
-    const richTextControls = [
-      "bold",
-      "italic",
-      "underline",
-      "numberList",
-      "bulletList",
-      "link",
-    ];
-
     return (
       <Layout>
-        <form noValidate autoComplete="off" onSubmit={this.submit}>
-          <div className={styles.projectBanner}>
-            <div className={styles.uploadBanner}>
-              <h3>Drop banner image here</h3>
-              <span>Use pjg, png, gif or bmp. Max. 1MB</span>
+        <Formik
+          initialValues={{
+            projectName: "",
+            category: 1,
+            target: 0,
+            proposal: "",
+            description: "",
+            startDate: "",
+            endDate: "",
+            hashtags: "",
+            goal: "",
+            comments: "",
+            youtube: "",
+          }}
+          validationSchema={Yup.object({
+            // tslint:disable: prettier
+            projectName: Yup.string()
+              .required("You must provide a name for your project"),
+            target: Yup.number()
+              .required("Please choose the target number of participants")
+              .moreThan(0, "You can choose up to a maximum of one million participants as your target number")
+              .lessThan(1000001, "You can choose up to a maximum of one million participants as your target number"),
+            proposal: Yup.string()
+              .required("Describe your proposal")
+              .max(300, "Best keep your proposal short, no more then 300 characters"),
+            startDate: Yup.date()
+              .required("Please enter the date on which the campaign opens"),
+            endDate: Yup.date()
+              .required("Please enter the date until which people can sign up for the campaign"),
+            hashtags: Yup.string()
+              .max(30, "Please keep the number of hashtags civil, no more then 30 characters")
+              .matches(/^[a-zA-Z_0-9]+(;[a-zA-Z_0-9]+)*$/, "Don't use spaces or #, must contain a letter, can contain digits and underscores. Seperate multiple tags with a colon ';'"),
+            youtube: Yup.string()
+              .matches(/^(http|https):\/\/www.youtube.com\/watch\?v=((?:\w|-){11}?)$/, "Only YouTube links of the form http://www.youtube.com/watch?v= are accepted.")
+            // tslint:enable: prettier
+          })}
+          onSubmit={(values, { setSubmitting }) => {
+            setTimeout(() => {
+              console.log(values);
+              setSubmitting(false);
+            }, 400);
+          }}
+        >
+          <Form>
+            <div className={styles.projectBanner}>
+              <div className={styles.uploadBanner}>
+                <h3>Drop banner image here</h3>
+                <span>Use jpg, png, gif or bmp. Max. 1MB</span>
+              </div>
             </div>
-          </div>
-          <Section className={`${styles.projectInfoBlock} ${styles.form}`}>
-            <FormControl>
-              <TextField
-                className={styles.formControl}
-                name="name"
-                label="Project name"
-                variant="outlined"
-                value={this.state.name}
-                onChange={this.handleInputChange}
-              ></TextField>
-            </FormControl>
-            <FormControl>
-              <TextField
-                className={styles.formControl}
-                name="category"
-                label="Category"
-                variant="outlined"
-                value={this.state.category}
-                onChange={this.handleInputChange}
-              ></TextField>
-            </FormControl>
-            <FormControl>
-              <TextField
-                className={styles.formControl}
-                name="number"
-                label="Target"
-                type="number"
-                variant="outlined"
-                value={this.state.number}
-                onChange={this.handleInputChange}
-              ></TextField>
-            </FormControl>
-            <FormControl>
-              <TextField
-                className={styles.formControl}
-                name="proposal"
-                label="Proposal"
-                multiline
-                rows="4"
-                variant="outlined"
-                helperText={`e.g. "If X people commit to Y, we'll all do it together!"`}
-                value={this.state.proposal}
-                onChange={this.handleInputChange}
-              ></TextField>
-            </FormControl>
-          </Section>
 
-          <MuiThemeProvider theme={this.defaultTheme}>
+            <Section className={`${styles.projectInfoBlock} ${styles.form}`}>
+              <FormControl>
+                <Field
+                  name="projectName"
+                  label="Project name"
+                  component={TextField}
+                ></Field>
+              </FormControl>
+
+              <FormControl>
+                <InputLabel htmlFor="category">Category</InputLabel>
+                <Field name="category" component={Select}>
+                  <MenuItem value={1}>Environment</MenuItem>
+                  <MenuItem value={2}>Community</MenuItem>
+                  <MenuItem value={3}>Governance</MenuItem>
+                  <MenuItem value={4}>Health</MenuItem>
+                  <MenuItem value={5}>Consumption</MenuItem>
+                  <MenuItem value={6}>Well-being</MenuItem>
+                  <MenuItem value={7}>Other</MenuItem>
+                </Field>
+              </FormControl>
+
+              <FormControl>
+                <Field
+                  name="target"
+                  type="number"
+                  label="Target"
+                  component={TextField}
+                ></Field>
+              </FormControl>
+
+              <FormControl>
+                <Field
+                  name="proposal"
+                  label="Proposal"
+                  multiline
+                  rows="4"
+                  helperText={`e.g. "If X people commit to Y, we'll all do it together!"`}
+                  component={TextField}
+                ></Field>
+              </FormControl>
+            </Section>
+
+            <MuiThemeProvider theme={this.defaultTheme}>
+              <Container>
+                <Grid container>
+                  <Grid item xs={12} md={5}>
+                    <Section className={styles.form}>
+                      <InputLabel
+                        htmlFor="description"
+                        className={styles.rteLabel}
+                      >
+                        Short description
+                      </InputLabel>
+                      <FormControl id="description">
+                        <MUIRichTextEditor
+                          label="E.g. reduce plastic waste and save our oceans!"
+                          controls={this.richTextControls}
+                        ></MUIRichTextEditor>
+                      </FormControl>
+
+                      <FormControl>
+                        <Field
+                          name="startDate"
+                          type="date"
+                          label="Sign up opens"
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          component={TextField}
+                        ></Field>
+                      </FormControl>
+
+                      <FormControl>
+                        <Field
+                          name="endDate"
+                          type="date"
+                          label="Sign up closes"
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                          component={TextField}
+                        ></Field>
+                      </FormControl>
+
+                      <FormControl>
+                        <Field
+                          name="hashtags"
+                          label="Hashtags"
+                          helperText="No #, seperate tags with ; e.g. tag1;tag2"
+                          component={TextField}
+                        ></Field>
+                      </FormControl>
+                    </Section>
+                  </Grid>
+
+                  <Grid item xs={12} md={7}>
+                    <Section className={styles.form}>
+                      <InputLabel htmlFor="goal" className={styles.rteLabel}>
+                        Goal/impact
+                      </InputLabel>
+                      <FormControl id="goal">
+                        <MUIRichTextEditor
+                          label="What is the problem you are trying to solve?"
+                          controls={this.richTextControls}
+                        ></MUIRichTextEditor>
+                      </FormControl>
+
+                      <InputLabel
+                        htmlFor="comments"
+                        className={styles.rteLabel}
+                      >
+                        Other comments
+                      </InputLabel>
+                      <FormControl id="comments">
+                        <MUIRichTextEditor
+                          label="E.g. background, process, FAQs, about the initiator"
+                          controls={this.richTextControls}
+                        ></MUIRichTextEditor>
+                      </FormControl>
+
+                      <FormControl>
+                        <Field
+                          name="youtube"
+                          label="YouTube Video Link"
+                          helperText="Descriptive video, e.g. http://www.youtube.com/watch?v=-wtIMTCHWuI"
+                          component={TextField}
+                        ></Field>
+                      </FormControl>
+                    </Section>
+                  </Grid>
+                </Grid>
+              </Container>
+            </MuiThemeProvider>
+
             <Container>
               <Grid container>
-                <Grid item xs={12} md={5}>
-                  <Section className={styles.form}>
-                    <InputLabel
-                      htmlFor="description"
-                      className={styles.rteFormLabel}
-                    >
-                      Short description
-                    </InputLabel>
-                    <FormControl id="description">
-                      <MUIRichTextEditor
-                        label="E.g. reduce plastic waste and save our oceans!"
-                        controls={richTextControls}
-                        value={this.state.description}
-                        onChange={this.handleDescriptionChange}
-                      ></MUIRichTextEditor>
-                    </FormControl>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                      <FormControl>
-                        <KeyboardDatePicker
-                          className={styles.formControl}
-                          label="Sign up opens"
-                          format="dd-MM-yyyy"
-                          inputVariant="outlined"
-                          value={this.state.startDate}
-                          onChange={this.handleDateChange}
-                        ></KeyboardDatePicker>
-                      </FormControl>
-                      <FormControl>
-                        <KeyboardDatePicker
-                          className={styles.formControl}
-                          label="Sign up closes"
-                          inputVariant="outlined"
-                          format="dd-MM-yyyy"
-                          value={this.state.endDate}
-                          onChange={this.handleDateChange}
-                        ></KeyboardDatePicker>
-                      </FormControl>
-                    </MuiPickersUtilsProvider>
-                    <FormControl>
-                      <TextField
-                        className={styles.formControl}
-                        label="Hashtags"
-                        variant="outlined"
-                        helperText="No #, seperate tags with ; e.g. tag1;tag2"
-                        value={this.state.hashtags}
-                        onChange={this.handleInputChange}
-                      ></TextField>
-                    </FormControl>
-                  </Section>
-                </Grid>
-                <Grid item xs={12} md={7}>
-                  <Section className={styles.form}>
-                    <InputLabel htmlFor="goal" className={styles.rteFormLabel}>
-                      Goal/impact
-                    </InputLabel>
-                    <FormControl id="goal">
-                      <MUIRichTextEditor
-                        label="What is the problem you are trying to solve?"
-                        controls={richTextControls}
-                        value={this.state.goal}
-                        onChange={this.handleGoalChange}
-                      ></MUIRichTextEditor>
-                    </FormControl>
-                    <InputLabel
-                      htmlFor="comments"
-                      className={styles.rteFormLabel}
-                    >
-                      Other comments
-                    </InputLabel>
-                    <FormControl id="comments">
-                      <MUIRichTextEditor
-                        label="E.g. background, process, FAQs, about the initiator"
-                        controls={richTextControls}
-                        value={this.state.comments}
-                        onChange={this.handleCommentsChange}
-                      ></MUIRichTextEditor>
-                    </FormControl>
-                    <FormControl>
-                      <TextField
-                        className={styles.formControl}
-                        label="Descriptive image"
-                        variant="outlined"
-                        helperText="Will be replaced with file upload componentnpm"
-                        value={this.state.imageDescription}
-                        onChange={this.handleInputChange}
-                      ></TextField>
-                    </FormControl>
-                    <FormControl>
-                      <TextField
-                        className={styles.formControl}
-                        label="YouTube Video Link"
-                        variant="outlined"
-                        helperText="Descriptive video, e.g. http://www.youtube.com/watch?v=-wtIMTCHWuI"
-                        value={this.state.youtube}
-                        onChange={this.handleInputChange}
-                      ></TextField>
-                    </FormControl>
-                  </Section>
-                </Grid>
                 <Grid item xs={12}>
                   <Section className={styles.submitProject}>
                     <Button type="submit">Submit</Button>
@@ -288,8 +259,8 @@ export default class CreateComponent extends React.Component {
                 </Grid>
               </Grid>
             </Container>
-          </MuiThemeProvider>
-        </form>
+          </Form>
+        </Formik>
       </Layout>
     );
   }

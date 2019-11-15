@@ -44,23 +44,21 @@
 }
 
 .form {
+  // ui-material creates an extra div around the form controls
   & > div {
-    // ui-material creates an extra div around the form controls
     display: flex;
     flex-direction: column;
+
+    & > div {
+      margin: var(--spacing-lg) 0 var(--spacing-lg) 0;
+    }
   }
 }
 
-.rteFormLabel {
-  // Faking a material-ui label here for the rich text editor
+.rteLabel {
+  // Fake a ui-material label
   font-size: 0.8rem !important;
-  margin-top: var(--spacing-lg);
-  margin-left: var(--spacing);
-  padding: 0 var(--spacing-xs) !important;
-  background-color: white;
-  margin-bottom: -6px;
-  z-index: 1;
-  width: fit-content;
+  margin-bottom: calc(var(--spacing-lg) * -1)
 }
 
 .formControl {
