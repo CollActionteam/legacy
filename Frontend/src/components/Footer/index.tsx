@@ -70,9 +70,9 @@ export default () => (
           <div className={styles.description}>
             Any questions, comments, or would you like to work together?
             Awesome! Email us at{" "}
-            <Link to="mailto:collactionteam@gmail.com">
+            <a href="mailto:collactionteam@gmail.com">
               collactionteam@gmail.com
-            </Link>
+            </a>
             .<br />
             Would you like to get an occasional update on CollAction and
             crowdacting? Sign up for our newsletter (to your right)! We will be
