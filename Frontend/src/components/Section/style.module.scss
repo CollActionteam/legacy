@@ -4,6 +4,7 @@ section {
   position: relative;
   padding-top: calc(var(--spacing-lg) * 2); //@TODO: replace with -hg
   padding-bottom: calc(var(--spacing-xlg) * 2); //@TODO: replace with -hg
+  width: 100%;
 
   &::after {
     position: absolute;
@@ -24,15 +25,7 @@ section {
   h5,
   h6,
   h7 {
-    line-height: var(--line-height);
-
-    &:not(:last-child) {
-      margin-bottom: var(--spacing-lg);
-    }
-  }
-
-  p {
-    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-lg);
   }
 
   ul,
@@ -71,11 +64,13 @@ section {
 // }
 
 .title {
-  font-weight: bold; //@TODO: replace with font-weight variable
+  font-weight: var(--font-weight-bold);
   margin-bottom: var(--spacing-lg);
 }
 
 .indent {
+  width: auto;
+
   @include breakpoint-up(md) {
     padding-left: calc(var(--spacing-xlg) * 7);
   }

@@ -22,10 +22,20 @@ import {
   faBars,
   faAngleDown,
   faSpinner,
+  faClock,
 } from "@fortawesome/free-solid-svg-icons";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 
-library.add(fab, faHeart, faEnvelope, faTimes, faBars, faAngleDown, faSpinner);
+library.add(
+  fab,
+  faHeart,
+  faEnvelope,
+  faTimes,
+  faBars,
+  faAngleDown,
+  faSpinner,
+  faClock
+);
 
 export default ({ children }) => (
   <StaticQuery
@@ -42,7 +52,7 @@ export default ({ children }) => (
         }
       }
     `}
-    render={data => (
+    render={(data) => (
       <React.Fragment>
         <Helmet
           title={data.site.siteMetadata.title}
