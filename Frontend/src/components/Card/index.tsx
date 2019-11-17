@@ -2,8 +2,11 @@ import React from "react";
 import styles from "./style.module.scss";
 import { IProject } from "../../api/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ProgressRing from "../ProgressRing";
 
 export default ({ project }: { project: IProject }) => {
+  const percentage = project.participantCounts ? Math.round(project.participantCounts.count / project.target) : 0;
+
   return (
     <a href={project.url} className={styles.card}>
       <figure className={styles.image}>
@@ -33,14 +36,7 @@ export default ({ project }: { project: IProject }) => {
         </div>
         <div className={styles.stats}>
           <div className={styles.percentage}>
-            {project.participantCounts ? (
-              <span>
-                {Math.round(project.participantCounts.count) / project.target}
-              </span>
-            ) : (
-              <span>0</span>
-            )}
-            <span>%</span>
+            <ProgressRing progress={percentage} />
           </div>
           <div>
             <div className={styles.count}>

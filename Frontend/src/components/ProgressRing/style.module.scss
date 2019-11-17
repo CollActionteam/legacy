@@ -1,0 +1,13 @@
+.progressCircle {
+    stroke: var(--c-green);
+    stroke-linecap: round;
+    fill: transparent;
+    transition: stroke-dashoffset 0.35s;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+}
+
+.backgroundCircle {
+    stroke: var(--c-grey);
+    fill: transparent;
+}
