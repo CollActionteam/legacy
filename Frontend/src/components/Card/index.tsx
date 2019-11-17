@@ -5,25 +5,27 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ProgressRing from "../ProgressRing";
 
 export default ({ project }: { project: IProject }) => {
-  const percentage = project.participantCounts ? Math.round(project.participantCounts.count / project.target) : 0;
+  const percentage = project.participantCounts
+    ? Math.round(project.participantCounts.count / project.target)
+    : 0;
 
   return (
     <a href={project.url} className={styles.card}>
       <figure className={styles.image}>
-        <img
-          src="https://collaction-production.s3.eu-central-1.amazonaws.com/62bb2ba9-32f1-492e-99cb-95e53f71aa4a.png"
-          alt={project.name}
-        />
-      </figure>
-      {project.descriptiveImage && (
-        <figure className={styles.image}>
+        {project.descriptiveImage ? (
           <img src={project.descriptiveImage.filepath} alt={project.name} />
-        </figure>
-      )}
+        ) : (
+          <img
+            src={`https://via.placeholder.com/370x270.png/d8d8d8/ffffff/?text=${project.name}`}
+            alt={project.name}
+          />
+        )}
+      </figure>
       <div className={styles.content}>
         <div className={styles.statusLabel}>
           {project.isActive ? <span>Signup open</span> : null}
           {project.isComingSoon ? <span>Coming soon</span> : null}
+          {project.isClosed ? <span>Signup closed</span> : null}
         </div>
         <h2 className={styles.title}>
           Carbon Neutral Travel 2019
