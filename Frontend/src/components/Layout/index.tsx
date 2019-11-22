@@ -52,7 +52,7 @@ export default ({ children }) => (
         }
       }
     `}
-    render={(data) => (
+    render={data => (
       <React.Fragment>
         <Helmet
           title={data.site.siteMetadata.title}

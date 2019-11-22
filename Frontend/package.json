@@ -22,7 +22,7 @@
     "apollo-upload-client": "^11.0.0",
     "babel-plugin-styled-components": "^1.10.6",
     "date-fns": "^2.0.0-beta.5",
-    "draft-js-export-markdown": "^1.4.0",
+    "draft-js-export-html": "^1.4.1",
     "formik": "^2.0.4",
     "formik-material-ui": "^1.0.0",
     "gatsby": "^2.13.50",
