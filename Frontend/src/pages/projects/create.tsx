@@ -3,7 +3,7 @@ import Layout from "../../components/Layout";
 import { graphql } from "gatsby";
 import styles from "./create.module.scss";
 import { Section } from "../../components/Section";
-import { Formik, Field, Form } from "formik";
+import { Formik, Field, Form, FormikProps } from "formik";
 import * as Yup from "yup";
 import { TextField, Select } from "formik-material-ui";
 import {
@@ -29,6 +29,17 @@ export const query = graphql`
 export default class CreateComponent extends React.Component {
   constructor(props: any) {
     super(props);
+  }
+
+  async validate(props: FormikProps<any>) {
+    const errors = Object.keys(await props.validateForm());
+
+    if (errors.length) {
+      const el = document.getElementsByName(errors[0])[0];
+      if (el) {
+        el.scrollIntoView();
+      }
+    }
   }
 
   render() {
@@ -220,7 +231,13 @@ export default class CreateComponent extends React.Component {
                 <Grid container>
                   <Grid item xs={12}>
                     <Section className={styles.submitProject}>
-                      <Button type="submit">Submit</Button>
+                      <Button
+                        type="submit"
+                        disabled={props.isSubmitting}
+                        onClick={() => this.validate(props)}
+                      >
+                        Submit
+                      </Button>
                     </Section>
                   </Grid>
                 </Grid>
