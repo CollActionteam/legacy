@@ -27,8 +27,30 @@ export const query = graphql`
 `;
 
 export default class CreateComponent extends React.Component {
+  minStartDate: Date;
+  maxStartDate: Date;
+
   constructor(props: any) {
     super(props);
+
+    this.minStartDate = new Date();
+    this.maxStartDate = new Date(this.minStartDate);
+    this.maxStartDate.setMonth(new Date().getMonth() + 12);
+  }
+
+  setEndDateValidation(startDate, schema) {
+    if (!startDate) {
+      return;
+    }
+
+    const minDate = new Date(startDate) as Date;
+    minDate.setDate(minDate.getDate() + 1);
+    const maxDate = new Date(startDate);
+    maxDate.setMonth(maxDate.getMonth() + 12);
+
+    return schema
+      .min(minDate, "Please ensure your sign up ends after it starts :-)")
+      .max(maxDate, "The deadline must be within a year of the start date");
   }
 
   async validate(props: FormikProps<any>) {
@@ -78,9 +100,12 @@ export default class CreateComponent extends React.Component {
               .required("Give a succinct description of the issues your project is designed to address")
               .max(10000, "Please use no more then 10.000 characters"),
             startDate: Yup.date()
-              .required("Please enter the date on which the campaign opens"),
+              .required("Please enter the date on which the campaign opens")
+              .min(this.minStartDate, "Please ensure your sign up starts somewhere in the near future")
+              .max(this.maxStartDate, "Please ensure your sign up starts within the next 12 months"),
             endDate: Yup.date()
-              .required("Please enter the date until which people can sign up for the campaign"),
+              .required("Please enter the date until which people can sign up for the campaign")
+              .when("startDate", this.setEndDateValidation),
             hashtags: Yup.string()
               .max(30, "Please keep the number of hashtags civil, no more then 30 characters")
               .matches(/^[a-zA-Z_0-9]+(;[a-zA-Z_0-9]+)*$/, "Don't use spaces or #, must contain a letter, can contain digits and underscores. Seperate multiple tags with a colon ';'"),
