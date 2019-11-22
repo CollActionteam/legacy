@@ -16,6 +16,7 @@ export interface IRichTextEditorProps {
   name: string;
   label: string;
   hint?: string;
+  height?: string;
 
   formik: FormikProps<any>;
 }
@@ -46,7 +47,7 @@ export class RichTextEditorFormControl extends React.Component<
           editorContainer: {
             padding: "var(--spacing-sm)",
             width: "unset",
-            height: "120px",
+            height: this.props.height || "calc(var(--spacing) * 20)",
             overflow: "scroll",
           },
         },
@@ -54,7 +55,12 @@ export class RichTextEditorFormControl extends React.Component<
     });
   }
 
-  hasError = () => this.props.formik.errors[this.props.name] !== undefined;
+  hasError() {
+    return (
+      this.props.formik.touched[this.props.name] !== undefined &&
+      this.props.formik.errors[this.props.name] !== undefined
+    );
+  }
 
   render() {
     return (
