@@ -55,12 +55,6 @@
   }
 }
 
-.rteLabel {
-  // Fake a ui-material label
-  font-size: 0.8rem !important;
-  margin-bottom: calc(var(--spacing-lg) * -1)
-}
-
 .formControl {
   margin: var(--spacing-lg) 0 var(--spacing-lg) 0 !important;
 }
