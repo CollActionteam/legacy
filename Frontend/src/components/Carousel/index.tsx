@@ -1,11 +1,14 @@
-import React, { Fragment } from "react";
+import React from "react";
 import Slider from "react-slick";
-import "./style.module.scss";
 import { Grid, Container } from "@material-ui/core";
 import Card from "../Card";
 import { useQuery } from "react-apollo";
 import Loader from "../Loader";
 import gql from "graphql-tag";
+
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import "./style.module.scss";
 
 export default () => {
   const settings = {

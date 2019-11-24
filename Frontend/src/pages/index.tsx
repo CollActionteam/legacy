@@ -1,10 +1,6 @@
 import React from "react";
 import Layout from "../components/Layout";
-import { Banner } from "../components/Banner";
-
 import { graphql, StaticQuery } from "gatsby";
-import { useQuery } from "react-apollo";
-import gql from "graphql-tag";
 import { CallToAction } from "../components/CallToAction";
 import { Hidden } from "@material-ui/core";
 
