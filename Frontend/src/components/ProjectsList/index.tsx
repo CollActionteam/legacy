@@ -7,8 +7,8 @@ import { ProjectStatusFilter } from "../../api/types";
 import Loader from "../Loader";
 
 export default ({
-  categoryId,
-  status,
+  categoryId = "",
+  status = ProjectStatusFilter.Active,
 }: {
   categoryId: string;
   status: string;

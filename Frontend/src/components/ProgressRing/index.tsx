@@ -12,7 +12,6 @@ export default ({ progress = 0, radius = 30, stroke = 4 }) => {
         className={styles.backgroundCircle}
         strokeWidth={stroke}
         strokeDasharray={circumference + " " + circumference}
-        stroke-width={stroke}
         r={normalizedRadius}
         cx={radius}
         cy={radius}
@@ -22,7 +21,6 @@ export default ({ progress = 0, radius = 30, stroke = 4 }) => {
         strokeWidth={stroke}
         strokeDasharray={circumference + " " + circumference}
         style={{ strokeDashoffset }}
-        stroke-width={stroke}
         r={normalizedRadius}
         cx={radius}
         cy={radius}
@@ -30,9 +28,9 @@ export default ({ progress = 0, radius = 30, stroke = 4 }) => {
       <text
         x="50%"
         y="50%"
-        text-anchor="middle"
+        textAnchor="middle"
         dy=".2rem"
-        font-size="var(--font-size-sm)"
+        fontSize="var(--font-size-sm)"
       >
         {progress}%
       </text>
