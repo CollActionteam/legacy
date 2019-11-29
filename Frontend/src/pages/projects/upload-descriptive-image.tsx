@@ -5,7 +5,7 @@ import DropZone from "react-dropzone";
 
 import BrowserSizeImage from "./BrowserSize.png";
 import styles from "./create.module.scss";
-import { Grid, Container, FormControl, TextField } from "@material-ui/core";
+import { Grid, Container, FormControl, TextField, Hidden } from "@material-ui/core";
 import { Field } from "formik";
 import { Section } from "../../components/Section";
 
@@ -61,23 +61,21 @@ export default class UploadDescriptiveImage extends UploadImage<
 
   renderPreviewControl() {
     return (
-      <Grid item xs={12} md={5}>
-        <Container>
-          {this.state.preview && (
-            <div className={styles.descriptiveImageDescription}>
-              <p>The image description will appear here</p>
-              <img src={BrowserSizeImage}></img>
-              <p>
-                Resize your browser or rotate your device to see if the image
-                suitable.
-              </p>
-              <TertiaryButton onClick={this.resetImage}>
-                Remove banner
-              </TertiaryButton>
-            </div>
-          )}
-        </Container>
-      </Grid>
+      <>
+        {this.state.preview && (
+          <div className={styles.descriptiveImageDescription}>
+            <p>The image description will appear here</p>
+            <img src={BrowserSizeImage}></img>
+            <p>
+              Resize your browser or rotate your device to see if the image
+              suitable.
+            </p>
+            <TertiaryButton onClick={this.resetImage}>
+              Remove banner
+            </TertiaryButton>
+          </div>
+        )}
+      </>
     );
   }
 
@@ -85,7 +83,12 @@ export default class UploadDescriptiveImage extends UploadImage<
     return (
       <>
         <Grid container>
-          {this.renderPreviewControl()}
+          <Grid item xs={12} md={5}>
+            <Container>
+              <Hidden smDown>{this.renderPreviewControl()}</Hidden>
+            </Container>
+          </Grid>
+
           <Grid item xs={12} md={7}>
             <Container>
               <div className={styles.uploadDescriptiveImage}>
@@ -131,43 +134,25 @@ export default class UploadDescriptiveImage extends UploadImage<
             </Container>
           </Grid>
         </Grid>
-        <Grid container>
-          <Grid item xs={12} md={5}></Grid>
-          <Grid item xs={12} md={7}>
-            <Section className={styles.form}>
-              <FormControl>
-                <Field
-                  name="imageDescription"
-                  label="Image description"
-                  helperText="A caption for your image"
-                  component={TextField}
-                ></Field>
-              </FormControl>
-            </Section>
+        {this.state.preview && (
+          <Grid container>
+            <Grid item xs={12} md={5}></Grid>
+            <Grid item xs={12} md={7}>
+              <Section className={styles.form}>
+                <Hidden mdUp>{this.renderPreviewControl()}</Hidden>
+                <FormControl>
+                  <Field
+                    name="imageDescription"
+                    label="Image description"
+                    helperText="A caption for your image"
+                    component={TextField}
+                  ></Field>
+                </FormControl>
+              </Section>
+            </Grid>
           </Grid>
-        </Grid>
+        )}
       </>
     );
   }
 }
-
-// {this.state.preview && (
-//   <Grid item xs={12} md={7}>
-//     <img
-//       className={styles.descriptiveImagePreview}
-//       src={this.state.image}
-//     ></img>
-//     <Section>
-//       <FormControl>
-//         <Field
-//           name="imageDescription"
-//           label="Image description"
-//           helperText="Text to accompany your image"
-//           component={TextField}
-//         ></Field>
-//       </FormControl>
-//     </Section>
-//     )}
-//   </Grid>
-// )}
-
