@@ -12,9 +12,11 @@
 
 .uploadBanner {
   background-color: var(--c-white);
-  padding: var(--spacing-xlg);
+  padding: var(--spacing);
   border-radius: var(--border-radius);
   margin: var(--spacing) auto auto calc(var(--spacing) * 2);
+  color: var(--c-black);
+  font-size: var(--font-size-sm);
   text-align: center;
 
   @include breakpoint-down(md) {
@@ -22,6 +24,22 @@
     margin-left: var(--spacing-xlg);
     width: 100%;
   }
+}
+
+.dropzone {
+  border: 1px dashed var(--c-grey-d10);
+  border-radius: var(--border-radius);
+  padding: var(--spacing) !important;
+}
+
+.bannerPreview {
+  img {
+    height: var(--spacing-xlg);
+  }
+}
+
+.error {
+  color: var(--c-red);
 }
 
 .projectInfoBlock {

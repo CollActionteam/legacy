@@ -15,6 +15,7 @@ import {
 } from "@material-ui/core";
 import { RichTextEditorFormControl } from "../../components/RichTextEditorFormContol";
 import { Button } from "../../components/Button";
+import UploadBanner from "./upload-banner";
 
 export const query = graphql`
   query {
@@ -127,12 +128,7 @@ export default class CreateComponent extends React.Component {
         >
           {props => (
             <Form>
-              <div className={styles.projectBanner}>
-                <div className={styles.uploadBanner}>
-                  <h3>Drop banner image here</h3>
-                  <span>Use jpg, png, gif or bmp. Max. 1MB</span>
-                </div>
-              </div>
+              <UploadBanner></UploadBanner>
 
               <Section className={`${styles.projectInfoBlock} ${styles.form}`}>
                 <FormControl>
