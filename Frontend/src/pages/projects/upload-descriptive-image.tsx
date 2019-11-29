@@ -5,7 +5,13 @@ import DropZone from "react-dropzone";
 
 import BrowserSizeImage from "./BrowserSize.png";
 import styles from "./create.module.scss";
-import { Grid, Container, FormControl, TextField, Hidden } from "@material-ui/core";
+import {
+  Grid,
+  Container,
+  FormControl,
+  TextField,
+  Hidden,
+} from "@material-ui/core";
 import { Field } from "formik";
 import { Section } from "../../components/Section";
 
