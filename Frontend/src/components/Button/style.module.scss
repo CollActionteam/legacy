@@ -35,11 +35,11 @@
 
 .tertiary {
     @include button();
-    background-color: var(--c-orange);
+    background-color: var(--c-grey-d20);
 
     &:hover,
     &:focus {
-        background-color: var(--c-orange-d10);
+        background-color: var(--c-grey-d10);
     }
 }
 

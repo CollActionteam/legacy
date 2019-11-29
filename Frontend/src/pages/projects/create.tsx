@@ -6,16 +6,11 @@ import { Section } from "../../components/Section";
 import { Formik, Field, Form, FormikProps } from "formik";
 import * as Yup from "yup";
 import { TextField, Select } from "formik-material-ui";
-import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Container,
-  Grid,
-} from "@material-ui/core";
+import { FormControl, InputLabel, MenuItem, Grid } from "@material-ui/core";
 import { RichTextEditorFormControl } from "../../components/RichTextEditorFormContol";
 import { Button } from "../../components/Button";
 import UploadBanner from "./upload-banner";
+import UploadDescriptiveImage from "./upload-descriptive-image";
 
 export const query = graphql`
   query {
@@ -173,7 +168,7 @@ export default class CreateComponent extends React.Component {
                 </FormControl>
               </Section>
 
-              <Container>
+              <Section>
                 <Grid container>
                   <Grid item xs={12} md={5}>
                     <Section className={styles.form}>
@@ -181,6 +176,7 @@ export default class CreateComponent extends React.Component {
                         name="description"
                         label="Short description"
                         hint="E.g. reduce plastic waste and save our oceans!"
+                        height="calc(var(--spacing) * 10.7)"
                         formik={props}
                       ></RichTextEditorFormControl>
 
@@ -234,7 +230,16 @@ export default class CreateComponent extends React.Component {
                         hint="E.g. background, process, FAQs, about the initiator"
                         formik={props}
                       ></RichTextEditorFormControl>
+                    </Section>
+                  </Grid>
+                </Grid>
 
+                <UploadDescriptiveImage></UploadDescriptiveImage>
+
+                <Grid container>
+                  <Grid item xs={12} md={5}></Grid>
+                  <Grid item xs={12} md={7}>
+                    <Section className={styles.form}>
                       <FormControl>
                         <Field
                           name="youtube"
@@ -246,9 +251,7 @@ export default class CreateComponent extends React.Component {
                     </Section>
                   </Grid>
                 </Grid>
-              </Container>
 
-              <Container>
                 <Grid container>
                   <Grid item xs={12}>
                     <Section className={styles.submitProject}>
@@ -262,7 +265,7 @@ export default class CreateComponent extends React.Component {
                     </Section>
                   </Grid>
                 </Grid>
-              </Container>
+              </Section>
             </Form>
           )}
         </Formik>

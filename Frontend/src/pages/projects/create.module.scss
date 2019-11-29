@@ -26,16 +26,43 @@
   }
 }
 
-.dropzone {
-  border: 1px dashed var(--c-grey-d10);
-  border-radius: var(--border-radius);
-  padding: var(--spacing) !important;
-}
-
 .bannerPreview {
   img {
     height: var(--spacing-xlg);
   }
+
+  button {
+    margin-top: var(--spacing-lg);
+  }
+}
+
+.uploadDescriptiveImage {
+  color: var(--c-black);
+  font-size: var(--font-size-sm);
+  text-align: center;
+}
+
+.descriptiveImageDescription {
+  color: var(--c-black);
+  font-size: var(--font-size-sm);
+  text-align: center;
+  background-color: var(--c-grey);
+  border-radius: var(--border-radius);
+  padding: var(--spacing);
+
+  img {
+    height: var(--spacing-xlg);
+  }
+}
+
+.descriptiveImagePreview {
+  width: 100%;
+}
+
+.dropzone {
+  border: 1px dashed var(--c-grey-d10);
+  border-radius: var(--border-radius);
+  padding: var(--spacing) !important;
 }
 
 .error {

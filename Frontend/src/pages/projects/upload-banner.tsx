@@ -1,7 +1,7 @@
 import * as React from "react";
 import DropZone from "react-dropzone";
 import UploadImage, { IUploadImageState } from "../../components/UploadImage";
-import { SecondaryButton } from "../../components/Button";
+import { TertiaryButton } from "../../components/Button";
 
 import BrowserSizeImage from "./BrowserSize.png";
 import styles from "./create.module.scss";
@@ -39,16 +39,6 @@ export default class UploadBanner extends UploadImage<{}, IUploadImageState> {
     };
   }
 
-  uploadCardStyle() {
-    if (this.state.image === null) {
-      return {};
-    }
-
-    return {
-      opacity: 0.8,
-    };
-  }
-
   createSrcImage(): string {
     return this.state.image as string;
   }
@@ -56,7 +46,10 @@ export default class UploadBanner extends UploadImage<{}, IUploadImageState> {
   render() {
     return (
       <div className={styles.projectBanner} style={this.createCssImage()}>
-        <div className={styles.uploadBanner} style={this.uploadCardStyle()}>
+        <div
+          className={styles.uploadBanner}
+          style={this.state.image ? { opacity: 0.8 } : {}}
+        >
           {!this.state.preview && (
             <DropZone
               accept="image/jpeg, image/png, image/gif, image/bmp"
@@ -82,7 +75,7 @@ export default class UploadBanner extends UploadImage<{}, IUploadImageState> {
                     <p className={this.state.invalid ? styles.error : ""}>
                       Use jpg, png, gif or bmp. Max. 1 MB.
                     </p>
-                    <input {...getInputProps()} />
+                    <input {...getInputProps()}></input>
                   </div>
                 );
               }}
@@ -96,9 +89,9 @@ export default class UploadBanner extends UploadImage<{}, IUploadImageState> {
                 Resize your browser or rotate your device to see if the image is
                 suitable.
               </p>
-              <SecondaryButton onClick={this.resetImage}>
+              <TertiaryButton onClick={this.resetImage}>
                 Remove banner
-              </SecondaryButton>
+              </TertiaryButton>
             </div>
           )}
         </div>
