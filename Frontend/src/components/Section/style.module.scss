@@ -78,14 +78,9 @@ section {
 
 .green {
   color: var(--c-white);
-
-  &::after {
-    background-color: var(--c-green);
-  }
+  background-color: var(--c-green);
 }
 
 .grey {
-  &::after {
-    background-color: var(--c-grey);
-  }
+  background-color: var(--c-grey);
 }
