@@ -1,5 +1,8 @@
 import * as React from "react";
-import UploadImage, { IUploadImageState } from "../../components/UploadImage";
+import UploadImage, {
+  IUploadImageState,
+  IUploadImageProps,
+} from "../../components/UploadImage";
 import { TertiaryButton } from "../../components/Button";
 import DropZone from "react-dropzone";
 
@@ -12,17 +15,23 @@ import {
   TextField,
   Hidden,
 } from "@material-ui/core";
-import { Field } from "formik";
 import { Section } from "../../components/Section";
 
+interface IUploadDescriptiveImageState extends IUploadImageState {
+  description: string;
+}
+
 export default class UploadDescriptiveImage extends UploadImage<
-  {},
-  IUploadImageState
+  IUploadImageProps,
+  IUploadDescriptiveImageState
 > {
   constructor(props: {}) {
     super(props);
 
-    this.state = super.createInitialState();
+    this.state = {
+      ...super.createInitialState(),
+      description: "",
+    };
 
     this.onDrop = this.onDrop.bind(this);
     this.onRejected = this.onRejected.bind(this);
@@ -30,8 +39,10 @@ export default class UploadDescriptiveImage extends UploadImage<
     this.createSrcImage = this.createSrcImage.bind(this);
   }
 
-  onDrop(accepted: File[], rejected: File[], event: any) {
-    this.loadImage(accepted, rejected, event);
+  onDrop(accepted: File[], _rejected: File[], _event: any) {
+    this.loadImage(accepted, () =>
+      this.props.formik.setFieldValue("image", this.state.image)
+    );
   }
 
   onRejected() {
@@ -69,8 +80,12 @@ export default class UploadDescriptiveImage extends UploadImage<
     return (
       <>
         {this.state.preview && (
-          <div className={styles.descriptiveImageDescription}>
-            <p>The image description will appear here</p>
+          <div className={styles.descriptiveImageInstruction}>
+            <p className={styles.imageDescription}>
+              {this.state.description !== ""
+                ? this.state.description
+                : "The image description will appear here"}
+            </p>
             <img src={BrowserSizeImage}></img>
             <p>
               Resize your browser or rotate your device to see if the image
@@ -83,6 +98,15 @@ export default class UploadDescriptiveImage extends UploadImage<
         )}
       </>
     );
+  }
+
+  setImageDescription(event: any) {
+    const description = event.target.value;
+    this.setState({
+      description,
+    });
+
+    this.props.formik.setFieldValue("imageDescription", description);
   }
 
   render() {
@@ -147,12 +171,11 @@ export default class UploadDescriptiveImage extends UploadImage<
               <Section className={styles.form}>
                 <Hidden mdUp>{this.renderPreviewControl()}</Hidden>
                 <FormControl>
-                  <Field
-                    name="imageDescription"
+                  <TextField
                     label="Image description"
                     helperText="A caption for your image"
-                    component={TextField}
-                  ></Field>
+                    onChange={e => this.setImageDescription(e)}
+                  ></TextField>
                 </FormControl>
               </Section>
             </Grid>

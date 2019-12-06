@@ -1,12 +1,18 @@
 import * as React from "react";
 import DropZone from "react-dropzone";
-import UploadImage, { IUploadImageState } from "../../components/UploadImage";
+import UploadImage, {
+  IUploadImageState,
+  IUploadImageProps,
+} from "../../components/UploadImage";
 import { TertiaryButton } from "../../components/Button";
 
 import BrowserSizeImage from "./BrowserSize.png";
 import styles from "./create.module.scss";
 
-export default class UploadBanner extends UploadImage<{}, IUploadImageState> {
+export default class UploadBanner extends UploadImage<
+  IUploadImageProps,
+  IUploadImageState
+> {
   constructor(props: {}) {
     super(props);
 
@@ -18,8 +24,10 @@ export default class UploadBanner extends UploadImage<{}, IUploadImageState> {
     this.createSrcImage = this.createSrcImage.bind(this);
   }
 
-  onDrop(accepted: File[], rejected: File[], event: any) {
-    this.loadImage(accepted, rejected, event);
+  onDrop(accepted: File[], _rejected: File[], _event: any) {
+    this.loadImage(accepted, () =>
+      this.props.formik.setFieldValue("banner", this.state.image)
+    );
   }
 
   onRejected() {

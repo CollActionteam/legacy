@@ -42,7 +42,7 @@
   text-align: center;
 }
 
-.descriptiveImageDescription {
+.descriptiveImageInstruction {
   color: var(--c-black);
   font-size: var(--font-size-sm);
   text-align: center;
@@ -53,6 +53,10 @@
   img {
     height: var(--spacing-xlg);
   }
+}
+
+.imageDescription {
+  font-size: var(--font-size);  
 }
 
 .descriptiveImagePreview {

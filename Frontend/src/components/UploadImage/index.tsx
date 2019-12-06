@@ -1,4 +1,9 @@
 import * as React from "react";
+import { FormikProps } from "formik";
+
+export interface IUploadImageProps {
+  formik: FormikProps<any>;
+}
 
 export interface IUploadImageState {
   invalid: boolean;
@@ -8,7 +13,7 @@ export interface IUploadImageState {
 }
 
 export default abstract class UploadImage<
-  P extends {},
+  P extends IUploadImageProps,
   S extends IUploadImageState
 > extends React.Component<P, S> {
   constructor(props: any) {
@@ -32,7 +37,7 @@ export default abstract class UploadImage<
     };
   }
 
-  protected loadImage(accepted: File[], _rejected: File[], _event: any) {
+  protected loadImage(accepted: File[], onLoaded) {
     if (this.state.preview) {
       // On Safari and Chrome, setBannerImageUploadInput triggers this function again.
       // On Firefox it does not... so, if preview is already in progress, we can stop.
@@ -51,6 +56,7 @@ export default abstract class UploadImage<
     const file = accepted[0];
     reader.onload = () => {
       that.setState({ image: reader.result });
+      onLoaded();
     };
     reader.onabort = this.rejectImage;
     reader.onerror = this.rejectImage;

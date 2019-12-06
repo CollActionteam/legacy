@@ -65,6 +65,7 @@ export default class CreateComponent extends React.Component {
       <Layout>
         <Formik
           initialValues={{
+            banner: null,
             projectName: "",
             category: 1,
             target: 0,
@@ -75,6 +76,7 @@ export default class CreateComponent extends React.Component {
             hashtags: "",
             goal: "",
             comments: "",
+            image: null,
             imageDescription: "",
             youtube: "",
           }}
@@ -126,7 +128,7 @@ export default class CreateComponent extends React.Component {
         >
           {props => (
             <Form>
-              <UploadBanner></UploadBanner>
+              <UploadBanner formik={props}></UploadBanner>
 
               <Section className={`${styles.projectInfoBlock} ${styles.form}`}>
                 <FormControl>
@@ -237,7 +239,7 @@ export default class CreateComponent extends React.Component {
                   </Grid>
                 </Grid>
 
-                <UploadDescriptiveImage></UploadDescriptiveImage>
+                <UploadDescriptiveImage formik={props}></UploadDescriptiveImage>
 
                 <Grid container>
                   <Grid item xs={12} md={5}></Grid>
