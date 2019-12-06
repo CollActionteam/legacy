@@ -75,6 +75,7 @@ export default class CreateComponent extends React.Component {
             hashtags: "",
             goal: "",
             comments: "",
+            imageDescription: "",
             youtube: "",
           }}
           validateOnChange={false}
@@ -110,6 +111,8 @@ export default class CreateComponent extends React.Component {
               .max(10000, "Please use no more then 10.000 characters"),
             comments: Yup.string()
               .max(20000, "Please use no more then 20.000 characters"),
+            imageDescription: Yup.string()
+              .max(2000, "Keep it short, no more then 2000 characters"),
             youtube: Yup.string()
               .matches(/^(http|https):\/\/www.youtube.com\/watch\?v=((?:\w|-){11}?)$/, "Only YouTube links of the form http://www.youtube.com/watch?v= are accepted.")
             // tslint:enable: prettier
@@ -176,7 +179,7 @@ export default class CreateComponent extends React.Component {
                         name="description"
                         label="Short description"
                         hint="E.g. reduce plastic waste and save our oceans!"
-                        height="calc(var(--spacing) * 10.7)"
+                        height="calc(var(--spacing) * 12.8)"
                         formik={props}
                       ></RichTextEditorFormControl>
 
