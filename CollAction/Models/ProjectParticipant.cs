@@ -6,11 +6,6 @@ namespace CollAction.Models
 {
     public class ProjectParticipant
     {
-        public ProjectParticipant()
-        {
-            ParticipationDate = DateTime.UtcNow;
-        }
-
         [Required]
         public string UserId { get; set; }
         [ForeignKey("UserId")]

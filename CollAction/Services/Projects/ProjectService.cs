@@ -358,7 +358,7 @@ namespace CollAction.Services.Projects
             var result = new AddParticipantResult();
             if (user == null)
             {
-                user = new ApplicationUser(email);
+                user = new ApplicationUser(email) { RegistrationDate = DateTime.UtcNow };
                 IdentityResult creationResult = await userManager.CreateAsync(user);
                 if (!creationResult.Succeeded)
                 {
@@ -444,7 +444,8 @@ namespace CollAction.Services.Projects
                 UserId = userId,
                 ProjectId = projectId,
                 SubscribedToProjectEmails = true,
-                UnsubscribeToken = Guid.NewGuid()
+                UnsubscribeToken = Guid.NewGuid(),
+                ParticipationDate = DateTime.UtcNow
             };
 
             try

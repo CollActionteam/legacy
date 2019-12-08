@@ -24,6 +24,7 @@ namespace CollAction.GraphQl.Queries
             Field(x => x.RepresentsNumberParticipants);
             Field(x => x.UserName);
             Field(x => x.Activated);
+            Field(x => x.RegistrationDate);
             Field<BooleanGraphType>(
                 "isAdmin", 
                 resolve: c => ((UserContext)c.UserContext).User.IsInRole(Constants.AdminRole));

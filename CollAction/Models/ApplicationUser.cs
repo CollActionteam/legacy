@@ -11,7 +11,6 @@ namespace CollAction.Models
         public ApplicationUser() 
         {
             RepresentsNumberParticipants = 1;        
-            RegistrationDate = DateTime.UtcNow;
         }
 
         public ApplicationUser(string email) 
@@ -19,7 +18,6 @@ namespace CollAction.Models
         {
             UserName = email;
             Email = email;
-            RegistrationDate = DateTime.UtcNow;
         }
 
         [MaxLength(250)]
