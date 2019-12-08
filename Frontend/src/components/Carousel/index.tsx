@@ -1,14 +1,15 @@
 import React from "react";
+import { useQuery } from "react-apollo";
+import gql from "graphql-tag";
 import Slider from "react-slick";
 import { Grid, Container } from "@material-ui/core";
 import Card from "../Card";
-import { useQuery } from "react-apollo";
 import Loader from "../Loader";
-import gql from "graphql-tag";
+import { SecondaryButton, GhostButton } from "../Button";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import "./style.module.scss";
+import styles from "./style.module.scss";
 
 export default () => {
   const settings = {
@@ -16,8 +17,8 @@ export default () => {
     infinite: false,
     arrows: true,
     speed: 500,
-    slidesToShow: 3,
     slidesToScroll: 1,
+    variableWidth: true,
   };
 
   const query = useQuery(GET_CAROUSEL_PROJECTS);
@@ -38,13 +39,30 @@ export default () => {
 
   return (
     <Container>
-      <Slider {...settings}>
-        {data.projects.map((project, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
-            <Card project={project} />
-          </Grid>
-        ))}
-      </Slider>
+      <Grid container>
+        <Grid item sm={3}>
+          <div className={styles.intro}>
+            <h1 className={styles.introTitle}>Power to the crowd</h1>
+            <p>
+              We help people solve collective action problems through
+              crowdacting.
+            </p>
+            <SecondaryButton to="projects/find">
+              Find Crowdaction
+            </SecondaryButton>
+            <GhostButton to="projects/start">Start Crowdaction</GhostButton>
+          </div>
+        </Grid>
+        <Grid item sm={9}>
+          <Slider {...settings}>
+            {data.projects.map((project, index) => (
+              // <Grid item xs={12} sm={6} md={4} key={index}>
+              <Card project={project} key={index} />
+              // </Grid>
+            ))}
+          </Slider>
+        </Grid>
+      </Grid>
     </Container>
   );
 };

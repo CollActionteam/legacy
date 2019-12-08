@@ -8,6 +8,7 @@ using GraphQL.Utilities;
 using GraphQL.Validation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -21,19 +22,15 @@ namespace CollAction.GraphQl
         public static void AddGraphQl(this IServiceCollection services)
         {
             services.AddSingleton<IDependencyResolver>(provider => new FuncDependencyResolver(provider.GetRequiredService));
-            services.AddSingleton<ISchema, GraphQl.Schema>();
+            services.AddSingleton<ISchema, Schema>();
 
             // Ensure queries are executed in serial instead of parallel
             services.AddSingleton<IDocumentExecuter, EfDocumentExecuter>();
 
             // Register the context
-            using (var context = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseNpgsql("_").Options))
-            {
-                EfGraphQLConventions.RegisterInContainer(
-                    services,
-                    context,
-                    c => ((UserContext)c).Context);
-            }
+            EfGraphQLConventions.RegisterInContainer<ApplicationDbContext>(
+                services,
+                model: GetDbModel());
 
             Type[] baseClasses = new[]
             {
@@ -78,6 +75,15 @@ namespace CollAction.GraphQl
                 validationRules.Add(authorizationRule);
                 return validationRules;
             });
+        }
+
+        private static IModel GetDbModel()
+        {
+            // Register the context
+            using (var context = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseNpgsql("_").Options))
+            {
+                return context.Model;
+            }
         }
 
         private static IEnumerable<Type> GetGraphQlTypes()

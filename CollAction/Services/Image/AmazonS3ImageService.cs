@@ -18,7 +18,7 @@ using CollAction.Data;
 
 namespace CollAction.Services.Image
 {
-    public class AmazonS3ImageService : IImageService
+    public sealed class AmazonS3ImageService : IImageService
     {
         private readonly AmazonS3Client client;
         private readonly string bucket;

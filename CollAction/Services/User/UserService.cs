@@ -52,7 +52,8 @@ namespace CollAction.Services.User
             ApplicationUser user = new ApplicationUser()
             {
                 Email = email,
-                UserName = email
+                UserName = email,
+                RegistrationDate = DateTime.UtcNow
             };
             IdentityResult result = await userManager.CreateAsync(user);
             if (result.Succeeded)
@@ -83,7 +84,8 @@ namespace CollAction.Services.User
                 Email = newUser.Email,
                 FirstName = newUser.FirstName,
                 LastName = newUser.LastName,
-                UserName = newUser.Email
+                UserName = newUser.Email,
+                RegistrationDate = DateTime.UtcNow
             };
             IdentityResult result = await userManager.CreateAsync(user, newUser.Password);
             if (result.Succeeded)

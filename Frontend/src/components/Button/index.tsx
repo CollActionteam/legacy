@@ -42,6 +42,12 @@ export const TertiaryButton = ({ children, ...props }) => (
   </Button>
 );
 
+export const GhostButton = ({ children, ...props }) => (
+  <Button variant="ghost" {...props}>
+    {children}
+  </Button>
+);
+
 export const IconButton = ({ ...props }) => (
   <Button variant="icon" {...props}>
     <FontAwesomeIcon icon={props.icon}></FontAwesomeIcon>
