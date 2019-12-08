@@ -13,8 +13,7 @@ namespace CollAction.Models
             RepresentsNumberParticipants = 1;        
         }
 
-        public ApplicationUser(string email) 
-            : base()
+        public ApplicationUser(string email): this()
         {
             UserName = email;
             Email = email;
