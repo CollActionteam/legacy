@@ -43,6 +43,17 @@
     }
 }
 
+.ghost {
+    @include button();
+    background-color: none;
+    border: 2px solid var(--c-white);
+
+    &:hover,
+    &:focus {
+        background-color: rgba(white, .2);
+    }
+}
+
 .icon {
     @include button();
     display: flex;
