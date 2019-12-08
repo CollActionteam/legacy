@@ -18,6 +18,8 @@ namespace CollAction.Models
 
         public bool SubscribedToProjectEmails { get; set; }
 
+        public DateTime ParticipationDate { get; set; }
+
         public Guid UnsubscribeToken { get; set; }
     }
 }

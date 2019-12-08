@@ -32,7 +32,7 @@ namespace CollAction.Services.Project
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
             {
-                var creationResult = await _userManager.CreateAsync(new ApplicationUser(email));
+                var creationResult = await _userManager.CreateAsync(new ApplicationUser(email) { RegistrationDate = DateTime.UtcNow });
                 if (!creationResult.Succeeded)
                 {
                     var errors = string.Join(',', creationResult.Errors.Select(e => $"{e.Code}: {e.Description}"));
@@ -81,7 +81,8 @@ namespace CollAction.Services.Project
                 UserId = userId,
                 ProjectId = projectId,
                 SubscribedToProjectEmails = true,
-                UnsubscribeToken = Guid.NewGuid()
+                UnsubscribeToken = Guid.NewGuid(),
+                ParticipationDate = DateTime.UtcNow
             };
 
             try

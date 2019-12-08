@@ -126,7 +126,7 @@ namespace CollAction.Data
             ApplicationUser admin = await userManager.FindByEmailAsync(adminEmail);
             if (admin == null)
             {
-                admin = new ApplicationUser(adminEmail) { EmailConfirmed = true };
+                admin = new ApplicationUser(adminEmail) { EmailConfirmed = true, RegistrationDate = DateTime.UtcNow };
                 IdentityResult result = await userManager.CreateAsync(admin, adminPassword);
                 if (!result.Succeeded)
                     throw new InvalidOperationException($"Error creating user.{Environment.NewLine}{string.Join(Environment.NewLine, result.Errors.Select(e => $"{e.Code}: {e.Description}"))}");
