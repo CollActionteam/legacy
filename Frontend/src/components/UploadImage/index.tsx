@@ -9,7 +9,6 @@ export interface IUploadImageState {
   invalid: boolean;
   preview: boolean;
   image: any;
-  ie11: boolean;
 }
 
 export default abstract class UploadImage<
@@ -31,9 +30,6 @@ export default abstract class UploadImage<
       invalid: false,
       preview: false,
       image: null,
-      ie11:
-        navigator.userAgent.indexOf("MSIE") !== -1 ||
-        navigator.appVersion.indexOf("Trident/") > 0,
     };
   }
 
