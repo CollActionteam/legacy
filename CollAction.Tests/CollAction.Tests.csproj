@@ -44,4 +44,8 @@
     <ProjectReference Include="..\CollAction\CollAction.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Unit\" />
+  </ItemGroup>
+
 </Project>

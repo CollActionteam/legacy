@@ -2,7 +2,7 @@
 
 namespace CollAction.ViewModels.GraphQl
 {
-    public class PostBody
+    public class GraphQlPostBody
     {
         public string OperationName { get; set; }
 

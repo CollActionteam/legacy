@@ -23,7 +23,6 @@ namespace CollAction.Tests.Integration
         [TestMethod]
         public Task TestProjectCreate()
             => WithServiceProvider(
-                   ConfigureReplacementServices,
                    async scope =>
                    {
                        IProjectService projectService = scope.ServiceProvider.GetRequiredService<IProjectService>();
@@ -57,7 +56,6 @@ namespace CollAction.Tests.Integration
         [TestMethod]
         public Task TestProjectUpdate()
             => WithServiceProvider(
-                   ConfigureReplacementServices,
                    async scope =>
                    {
                        IProjectService projectService = scope.ServiceProvider.GetRequiredService<IProjectService>();
@@ -100,7 +98,6 @@ namespace CollAction.Tests.Integration
         [TestMethod]
         public Task TestProjectCommit()
             => WithServiceProvider(
-                   ConfigureReplacementServices,
                    async scope =>
                    {
                        IProjectService projectService = scope.ServiceProvider.GetRequiredService<IProjectService>();
@@ -118,7 +115,6 @@ namespace CollAction.Tests.Integration
         [TestMethod]
         public Task TestProjectEmail()
             => WithServiceProvider(
-                   ConfigureReplacementServices,
                    async scope =>
                    {
                        IProjectService projectService = scope.ServiceProvider.GetRequiredService<IProjectService>();
@@ -160,9 +156,9 @@ namespace CollAction.Tests.Integration
                        Assert.IsFalse(projectService.CanSendProjectEmail(newProject));
                    });
 
-        private void ConfigureReplacementServices(IServiceCollection sc)
+        protected override void ConfigureReplacementServicesProvider(IServiceCollection collection)
         {
-            sc.AddTransient(s => new Mock<IEmailSender>().Object);
+            collection.AddTransient(s => new Mock<IEmailSender>().Object);
         }
 
         private string GetTestEmail()

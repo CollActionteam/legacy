@@ -19,12 +19,11 @@ namespace CollAction.Tests.Integration
 {
     [TestClass]
     [TestCategory("Integration")]
-    public class UserServiceTests : IntegrationTestBase // TODO
+    public class UserServiceTests : IntegrationTestBase
     {
         [TestMethod]
         public Task TestPasswordReset()
             => WithServiceProvider(
-                ConfigureReplacementServices,
                 async scope =>
                 {
                     var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
@@ -57,7 +56,6 @@ namespace CollAction.Tests.Integration
         [TestMethod]
         public Task TestUserManagement()
             => WithServiceProvider(
-                ConfigureReplacementServices,
                 async scope =>
                 {
                     var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
@@ -112,7 +110,6 @@ namespace CollAction.Tests.Integration
         [TestMethod]
         public Task TestFinishRegistration()
             => WithServiceProvider(
-                ConfigureReplacementServices,
                 async scope =>
                 {
                     var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
@@ -139,9 +136,9 @@ namespace CollAction.Tests.Integration
                     Assert.IsNotNull(finishRegistrationResult.User);
                 });
 
-        private void ConfigureReplacementServices(IServiceCollection sc)
+        protected override void ConfigureReplacementServicesProvider(IServiceCollection collection)
         {
-            sc.AddTransient(s => new Mock<IEmailSender>().Object);
+            collection.AddTransient(s => new Mock<IEmailSender>().Object);
         }
 
         private string GetTestEmail()

@@ -15,15 +15,6 @@ script:
 - scripts/docker-push.sh
 env:
   global:
-  # Test account
-  - AdminEmail=test-collaction@collaction.org
-  - AdminPassword=Test_0_tesT
-  # Test database settings
-  - Db=CollActionDb
-  - DbUser=postgres
-  - DbPassword=test
-  - DbHost=127.0.0.1
-  - SeedTestProjects=true
   # AWS_SECRET_ACCESS_KEY (deployment credential)
   - secure: GTLIxr2KVmI4L5TPwbK2YumLyy65ZbXRVwM3BhIX82h+wMB+/jXbN7aWqTPQPhB1D75QJ2PQOP/HDhpMN7CN/9ntOyvF9pZKA/pFj/ZXGuJZcQdax5UU7BHn6CBZ9C2MhSTu4EJBRLMLdC4H4MkRWAL9PinLj0aWgRIwjoNv+R2bmyZepKAEQ8vLH6qUE/fVc/eFtly0/NhlzGxW6KrGhZlRZd5dJLnZ9dXUnUbsTT7Or1Yd/DcJ5EORVFiQvesERO55gdx3WUMkNYpjKiGPlIhK0dRiBjqpZQmGh1SKn+vgDKapeV0Aq7hyiimK/MRzdurviSieqlaKk47F0A//4BpxgdU4XKZK4k092fIx04UCNC8FJAbFOy/3sqm21TH6vzh3k5WhyUHje+LWm1wITSjr/gJirirzQ2DHZaAykhiNoXDR/UyU8MIoM1MaGUi4kYmIFvyYzG+C98LpC6olYEgyPUt0a1nIov/isX2E9dmS1snrtrXiHe7T82ZbL5HBsbKN0IvubiARjzHL561ChCVDxTkR8PQtrO6hjXbvtegDRq5Qoxha5z7X3nr1kcTzOd2hVpTD4NAmM88KKv6XzCDlRptv9UOoy1l6nNFrw/xZDtWdDIN0Z+fJhoJVTcKI2k39DmkljTCIgqeNQfk/ZnwFQrC9aqutva6wVUmJwc0=
   # AWS_ACCESS_KEY_ID (deployment credential)

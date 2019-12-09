@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 namespace CollAction.Controllers
 {
     [Route("graphql")]
-    [ApiController]
+    [Produces("application/json")]
     public class GraphQlController : Controller
     {
         private readonly IDocumentExecuter executer;
@@ -39,16 +39,16 @@ namespace CollAction.Controllers
         }
 
         [HttpPost]
-        public Task<ExecutionResult> Post([BindRequired, FromBody] PostBody body, CancellationToken cancellation)
+        public Task<ExecutionResult> Post([BindRequired, FromBody] GraphQlPostBody body, CancellationToken cancellation)
         {
             return Execute(body.Query, body.OperationName, body.Variables, cancellation);
         }
 
         [HttpGet]
-        public Task<ExecutionResult> Get([FromQuery] string query, [FromQuery] string variables, [FromQuery] string operationName, CancellationToken cancellation)
+        public Task<ExecutionResult> Get([FromQuery] GraphQlGetQuery getQuery, CancellationToken cancellation)
         {
-            var jsonVariables = ParseVariables(variables);
-            return Execute(query, operationName, jsonVariables, cancellation);
+            var jsonVariables = ParseVariables(getQuery.Variables);
+            return Execute(getQuery.Query, getQuery.OperationName, jsonVariables, cancellation);
         }
 
         private static JObject ParseVariables(string variables)

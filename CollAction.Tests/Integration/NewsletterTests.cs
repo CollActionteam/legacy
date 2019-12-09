@@ -17,7 +17,6 @@ namespace CollAction.Tests.Integration
         [TestMethod]
         public Task TestGetListMemberStatusOnNonExistentMember()
             => WithServiceProvider(
-                ConfigureReplacementServices,
                 async scope =>
                 {
                     var newsletterService = scope.ServiceProvider.GetRequiredService<INewsletterService>();
@@ -28,7 +27,6 @@ namespace CollAction.Tests.Integration
         [TestMethod]
         public Task TestSubscribeListMemberAsPending()
             => WithServiceProvider(
-                   ConfigureReplacementServices,
                    async scope =>
                    {
                        var newsletterService = scope.ServiceProvider.GetRequiredService<INewsletterService>();
@@ -50,7 +48,6 @@ namespace CollAction.Tests.Integration
         [TestMethod]
         public Task TestSubscribeListMemberAsSubscribed()
             => WithServiceProvider(
-                   ConfigureReplacementServices,
                    async scope =>
                    {
                        var newsletterService = scope.ServiceProvider.GetRequiredService<INewsletterService>();
@@ -72,7 +69,6 @@ namespace CollAction.Tests.Integration
         [TestMethod]
         public Task TestUnsubscribeExistingListMember()
             => WithServiceProvider(
-                   ConfigureReplacementServices,
                    async scope =>
                    {
                        var newsletterService = scope.ServiceProvider.GetRequiredService<INewsletterService>();
@@ -96,7 +92,6 @@ namespace CollAction.Tests.Integration
         [TestMethod]
         public Task TestUnsubscribeSubscribeMultiple()
             => WithServiceProvider(
-                   ConfigureReplacementServices,
                    async scope =>
                    {
                        var newsletterService = scope.ServiceProvider.GetRequiredService<INewsletterService>();
@@ -125,7 +120,6 @@ namespace CollAction.Tests.Integration
         [TestMethod]
         public Task TestUnsubscribeNonExistingListMember()
             => WithServiceProvider(
-                   ConfigureReplacementServices,
                    async scope =>
                    {
                        var newsletterService = scope.ServiceProvider.GetRequiredService<INewsletterService>();
@@ -135,10 +129,10 @@ namespace CollAction.Tests.Integration
                        Assert.IsFalse(await newsletterService.IsSubscribedAsync(email));
                    });
 
-        private void ConfigureReplacementServices(IServiceCollection sc)
+        protected override void ConfigureReplacementServicesProvider(IServiceCollection collection)
         {
             var jobClient = new Mock<IBackgroundJobClient>();
-            sc.AddScoped(s => jobClient.Object);
+            collection.AddScoped(s => jobClient.Object);
         }
 
         private string GetTestEmail()

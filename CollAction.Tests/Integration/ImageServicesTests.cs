@@ -27,7 +27,6 @@ namespace CollAction.Tests.Integration
         [TestMethod]
         public Task TestUpload()
             => WithServiceProvider(
-                   ConfigureReplacementServices,
                    async scope =>
                    {
                        imageService = scope.ServiceProvider.GetRequiredService<IImageService>();
@@ -48,7 +47,6 @@ namespace CollAction.Tests.Integration
         [TestMethod]
         public Task TestDelete()
             => WithServiceProvider(
-                   ConfigureReplacementServices,
                    async scope =>
                    {
                        imageService = scope.ServiceProvider.GetRequiredService<IImageService>();
@@ -73,7 +71,7 @@ namespace CollAction.Tests.Integration
             }
         }
 
-        private void ConfigureReplacementServices(IServiceCollection sc)
+        protected override void ConfigureReplacementServicesProvider(IServiceCollection collection)
         {
             upload = new Mock<IFormFile>();
             upload.Setup(u => u.OpenReadStream()).Returns(new MemoryStream(testImage));
@@ -85,7 +83,7 @@ namespace CollAction.Tests.Integration
                               Task.Run(() => (Task)job.Method.Invoke(imageService, job.Args.ToArray())).Wait();
                               return string.Empty;
                           });
-            sc.AddScoped(s => jobClient.Object);
+            collection.AddScoped(s => jobClient.Object);
         }
     }
 }

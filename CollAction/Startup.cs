@@ -210,7 +210,7 @@ namespace CollAction
             }
             else
             {
-                app.UseExceptionHandler("error");
+                app.UseExceptionHandler("/error");
             }
 
             app.UseAuthentication();
