@@ -5,8 +5,6 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.TestHost;
 using CollAction.Data;
-using System.IO;
-using Microsoft.Extensions.Configuration;
 
 namespace CollAction.Tests.Integration
 {
@@ -42,12 +40,7 @@ namespace CollAction.Tests.Integration
 
         private static IWebHostBuilder GetHost(Action<IServiceCollection> configureReplacements)
             => WebHost.CreateDefaultBuilder()
-                      .ConfigureAppConfiguration(builder =>
-                      {
-                          string appSettingsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "appsettings.Development.json");
-                          builder.AddUserSecrets<Startup>()
-                                 .AddJsonFile(appSettingsDirectory, optional: true);
-                      })
+                      .UseEnvironment("Development")
                       .ConfigureTestServices(configureReplacements)
                       .UseStartup<Startup>();
     }
