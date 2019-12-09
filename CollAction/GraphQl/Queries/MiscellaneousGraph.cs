@@ -1,6 +1,5 @@
 ﻿using CollAction.Models;
 using CollAction.Services;
-using CollAction.Services.Festival;
 using GraphQL.Types;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,16 +10,8 @@ namespace CollAction.GraphQl.Queries
 {
     public class MiscellaneousGraph : ObjectGraphType
     {
-        public MiscellaneousGraph(IServiceScopeFactory serviceScopeFactory, IFestivalService festivalService, IOptions<DisqusOptions> disqusOptions)
+        public MiscellaneousGraph(IServiceScopeFactory serviceScopeFactory, IOptions<DisqusOptions> disqusOptions)
         {
-            Field<BooleanGraphType>(
-                nameof(IFestivalService.FestivalCallToActionVisible), 
-                resolve: c => festivalService.FestivalCallToActionVisible);
-
-            Field<StringGraphType>(
-                nameof(DisqusOptions.DisqusSite),
-                resolve: c => disqusOptions.Value.DisqusSite);
-
             FieldAsync<ListGraphType<StringGraphType>>(
                 "externalLoginProviders",
                 resolve: async c =>

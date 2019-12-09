@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
@@ -15,10 +14,6 @@ namespace CollAction.Tests.Integration
         {
             IWebHostBuilder hostBuilder =
                 WebHost.CreateDefaultBuilder()
-                       .ConfigureAppConfiguration(builder =>
-                       {
-                           builder.AddUserSecrets<Startup>();
-                       })
                        .ConfigureTestServices(configureReplacements)
                        .UseStartup<Startup>();
                        

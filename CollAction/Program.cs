@@ -1,7 +1,6 @@
 ﻿using CollAction.Data;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 
@@ -13,12 +12,8 @@ namespace CollAction
         {
             IWebHost host =
                 WebHost.CreateDefaultBuilder(args)
-                   .ConfigureAppConfiguration(builder =>
-                   {
-                       builder.AddUserSecrets<Startup>();
-                   })
-                   .UseStartup<Startup>()
-                   .Build();
+                       .UseStartup<Startup>()
+                       .Build();
 
             using (IServiceScope scope = host.Services.CreateScope())
             {

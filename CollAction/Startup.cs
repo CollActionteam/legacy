@@ -18,7 +18,6 @@ using Hangfire.Dashboard;
 using CollAction.Services.Email;
 using CollAction.Services.Projects;
 using CollAction.Services.Newsletter;
-using CollAction.Services.Festival;
 using CollAction.Services.DataProtection;
 using CollAction.Services.Image;
 using Stripe;
@@ -149,7 +148,6 @@ namespace CollAction
             services.AddTransient<IDonationService, DonationService>();
             services.AddTransient<IViewRenderService, ViewRenderService>();
             services.AddTransient<IMailChimpManager, MailChimpManager>();
-            services.AddTransient<IFestivalService, FestivalService>();
             services.AddTransient<IHtmlInputValidator, HtmlInputValidator>();
 
             // Configure application options
@@ -160,7 +158,6 @@ namespace CollAction
             services.Configure<ImageServiceOptions>(Configuration);
             services.Configure<ImageProcessingOptions>(Configuration);
             services.Configure<NewsletterServiceOptions>(Configuration);
-            services.Configure<FestivalServiceOptions>(Configuration);
             services.Configure<ProjectEmailOptions>(Configuration);
             services.Configure<MailChimpOptions>(options =>
             {

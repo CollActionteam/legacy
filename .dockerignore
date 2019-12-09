@@ -10,7 +10,8 @@ env_collaction
 env_postgres
 CollAction/bin
 CollAction/obj
-CollAction/*.txt
+CollAction/*cache
+CollAction/*json
 CollAction/CollAction.csproj.user
 CollAction.Tests
 scripts

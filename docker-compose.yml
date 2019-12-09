@@ -1,8 +1,5 @@
 version: '3.4'
 
-volumes:
-  images:
-
 services:
   backend:
     image: collaction-backend
@@ -20,8 +17,11 @@ services:
     ports:
       - "44301:44301"
     environment:
-      - DbHost=db
       - PublicAddress=http://localhost:8000
+      - DbHost=db
+      - DbUser=postgres
+      - DbPassword=...
+      - Db=CollActionDb
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://*:44301
       - Kestrel__Certificates__Default__Path=/app/collaction.pfx
@@ -41,7 +41,9 @@ services:
 
   db:
     image: postgres
-    env_file:
-      - env_postgres
+    environment: 
+      - POSTGRES_PASSWORD=...
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=CollActionDb
     ports:
       - "5432:5432"
