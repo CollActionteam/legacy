@@ -79,22 +79,36 @@ namespace CollAction
                 o.Cookie.SameSite = SameSiteMode.None;
             });
 
-            services.AddAuthentication()
-                    .AddFacebook(options =>
-                    {
-                        options.AppId = Configuration["Authentication:Facebook:AppId"];
-                        options.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
-                        options.Scope.Add("email");
-                    }).AddGoogle(options =>
-                    {
-                        options.ClientId = Configuration["Authentication:Google:ClientId"];
-                        options.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
-                        options.Scope.Add("email");
-                    }).AddTwitter(options =>
-                    {
-                        options.ConsumerKey = Configuration["Authentication:Twitter:ConsumerKey"];
-                        options.ConsumerSecret = Configuration["Authentication:Twitter:ConsumerSecret"];
-                    });
+            var authenticationBuilder = services.AddAuthentication();
+
+            if (Configuration["Authentication:Facebook:AppId"] != null)
+            {
+                authenticationBuilder = authenticationBuilder.AddFacebook(options =>
+                {
+                    options.AppId = Configuration["Authentication:Facebook:AppId"];
+                    options.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+                    options.Scope.Add("email");
+                });
+            }
+
+            if (Configuration["Authentication:Google:ClientId"] != null)
+            {
+                authenticationBuilder = authenticationBuilder.AddGoogle(options =>
+                {
+                    options.ClientId = Configuration["Authentication:Google:ClientId"];
+                    options.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+                    options.Scope.Add("email");
+                });
+            }
+
+            if (Configuration["Authentication:Twitter:ConsumerKey"] != null)
+            {
+                authenticationBuilder = authenticationBuilder.AddTwitter(options =>
+                {
+                    options.ConsumerKey = Configuration["Authentication:Twitter:ConsumerKey"];
+                    options.ConsumerSecret = Configuration["Authentication:Twitter:ConsumerSecret"];
+                });
+            }
 
             services.AddApplicationInsightsTelemetry(Configuration);
 
