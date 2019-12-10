@@ -7,7 +7,7 @@ A project can only be listed when it meets the following criteria:
 
 * The goal of the project is to make a positive societal or ecological contribution to your neighbourhood, country or the world.
 * The project is not geared towards personal gain.
-* The project does not include activities that are focussed on conversion or activism (religious or political).
+* The project does not include activities that are focused on conversion or activism (religious or political).
 * The project does not include activities that are illegal or do not abide by the official legislation of the Netherlands or the country of implementation.
 * The online project registration form is completed fully and truthfully and has a clear and easily readable project description and goal. The CollAction team can ask for clarification and/or edit your text if necessary.
 * The ProjectStarter has thought through how people can be moved from commitment to action. We can help you with this!
