@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.TestHost;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CollAction.Tests.Integration
@@ -18,15 +20,67 @@ namespace CollAction.Tests.Integration
             => WithTestServer(
                    async (scope, testServer) =>
                    {
-                       const string Query = @"
+                       const string QueryProjects = @"
                            query {
                                projects {
                                    id
+                                   name
+                                   descriptiveImage {
+                                       filepath
+                                   }
                                }
                            }";
 
-                       var response = await PerformGraphQlQuery(testServer, Query, null);
-                       Assert.IsTrue(response.IsSuccessStatusCode);
+                       HttpResponseMessage response = await PerformGraphQlQuery(testServer, QueryProjects, null);
+                       string content = await response.Content.ReadAsStringAsync();
+                       Assert.IsTrue(response.IsSuccessStatusCode, content);
+                       JsonDocument result = JsonDocument.Parse(content);
+                       Assert.ThrowsException<KeyNotFoundException>(() => result.RootElement.GetProperty("errors"), content);
+                       JsonElement projects = result.RootElement.GetProperty("data").GetProperty("projects");
+                       Assert.IsTrue(projects.GetArrayLength() > 0, content);
+
+                       int projectId = projects.EnumerateArray().First().GetProperty("id").GetInt32();
+                       const string QueryProject = @"
+                           query($projectId : ID!) {
+                               project(id: $projectId) {
+                                   id
+                                   name
+                                   descriptiveImage {
+                                       filepath
+                                   }
+                               }
+                           }";
+                       dynamic variables = new { projectId };
+                       response = await PerformGraphQlQuery(testServer, QueryProject, variables);
+                       content = await response.Content.ReadAsStringAsync();
+                       Assert.IsTrue(response.IsSuccessStatusCode, content);
+                       result = JsonDocument.Parse(content);
+                       Assert.ThrowsException<KeyNotFoundException>(() => result.RootElement.GetProperty("errors"), content);
+                       JsonElement project = result.RootElement.GetProperty("data").GetProperty("project");
+                       Assert.AreEqual(projectId, project.GetProperty("id").GetInt32());
+                   });
+
+        [TestMethod]
+        public Task TestAuthorization()
+            => WithTestServer(
+                   async (scope, testServer) =>
+                   {
+                       const string QueryProjects = @"
+                           query {
+                               projects {
+                                   id
+                                   name
+                                   owner {
+                                       id
+                                   }
+                               }
+                           }";
+
+                       HttpResponseMessage response = await PerformGraphQlQuery(testServer, QueryProjects, null);
+                       string content = await response.Content.ReadAsStringAsync();
+                       Assert.IsTrue(response.IsSuccessStatusCode, content);
+                       JsonDocument result = JsonDocument.Parse(content);
+                       Assert.IsNotNull(result.RootElement.GetProperty("errors"), content);
                    });
 
         private static async Task<HttpResponseMessage> PerformGraphQlQuery(TestServer server, string query, dynamic variables)

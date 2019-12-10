@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 namespace CollAction.Controllers
 {
     [Route("graphql")]
-    [Produces("application/json")]
+    [ApiController]
     public class GraphQlController : Controller
     {
         private readonly IDocumentExecuter executer;

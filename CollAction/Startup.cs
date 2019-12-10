@@ -72,7 +72,7 @@ namespace CollAction
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddDefaultTokenProviders();
 
-            // Identity/Auth cookie, allow it to be used from different sites
+            // Identity/Auth cookie, allow it to be used from different sites, use CORS to secure it
             services.ConfigureApplicationCookie(o =>
             {
                 o.Cookie.HttpOnly = false;
@@ -114,8 +114,9 @@ namespace CollAction
                 loggingBuilder.AddSerilog(Log.Logger);
             });
 
-            services.AddMvc()
-                    .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddControllers()
+                    .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+                    .AddNewtonsoftJson();
 
             services.AddHangfire(config => config.UsePostgreSqlStorage(connectionString));
 
