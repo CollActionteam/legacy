@@ -20,7 +20,7 @@ services:
       - PublicAddress=http://localhost:8000
       - DbHost=db
       - DbUser=postgres
-      - DbPassword=...
+      - DbPassword=test
       - Db=CollActionDb
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://*:44301
