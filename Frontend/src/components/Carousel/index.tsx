@@ -14,33 +14,33 @@ import styles from "./style.module.scss";
 export default () => {
   const settings = {
     dots: false,
-    infinite: false,
+    infinite: true,
     arrows: true,
     speed: 500,
     slidesToScroll: 1,
     variableWidth: true,
+    responsive: [
+      {
+        breakpoint: 600,
+        settings: {
+          arrows: false,
+        },
+      },
+    ],
   };
 
   const query = useQuery(GET_CAROUSEL_PROJECTS);
   const { data, loading, error } = query;
-
-  if (loading) {
-    return <Loader />;
-  }
 
   if (error) {
     console.error(error);
     return;
   }
 
-  if (!data.projects || !data.projects.length) {
-    return <div>No projects.</div>;
-  }
-
   return (
     <Container>
-      <Grid container>
-        <Grid item sm={3}>
+      <Grid container className={styles.container}>
+        <Grid item sm={12} md={3}>
           <div className={styles.intro}>
             <h1 className={styles.introTitle}>Power to the crowd</h1>
             <p>
@@ -53,14 +53,17 @@ export default () => {
             <GhostButton to="projects/start">Start Crowdaction</GhostButton>
           </div>
         </Grid>
-        <Grid item sm={9}>
-          <Slider {...settings}>
-            {data.projects.map((project, index) => (
-              // <Grid item xs={12} sm={6} md={4} key={index}>
-              <Card project={project} key={index} />
-              // </Grid>
-            ))}
-          </Slider>
+        <Grid item sm={12} md={9} className={styles.sliderContainer}>
+          {loading && <Loader />}
+          {data.projects && (
+            <Slider {...settings}>
+              {data.projects.map((project, index) => (
+                // <Grid item xs={12} sm={6} md={4} key={index}>
+                <Card project={project} key={index} />
+                // </Grid>
+              ))}
+            </Slider>
+          )}
         </Grid>
       </Grid>
     </Container>

@@ -1,23 +1,41 @@
+@import '../Styles/responsive.scss';
+
 :global {
-
     .slick-list {
-
+        @include breakpoint-down(sm) {
+            margin-top: var(--spacing-lg);
+        }
     }
 
     .slick-slide {
-        width: 370px;
+        width: 100%;
+        min-width: 240px;
+        max-width: 370px;
         margin-right: var(--spacing);
+
+        @include breakpoint-up(sm) {
+            width: 28vw;
+        }
     }
 
     .slick-arrow {
-        width: 40px;
-        height: 40px;
+        width: 38px;
+        height: 38px;
         border-radius: 100%;
         border: 1px solid var(--c-black);
         opacity: .5;
 
         &::before {
-            color: var(--c-black);
+            content: "";
+            width: 6px;
+            height: 11px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate3d(-50%, -50%, 0);
+            background-image: url("/assets/svg/arrow.svg");
+            background-size: cover;
+            margin-left: 2px;
         }
     }
 
@@ -32,29 +50,78 @@
     }
 
     .slick-prev {
-        left: -36%;
+        left: -7.5vw;
+
+        &::before {
+            transform: translate3d(-50%, -50%, 0) rotate(-180deg);
+            margin-left: -2px;
+        }
+
+        @include breakpoint-up(sm) {
+            left: -50px;
+        }
+        
+        @include breakpoint-up(md) {
+            left: -25.5vw;
+        }
+    }
+
+    .slick-next {
+        @include breakpoint-up(sm) {
+            right: -3rem;
+        }
+    }
+}
+
+.container {
+    @include breakpoint-up(md) {
+        padding-left: 3rem;
+        padding-right: 3rem;
     }
 }
 
 .intro {
-    display: inline-block;
-    padding: 0 var(--spacing-md);
-    margin-right: var(--spacing);
+    display: block;
     height: 100%;
+    margin-left: -24px;
+    margin-right: -24px;
+    padding: var(--spacing-xlg) 2rem;
     text-align: center;
     color: var(--c-white);
     background-color: var(--c-green);
-    border-radius: var(--border-radius-sm);
 
     a {
+        margin: var(--spacing-sm);
         margin-top: var(--spacing);
+    }
+
+    @include breakpoint-up(md) {
+        margin: 0;
+        margin-right: var(--spacing);
+        padding: var(--spacing-lg);
+        border-radius: var(--border-radius-sm);
+
+        a {
+            display: block;
+            margin-top: var(--spacing);
+        }
     }
 }
 
 .introTitle {
-    margin-top: var(--spacing-lg);
+    // margin-top: var(--spacing-lg);
 }
 
 .introText {
     margin-bottom: var(--spacing);
+}
+
+.sliderContainer {
+    @include breakpoint-up(sm) {
+        padding: var(--spacing-xlg) 3rem;
+    }
+
+    @include breakpoint-up(md) {
+        padding: 0;
+    }
 }
