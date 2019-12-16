@@ -8,6 +8,9 @@ using System.Text.Json;
 using System.Threading;
 using System.Linq;
 using System.Threading.Tasks;
+using CollAction.Services;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CollAction.Tests.Integration
 {
@@ -81,26 +84,58 @@ namespace CollAction.Tests.Integration
                        Assert.IsTrue(response.IsSuccessStatusCode, content);
                        JsonDocument result = JsonDocument.Parse(content);
                        Assert.IsNotNull(result.RootElement.GetProperty("errors"), content);
+
+                       SeedOptions seedOptions = scope.ServiceProvider.GetRequiredService<IOptions<SeedOptions>>().Value;
+
+                       using (var httpClient = testServer.CreateClient())
+                       {
+                           // Login as admin
+                           Dictionary<string, string> loginContent = new Dictionary<string, string>()
+                           {
+                               { "Email", seedOptions.AdminEmail },
+                               { "Password", seedOptions.AdminPassword }
+                           };
+                           using (var formContent = new FormUrlEncodedContent(loginContent))
+                           {
+                               HttpResponseMessage authResult = await httpClient.PostAsync(new Uri("/account/login", UriKind.Relative), formContent);
+                               string authResultContent = await authResult.Content.ReadAsStringAsync();
+                               string cookie = authResult.Headers.Single(h => h.Key == "Set-Cookie").Value.Single().Split(";").First();
+                               httpClient.DefaultRequestHeaders.Add("Cookie", cookie);
+                               Assert.IsTrue(authResult.IsSuccessStatusCode, authResultContent);
+                           }
+
+                           // Retry call as admin
+                           response = await PerformGraphQlQuery(httpClient, QueryProjects, null);
+                           content = await response.Content.ReadAsStringAsync();
+                           Assert.IsTrue(response.IsSuccessStatusCode, content);
+                           result = JsonDocument.Parse(content);
+                           Assert.ThrowsException<KeyNotFoundException>(() => result.RootElement.GetProperty("errors"), content);
+                       }
                    });
 
-        private static async Task<HttpResponseMessage> PerformGraphQlQuery(TestServer server, string query, dynamic variables)
+        private static async Task<HttpResponseMessage> PerformGraphQlQuery(TestServer testServer, string query, dynamic variables)
         {
-            using (var httpClient = server.CreateClient())
+            using (var httpClient = testServer.CreateClient())
             {
-               // Test with columns provided
-               string jsonBody =
-                   JsonSerializer.Serialize(
-                       new
-                       {
-                           Query = query,
-                           Variables = variables
-                       });
-               var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+                return await PerformGraphQlQuery(httpClient, query, variables);
+            }
+        }
 
-               using (content)
-               {
-                   return await httpClient.PostAsync(new Uri("/graphql", UriKind.Relative), content, CancellationToken.None).ConfigureAwait(false);
-               }
+        private static async Task<HttpResponseMessage> PerformGraphQlQuery(HttpClient httpClient, string query, dynamic variables)
+        {
+           // Test with columns provided
+           string jsonBody =
+               JsonSerializer.Serialize(
+                   new
+                   {
+                       Query = query,
+                       Variables = variables
+                   });
+           var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+
+           using (content)
+           {
+               return await httpClient.PostAsync(new Uri("/graphql", UriKind.Relative), content, CancellationToken.None).ConfigureAwait(false);
            }
         }
     }

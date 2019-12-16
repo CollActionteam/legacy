@@ -41,17 +41,38 @@ namespace CollAction.Controllers
             if (result.Succeeded)
             {
                 logger.LogInformation("User logged in");
-                return Redirect(model.ReturnUrl);
+                if (model.ReturnUrl != null)
+                {
+                    return Redirect(model.ReturnUrl);
+                }
+                else
+                {
+                    return Ok();
+                }
             }
             else if (result.IsLockedOut)
             {
                 logger.LogInformation("User is locked out");
-                return Redirect($"{model.ErrorUrl}?error=lockout");
+                if (model.ErrorUrl != null)
+                {
+                    return Redirect($"{model.ErrorUrl}?error=lockout");
+                }
+                else
+                {
+                    return Unauthorized("lockout");
+                }
             }
             else
             {
                 logger.LogInformation("User is unable to log in");
-                return Redirect($"{model.ErrorUrl}?error=other");
+                if (model.ErrorUrl != null)
+                {
+                    return Redirect($"{model.ErrorUrl}?error=other");
+                }
+                else
+                {
+                    return Unauthorized();
+                }
             }
         }
 
