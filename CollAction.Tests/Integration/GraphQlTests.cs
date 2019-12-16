@@ -113,6 +113,40 @@ namespace CollAction.Tests.Integration
                        }
                    });
 
+        [TestMethod]
+        public Task TestCreateProject()
+            => WithTestServer(
+                   async (scope, testServer) =>
+                   {
+                       string createProject = $@"
+                           mutation {{
+                               project {{
+                                   createProject(project:
+                                       {{
+                                           name:""{Guid.NewGuid()}"",
+                                           categoryId: 4,
+                                           target: 55,
+                                           proposal: ""44"",
+                                           description: """",
+                                           goal: ""dd"",
+                                           creatorComments: ""dd"",
+                                           start: ""4-4-2009"",
+                                           end: ""4-4-2000"",
+                                           descriptionVideoLink: ""https://youtube.com"",
+                                           tags:[""{Guid.NewGuid()}"", ""a""]
+                                       }}) {{
+                                           id
+                                       }}
+                                   }}
+                               }}";
+                       HttpResponseMessage response = await PerformGraphQlQuery(testServer, createProject, null);
+                       string content = await response.Content.ReadAsStringAsync();
+                       JsonDocument result = JsonDocument.Parse(content);
+                       Assert.IsTrue(response.IsSuccessStatusCode, content);
+                       Assert.ThrowsException<KeyNotFoundException>(() => result.RootElement.GetProperty("errors"), content);
+                   });
+
+
         private static async Task<HttpResponseMessage> PerformGraphQlQuery(TestServer testServer, string query, dynamic variables)
         {
             using (var httpClient = testServer.CreateClient())
