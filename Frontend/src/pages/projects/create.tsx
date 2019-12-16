@@ -1,16 +1,21 @@
 import React from "react";
-import Layout from "../../components/Layout";
 import { graphql } from "gatsby";
-import styles from "./create.module.scss";
-import { Section } from "../../components/Section";
 import { Formik, Field, Form, FormikProps } from "formik";
 import * as Yup from "yup";
 import { TextField, Select } from "formik-material-ui";
 import { FormControl, InputLabel, MenuItem, Grid } from "@material-ui/core";
+
+import Layout from "../../components/Layout";
+import { Section } from "../../components/Section";
 import { RichTextEditorFormControl } from "../../components/RichTextEditorFormContol";
 import { Button } from "../../components/Button";
 import UploadBanner from "./upload-banner";
 import UploadDescriptiveImage from "./upload-descriptive-image";
+
+import styles from "./create.module.scss";
+import gql from "graphql-tag";
+import { useQuery } from "react-apollo";
+import Loader from "../../components/Loader";
 
 export const query = graphql`
   query {
@@ -22,19 +27,21 @@ export const query = graphql`
   }
 `;
 
-export default class CreateComponent extends React.Component {
-  minStartDate: Date;
-  maxStartDate: Date;
-
-  constructor(props: any) {
-    super(props);
-
-    this.minStartDate = new Date();
-    this.maxStartDate = new Date(this.minStartDate);
-    this.maxStartDate.setMonth(new Date().getMonth() + 12);
+const GET_CATEGORIES = gql`
+  query {
+    categories {
+      id
+      name
+    }
   }
+`;
 
-  setEndDateValidation(startDate, schema) {
+export default () => {
+  const minStartDate = new Date();
+  const maxStartDate = new Date(minStartDate);
+  maxStartDate.setMonth(new Date().getMonth() + 12);
+
+  const setEndDateValidation = (startDate, schema) => {
     if (!startDate) {
       return;
     }
@@ -47,9 +54,9 @@ export default class CreateComponent extends React.Component {
     return schema
       .min(minDate, "Please ensure your sign up ends after it starts :-)")
       .max(maxDate, "The deadline must be within a year of the start date");
-  }
+  };
 
-  async validate(props: FormikProps<any>) {
+  const validate = async (props: FormikProps<any>) => {
     const errors = Object.keys(await props.validateForm());
 
     if (errors.length) {
@@ -58,11 +65,15 @@ export default class CreateComponent extends React.Component {
         el.scrollIntoView();
       }
     }
-  }
+  };
 
-  render() {
-    return (
-      <Layout>
+  const { data, loading } = useQuery(GET_CATEGORIES);
+
+  return (
+    <Layout>
+      {loading ? (
+        <Loader />
+      ) : (
         <Formik
           initialValues={{
             banner: null,
@@ -84,40 +95,40 @@ export default class CreateComponent extends React.Component {
           validateOnBlur={true}
           validateOnMount={false}
           validationSchema={Yup.object({
-            // tslint:disable: prettier
-            projectName: Yup.string()
-              .required("You must provide a name for your project")
-              .max(50, "Keep the name short, no more then 50 characters"),
-            target: Yup.number()
-              .required("Please choose the target number of participants")
-              .moreThan(0, "You can choose up to a maximum of one million participants as your target number")
-              .lessThan(1000001, "You can choose up to a maximum of one million participants as your target number"),
-            proposal: Yup.string()
-              .required("Describe your proposal")
-              .max(300, "Best keep your proposal short, no more then 300 characters"),
-            description: Yup.string()
-              .required("Give a succinct description of the issues your project is designed to address")
-              .max(10000, "Please use no more then 10.000 characters"),
-            startDate: Yup.date()
-              .required("Please enter the date on which the campaign opens")
-              .min(this.minStartDate, "Please ensure your sign up starts somewhere in the near future")
-              .max(this.maxStartDate, "Please ensure your sign up starts within the next 12 months"),
-            endDate: Yup.date()
-              .required("Please enter the date until which people can sign up for the campaign")
-              .when("startDate", this.setEndDateValidation),
-            hashtags: Yup.string()
-              .max(30, "Please keep the number of hashtags civil, no more then 30 characters")
-              .matches(/^[a-zA-Z_0-9]+(;[a-zA-Z_0-9]+)*$/, "Don't use spaces or #, must contain a letter, can contain digits and underscores. Seperate multiple tags with a colon ';'"),
-            goal: Yup.string()
-              .required("Describe what you hope to have achieved upon successful completion of your project")
-              .max(10000, "Please use no more then 10.000 characters"),
-            comments: Yup.string()
-              .max(20000, "Please use no more then 20.000 characters"),
-            imageDescription: Yup.string()
-              .max(2000, "Keep it short, no more then 2000 characters"),
-            youtube: Yup.string()
-              .matches(/^(http|https):\/\/www.youtube.com\/watch\?v=((?:\w|-){11}?)$/, "Only YouTube links of the form http://www.youtube.com/watch?v= are accepted.")
-            // tslint:enable: prettier
+              // tslint:disable: prettier
+              projectName: Yup.string()
+                .required("You must provide a name for your project")
+                .max(50, "Keep the name short, no more then 50 characters"),
+              target: Yup.number()
+                .required("Please choose the target number of participants")
+                .moreThan(0, "You can choose up to a maximum of one million participants as your target number")
+                .lessThan(1000001, "You can choose up to a maximum of one million participants as your target number"),
+              proposal: Yup.string()
+                .required("Describe your proposal")
+                .max(300, "Best keep your proposal short, no more then 300 characters"),
+              description: Yup.string()
+                .required("Give a succinct description of the issues your project is designed to address")
+                .max(10000, "Please use no more then 10.000 characters"),
+              startDate: Yup.date()
+                .required("Please enter the date on which the campaign opens")
+                .min(minStartDate, "Please ensure your sign up starts somewhere in the near future")
+                .max(maxStartDate, "Please ensure your sign up starts within the next 12 months"),
+              endDate: Yup.date()
+                .required("Please enter the date until which people can sign up for the campaign")
+                .when("startDate", setEndDateValidation),
+              hashtags: Yup.string()
+                .max(30, "Please keep the number of hashtags civil, no more then 30 characters")
+                .matches(/^[a-zA-Z_0-9]+(;[a-zA-Z_0-9]+)*$/, "Don't use spaces or #, must contain a letter, can contain digits and underscores. Seperate multiple tags with a colon ';'"),
+              goal: Yup.string()
+                .required("Describe what you hope to have achieved upon successful completion of your project")
+                .max(10000, "Please use no more then 10.000 characters"),
+              comments: Yup.string()
+                .max(20000, "Please use no more then 20.000 characters"),
+              imageDescription: Yup.string()
+                .max(2000, "Keep it short, no more then 2000 characters"),
+              youtube: Yup.string()
+                .matches(/^(http|https):\/\/www.youtube.com\/watch\?v=((?:\w|-){11}?)$/, "Only YouTube links of the form http://www.youtube.com/watch?v= are accepted.")
+              // tslint:enable: prettier
           })}
           onSubmit={(values, { setSubmitting }) => {
             setTimeout(() => {
@@ -142,13 +153,13 @@ export default class CreateComponent extends React.Component {
                 <FormControl>
                   <InputLabel htmlFor="category">Category</InputLabel>
                   <Field name="category" component={Select}>
-                    <MenuItem value={1}>Environment</MenuItem>
-                    <MenuItem value={2}>Community</MenuItem>
-                    <MenuItem value={3}>Governance</MenuItem>
-                    <MenuItem value={4}>Health</MenuItem>
-                    <MenuItem value={5}>Consumption</MenuItem>
-                    <MenuItem value={6}>Well-being</MenuItem>
-                    <MenuItem value={7}>Other</MenuItem>
+                    {data
+                      ? data.categories.map(c => (
+                          <MenuItem key={c.id} value={c.id}>
+                            {c.name}
+                          </MenuItem>
+                        ))
+                      : null}
                   </Field>
                 </FormControl>
 
@@ -263,7 +274,7 @@ export default class CreateComponent extends React.Component {
                       <Button
                         type="submit"
                         disabled={props.isSubmitting}
-                        onClick={() => this.validate(props)}
+                        onClick={() => validate(props)}
                       >
                         Submit
                       </Button>
@@ -274,7 +285,7 @@ export default class CreateComponent extends React.Component {
             </Form>
           )}
         </Formik>
-      </Layout>
-    );
-  }
-}
+      )}
+    </Layout>
+  );
+};

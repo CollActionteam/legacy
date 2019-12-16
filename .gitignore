@@ -3,3 +3,5 @@
 *.cache
 env_collaction
 env_postgres
+node_modules
+log-*
