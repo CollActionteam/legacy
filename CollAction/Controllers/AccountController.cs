@@ -67,11 +67,11 @@ namespace CollAction.Controllers
                 logger.LogInformation("User is unable to log in");
                 if (model.ErrorUrl != null)
                 {
-                    return Redirect($"{model.ErrorUrl}?error=other");
+                    return Redirect($"{model.ErrorUrl}?error=invalid-credentials");
                 }
                 else
                 {
-                    return Unauthorized();
+                    return Unauthorized("invalid-credentials");
                 }
             }
         }
