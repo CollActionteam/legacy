@@ -86,25 +86,10 @@ namespace CollAction.Tests.Integration
                        Assert.IsNotNull(result.RootElement.GetProperty("errors"), content);
 
                        SeedOptions seedOptions = scope.ServiceProvider.GetRequiredService<IOptions<SeedOptions>>().Value;
-
                        using (var httpClient = testServer.CreateClient())
                        {
-                           // Login as admin
-                           Dictionary<string, string> loginContent = new Dictionary<string, string>()
-                           {
-                               { "Email", seedOptions.AdminEmail },
-                               { "Password", seedOptions.AdminPassword }
-                           };
-                           using (var formContent = new FormUrlEncodedContent(loginContent))
-                           {
-                               HttpResponseMessage authResult = await httpClient.PostAsync(new Uri("/account/login", UriKind.Relative), formContent);
-                               string authResultContent = await authResult.Content.ReadAsStringAsync();
-                               string cookie = authResult.Headers.Single(h => h.Key == "Set-Cookie").Value.Single().Split(";").First();
-                               httpClient.DefaultRequestHeaders.Add("Cookie", cookie);
-                               Assert.IsTrue(authResult.IsSuccessStatusCode, authResultContent);
-                           }
-
                            // Retry call as admin
+                           httpClient.DefaultRequestHeaders.Add("Cookie", await GetAuthCookie(httpClient, seedOptions));
                            response = await PerformGraphQlQuery(httpClient, QueryProjects, null);
                            content = await response.Content.ReadAsStringAsync();
                            Assert.IsTrue(response.IsSuccessStatusCode, content);
@@ -139,12 +124,36 @@ namespace CollAction.Tests.Integration
                                        }}
                                    }}
                                }}";
-                       HttpResponseMessage response = await PerformGraphQlQuery(testServer, createProject, null);
-                       string content = await response.Content.ReadAsStringAsync();
-                       JsonDocument result = JsonDocument.Parse(content);
-                       Assert.IsTrue(response.IsSuccessStatusCode, content);
-                       Assert.ThrowsException<KeyNotFoundException>(() => result.RootElement.GetProperty("errors"), content);
+
+                       SeedOptions seedOptions = scope.ServiceProvider.GetRequiredService<IOptions<SeedOptions>>().Value;
+                       using (var httpClient = testServer.CreateClient())
+                       {
+                           httpClient.DefaultRequestHeaders.Add("Cookie", await GetAuthCookie(httpClient, seedOptions));
+                           HttpResponseMessage response = await PerformGraphQlQuery(httpClient, createProject, null);
+                           string content = await response.Content.ReadAsStringAsync();
+                           JsonDocument result = JsonDocument.Parse(content);
+                           Assert.IsTrue(response.IsSuccessStatusCode, content);
+                           Assert.ThrowsException<KeyNotFoundException>(() => result.RootElement.GetProperty("errors"), content);
+                       }
                    });
+
+        private static async Task<string> GetAuthCookie(HttpClient httpClient, SeedOptions seedOptions)
+        {
+            // Login as admin
+            Dictionary<string, string> loginContent = new Dictionary<string, string>()
+            {
+                { "Email", seedOptions.AdminEmail },
+                { "Password", seedOptions.AdminPassword }
+            };
+            using (var formContent = new FormUrlEncodedContent(loginContent))
+            {
+                HttpResponseMessage authResult = await httpClient.PostAsync(new Uri("/account/login", UriKind.Relative), formContent);
+                string authResultContent = await authResult.Content.ReadAsStringAsync();
+                string cookie = authResult.Headers.Single(h => h.Key == "Set-Cookie").Value.Single().Split(";").First();
+                Assert.IsTrue(authResult.IsSuccessStatusCode, authResultContent);
+                return cookie;
+            }
+        }
 
 
         private static async Task<HttpResponseMessage> PerformGraphQlQuery(TestServer testServer, string query, dynamic variables)
@@ -157,20 +166,20 @@ namespace CollAction.Tests.Integration
 
         private static async Task<HttpResponseMessage> PerformGraphQlQuery(HttpClient httpClient, string query, dynamic variables)
         {
-           // Test with columns provided
-           string jsonBody =
-               JsonSerializer.Serialize(
-                   new
-                   {
-                       Query = query,
-                       Variables = variables
-                   });
-           var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+            // Test with columns provided
+            string jsonBody =
+                JsonSerializer.Serialize(
+                    new
+                    {
+                        Query = query,
+                        Variables = variables
+                    });
+            var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
 
-           using (content)
-           {
-               return await httpClient.PostAsync(new Uri("/graphql", UriKind.Relative), content, CancellationToken.None).ConfigureAwait(false);
-           }
+            using (content)
+            {
+                return await httpClient.PostAsync(new Uri("/graphql", UriKind.Relative), content, CancellationToken.None).ConfigureAwait(false);
+            }
         }
     }
 }
