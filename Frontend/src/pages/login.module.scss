@@ -1,9 +1,7 @@
 @import '../components/Styles/responsive';
-@import '../components/Styles/typography';
 
 .intro {
     .title {
-        @include large-title();
         color: var(--c-green);
         text-align: center;
         margin-bottom: 0;
@@ -14,7 +12,6 @@
     }
 
     .subtitle {
-        @include large-title();
         font-size: var(--font-size-lg);
         color: var(--c-grey-d30);
         text-align: center;

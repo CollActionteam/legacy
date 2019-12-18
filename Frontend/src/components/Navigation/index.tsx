@@ -46,13 +46,16 @@ export default class Navigation extends React.Component<
           </ul>
           <ul className={styles.navigationList}>
             <li className={styles.navigationItem}>
-              <Link className={styles.donationLink} to="/donate">
+              <Link className={styles.navigationButton} to="/donate">
                 <FontAwesomeIcon icon="heart" />
                 Donate
               </Link>
             </li>
             <li className={styles.navigationItem}>
-              <Button to="/login">Login</Button>
+              <Link className={styles.navigationButton} to="/login">
+                <FontAwesomeIcon icon="sign-in-alt" />
+                Login
+              </Link>
             </li>
           </ul>
         </nav>

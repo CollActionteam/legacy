@@ -40,7 +40,7 @@
 
 .navigationItem {
     display: inline-block;
-    padding-left: var(--spacing-xlg);
+    padding-left: var(--spacing-lg);
 
     @include breakpoint-down(lg) {
         padding-left: var(--spacing-lg);
@@ -77,7 +77,7 @@
     cursor: pointer;
 }
 
-.donationLink {
+.navigationButton {
     color: var(--c-green);
     text-decoration: none;
     

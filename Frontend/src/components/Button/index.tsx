@@ -48,6 +48,12 @@ export const GhostButton = ({ children, ...props }) => (
   </Button>
 );
 
+export const SecondaryGhostButton = ({ children, ...props }) => (
+  <Button variant="ghostSecondary" {...props}>
+    {children}
+  </Button>
+);
+
 export const IconButton = ({ ...props }) => (
   <Button variant="icon" {...props}>
     <FontAwesomeIcon icon={props.icon}></FontAwesomeIcon>

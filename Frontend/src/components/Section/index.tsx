@@ -22,7 +22,7 @@ export const Section = ({
   return (
     <section className={classes}>
       <Container>
-        {title ? <h3 className={styles.title}>{title}</h3> : null}
+        {title ? <h2 className={styles.title}>{title}</h2> : null}
         {children}
       </Container>
     </section>

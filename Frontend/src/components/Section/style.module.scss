@@ -2,9 +2,10 @@
 
 section {
   position: relative;
-  padding-top: calc(var(--spacing-lg) * 2); //@TODO: replace with -hg
-  padding-bottom: calc(var(--spacing-xlg) * 2); //@TODO: replace with -hg
+  padding-top: var(--spacing-xlg);
+  padding-bottom: var(--spacing-xlg);
   width: 100%;
+  text-align: center;
 
   &::after {
     position: absolute;
@@ -26,6 +27,10 @@ section {
   h6,
   h7 {
     margin-bottom: var(--spacing-lg);
+  }
+
+  p {
+    font-size: var(--font-size-md);
   }
 
   ul,
@@ -64,8 +69,11 @@ section {
 // }
 
 .title {
-  font-weight: var(--font-weight-bold);
   margin-bottom: var(--spacing-lg);
+  color: var(--c-green);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  text-align: center;
 }
 
 .indent {

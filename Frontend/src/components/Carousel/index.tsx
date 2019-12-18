@@ -5,13 +5,18 @@ import Slider from "react-slick";
 import { Grid, Container } from "@material-ui/core";
 import Card from "../Card";
 import Loader from "../Loader";
-import { SecondaryButton, GhostButton } from "../Button";
+import { SecondaryButton, SecondaryGhostButton } from "../Button";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import styles from "./style.module.scss";
 
-export default () => {
+interface ICarouselProps {
+  title?: string;
+  text?: any;
+}
+
+export default ({ title, text }: ICarouselProps) => {
   const settings = {
     dots: false,
     infinite: true,
@@ -34,7 +39,7 @@ export default () => {
 
   if (error) {
     console.error(error);
-    return;
+    return null;
   }
 
   return (
@@ -42,15 +47,17 @@ export default () => {
       <Grid container className={styles.container}>
         <Grid item sm={12} md={3}>
           <div className={styles.intro}>
-            <h1 className={styles.introTitle}>Power to the crowd</h1>
-            <p>
-              We help people solve collective action problems through
-              crowdacting.
-            </p>
+            <h2 className={styles.introTitle}>{title}</h2>
+            <p
+              className={styles.introText}
+              dangerouslySetInnerHTML={{ __html: text }}
+            ></p>
             <SecondaryButton to="projects/find">
               Find Crowdaction
             </SecondaryButton>
-            <GhostButton to="projects/start">Start Crowdaction</GhostButton>
+            <SecondaryGhostButton to="projects/start">
+              Start Crowdaction
+            </SecondaryGhostButton>
           </div>
         </Grid>
         <Grid item sm={12} md={9} className={styles.sliderContainer}>

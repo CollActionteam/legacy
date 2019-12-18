@@ -2,12 +2,12 @@ import React from "react";
 import Layout from "../components/Layout";
 import { graphql, StaticQuery } from "gatsby";
 import { CallToAction } from "../components/CallToAction";
-import { Hidden } from "@material-ui/core";
+import { Hidden, Grid } from "@material-ui/core";
 
 import styles from "./index.module.scss";
 import { CrowdactingSteps } from "../components/CrowdactingSteps";
 import { StartProjectSteps } from "../components/StartProjectSteps";
-import { Button } from "../components/Button";
+import { Button, GhostButton } from "../components/Button";
 import { Facebook, Twitter, LinkedIn, Email } from "../components/Share";
 import { Section } from "../components/Section";
 import Carousel from "../components/Carousel";
@@ -39,36 +39,25 @@ export default () => (
     `}
     render={staticData => {
       const sections = staticData.content.edges.map(e => e.node);
+      const carousel = sections.find(s => s.frontmatter.name === "carousel");
       const intro = sections.find(s => s.frontmatter.name === "intro");
-
       return (
         <Layout>
-          <Carousel />
-          <Section className={styles.introduction}>
-            <h2>{intro.frontmatter.title}</h2>
+          <Carousel title={carousel.frontmatter.title} text={carousel.html} />
+          <Section color="grey" title={intro.frontmatter.title}>
             <p dangerouslySetInnerHTML={{ __html: intro.html }}></p>
+            <GhostButton to="/about">Learn more</GhostButton>
           </Section>
-          <Section color="grey">
-            <CrowdactingSteps />
+          <Section className={styles.timeToAct} title="Time to act">
+            <StartProjectSteps />
           </Section>
-          <Hidden smDown>
-            <Section className={styles.findProject}>
-              <h1>Join a project</h1>
-              <ProjectsList />
-              <Button to="/projects/find">Find more projects</Button>
-            </Section>
-            <Section color="grey" className={styles.startproject}>
-              <h1>Starting a project</h1>
-              <h2>(is super easy)</h2>
-              <StartProjectSteps />
-              <Button to="/projects/start">Start a project</Button>
-            </Section>
-          </Hidden>
-          <Hidden mdUp>
-            <Section>
-              <CallToAction title="" />
-            </Section>
-          </Hidden>
+          <Section color="grey" title="Our collective impact">
+            <p>Stats</p>
+          </Section>
+          <Section title="Join a crowdaction">
+            <ProjectsList />
+            <Button to="/projects/find">Find more projects</Button>
+          </Section>
           <Section color="grey">
             <div className={styles.spread}>
               <div className={styles.spreadBlock}>

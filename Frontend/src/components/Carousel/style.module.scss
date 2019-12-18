@@ -80,7 +80,10 @@
 }
 
 .container {
+    margin-bottom: var(--spacing-xlg);
+
     @include breakpoint-up(md) {
+        margin-top: var(--spacing-xlg);
         padding-left: 3rem;
         padding-right: 3rem;
     }
@@ -107,6 +110,10 @@
     }
 
     @include breakpoint-up(md) {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
         margin: 0;
         margin-right: var(--spacing);
         padding: var(--spacing-md);
@@ -114,6 +121,7 @@
 
         a {
             display: block;
+            margin: 0;
             margin-top: var(--spacing);
         }
     }
@@ -124,7 +132,7 @@
 }
 
 .introText {
-    margin-bottom: var(--spacing);
+    font-size: var(--font-size-md);
 }
 
 .sliderContainer {

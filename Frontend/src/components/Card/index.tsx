@@ -27,10 +27,10 @@ export default ({ project }: { project: IProject }) => {
           {project.isComingSoon ? <span>Coming soon</span> : null}
           {project.isClosed ? <span>Signup closed</span> : null}
         </div>
-        <h2 className={styles.title}>
+        <h3 className={styles.title}>
           Carbon Neutral Travel 2019
           {/* {project.title} */}
-        </h2>
+        </h3>
         <div className={styles.description}>
           If 50 people commit to (1) thinking twice about each flight they take,
           and (2) … purchasing carbon offsets ...

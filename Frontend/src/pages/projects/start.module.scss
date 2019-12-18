@@ -1,4 +1,4 @@
-@import '../../components/Styles/typography.scss';
+@import '../../components/Styles/responsive';
 
 .banner {
   height: 450px;
@@ -38,10 +38,6 @@
 
 .howItWorks {
   text-align: center;
-  
-  h1 {
-    @include large-title();
-  }
 }
 
 .faq {
