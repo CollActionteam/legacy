@@ -64,6 +64,10 @@
         @include breakpoint-up(md) {
             left: -25.5vw;
         }
+
+        @include breakpoint-up(lg) {
+            left: -38.5%;
+        }
     }
 
     .slick-next {
@@ -77,6 +81,10 @@
     @include breakpoint-up(md) {
         padding-left: 3rem;
         padding-right: 3rem;
+    }
+
+    @include breakpoint-up(lg) {
+        padding: 0;
     }
 }
 
@@ -98,7 +106,7 @@
     @include breakpoint-up(md) {
         margin: 0;
         margin-right: var(--spacing);
-        padding: var(--spacing-lg);
+        padding: var(--spacing-md);
         border-radius: var(--border-radius-sm);
 
         a {
@@ -106,10 +114,10 @@
             margin-top: var(--spacing);
         }
     }
-}
 
-.introTitle {
-    // margin-top: var(--spacing-lg);
+    @include breakpoint-up(lg) {
+        padding: var(--spacing-lg);
+    }
 }
 
 .introText {
