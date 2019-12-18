@@ -1,11 +1,9 @@
 import React from "react";
 import Layout from "../components/Layout";
 import { graphql, StaticQuery } from "gatsby";
-import { CallToAction } from "../components/CallToAction";
-import { Hidden, Grid } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 
 import styles from "./index.module.scss";
-import { CrowdactingSteps } from "../components/CrowdactingSteps";
 import { StartProjectSteps } from "../components/StartProjectSteps";
 import { Button, GhostButton } from "../components/Button";
 import { Facebook, Twitter, LinkedIn, Email } from "../components/Share";
@@ -44,21 +42,21 @@ export default () => (
       return (
         <Layout>
           <Carousel title={carousel.frontmatter.title} text={carousel.html} />
-          <Section color="grey" title={intro.frontmatter.title}>
-            <p dangerouslySetInnerHTML={{ __html: intro.html }}></p>
+          <Section center color="grey" title={intro.frontmatter.title}>
+            <p dangerouslySetInnerHTML={{ __html: intro.html }} />
             <GhostButton to="/about">Learn more</GhostButton>
           </Section>
-          <Section className={styles.timeToAct} title="Time to act">
-            <StartProjectSteps />
+          <Section center className={styles.timeToAct} title="Time to act">
+            <p>Time to act</p>
           </Section>
-          <Section color="grey" title="Our collective impact">
+          <Section center color="grey" title="Our collective impact">
             <p>Stats</p>
           </Section>
-          <Section title="Join a crowdaction">
+          <Section center title="Join a crowdaction">
             <ProjectsList />
             <Button to="/projects/find">Find more projects</Button>
           </Section>
-          <Section color="grey">
+          <Section center color="grey">
             <div className={styles.spread}>
               <div className={styles.spreadBlock}>
                 <h2>Spread it further!</h2>

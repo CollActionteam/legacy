@@ -25,11 +25,9 @@ export default function About({ data }) {
   const faqs = data.faqs.edges.map(e => e.node);
 
   const generateMemberPhoto = member => (
-    <li key={member.name}>
-      <div className={styles.teamMember}>
-        <img src={member.photo} alt={member.name} title={member.name} />
-        <p>{member.name}</p>
-      </div>
+    <li key={member.name} className={styles.teamMember}>
+      <img src={member.photo} alt={member.name} title={member.name} />
+      <span>{member.name}</span>
     </li>
   );
 
@@ -43,26 +41,24 @@ export default function About({ data }) {
           allowFullScreen
         ></iframe>
       </Grid>
-      <Section indent color="green">
+      <Section color="green">
         <span dangerouslySetInnerHTML={{ __html: mission.html }}></span>
       </Section>
-      <Section indent>
+      <Section>
         <span dangerouslySetInnerHTML={{ __html: about.html }}></span>
       </Section>
-      <Section indent color="grey">
-        <h2>{meetTheTeam.title}</h2>
+      <Section color="grey" title={meetTheTeam.title}>
         <ul className={styles.team}>
           {meetTheTeam.team.map(generateMemberPhoto)}
         </ul>
       </Section>
-      <Section indent>
+      <Section>
         <span dangerouslySetInnerHTML={{ __html: join.html }}></span>
       </Section>
-      <Section indent color="grey">
+      <Section color="grey">
         <span dangerouslySetInnerHTML={{ __html: partners.html }}></span>
       </Section>
-      <Section indent>
-        <h2>Frequently Asked Questions</h2>
+      <Section title="Frequently Asked Questions">
         {faqs.map(faq => (
           <Faq
             key={faq.frontmatter.name}

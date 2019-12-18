@@ -79,16 +79,14 @@ const StartProject = ({ data }) => {
         </div>
       </Section>
 
-      <Section color="grey" className={styles.howItWorks}>
-        <h1>How it works</h1>
+      <Section color="grey" className={styles.howItWorks} title="How it works">
         <StartProjectSteps></StartProjectSteps>
         <Button to="/projects/create">Start a project</Button>
       </Section>
       <Grid container>
         <Grid item md={2}></Grid>
         <Grid item xs={12} md={8}>
-          <Section className={styles.faq}>
-            <h2>Frequently Asked Questions</h2>
+          <Section className={styles.faq} title="Frequently Asked Questions">
             {faqs.map(faq => (
               <Faq
                 key={faq.frontmatter.name}

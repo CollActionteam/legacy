@@ -5,7 +5,7 @@ section {
   padding-top: var(--spacing-xlg);
   padding-bottom: var(--spacing-xlg);
   width: 100%;
-  text-align: center;
+  // text-align: center;
 
   &::after {
     position: absolute;
@@ -18,19 +18,18 @@ section {
     z-index: -1;
   }
 
-  p,
   h1,
   h2,
   h3,
   h4,
   h5,
-  h6,
-  h7 {
-    margin-bottom: var(--spacing-lg);
+  h6 {
+    margin-bottom: var(--spacing-md);
   }
 
   p {
     font-size: var(--font-size-md);
+    margin-bottom: var(--spacing-lg);
   }
 
   ul,
@@ -57,16 +56,11 @@ section {
   ol {
     list-style: decimal;
   }
-}
 
-// .textContent {
-//   > *:not(:last-child),
-//   // CMS content is wrapped in a span
-//   > span > *:not(:last-child),
-//   // FAQs are wrapped in a div
-//   > div > span > *:not(:last-child) { 
-//   }
-// }
+  &.center {
+    text-align: center;
+  }
+}
 
 .title {
   margin-bottom: var(--spacing-lg);
@@ -74,14 +68,6 @@ section {
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-semibold);
   text-align: center;
-}
-
-.indent {
-  width: auto;
-
-  @include breakpoint-up(md) {
-    padding-left: calc(var(--spacing-xlg) * 7);
-  }
 }
 
 .green {
