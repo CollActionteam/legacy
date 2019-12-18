@@ -4,10 +4,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using CollAction.Models;
-using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using CollAction.Services;
+using Microsoft.Extensions.Options;
 
 namespace CollAction.Data
 {
@@ -44,11 +45,11 @@ namespace CollAction.Data
         /// <param name="configuration">Configuration</param>
         /// <param name="userManager">User manager to create and query users</param>
         /// <param name="roleManager">Role managers to create and query roles</param>
-        public async Task Seed(IConfiguration configuration, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public async Task Seed(SeedOptions seedOptions, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
-            await CreateAdminRoleAndUser(configuration, userManager, roleManager);
+            await CreateAdminRoleAndUser(seedOptions, userManager, roleManager);
             await CreateCategories();
-            await SeedTestProjects(configuration, userManager);
+            await SeedTestProjects(seedOptions, userManager);
         }
 
         public static async Task InitializeDatabase(IServiceScope scope)
@@ -57,12 +58,12 @@ namespace CollAction.Data
             var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
             var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-            var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+            var seedOptions = scope.ServiceProvider.GetRequiredService<IOptions<SeedOptions>>().Value;
 
             logger.LogInformation("migrating database");
             await context.Database.MigrateAsync();
             logger.LogInformation("seeding database");
-            await context.Seed(configuration, userManager, roleManager);
+            await context.Seed(seedOptions, userManager, roleManager);
             logger.LogInformation("done starting up");
         }
 
@@ -102,7 +103,7 @@ namespace CollAction.Data
                    .HasForeignKey(e => e.UserId);
         }
 
-        private async Task CreateAdminRoleAndUser(IConfiguration configuration, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        private async Task CreateAdminRoleAndUser(SeedOptions seedOptions, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             // Create admin role if not exists
             IdentityRole adminRole = await roleManager.FindByNameAsync(Constants.AdminRole);
@@ -117,13 +118,11 @@ namespace CollAction.Data
             }
 
             // Create admin user if not exists
-            string adminPassword = configuration["AdminPassword"];
-            string adminEmail = configuration["AdminEmail"];
-            ApplicationUser admin = await userManager.FindByEmailAsync(adminEmail);
+            ApplicationUser admin = await userManager.FindByEmailAsync(seedOptions.AdminEmail);
             if (admin == null)
             {
-                admin = new ApplicationUser(adminEmail) { EmailConfirmed = true, RegistrationDate = DateTime.UtcNow };
-                IdentityResult result = await userManager.CreateAsync(admin, adminPassword);
+                admin = new ApplicationUser(seedOptions.AdminEmail) { EmailConfirmed = true, RegistrationDate = DateTime.UtcNow };
+                IdentityResult result = await userManager.CreateAsync(admin, seedOptions.AdminPassword);
                 if (!result.Succeeded)
                 {
                     throw new InvalidOperationException($"Error creating user.{Environment.NewLine}{string.Join(Environment.NewLine, result.Errors.Select(e => $"{e.Code}: {e.Description}"))}");
@@ -160,12 +159,12 @@ namespace CollAction.Data
             }
         }
 
-        private async Task SeedTestProjects(IConfiguration configuration, UserManager<ApplicationUser> userManager)
+        private async Task SeedTestProjects(SeedOptions seedOptions, UserManager<ApplicationUser> userManager)
         {
-            if (configuration.GetValue<bool>("SeedTestProjects") && !(await Projects.AnyAsync()))
+            if (seedOptions.SeedTestProjects && !(await Projects.AnyAsync()))
             {
                 Random r = new Random();
-                ApplicationUser admin = await userManager.FindByEmailAsync(configuration["AdminEmail"]);
+                ApplicationUser admin = await userManager.FindByEmailAsync(seedOptions.AdminEmail);
                 Projects.AddRange(
                     Enumerable.Range(0, r.Next(20, 200))
                               .Select(i =>

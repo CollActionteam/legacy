@@ -174,6 +174,7 @@ namespace CollAction
             services.Configure<ImageProcessingOptions>(Configuration);
             services.Configure<NewsletterServiceOptions>(Configuration);
             services.Configure<ProjectEmailOptions>(Configuration);
+            services.Configure<SeedOptions>(Configuration);
             services.Configure<MailChimpOptions>(options =>
             {
                 options.ApiKey = Configuration["MailChimpKey"];

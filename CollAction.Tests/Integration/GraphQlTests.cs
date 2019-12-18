@@ -8,6 +8,9 @@ using System.Text.Json;
 using System.Threading;
 using System.Linq;
 using System.Threading.Tasks;
+using CollAction.Services;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CollAction.Tests.Integration
 {
@@ -81,27 +84,102 @@ namespace CollAction.Tests.Integration
                        Assert.IsTrue(response.IsSuccessStatusCode, content);
                        JsonDocument result = JsonDocument.Parse(content);
                        Assert.IsNotNull(result.RootElement.GetProperty("errors"), content);
+
+                       SeedOptions seedOptions = scope.ServiceProvider.GetRequiredService<IOptions<SeedOptions>>().Value;
+                       using (var httpClient = testServer.CreateClient())
+                       {
+                           // Retry call as admin
+                           httpClient.DefaultRequestHeaders.Add("Cookie", await GetAuthCookie(httpClient, seedOptions));
+                           response = await PerformGraphQlQuery(httpClient, QueryProjects, null);
+                           content = await response.Content.ReadAsStringAsync();
+                           Assert.IsTrue(response.IsSuccessStatusCode, content);
+                           result = JsonDocument.Parse(content);
+                           Assert.ThrowsException<KeyNotFoundException>(() => result.RootElement.GetProperty("errors"), content);
+                       }
                    });
 
-        private static async Task<HttpResponseMessage> PerformGraphQlQuery(TestServer server, string query, dynamic variables)
-        {
-            using (var httpClient = server.CreateClient())
-            {
-               // Test with columns provided
-               string jsonBody =
-                   JsonSerializer.Serialize(
-                       new
-                       {
-                           Query = query,
-                           Variables = variables
-                       });
-               var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+        [TestMethod]
+        public Task TestCreateProject()
+            => WithTestServer(
+                   async (scope, testServer) =>
+                   {
+                       string createProject = $@"
+                           mutation {{
+                               project {{
+                                   createProject(project:
+                                       {{
+                                           name:""{Guid.NewGuid()}"",
+                                           categoryId: 4,
+                                           target: 55,
+                                           proposal: ""44"",
+                                           description: """",
+                                           goal: ""dd"",
+                                           creatorComments: ""dd"",
+                                           start: ""4-4-2009"",
+                                           end: ""4-4-2000"",
+                                           descriptionVideoLink: ""https://youtube.com"",
+                                           tags:[""{Guid.NewGuid()}"", ""a""]
+                                       }}) {{
+                                           id
+                                       }}
+                                   }}
+                               }}";
 
-               using (content)
-               {
-                   return await httpClient.PostAsync(new Uri("/graphql", UriKind.Relative), content, CancellationToken.None).ConfigureAwait(false);
-               }
-           }
+                       SeedOptions seedOptions = scope.ServiceProvider.GetRequiredService<IOptions<SeedOptions>>().Value;
+                       using (var httpClient = testServer.CreateClient())
+                       {
+                           httpClient.DefaultRequestHeaders.Add("Cookie", await GetAuthCookie(httpClient, seedOptions));
+                           HttpResponseMessage response = await PerformGraphQlQuery(httpClient, createProject, null);
+                           string content = await response.Content.ReadAsStringAsync();
+                           JsonDocument result = JsonDocument.Parse(content);
+                           Assert.IsTrue(response.IsSuccessStatusCode, content);
+                           Assert.ThrowsException<KeyNotFoundException>(() => result.RootElement.GetProperty("errors"), content);
+                       }
+                   });
+
+        private static async Task<string> GetAuthCookie(HttpClient httpClient, SeedOptions seedOptions)
+        {
+            // Login as admin
+            Dictionary<string, string> loginContent = new Dictionary<string, string>()
+            {
+                { "Email", seedOptions.AdminEmail },
+                { "Password", seedOptions.AdminPassword }
+            };
+            using (var formContent = new FormUrlEncodedContent(loginContent))
+            {
+                HttpResponseMessage authResult = await httpClient.PostAsync(new Uri("/account/login", UriKind.Relative), formContent);
+                string authResultContent = await authResult.Content.ReadAsStringAsync();
+                string cookie = authResult.Headers.Single(h => h.Key == "Set-Cookie").Value.Single().Split(";").First();
+                Assert.IsTrue(authResult.IsSuccessStatusCode, authResultContent);
+                return cookie;
+            }
+        }
+
+
+        private static async Task<HttpResponseMessage> PerformGraphQlQuery(TestServer testServer, string query, dynamic variables)
+        {
+            using (var httpClient = testServer.CreateClient())
+            {
+                return await PerformGraphQlQuery(httpClient, query, variables);
+            }
+        }
+
+        private static async Task<HttpResponseMessage> PerformGraphQlQuery(HttpClient httpClient, string query, dynamic variables)
+        {
+            // Test with columns provided
+            string jsonBody =
+                JsonSerializer.Serialize(
+                    new
+                    {
+                        Query = query,
+                        Variables = variables
+                    });
+            var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+
+            using (content)
+            {
+                return await httpClient.PostAsync(new Uri("/graphql", UriKind.Relative), content, CancellationToken.None).ConfigureAwait(false);
+            }
         }
     }
 }
