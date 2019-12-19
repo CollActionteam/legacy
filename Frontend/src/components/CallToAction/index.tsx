@@ -4,7 +4,7 @@ import Grid from "@material-ui/core/Grid";
 
 import { Hidden } from "@material-ui/core";
 
-import { CircleButton, CircleButtonContainer, Button } from "../Button";
+import { CircleButton, CircleButtonContainer, Button } from "../Button/Button";
 
 import styles from "./style.module.scss";
 

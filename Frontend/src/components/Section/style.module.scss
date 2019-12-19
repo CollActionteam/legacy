@@ -2,9 +2,10 @@
 
 section {
   position: relative;
-  padding-top: calc(var(--spacing-lg) * 2); //@TODO: replace with -hg
-  padding-bottom: calc(var(--spacing-xlg) * 2); //@TODO: replace with -hg
+  padding-top: var(--spacing-xlg);
+  padding-bottom: var(--spacing-xlg);
   width: 100%;
+  // text-align: center;
 
   &::after {
     position: absolute;
@@ -17,14 +18,17 @@ section {
     z-index: -1;
   }
 
-  p,
   h1,
   h2,
   h3,
   h4,
   h5,
-  h6,
-  h7 {
+  h6 {
+    margin-bottom: var(--spacing-md);
+  }
+
+  p {
+    font-size: var(--font-size-md);
     margin-bottom: var(--spacing-lg);
   }
 
@@ -52,28 +56,18 @@ section {
   ol {
     list-style: decimal;
   }
-}
 
-// .textContent {
-//   > *:not(:last-child),
-//   // CMS content is wrapped in a span
-//   > span > *:not(:last-child),
-//   // FAQs are wrapped in a div
-//   > div > span > *:not(:last-child) { 
-//   }
-// }
+  &.center {
+    text-align: center;
+  }
+}
 
 .title {
-  font-weight: var(--font-weight-bold);
   margin-bottom: var(--spacing-lg);
-}
-
-.indent {
-  width: auto;
-
-  @include breakpoint-up(md) {
-    padding-left: calc(var(--spacing-xlg) * 7);
-  }
+  color: var(--c-green);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  text-align: center;
 }
 
 .green {

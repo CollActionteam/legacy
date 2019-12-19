@@ -18,7 +18,16 @@
             true,
             "spaces"
         ],
-
+        "overrides": [
+            {
+              "files": [
+                "**/*.spec.js"
+              ],
+              "env": {
+                "jest": true
+              }
+            }
+        ],
         "jsx-no-multiline-js" : false,
         "jsx-no-lambda" : false,
         "jsx-boolean-value" : false,

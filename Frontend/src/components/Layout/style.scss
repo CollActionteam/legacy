@@ -1,11 +1,13 @@
-//Global custom properties
+@import '../Styles/typography';
+
+///Global custom properties
 :root {
     --spacing: 1rem;
     --spacing-xs: calc(var(--spacing) * 0.25);
     --spacing-sm: calc(var(--spacing) * 0.5);
     --spacing-md: calc(var(--spacing) * 0.75);
-    --spacing-lg: calc(var(--spacing) * 1.5);
-    --spacing-xlg: calc(var(--spacing) * 2);
+    --spacing-lg: calc(var(--spacing) * 3);
+    --spacing-xlg: calc(var(--spacing) * 5);
 
     //Font
     --font-family: 'Raleway', sans-serif;
@@ -13,10 +15,9 @@
     --font-size: 16px;
     --font-size-xs: calc(var(--font-size) * 0.5);
     --font-size-sm: calc(var(--font-size) * 0.75);
-    --font-size-md: calc(var(--font-size) * 1.25);
-    --font-size-lg: calc(var(--font-size) * 1.75);
-    --font-size-xl: calc(var(--font-size) * 2);
-    --font-size-xlg: calc(var(--font-size) * 2.25);
+    --font-size-md: calc(var(--font-size) * 1.125);
+    --font-size-lg: calc(var(--font-size) * 2);
+    --font-size-xl: calc(var(--font-size) * 3);
 
     --font-weight-light: 200;
     --font-weight-regular: 300;
@@ -49,11 +50,15 @@
     --transition-ease: ease;
     
     //Other
-    --border-radius: var(--spacing-lg);
+    --border-radius: var(--spacing-md);
     --border-radius-sm: 4px;
     --box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.25);
     --box-shadow-lg: 10px 10px 40px -9px rgba(0, 0, 0, 0.55);
     --line-height: 1.5;
+}
+
+* {
+    box-sizing: border-box;
 }
 
 html,

@@ -4,7 +4,7 @@ import { Container } from "@material-ui/core";
 
 interface ISectionProps {
   children: any;
-  indent?: boolean;
+  center?: boolean;
   color?: string;
   title?: string;
   className?: string;
@@ -12,17 +12,17 @@ interface ISectionProps {
 
 export const Section = ({
   children,
-  indent,
+  center,
   color,
   title,
   className,
 }: ISectionProps) => {
   // tslint:disable-next-line: prettier
-  const classes = `${color ? styles[color] : ""} ${indent ? styles.indent : ""} ${className ? className : ""}`.trim();
+  const classes = `${color ? styles[color] : ""} ${center ? styles.center : ""} ${className ? className : ""}`.trim();
   return (
     <section className={classes}>
       <Container>
-        {title ? <h3 className={styles.title}>{title}</h3> : null}
+        {title ? <h2 className={styles.title}>{title}</h2> : null}
         {children}
       </Container>
     </section>
