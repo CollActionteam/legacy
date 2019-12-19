@@ -1,14 +1,12 @@
 import React from "react";
 import Layout from "../components/Layout";
 import { graphql, StaticQuery } from "gatsby";
-import { Box } from "@material-ui/core";
 
 import styles from "./index.module.scss";
-import { StartProjectSteps } from "../components/StartProjectSteps";
 import { Button, GhostButton } from "../components/Button";
 import { Facebook, Twitter, LinkedIn, Email } from "../components/Share";
 import { Section } from "../components/Section";
-import Carousel from "../components/Carousel";
+import Carousel from "../components/Carousel/Carousel";
 import ProjectsList from "../components/ProjectsList";
 
 export default () => (
