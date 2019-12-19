@@ -5,7 +5,7 @@ import { Banner } from "../../components/Banner";
 import styles from "./start.module.scss";
 import { Section } from "../../components/Section";
 import { StartProjectSteps } from "../../components/StartProjectSteps";
-import { Button, SecondaryButton } from "../../components/Button";
+import { Button, SecondaryButton } from "../../components/Button/Button";
 import { Faq } from "../../components/Faq";
 import { Grid } from "@material-ui/core";
 

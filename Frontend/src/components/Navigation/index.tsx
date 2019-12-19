@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "gatsby";
-import { Button } from "../Button";
+import { Button } from "../Button/Button";
 import { Hidden } from "@material-ui/core";
 import styles from "./style.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

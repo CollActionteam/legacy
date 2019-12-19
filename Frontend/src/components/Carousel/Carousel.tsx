@@ -5,7 +5,7 @@ import Slider from "react-slick";
 import { Grid, Container } from "@material-ui/core";
 import Card from "../Card";
 import Loader from "../Loader";
-import { SecondaryButton, SecondaryGhostButton } from "../Button";
+import { SecondaryButton, SecondaryGhostButton } from "../Button/Button";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";

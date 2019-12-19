@@ -3,7 +3,7 @@ import Layout from "../components/Layout";
 import { graphql, StaticQuery } from "gatsby";
 
 import styles from "./index.module.scss";
-import { Button, GhostButton } from "../components/Button";
+import { Button, GhostButton } from "../components/Button/Button";
 import { Facebook, Twitter, LinkedIn, Email } from "../components/Share";
 import { Section } from "../components/Section";
 import Carousel from "../components/Carousel/Carousel";

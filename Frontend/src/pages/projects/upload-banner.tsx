@@ -4,7 +4,7 @@ import UploadImage, {
   IUploadImageState,
   IUploadImageProps,
 } from "../../components/UploadImage";
-import { TertiaryButton } from "../../components/Button";
+import { TertiaryButton } from "../../components/Button/Button";
 
 import BrowserSizeImage from "./BrowserSize.png";
 import styles from "./create.module.scss";

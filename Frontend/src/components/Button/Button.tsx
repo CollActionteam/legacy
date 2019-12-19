@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "gatsby";
-import styles from "./style.module.scss";
+import styles from "./Button.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const Button = ({ children, variant = "primary", ...props }) => {
