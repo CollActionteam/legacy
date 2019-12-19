@@ -128,7 +128,7 @@ namespace CollAction
                 loggingBuilder.AddSerilog(Log.Logger);
             });
 
-            services.AddControllers()
+            services.AddMvc()
                     .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                     .AddNewtonsoftJson();
 
