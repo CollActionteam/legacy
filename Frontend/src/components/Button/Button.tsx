@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "gatsby";
-import styles from "./style.module.scss";
+import styles from "./Button.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const Button = ({ children, variant = "primary", ...props }) => {
@@ -44,6 +44,12 @@ export const TertiaryButton = ({ children, ...props }) => (
 
 export const GhostButton = ({ children, ...props }) => (
   <Button variant="ghost" {...props}>
+    {children}
+  </Button>
+);
+
+export const SecondaryGhostButton = ({ children, ...props }) => (
+  <Button variant="ghostSecondary" {...props}>
     {children}
   </Button>
 );

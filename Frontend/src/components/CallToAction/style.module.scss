@@ -1,9 +1,7 @@
 @import '../Styles/responsive';
-@import '../Styles/typography';
 
 .callToAction {
   h1 {
-    @include large-title();
     color: var(--c-green);
     padding-bottom: var(--spacing-xlg);
     text-align: center;

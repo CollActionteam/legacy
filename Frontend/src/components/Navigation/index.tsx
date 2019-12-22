@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "gatsby";
-import { Button } from "../Button";
+import { Button } from "../Button/Button";
 import { Hidden } from "@material-ui/core";
 import styles from "./style.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -46,13 +46,16 @@ export default class Navigation extends React.Component<
           </ul>
           <ul className={styles.navigationList}>
             <li className={styles.navigationItem}>
-              <Link className={styles.donationLink} to="/donate">
+              <Link className={styles.navigationButton} to="/donate">
                 <FontAwesomeIcon icon="heart" />
                 Donate
               </Link>
             </li>
             <li className={styles.navigationItem}>
-              <Button to="/login">Login</Button>
+              <Link className={styles.navigationButton} to="/login">
+                <FontAwesomeIcon icon="sign-in-alt" />
+                Login
+              </Link>
             </li>
           </ul>
         </nav>

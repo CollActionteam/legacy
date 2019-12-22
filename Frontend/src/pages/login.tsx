@@ -1,7 +1,7 @@
 import React from "react";
 import { graphql, StaticQuery } from "gatsby";
 import Layout from "../components/Layout";
-import { Button } from "../components/Button";
+import { Button } from "../components/Button/Button";
 import { Section } from "../components/Section";
 import {
   Grid,

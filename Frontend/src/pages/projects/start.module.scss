@@ -1,4 +1,4 @@
-@import '../../components/Styles/typography.scss';
+@import '../../components/Styles/responsive';
 
 .banner {
   height: 450px;
@@ -11,7 +11,7 @@
 
   background-color: var(--c-green);
   color: var(--c-white);
-  padding: var(--spacing-xlg);
+  padding: var(--spacing-lg) var(--spacing-md);
   border-radius: var(--border-radius);
   width: 450px;
   
@@ -20,10 +20,6 @@
     margin-left: var(--spacing-xlg);
     margin-right: var(--spacing-xlg);
     width: unset;
-  }
-
-  h1 {
-    margin-bottom: 0 !important;
   }
 }
 
@@ -38,10 +34,6 @@
 
 .howItWorks {
   text-align: center;
-  
-  h1 {
-    @include large-title();
-  }
 }
 
 .faq {

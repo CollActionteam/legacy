@@ -6,13 +6,15 @@ import { Grid } from "@material-ui/core";
 import { ProjectStatusFilter } from "../../api/types";
 import Loader from "../Loader";
 
+interface IProjectListProps {
+  categoryId?: string;
+  status?: string;
+}
+
 export default ({
   categoryId = "",
   status = ProjectStatusFilter.Active,
-}: {
-  categoryId: string;
-  status: string;
-}) => {
+}: IProjectListProps) => {
   const query = categoryId
     ? useQuery(FIND_PROJECTS, {
         variables: {
@@ -32,7 +34,7 @@ export default ({
 
   if (error) {
     console.error(error);
-    return;
+    return null;
   }
 
   return (

@@ -5,7 +5,7 @@ import { Banner } from "../../components/Banner";
 import styles from "./start.module.scss";
 import { Section } from "../../components/Section";
 import { StartProjectSteps } from "../../components/StartProjectSteps";
-import { Button, SecondaryButton } from "../../components/Button";
+import { Button, SecondaryButton } from "../../components/Button/Button";
 import { Faq } from "../../components/Faq";
 import { Grid } from "@material-ui/core";
 
@@ -79,16 +79,14 @@ const StartProject = ({ data }) => {
         </div>
       </Section>
 
-      <Section color="grey" className={styles.howItWorks}>
-        <h1>How it works</h1>
+      <Section color="grey" className={styles.howItWorks} title="How it works">
         <StartProjectSteps></StartProjectSteps>
         <Button to="/projects/create">Start a project</Button>
       </Section>
       <Grid container>
         <Grid item md={2}></Grid>
         <Grid item xs={12} md={8}>
-          <Section className={styles.faq}>
-            <h2>Frequently Asked Questions</h2>
+          <Section className={styles.faq} title="Frequently Asked Questions">
             {faqs.map(faq => (
               <Faq
                 key={faq.frontmatter.name}

@@ -1,5 +1,4 @@
-@import '../components/Styles/typography';
-@import '../components/Styles/responsive.scss';
+@import '../components/Styles/responsive';
 
 .video {
   position: relative;
@@ -21,28 +20,28 @@
   }
 }
 
-ul.team {
+.team {
   list-style: none;
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start;
+  justify-content: space-between;
   margin-left: 0;
-  margin-bottom: calc(var(--spacing) * -1);
 }
 
 $image-size: 6rem;
+
 .teamMember {
   display: flex;
   flex-direction: column;
   text-align: center;
-
-  padding: 0 calc(var(--spacing) * 3) var(--spacing) 0;
+  margin-bottom: var(--spacing-md);
+  margin-right: var(--spacing-lg);
   width: $image-size;
 
   img {
     width: 100%;
     height: $image-size;
-    background-color: #666;
+    background-color: var(--c-gray);
     border-radius: 50px;
     margin-bottom: var(--spacing)
   }

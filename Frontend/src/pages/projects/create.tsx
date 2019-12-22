@@ -8,7 +8,7 @@ import { FormControl, InputLabel, MenuItem, Grid } from "@material-ui/core";
 import Layout from "../../components/Layout";
 import { Section } from "../../components/Section";
 import { RichTextEditorFormControl } from "../../components/RichTextEditorFormContol";
-import { Button } from "../../components/Button";
+import { Button } from "../../components/Button/Button";
 import UploadBanner from "./upload-banner";
 import UploadDescriptiveImage from "./upload-descriptive-image";
 

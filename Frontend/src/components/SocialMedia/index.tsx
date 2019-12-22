@@ -1,7 +1,7 @@
 import React from "react";
 import { useStaticQuery, graphql } from "gatsby";
 import styles from "./style.module.scss";
-import { IconButton } from "../Button";
+import { IconButton } from "../Button/Button";
 
 export default () => {
   const data = useStaticQuery(query);
