@@ -67,12 +67,14 @@ export default () => (
                   <FormGroup>
                     <FormControl margin="normal">
                       <TextField
+                        name="Email"
                         className={styles.formControl}
                         label="E-mail"
                       />
                     </FormControl>
                     <FormControl margin="normal">
                       <TextField
+                        name="Password"
                         className={styles.formControl}
                         label="Password"
                         type="password"
