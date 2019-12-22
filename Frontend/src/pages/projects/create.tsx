@@ -70,8 +70,12 @@ export default () => {
   const { data: categoryResponse, loading } = useQuery(GET_CATEGORIES);
 
   const [createProject, { data: createProjectResponse }] = useMutation(gql`
-    mutation project($project: NewProjectInputGraph!) {
-      createProject(project: $project)
+    mutation Create($project: NewProjectInputGraph!) {
+      project {
+        createProject(project: $project) {
+          id
+        }
+      }
     }
   `);
 
@@ -87,7 +91,7 @@ export default () => {
           start: form.startDate,
           end: form.endDate,
           goal: form.goal,
-          tags: form.tags,
+          tags: form.tags ? form.tags.split(";") : [],
           creatorComments: form.comments,
           descriptionVideoLink: form.youtube,
         },
