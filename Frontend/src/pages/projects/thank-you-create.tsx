@@ -32,7 +32,7 @@ const ThankYou = ({ data }) => {
     .find(n => (n.name = "photos"));
   return (
     <Layout>
-      <Overlay photo={photos.thankyoucreatephoto} media="min-width: 600px">
+      <Overlay photo={photos.thankyoucreatephoto}>
         <Section className={styles.thankYouOverlay}>
           <h1>Awesome!</h1>
           <h2>Thank you for submitting {name}!</h2>
