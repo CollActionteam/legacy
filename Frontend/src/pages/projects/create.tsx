@@ -14,7 +14,7 @@ import UploadDescriptiveImage from "./upload-descriptive-image";
 
 import styles from "./create.module.scss";
 import gql from "graphql-tag";
-import { useQuery } from "react-apollo";
+import { useQuery, useMutation } from "react-apollo";
 import Loader from "../../components/Loader";
 
 export const query = graphql`
@@ -67,7 +67,41 @@ export default () => {
     }
   };
 
-  const { data, loading } = useQuery(GET_CATEGORIES);
+  const { data: categoryResponse, loading } = useQuery(GET_CATEGORIES);
+
+  const [createProject, { data: createProjectResponse }] = useMutation(gql`
+    mutation Create($project: NewProjectInputGraph!) {
+      project {
+        createProject(project: $project) {
+          id
+        }
+      }
+    }
+  `);
+
+  const commit = form => {
+    createProject({
+      variables: {
+        project: {
+          name: form.projectName,
+          categoryId: form.category,
+          target: form.target,
+          proposal: form.proposal,
+          description: form.description,
+          start: form.startDate,
+          end: form.endDate,
+          goal: form.goal,
+          tags: form.tags ? form.tags.split(";") : [],
+          creatorComments: form.comments,
+          descriptionVideoLink: form.youtube,
+        },
+      },
+    });
+
+    console.log(createProjectResponse);
+  };
+
+  // TODO: banner image, descriptive image + description
 
   return (
     <Layout>
@@ -131,10 +165,12 @@ export default () => {
               // tslint:enable: prettier
           })}
           onSubmit={(values, { setSubmitting }) => {
-            setTimeout(() => {
-              console.log(values);
-              setSubmitting(false);
-            }, 400);
+            commit(values);
+            setSubmitting(false);
+            // setTimeout(() => {
+            //   console.log(values);
+            //   setSubmitting(false);
+            // }, 400);
           }}
         >
           {props => (
@@ -153,8 +189,8 @@ export default () => {
                 <FormControl>
                   <InputLabel htmlFor="category">Category</InputLabel>
                   <Field name="category" component={Select}>
-                    {data
-                      ? data.categories.map(c => (
+                    {categoryResponse
+                      ? categoryResponse.categories.map(c => (
                           <MenuItem key={c.id} value={c.id}>
                             {c.name}
                           </MenuItem>

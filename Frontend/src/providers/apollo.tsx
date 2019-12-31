@@ -13,6 +13,7 @@ export default ({ children }) => {
     fetch,
     // uri: process.env.GATSBY_GRAPHQL_API,
     uri: "https://localhost:44301/graphql",
+    credentials: "include",
   });
 
   const errorLink = onError(({ networkError, graphQLErrors }) => {
