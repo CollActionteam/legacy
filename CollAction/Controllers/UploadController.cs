@@ -1,5 +1,6 @@
 ﻿using CollAction.Services.Image;
 using CollAction.ViewModels.Upload;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,9 +19,10 @@ namespace CollAction.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UploadImage(UploadImageViewModel uploadImage, CancellationToken cancellationToken)
+        [Authorize]
+        public async Task<IActionResult> UploadImage([FromForm] UploadImageViewModel uploadImage, CancellationToken cancellationToken)
         {
-            var image = await imageService.UploadImage(uploadImage.ImageUpload, uploadImage.ImageDescription, cancellationToken);
+            var image = await imageService.UploadImage(uploadImage.Image, uploadImage.ImageDescription, cancellationToken);
             return Ok(image.Id);
         }
     }

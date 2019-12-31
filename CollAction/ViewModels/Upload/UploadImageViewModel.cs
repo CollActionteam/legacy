@@ -13,6 +13,6 @@ namespace CollAction.ViewModels.Upload
         [FileSize(1024000)] // 1MB
         [FileType("jpg", "jpeg", "gif", "png", "bmp")]
         [Display(Name = "Description image")]
-        public IFormFile ImageUpload { get; set; }
+        public IFormFile Image { get; set; }
     }
 }

@@ -5,6 +5,11 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.TestHost;
 using CollAction.Data;
+using System.Net.Http;
+using CollAction.Services;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CollAction.Tests.Integration
 {
@@ -43,5 +48,23 @@ namespace CollAction.Tests.Integration
                       .UseEnvironment("Development")
                       .ConfigureTestServices(configureReplacements)
                       .UseStartup<Startup>();
+
+        protected static async Task<string> GetAuthCookie(HttpClient httpClient, SeedOptions seedOptions)
+        {
+            // Login as admin
+            Dictionary<string, string> loginContent = new Dictionary<string, string>()
+            {
+                { "Email", seedOptions.AdminEmail },
+                { "Password", seedOptions.AdminPassword }
+            };
+            using (var formContent = new FormUrlEncodedContent(loginContent))
+            {
+                HttpResponseMessage authResult = await httpClient.PostAsync(new Uri("/account/login", UriKind.Relative), formContent);
+                string authResultContent = await authResult.Content.ReadAsStringAsync();
+                string cookie = authResult.Headers.Single(h => h.Key == "Set-Cookie").Value.Single().Split(";").First();
+                Assert.IsTrue(authResult.IsSuccessStatusCode, authResultContent);
+                return cookie;
+            }
+        }
     }
 }

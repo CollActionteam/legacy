@@ -231,6 +231,8 @@ namespace CollAction
 
             app.UseAuthentication();
 
+            app.UseAuthorization();
+
             app.UseHangfireServer(new BackgroundJobServerOptions() { WorkerCount = 1 });
 
             app.UseHangfireDashboard(
