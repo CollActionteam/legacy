@@ -3,10 +3,7 @@ using CollAction.Helpers;
 using CollAction.Models;
 using GraphQL.Types;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CollAction.Tests.Unit
 {
@@ -25,6 +22,7 @@ namespace CollAction.Tests.Unit
             Assert.IsTrue(typeof(CategoryGraph).IsAssignableToGenericType(typeof(EnumerationGraphType<>)));
             Assert.IsTrue(typeof(List<int>).IsAssignableToGenericType(typeof(List<>)));
             Assert.IsFalse(typeof(IEnumerable<int>).IsAssignableToGenericType(typeof(List<>)));
+            Assert.IsTrue(typeof(List<int>).IsAssignableToGenericType(typeof(IEnumerable<>)));
         }
     }
 }
