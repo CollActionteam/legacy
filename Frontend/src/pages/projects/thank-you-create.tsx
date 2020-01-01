@@ -33,9 +33,11 @@ const ThankYou = ({ data }) => {
   return (
     <Layout>
       <Overlay photo={photos.thankyoucreatephoto}>
-        <Section className={styles.thankYouOverlay}>
-          <h1>Awesome!</h1>
-          <h2>Thank you for submitting {name}!</h2>
+        <Section>
+          <h1 className={styles.thankYouOverlayTitle}>Awesome!</h1>
+          <h2 className={styles.thankYouOverlaySubtitle}>
+            Thank you for submitting {name}!
+          </h2>
           The CollAction Team will review your project as soon as possible.
           <br />
           If it meets all the CollAction criteria we’ll publish the project on
