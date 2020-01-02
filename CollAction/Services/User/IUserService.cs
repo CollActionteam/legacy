@@ -25,6 +25,6 @@ namespace CollAction.Services.User
 
         Task<UserResult> FinishRegistration(NewUser newUser, string code);
 
-        Task<int> IngestUserEvent(ClaimsPrincipal trackedUser, JObject eventData, bool canTrack, CancellationToken cancellationToken);
+        Task<int> IngestUserEvent(ClaimsPrincipal trackedUser, JObject eventData, bool canTrack, CancellationToken token);
     }
 }

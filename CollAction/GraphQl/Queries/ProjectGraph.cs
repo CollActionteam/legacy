@@ -15,7 +15,6 @@ namespace CollAction.GraphQl.Queries
             Field(x => x.Id);
             Field(x => x.AnonymousUserParticipants);
             Field(x => x.BannerImageFileId, true);
-            Field(x => x.CategoryId);
             Field(x => x.CreatorComments, true);
             Field(x => x.Description);
             Field(x => x.DescriptionVideoLink, true);
@@ -45,11 +44,11 @@ namespace CollAction.GraphQl.Queries
                         return scope.ServiceProvider.GetRequiredService<IProjectService>().CanSendProjectEmail(c.Source);
                     }
                 });
-            AddNavigationField(nameof(Project.Category), c => c.Source.Category);
             AddNavigationField(nameof(Project.DescriptiveImage), c => c.Source.DescriptiveImage);
             AddNavigationField(nameof(Project.BannerImage), c => c.Source.BannerImage);
             AddNavigationField(nameof(Project.ParticipantCounts), c => c.Source.ParticipantCounts);
             AddNavigationField(nameof(Project.Owner), c => c.Source.Owner).AuthorizeWith(Constants.GraphQlAdminPolicy);
+            AddNavigationListField(nameof(Project.Categories), c => c.Source.Categories);
             AddNavigationListField(nameof(Project.Participants), c => c.Source.Participants).AuthorizeWith(Constants.GraphQlAdminPolicy);
             AddNavigationListField(nameof(Project.Tags), c => c.Source.Tags);
         }

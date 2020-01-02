@@ -15,7 +15,7 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CollAction.Tests.Integration
+namespace CollAction.Tests.Integration.Service
 {
     [TestClass]
     [TestCategory("Integration")]

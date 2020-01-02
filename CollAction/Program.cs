@@ -10,10 +10,7 @@ namespace CollAction
     {
         public static async Task Main(string[] args)
         {
-            IWebHost host =
-                WebHost.CreateDefaultBuilder(args)
-                       .UseStartup<Startup>()
-                       .Build();
+            IWebHost host = CreateHostBuilder(args).Build();
 
             using (IServiceScope scope = host.Services.CreateScope())
             {
@@ -22,5 +19,9 @@ namespace CollAction
 
             await host.RunAsync();
         }
+
+        public static IWebHostBuilder CreateHostBuilder(string[] args)
+            => WebHost.CreateDefaultBuilder(args)
+                      .UseStartup<Startup>();
     }
 }

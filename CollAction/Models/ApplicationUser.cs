@@ -8,17 +8,6 @@ namespace CollAction.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        public ApplicationUser() 
-        {
-            RepresentsNumberParticipants = 1;        
-        }
-
-        public ApplicationUser(string email): this()
-        {
-            UserName = email;
-            Email = email;
-        }
-
         [MaxLength(250)]
         public string FirstName { get; set; }
 
@@ -37,12 +26,12 @@ namespace CollAction.Models
 
         public int RepresentsNumberParticipants { get; set; } // Users might represent a business or a school. In that case, one user might represent multiple participants. Only settable by an admin user. Defaults to 1.
 
-        public List<Project> Projects { get; set; }
+        public ICollection<Project> Projects { get; set; }
 
-        public List<ProjectParticipant> Participates { get; set; }
+        public ICollection<ProjectParticipant> Participates { get; set; }
 
-        public List<DonationEventLog> DonationEvents { get; set; }
+        public ICollection<DonationEventLog> DonationEvents { get; set; }
 
-        public List<UserEvent> UserEvents { get; set; }
+        public ICollection<UserEvent> UserEvents { get; set; }
     }
 }

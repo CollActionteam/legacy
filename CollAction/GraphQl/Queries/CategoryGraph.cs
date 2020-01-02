@@ -1,17 +1,9 @@
-﻿using CollAction.Data;
-using CollAction.Models;
-using GraphQL.EntityFramework;
+﻿using CollAction.Models;
+using GraphQL.Types;
 
 namespace CollAction.GraphQl.Queries
 {
-    public class CategoryGraph : EfObjectGraphType<ApplicationDbContext, Category>
+    public class CategoryGraph : EnumerationGraphType<Category>
     {
-        public CategoryGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService) : base(entityFrameworkGraphQlService)
-        {
-            Field(x => x.Id);
-            Field(x => x.Color);
-            Field(x => x.ColorHex);
-            Field(x => x.Name);
-        }
     }
 }

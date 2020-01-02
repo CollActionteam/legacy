@@ -7,7 +7,7 @@ using Hangfire;
 using MailChimp.Net.Models;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CollAction.Tests.Integration
+namespace CollAction.Tests.Integration.Service
 {
     [TestClass]
     [TestCategory("Integration")]

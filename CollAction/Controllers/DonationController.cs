@@ -16,13 +16,13 @@ namespace CollAction.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PaymentEvent(CancellationToken cancellationToken)
+        public async Task<IActionResult> PaymentEvent(CancellationToken token)
         {
             using (var streamReader = new StreamReader(HttpContext.Request.Body))
             {
                 string json = await streamReader.ReadToEndAsync();
                 string signature = Request.Headers["Stripe-Signature"];
-                await donationService.LogPaymentEvent(json, signature, cancellationToken);
+                await donationService.LogPaymentEvent(json, signature, token);
                 return Ok();
             }
         }

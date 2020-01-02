@@ -5,13 +5,12 @@ using CollAction.Services.Image;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CollAction.Tests.Integration
+namespace CollAction.Tests.Integration.Endpoint
 {
     [TestClass]
     [TestCategory("Integration")]
@@ -34,7 +33,7 @@ namespace CollAction.Tests.Integration
                            client.DefaultRequestHeaders.Add("Cookie", await GetAuthCookie(client, seedOptions));
                            content.Add(streamContent, "Image", "test.png");
                            content.Add(descriptionContent, "ImageDescription");
-                           using (var response = await client.PostAsync("/upload", content))
+                           using (var response = await client.PostAsync("/image", content))
                            {
                                string body = await response.Content.ReadAsStringAsync();
                                Assert.IsTrue(response.IsSuccessStatusCode, body);

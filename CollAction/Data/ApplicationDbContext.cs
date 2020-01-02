@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using CollAction.Services;
 using Microsoft.Extensions.Options;
+using System.Collections.Generic;
 
 namespace CollAction.Data
 {
@@ -21,13 +22,13 @@ namespace CollAction.Data
 
         public DbSet<Project> Projects { get; set; }
 
+        public DbSet<ProjectCategory> ProjectCategories { get; set; }
+
         public DbSet<ProjectParticipant> ProjectParticipants { get; set; }
 
         public DbSet<ProjectTag> ProjectTags { get; set; }
 
         public DbSet<Tag> Tags { get; set; }
-
-        public DbSet<Category> Categories { get; set; }
 
         public DbSet<ImageFile> ImageFiles { get; set; }
 
@@ -48,7 +49,6 @@ namespace CollAction.Data
         public async Task Seed(SeedOptions seedOptions, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             await CreateAdminRoleAndUser(seedOptions, userManager, roleManager);
-            await CreateCategories();
             await SeedTestProjects(seedOptions, userManager);
         }
 
@@ -88,6 +88,14 @@ namespace CollAction.Data
                    .WithOne(proj => proj.Owner)
                    .HasForeignKey(proj => proj.OwnerId)
                    .OnDelete(DeleteBehavior.SetNull);
+            builder.Entity<Project>()
+                   .OwnsMany(
+                       p => p.Categories,
+                       b =>
+                       {
+                           b.WithOwner().HasForeignKey(pc => pc.ProjectId);
+                           b.HasKey("Category", "ProjectId");
+                       });
             builder.Entity<ProjectParticipant>()
                    .HasKey("UserId", "ProjectId");
             builder.Entity<ProjectTag>()
@@ -121,7 +129,7 @@ namespace CollAction.Data
             ApplicationUser admin = await userManager.FindByEmailAsync(seedOptions.AdminEmail);
             if (admin == null)
             {
-                admin = new ApplicationUser(seedOptions.AdminEmail) { EmailConfirmed = true, RegistrationDate = DateTime.UtcNow };
+                admin = new ApplicationUser() { Email = seedOptions.AdminEmail, UserName = seedOptions.AdminEmail, EmailConfirmed = true, RegistrationDate = DateTime.UtcNow, RepresentsNumberParticipants = 1 };
                 IdentityResult result = await userManager.CreateAsync(admin, seedOptions.AdminPassword);
                 if (!result.Succeeded)
                 {
@@ -137,25 +145,6 @@ namespace CollAction.Data
                 {
                     throw new InvalidOperationException($"Error assigning admin role.{Environment.NewLine}{string.Join(Environment.NewLine, result.Errors.Select(e => $"{e.Code}: {e.Description}"))}");
                 }
-            }
-        }
-
-        private async Task CreateCategories()
-        {
-            if (!(await Categories.AnyAsync()))
-            {
-                Categories.AddRange(
-                    new[] 
-                    {
-                        new Category() { Name = "Environment", ColorHex = "E88424" },
-                        new Category() { Name = "Community", ColorHex = "7B2164" },
-                        new Category() { Name = "Consumption", ColorHex = "9D1D20" },
-                        new Category() { Name = "Well-being", ColorHex = "3762AE" },
-                        new Category() { Name = "Governance", ColorHex = "29ABE2" },
-                        new Category() { Name = "Health", ColorHex = "EB078C" },
-                        new Category() { Name = "Other", ColorHex = "007D43" },
-                    });
-                await SaveChangesAsync();
             }
         }
 
@@ -175,7 +164,7 @@ namespace CollAction.Data
                                       Start = DateTime.Now.AddDays(r.Next(-10, 10)),
                                       End = DateTime.Now.AddDays(r.Next(20, 30)),
                                       AnonymousUserParticipants = r.Next(0, 5),
-                                      CategoryId = r.Next(1, 5),
+                                      Categories = new List<ProjectCategory>() { new ProjectCategory() { Category = (Category)r.Next(2) }, new ProjectCategory() { Category = (Category)(r.Next(3) + 2) } },
                                       CreatorComments = Guid.NewGuid().ToString(),
                                       DisplayPriority = (ProjectDisplayPriority)r.Next(0, 2),
                                       Goal = Guid.NewGuid().ToString(),

@@ -53,7 +53,8 @@ namespace CollAction.Services.User
             {
                 Email = email,
                 UserName = email,
-                RegistrationDate = DateTime.UtcNow
+                RegistrationDate = DateTime.UtcNow,
+                RepresentsNumberParticipants = 1
             };
             IdentityResult result = await userManager.CreateAsync(user);
             if (result.Succeeded)
@@ -85,7 +86,8 @@ namespace CollAction.Services.User
                 FirstName = newUser.FirstName,
                 LastName = newUser.LastName,
                 UserName = newUser.Email,
-                RegistrationDate = DateTime.UtcNow
+                RegistrationDate = DateTime.UtcNow,
+                RepresentsNumberParticipants = 1
             };
             IdentityResult result = await userManager.CreateAsync(user, newUser.Password);
             if (result.Succeeded)
@@ -241,7 +243,7 @@ namespace CollAction.Services.User
             return result;
         }
 
-        public async Task<int> IngestUserEvent(ClaimsPrincipal trackedUser, JObject eventData, bool canTrack, CancellationToken cancellationToken)
+        public async Task<int> IngestUserEvent(ClaimsPrincipal trackedUser, JObject eventData, bool canTrack, CancellationToken token)
         {
             logger.LogInformation("Ingesting user event information");
             ApplicationUser user = await userManager.GetUserAsync(trackedUser);
@@ -253,7 +255,7 @@ namespace CollAction.Services.User
                 UserId = trackedUserId
             };
             context.UserEvents.Add(userEvent);
-            await context.SaveChangesAsync(cancellationToken);
+            await context.SaveChangesAsync(token);
             return userEvent.Id;
         }
 

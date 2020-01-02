@@ -1,4 +1,5 @@
 ﻿using CollAction.Data;
+using CollAction.GraphQl.Mutations.Input;
 using CollAction.Models;
 using CollAction.Services.Email;
 using CollAction.Services.Projects;
@@ -9,12 +10,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CollAction.Tests.Integration
+namespace CollAction.Tests.Integration.Service
 {
     [TestClass]
     [TestCategory("Integration")]
@@ -35,7 +37,7 @@ namespace CollAction.Tests.Integration
                            new NewProject()
                            {
                                Name = "test" + Guid.NewGuid(),
-                               CategoryId = 2,
+                               Categories = new List<Category>() { Category.Other, Category.Health },
                                Description = Guid.NewGuid().ToString(),
                                DescriptionVideoLink = Guid.NewGuid().ToString(),
                                End = DateTime.Now.AddDays(30),
@@ -63,15 +65,16 @@ namespace CollAction.Tests.Integration
                        SignInManager<ApplicationUser> signInManager = scope.ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>();
                        UserManager<ApplicationUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-                       var currentProject = await context.Projects.Include(p => p.Owner).FirstOrDefaultAsync();
+                       var currentProject = await context.Projects.Include(p => p.Owner).FirstAsync(p => p.OwnerId != null);
                        var admin = (await userManager.GetUsersInRoleAsync(Constants.AdminRole)).First();
                        var adminClaims = await signInManager.CreateUserPrincipalAsync(admin);
+                       var owner = await signInManager.CreateUserPrincipalAsync(currentProject.Owner);
                        var updatedProject =
                            new UpdatedProject()
                            {
                                Name = Guid.NewGuid().ToString(),
                                BannerImageFileId = currentProject.BannerImageFileId,
-                               CategoryId = currentProject.CategoryId,
+                               Categories = new[] { Category.Community, Category.Environment },
                                CreatorComments = currentProject.CreatorComments,
                                Description = currentProject.Description,
                                DescriptionVideoLink = Guid.NewGuid().ToString(),
@@ -83,7 +86,7 @@ namespace CollAction.Tests.Integration
                                Tags = new string[3] { Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString() },
                                Id = currentProject.Id,
                                NumberProjectEmailsSend = 3,
-                               Owner = await signInManager.CreateUserPrincipalAsync(currentProject.Owner),
+                               Owner = owner,
                                Proposal = currentProject.Proposal,
                                Status = ProjectStatus.Running,
                                Target = 33
@@ -127,7 +130,7 @@ namespace CollAction.Tests.Integration
                            new Project()
                            {
                                Name = "test" + Guid.NewGuid(),
-                               CategoryId = 2,
+                               Categories = new List<ProjectCategory>() { new ProjectCategory() { Category = Category.Environment }, new ProjectCategory() { Category = Category.Community } },
                                Description = Guid.NewGuid().ToString(),
                                DescriptionVideoLink = Guid.NewGuid().ToString(),
                                End = DateTime.Now.AddDays(30),
@@ -154,6 +157,26 @@ namespace CollAction.Tests.Integration
 
                        Assert.AreEqual(4, newProject.NumberProjectEmailsSend);
                        Assert.IsFalse(projectService.CanSendProjectEmail(newProject));
+                   });
+
+        [TestMethod]
+        public Task TestProjectSearch()
+            => WithServiceProvider(
+                   async scope =>
+                   {
+                       IProjectService projectService = scope.ServiceProvider.GetRequiredService<IProjectService>();
+                       Random r = new Random();
+
+                       Assert.IsTrue(await projectService.SearchProjects(null, null).AnyAsync());
+
+                       Category searchCategory = (Category)r.Next(7);
+                       Assert.IsTrue(await projectService.SearchProjects(searchCategory, null).Include(p => p.Categories).AllAsync(p => p.Categories.Any(pc => pc.Category == searchCategory)));
+                       Assert.IsTrue(await projectService.SearchProjects(null, SearchProjectStatus.Closed).AllAsync(p => p.End < DateTime.UtcNow));
+                       Assert.IsTrue(await projectService.SearchProjects(searchCategory, SearchProjectStatus.Closed).AllAsync(p => p.End < DateTime.UtcNow));
+                       Assert.IsTrue(await projectService.SearchProjects(null, SearchProjectStatus.ComingSoon).AllAsync(p => p.Start > DateTime.UtcNow && p.Status == ProjectStatus.Running));
+                       Assert.IsTrue(await projectService.SearchProjects(searchCategory, SearchProjectStatus.ComingSoon).AllAsync(p => p.Start > DateTime.UtcNow && p.Status == ProjectStatus.Running));
+                       Assert.IsTrue(await projectService.SearchProjects(null, SearchProjectStatus.Open).AllAsync(p => p.Start <= DateTime.UtcNow && p.End >= DateTime.UtcNow && p.Status == ProjectStatus.Running));
+                       Assert.IsTrue(await projectService.SearchProjects(searchCategory, SearchProjectStatus.Open).AllAsync(p => p.Start <= DateTime.UtcNow && p.End >= DateTime.UtcNow && p.Status == ProjectStatus.Running));
                    });
 
         protected override void ConfigureReplacementServicesProvider(IServiceCollection collection)

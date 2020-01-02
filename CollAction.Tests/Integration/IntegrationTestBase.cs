@@ -61,6 +61,7 @@ namespace CollAction.Tests.Integration
             {
                 HttpResponseMessage authResult = await httpClient.PostAsync(new Uri("/account/login", UriKind.Relative), formContent);
                 string authResultContent = await authResult.Content.ReadAsStringAsync();
+                Assert.IsTrue(authResult.IsSuccessStatusCode, authResultContent);
                 string cookie = authResult.Headers.Single(h => h.Key == "Set-Cookie").Value.Single().Split(";").First();
                 Assert.IsTrue(authResult.IsSuccessStatusCode, authResultContent);
                 return cookie;

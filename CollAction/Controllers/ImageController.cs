@@ -7,22 +7,23 @@ using System.Threading.Tasks;
 
 namespace CollAction.Controllers
 {
-    [Route("upload")]
+    [Route("image")]
     [ApiController]
-    public class UploadController : Controller
+    public class ImageController : Controller
     {
         private readonly IImageService imageService;
 
-        public UploadController(IImageService imageService)
+        public ImageController(IImageService imageService)
         {
             this.imageService = imageService;
         }
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> UploadImage([FromForm] UploadImageViewModel uploadImage, CancellationToken cancellationToken)
+        public async Task<IActionResult> UploadImage([FromForm] UploadImageViewModel uploadImage, CancellationToken token)
         {
-            var image = await imageService.UploadImage(uploadImage.Image, uploadImage.ImageDescription, cancellationToken);
+            var image = await imageService.UploadImage(uploadImage.Image, uploadImage.ImageDescription, token);
+            imageService.InitializeDanglingImageJob();
             return Ok(image.Id);
         }
     }

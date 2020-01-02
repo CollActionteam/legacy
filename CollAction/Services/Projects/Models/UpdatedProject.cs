@@ -1,5 +1,6 @@
 ﻿using CollAction.Models;
 using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 
 namespace CollAction.Services.Projects.Models
@@ -9,8 +10,6 @@ namespace CollAction.Services.Projects.Models
         public int Id { get; set; }
 
         public string Name { get; set; }
-
-        public int CategoryId { get; set; }
 
         public int Target { get; set; }
 
@@ -34,12 +33,14 @@ namespace CollAction.Services.Projects.Models
 
         public string DescriptionVideoLink { get; set; }
 
-        public string[] Tags { get; set; }
-
         public ProjectDisplayPriority DisplayPriority { get; set; }
 
         public ProjectStatus Status { get; set; }
 
         public int NumberProjectEmailsSend { get; set; }
+
+        public ICollection<string> Tags { get; set; }
+
+        public ICollection<Category> Categories { get; set; }
     }
 }

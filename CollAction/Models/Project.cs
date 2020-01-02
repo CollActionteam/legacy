@@ -20,11 +20,8 @@ namespace CollAction.Models
 
         public ProjectStatus Status { get; set; }
 
-        public int CategoryId { get; set; }
-        [ForeignKey("CategoryId")]
-        public Category Category { get; set; }
-
         public string OwnerId { get; set; }
+
         [ForeignKey("OwnerId")]
         public ApplicationUser Owner { get; set; }
 
@@ -54,10 +51,12 @@ namespace CollAction.Models
         public int AnonymousUserParticipants { get; set; }
 
         public int? BannerImageFileId { get; set; }
+
         [ForeignKey("BannerImageFileId")]
         public ImageFile BannerImage { get; set; }
 
         public int? DescriptiveImageFileId { get; set; }
+
         [ForeignKey("DescriptiveImageFileId")]
         public ImageFile DescriptiveImage { get; set; }
 
@@ -67,9 +66,11 @@ namespace CollAction.Models
 
         public ProjectParticipantCount ParticipantCounts { get; set; }
 
-        public List<ProjectParticipant> Participants { get; set; }
+        public ICollection<ProjectParticipant> Participants { get; set; }
 
-        public List<ProjectTag> Tags { get; set; }
+        public ICollection<ProjectCategory> Categories { get; set; }
+
+        public ICollection<ProjectTag> Tags { get; set; }
 
         [NotMapped]
         public bool IsActive

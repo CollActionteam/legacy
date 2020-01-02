@@ -12,7 +12,7 @@ using CollAction.Services;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CollAction.Tests.Integration
+namespace CollAction.Tests.Integration.Endpoint
 {
     [TestClass]
     [TestCategory("Integration")]
@@ -28,6 +28,9 @@ namespace CollAction.Tests.Integration
                                projects {
                                    id
                                    name
+                                   categories {
+                                     category
+                                   }
                                    descriptiveImage {
                                        filepath
                                    }
@@ -39,10 +42,10 @@ namespace CollAction.Tests.Integration
                        Assert.IsTrue(response.IsSuccessStatusCode, content);
                        JsonDocument result = JsonDocument.Parse(content);
                        Assert.ThrowsException<KeyNotFoundException>(() => result.RootElement.GetProperty("errors"), content);
-                       JsonElement projects = result.RootElement.GetProperty("data").GetProperty("projects");
-                       Assert.IsTrue(projects.GetArrayLength() > 0, content);
+                       JsonElement.ArrayEnumerator projects = result.RootElement.GetProperty("data").GetProperty("projects").EnumerateArray();
+                       Assert.IsTrue(projects.Any(), content);
 
-                       int projectId = projects.EnumerateArray().First().GetProperty("id").GetInt32();
+                       int projectId = projects.First().GetProperty("id").GetInt32();
                        const string QueryProject = @"
                            query($projectId : ID!) {
                                project(id: $projectId) {
@@ -61,6 +64,33 @@ namespace CollAction.Tests.Integration
                        Assert.ThrowsException<KeyNotFoundException>(() => result.RootElement.GetProperty("errors"), content);
                        JsonElement project = result.RootElement.GetProperty("data").GetProperty("project");
                        Assert.AreEqual(projectId, project.GetProperty("id").GetInt32());
+                   });
+
+        [TestMethod]
+        public Task TestProjectFilter()
+            => WithTestServer(
+                   async (scope, testServer) =>
+                   {
+                       const string QueryProjects = @"
+                           query {
+                               projects(status: COMING_SOON, category: ENVIRONMENT) {
+                                   id
+                                   categories {
+                                     category
+                                   }
+                                   start
+                                   end
+                                   status
+                               }
+                           }";
+
+                       HttpResponseMessage response = await PerformGraphQlQuery(testServer, QueryProjects, null);
+                       string content = await response.Content.ReadAsStringAsync();
+                       Assert.IsTrue(response.IsSuccessStatusCode, content);
+                       JsonDocument result = JsonDocument.Parse(content);
+                       Assert.ThrowsException<KeyNotFoundException>(() => result.RootElement.GetProperty("errors"), content);
+                       JsonElement.ArrayEnumerator projects = result.RootElement.GetProperty("data").GetProperty("projects").EnumerateArray();
+                       Assert.IsTrue(projects.Any(), content);
                    });
 
         [TestMethod]
@@ -109,7 +139,7 @@ namespace CollAction.Tests.Integration
                                    createProject(project:
                                        {{
                                            name:""{Guid.NewGuid()}"",
-                                           categoryId: 4,
+                                           categories: [COMMUNITY, ENVIRONMENT],
                                            target: 55,
                                            proposal: ""44"",
                                            description: """",

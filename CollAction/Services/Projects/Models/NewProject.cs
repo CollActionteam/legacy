@@ -1,12 +1,12 @@
-﻿using System;
+﻿using CollAction.Models;
+using System;
+using System.Collections.Generic;
 
 namespace CollAction.Services.Projects.Models
 {
     public class NewProject
     {
         public string Name { get; set; }
-
-        public int CategoryId { get; set; }
 
         public int Target { get; set; }
 
@@ -28,6 +28,8 @@ namespace CollAction.Services.Projects.Models
 
         public string DescriptionVideoLink { get; set; }
 
-        public string[] Tags { get; set; }
+        public ICollection<Category> Categories { get; set; }
+
+        public ICollection<string> Tags { get; set; }
     }
 }
