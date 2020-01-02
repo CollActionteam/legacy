@@ -57,6 +57,16 @@ namespace CollAction.Services.Projects
                 throw new ValidationException("User not found");
             }
 
+            if (newProject.Categories.Count > 2)
+            {
+                throw new ValidationException("Too many categories");
+            }
+
+            if (newProject.Categories.Distinct().Count() != newProject.Categories.Count)
+            {
+                throw new ValidationException("Duplicate categories");
+            }
+
             var tagMap = new Dictionary<string, int>();
             if (newProject.Tags.Any())
             {
