@@ -52,7 +52,7 @@ export default abstract class UploadImage<
     const file = accepted[0];
     reader.onload = () => {
       that.setState({ image: reader.result });
-      onLoaded();
+      onLoaded(file);
     };
     reader.onabort = this.rejectImage;
     reader.onerror = this.rejectImage;

@@ -25,9 +25,9 @@ export default class UploadBanner extends UploadImage<
   }
 
   onDrop(accepted: File[], _rejected: File[], _event: any) {
-    this.loadImage(accepted, () =>
-      this.props.formik.setFieldValue("banner", this.state.image)
-    );
+    this.loadImage(accepted, file => {
+      this.props.formik.setFieldValue("banner", file);
+    });
   }
 
   onRejected() {
