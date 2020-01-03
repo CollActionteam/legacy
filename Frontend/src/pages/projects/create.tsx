@@ -1,5 +1,5 @@
 import React from "react";
-import { graphql } from "gatsby";
+import { graphql, navigate } from "gatsby";
 import { Formik, Field, Form, FormikProps } from "formik";
 import * as Yup from "yup";
 import { TextField, Select } from "formik-material-ui";
@@ -93,25 +93,34 @@ export default ({ data }) => {
       imageId = await uploadImage(form.image, form.imageDescription);
     }
 
-    createProject({
-      variables: {
-        project: {
-          name: form.projectName,
-          bannerImageFileId: bannerId || null,
-          categories: [form.category],
-          target: form.target,
-          proposal: form.proposal,
-          description: form.description,
-          start: form.startDate,
-          end: form.endDate,
-          goal: form.goal,
-          tags: form.tags ? form.tags.split(";") : [],
-          creatorComments: form.comments || null,
-          descriptiveImageFileId: imageId || null,
-          descriptionVideoLink: form.youtube || null,
+    try {
+      const response = await createProject({
+        variables: {
+          project: {
+            name: form.projectName,
+            bannerImageFileId: bannerId || null,
+            categories: [form.category],
+            target: form.target,
+            proposal: form.proposal,
+            description: form.description,
+            start: form.startDate,
+            end: form.endDate,
+            goal: form.goal,
+            tags: form.tags ? form.tags.split(";") : [],
+            creatorComments: form.comments || null,
+            descriptiveImageFileId: imageId || null,
+            descriptionVideoLink: form.youtube || null,
+          },
         },
-      },
-    });
+      });
+
+      // TODO: integrate with new thank you page
+      console.log(response);
+      navigate("projects/thankyou");
+    } catch (error) {
+      // TODO: error handling
+      console.error("Could not create project", error);
+    }
   };
 
   const uploadImage = async (file: any, description: string) => {
