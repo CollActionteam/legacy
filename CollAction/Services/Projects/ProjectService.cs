@@ -248,7 +248,7 @@ namespace CollAction.Services.Projects
                 jobClient.Delete(project.FinishJobId);
             }
 
-            await context.SaveChangesAsync();
+            await context.SaveChangesAsync(token);
             logger.LogInformation("Updated project: {0}", updatedProject.Name);
 
             return project;
@@ -256,13 +256,13 @@ namespace CollAction.Services.Projects
 
         public async Task ProjectSuccess(int projectId, CancellationToken token)
         {
-            Project project = await context.Projects.Include(p => p.ParticipantCounts).FirstAsync(p => p.Id == projectId);
+            Project project = await context.Projects.Include(p => p.ParticipantCounts).FirstAsync(p => p.Id == projectId, token);
 
             if (project.IsSuccessfull)
             {
                 await emailSender.SendEmailTemplated(project.Owner.Email, $"Success - {project.Name}", "ProjectSuccess");
             }
-            else
+            else if (project.IsFailed)
             {
                 await emailSender.SendEmailTemplated(project.Owner.Email, $"Failed - {project.Name}", "ProjectFailed");
             }
