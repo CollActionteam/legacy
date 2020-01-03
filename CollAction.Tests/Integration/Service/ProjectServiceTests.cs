@@ -32,6 +32,7 @@ namespace CollAction.Tests.Integration.Service
                        SignInManager<ApplicationUser> signInManager = scope.ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>();
                        var user = await context.Users.FirstAsync();
                        var claimsPrincipal = await signInManager.CreateUserPrincipalAsync(user);
+                       var r = new Random();
 
                        var newProject =
                            new NewProject()
@@ -39,14 +40,14 @@ namespace CollAction.Tests.Integration.Service
                                Name = "test" + Guid.NewGuid(),
                                Categories = new List<Category>() { Category.Other, Category.Health },
                                Description = Guid.NewGuid().ToString(),
-                               DescriptionVideoLink = Guid.NewGuid().ToString(),
+                               DescriptionVideoLink = "https://www.youtube.com/watch?v=a1",
                                End = DateTime.Now.AddDays(30),
                                Start = DateTime.Now.AddDays(10),
                                Goal = Guid.NewGuid().ToString(),
                                CreatorComments = Guid.NewGuid().ToString(),
                                Proposal = Guid.NewGuid().ToString(),
                                Target = 40,
-                               Tags = new string[3] { Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString() }
+                               Tags = new string[3] { r.Next(1000).ToString(), r.Next(1000).ToString(), r.Next(1000).ToString() }
                            };
                        var project = await projectService.CreateProject(newProject, claimsPrincipal, CancellationToken.None);
                        var retrievedProject = await context.Projects.Include(p => p.Tags).ThenInclude(t => t.Tag).FirstOrDefaultAsync(p => p.Id == project.Id);
@@ -69,6 +70,7 @@ namespace CollAction.Tests.Integration.Service
                        var admin = (await userManager.GetUsersInRoleAsync(Constants.AdminRole)).First();
                        var adminClaims = await signInManager.CreateUserPrincipalAsync(admin);
                        var owner = await signInManager.CreateUserPrincipalAsync(currentProject.Owner);
+                       var r = new Random();
                        var updatedProject =
                            new UpdatedProject()
                            {
@@ -77,13 +79,13 @@ namespace CollAction.Tests.Integration.Service
                                Categories = new[] { Category.Community, Category.Environment },
                                CreatorComments = currentProject.CreatorComments,
                                Description = currentProject.Description,
-                               DescriptionVideoLink = Guid.NewGuid().ToString(),
+                               DescriptionVideoLink = "https://www.youtube.com/watch?v=a1",
                                DescriptiveImageFileId = currentProject.DescriptiveImageFileId,
                                DisplayPriority = ProjectDisplayPriority.Top,
                                End = DateTime.Now.AddDays(30),
                                Start = DateTime.Now.AddDays(10),
                                Goal = Guid.NewGuid().ToString(),
-                               Tags = new string[3] { Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), Guid.NewGuid().ToString() },
+                               Tags = new string[3] { r.Next(1000).ToString(), r.Next(1000).ToString(), r.Next(1000).ToString() },
                                Id = currentProject.Id,
                                NumberProjectEmailsSend = 3,
                                Owner = owner,

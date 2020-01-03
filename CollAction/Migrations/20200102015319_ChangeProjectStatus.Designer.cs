@@ -3,15 +3,17 @@ using System;
 using CollAction.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace CollAction.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200102015319_ChangeProjectStatus")]
+    partial class ChangeProjectStatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -202,10 +204,6 @@ namespace CollAction.Migrations
                     b.Property<DateTime>("End")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("FinishJobId")
-                        .HasColumnType("character varying(100)")
-                        .HasMaxLength(100);
-
                     b.Property<string>("Goal")
                         .IsRequired()
                         .HasColumnType("character varying(10000)")
@@ -312,8 +310,8 @@ namespace CollAction.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("character varying(30)")
-                        .HasMaxLength(30);
+                        .HasColumnType("character varying(120)")
+                        .HasMaxLength(120);
 
                     b.HasKey("Id");
 

@@ -1,4 +1,5 @@
 ﻿using CollAction.Data;
+using CollAction.Helpers;
 using CollAction.Models;
 using CollAction.Services.Projects;
 using GraphQL.Authorization;
@@ -43,6 +44,28 @@ namespace CollAction.GraphQl.Queries
                     {
                         return scope.ServiceProvider.GetRequiredService<IProjectService>().CanSendProjectEmail(c.Source);
                     }
+                });
+            FieldAsync<BooleanGraphType>(
+                nameof(Project.IsSuccessfull),
+                resolve: async c =>
+                {
+                    if (c.Source.ParticipantCounts == null)
+                    {
+                        c.Source.ParticipantCounts = await c.GetUserContext().Context.ProjectParticipantCounts.FindAsync(c.Source.Id);
+                    }
+
+                    return c.Source.IsSuccessfull;   
+                });
+            FieldAsync<BooleanGraphType>(
+                nameof(Project.IsFailed),
+                resolve: async c =>
+                {
+                    if (c.Source.ParticipantCounts == null)
+                    {
+                        c.Source.ParticipantCounts = await c.GetUserContext().Context.ProjectParticipantCounts.FindAsync(c.Source.Id);
+                    }
+
+                    return c.Source.IsFailed;   
                 });
             AddNavigationField(nameof(Project.DescriptiveImage), c => c.Source.DescriptiveImage);
             AddNavigationField(nameof(Project.BannerImage), c => c.Source.BannerImage);

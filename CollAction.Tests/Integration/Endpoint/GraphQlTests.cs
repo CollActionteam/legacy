@@ -106,6 +106,9 @@ namespace CollAction.Tests.Integration.Endpoint
                                    owner {
                                        id
                                    }
+                                   isSuccessfull
+                                   isFailed
+                                   canSendProjectEmail
                                }
                            }";
 
@@ -145,10 +148,10 @@ namespace CollAction.Tests.Integration.Endpoint
                                            description: """",
                                            goal: ""dd"",
                                            creatorComments: ""dd"",
-                                           start: ""4-4-2009"",
-                                           end: ""4-4-2000"",
-                                           descriptionVideoLink: ""https://youtube.com"",
-                                           tags:[""{Guid.NewGuid()}"", ""a""]
+                                           start: ""{DateTime.UtcNow.AddDays(10).ToString("o")}"",
+                                           end: ""{DateTime.UtcNow.AddDays(20).ToString("o")}"",
+                                           descriptionVideoLink: ""https://www.youtube.com/watch?v=a1"",
+                                           tags:[""b"", ""a""]
                                        }}) {{
                                            id
                                        }}

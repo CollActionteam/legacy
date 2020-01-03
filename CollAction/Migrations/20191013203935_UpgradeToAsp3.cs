@@ -7,8 +7,6 @@ namespace CollAction.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            // TODO: Restore once this is fixed : https://github.com/npgsql/efcore.pg/issues/1154
-            /*
             migrationBuilder.Sql(@"DROP MATERIALIZED VIEW ""ProjectParticipantCounts"";");
 
             migrationBuilder.AlterColumn<int>(
@@ -85,7 +83,6 @@ namespace CollAction.Migrations
                               GROUP BY proj.""Id"";");
 
             migrationBuilder.CreateIndex("ProjectIdIndex", "ProjectParticipantCounts", "ProjectId", null, true);
-            */
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

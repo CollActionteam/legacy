@@ -11,7 +11,7 @@ namespace CollAction.Models
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(120)]
+        [MaxLength(30)]
         public string Name { get; set; }
 
         public ICollection<ProjectTag> ProjectTags { get; set; }

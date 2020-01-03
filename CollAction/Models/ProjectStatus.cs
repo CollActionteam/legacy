@@ -3,9 +3,7 @@
     public enum ProjectStatus
     {
         Hidden = 0,
-        Running = 1,
-        Successfull = 2,
-        Failed = 3,
-        Deleted = 4
+        Deleted = 1,
+        Running = 2
     }
 }

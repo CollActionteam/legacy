@@ -48,6 +48,9 @@ namespace CollAction.Models
         [MaxLength(20000)]
         public string CreatorComments { get; set; }
 
+        [MaxLength(100)]
+        public string FinishJobId { get; set; }
+
         public int AnonymousUserParticipants { get; set; }
 
         public int? BannerImageFileId { get; set; }
@@ -83,6 +86,16 @@ namespace CollAction.Models
         [NotMapped]
         public bool IsClosed
             => Status == ProjectStatus.Running && End < DateTime.UtcNow;
+
+        [NotMapped]
+        public bool IsSuccessfull
+            => IsClosed &&
+               ParticipantCounts.Count + AnonymousUserParticipants >= Target;
+
+        [NotMapped]
+        public bool IsFailed
+            => IsClosed &&
+               ParticipantCounts.Count + AnonymousUserParticipants < Target;
 
         [NotMapped]
         public string NameNormalized

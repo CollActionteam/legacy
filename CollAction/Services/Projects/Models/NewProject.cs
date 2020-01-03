@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace CollAction.Services.Projects.Models
 {
-    public class NewProject
+    public class NewProject : IProjectModel
     {
         public string Name { get; set; }
 

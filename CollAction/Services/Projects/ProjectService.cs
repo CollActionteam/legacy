@@ -17,6 +17,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using CollAction.Services.HtmlValidator;
 using CollAction.GraphQl.Mutations.Input;
+using Hangfire;
+using System.Text.RegularExpressions;
 
 namespace CollAction.Services.Projects
 {
@@ -29,6 +31,7 @@ namespace CollAction.Services.Projects
         private readonly ProjectEmailOptions projectEmailOptions;
         private readonly SiteOptions siteOptions;
         private readonly IHtmlInputValidator htmlInputValidator;
+        private readonly IBackgroundJobClient jobClient;
 
         public ProjectService(
             UserManager<ApplicationUser> userManager,
@@ -37,7 +40,8 @@ namespace CollAction.Services.Projects
             ILogger<ProjectService> logger,
             IOptions<ProjectEmailOptions> projectEmailOptions,
             IOptions<SiteOptions> siteOptions,
-            IHtmlInputValidator htmlInputValidator)
+            IHtmlInputValidator htmlInputValidator,
+            IBackgroundJobClient jobClient)
         {
             this.userManager = userManager;
             this.context = context;
@@ -46,26 +50,25 @@ namespace CollAction.Services.Projects
             this.projectEmailOptions = projectEmailOptions.Value;
             this.siteOptions = siteOptions.Value;
             this.htmlInputValidator = htmlInputValidator;
+            this.jobClient = jobClient;
         }
 
         public async Task<Project> CreateProject(NewProject newProject, ClaimsPrincipal user, CancellationToken token)
         {
             logger.LogInformation("Creating project: {0}", newProject.Name);
             ApplicationUser owner = await userManager.GetUserAsync(user);
+
             if (owner == null)
             {
                 throw new ValidationException("User not found");
             }
 
-            if (newProject.Categories.Count > 2)
+            if (await context.Projects.AnyAsync(p => p.Name == newProject.Name))
             {
-                throw new ValidationException("Too many categories");
+                throw new ValidationException("A project with this name already exists");
             }
 
-            if (newProject.Categories.Distinct().Count() != newProject.Categories.Count)
-            {
-                throw new ValidationException("Duplicate categories");
-            }
+            ValidateProject(newProject);
 
             var tagMap = new Dictionary<string, int>();
             if (newProject.Tags.Any())
@@ -106,6 +109,7 @@ namespace CollAction.Services.Projects
                 Categories = newProject.Categories.Select(c => new ProjectCategory() { Category = c }).ToList(),
                 Target = newProject.Target,
                 Start = newProject.Start,
+                Status = ProjectStatus.Hidden,
                 End = newProject.End.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
                 BannerImageFileId = newProject.BannerImageFileId,
                 DescriptiveImageFileId = newProject.DescriptiveImageFileId,
@@ -137,11 +141,6 @@ namespace CollAction.Services.Projects
 
             logger.LogInformation("Updating project: {0}", updatedProject.Name);
 
-            bool approved = updatedProject.Status == ProjectStatus.Running && updatedProject.Status == ProjectStatus.Hidden;
-            bool successfull = updatedProject.Status == ProjectStatus.Successfull && updatedProject.Status == ProjectStatus.Running;
-            bool failed = updatedProject.Status == ProjectStatus.Failed && updatedProject.Status == ProjectStatus.Running;
-            bool deleted = updatedProject.Status == ProjectStatus.Deleted;
-
             Project project = await context
                 .Projects
                 .Include(p => p.Tags).ThenInclude(t => t.Tag)
@@ -152,6 +151,18 @@ namespace CollAction.Services.Projects
             {
                 throw new ValidationException("Project not found");
             }
+
+            if (project.Name != updatedProject.Name && await context.Projects.AnyAsync(p => p.Name == updatedProject.Name))
+            {
+                throw new ValidationException("A project with this name already exists");
+            }
+
+            ValidateProject(updatedProject);
+
+            bool approved = updatedProject.Status == ProjectStatus.Running && project.Status != ProjectStatus.Running;
+            bool changeFinishJob = (approved || project.End != updatedProject.End) && updatedProject.End < DateTime.UtcNow;
+            bool removeFinishJob = updatedProject.Status != ProjectStatus.Running && project.FinishJobId != null;
+            bool deleted = updatedProject.Status == ProjectStatus.Deleted;
 
             project.Name = updatedProject.Name;
             project.Description = updatedProject.Description;
@@ -168,7 +179,6 @@ namespace CollAction.Services.Projects
             project.DisplayPriority = updatedProject.DisplayPriority;
             project.NumberProjectEmailsSend = updatedProject.NumberProjectEmailsSend;
             context.Projects.Update(project);
-            await context.SaveChangesAsync();
 
             var projectTags = project.Tags.Select(t => t.Tag.Name);
             if (!Enumerable.SequenceEqual(updatedProject.Tags.OrderBy(t => t), projectTags.OrderBy(t => t)))
@@ -201,7 +211,6 @@ namespace CollAction.Services.Projects
                            .Where(t => projectTags.Except(updatedProject.Tags).Contains(t.Tag.Name));
                 context.ProjectTags.AddRange(newTags);
                 context.ProjectTags.RemoveRange(removedTags);
-                await context.SaveChangesAsync(token);
             }
 
             var categories = project.Categories.Select(c => c.Category);
@@ -212,7 +221,6 @@ namespace CollAction.Services.Projects
 
                 context.ProjectCategories.RemoveRange(removedCategories);
                 context.ProjectCategories.AddRange(newCategories.Select(c => new ProjectCategory() { ProjectId = project.Id, Category = c }));
-                await context.SaveChangesAsync();
             }
 
             ApplicationUser owner = await userManager.FindByIdAsync(project.OwnerId);
@@ -221,22 +229,43 @@ namespace CollAction.Services.Projects
             {
                 await emailSender.SendEmailTemplated(owner.Email, $"Approval - {project.Name}", "ProjectApproval");
             }
-            else if (successfull)
-            {
-                await emailSender.SendEmailTemplated(owner.Email, $"Success - {project.Name}", "ProjectSuccess");
-            }
-            else if (failed)
-            {
-                await emailSender.SendEmailTemplated(owner.Email, $"Failed - {project.Name}", "ProjectFailed");
-            }
             else if (deleted)
             {
                 await emailSender.SendEmailTemplated(owner.Email, $"Deleted - {project.Name}", "ProjectDeleted");
             }
 
+            if (changeFinishJob)
+            {
+                if (project.FinishJobId != null)
+                {
+                    jobClient.Delete(project.FinishJobId);
+                }
+
+                project.FinishJobId = jobClient.Schedule(() => ProjectSuccess(project.Id, CancellationToken.None), project.End);
+            }
+            else if (removeFinishJob)
+            {
+                jobClient.Delete(project.FinishJobId);
+            }
+
+            await context.SaveChangesAsync();
             logger.LogInformation("Updated project: {0}", updatedProject.Name);
 
             return project;
+        }
+
+        public async Task ProjectSuccess(int projectId, CancellationToken token)
+        {
+            Project project = await context.Projects.Include(p => p.ParticipantCounts).FirstAsync(p => p.Id == projectId);
+
+            if (project.IsSuccessfull)
+            {
+                await emailSender.SendEmailTemplated(project.Owner.Email, $"Success - {project.Name}", "ProjectSuccess");
+            }
+            else
+            {
+                await emailSender.SendEmailTemplated(project.Owner.Email, $"Failed - {project.Name}", "ProjectFailed");
+            }
         }
 
         public async Task<Project> SendProjectEmail(int projectId, string subject, string message, ClaimsPrincipal performingUser, CancellationToken token)
@@ -294,7 +323,6 @@ namespace CollAction.Services.Projects
                    project.End + projectEmailOptions.TimeEmailAllowedAfterProjectEnd > now &&
                    project.Status != ProjectStatus.Deleted &&
                    project.Status != ProjectStatus.Hidden &&
-                   project.Status != ProjectStatus.Failed &&
                    now >= project.Start;
         }
 
@@ -382,13 +410,13 @@ namespace CollAction.Services.Projects
             switch (searchProjectStatus)
             {
                 case SearchProjectStatus.Closed:
-                    projects = projects.Where(p => p.End < DateTime.UtcNow && p.Status != ProjectStatus.Deleted && p.Status != ProjectStatus.Hidden);
+                    projects = projects.Where(p => p.End < DateTime.UtcNow && p.Status == ProjectStatus.Running);
                     break;
                 case SearchProjectStatus.ComingSoon:
                     projects = projects.Where(p => p.Start > DateTime.UtcNow && p.Status == ProjectStatus.Running);
                     break;
                 case SearchProjectStatus.Open:
-                    projects = projects.Where(p => p.Status == ProjectStatus.Running && p.Start <= DateTime.UtcNow && p.End >= DateTime.UtcNow);
+                    projects = projects.Where(p => p.Start <= DateTime.UtcNow && p.End >= DateTime.UtcNow && p.Status == ProjectStatus.Running);
                     break;
             }
 
@@ -398,6 +426,40 @@ namespace CollAction.Services.Projects
             }
 
             return projects;
+        }
+
+        private void ValidateProject(IProjectModel project)
+        {
+            if (project.Categories.Count > 2)
+            {
+                throw new ValidationException("Too many categories");
+            }
+
+            if (project.Categories.First() == project.Categories.Last())
+            {
+
+                throw new ValidationException("Duplicate categories");
+            }
+
+            if (project.End < project.Start || project.Start < DateTime.UtcNow)
+            {
+                throw new ValidationException("Issue with project start and end dates");
+            }
+
+            if (project.DescriptionVideoLink != null && !Regex.IsMatch(project.DescriptionVideoLink, @"^https://www.youtube.com/watch\?v=[^& ]+$"))
+            {
+                throw new ValidationException("Project has invalid video link");
+            }
+
+            if (DateTime.UtcNow < project.Start.AddYears(-1))
+            {
+                throw new ValidationException("Please ensure your project starts within the next year");
+            }
+
+            if (project.End - project.Start > TimeSpan.FromDays(356))
+            {
+                throw new ValidationException("Please ensure your project end-date is within a year of the start-date");
+            }
         }
 
         private async Task<AddParticipantResult> AddAnonymousParticipant(Project project, ApplicationUser user, string email, CancellationToken token)
