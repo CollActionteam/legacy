@@ -9,7 +9,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
-      "program": "${workspaceFolder}/bin/Debug/netcoreapp2.2/CollAction.dll",
+      "program": "${workspaceFolder}/bin/Debug/netcoreapp3.1/CollAction.dll",
       "args": [],
       "cwd": "${workspaceFolder}",
       "stopAtEntry": false,
@@ -23,7 +23,8 @@
       },
       "sourceFileMap": {
         "/Views": "${workspaceFolder}/Views"
-      }
+      },
+      "requireExactSource": false
     },
     {
       "name": ".NET Core Attach",
