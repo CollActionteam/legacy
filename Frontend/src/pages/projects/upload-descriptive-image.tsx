@@ -40,8 +40,8 @@ export default class UploadDescriptiveImage extends UploadImage<
   }
 
   onDrop(accepted: File[], _rejected: File[], _event: any) {
-    this.loadImage(accepted, () =>
-      this.props.formik.setFieldValue("image", this.state.image)
+    this.loadImage(accepted, file =>
+      this.props.formik.setFieldValue("image", file)
     );
   }
 

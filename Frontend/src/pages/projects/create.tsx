@@ -1,5 +1,5 @@
 import React from "react";
-import { graphql } from "gatsby";
+import { graphql, navigate } from "gatsby";
 import { Formik, Field, Form, FormikProps } from "formik";
 import * as Yup from "yup";
 import { TextField, Select } from "formik-material-ui";
@@ -22,6 +22,7 @@ export const query = graphql`
     site {
       siteMetadata {
         title
+        backendUrl
       }
     }
   }
@@ -29,14 +30,16 @@ export const query = graphql`
 
 const GET_CATEGORIES = gql`
   query {
-    categories {
-      id
-      name
+    __type(name: "Category") {
+      enumValues {
+        name
+        description
+      }
     }
   }
 `;
 
-export default () => {
+export default ({ data }) => {
   const minStartDate = new Date();
   const maxStartDate = new Date(minStartDate);
   maxStartDate.setMonth(new Date().getMonth() + 12);
@@ -69,7 +72,7 @@ export default () => {
 
   const { data: categoryResponse, loading } = useQuery(GET_CATEGORIES);
 
-  const [createProject, { data: createProjectResponse }] = useMutation(gql`
+  const [createProject] = useMutation(gql`
     mutation Create($project: NewProjectInputGraph!) {
       project {
         createProject(project: $project) {
@@ -79,29 +82,58 @@ export default () => {
     }
   `);
 
-  const commit = form => {
-    createProject({
-      variables: {
-        project: {
-          name: form.projectName,
-          categoryId: form.category,
-          target: form.target,
-          proposal: form.proposal,
-          description: form.description,
-          start: form.startDate,
-          end: form.endDate,
-          goal: form.goal,
-          tags: form.tags ? form.tags.split(";") : [],
-          creatorComments: form.comments,
-          descriptionVideoLink: form.youtube,
-        },
-      },
-    });
+  const commit = async form => {
+    let bannerId;
+    if (form.banner) {
+      bannerId = await uploadImage(form.banner, form.projectName);
+    }
 
-    console.log(createProjectResponse);
+    let imageId;
+    if (form.image) {
+      imageId = await uploadImage(form.image, form.imageDescription);
+    }
+
+    try {
+      const response = await createProject({
+        variables: {
+          project: {
+            name: form.projectName,
+            bannerImageFileId: bannerId || null,
+            categories: [form.category],
+            target: form.target,
+            proposal: form.proposal,
+            description: form.description,
+            start: form.startDate,
+            end: form.endDate,
+            goal: form.goal,
+            tags: form.tags ? form.tags.split(";") : [],
+            creatorComments: form.comments || null,
+            descriptiveImageFileId: imageId || null,
+            descriptionVideoLink: form.youtube || null,
+          },
+        },
+      });
+
+      // TODO: integrate with new thank you page
+      console.log(response);
+      navigate("projects/thankyou");
+    } catch (error) {
+      // TODO: error handling
+      console.error("Could not create project", error);
+    }
   };
 
-  // TODO: banner image, descriptive image + description
+  const uploadImage = async (file: any, description: string) => {
+    const body = new FormData();
+    body.append("Image", file);
+    body.append("ImageDescription", description);
+
+    return await fetch(`${data.site.siteMetadata.backendUrl}/image`, {
+      method: "POST",
+      body,
+      credentials: "include",
+    }).then(response => response.json());
+  };
 
   return (
     <Layout>
@@ -164,8 +196,8 @@ export default () => {
                 .matches(/^(http|https):\/\/www.youtube.com\/watch\?v=((?:\w|-){11}?)$/, "Only YouTube links of the form http://www.youtube.com/watch?v= are accepted.")
               // tslint:enable: prettier
           })}
-          onSubmit={(values, { setSubmitting }) => {
-            commit(values);
+          onSubmit={async (values, { setSubmitting }) => {
+            await commit(values);
             setSubmitting(false);
             // setTimeout(() => {
             //   console.log(values);
@@ -190,8 +222,8 @@ export default () => {
                   <InputLabel htmlFor="category">Category</InputLabel>
                   <Field name="category" component={Select}>
                     {categoryResponse
-                      ? categoryResponse.categories.map(c => (
-                          <MenuItem key={c.id} value={c.id}>
+                      ? categoryResponse.__type.enumValues.map(c => (
+                          <MenuItem key={c.name} value={c.name}>
                             {c.name}
                           </MenuItem>
                         ))
