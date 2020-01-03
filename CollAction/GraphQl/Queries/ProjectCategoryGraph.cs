@@ -6,7 +6,7 @@ namespace CollAction.GraphQl.Queries
 {
     public class ProjectCategoryGraph : EfObjectGraphType<ApplicationDbContext, ProjectCategory>
     {
-        public ProjectCategoryGraph(IEfGraphQLService<ApplicationDbContext> efGraphQlService) : base(efGraphQlService)
+        public ProjectCategoryGraph(IEfGraphQLService<ApplicationDbContext> graphService) : base(graphService)
         {
             Field(x => x.Category);
             Field(x => x.ProjectId);

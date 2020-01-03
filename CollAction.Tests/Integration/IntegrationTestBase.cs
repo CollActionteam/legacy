@@ -35,20 +35,6 @@ namespace CollAction.Tests.Integration
                     }
                 });
 
-        protected virtual void ConfigureReplacementServicesProvider(IServiceCollection collection)
-        {
-        }
-
-        protected virtual void ConfigureReplacementServicesTestServer(IServiceCollection collection)
-        {
-        }
-
-        private static IWebHostBuilder GetHost(Action<IServiceCollection> configureReplacements)
-            => WebHost.CreateDefaultBuilder()
-                      .UseEnvironment("Development")
-                      .ConfigureTestServices(configureReplacements)
-                      .UseStartup<Startup>();
-
         protected static async Task<string> GetAuthCookie(HttpClient httpClient, SeedOptions seedOptions)
         {
             // Login as admin
@@ -67,5 +53,19 @@ namespace CollAction.Tests.Integration
                 return cookie;
             }
         }
+
+        protected virtual void ConfigureReplacementServicesProvider(IServiceCollection collection)
+        {
+        }
+
+        protected virtual void ConfigureReplacementServicesTestServer(IServiceCollection collection)
+        {
+        }
+
+        private static IWebHostBuilder GetHost(Action<IServiceCollection> configureReplacements)
+            => WebHost.CreateDefaultBuilder()
+                      .UseEnvironment("Development")
+                      .ConfigureTestServices(configureReplacements)
+                      .UseStartup<Startup>();
     }
 }

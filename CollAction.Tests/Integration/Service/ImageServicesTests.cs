@@ -60,17 +60,6 @@ namespace CollAction.Tests.Integration.Service
                        Assert.AreEqual(HttpStatusCode.Forbidden, await CheckUrl(imageService.GetUrl(imageFile)));
                    });
 
-        private async Task<HttpStatusCode> CheckUrl(string url)
-        {
-            using (HttpClient client = new HttpClient())
-            {
-                using (HttpResponseMessage response = await client.GetAsync(url))
-                {
-                    return response.StatusCode;
-                }
-            }
-        }
-
         protected override void ConfigureReplacementServicesProvider(IServiceCollection collection)
         {
             upload = new Mock<IFormFile>();
@@ -84,6 +73,17 @@ namespace CollAction.Tests.Integration.Service
                               return string.Empty;
                           });
             collection.AddScoped(s => jobClient.Object);
+        }
+
+        private async Task<HttpStatusCode> CheckUrl(string url)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                using (HttpResponseMessage response = await client.GetAsync(url))
+                {
+                    return response.StatusCode;
+                }
+            }
         }
     }
 }

@@ -9,6 +9,8 @@ using CollAction.ViewModels.Account;
 using System.Net;
 using CollAction.Services.User;
 using System.Linq;
+using Microsoft.AspNetCore.Authentication;
+using CollAction.Services.User.Models;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace CollAction.Controllers
@@ -89,7 +91,7 @@ namespace CollAction.Controllers
         public IActionResult ExternalLogin(ExternalLoginViewModel model)
         {
             string redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { model.ErrorUrl, model.ReturnUrl, model.RememberMe });
-            var properties = signInManager.ConfigureExternalAuthenticationProperties(model.Provider, redirectUrl);
+            AuthenticationProperties properties = signInManager.ConfigureExternalAuthenticationProperties(model.Provider, redirectUrl);
             return Challenge(properties, model.Provider);
         }
 
@@ -112,7 +114,7 @@ namespace CollAction.Controllers
             }
 
             // Sign in the user with this external login provider if the user already has a login.
-            var result = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false);
+            SignInResult result = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false);
             if (result.Succeeded)
             {
                 logger.LogInformation("User logged in with {0} provider.", info.LoginProvider);
@@ -126,7 +128,7 @@ namespace CollAction.Controllers
 
             // If the user does not have an account, create one
             string email = info.Principal.FindFirstValue(ClaimTypes.Email);
-            var newUserResult = await userService.CreateUser(email, info);
+            UserResult newUserResult = await userService.CreateUser(email, info);
             if (newUserResult.Result.Succeeded)
             {
                 return Redirect(model.ReturnUrl);

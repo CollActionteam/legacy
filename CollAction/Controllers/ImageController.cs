@@ -1,4 +1,5 @@
-﻿using CollAction.Services.Image;
+﻿using CollAction.Models;
+using CollAction.Services.Image;
 using CollAction.ViewModels.Upload;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +23,7 @@ namespace CollAction.Controllers
         [Authorize]
         public async Task<IActionResult> UploadImage([FromForm] UploadImageViewModel uploadImage, CancellationToken token)
         {
-            var image = await imageService.UploadImage(uploadImage.Image, uploadImage.ImageDescription, token);
+            ImageFile image = await imageService.UploadImage(uploadImage.Image, uploadImage.ImageDescription, token);
             imageService.InitializeDanglingImageJob();
             return Ok(image.Id);
         }

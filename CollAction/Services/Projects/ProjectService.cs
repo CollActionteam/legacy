@@ -437,7 +437,6 @@ namespace CollAction.Services.Projects
 
             if (project.Categories.First() == project.Categories.Last())
             {
-
                 throw new ValidationException("Duplicate categories");
             }
 

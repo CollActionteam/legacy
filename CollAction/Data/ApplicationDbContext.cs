@@ -40,18 +40,6 @@ namespace CollAction.Data
 
         public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 
-        /// <summary>
-        /// Seed the database with initialization data here
-        /// </summary>
-        /// <param name="configuration">Configuration</param>
-        /// <param name="userManager">User manager to create and query users</param>
-        /// <param name="roleManager">Role managers to create and query roles</param>
-        public async Task Seed(SeedOptions seedOptions, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
-        {
-            await CreateAdminRoleAndUser(seedOptions, userManager, roleManager);
-            await SeedTestProjects(seedOptions, userManager);
-        }
-
         public static async Task InitializeDatabase(IServiceScope scope)
         {
             var userManager = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
@@ -67,10 +55,12 @@ namespace CollAction.Data
             logger.LogInformation("done starting up");
         }
 
-        /// <summary>
-        /// Configure the model (foreign keys, relations, primary keys, etc)
-        /// </summary>
-        /// <param name="builder">Model builder</param>
+        public async Task Seed(SeedOptions seedOptions, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        {
+            await CreateAdminRoleAndUser(seedOptions, userManager, roleManager);
+            await SeedTestProjects(seedOptions, userManager);
+        }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
