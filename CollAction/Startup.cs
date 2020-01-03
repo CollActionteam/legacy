@@ -194,7 +194,6 @@ namespace CollAction
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredLength = 8;
-                options.Stores.ProtectPersonalData = true;
             });
         }
 
