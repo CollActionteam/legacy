@@ -116,7 +116,7 @@ export default ({ data }) => {
 
       // TODO: integrate with new thank you page
       console.log(response);
-      navigate("projects/thankyou");
+      navigate("projects/thank-you-create");
     } catch (error) {
       // TODO: error handling
       console.error("Could not create project", error);
