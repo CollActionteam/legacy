@@ -311,6 +311,7 @@ export default ({ data }) => {
                         name="goal"
                         label="Goal/impact"
                         hint="What is the problem you are trying to solve?"
+                        height="24rem"
                         formik={props}
                       ></RichTextEditorFormControl>
 
