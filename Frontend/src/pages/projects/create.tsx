@@ -121,8 +121,6 @@ export default ({ data }) => {
         },
       });
 
-      // TODO: integrate with new thank you page
-      console.log(response);
       navigate("projects/thank-you-create");
     } catch (error) {
       // TODO: error handling
@@ -206,10 +204,6 @@ export default ({ data }) => {
           onSubmit={async (values, { setSubmitting }) => {
             await commit(values);
             setSubmitting(false);
-            // setTimeout(() => {
-            //   console.log(values);
-            //   setSubmitting(false);
-            // }, 400);
           }}
         >
           {props => (
@@ -348,13 +342,17 @@ export default ({ data }) => {
                   <Grid item md={4}></Grid>
                   <Grid item xs={12} md={4}>
                     <Section className={styles.form}>
-                      <Button
-                        type="submit"
-                        disabled={props.isSubmitting}
-                        onClick={() => validate(props)}
-                      >
-                        Submit
-                      </Button>
+                      {props.isSubmitting ? (
+                        <Loader></Loader>
+                      ) : (
+                        <Button
+                          type="submit"
+                          disabled={props.isSubmitting}
+                          onClick={() => validate(props)}
+                        >
+                          Submit
+                        </Button>
+                      )}
                     </Section>
                   </Grid>
                 </Grid>
