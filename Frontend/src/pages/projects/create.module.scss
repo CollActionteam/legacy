@@ -16,7 +16,6 @@
   border-radius: var(--border-radius);
   margin: var(--spacing) auto auto calc(var(--spacing) * 2);
   color: var(--c-black);
-  font-size: var(--font-size-sm);
   text-align: center;
 
   @include breakpoint-down(md) {
@@ -40,6 +39,10 @@
   color: var(--c-black);
   font-size: var(--font-size-sm);
   text-align: center;
+}
+
+.dropzoneInstruction {
+  font-size: var(--font-size-sm);
 }
 
 .descriptiveImageInstruction {

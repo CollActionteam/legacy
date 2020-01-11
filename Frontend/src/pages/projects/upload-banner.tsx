@@ -73,14 +73,18 @@ export default class UploadBanner extends UploadImage<
                     className={styles.dropzone}
                     onClick={() => open()}
                   >
-                    <h2>Drop banner image / tap to select</h2>
+                    <h3>Drop banner image / tap to select</h3>
                     {this.state.invalid && (
                       <p className={styles.error}>
                         This image is not valid. Please edit it or pick another
                         one.
                       </p>
                     )}
-                    <p className={this.state.invalid ? styles.error : ""}>
+                    <p
+                      className={`${styles.dropzoneInstruction} ${
+                        this.state.invalid ? styles.error : ""
+                      }`}
+                    >
                       Use jpg, png, gif or bmp. Max. 1 MB.
                     </p>
                     <input {...getInputProps()}></input>
