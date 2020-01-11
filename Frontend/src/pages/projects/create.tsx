@@ -3,13 +3,7 @@ import { graphql, navigate } from "gatsby";
 import { Formik, Field, Form, FormikProps } from "formik";
 import * as Yup from "yup";
 import { TextField, Select } from "formik-material-ui";
-import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Grid,
-  Container,
-} from "@material-ui/core";
+import { FormControl, InputLabel, MenuItem, Grid } from "@material-ui/core";
 
 import Layout from "../../components/Layout";
 import { Section } from "../../components/Section";
@@ -328,7 +322,7 @@ export default ({ data }) => {
                 <UploadDescriptiveImage formik={props}></UploadDescriptiveImage>
 
                 <Grid container>
-                  <Grid md={5}></Grid>
+                  <Grid item md={5}></Grid>
                   <Grid item xs={12} md={7}>
                     <Section className={styles.form}>
                       <FormControl>
