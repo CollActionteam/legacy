@@ -435,7 +435,7 @@ namespace CollAction.Services.Projects
                 throw new ValidationException("Too many categories");
             }
 
-            if (project.Categories.Count == 2 && project.Categories.First() == project.Categories.Last())
+            if (project.Categories.Distinct().Count() != project.Categories.Count)
             {
                 throw new ValidationException("Duplicate categories");
             }
