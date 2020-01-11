@@ -80,7 +80,7 @@
 
   background-color: var(--c-white);
   box-shadow: var(--box-shadow-lg);
-  padding: var(--spacing-xlg);
+  padding: var(--spacing-lg) var(--spacing);
   border-radius: var(--border-radius);
   width: 450px;
   
@@ -99,13 +99,13 @@
     flex-direction: column;
 
     & > div {
-      margin: var(--spacing-lg) 0 var(--spacing-lg) 0;
+      margin: var(--spacing) 0 var(--spacing) 0;
     }
   }
 }
 
 .formControl {
-  margin: var(--spacing-lg) 0 var(--spacing-lg) 0 !important;
+  margin: var(--spacing) 0 var(--spacing) 0 !important;
 }
 
 .submitProject {
