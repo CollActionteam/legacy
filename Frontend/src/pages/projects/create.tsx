@@ -59,6 +59,13 @@ export default ({ data }) => {
       .max(maxDate, "The deadline must be within a year of the start date");
   };
 
+  const formatCategory = (name: string) =>
+    name.charAt(0).toUpperCase() +
+    name
+      .substring(1)
+      .replace("_", " ")
+      .toLowerCase();
+
   const validate = async (props: FormikProps<any>) => {
     const errors = Object.keys(await props.validateForm());
 
@@ -224,7 +231,7 @@ export default ({ data }) => {
                     {categoryResponse
                       ? categoryResponse.__type.enumValues.map(c => (
                           <MenuItem key={c.name} value={c.name}>
-                            {c.name}
+                            {formatCategory(c.name)}
                           </MenuItem>
                         ))
                       : null}
