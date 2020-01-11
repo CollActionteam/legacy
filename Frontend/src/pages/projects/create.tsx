@@ -3,7 +3,13 @@ import { graphql, navigate } from "gatsby";
 import { Formik, Field, Form, FormikProps } from "formik";
 import * as Yup from "yup";
 import { TextField, Select } from "formik-material-ui";
-import { FormControl, InputLabel, MenuItem, Grid } from "@material-ui/core";
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Grid,
+  Container,
+} from "@material-ui/core";
 
 import Layout from "../../components/Layout";
 import { Section } from "../../components/Section";
@@ -338,7 +344,7 @@ export default ({ data }) => {
 
                 <Grid container>
                   <Grid item xs={12}>
-                    <Section className={styles.submitProject}>
+                    <Container className={styles.submitProject}>
                       <Button
                         type="submit"
                         disabled={props.isSubmitting}
@@ -346,7 +352,7 @@ export default ({ data }) => {
                       >
                         Submit
                       </Button>
-                    </Section>
+                    </Container>
                   </Grid>
                 </Grid>
               </Section>

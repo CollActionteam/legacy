@@ -174,7 +174,7 @@ export default class UploadDescriptiveImage extends UploadImage<
           <Grid container>
             <Grid item xs={12} md={5}></Grid>
             <Grid item xs={12} md={7}>
-              <Section className={styles.form}>
+              <Container className={styles.form}>
                 <Hidden mdUp>{this.renderPreviewControl()}</Hidden>
                 <FormControl>
                   <TextField
@@ -183,7 +183,7 @@ export default class UploadDescriptiveImage extends UploadImage<
                     onChange={e => this.setImageDescription(e)}
                   ></TextField>
                 </FormControl>
-              </Section>
+              </Container>
             </Grid>
           </Grid>
         )}
