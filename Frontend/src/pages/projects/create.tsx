@@ -328,7 +328,7 @@ export default ({ data }) => {
                 <UploadDescriptiveImage formik={props}></UploadDescriptiveImage>
 
                 <Grid container>
-                  <Grid item xs={12} md={5}></Grid>
+                  <Grid md={5}></Grid>
                   <Grid item xs={12} md={7}>
                     <Section className={styles.form}>
                       <FormControl>
@@ -344,8 +344,9 @@ export default ({ data }) => {
                 </Grid>
 
                 <Grid container>
-                  <Grid item xs={12}>
-                    <Container className={styles.submitProject}>
+                  <Grid item md={4}></Grid>
+                  <Grid item xs={12} md={4}>
+                    <Section className={styles.form}>
                       <Button
                         type="submit"
                         disabled={props.isSubmitting}
@@ -353,7 +354,7 @@ export default ({ data }) => {
                       >
                         Submit
                       </Button>
-                    </Container>
+                    </Section>
                   </Grid>
                 </Grid>
               </Section>

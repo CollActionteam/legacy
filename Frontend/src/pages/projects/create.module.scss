@@ -105,12 +105,3 @@
 .formControl {
   margin: var(--spacing) 0 var(--spacing) 0 !important;
 }
-
-.submitProject {
-  text-align: center;
-
-  button {
-    padding-left: calc(var(--spacing-xlg) * 3);
-    padding-right: calc(var(--spacing-xlg) * 3);
-  }
-}
