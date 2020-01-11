@@ -86,14 +86,16 @@ export default class UploadDescriptiveImage extends UploadImage<
                 ? this.state.description
                 : "The image description will appear here"}
             </p>
-            <img src={BrowserSizeImage}></img>
-            <p>
-              Resize your browser or rotate your device to see if the image
-              suitable.
-            </p>
-            <TertiaryButton onClick={this.resetImage}>
-              Remove banner
-            </TertiaryButton>
+            <div className={styles.imagePreview}>
+              <img src={BrowserSizeImage}></img>
+              <div className={styles.dropzoneInstruction}>
+                Resize your browser or rotate your device to see if the image
+                suitable.
+              </div>
+              <TertiaryButton onClick={this.resetImage}>
+                Remove banner
+              </TertiaryButton>
+            </div>
           </div>
         )}
       </>
@@ -138,19 +140,19 @@ export default class UploadDescriptiveImage extends UploadImage<
                           onClick={() => open()}
                         >
                           <h3>Drop a image / tap to select</h3>
-                          {this.state.invalid && (
-                            <p className={styles.error}>
-                              This image is not valid. Please edit it or pick
-                              another one.
-                            </p>
-                          )}
-                          <p
-                            className={`${styles.dropzoneInstruction} ${
-                              this.state.invalid ? styles.error : ""
-                            }`}
-                          >
-                            Use jpg, png, gif or bmp. Max. 1 MB.
-                          </p>
+                          <div className={styles.dropzoneInstruction}>
+                            {this.state.invalid && (
+                              <div className={styles.error}>
+                                This image is not valid. Please edit it or pick
+                                another one.
+                              </div>
+                            )}
+                            <div
+                              className={this.state.invalid ? styles.error : ""}
+                            >
+                              Use jpg, png, gif or bmp. Max. 1 MB.
+                            </div>
+                          </div>
                           <input {...getInputProps()}></input>
                         </div>
                       );

@@ -25,13 +25,13 @@
   }
 }
 
-.bannerPreview {
+.imagePreview {
   img {
-    height: var(--spacing-xlg);
+    height: var(--spacing-lg);
   }
 
   button {
-    margin-top: var(--spacing-lg);
+    margin-top: var(--spacing);
   }
 }
 
@@ -47,15 +47,10 @@
 
 .descriptiveImageInstruction {
   color: var(--c-black);
-  font-size: var(--font-size-sm);
   text-align: center;
   background-color: var(--c-grey);
   border-radius: var(--border-radius);
   padding: var(--spacing);
-
-  img {
-    height: var(--spacing-xlg);
-  }
 }
 
 .imageDescription {

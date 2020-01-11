@@ -74,19 +74,17 @@ export default class UploadBanner extends UploadImage<
                     onClick={() => open()}
                   >
                     <h3>Drop banner image / tap to select</h3>
-                    {this.state.invalid && (
-                      <p className={styles.error}>
-                        This image is not valid. Please edit it or pick another
-                        one.
-                      </p>
-                    )}
-                    <p
-                      className={`${styles.dropzoneInstruction} ${
-                        this.state.invalid ? styles.error : ""
-                      }`}
-                    >
-                      Use jpg, png, gif or bmp. Max. 1 MB.
-                    </p>
+                    <div className={styles.dropzoneInstruction}>
+                      {this.state.invalid && (
+                        <div className={styles.error}>
+                          This image is not valid. Please edit it or pick
+                          another one.
+                        </div>
+                      )}
+                      <div className={this.state.invalid ? styles.error : ""}>
+                        Use jpg, png, gif or bmp. Max. 1 MB.
+                      </div>
+                    </div>
                     <input {...getInputProps()}></input>
                   </div>
                 );
@@ -95,12 +93,12 @@ export default class UploadBanner extends UploadImage<
           )}
 
           {this.state.preview && (
-            <div className={styles.bannerPreview}>
+            <div className={styles.imagePreview}>
               <img src={BrowserSizeImage}></img>
-              <p>
+              <div className={styles.dropzoneInstruction}>
                 Resize your browser or rotate your device to see if the image is
                 suitable.
-              </p>
+              </div>
               <TertiaryButton onClick={this.resetImage}>
                 Remove banner
               </TertiaryButton>
