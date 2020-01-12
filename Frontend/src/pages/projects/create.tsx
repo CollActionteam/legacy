@@ -59,6 +59,13 @@ export default ({ data }) => {
       .max(maxDate, "The deadline must be within a year of the start date");
   };
 
+  const formatCategory = (name: string) =>
+    name.charAt(0).toUpperCase() +
+    name
+      .substring(1)
+      .replace("_", " ")
+      .toLowerCase();
+
   const validate = async (props: FormikProps<any>) => {
     const errors = Object.keys(await props.validateForm());
 
@@ -114,9 +121,7 @@ export default ({ data }) => {
         },
       });
 
-      // TODO: integrate with new thank you page
-      console.log(response);
-      navigate("projects/thankyou");
+      navigate("projects/thank-you-create");
     } catch (error) {
       // TODO: error handling
       console.error("Could not create project", error);
@@ -199,10 +204,6 @@ export default ({ data }) => {
           onSubmit={async (values, { setSubmitting }) => {
             await commit(values);
             setSubmitting(false);
-            // setTimeout(() => {
-            //   console.log(values);
-            //   setSubmitting(false);
-            // }, 400);
           }}
         >
           {props => (
@@ -224,7 +225,7 @@ export default ({ data }) => {
                     {categoryResponse
                       ? categoryResponse.__type.enumValues.map(c => (
                           <MenuItem key={c.name} value={c.name}>
-                            {c.name}
+                            {formatCategory(c.name)}
                           </MenuItem>
                         ))
                       : null}
@@ -305,6 +306,7 @@ export default ({ data }) => {
                         name="goal"
                         label="Goal/impact"
                         hint="What is the problem you are trying to solve?"
+                        height="24rem"
                         formik={props}
                       ></RichTextEditorFormControl>
 
@@ -321,7 +323,7 @@ export default ({ data }) => {
                 <UploadDescriptiveImage formik={props}></UploadDescriptiveImage>
 
                 <Grid container>
-                  <Grid item xs={12} md={5}></Grid>
+                  <Grid item md={5}></Grid>
                   <Grid item xs={12} md={7}>
                     <Section className={styles.form}>
                       <FormControl>
@@ -337,15 +339,20 @@ export default ({ data }) => {
                 </Grid>
 
                 <Grid container>
-                  <Grid item xs={12}>
-                    <Section className={styles.submitProject}>
-                      <Button
-                        type="submit"
-                        disabled={props.isSubmitting}
-                        onClick={() => validate(props)}
-                      >
-                        Submit
-                      </Button>
+                  <Grid item md={4}></Grid>
+                  <Grid item xs={12} md={4}>
+                    <Section className={styles.form}>
+                      {props.isSubmitting ? (
+                        <Loader></Loader>
+                      ) : (
+                        <Button
+                          type="submit"
+                          disabled={props.isSubmitting}
+                          onClick={() => validate(props)}
+                        >
+                          Submit
+                        </Button>
+                      )}
                     </Section>
                   </Grid>
                 </Grid>

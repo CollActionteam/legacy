@@ -16,7 +16,6 @@
   border-radius: var(--border-radius);
   margin: var(--spacing) auto auto calc(var(--spacing) * 2);
   color: var(--c-black);
-  font-size: var(--font-size-sm);
   text-align: center;
 
   @include breakpoint-down(md) {
@@ -26,13 +25,13 @@
   }
 }
 
-.bannerPreview {
+.imagePreview {
   img {
-    height: var(--spacing-xlg);
+    height: var(--spacing-lg);
   }
 
   button {
-    margin-top: var(--spacing-lg);
+    margin-top: var(--spacing);
   }
 }
 
@@ -42,17 +41,16 @@
   text-align: center;
 }
 
+.dropzoneInstruction {
+  font-size: var(--font-size-sm);
+}
+
 .descriptiveImageInstruction {
   color: var(--c-black);
-  font-size: var(--font-size-sm);
   text-align: center;
   background-color: var(--c-grey);
   border-radius: var(--border-radius);
   padding: var(--spacing);
-
-  img {
-    height: var(--spacing-xlg);
-  }
 }
 
 .imageDescription {
@@ -80,7 +78,7 @@
 
   background-color: var(--c-white);
   box-shadow: var(--box-shadow-lg);
-  padding: var(--spacing-xlg);
+  padding: var(--spacing-lg) var(--spacing);
   border-radius: var(--border-radius);
   width: 450px;
   
@@ -99,20 +97,11 @@
     flex-direction: column;
 
     & > div {
-      margin: var(--spacing-lg) 0 var(--spacing-lg) 0;
+      margin: var(--spacing) 0 var(--spacing) 0;
     }
   }
 }
 
 .formControl {
-  margin: var(--spacing-lg) 0 var(--spacing-lg) 0 !important;
-}
-
-.submitProject {
-  text-align: center;
-
-  button {
-    padding-left: calc(var(--spacing-xlg) * 3);
-    padding-right: calc(var(--spacing-xlg) * 3);
-  }
+  margin: var(--spacing) 0 var(--spacing) 0 !important;
 }

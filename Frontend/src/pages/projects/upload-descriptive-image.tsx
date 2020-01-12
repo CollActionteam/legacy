@@ -86,14 +86,16 @@ export default class UploadDescriptiveImage extends UploadImage<
                 ? this.state.description
                 : "The image description will appear here"}
             </p>
-            <img src={BrowserSizeImage}></img>
-            <p>
-              Resize your browser or rotate your device to see if the image
-              suitable.
-            </p>
-            <TertiaryButton onClick={this.resetImage}>
-              Remove banner
-            </TertiaryButton>
+            <div className={styles.imagePreview}>
+              <img src={BrowserSizeImage}></img>
+              <div className={styles.dropzoneInstruction}>
+                Resize your browser or rotate your device to see if the image
+                suitable.
+              </div>
+              <TertiaryButton onClick={this.resetImage}>
+                Remove banner
+              </TertiaryButton>
+            </div>
           </div>
         )}
       </>
@@ -137,16 +139,20 @@ export default class UploadDescriptiveImage extends UploadImage<
                           className={styles.dropzone}
                           onClick={() => open()}
                         >
-                          <h2>Drop a image / tap to select</h2>
-                          {this.state.invalid && (
-                            <p className={styles.error}>
-                              This image is not valid. Please edit it or pick
-                              another one.
-                            </p>
-                          )}
-                          <p className={this.state.invalid ? styles.error : ""}>
-                            Use jpg, png, gif or bmp. Max. 1 MB.
-                          </p>
+                          <h3>Drop a image / tap to select</h3>
+                          <div className={styles.dropzoneInstruction}>
+                            {this.state.invalid && (
+                              <div className={styles.error}>
+                                This image is not valid. Please edit it or pick
+                                another one.
+                              </div>
+                            )}
+                            <div
+                              className={this.state.invalid ? styles.error : ""}
+                            >
+                              Use jpg, png, gif or bmp. Max. 1 MB.
+                            </div>
+                          </div>
                           <input {...getInputProps()}></input>
                         </div>
                       );
@@ -168,7 +174,7 @@ export default class UploadDescriptiveImage extends UploadImage<
           <Grid container>
             <Grid item xs={12} md={5}></Grid>
             <Grid item xs={12} md={7}>
-              <Section className={styles.form}>
+              <Container className={styles.form}>
                 <Hidden mdUp>{this.renderPreviewControl()}</Hidden>
                 <FormControl>
                   <TextField
@@ -177,7 +183,7 @@ export default class UploadDescriptiveImage extends UploadImage<
                     onChange={e => this.setImageDescription(e)}
                   ></TextField>
                 </FormControl>
-              </Section>
+              </Container>
             </Grid>
           </Grid>
         )}
