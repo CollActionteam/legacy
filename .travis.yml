@@ -12,7 +12,7 @@ script:
 - pip install --user awscli
 - export PATH=$PATH:$HOME/.local/bin
 - chmod +x docker-push.sh
-- docker-push.sh
+- ./docker-push.sh
 env:
   global:
   # Test database settings
