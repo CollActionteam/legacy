@@ -33,7 +33,9 @@ namespace CollAction.Tests.Integration.Service
                     var (result, code) = await userService.ForgotPassword("nonexistent@collaction.org");
                     Assert.IsFalse(result.Succeeded);
 
-                    ApplicationUser user = await context.Users.FirstAsync();
+                    string testEmail = GetTestEmail();
+                    UserResult testUserCreation = await userService.CreateUser(new NewUser() { Email = testEmail, FirstName = testEmail, LastName = testEmail, IsSubscribedNewsletter = false, Password = Guid.NewGuid().ToString() });
+                    ApplicationUser user = testUserCreation.User;
                     (result, code) = await userService.ForgotPassword(user.Email);
                     Assert.IsTrue(result.Succeeded);
 
