@@ -34,7 +34,15 @@ namespace CollAction.Tests.Integration.Service
                     Assert.IsFalse(result.Succeeded);
 
                     string testEmail = GetTestEmail();
-                    UserResult testUserCreation = await userService.CreateUser(new NewUser() { Email = testEmail, FirstName = testEmail, LastName = testEmail, IsSubscribedNewsletter = false, Password = Guid.NewGuid().ToString() });
+                    UserResult testUserCreation = await userService.CreateUser(
+                        new NewUser() 
+                        { 
+                            Email = testEmail, 
+                            FirstName = testEmail, 
+                            LastName = testEmail, 
+                            IsSubscribedNewsletter = false, 
+                            Password = Guid.NewGuid().ToString() 
+                        });
                     ApplicationUser user = testUserCreation.User;
                     (result, code) = await userService.ForgotPassword(user.Email);
                     Assert.IsTrue(result.Succeeded);
