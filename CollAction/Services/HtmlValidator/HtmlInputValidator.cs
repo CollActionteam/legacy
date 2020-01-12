@@ -1,5 +1,6 @@
 using Ganss.XSS;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace CollAction.Services.HtmlValidator
 {
@@ -40,9 +41,9 @@ namespace CollAction.Services.HtmlValidator
                         "href"
                     },
                 allowedCssProperties: 
-                    new string[0],
+                    Enumerable.Empty<string>(),
                 allowedCssClasses: 
-                    new string[0]);
+                    Enumerable.Empty<string>());
 
             bool isSafe = true;
 
