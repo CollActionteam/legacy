@@ -11,8 +11,8 @@ script:
 - docker build . -f CollAction/Dockerfile -t collaction:latest
 - pip install --user awscli
 - export PATH=$PATH:$HOME/.local/bin
-- chmod +x scripts/docker-push.sh
-- scripts/docker-push.sh
+- chmod +x docker-push.sh
+- docker-push.sh
 env:
   global:
   # Test database settings
