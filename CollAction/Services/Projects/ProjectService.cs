@@ -83,7 +83,7 @@ namespace CollAction.Services.Projects
             {
                 return new ProjectResult()
                 {
-                    Errors = new[] { new ValidationResult("A project with this name already exists") }
+                    Errors = new[] { new ValidationResult("A project with this name already exists", new[] { nameof(Project.Name) }) }
                 };
             }
 
@@ -177,7 +177,7 @@ namespace CollAction.Services.Projects
             {
                 return new ProjectResult()
                 {
-                    Errors = new[] { new ValidationResult("Project not found") }
+                    Errors = new[] { new ValidationResult("Project not found", new[] { nameof(Project.Id) }) }
                 };
             }
 
@@ -185,7 +185,7 @@ namespace CollAction.Services.Projects
             {
                 return new ProjectResult()
                 {
-                    Errors = new[] { new ValidationResult("A project with this name already exists") }
+                    Errors = new[] { new ValidationResult("A project with this name already exists", new[] { nameof(Project.Name) }) }
                 };
             }
 
@@ -312,7 +312,7 @@ namespace CollAction.Services.Projects
             {
                 return new ProjectResult()
                 {
-                    Errors = new[] { new ValidationResult("Project could not be found") }
+                    Errors = new[] { new ValidationResult("Project could not be found", new[] { nameof(projectId) }) }
                 };
             }
 
@@ -320,7 +320,7 @@ namespace CollAction.Services.Projects
             {
                 return new ProjectResult()
                 {
-                    Errors = new[] { new ValidationResult("Unsafe HTML in e-mail message") }
+                    Errors = new[] { new ValidationResult("Unsafe HTML in e-mail message", new[] { nameof(message) }) }
                 };
             }
 
