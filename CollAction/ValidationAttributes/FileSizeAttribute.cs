@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CollAction.ValidationAttributes
 {
-    public class FileSizeAttribute : ValidationAttribute
+    public sealed class FileSizeAttribute : ValidationAttribute
     {
         private readonly int maxSize;
 
@@ -24,7 +24,7 @@ namespace CollAction.ValidationAttributes
 
         public override string FormatErrorMessage(string name)
         {
-            return string.Format("The file size should not exceed {0} bytes.", maxSize);
+            return $"The file size should not exceed {maxSize} bytes.";
         }
     }
 }

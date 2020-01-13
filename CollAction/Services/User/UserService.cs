@@ -1,4 +1,5 @@
 ﻿using CollAction.Data;
+using CollAction.Helpers;
 using CollAction.Models;
 using CollAction.Services.Email;
 using CollAction.Services.Newsletter;
@@ -20,8 +21,8 @@ namespace CollAction.Services.User
 {
     public class UserService : IUserService
     {
+        private readonly IServiceProvider serviceProvider;
         private readonly INewsletterService newsletterService;
-        private readonly SignInManager<ApplicationUser> signInManager;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IEmailSender emailSender;
         private readonly ILogger<UserService> logger;
@@ -29,16 +30,16 @@ namespace CollAction.Services.User
         private readonly SiteOptions siteOptions;
 
         public UserService(
+            IServiceProvider serviceProvider,
             INewsletterService newsletterService, 
-            SignInManager<ApplicationUser> signInManager, 
             UserManager<ApplicationUser> userManager,
             IEmailSender emailSender,
             ILogger<UserService> logger,
             ApplicationDbContext context,
             IOptions<SiteOptions> siteOptions)
         {
+            this.serviceProvider = serviceProvider;
             this.newsletterService = newsletterService;
-            this.signInManager = signInManager;
             this.userManager = userManager;
             this.emailSender = emailSender;
             this.logger = logger;
@@ -80,6 +81,15 @@ namespace CollAction.Services.User
 
         public async Task<UserResult> CreateUser(NewUser newUser)
         {
+            IEnumerable<IdentityError> validationResults = ValidationHelper.ValidateAsIdentity(newUser, serviceProvider);
+            if (validationResults.Any())
+            {
+                return new UserResult()
+                {
+                    Result = IdentityResult.Failed(validationResults.ToArray())
+                };
+            }
+
             ApplicationUser user = new ApplicationUser()
             {
                 Email = newUser.Email,
@@ -178,6 +188,15 @@ namespace CollAction.Services.User
 
         public async Task<UserResult> UpdateUser(UpdatedUser updatedUser, ClaimsPrincipal loggedIn)
         {
+            IEnumerable<IdentityError> validationResults = ValidationHelper.ValidateAsIdentity(updatedUser, serviceProvider);
+            if (validationResults.Any())
+            {
+                return new UserResult()
+                {
+                    Result = IdentityResult.Failed(validationResults.ToArray())
+                };
+            }
+
             var user = await userManager.FindByIdAsync(updatedUser.Id);
             if (user == null)
             {

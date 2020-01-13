@@ -49,11 +49,13 @@ namespace CollAction.Tests.Integration.Service
                                Target = 40,
                                Tags = new string[3] { r.Next(1000).ToString(), r.Next(1000).ToString(), r.Next(1000).ToString() }
                            };
-                       var project = await projectService.CreateProject(newProject, claimsPrincipal, CancellationToken.None);
-                       var retrievedProject = await context.Projects.Include(p => p.Tags).ThenInclude(t => t.Tag).FirstOrDefaultAsync(p => p.Id == project.Id);
+                       var projectResult = await projectService.CreateProject(newProject, claimsPrincipal, CancellationToken.None);
+                       var retrievedProject = await context.Projects.Include(p => p.Tags).ThenInclude(t => t.Tag).FirstOrDefaultAsync(p => p.Id == projectResult.Project.Id);
 
-                       Assert.AreEqual(project.Name, retrievedProject.Name);
-                       Assert.IsTrue(Enumerable.SequenceEqual(project.Tags.Select(t => t.Tag.Name).OrderBy(t => t), retrievedProject.Tags.Select(t => t.Tag.Name).OrderBy(t => t)));
+                       Assert.IsTrue(projectResult.Succeeded);
+                       Assert.IsFalse(projectResult.Errors.Any());
+                       Assert.AreEqual(projectResult.Project.Name, retrievedProject.Name);
+                       Assert.IsTrue(Enumerable.SequenceEqual(projectResult.Project.Tags.Select(t => t.Tag.Name).OrderBy(t => t), retrievedProject.Tags.Select(t => t.Tag.Name).OrderBy(t => t)));
                    });
 
         [TestMethod]
@@ -93,8 +95,9 @@ namespace CollAction.Tests.Integration.Service
                                Status = ProjectStatus.Running,
                                Target = 33
                            };
-                       var newProject = await projectService.UpdateProject(updatedProject, adminClaims, CancellationToken.None);
-                       var retrievedProject = await context.Projects.Include(p => p.Tags).ThenInclude(t => t.Tag).FirstOrDefaultAsync(p => p.Id == newProject.Id);
+                       var newProjectResult = await projectService.UpdateProject(updatedProject, adminClaims, CancellationToken.None);
+                       Assert.IsTrue(newProjectResult.Succeeded);
+                       var retrievedProject = await context.Projects.Include(p => p.Tags).ThenInclude(t => t.Tag).FirstOrDefaultAsync(p => p.Id == newProjectResult.Project.Id);
 
                        Assert.AreEqual(updatedProject.Name, retrievedProject.Name);
                        Assert.IsTrue(Enumerable.SequenceEqual(updatedProject.Tags.OrderBy(t => t), retrievedProject.Tags.Select(t => t.Tag.Name).OrderBy(t => t)));

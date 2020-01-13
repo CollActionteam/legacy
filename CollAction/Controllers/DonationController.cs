@@ -8,7 +8,7 @@ namespace CollAction.Controllers
 {
     public class DonationController : Controller
     {
-        private IDonationService donationService;
+        private readonly IDonationService donationService;
 
         public DonationController(IDonationService donationService)
         {

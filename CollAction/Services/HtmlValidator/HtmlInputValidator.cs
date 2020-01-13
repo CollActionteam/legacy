@@ -8,6 +8,11 @@ namespace CollAction.Services.HtmlValidator
     {
         public bool IsSafe(string inputHtml)
         {
+            if (inputHtml == null)
+            {
+                return true;
+            }
+
             var sanitizer = new HtmlSanitizer(
                 allowedTags: 
                     new[] 

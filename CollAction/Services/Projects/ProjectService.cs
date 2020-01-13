@@ -18,7 +18,7 @@ using System.Threading;
 using CollAction.Services.HtmlValidator;
 using CollAction.GraphQl.Mutations.Input;
 using Hangfire;
-using System.Text.RegularExpressions;
+using CollAction.Helpers;
 
 namespace CollAction.Services.Projects
 {
@@ -31,6 +31,7 @@ namespace CollAction.Services.Projects
         private readonly ProjectEmailOptions projectEmailOptions;
         private readonly SiteOptions siteOptions;
         private readonly IHtmlInputValidator htmlInputValidator;
+        private readonly IServiceProvider serviceProvider;
         private readonly IBackgroundJobClient jobClient;
 
         public ProjectService(
@@ -41,6 +42,7 @@ namespace CollAction.Services.Projects
             IOptions<ProjectEmailOptions> projectEmailOptions,
             IOptions<SiteOptions> siteOptions,
             IHtmlInputValidator htmlInputValidator,
+            IServiceProvider serviceProvider,
             IBackgroundJobClient jobClient)
         {
             this.userManager = userManager;
@@ -50,26 +52,42 @@ namespace CollAction.Services.Projects
             this.projectEmailOptions = projectEmailOptions.Value;
             this.siteOptions = siteOptions.Value;
             this.htmlInputValidator = htmlInputValidator;
+            this.serviceProvider = serviceProvider;
             this.jobClient = jobClient;
         }
 
-        public async Task<Project> CreateProject(NewProject newProject, ClaimsPrincipal user, CancellationToken token)
+        public async Task<ProjectResult> CreateProject(NewProject newProject, ClaimsPrincipal user, CancellationToken token)
         {
-            logger.LogInformation("Creating project: {0}", newProject.Name);
+            logger.LogInformation("Validating new project");
+
+            IEnumerable<ValidationResult> validationResults = ValidationHelper.Validate(newProject, serviceProvider);
+            if (validationResults.Any())
+            {
+                return new ProjectResult()
+                {
+                    Errors = validationResults
+                };
+            }
+
             ApplicationUser owner = await userManager.GetUserAsync(user);
 
             if (owner == null)
             {
-                throw new ValidationException("User not found");
+                return new ProjectResult()
+                {
+                    Errors = new[] { new ValidationResult("Project owner could not be found") }
+                };
             }
 
             if (await context.Projects.AnyAsync(p => p.Name == newProject.Name))
             {
-                throw new ValidationException("A project with this name already exists");
+                return new ProjectResult()
+                {
+                    Errors = new[] { new ValidationResult("A project with this name already exists") }
+                };
             }
 
-            ValidateProject(newProject);
-
+            logger.LogInformation("Creating project: {0}", newProject.Name);
             var tagMap = new Dictionary<string, int>();
             if (newProject.Tags.Any())
             {
@@ -129,17 +147,25 @@ namespace CollAction.Services.Projects
 
             logger.LogInformation("Created project: {0}", newProject.Name);
 
-            return project;
+            return new ProjectResult()
+            {
+                Project = project,
+                Succeeded = true,
+                Errors = Enumerable.Empty<ValidationResult>()
+            };
         }
 
-        public async Task<Project> UpdateProject(UpdatedProject updatedProject, ClaimsPrincipal user, CancellationToken token)
+        public async Task<ProjectResult> UpdateProject(UpdatedProject updatedProject, ClaimsPrincipal user, CancellationToken token)
         {
+            logger.LogInformation("Validating updated project");
+
             if (!user.IsInRole(Constants.AdminRole))
             {
-                throw new ValidationException("Not allowed to update project");
+                return new ProjectResult()
+                {
+                    Errors = new[] { new ValidationResult("User is not allowed to update project") }
+                };
             }
-
-            logger.LogInformation("Updating project: {0}", updatedProject.Name);
 
             Project project = await context
                 .Projects
@@ -149,15 +175,21 @@ namespace CollAction.Services.Projects
 
             if (project == null)
             {
-                throw new ValidationException("Project not found");
+                return new ProjectResult()
+                {
+                    Errors = new[] { new ValidationResult("Project not found") }
+                };
             }
 
             if (project.Name != updatedProject.Name && await context.Projects.AnyAsync(p => p.Name == updatedProject.Name))
             {
-                throw new ValidationException("A project with this name already exists");
+                return new ProjectResult()
+                {
+                    Errors = new[] { new ValidationResult("A project with this name already exists") }
+                };
             }
 
-            ValidateProject(updatedProject);
+            logger.LogInformation("Updating project: {0}", updatedProject.Name);
 
             bool approved = updatedProject.Status == ProjectStatus.Running && project.Status != ProjectStatus.Running;
             bool changeFinishJob = (approved || project.End != updatedProject.End) && updatedProject.End < DateTime.UtcNow;
@@ -251,7 +283,12 @@ namespace CollAction.Services.Projects
             await context.SaveChangesAsync(token);
             logger.LogInformation("Updated project: {0}", updatedProject.Name);
 
-            return project;
+            return new ProjectResult()
+            {
+                Project = project,
+                Succeeded = true,
+                Errors = Enumerable.Empty<ValidationResult>()
+            };
         }
 
         public async Task ProjectSuccess(int projectId, CancellationToken token)
@@ -268,23 +305,32 @@ namespace CollAction.Services.Projects
             }
         }
 
-        public async Task<Project> SendProjectEmail(int projectId, string subject, string message, ClaimsPrincipal performingUser, CancellationToken token)
+        public async Task<ProjectResult> SendProjectEmail(int projectId, string subject, string message, ClaimsPrincipal performingUser, CancellationToken token)
         {
             Project project = await context.Projects.FindAsync(new object[] { projectId }, token);
             if (project == null)
             {
-                throw new ValidationException("Project not found");
+                return new ProjectResult()
+                {
+                    Errors = new[] { new ValidationResult("Project could not be found") }
+                };
             }
 
             if (!(htmlInputValidator.IsSafe(message) && htmlInputValidator.IsSafe(subject)))
             {
-                throw new ValidationException("Unsafe html");
+                return new ProjectResult()
+                {
+                    Errors = new[] { new ValidationResult("Unsafe HTML in e-mail message") }
+                };
             }
 
             ApplicationUser user = await userManager.GetUserAsync(performingUser);
             if (project.OwnerId != user.Id)
             {
-                throw new InvalidOperationException("Unauthorized");
+                return new ProjectResult()
+                {
+                    Errors = new[] { new ValidationResult("Unauthorized") }
+                };
             }
 
             IEnumerable<ProjectParticipant> participants =
@@ -313,7 +359,12 @@ namespace CollAction.Services.Projects
             await context.SaveChangesAsync(token);
 
             logger.LogInformation("done sending project email for '{0}' on {1} to {2} users", project.Name, subject, participants.Count());
-            return project;
+            return new ProjectResult()
+            {
+                Project = project,
+                Succeeded = true,
+                Errors = Enumerable.Empty<ValidationResult>()
+            };
         }
 
         public bool CanSendProjectEmail(Project project)
@@ -428,39 +479,6 @@ namespace CollAction.Services.Projects
             return projects;
         }
 
-        private void ValidateProject(IProjectModel project)
-        {
-            if (project.Categories.Count > 2)
-            {
-                throw new ValidationException("Too many categories");
-            }
-
-            if (project.Categories.Distinct().Count() != project.Categories.Count)
-            {
-                throw new ValidationException("Duplicate categories");
-            }
-
-            if (project.End < project.Start || project.Start < DateTime.UtcNow)
-            {
-                throw new ValidationException("Issue with project start and end dates");
-            }
-
-            if (project.DescriptionVideoLink != null && !Regex.IsMatch(project.DescriptionVideoLink, @"^https://www.youtube.com/watch\?v=[^& ]+$"))
-            {
-                throw new ValidationException("Project has invalid video link");
-            }
-
-            if (DateTime.UtcNow < project.Start.AddYears(-1))
-            {
-                throw new ValidationException("Please ensure your project starts within the next year");
-            }
-
-            if (project.End - project.Start > TimeSpan.FromDays(356))
-            {
-                throw new ValidationException("Please ensure your project end-date is within a year of the start-date");
-            }
-        }
-
         private async Task<AddParticipantResult> AddAnonymousParticipant(Project project, ApplicationUser user, string email, CancellationToken token)
         {
             var result = new AddParticipantResult();
@@ -514,7 +532,7 @@ namespace CollAction.Services.Projects
         {
             if (!string.IsNullOrEmpty(unsubscribeLink))
             {
-                message = message + $"<br><a href=\"{unsubscribeLink}\">Unsubscribe</a>";
+                message += $"<br><a href=\"{unsubscribeLink}\">Unsubscribe</a>";
             }
 
             if (string.IsNullOrEmpty(user.FirstName))

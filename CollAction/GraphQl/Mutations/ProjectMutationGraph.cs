@@ -1,4 +1,5 @@
 ﻿using CollAction.GraphQl.Mutations.Input;
+using CollAction.GraphQl.Mutations.Result;
 using CollAction.GraphQl.Queries;
 using CollAction.Helpers;
 using CollAction.Models;
@@ -15,7 +16,7 @@ namespace CollAction.GraphQl.Mutations
     {
         public ProjectMutationGraph()
         {
-            FieldAsync<ProjectGraph, Project>(
+            FieldAsync<ProjectResultGraph, ProjectResult>(
                 "createProject",
                 arguments: new QueryArguments(
                     new QueryArgument<NewProjectInputGraph>() { Name = "project" }),
@@ -28,7 +29,7 @@ namespace CollAction.GraphQl.Mutations
                                         .CreateProject(project, context.User, c.CancellationToken);
                 });
 
-            FieldAsync<ProjectGraph, Project>(
+            FieldAsync<ProjectResultGraph, ProjectResult>(
                 "updateProject",
                 arguments: new QueryArguments(
                     new QueryArgument<UpdatedProjectInputGraph>() { Name = "project" }),
@@ -56,7 +57,7 @@ namespace CollAction.GraphQl.Mutations
                                         .CommitToProject(email, projectId, context.User, c.CancellationToken);
                 });
 
-            FieldAsync<ProjectGraph, Project>(
+            FieldAsync<ProjectResultGraph, ProjectResult>(
                 "sendProjectEmail",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IntGraphType>>() { Name = "projectId" },

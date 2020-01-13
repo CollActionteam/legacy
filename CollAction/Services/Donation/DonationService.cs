@@ -379,6 +379,14 @@ namespace CollAction.Services.Donation
             await context.SaveChangesAsync(token);
         }
 
+        private static void ValidateDetails(string name, string email)
+        {
+            if (string.IsNullOrEmpty(name) || !email.Contains("@", StringComparison.Ordinal))
+            {
+                throw new InvalidOperationException($"Invalid user-details");
+            }
+        }
+
         private async Task<Plan> CreateRecurringPlan(int amount, string currency, CancellationToken token)
         {
             Product product = await GetOrCreateRecurringDonationProduct(token);
@@ -451,14 +459,6 @@ namespace CollAction.Services.Donation
             }
 
             return customer;
-        }
-
-        private void ValidateDetails(string name, string email)
-        {
-            if (string.IsNullOrEmpty(name) || !email.Contains("@", StringComparison.Ordinal))
-            {
-                throw new InvalidOperationException($"Invalid user-details");
-            }
         }
 
         private Task SendDonationThankYou(Customer customer, bool hasSubscriptions)

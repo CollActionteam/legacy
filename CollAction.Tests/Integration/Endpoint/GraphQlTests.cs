@@ -145,7 +145,7 @@ namespace CollAction.Tests.Integration.Endpoint
                                            categories: [COMMUNITY, ENVIRONMENT],
                                            target: 55,
                                            proposal: ""44"",
-                                           description: """",
+                                           description: ""test"",
                                            goal: ""dd"",
                                            creatorComments: ""dd"",
                                            start: ""{DateTime.UtcNow.AddDays(10).ToString("o")}"",
@@ -153,7 +153,14 @@ namespace CollAction.Tests.Integration.Endpoint
                                            descriptionVideoLink: ""https://www.youtube.com/watch?v=a1"",
                                            tags:[""b"", ""a""]
                                        }}) {{
-                                           id
+                                           succeeded
+                                           project {{
+                                               id
+                                           }}
+                                           errors {{
+                                               memberNames
+                                               errorMessage
+                                           }}
                                        }}
                                    }}
                                }}";

@@ -10,7 +10,7 @@ namespace CollAction.GraphQl.Queries
 {
     public class MiscellaneousGraph : ObjectGraphType
     {
-        public MiscellaneousGraph(IServiceScopeFactory serviceScopeFactory, IOptions<DisqusOptions> disqusOptions)
+        public MiscellaneousGraph(IServiceScopeFactory serviceScopeFactory)
         {
             FieldAsync<ListGraphType<StringGraphType>>(
                 "externalLoginProviders",
