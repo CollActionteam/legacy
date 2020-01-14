@@ -192,8 +192,8 @@ namespace CollAction.Tests.Integration.Endpoint
                 JsonSerializer.Serialize(
                     new
                     {
-                        Query = query,
-                        Variables = variables
+                        query,
+                        variables
                     });
             var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
 
