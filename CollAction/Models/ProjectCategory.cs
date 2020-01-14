@@ -2,7 +2,6 @@
 
 namespace CollAction.Models
 {
-    [Owned]
     public class ProjectCategory
     {
         public int ProjectId { get; set; }

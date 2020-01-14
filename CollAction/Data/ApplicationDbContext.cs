@@ -79,13 +79,12 @@ namespace CollAction.Data
                    .HasForeignKey(proj => proj.OwnerId)
                    .OnDelete(DeleteBehavior.SetNull);
             builder.Entity<Project>()
-                   .OwnsMany(
-                       p => p.Categories,
-                       b =>
-                       {
-                           b.WithOwner().HasForeignKey(pc => pc.ProjectId);
-                           b.HasKey("Category", "ProjectId");
-                       });
+                   .HasMany(p => p.Categories)
+                   .WithOne(pc => pc.Project)
+                   .HasForeignKey(pc => pc.ProjectId)
+                   .OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<ProjectCategory>()
+                   .HasKey("Category", "ProjectId");
             builder.Entity<ProjectParticipant>()
                    .HasKey("UserId", "ProjectId");
             builder.Entity<ProjectTag>()
