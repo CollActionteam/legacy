@@ -9,10 +9,10 @@ namespace CollAction.Models
     public class ApplicationUser : IdentityUser
     {
         [MaxLength(250)]
-        public string FirstName { get; set; }
+        public string? FirstName { get; set; }
 
         [MaxLength(250)]
-        public string LastName { get; set; }
+        public string? LastName { get; set; }
 
         public DateTime RegistrationDate { get; set; }
 

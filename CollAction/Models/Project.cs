@@ -20,7 +20,7 @@ namespace CollAction.Models
 
         public ProjectStatus Status { get; set; }
 
-        public string OwnerId { get; set; }
+        public string? OwnerId { get; set; }
 
         [ForeignKey("OwnerId")]
         public ApplicationUser Owner { get; set; }
@@ -46,10 +46,10 @@ namespace CollAction.Models
         public string Proposal { get; set; }
 
         [MaxLength(20000)]
-        public string CreatorComments { get; set; }
+        public string? CreatorComments { get; set; }
 
         [MaxLength(100)]
-        public string FinishJobId { get; set; }
+        public string? FinishJobId { get; set; }
 
         public int AnonymousUserParticipants { get; set; }
 
@@ -63,7 +63,7 @@ namespace CollAction.Models
         [ForeignKey("DescriptiveImageFileId")]
         public ImageFile DescriptiveImage { get; set; }
 
-        public string DescriptionVideoLink { get; set; }
+        public string? DescriptionVideoLink { get; set; }
         
         public ProjectDisplayPriority DisplayPriority { get; set; }
 

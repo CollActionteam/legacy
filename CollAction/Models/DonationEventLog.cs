@@ -9,10 +9,11 @@ namespace CollAction.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
+        [Required]
         [Column(TypeName = "json")]
         public string EventData { get; set; }
 
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
         [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }
 

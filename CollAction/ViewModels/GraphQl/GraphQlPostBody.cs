@@ -6,12 +6,12 @@ namespace CollAction.ViewModels.GraphQl
     public class GraphQlPostBody
     {
         [JsonProperty("operationName")]
-        public string OperationName { get; set; }
+        public string? OperationName { get; set; }
 
         [JsonProperty("query")]
         public string Query { get; set; }
 
         [JsonProperty("variables")]
-        public JObject Variables { get; set; }
+        public JObject? Variables { get; set; }
     }
 }

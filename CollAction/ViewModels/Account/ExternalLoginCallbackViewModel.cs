@@ -10,6 +10,6 @@ namespace CollAction.ViewModels.Account
         [Required]
         public string ErrorUrl { get; set; }
 
-        public string RemoteError { get; set; }
+        public string? RemoteError { get; set; }
     }
 }

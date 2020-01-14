@@ -47,11 +47,11 @@ namespace CollAction.Controllers
         [HttpGet]
         public Task<ExecutionResult> Get([FromQuery] GraphQlGetQuery getQuery, CancellationToken cancellation)
         {
-            JObject jsonVariables = ParseVariables(getQuery.Variables);
+            JObject? jsonVariables = ParseVariables(getQuery.Variables);
             return Execute(getQuery.Query, getQuery.OperationName, jsonVariables, cancellation);
         }
 
-        private static JObject ParseVariables(string variables)
+        private static JObject? ParseVariables(string? variables)
         {
             if (variables == null)
             {
@@ -68,7 +68,7 @@ namespace CollAction.Controllers
             }
         }
 
-        private async Task<ExecutionResult> Execute(string query, string operationName, JObject variables, CancellationToken cancellation)
+        private async Task<ExecutionResult> Execute(string query, string? operationName, JObject? variables, CancellationToken cancellation)
         {
             var options = new ExecutionOptions
             {
