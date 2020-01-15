@@ -1,7 +1,10 @@
-﻿namespace CollAction.Services.Donation
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CollAction.Services.Donation
 {
     public class StripePublicOptions
     {
-        public string StripePublicKey { get; set; }
+        [Required]
+        public string StripePublicKey { get; set; } = null!;
     }
 }

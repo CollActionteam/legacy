@@ -17,7 +17,7 @@ namespace CollAction.Services.User
 
         Task<IdentityResult> DeleteUser(string userId, ClaimsPrincipal loggedInUser);
 
-        Task<(IdentityResult Result, string ResetCode)> ForgotPassword(string email);
+        Task<(IdentityResult Result, string? ResetCode)> ForgotPassword(string email);
 
         Task<IdentityResult> ResetPassword(string email, string code, string password);
 

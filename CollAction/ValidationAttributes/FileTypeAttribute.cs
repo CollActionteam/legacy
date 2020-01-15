@@ -22,7 +22,12 @@ namespace CollAction.ValidationAttributes
                 return true;
             }
 
-            string extension = Path.GetExtension((value as IFormFile).FileName).ToLower().Substring(1); // Strip off the preceeding dot.
+            if (!(value is IFormFile))
+            {
+                throw new ArgumentException("Value being validated is not a IFormFile", nameof(value));
+            }
+
+            string extension = Path.GetExtension(((IFormFile)value).FileName).ToLower().Substring(1); // Strip off the preceeding dot.
             return types.Contains(extension);
         }
 

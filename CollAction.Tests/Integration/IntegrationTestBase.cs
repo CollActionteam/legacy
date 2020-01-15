@@ -17,22 +17,18 @@ namespace CollAction.Tests.Integration
     {
         public async Task WithServiceProvider(Func<IServiceScope, Task> executeTests)
         {
-            using (IWebHost host = GetHost(ConfigureReplacementServicesProvider).Build())
-            using (IServiceScope scope = host.Services.CreateScope())
-            {
-                await ApplicationDbContext.InitializeDatabase(scope);
-                await executeTests(scope);
-            }
+            using IWebHost host = GetHost(ConfigureReplacementServicesProvider).Build();
+            using IServiceScope scope = host.Services.CreateScope();
+            await ApplicationDbContext.InitializeDatabase(scope);
+            await executeTests(scope);
         }
 
         public Task WithTestServer(Func<IServiceScope, TestServer, Task> executeTests)
             => WithServiceProvider(
                 async scope =>
                 {
-                    using (var testServer = new TestServer(GetHost(ConfigureReplacementServicesTestServer)))
-                    {
-                        await executeTests(scope, testServer);
-                    }
+                    using var testServer = new TestServer(GetHost(ConfigureReplacementServicesTestServer));
+                    await executeTests(scope, testServer);
                 });
 
         protected static async Task<string> GetAuthCookie(HttpClient httpClient, SeedOptions seedOptions)
@@ -43,15 +39,13 @@ namespace CollAction.Tests.Integration
                 { "Email", seedOptions.AdminEmail },
                 { "Password", seedOptions.AdminPassword }
             };
-            using (var formContent = new FormUrlEncodedContent(loginContent))
-            {
-                HttpResponseMessage authResult = await httpClient.PostAsync(new Uri("/account/login", UriKind.Relative), formContent);
-                string authResultContent = await authResult.Content.ReadAsStringAsync();
-                Assert.IsTrue(authResult.IsSuccessStatusCode, authResultContent);
-                string cookie = authResult.Headers.Single(h => h.Key == "Set-Cookie").Value.Single().Split(";").First();
-                Assert.IsTrue(authResult.IsSuccessStatusCode, authResultContent);
-                return cookie;
-            }
+            using var formContent = new FormUrlEncodedContent(loginContent);
+            HttpResponseMessage authResult = await httpClient.PostAsync(new Uri("/account/login", UriKind.Relative), formContent);
+            string authResultContent = await authResult.Content.ReadAsStringAsync();
+            Assert.IsTrue(authResult.IsSuccessStatusCode, authResultContent);
+            string cookie = authResult.Headers.Single(h => h.Key == "Set-Cookie").Value.Single().Split(";").First();
+            Assert.IsTrue(authResult.IsSuccessStatusCode, authResultContent);
+            return cookie;
         }
 
         protected virtual void ConfigureReplacementServicesProvider(IServiceCollection collection)

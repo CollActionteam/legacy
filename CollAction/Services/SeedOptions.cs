@@ -1,11 +1,15 @@
-﻿namespace CollAction.Services
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CollAction.Services
 {
     public class SeedOptions
     {
-        public string AdminEmail { get; set; }
+        [Required]
+        public string AdminEmail { get; set; } = null!;
         
-        public string AdminPassword { get; set; }
+        [Required]
+        public string AdminPassword { get; set; } = null!;
 
-        public bool SeedTestProjects { get; set; }
+        public bool SeedTestProjects { get; set; } = false;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace CollAction.ValidationAttributes
@@ -19,7 +20,12 @@ namespace CollAction.ValidationAttributes
                 return true;
             }
 
-            return (value as IFormFile).Length <= maxSize;
+            if (!(value is IFormFile))
+            {
+                throw new ArgumentException("Value being validated is not a IFormFile", nameof(value));
+            }
+
+            return ((IFormFile)value).Length <= maxSize;
         }
 
         public override string FormatErrorMessage(string name)

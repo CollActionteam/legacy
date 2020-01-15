@@ -112,7 +112,7 @@ namespace CollAction.Services.User
             }
         }
 
-        public async Task<(IdentityResult Result, string ResetCode)> ForgotPassword(string email)
+        public async Task<(IdentityResult Result, string? ResetCode)> ForgotPassword(string email)
         {
             ApplicationUser user = await userManager.FindByEmailAsync(email);
             if (user == null)
@@ -266,7 +266,7 @@ namespace CollAction.Services.User
         {
             logger.LogInformation("Ingesting user event information");
             ApplicationUser user = await userManager.GetUserAsync(trackedUser);
-            string trackedUserId = canTrack ? user?.Id : null;
+            string? trackedUserId = canTrack ? user?.Id : null;
             var userEvent = new UserEvent()
             {
                 EventLoggedAt = DateTime.UtcNow,

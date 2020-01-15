@@ -1,7 +1,10 @@
-﻿namespace CollAction.Services.Newsletter
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CollAction.Services.Newsletter
 {
     public class NewsletterServiceOptions
     {
-        public string MailChimpNewsletterListId { get; set; }
+        [Required]
+        public string MailChimpNewsletterListId { get; set; } = null!;
     }
 }

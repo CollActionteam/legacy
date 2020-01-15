@@ -1,7 +1,10 @@
-﻿namespace CollAction.Services
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CollAction.Services
 {
     public class SiteOptions
     {
-        public string PublicAddress { get; set; }
+        [Required]
+        public string PublicAddress { get; set; } = null!;
     }
 }

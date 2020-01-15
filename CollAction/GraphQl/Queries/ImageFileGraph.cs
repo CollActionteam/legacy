@@ -21,12 +21,10 @@ namespace CollAction.GraphQl.Queries
                 "url",
                 resolve: c =>
                 {
-                    using (var scope = serviceScopeFactory.CreateScope())
-                    {
-                        return scope.ServiceProvider
-                                    .GetRequiredService<IImageService>()
-                                    .GetUrl(c.Source);
-                    }
+                    using var scope = serviceScopeFactory.CreateScope();
+                    return scope.ServiceProvider
+                                .GetRequiredService<IImageService>()
+                                .GetUrl(c.Source);
                 });
         }
     }

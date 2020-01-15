@@ -34,25 +34,23 @@ namespace CollAction.Services.ViewRender
 
             IView view = viewEngineResult.View;
 
-            using (var output = new StringWriter())
+            using var output = new StringWriter();
+            var viewContext = new ViewContext()
             {
-                var viewContext = new ViewContext()
+                HttpContext = urlHelper.ActionContext.HttpContext,
+                RouteData = urlHelper.ActionContext.RouteData,
+                ActionDescriptor = urlHelper.ActionContext.ActionDescriptor,
+                View = view,
+                ViewData = new ViewDataDictionary<TModel>(new EmptyModelMetadataProvider(), new ModelStateDictionary())
                 {
-                    HttpContext = urlHelper.ActionContext.HttpContext,
-                    RouteData = urlHelper.ActionContext.RouteData,
-                    ActionDescriptor = urlHelper.ActionContext.ActionDescriptor,
-                    View = view,
-                    ViewData = new ViewDataDictionary<TModel>(new EmptyModelMetadataProvider(), new ModelStateDictionary())
-                    {
-                        Model = model
-                    },
-                    Writer = output
-                };
+                    Model = model
+                },
+                Writer = output
+            };
 
-                await view.RenderAsync(viewContext);
+            await view.RenderAsync(viewContext);
 
-                return output.ToString();
-            }
+            return output.ToString();
         }
     }
 } 

@@ -423,7 +423,7 @@ namespace CollAction.Services.Projects
 
             AddParticipantResult result = applicationUser != null
                 ? await AddLoggedInParticipant(project, applicationUser, token)
-                : await AddAnonymousParticipant(project, applicationUser, email, token);
+                : await AddAnonymousParticipant(project, email, token);
 
             if (result.Scenario != AddParticipantScenario.Error &&
                 result.Scenario != AddParticipantScenario.AnonymousNotRegisteredPresentAndAlreadyParticipating &&
@@ -479,24 +479,21 @@ namespace CollAction.Services.Projects
             return projects;
         }
 
-        private async Task<AddParticipantResult> AddAnonymousParticipant(Project project, ApplicationUser user, string email, CancellationToken token)
+        private async Task<AddParticipantResult> AddAnonymousParticipant(Project project, string email, CancellationToken token)
         {
             var result = new AddParticipantResult();
-            if (user == null)
+            var user = new ApplicationUser() { Email = email, UserName = email, RepresentsNumberParticipants = 1, RegistrationDate = DateTime.UtcNow };
+            IdentityResult creationResult = await userManager.CreateAsync(user);
+            if (!creationResult.Succeeded)
             {
-                user = new ApplicationUser() { Email = email, UserName = email, RepresentsNumberParticipants = 1, RegistrationDate = DateTime.UtcNow };
-                IdentityResult creationResult = await userManager.CreateAsync(user);
-                if (!creationResult.Succeeded)
+                string errors = string.Join(',', creationResult.Errors.Select(e => $"{e.Code}: {e.Description}"));
+                return new AddParticipantResult()
                 {
-                    string errors = string.Join(',', creationResult.Errors.Select(e => $"{e.Code}: {e.Description}"));
-                    return new AddParticipantResult()
-                    {
-                        Error = $"Could not create new unregistered user {email}: {errors}"
-                    };
-                }
-
-                result.UserCreated = true;
+                    Error = $"Could not create new unregistered user {email}: {errors}"
+                };
             }
+
+            result.UserCreated = true;
 
             result.UserAdded = await InsertParticipant(project.Id, user.Id, token);
             result.UserAlreadyActive = user.Activated;
@@ -528,7 +525,7 @@ namespace CollAction.Services.Projects
         private Task RefreshParticipantCountMaterializedView(CancellationToken token)
             => context.Database.ExecuteSqlRawAsync("REFRESH MATERIALIZED VIEW CONCURRENTLY \"ProjectParticipantCounts\";", token);
 
-        private string FormatEmailMessage(string message, ApplicationUser user, string unsubscribeLink)
+        private string FormatEmailMessage(string message, ApplicationUser user, string? unsubscribeLink)
         {
             if (!string.IsNullOrEmpty(unsubscribeLink))
             {

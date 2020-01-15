@@ -168,7 +168,6 @@ namespace CollAction
             // Configure application options
             services.Configure<StripeSignatures>(Configuration);
             services.Configure<SiteOptions>(Configuration);
-            services.Configure<DisqusOptions>(Configuration);
             services.Configure<AuthMessageSenderOptions>(Configuration);
             services.Configure<ImageServiceOptions>(Configuration);
             services.Configure<ImageProcessingOptions>(Configuration);

@@ -21,26 +21,22 @@ namespace CollAction.Services.DataProtection
 
         public IReadOnlyCollection<XElement> GetAllElements()
         {
-            using (var context = new ApplicationDbContext(options))
-            {
-                return context.DataProtectionKeys
-                              .Select(key => XElement.Parse(key.KeyDataXml))
-                              .ToArray();
-            }
+            using var context = new ApplicationDbContext(options);
+            return context.DataProtectionKeys
+                          .Select(key => XElement.Parse(key.KeyDataXml))
+                          .ToArray();
         }
 
         public void StoreElement(XElement element, string friendlyName)
         {
-            using (var context = new ApplicationDbContext(options))
+            using var context = new ApplicationDbContext(options);
+            context.DataProtectionKeys.Add(new DataProtectionKey()
             {
-                context.DataProtectionKeys.Add(new DataProtectionKey()
-                {
-                    FriendlyName = friendlyName,
-                    KeyDataXml = element.ToString(SaveOptions.DisableFormatting)
-                });
+                FriendlyName = friendlyName,
+                KeyDataXml = element.ToString(SaveOptions.DisableFormatting)
+            });
 
-                context.SaveChanges();
-            }
+            context.SaveChanges();
         }
     }
 }

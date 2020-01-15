@@ -77,13 +77,9 @@ namespace CollAction.Tests.Integration.Service
 
         private async Task<HttpStatusCode> CheckUrl(string url)
         {
-            using (HttpClient client = new HttpClient())
-            {
-                using (HttpResponseMessage response = await client.GetAsync(url))
-                {
-                    return response.StatusCode;
-                }
-            }
+            using HttpClient client = new HttpClient();
+            using HttpResponseMessage response = await client.GetAsync(url);
+            return response.StatusCode;
         }
     }
 }

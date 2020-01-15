@@ -119,16 +119,14 @@ namespace CollAction.Tests.Integration.Endpoint
                        Assert.IsNotNull(result.RootElement.GetProperty("errors"), content);
 
                        SeedOptions seedOptions = scope.ServiceProvider.GetRequiredService<IOptions<SeedOptions>>().Value;
-                       using (var httpClient = testServer.CreateClient())
-                       {
-                           // Retry call as admin
-                           httpClient.DefaultRequestHeaders.Add("Cookie", await GetAuthCookie(httpClient, seedOptions));
-                           response = await PerformGraphQlQuery(httpClient, QueryProjects, null);
-                           content = await response.Content.ReadAsStringAsync();
-                           Assert.IsTrue(response.IsSuccessStatusCode, content);
-                           result = JsonDocument.Parse(content);
-                           Assert.ThrowsException<KeyNotFoundException>(() => result.RootElement.GetProperty("errors"), content);
-                       }
+                       using var httpClient = testServer.CreateClient();
+                       // Retry call as admin
+                       httpClient.DefaultRequestHeaders.Add("Cookie", await GetAuthCookie(httpClient, seedOptions));
+                       response = await PerformGraphQlQuery(httpClient, QueryProjects, null);
+                       content = await response.Content.ReadAsStringAsync();
+                       Assert.IsTrue(response.IsSuccessStatusCode, content);
+                       result = JsonDocument.Parse(content);
+                       Assert.ThrowsException<KeyNotFoundException>(() => result.RootElement.GetProperty("errors"), content);
                    });
 
         [TestMethod]
@@ -166,26 +164,22 @@ namespace CollAction.Tests.Integration.Endpoint
                                }}";
 
                        SeedOptions seedOptions = scope.ServiceProvider.GetRequiredService<IOptions<SeedOptions>>().Value;
-                       using (var httpClient = testServer.CreateClient())
-                       {
-                           httpClient.DefaultRequestHeaders.Add("Cookie", await GetAuthCookie(httpClient, seedOptions));
-                           HttpResponseMessage response = await PerformGraphQlQuery(httpClient, createProject, null);
-                           string content = await response.Content.ReadAsStringAsync();
-                           JsonDocument result = JsonDocument.Parse(content);
-                           Assert.IsTrue(response.IsSuccessStatusCode, content);
-                           Assert.ThrowsException<KeyNotFoundException>(() => result.RootElement.GetProperty("errors"), content);
-                       }
+                       using var httpClient = testServer.CreateClient();
+                       httpClient.DefaultRequestHeaders.Add("Cookie", await GetAuthCookie(httpClient, seedOptions));
+                       HttpResponseMessage response = await PerformGraphQlQuery(httpClient, createProject, null);
+                       string content = await response.Content.ReadAsStringAsync();
+                       JsonDocument result = JsonDocument.Parse(content);
+                       Assert.IsTrue(response.IsSuccessStatusCode, content);
+                       Assert.ThrowsException<KeyNotFoundException>(() => result.RootElement.GetProperty("errors"), content);
                    });
 
-        private static async Task<HttpResponseMessage> PerformGraphQlQuery(TestServer testServer, string query, dynamic variables)
+        private static async Task<HttpResponseMessage> PerformGraphQlQuery(TestServer testServer, string query, dynamic? variables)
         {
-            using (var httpClient = testServer.CreateClient())
-            {
-                return await PerformGraphQlQuery(httpClient, query, variables);
-            }
+            using var httpClient = testServer.CreateClient();
+            return await PerformGraphQlQuery(httpClient, query, variables);
         }
 
-        private static async Task<HttpResponseMessage> PerformGraphQlQuery(HttpClient httpClient, string query, dynamic variables)
+        private static async Task<HttpResponseMessage> PerformGraphQlQuery(HttpClient httpClient, string query, dynamic? variables)
         {
             // Test with columns provided
             string jsonBody =

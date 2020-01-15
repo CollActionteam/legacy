@@ -22,29 +22,25 @@ namespace CollAction.Tests.Integration.Endpoint
             => WithTestServer(
                    async (scope, testServer) =>
                    {
-                       using (var content = new MultipartFormDataContent())
-                       using (var memoryStream = new MemoryStream(testImage))
-                       using (var streamContent = new StreamContent(memoryStream))
-                       using (var descriptionContent = new StringContent("My Description"))
-                       using (var client = testServer.CreateClient())
-                       {
-                           SeedOptions seedOptions = scope.ServiceProvider.GetRequiredService<IOptions<SeedOptions>>().Value;
-                           client.DefaultRequestHeaders.Add("Cookie", await GetAuthCookie(client, seedOptions));
-                           content.Add(streamContent, "Image", "test.png");
-                           content.Add(descriptionContent, "ImageDescription");
-                           using (var response = await client.PostAsync("/image", content))
-                           {
-                               string body = await response.Content.ReadAsStringAsync();
-                               Assert.IsTrue(response.IsSuccessStatusCode, body);
-                               int imageId = int.Parse(body);
+                       using var content = new MultipartFormDataContent();
+                       using var memoryStream = new MemoryStream(testImage);
+                       using var streamContent = new StreamContent(memoryStream);
+                       using var descriptionContent = new StringContent("My Description");
+                       using var client = testServer.CreateClient();
+                       SeedOptions seedOptions = scope.ServiceProvider.GetRequiredService<IOptions<SeedOptions>>().Value;
+                       client.DefaultRequestHeaders.Add("Cookie", await GetAuthCookie(client, seedOptions));
+                       content.Add(streamContent, "Image", "test.png");
+                       content.Add(descriptionContent, "ImageDescription");
+                       using var response = await client.PostAsync("/image", content);
+                       string body = await response.Content.ReadAsStringAsync();
+                       Assert.IsTrue(response.IsSuccessStatusCode, body);
+                       int imageId = int.Parse(body);
 
-                               // Cleanup
-                               var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                               var imageService = scope.ServiceProvider.GetRequiredService<IImageService>();
-                               var image = await context.ImageFiles.FindAsync(imageId);
-                               await imageService.DeleteImage(image, CancellationToken.None);
-                           }
-                       }
+                       // Cleanup
+                       var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                       var imageService = scope.ServiceProvider.GetRequiredService<IImageService>();
+                       var image = await context.ImageFiles.FindAsync(imageId);
+                       await imageService.DeleteImage(image, CancellationToken.None);
                    });
     }
 }

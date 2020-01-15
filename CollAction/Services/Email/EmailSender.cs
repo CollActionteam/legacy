@@ -71,17 +71,15 @@ namespace CollAction.Services.Email
                 }
             };
 
-            using (AmazonSimpleEmailServiceClient client = new AmazonSimpleEmailServiceClient(authOptions.SesAwsAccessKeyID, authOptions.SesAwsAccessKey, RegionEndpoint.GetBySystemName(authOptions.SesRegion)))
+            using AmazonSimpleEmailServiceClient client = new AmazonSimpleEmailServiceClient(authOptions.SesAwsAccessKeyID, authOptions.SesAwsAccessKey, RegionEndpoint.GetBySystemName(authOptions.SesRegion));
+            SendEmailResponse response = await client.SendEmailAsync(emailRequest);
+            if (!response.HttpStatusCode.IsSuccess())
             {
-                SendEmailResponse response = await client.SendEmailAsync(emailRequest);
-                if (!response.HttpStatusCode.IsSuccess())
-                {
-                    logger.LogError("failed to send email to {0}", string.Join(", ", emails));
-                    throw new InvalidOperationException($"failed to send email to {string.Join(", ", emails)}, {response.HttpStatusCode}");
-                }
-
-                logger.LogInformation("successfully send email to {0}", string.Join(", ", emails));
+                logger.LogError("failed to send email to {0}", string.Join(", ", emails));
+                throw new InvalidOperationException($"failed to send email to {string.Join(", ", emails)}, {response.HttpStatusCode}");
             }
+
+            logger.LogInformation("successfully send email to {0}", string.Join(", ", emails));
         }
     }
 }

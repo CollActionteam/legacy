@@ -4,11 +4,15 @@ namespace CollAction.Helpers
 {
     public static class TypeExtensions
     {
-        public static Type GetGenericBaseClass(this Type t, Type baseGeneric)
+        public static Type? GetGenericBaseClass(this Type t, Type baseGeneric)
         {
             if (t.IsGenericType && t.GetGenericTypeDefinition() == baseGeneric)
             {
                 return t;
+            }
+            else if (t.BaseType == null)
+            {
+                return null;
             }
             else
             {
@@ -33,7 +37,7 @@ namespace CollAction.Helpers
                 return true;
             }
 
-            Type baseType = givenType.BaseType;
+            Type? baseType = givenType.BaseType;
             if (baseType == null)
             {
                 return false;

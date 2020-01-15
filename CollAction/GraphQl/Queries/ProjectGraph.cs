@@ -40,10 +40,8 @@ namespace CollAction.GraphQl.Queries
                 "canSendProjectEmail",
                 resolve: c =>
                 {
-                    using (var scope = serviceScopeFactory.CreateScope())
-                    {
-                        return scope.ServiceProvider.GetRequiredService<IProjectService>().CanSendProjectEmail(c.Source);
-                    }
+                    using var scope = serviceScopeFactory.CreateScope();
+                    return scope.ServiceProvider.GetRequiredService<IProjectService>().CanSendProjectEmail(c.Source);
                 });
             FieldAsync<BooleanGraphType>(
                 nameof(Project.IsSuccessfull),

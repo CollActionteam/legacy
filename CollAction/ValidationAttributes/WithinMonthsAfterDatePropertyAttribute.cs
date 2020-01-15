@@ -41,13 +41,19 @@ namespace CollAction.ValidationAttributes
 
         private DateTime GetReferencedDate(object instance)
         {
-            PropertyInfo propertyInfo = instance.GetType().GetProperty(dateProperty);
+            PropertyInfo? propertyInfo = instance.GetType().GetProperty(dateProperty);
             if (propertyInfo == null || propertyInfo.PropertyType != typeof(DateTime))
             {
-                throw new ArgumentException($"The specified property '{dateProperty}' does not refer to a valid DateTime property");
+                throw new ArgumentException($"The specified property '{dateProperty}' does not refer to a valid DateTime property", nameof(dateProperty));
             }
 
-            return (DateTime)propertyInfo.GetValue(instance, null);
+            object? propValue = propertyInfo.GetValue(instance, null);
+            if (propValue == null)
+            {
+                throw new ArgumentException($"The specified property '{dateProperty}' contained a null value", nameof(dateProperty));
+            }
+
+            return (DateTime)propValue;
         }
     }
 }

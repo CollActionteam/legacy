@@ -76,12 +76,7 @@ namespace CollAction.Controllers
                 Query = query,
                 OperationName = operationName,
                 Inputs = variables?.ToInputs(),
-                UserContext = new UserContext()
-                {
-                    Context = context,
-                    User = User,
-                    ServiceProvider = serviceProvider
-                },
+                UserContext = new UserContext(User, context, serviceProvider),
                 ComplexityConfiguration = new ComplexityConfiguration()
                 {
                     MaxDepth = 20

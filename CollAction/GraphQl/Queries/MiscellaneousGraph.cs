@@ -16,14 +16,12 @@ namespace CollAction.GraphQl.Queries
                 "externalLoginProviders",
                 resolve: async c =>
                 {
-                    using (var scope = serviceScopeFactory.CreateScope())
-                    {
-                        var externalSchemes = 
-                            await scope.ServiceProvider
-                                       .GetRequiredService<SignInManager<ApplicationUser>>()
-                                       .GetExternalAuthenticationSchemesAsync();
-                        return externalSchemes.Select(s => s.Name);
-                    }
+                    using var scope = serviceScopeFactory.CreateScope();
+                    var externalSchemes =
+                        await scope.ServiceProvider
+                            .GetRequiredService<SignInManager<ApplicationUser>>()
+                            .GetExternalAuthenticationSchemesAsync();
+                    return externalSchemes.Select(s => s.Name);
                 });
         }
     }

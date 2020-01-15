@@ -20,32 +20,32 @@ namespace CollAction.Data
         {
         }
 
-        public DbSet<Project> Projects { get; set; }
+        public DbSet<Project> Projects { get; set; } = null!;
 
-        public DbSet<ProjectCategory> ProjectCategories { get; set; }
+        public DbSet<ProjectCategory> ProjectCategories { get; set; } = null!;
 
-        public DbSet<ProjectParticipant> ProjectParticipants { get; set; }
+        public DbSet<ProjectParticipant> ProjectParticipants { get; set; } = null!;
 
-        public DbSet<ProjectTag> ProjectTags { get; set; }
+        public DbSet<ProjectTag> ProjectTags { get; set; } = null!;
 
-        public DbSet<Tag> Tags { get; set; }
+        public DbSet<Tag> Tags { get; set; } = null!;
 
-        public DbSet<ImageFile> ImageFiles { get; set; }
+        public DbSet<ImageFile> ImageFiles { get; set; } = null!;
 
-        public DbSet<ProjectParticipantCount> ProjectParticipantCounts { get; set; }
+        public DbSet<ProjectParticipantCount> ProjectParticipantCounts { get; set; } = null!;
 
-        public DbSet<UserEvent> UserEvents { get; set; }
+        public DbSet<UserEvent> UserEvents { get; set; } = null!;
 
-        public DbSet<DonationEventLog> DonationEventLog { get; set; }
+        public DbSet<DonationEventLog> DonationEventLog { get; set; } = null!;
 
-        public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
+        public DbSet<DataProtectionKey> DataProtectionKeys { get; set; } = null!;
 
         public static async Task InitializeDatabase(IServiceScope scope)
         {
             var userManager = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
             var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
             var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+            var logger = scope.ServiceProvider.GetRequiredService<ILogger<ApplicationDbContext>>();
             var seedOptions = scope.ServiceProvider.GetRequiredService<IOptions<SeedOptions>>().Value;
 
             logger.LogInformation("migrating database");

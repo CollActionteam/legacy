@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 
@@ -46,7 +47,8 @@ namespace CollAction.GraphQl
                 {
                     if (type.IsAssignableToGenericType(baseClass))
                     {
-                        Type generic = type.GetGenericBaseClass(baseClass);
+                        Type? generic = type.GetGenericBaseClass(baseClass);
+                        Debug.Assert(generic != null, $"{type.Name} must have geneneric baseclass");
                         Type source = generic.GenericTypeArguments[0];
                         GraphTypeTypeRegistry.Register(source, type);
                         break;
@@ -80,10 +82,8 @@ namespace CollAction.GraphQl
         private static IModel GetDbModel()
         {
             // Register the context
-            using (var context = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseNpgsql("_").Options))
-            {
-                return context.Model;
-            }
+            using var context = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseNpgsql("_").Options);
+            return context.Model;
         }
 
         private static IEnumerable<Type> GetGraphQlTypes()

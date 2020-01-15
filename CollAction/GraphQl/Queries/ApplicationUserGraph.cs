@@ -38,21 +38,17 @@ namespace CollAction.GraphQl.Queries
                 "donationSubscriptions",
                 resolve: async c =>
                 {
-                    using (var scope = serviceScopeFactory.CreateScope())
-                    {
-                        return await scope.ServiceProvider.GetRequiredService<IDonationService>().GetSubscriptionsFor(c.Source, c.CancellationToken);
-                    }
+                    using var scope = serviceScopeFactory.CreateScope();
+                    return await scope.ServiceProvider.GetRequiredService<IDonationService>().GetSubscriptionsFor(c.Source, c.CancellationToken);
                 });
             FieldAsync<ListGraphType<StringGraphType>>(
                 "loginProviders",
                 resolve: async c =>
                 {
-                    using (var scope = serviceScopeFactory.CreateScope())
-                    {
-                        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-                        var providers = await userManager.GetLoginsAsync(c.Source);
-                        return providers.Select(p => p.LoginProvider);
-                    }
+                    using var scope = serviceScopeFactory.CreateScope();
+                    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+                    var providers = await userManager.GetLoginsAsync(c.Source);
+                    return providers.Select(p => p.LoginProvider);
                 });
             AddNavigationListField(nameof(ApplicationUser.Projects), c => c.Source.Projects);
             AddNavigationListField(nameof(ApplicationUser.Participates), c => c.Source.Participates);

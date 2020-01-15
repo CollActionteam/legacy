@@ -320,7 +320,7 @@ namespace CollAction.Services.Donation
                 }
 
                 Customer customer = await customerService.GetAsync(source.Customer);
-                ApplicationUser user = customer != null ? await userManager.FindByEmailAsync(customer.Email) : null;
+                ApplicationUser? user = customer != null ? await userManager.FindByEmailAsync(customer.Email) : null;
                 context.DonationEventLog.Add(new DonationEventLog()
                 {
                     UserId = user?.Id,
@@ -434,7 +434,7 @@ namespace CollAction.Services.Donation
         private async Task<Customer> GetOrCreateCustomer(string name, string email, CancellationToken token)
         {
             Customer customer = (await customerService.ListAsync(new CustomerListOptions() { Email = email, Limit = 1 }, requestOptions, token)).FirstOrDefault();
-            string metadataName = null;
+            string? metadataName = null;
             customer?.Metadata?.TryGetValue(NameKey, out metadataName);
             var metadata = new Dictionary<string, string>() { { NameKey, name } };
             if (customer == null)

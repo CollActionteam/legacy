@@ -7,10 +7,17 @@ namespace CollAction.GraphQl
 {
     public class UserContext : IProvideClaimsPrincipal
     {
-        public ClaimsPrincipal User { get; set; }
+        public UserContext(ClaimsPrincipal user, ApplicationDbContext context, IServiceProvider serviceProvider)
+        {
+            User = user;
+            Context = context;
+            ServiceProvider = serviceProvider;
+        }
 
-        public ApplicationDbContext Context { get; set; }
+        public ClaimsPrincipal User { get; }
 
-        public IServiceProvider ServiceProvider { get; set; }
+        public ApplicationDbContext Context { get; }
+
+        public IServiceProvider ServiceProvider { get; }
     }
 }
