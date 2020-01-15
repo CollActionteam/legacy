@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CollAction.GraphQl.Queries
 {
-    public class ProjectGraph : EfObjectGraphType<ApplicationDbContext, Project>
+    public sealed class ProjectGraph : EfObjectGraphType<ApplicationDbContext, Project>
     {
         public ProjectGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService, IServiceScopeFactory serviceScopeFactory) : base(entityFrameworkGraphQlService)
         {

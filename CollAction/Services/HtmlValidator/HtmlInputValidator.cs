@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace CollAction.Services.HtmlValidator
 {
-    public class HtmlInputValidator : IHtmlInputValidator
+    public sealed class HtmlInputValidator : IHtmlInputValidator
     {
         public bool IsSafe(string inputHtml)
         {

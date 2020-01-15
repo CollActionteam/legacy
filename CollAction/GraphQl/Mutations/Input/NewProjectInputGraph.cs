@@ -3,7 +3,7 @@ using GraphQL.Types;
 
 namespace CollAction.GraphQl.Mutations.Input
 {
-    public class NewProjectInputGraph : InputObjectGraphType<NewProject>
+    public sealed class NewProjectInputGraph : InputObjectGraphType<NewProject>
     {
         public NewProjectInputGraph()
         {

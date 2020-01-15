@@ -3,7 +3,7 @@ using GraphQL.Types;
 
 namespace CollAction.GraphQl.Queries
 {
-    public class CategoryGraph : EnumerationGraphType<Category>
+    public sealed class CategoryGraph : EnumerationGraphType<Category>
     {
     }
 }

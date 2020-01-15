@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace CollAction.GraphQl.Mutations
 {
-    public class IdentityErrorGraph : ObjectGraphType<IdentityError>
+    public sealed class IdentityErrorGraph : ObjectGraphType<IdentityError>
     {
         public IdentityErrorGraph()
         {

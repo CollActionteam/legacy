@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace CollAction.Controllers
 {
-    public class HomeController : Controller
+    public sealed class HomeController : Controller
     {
         private readonly ILogger<HomeController> logger;
 

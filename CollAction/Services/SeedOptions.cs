@@ -2,7 +2,7 @@
 
 namespace CollAction.Services
 {
-    public class SeedOptions
+    public sealed class SeedOptions
     {
         [Required]
         public string AdminEmail { get; set; } = null!;

@@ -5,7 +5,7 @@ using System.Security.Claims;
 
 namespace CollAction.GraphQl
 {
-    public class UserContext : IProvideClaimsPrincipal
+    public sealed class UserContext : IProvideClaimsPrincipal
     {
         public UserContext(ClaimsPrincipal user, ApplicationDbContext context, IServiceProvider serviceProvider)
         {

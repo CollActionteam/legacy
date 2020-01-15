@@ -2,8 +2,18 @@
 
 namespace CollAction.Models
 {
-    public class ProjectCategory
+    public sealed class ProjectCategory
     {
+        public ProjectCategory(Category category): this(0, category)
+        {
+        }
+
+        public ProjectCategory(int projectId, Category category)
+        {
+            ProjectId = projectId;
+            Category = category;
+        }
+
         public int ProjectId { get; set; }
 
         public Project Project { get; set; }

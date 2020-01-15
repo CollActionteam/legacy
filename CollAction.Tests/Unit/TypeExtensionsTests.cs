@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace CollAction.Tests.Unit
 {
     [TestClass]
-    public class TypeExtensionsTests
+    public sealed class TypeExtensionsTests
     {
         [TestMethod]
         public void TestGetGenericBaseClass()

@@ -3,7 +3,7 @@ using System;
 
 namespace CollAction.Services.Newsletter
 {
-    public class NeedsToResubscribeException : Exception
+    public sealed class NeedsToResubscribeException : Exception
     {
         public NeedsToResubscribeException(MailChimpException innerException) : base("User needs to resubscribe", innerException)
         {

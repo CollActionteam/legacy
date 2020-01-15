@@ -4,7 +4,7 @@ using GraphQL.EntityFramework;
 
 namespace CollAction.GraphQl.Queries
 {
-    public class ProjectCategoryGraph : EfObjectGraphType<ApplicationDbContext, ProjectCategory>
+    public sealed class ProjectCategoryGraph : EfObjectGraphType<ApplicationDbContext, ProjectCategory>
     {
         public ProjectCategoryGraph(IEfGraphQLService<ApplicationDbContext> graphService) : base(graphService)
         {

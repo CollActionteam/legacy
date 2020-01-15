@@ -4,7 +4,7 @@ using GraphQL.EntityFramework;
 
 namespace CollAction.GraphQl.Queries
 {
-    public class ProjectTagGraph : EfObjectGraphType<ApplicationDbContext, ProjectTag>
+    public sealed class ProjectTagGraph : EfObjectGraphType<ApplicationDbContext, ProjectTag>
     {
         public ProjectTagGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService) : base(entityFrameworkGraphQlService)
         {

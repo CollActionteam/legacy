@@ -2,7 +2,7 @@
 
 namespace CollAction.Services.Projects.Models
 {
-    public class AddParticipantResult
+    public sealed class AddParticipantResult
     {
         public string Error { get; set; }
 

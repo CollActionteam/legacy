@@ -4,7 +4,7 @@ using System.Net;
 
 namespace CollAction.ViewModels.Email
 {
-    public class ProjectCommitEmailViewModel
+    public sealed class ProjectCommitEmailViewModel
     {
         public Project Project { get; set; }
 

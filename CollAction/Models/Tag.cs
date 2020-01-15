@@ -4,8 +4,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CollAction.Models
 {
-    public class Tag
+    public sealed class Tag
     {
+        public Tag(string name)
+        {
+            Name = name;
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }

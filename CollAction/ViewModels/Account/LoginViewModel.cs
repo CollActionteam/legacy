@@ -2,7 +2,7 @@
 
 namespace CollAction.ViewModels.Account
 {
-    public class LoginViewModel
+    public sealed class LoginViewModel
     {
         [Required]
         [EmailAddress]

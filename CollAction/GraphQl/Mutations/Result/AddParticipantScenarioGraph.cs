@@ -3,7 +3,7 @@ using GraphQL.Types;
 
 namespace CollAction.GraphQl.Mutations
 {
-    public class AddParticipantScenarioGraph : EnumerationGraphType<AddParticipantScenario>
+    public sealed class AddParticipantScenarioGraph : EnumerationGraphType<AddParticipantScenario>
     {
     }
 }

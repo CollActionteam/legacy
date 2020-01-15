@@ -19,7 +19,7 @@ namespace CollAction.Controllers
 {
     [Route("graphql")]
     [ApiController]
-    public class GraphQlController : Controller
+    public sealed class GraphQlController : Controller
     {
         private readonly IDocumentExecuter executer;
         private readonly IEnumerable<IValidationRule> validationRules;

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CollAction.Controllers
 {
-    public class DonationController : Controller
+    public sealed class DonationController : Controller
     {
         private readonly IDonationService donationService;
 

@@ -2,7 +2,7 @@
 
 namespace CollAction.Services.Email
 {
-    public class AuthMessageSenderOptions
+    public sealed class AuthMessageSenderOptions
     {
         [Required]
         [EmailAddress]

@@ -2,7 +2,7 @@
 
 namespace CollAction.ViewModels.Account
 {
-    public class ExternalLoginCallbackViewModel
+    public sealed class ExternalLoginCallbackViewModel
     {
         [Required]
         public string ReturnUrl { get; set; }

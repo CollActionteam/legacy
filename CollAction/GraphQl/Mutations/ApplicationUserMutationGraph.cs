@@ -10,7 +10,7 @@ using Newtonsoft.Json.Linq;
 
 namespace CollAction.GraphQl.Mutations
 {
-    public class ApplicationUserMutationGraph : ObjectGraphType
+    public sealed class ApplicationUserMutationGraph : ObjectGraphType
     {
         public ApplicationUserMutationGraph()
         {

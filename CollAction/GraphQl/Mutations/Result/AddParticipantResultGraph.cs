@@ -3,7 +3,7 @@ using GraphQL.Types;
 
 namespace CollAction.GraphQl.Mutations
 {
-    public class AddParticipantResultGraph : ObjectGraphType<AddParticipantResult>
+    public sealed class AddParticipantResultGraph : ObjectGraphType<AddParticipantResult>
     {
         public AddParticipantResultGraph()
         {

@@ -3,7 +3,7 @@ using GraphQL.Types;
 
 namespace CollAction.GraphQl.Queries
 {
-    public class ProjectStatusGraph : EnumerationGraphType<ProjectStatus>
+    public sealed class ProjectStatusGraph : EnumerationGraphType<ProjectStatus>
     {
     }
 }

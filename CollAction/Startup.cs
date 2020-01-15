@@ -40,7 +40,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace CollAction
 {
-    public class Startup
+    public sealed class Startup
     {
         private readonly string corsPolicy = "FrontendCors";
 

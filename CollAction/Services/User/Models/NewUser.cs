@@ -2,7 +2,7 @@
 
 namespace CollAction.Services.User.Models
 {
-    public class NewUser
+    public sealed class NewUser
     {
         [EmailAddress]
         [Required]

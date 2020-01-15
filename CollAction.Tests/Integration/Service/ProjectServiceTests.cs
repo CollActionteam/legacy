@@ -20,7 +20,7 @@ namespace CollAction.Tests.Integration.Service
 {
     [TestClass]
     [TestCategory("Integration")]
-    public class ProjectServiceTests : IntegrationTestBase
+    public sealed class ProjectServiceTests : IntegrationTestBase
     {
         [TestMethod]
         public Task TestProjectCreate()
@@ -132,21 +132,21 @@ namespace CollAction.Tests.Integration.Service
                        var user = await context.Users.FirstAsync();
                        var claimsUser = await signInManager.CreateUserPrincipalAsync(user);
                        var newProject =
-                           new Project()
-                           {
-                               Name = "test" + Guid.NewGuid(),
-                               Categories = new List<ProjectCategory>() { new ProjectCategory() { Category = Category.Environment }, new ProjectCategory() { Category = Category.Community } },
-                               Description = Guid.NewGuid().ToString(),
-                               DescriptionVideoLink = Guid.NewGuid().ToString(),
-                               End = DateTime.Now.AddDays(30),
-                               Start = DateTime.Now.AddDays(-10),
-                               Goal = Guid.NewGuid().ToString(),
-                               CreatorComments = Guid.NewGuid().ToString(),
-                               Proposal = Guid.NewGuid().ToString(),
-                               Target = 40,
-                               Status = ProjectStatus.Running,
-                               OwnerId = user.Id
-                           };
+                           new Project(
+                               name: $"test{Guid.NewGuid()}",
+                               categories: new List<ProjectCategory>() { new ProjectCategory(Category.Environment), new ProjectCategory(Category.Community) },
+                               tags: new List<ProjectTag>(),
+                               description: Guid.NewGuid().ToString(),
+                               descriptionVideoLink: Guid.NewGuid().ToString(),
+                               start: DateTime.Now.AddDays(-10),
+                               end: DateTime.Now.AddDays(30),
+                               goal: Guid.NewGuid().ToString(),
+                               creatorComments: Guid.NewGuid().ToString(),
+                               proposal: Guid.NewGuid().ToString(),
+                               target: 40,
+                               status: ProjectStatus.Running,
+                               displayPriority: ProjectDisplayPriority.Medium,
+                               ownerId: user.Id);
                        context.Projects.Add(newProject);
                        await context.SaveChangesAsync();
 

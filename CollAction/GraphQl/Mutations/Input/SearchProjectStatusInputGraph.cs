@@ -2,7 +2,7 @@
 
 namespace CollAction.GraphQl.Mutations.Input
 {
-    public class SearchProjectStatusInputGraph : EnumerationGraphType<SearchProjectStatus>
+    public sealed class SearchProjectStatusInputGraph : EnumerationGraphType<SearchProjectStatus>
     {
     }
 }

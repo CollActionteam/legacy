@@ -12,7 +12,7 @@ using System;
 
 namespace CollAction.GraphQl.Mutations
 {
-    public class ProjectMutationGraph : ObjectGraphType
+    public sealed class ProjectMutationGraph : ObjectGraphType
     {
         public ProjectMutationGraph()
         {

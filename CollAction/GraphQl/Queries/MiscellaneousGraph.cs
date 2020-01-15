@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace CollAction.GraphQl.Queries
 {
-    public class MiscellaneousGraph : ObjectGraphType
+    public sealed class MiscellaneousGraph : ObjectGraphType
     {
         public MiscellaneousGraph(IServiceScopeFactory serviceScopeFactory)
         {

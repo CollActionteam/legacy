@@ -7,7 +7,7 @@ using System.Security.Claims;
 
 namespace CollAction.Services.Projects.Models
 {
-    public class UpdatedProject
+    public sealed class UpdatedProject
     {
         public int Id { get; set; }
 

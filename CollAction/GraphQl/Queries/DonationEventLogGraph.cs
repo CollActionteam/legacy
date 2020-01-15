@@ -6,7 +6,7 @@ using GraphQL.EntityFramework;
 namespace CollAction.GraphQl.Queries
 {
     [GraphQLAuthorize(Policy = Constants.GraphQlAdminPolicy)]
-    public class DonationEventLogGraph : EfObjectGraphType<ApplicationDbContext, DonationEventLog>
+    public sealed class DonationEventLogGraph : EfObjectGraphType<ApplicationDbContext, DonationEventLog>
     {
         public DonationEventLogGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService) : base(entityFrameworkGraphQlService)
         {

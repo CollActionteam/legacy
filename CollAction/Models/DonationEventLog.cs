@@ -3,8 +3,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CollAction.Models
 {
-    public class DonationEventLog
+    public sealed class DonationEventLog
     {
+        public DonationEventLog(string eventData, DonationEventType type, string? userId = null)
+        {
+            EventData = eventData;
+            UserId = userId;
+            Type = type;
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }

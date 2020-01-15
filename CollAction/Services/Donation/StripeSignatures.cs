@@ -2,7 +2,7 @@
 
 namespace CollAction.Services.Donation
 {
-    public class StripeSignatures
+    public sealed class StripeSignatures
     {
         [Required]
         public string StripeChargeableWebhookSecret { get; set; } = null!;

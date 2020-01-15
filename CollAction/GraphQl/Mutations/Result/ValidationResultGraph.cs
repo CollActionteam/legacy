@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CollAction.GraphQl.Mutations.Result
 {
-    public class ValidationResultGraph : ObjectGraphType<ValidationResult>
+    public sealed class ValidationResultGraph : ObjectGraphType<ValidationResult>
     {
         public ValidationResultGraph()
         {

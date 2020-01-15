@@ -2,7 +2,7 @@
 
 namespace CollAction.Services.Projects
 {
-    public class ProjectEmailOptions
+    public sealed class ProjectEmailOptions
     {
         public int MaxNumberProjectEmails { get; set; } = 4;
 

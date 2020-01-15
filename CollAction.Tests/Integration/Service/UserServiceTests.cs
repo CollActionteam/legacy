@@ -19,7 +19,7 @@ namespace CollAction.Tests.Integration.Service
 {
     [TestClass]
     [TestCategory("Integration")]
-    public class UserServiceTests : IntegrationTestBase
+    public sealed class UserServiceTests : IntegrationTestBase
     {
         [TestMethod]
         public Task TestPasswordReset()

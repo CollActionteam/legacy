@@ -3,7 +3,7 @@ using Stripe;
 
 namespace CollAction.GraphQl.Queries
 {
-    public class DonationSubscriptionGraph : ObjectGraphType<Subscription>
+    public sealed class DonationSubscriptionGraph : ObjectGraphType<Subscription>
     {
         public DonationSubscriptionGraph()
         {

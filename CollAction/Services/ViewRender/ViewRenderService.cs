@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CollAction.Services.ViewRender
 {
-    public class ViewRenderService : IViewRenderService
+    public sealed class ViewRenderService : IViewRenderService
     {
         private readonly ICompositeViewEngine viewEngine;
         private readonly IUrlHelper urlHelper;

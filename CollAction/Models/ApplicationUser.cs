@@ -6,8 +6,26 @@ using Microsoft.AspNetCore.Identity;
 
 namespace CollAction.Models
 {
-    public class ApplicationUser : IdentityUser
+    public sealed class ApplicationUser : IdentityUser
     {
+        public ApplicationUser(string userName, string email, bool emailConfirmed, string? firstName, string? lastName, DateTime registrationDate)
+        {
+            UserName = userName;
+            Email = email;
+            EmailConfirmed = emailConfirmed;
+            FirstName = firstName;
+            LastName = lastName;
+            RegistrationDate = registrationDate;
+        }
+
+        public ApplicationUser(string email, DateTime registrationDate): this(email, email, false, null, null, registrationDate)
+        {
+        }
+
+        public ApplicationUser(string email, string firstName, string lastName, DateTime registrationDate): this(email, email, false, firstName, lastName, registrationDate)
+        {
+        }
+
         [MaxLength(250)]
         public string? FirstName { get; set; }
 
@@ -24,14 +42,14 @@ namespace CollAction.Models
         public bool Activated
             => PasswordHash != null;
 
-        public int RepresentsNumberParticipants { get; set; } // Users might represent a business or a school. In that case, one user might represent multiple participants. Only settable by an admin user. Defaults to 1.
+        public int RepresentsNumberParticipants { get; set; } = 1; // Users might represent a business or a school. In that case, one user might represent multiple participants. Only settable by an admin user. Defaults to 1.
 
-        public ICollection<Project> Projects { get; set; }
+        public ICollection<Project> Projects { get; set; } = new List<Project>();
 
-        public ICollection<ProjectParticipant> Participates { get; set; }
+        public ICollection<ProjectParticipant> Participates { get; set; } = new List<ProjectParticipant>();
 
-        public ICollection<DonationEventLog> DonationEvents { get; set; }
+        public ICollection<DonationEventLog> DonationEvents { get; set; } = new List<DonationEventLog>();
 
-        public ICollection<UserEvent> UserEvents { get; set; }
+        public ICollection<UserEvent> UserEvents { get; set; } = new List<UserEvent>();
     }
 }

@@ -2,7 +2,7 @@
 
 namespace CollAction.GraphQl.Mutations
 {
-    public class MutationGraph : ObjectGraphType
+    public sealed class MutationGraph : ObjectGraphType
     {
         public MutationGraph()
         {

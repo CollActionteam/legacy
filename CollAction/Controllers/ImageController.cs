@@ -10,7 +10,7 @@ namespace CollAction.Controllers
 {
     [Route("image")]
     [ApiController]
-    public class ImageController : Controller
+    public sealed class ImageController : Controller
     {
         private readonly IImageService imageService;
 

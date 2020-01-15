@@ -47,14 +47,7 @@ namespace CollAction.Services.Image
         {
             logger.LogInformation("Uploading image");
             using Image<Rgba32> image = await UploadToImage(fileUploaded, token);
-            var currentImage = new ImageFile()
-            {
-                Filepath = $"{Guid.NewGuid()}.png",
-                Date = DateTime.UtcNow,
-                Description = imageDescription,
-                Height = image.Height,
-                Width = image.Width
-            };
+            var currentImage = new ImageFile(filepath: $"{Guid.NewGuid()}.png", date: DateTime.UtcNow, description: imageDescription, height: image.Height, width: image.Width);
 
             logger.LogInformation("Queuing for s3 upload");
             byte[] imageBytes = ConvertImageToPng(image);

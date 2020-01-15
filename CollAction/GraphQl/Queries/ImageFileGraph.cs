@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CollAction.GraphQl.Queries
 {
-    public class ImageFileGraph : EfObjectGraphType<ApplicationDbContext, ImageFile>
+    public sealed class ImageFileGraph : EfObjectGraphType<ApplicationDbContext, ImageFile>
     {
         public ImageFileGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService, IServiceScopeFactory serviceScopeFactory) : base(entityFrameworkGraphQlService)
         {

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace CollAction.GraphQl.Mutations
 {
-    public class IdentityResultGraph : ObjectGraphType<IdentityResult>
+    public sealed class IdentityResultGraph : ObjectGraphType<IdentityResult>
     {
         public IdentityResultGraph()
         {

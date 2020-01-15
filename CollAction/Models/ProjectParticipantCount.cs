@@ -6,8 +6,14 @@ namespace CollAction.Models
     /// <summary>
     /// This is a materialized view of the aggregate Participants.Sum(participant => participant.User.RepresentsNumberParticipants) + project.AnonymousUserParticipants
     /// </summary>
-    public class ProjectParticipantCount
+    public sealed class ProjectParticipantCount
     {
+        public ProjectParticipantCount(int projectId, int count)
+        {
+            ProjectId = projectId;
+            Count = count;
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ProjectId { get; set; }

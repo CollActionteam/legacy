@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CollAction.GraphQl.Mutations
 {
-    public class DonationMutationGraph : ObjectGraphType
+    public sealed class DonationMutationGraph : ObjectGraphType
     {
         public DonationMutationGraph()
         {

@@ -14,7 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CollAction.Services.Email
 {
-    public class EmailSender : IEmailSender
+    public sealed class EmailSender : IEmailSender
     {
         private readonly AuthMessageSenderOptions authOptions;
         private readonly IServiceProvider serviceProvider;

@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
 namespace CollAction.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public sealed class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -118,7 +118,7 @@ namespace CollAction.Data
             ApplicationUser admin = await userManager.FindByEmailAsync(seedOptions.AdminEmail);
             if (admin == null)
             {
-                admin = new ApplicationUser() { Email = seedOptions.AdminEmail, UserName = seedOptions.AdminEmail, EmailConfirmed = true, RegistrationDate = DateTime.UtcNow, RepresentsNumberParticipants = 1 };
+                admin = new ApplicationUser(userName: seedOptions.AdminEmail, email: seedOptions.AdminEmail, emailConfirmed: true, registrationDate: DateTime.UtcNow, firstName: null, lastName: null);
                 IdentityResult result = await userManager.CreateAsync(admin, seedOptions.AdminPassword);
                 if (!result.Succeeded)
                 {
@@ -146,23 +146,21 @@ namespace CollAction.Data
                 Projects.AddRange(
                     Enumerable.Range(0, r.Next(20, 200))
                               .Select(i =>
-                                  new Project()
-                                  {
-                                      Name = Guid.NewGuid().ToString(),
-                                      Description = Guid.NewGuid().ToString(),
-                                      Start = DateTime.Now.AddDays(r.Next(-10, 10)),
-                                      End = DateTime.Now.AddDays(r.Next(20, 30)),
-                                      AnonymousUserParticipants = r.Next(0, 5),
-                                      Categories = new List<ProjectCategory>() { new ProjectCategory() { Category = (Category)r.Next(2) }, new ProjectCategory() { Category = (Category)(r.Next(3) + 2) } },
-                                      CreatorComments = Guid.NewGuid().ToString(),
-                                      DisplayPriority = (ProjectDisplayPriority)r.Next(0, 2),
-                                      Goal = Guid.NewGuid().ToString(),
-                                      OwnerId = admin.Id,
-                                      Proposal = Guid.NewGuid().ToString(),
-                                      Status = (ProjectStatus)r.Next(0, 4),
-                                      Target = r.Next(1, 10000),
-                                      NumberProjectEmailsSend = r.Next(0, 3)
-                                  }));
+                                  new Project(
+                                      name: Guid.NewGuid().ToString(),
+                                      description: Guid.NewGuid().ToString(),
+                                      start: DateTime.Now.AddDays(r.Next(-10, 10)),
+                                      end: DateTime.Now.AddDays(r.Next(20, 30)),
+                                      categories: new List<ProjectCategory>() { new ProjectCategory((Category)r.Next(2)), new ProjectCategory((Category)(r.Next(3) + 2)) },
+                                      tags: new List<ProjectTag>(),
+                                      creatorComments: Guid.NewGuid().ToString(),
+                                      displayPriority: (ProjectDisplayPriority)r.Next(0, 2),
+                                      goal: Guid.NewGuid().ToString(),
+                                      ownerId: admin.Id,
+                                      proposal: Guid.NewGuid().ToString(),
+                                      status: (ProjectStatus)r.Next(0, 3),
+                                      target: r.Next(1, 100000),
+                                      descriptionVideoLink: Guid.NewGuid().ToString())));
                 await SaveChangesAsync();
             }
         }

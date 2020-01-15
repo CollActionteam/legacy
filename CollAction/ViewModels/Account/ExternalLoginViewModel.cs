@@ -2,7 +2,7 @@
 
 namespace CollAction.ViewModels.Account
 {
-    public class ExternalLoginViewModel
+    public sealed class ExternalLoginViewModel
     {
         [Required]
         public string Provider { get; set; } = null!;

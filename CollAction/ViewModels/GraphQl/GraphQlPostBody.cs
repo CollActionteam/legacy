@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 
 namespace CollAction.ViewModels.GraphQl
 {
-    public class GraphQlPostBody
+    public sealed class GraphQlPostBody
     {
         [JsonProperty("operationName")]
         public string? OperationName { get; set; }

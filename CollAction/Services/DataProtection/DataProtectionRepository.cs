@@ -30,12 +30,7 @@ namespace CollAction.Services.DataProtection
         public void StoreElement(XElement element, string friendlyName)
         {
             using var context = new ApplicationDbContext(options);
-            context.DataProtectionKeys.Add(new DataProtectionKey()
-            {
-                FriendlyName = friendlyName,
-                KeyDataXml = element.ToString(SaveOptions.DisableFormatting)
-            });
-
+            context.DataProtectionKeys.Add(new DataProtectionKey(friendlyName: friendlyName, keyDataXml: element.ToString(SaveOptions.DisableFormatting)));
             context.SaveChanges();
         }
     }

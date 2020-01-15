@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace CollAction.Tests.Unit
 {
     [TestClass]
-    public class HtmlInputValidatorTests
+    public sealed class HtmlInputValidatorTests
     {
         [TestMethod]
         public void TestHtmlInputValidation()

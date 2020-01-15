@@ -2,7 +2,7 @@
 
 namespace CollAction.Services.Donation
 {
-    public class StripePublicOptions
+    public sealed class StripePublicOptions
     {
         [Required]
         public string StripePublicKey { get; set; } = null!;

@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 
 namespace CollAction.GraphQl.Queries
 {
-    public class DonationGraph : ObjectGraphType
+    public sealed class DonationGraph : ObjectGraphType
     {
         public DonationGraph(IServiceScopeFactory serviceScopeFactory, IOptions<StripePublicOptions> stripePublicOptions)
         {

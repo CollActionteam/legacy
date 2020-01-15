@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace CollAction.GraphQl.Queries
 {
-    public class ApplicationUserGraph : EfObjectGraphType<ApplicationDbContext, ApplicationUser>
+    public sealed class ApplicationUserGraph : EfObjectGraphType<ApplicationDbContext, ApplicationUser>
     {
         public ApplicationUserGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService, IDependencyResolver dependencyResolver, IServiceScopeFactory serviceScopeFactory) : base(entityFrameworkGraphQlService)
         {

@@ -12,7 +12,7 @@ using System.Security.Claims;
 
 namespace CollAction.GraphQl.Queries
 {
-    public class QueryGraph : QueryGraphType<ApplicationDbContext>
+    public sealed class QueryGraph : QueryGraphType<ApplicationDbContext>
     {
         public QueryGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService) : base(entityFrameworkGraphQlService)
         {

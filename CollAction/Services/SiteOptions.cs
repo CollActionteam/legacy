@@ -2,7 +2,7 @@
 
 namespace CollAction.Services
 {
-    public class SiteOptions
+    public sealed class SiteOptions
     {
         [Required]
         public string PublicAddress { get; set; } = null!;

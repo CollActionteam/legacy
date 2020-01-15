@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace CollAction.Services.User
 {
-    public class UserService : IUserService
+    public sealed class UserService : IUserService
     {
         private readonly IServiceProvider serviceProvider;
         private readonly INewsletterService newsletterService;
@@ -50,13 +50,7 @@ namespace CollAction.Services.User
         public async Task<UserResult> CreateUser(string email, ExternalLoginInfo info)
         {
             logger.LogInformation("Creating user from external login");
-            ApplicationUser user = new ApplicationUser()
-            {
-                Email = email,
-                UserName = email,
-                RegistrationDate = DateTime.UtcNow,
-                RepresentsNumberParticipants = 1
-            };
+            ApplicationUser user = new ApplicationUser(email: email, registrationDate: DateTime.UtcNow);
             IdentityResult result = await userManager.CreateAsync(user);
             if (result.Succeeded)
             {
@@ -90,15 +84,7 @@ namespace CollAction.Services.User
                 };
             }
 
-            ApplicationUser user = new ApplicationUser()
-            {
-                Email = newUser.Email,
-                FirstName = newUser.FirstName,
-                LastName = newUser.LastName,
-                UserName = newUser.Email,
-                RegistrationDate = DateTime.UtcNow,
-                RepresentsNumberParticipants = 1
-            };
+            ApplicationUser user = new ApplicationUser(email: newUser.Email, firstName: newUser.FirstName, lastName: newUser.LastName, registrationDate: DateTime.UtcNow);
             IdentityResult result = await userManager.CreateAsync(user, newUser.Password);
             if (result.Succeeded)
             {

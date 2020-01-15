@@ -22,7 +22,7 @@ using CollAction.Helpers;
 
 namespace CollAction.Services.Projects
 {
-    public class ProjectService : IProjectService
+    public sealed class ProjectService : IProjectService
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly ApplicationDbContext context;
@@ -98,7 +98,7 @@ namespace CollAction.Services.Projects
                                      .Where(t => newProject.Tags.Contains(t.Name))
                                      .Select(t => t.Name)
                                      .ToListAsync(token))
-                    .Select(t => new Tag() { Name = t });
+                    .Select(t => new Tag(t));
 
                 if (missingTags.Any())
                 {
@@ -113,27 +113,26 @@ namespace CollAction.Services.Projects
 
             List<ProjectTag> projectTags =
                 newProject.Tags
-                          .Select(t => new ProjectTag() { TagId = tagMap[t] })
+                          .Select(t => new ProjectTag(tagId: tagMap[t]))
                           .ToList();
 
-            var project = new Project
-            {
-                OwnerId = owner.Id,
-                Name = newProject.Name,
-                Description = newProject.Description,
-                Proposal = newProject.Proposal,
-                Goal = newProject.Goal,
-                CreatorComments = newProject.CreatorComments,
-                Categories = newProject.Categories.Select(c => new ProjectCategory() { Category = c }).ToList(),
-                Target = newProject.Target,
-                Start = newProject.Start,
-                Status = ProjectStatus.Hidden,
-                End = newProject.End.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
-                BannerImageFileId = newProject.BannerImageFileId,
-                DescriptiveImageFileId = newProject.DescriptiveImageFileId,
-                DescriptionVideoLink = newProject.DescriptionVideoLink,
-                Tags = projectTags
-            };
+            var project = new Project(
+                name: newProject.Name,
+                status: ProjectStatus.Hidden,
+                ownerId: owner.Id,
+                target: newProject.Target,
+                start: newProject.Start,
+                end: newProject.End.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+                description: newProject.Description,
+                goal: newProject.Goal, 
+                proposal: newProject.Proposal,
+                creatorComments: newProject.CreatorComments,
+                descriptionVideoLink: newProject.DescriptionVideoLink,
+                displayPriority: ProjectDisplayPriority.Medium, 
+                bannerImageFileId: newProject.BannerImageFileId,
+                descriptiveImageFileId: newProject.DescriptiveImageFileId,
+                categories: newProject.Categories.Select(c => new ProjectCategory((c))).ToList(), 
+                tags: projectTags);
 
             context.Projects.Add(project);
             await context.SaveChangesAsync(token);
@@ -225,7 +224,7 @@ namespace CollAction.Services.Projects
 
                 if (missingTags.Any())
                 {
-                    context.Tags.AddRange(missingTags.Select(t => new Tag() { Name = t }));
+                    context.Tags.AddRange(missingTags.Select(t => new Tag(t)));
                     await context.SaveChangesAsync(token);
                 }
 
@@ -237,7 +236,7 @@ namespace CollAction.Services.Projects
                 IEnumerable<ProjectTag> newTags =
                     updatedProject.Tags
                                   .Except(projectTags)
-                                  .Select(t => new ProjectTag() { ProjectId = project.Id, TagId = tagMap[t] });
+                                  .Select(t => new ProjectTag(projectId: project.Id, tagId: tagMap[t]));
                 IEnumerable<ProjectTag> removedTags =
                     project.Tags
                            .Where(t => projectTags.Except(updatedProject.Tags).Contains(t.Tag.Name));
@@ -252,7 +251,7 @@ namespace CollAction.Services.Projects
                 IEnumerable<ProjectCategory> removedCategories = project.Categories.Where(pc => !updatedProject.Categories.Contains(pc.Category));
 
                 context.ProjectCategories.RemoveRange(removedCategories);
-                context.ProjectCategories.AddRange(newCategories.Select(c => new ProjectCategory() { ProjectId = project.Id, Category = c }));
+                context.ProjectCategories.AddRange(newCategories.Select(c => new ProjectCategory(projectId: project.Id, category: c)));
             }
 
             ApplicationUser owner = await userManager.FindByIdAsync(project.OwnerId);
@@ -482,7 +481,7 @@ namespace CollAction.Services.Projects
         private async Task<AddParticipantResult> AddAnonymousParticipant(Project project, string email, CancellationToken token)
         {
             var result = new AddParticipantResult();
-            var user = new ApplicationUser() { Email = email, UserName = email, RepresentsNumberParticipants = 1, RegistrationDate = DateTime.UtcNow };
+            var user = new ApplicationUser(email: email, registrationDate: DateTime.UtcNow);
             IdentityResult creationResult = await userManager.CreateAsync(user);
             if (!creationResult.Succeeded)
             {
@@ -562,14 +561,7 @@ namespace CollAction.Services.Projects
                 return false;
             }
 
-            ProjectParticipant participant = new ProjectParticipant
-            {
-                UserId = userId,
-                ProjectId = projectId,
-                SubscribedToProjectEmails = true,
-                UnsubscribeToken = Guid.NewGuid(),
-                ParticipationDate = DateTime.UtcNow
-            };
+            ProjectParticipant participant = new ProjectParticipant(userId: userId, projectId: projectId, subscribedToProjectEmails: true, participationDate: DateTime.UtcNow, unsubscribeToken: Guid.NewGuid());
 
             try
             {

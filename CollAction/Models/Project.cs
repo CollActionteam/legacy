@@ -8,8 +8,32 @@ using System.Text.RegularExpressions;
 
 namespace CollAction.Models
 {
-    public class Project
+    public sealed class Project
     {
+        public Project(string name, ProjectStatus status, string? ownerId, int target, DateTime start, DateTime end, string description, string goal, string proposal, string? creatorComments, string? descriptionVideoLink, ProjectDisplayPriority displayPriority = ProjectDisplayPriority.Medium, int? bannerImageFileId = null, int? descriptiveImageFileId = null): this(name, status, ownerId, target, start, end, description, goal, proposal, creatorComments, descriptionVideoLink, new List<ProjectCategory>(), new List<ProjectTag>(), displayPriority, bannerImageFileId, descriptiveImageFileId)
+        {
+        }
+
+        public Project(string name, ProjectStatus status, string? ownerId, int target, DateTime start, DateTime end, string description, string goal, string proposal, string? creatorComments, string? descriptionVideoLink, ICollection<ProjectCategory> categories, ICollection<ProjectTag> tags, ProjectDisplayPriority displayPriority = ProjectDisplayPriority.Medium, int? bannerImageFileId = null, int? descriptiveImageFileId = null)
+        {
+            Name = name;
+            Status = status;
+            OwnerId = ownerId;
+            Target = target;
+            Start = start;
+            End = end;
+            Description = description;
+            Goal = goal;
+            Proposal = proposal;
+            CreatorComments = creatorComments;
+            DescriptionVideoLink = descriptionVideoLink;
+            DisplayPriority = displayPriority;
+            BannerImageFileId = bannerImageFileId;
+            DescriptiveImageFileId = descriptiveImageFileId;
+            Categories = categories;
+            Tags = tags;
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
@@ -48,6 +72,10 @@ namespace CollAction.Models
         [MaxLength(20000)]
         public string? CreatorComments { get; set; }
 
+        public string? DescriptionVideoLink { get; set; }
+        
+        public ProjectDisplayPriority DisplayPriority { get; set; }
+
         [MaxLength(100)]
         public string? FinishJobId { get; set; }
 
@@ -63,13 +91,9 @@ namespace CollAction.Models
         [ForeignKey("DescriptiveImageFileId")]
         public ImageFile DescriptiveImage { get; set; }
 
-        public string? DescriptionVideoLink { get; set; }
-        
-        public ProjectDisplayPriority DisplayPriority { get; set; }
-
         public ProjectParticipantCount ParticipantCounts { get; set; }
 
-        public ICollection<ProjectParticipant> Participants { get; set; }
+        public ICollection<ProjectParticipant> Participants { get; set; } = new List<ProjectParticipant>();
 
         public ICollection<ProjectCategory> Categories { get; set; }
 

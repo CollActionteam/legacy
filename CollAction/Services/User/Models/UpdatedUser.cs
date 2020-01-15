@@ -2,7 +2,7 @@
 
 namespace CollAction.Services.User.Models
 {
-    public class UpdatedUser
+    public sealed class UpdatedUser
     {
         [Required]
         public string Id { get; set; }

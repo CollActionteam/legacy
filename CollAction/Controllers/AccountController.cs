@@ -15,7 +15,7 @@ using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace CollAction.Controllers
 {
-    public class AccountController : Controller
+    public sealed class AccountController : Controller
     {
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IUserService userService;

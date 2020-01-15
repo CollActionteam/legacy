@@ -4,8 +4,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CollAction.Models
 {
-    public class ProjectParticipant
+    public sealed class ProjectParticipant
     {
+        public ProjectParticipant(string userId, int projectId, bool subscribedToProjectEmails, DateTime participationDate, Guid unsubscribeToken)
+        {
+            UserId = userId;
+            ProjectId = projectId;
+            SubscribedToProjectEmails = subscribedToProjectEmails;
+            ParticipationDate = participationDate;
+            UnsubscribeToken = unsubscribeToken;
+        }
+
         [Required]
         public string UserId { get; set; }
         [ForeignKey("UserId")]

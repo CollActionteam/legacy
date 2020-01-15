@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 
 namespace CollAction.Services.Newsletter
 {
-    public class NewsletterService : INewsletterService
+    public sealed class NewsletterService : INewsletterService
     {
         private readonly string newsletterListId;
         private readonly IMailChimpManager mailChimpManager;

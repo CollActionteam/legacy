@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CollAction.Services.Projects.Models
 {
-    public class ProjectResult
+    public sealed class ProjectResult
     {
         public Project Project { get; set; }
 

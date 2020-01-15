@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CollAction.GraphQl.Mutations.Result
 {
-    public class ProjectResultGraph : ObjectGraphType<ProjectResult>
+    public sealed class ProjectResultGraph : ObjectGraphType<ProjectResult>
     {
         public ProjectResultGraph()
         {

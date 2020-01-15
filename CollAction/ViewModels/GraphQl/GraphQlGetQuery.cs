@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CollAction.ViewModels.GraphQl
 {
-    public class GraphQlGetQuery
+    public sealed class GraphQlGetQuery
     {
         [FromQuery(Name = "query")]
         public string Query { get; set; }

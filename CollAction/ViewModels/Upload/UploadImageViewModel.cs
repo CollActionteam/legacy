@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CollAction.ViewModels.Upload
 {
-    public class UploadImageViewModel
+    public sealed class UploadImageViewModel
     {
         [Required]
         [MaxLength(50, ErrorMessage = "Keep your description short, no more then 50 characters")]

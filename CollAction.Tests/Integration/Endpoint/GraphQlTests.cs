@@ -16,7 +16,7 @@ namespace CollAction.Tests.Integration.Endpoint
 {
     [TestClass]
     [TestCategory("Integration")]
-    public class GraphQlTests : IntegrationTestBase
+    public sealed class GraphQlTests : IntegrationTestBase
     {
         [TestMethod]
         public Task TestProjectList()

@@ -2,7 +2,7 @@
 
 namespace CollAction.Services.Image
 {
-    public class ImageServiceOptions
+    public sealed class ImageServiceOptions
     {
         [Required]
         public string S3AwsAccessKeyID { get; set; } = null!;

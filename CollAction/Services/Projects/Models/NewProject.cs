@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CollAction.Services.Projects.Models
 {
-    public class NewProject
+    public sealed class NewProject
     {
         [Required(ErrorMessage = "You must provide a unique name for your project")]
         [StringLength(50, ErrorMessage = "Keep the name short, no more then 50 characters")]

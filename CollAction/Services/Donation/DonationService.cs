@@ -42,7 +42,7 @@ namespace CollAction.Services.Donation
     ///   - If successfull, the user will be returned to the thank-you page, otherwise the user will be redirected to the donation-page
     ///   - Checkout/Billing will auto-charge the subscription, so the webhook won't be necessary
     /// </summary>
-    public class DonationService : IDonationService
+    public sealed class DonationService : IDonationService
     {
         private const string StatusChargeable = "chargeable";
         private const string StatusConsumed = "consumed";
@@ -157,12 +157,7 @@ namespace CollAction.Services.Donation
 
             Session session = await sessionService.CreateAsync(sessionOptions, cancellationToken: token);
 
-            context.DonationEventLog.Add(new DonationEventLog()
-            {
-                UserId = user?.Id,
-                Type = DonationEventType.Internal,
-                EventData = session.ToJson()
-            });
+            context.DonationEventLog.Add(new DonationEventLog(eventData: session.ToJson(), type: DonationEventType.Internal, userId: user?.Id));
             await context.SaveChangesAsync(token);
             logger.LogInformation("Done initializing credit card checkout session");
 
@@ -204,12 +199,7 @@ namespace CollAction.Services.Donation
                 },
                 cancellationToken: token);
 
-            context.DonationEventLog.Add(new DonationEventLog()
-            {
-                UserId = user?.Id,
-                Type = DonationEventType.Internal,
-                EventData = subscription.ToJson()
-            });
+            context.DonationEventLog.Add(new DonationEventLog(userId: user?.Id, type: DonationEventType.Internal, eventData: subscription.ToJson()));
             await context.SaveChangesAsync(token);
             logger.LogInformation("Done initializing sepa direct");
         }
@@ -233,13 +223,7 @@ namespace CollAction.Services.Donation
                 },
                 cancellationToken: token);
 
-            context.DonationEventLog.Add(
-                new DonationEventLog()
-                {
-                    UserId = user?.Id,
-                    Type = DonationEventType.Internal,
-                    EventData = source.ToJson()
-                });
+            context.DonationEventLog.Add(new DonationEventLog(userId: user?.Id, type: DonationEventType.Internal, eventData: source.ToJson()));
             await context.SaveChangesAsync(token);
             logger.LogInformation("Done initializing iDeal");
         }
@@ -271,11 +255,7 @@ namespace CollAction.Services.Donation
             logger.LogInformation("Received payment event");
             Event stripeEvent = EventUtility.ConstructEvent(json, signature, stripeSignatures.StripePaymentEventWebhookSecret);
 
-            context.DonationEventLog.Add(new DonationEventLog()
-            {
-                Type = DonationEventType.External,
-                EventData = stripeEvent.ToJson()
-            });
+            context.DonationEventLog.Add(new DonationEventLog(type: DonationEventType.External, eventData: stripeEvent.ToJson()));
             await context.SaveChangesAsync(token);
 
             if (stripeEvent.Type == EventTypeChargeSucceeded)
@@ -321,12 +301,7 @@ namespace CollAction.Services.Donation
 
                 Customer customer = await customerService.GetAsync(source.Customer);
                 ApplicationUser? user = customer != null ? await userManager.FindByEmailAsync(customer.Email) : null;
-                context.DonationEventLog.Add(new DonationEventLog()
-                {
-                    UserId = user?.Id,
-                    Type = DonationEventType.Internal,
-                    EventData = charge.ToJson()
-                });
+                context.DonationEventLog.Add(new DonationEventLog(userId: user?.Id, type: DonationEventType.Internal, eventData: charge.ToJson()));
                 await context.SaveChangesAsync();
             }
             else
@@ -370,12 +345,7 @@ namespace CollAction.Services.Donation
 
             subscription = await subscriptionService.CancelAsync(subscriptionId, new SubscriptionCancelOptions(), cancellationToken: token);
 
-            context.DonationEventLog.Add(new DonationEventLog()
-            {
-                UserId = user.Id,
-                Type = DonationEventType.Internal,
-                EventData = subscription.ToJson()
-            });
+            context.DonationEventLog.Add(new DonationEventLog(userId: user.Id, type: DonationEventType.Internal, eventData: subscription.ToJson()));
             await context.SaveChangesAsync(token);
         }
 
