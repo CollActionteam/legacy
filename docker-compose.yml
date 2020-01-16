@@ -32,12 +32,8 @@ services:
     build:
       context: Frontend
       dockerfile: Dockerfile
-    depends_on:
-      - backend
-    links:
-      - backend:backend
     ports:
-      - "8000:80"
+      - "8000:8000"
 
   db:
     image: postgres
