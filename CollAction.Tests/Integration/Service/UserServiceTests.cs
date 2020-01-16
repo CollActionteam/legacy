@@ -46,6 +46,7 @@ namespace CollAction.Tests.Integration.Service
                     ApplicationUser user = testUserCreation.User;
                     (result, code) = await userService.ForgotPassword(user.Email);
                     Assert.IsTrue(result.Succeeded);
+                    Assert.IsNotNull(code);
 
                     result = await userService.ResetPassword(user.Email, code, "");
                     Assert.IsFalse(result.Succeeded);

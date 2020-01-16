@@ -6,7 +6,8 @@ namespace CollAction.ViewModels.GraphQl
     public sealed class GraphQlGetQuery
     {
         [FromQuery(Name = "query")]
-        public string Query { get; set; }
+        [Required]
+        public string Query { get; set; } = null!;
 
         [FromQuery(Name = "operationName")]
         public string? OperationName { get; set; }

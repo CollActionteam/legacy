@@ -9,12 +9,12 @@ namespace CollAction.ViewModels.Upload
         [Required]
         [MaxLength(50, ErrorMessage = "Keep your description short, no more then 50 characters")]
         [Display(Name = "Image description")]
-        public string ImageDescription { get; set; }
+        public string ImageDescription { get; set; } = null!;
 
         [Required]
         [FileSize(1024000)] // 1MB
         [FileType("jpg", "jpeg", "gif", "png", "bmp")]
         [Display(Name = "Description image")]
-        public IFormFile Image { get; set; }
+        public IFormFile Image { get; set; } = null!;
     }
 }

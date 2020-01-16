@@ -75,7 +75,7 @@ namespace CollAction.Data
                    .HasDefaultValue(ProjectDisplayPriority.Medium);
             builder.Entity<ApplicationUser>()
                    .HasMany(p => p.Projects)
-                   .WithOne(proj => proj.Owner)
+                   .WithOne(proj => proj.Owner!)
                    .HasForeignKey(proj => proj.OwnerId)
                    .OnDelete(DeleteBehavior.SetNull);
             builder.Entity<Project>()
@@ -91,22 +91,22 @@ namespace CollAction.Data
                    .HasKey("TagId", "ProjectId");
             builder.Entity<Project>()
                    .HasOne(p => p.ParticipantCounts)
-                   .WithOne(p => p.Project)
+                   .WithOne(p => p!.Project)
                    .HasForeignKey<ProjectParticipantCount>(p => p.ProjectId);
             builder.Entity<ApplicationUser>().Property(u => u.RepresentsNumberParticipants).HasDefaultValue(1);
             builder.Entity<UserEvent>()
                    .HasOne(e => e.User)
-                   .WithMany(u => u.UserEvents)
+                   .WithMany(u => u!.UserEvents)
                    .HasForeignKey(e => e.UserId);
         }
 
         private async Task CreateAdminRoleAndUser(SeedOptions seedOptions, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             // Create admin role if not exists
-            IdentityRole adminRole = await roleManager.FindByNameAsync(Constants.AdminRole);
+            IdentityRole adminRole = await roleManager.FindByNameAsync(AuthorizationConstants.AdminRole);
             if (adminRole == null)
             {
-                adminRole = new IdentityRole(Constants.AdminRole) { NormalizedName = Constants.AdminRole };
+                adminRole = new IdentityRole(AuthorizationConstants.AdminRole) { NormalizedName = AuthorizationConstants.AdminRole };
                 IdentityResult result = await roleManager.CreateAsync(adminRole);
                 if (!result.Succeeded)
                 {
@@ -127,9 +127,9 @@ namespace CollAction.Data
             }
 
             // Assign admin role if not assigned
-            if (!(await userManager.IsInRoleAsync(admin, Constants.AdminRole)))
+            if (!(await userManager.IsInRoleAsync(admin, AuthorizationConstants.AdminRole)))
             {
-                IdentityResult result = await userManager.AddToRoleAsync(admin, Constants.AdminRole);
+                IdentityResult result = await userManager.AddToRoleAsync(admin, AuthorizationConstants.AdminRole);
                 if (!result.Succeeded)
                 {
                     throw new InvalidOperationException($"Error assigning admin role.{Environment.NewLine}{string.Join(Environment.NewLine, result.Errors.Select(e => $"{e.Code}: {e.Description}"))}");

@@ -4,7 +4,34 @@ namespace CollAction.Services.Projects.Models
 {
     public sealed class AddParticipantResult
     {
-        public string Error { get; set; }
+        public AddParticipantResult(string error)
+        {
+            Error = error;
+        }
+
+        public AddParticipantResult(bool loggedIn, bool userAdded)
+        {
+            LoggedIn = loggedIn;
+            UserAdded = userAdded;
+        }
+
+        public AddParticipantResult(bool userCreated, bool userAdded, bool userAlreadyActive)
+        {
+            UserCreated = userCreated;
+            UserAdded = userAdded;
+            UserAlreadyActive = userAlreadyActive;
+        }
+
+        public AddParticipantResult(bool userCreated, bool userAdded, bool userAlreadyActive, string participantEmail, string passwordResetToken)
+        {
+            UserCreated = userCreated;
+            UserAdded = userAdded;
+            UserAlreadyActive = userAlreadyActive;
+            ParticipantEmail = participantEmail;
+            PasswordResetToken = passwordResetToken;
+        }
+
+        public string? Error { get; set; }
 
         public bool LoggedIn { get; set; }
 
@@ -14,7 +41,9 @@ namespace CollAction.Services.Projects.Models
 
         public bool UserAlreadyActive { get; set; }
 
-        public string ParticipantEmail { get; set; }
+        public string? ParticipantEmail { get; set; }
+
+        public string? PasswordResetToken { get; set; }
 
         public AddParticipantScenario Scenario
         {
@@ -54,7 +83,5 @@ namespace CollAction.Services.Projects.Models
                 }
             }
         }
-
-        public string PasswordResetToken { get; internal set; }
     }
 }

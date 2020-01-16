@@ -8,8 +8,8 @@ namespace CollAction.GraphQl.Mutations.Input
         public NewUserInputGraph()
         {
             Field(x => x.Email);
-            Field(x => x.FirstName);
-            Field(x => x.LastName);
+            Field(x => x.FirstName, true);
+            Field(x => x.LastName, true);
             Field(x => x.Password);
             Field(x => x.IsSubscribedNewsletter);
         }

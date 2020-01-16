@@ -49,13 +49,16 @@ namespace CollAction.Tests.Integration.Service
                                Target = 40,
                                Tags = new string[3] { r.Next(1000).ToString(), r.Next(1000).ToString(), r.Next(1000).ToString() }
                            };
-                       var projectResult = await projectService.CreateProject(newProject, claimsPrincipal, CancellationToken.None);
-                       var retrievedProject = await context.Projects.Include(p => p.Tags).ThenInclude(t => t.Tag).FirstOrDefaultAsync(p => p.Id == projectResult.Project.Id);
+                       ProjectResult projectResult = await projectService.CreateProject(newProject, claimsPrincipal, CancellationToken.None);
+                       int? projectId = projectResult.Project?.Id;
+                       Assert.IsNotNull(projectId);
+                       Project retrievedProject = await context.Projects.Include(p => p.Tags).ThenInclude(t => t.Tag).FirstOrDefaultAsync(p => p.Id == projectId);
+                       Assert.IsNotNull(retrievedProject);
 
                        Assert.IsTrue(projectResult.Succeeded);
                        Assert.IsFalse(projectResult.Errors.Any());
-                       Assert.AreEqual(projectResult.Project.Name, retrievedProject.Name);
-                       Assert.IsTrue(Enumerable.SequenceEqual(projectResult.Project.Tags.Select(t => t.Tag.Name).OrderBy(t => t), retrievedProject.Tags.Select(t => t.Tag.Name).OrderBy(t => t)));
+                       Assert.AreEqual(projectResult.Project?.Name, retrievedProject.Name);
+                       Assert.IsTrue(Enumerable.SequenceEqual(projectResult.Project?.Tags.Select(t => t.Tag.Name).OrderBy(t => t), retrievedProject.Tags.Select(t => t.Tag.Name).OrderBy(t => t)));
                    });
 
         [TestMethod]
@@ -68,10 +71,10 @@ namespace CollAction.Tests.Integration.Service
                        SignInManager<ApplicationUser> signInManager = scope.ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>();
                        UserManager<ApplicationUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-                       var currentProject = await context.Projects.Include(p => p.Owner).FirstAsync(p => p.OwnerId != null);
-                       var admin = (await userManager.GetUsersInRoleAsync(Constants.AdminRole)).First();
+                       Project currentProject = await context.Projects.Include(p => p.Owner).FirstAsync(p => p.OwnerId != null);
+                       var admin = (await userManager.GetUsersInRoleAsync(AuthorizationConstants.AdminRole)).First();
                        var adminClaims = await signInManager.CreateUserPrincipalAsync(admin);
-                       var owner = await signInManager.CreateUserPrincipalAsync(currentProject.Owner);
+                       var owner = await signInManager.CreateUserPrincipalAsync(currentProject.Owner ?? throw new InvalidOperationException("Owner is null"));
                        var r = new Random();
                        var updatedProject =
                            new UpdatedProject()
@@ -81,6 +84,7 @@ namespace CollAction.Tests.Integration.Service
                                Categories = new[] { Category.Community, Category.Environment },
                                CreatorComments = currentProject.CreatorComments,
                                Description = currentProject.Description,
+                               OwnerId = currentProject.OwnerId,
                                DescriptionVideoLink = "https://www.youtube.com/watch?v=a1",
                                DescriptiveImageFileId = currentProject.DescriptiveImageFileId,
                                DisplayPriority = ProjectDisplayPriority.Top,
@@ -90,14 +94,15 @@ namespace CollAction.Tests.Integration.Service
                                Tags = new string[3] { r.Next(1000).ToString(), r.Next(1000).ToString(), r.Next(1000).ToString() },
                                Id = currentProject.Id,
                                NumberProjectEmailsSend = 3,
-                               Owner = owner,
                                Proposal = currentProject.Proposal,
                                Status = ProjectStatus.Running,
                                Target = 33
                            };
                        var newProjectResult = await projectService.UpdateProject(updatedProject, adminClaims, CancellationToken.None);
                        Assert.IsTrue(newProjectResult.Succeeded);
-                       var retrievedProject = await context.Projects.Include(p => p.Tags).ThenInclude(t => t.Tag).FirstOrDefaultAsync(p => p.Id == newProjectResult.Project.Id);
+                       int? newProjectId = newProjectResult.Project?.Id;
+                       Assert.IsNotNull(newProjectId);
+                       var retrievedProject = await context.Projects.Include(p => p.Tags).ThenInclude(t => t.Tag).FirstOrDefaultAsync(p => p.Id == newProjectId);
 
                        Assert.AreEqual(updatedProject.Name, retrievedProject.Name);
                        Assert.IsTrue(Enumerable.SequenceEqual(updatedProject.Tags.OrderBy(t => t), retrievedProject.Tags.Select(t => t.Tag.Name).OrderBy(t => t)));

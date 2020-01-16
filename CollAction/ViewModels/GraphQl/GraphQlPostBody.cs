@@ -9,7 +9,7 @@ namespace CollAction.ViewModels.GraphQl
         public string? OperationName { get; set; }
 
         [JsonProperty("query")]
-        public string Query { get; set; }
+        public string Query { get; set; } = null!;
 
         [JsonProperty("variables")]
         public JObject? Variables { get; set; }

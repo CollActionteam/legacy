@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
 
 namespace CollAction.Models
 {
@@ -16,8 +16,13 @@ namespace CollAction.Models
 
         public int ProjectId { get; set; }
 
-        public Project Project { get; set; }
-
         public Category Category { get; set; }
+
+        private Project? project;
+        public Project Project
+        {
+            get => project ?? throw new InvalidOperationException($"Uninitialized navigation property: {nameof(Project)}");
+            set => project = value;
+        }
     }
 }

@@ -63,28 +63,19 @@ namespace CollAction.Services.Projects
             IEnumerable<ValidationResult> validationResults = ValidationHelper.Validate(newProject, serviceProvider);
             if (validationResults.Any())
             {
-                return new ProjectResult()
-                {
-                    Errors = validationResults
-                };
+                return new ProjectResult(validationResults);
             }
 
             ApplicationUser owner = await userManager.GetUserAsync(user);
 
             if (owner == null)
             {
-                return new ProjectResult()
-                {
-                    Errors = new[] { new ValidationResult("Project owner could not be found") }
-                };
+                return new ProjectResult(new ValidationResult("Project owner could not be found"));
             }
 
             if (await context.Projects.AnyAsync(p => p.Name == newProject.Name))
             {
-                return new ProjectResult()
-                {
-                    Errors = new[] { new ValidationResult("A project with this name already exists", new[] { nameof(Project.Name) }) }
-                };
+                return new ProjectResult(new ValidationResult("A project with this name already exists", new[] { nameof(Project.Name) }));
             }
 
             logger.LogInformation("Creating project: {0}", newProject.Name);
@@ -141,29 +132,27 @@ namespace CollAction.Services.Projects
 
             await emailSender.SendEmailTemplated(owner.Email, $"Thank you for submitting \"{project.Name}\" on CollAction", "ProjectConfirmation");
 
-            IList<ApplicationUser> administrators = await userManager.GetUsersInRoleAsync(Constants.AdminRole);
+            IList<ApplicationUser> administrators = await userManager.GetUsersInRoleAsync(AuthorizationConstants.AdminRole);
             await emailSender.SendEmailsTemplated(administrators.Select(a => a.Email), $"A new project was submitted on CollAction: \"{project.Name}\"", "ProjectAddedAdmin", project.Name);
 
             logger.LogInformation("Created project: {0}", newProject.Name);
 
-            return new ProjectResult()
-            {
-                Project = project,
-                Succeeded = true,
-                Errors = Enumerable.Empty<ValidationResult>()
-            };
+            return new ProjectResult(project);
         }
 
         public async Task<ProjectResult> UpdateProject(UpdatedProject updatedProject, ClaimsPrincipal user, CancellationToken token)
         {
             logger.LogInformation("Validating updated project");
 
-            if (!user.IsInRole(Constants.AdminRole))
+            IEnumerable<ValidationResult> validationResults = ValidationHelper.Validate(updatedProject, serviceProvider);
+            if (validationResults.Any())
             {
-                return new ProjectResult()
-                {
-                    Errors = new[] { new ValidationResult("User is not allowed to update project") }
-                };
+                return new ProjectResult(validationResults);
+            }
+
+            if (!user.IsInRole(AuthorizationConstants.AdminRole))
+            {
+                return new ProjectResult(new ValidationResult("User is not allowed to update project"));
             }
 
             Project project = await context
@@ -174,18 +163,12 @@ namespace CollAction.Services.Projects
 
             if (project == null)
             {
-                return new ProjectResult()
-                {
-                    Errors = new[] { new ValidationResult("Project not found", new[] { nameof(Project.Id) }) }
-                };
+                return new ProjectResult(new ValidationResult("Project not found", new[] { nameof(Project.Id) }));
             }
 
             if (project.Name != updatedProject.Name && await context.Projects.AnyAsync(p => p.Name == updatedProject.Name))
             {
-                return new ProjectResult()
-                {
-                    Errors = new[] { new ValidationResult("A project with this name already exists", new[] { nameof(Project.Name) }) }
-                };
+                return new ProjectResult(new ValidationResult("A project with this name already exists", new[] { nameof(Project.Name) }));
             }
 
             logger.LogInformation("Updating project: {0}", updatedProject.Name);
@@ -209,6 +192,7 @@ namespace CollAction.Services.Projects
             project.Status = updatedProject.Status;
             project.DisplayPriority = updatedProject.DisplayPriority;
             project.NumberProjectEmailsSend = updatedProject.NumberProjectEmailsSend;
+            project.OwnerId = updatedProject.OwnerId;
             context.Projects.Update(project);
 
             var projectTags = project.Tags.Select(t => t.Tag.Name);
@@ -282,23 +266,18 @@ namespace CollAction.Services.Projects
             await context.SaveChangesAsync(token);
             logger.LogInformation("Updated project: {0}", updatedProject.Name);
 
-            return new ProjectResult()
-            {
-                Project = project,
-                Succeeded = true,
-                Errors = Enumerable.Empty<ValidationResult>()
-            };
+            return new ProjectResult(project);
         }
 
         public async Task ProjectSuccess(int projectId, CancellationToken token)
         {
             Project project = await context.Projects.Include(p => p.ParticipantCounts).FirstAsync(p => p.Id == projectId, token);
 
-            if (project.IsSuccessfull)
+            if (project.IsSuccessfull && project.Owner != null)
             {
                 await emailSender.SendEmailTemplated(project.Owner.Email, $"Success - {project.Name}", "ProjectSuccess");
             }
-            else if (project.IsFailed)
+            else if (project.IsFailed && project.Owner != null)
             {
                 await emailSender.SendEmailTemplated(project.Owner.Email, $"Failed - {project.Name}", "ProjectFailed");
             }
@@ -309,27 +288,18 @@ namespace CollAction.Services.Projects
             Project project = await context.Projects.FindAsync(new object[] { projectId }, token);
             if (project == null)
             {
-                return new ProjectResult()
-                {
-                    Errors = new[] { new ValidationResult("Project could not be found", new[] { nameof(projectId) }) }
-                };
+                return new ProjectResult(new ValidationResult("Project could not be found", new[] { nameof(projectId) }));
             }
 
             if (!(htmlInputValidator.IsSafe(message) && htmlInputValidator.IsSafe(subject)))
             {
-                return new ProjectResult()
-                {
-                    Errors = new[] { new ValidationResult("Unsafe HTML in e-mail message", new[] { nameof(message) }) }
-                };
+                return new ProjectResult(new ValidationResult("Unsafe HTML in e-mail message", new[] { nameof(message) }));
             }
 
             ApplicationUser user = await userManager.GetUserAsync(performingUser);
             if (project.OwnerId != user.Id)
             {
-                return new ProjectResult()
-                {
-                    Errors = new[] { new ValidationResult("Unauthorized") }
-                };
+                return new ProjectResult(new ValidationResult("Unauthorized"));
             }
 
             IEnumerable<ProjectParticipant> participants =
@@ -346,24 +316,22 @@ namespace CollAction.Services.Projects
                 emailSender.SendEmail(participant.User.Email, subject, FormatEmailMessage(message, participant.User, unsubscribeLink));
             }
 
-            IList<ApplicationUser> adminUsers = await userManager.GetUsersInRoleAsync(Constants.AdminRole);
+            IList<ApplicationUser> adminUsers = await userManager.GetUsersInRoleAsync(AuthorizationConstants.AdminRole);
             foreach (ApplicationUser admin in adminUsers)
             {
                 emailSender.SendEmail(admin.Email, subject, FormatEmailMessage(message, admin, null));
             }
 
-            emailSender.SendEmail(project.Owner.Email, subject, FormatEmailMessage(message, project.Owner, null));
+            if (project.Owner != null)
+            {
+                emailSender.SendEmail(project.Owner.Email, subject, FormatEmailMessage(message, project.Owner, null));
+            }
 
             project.NumberProjectEmailsSend += 1;
             await context.SaveChangesAsync(token);
 
             logger.LogInformation("done sending project email for '{0}' on {1} to {2} users", project.Name, subject, participants.Count());
-            return new ProjectResult()
-            {
-                Project = project,
-                Succeeded = true,
-                Errors = Enumerable.Empty<ValidationResult>()
-            };
+            return new ProjectResult(project);
         }
 
         public bool CanSendProjectEmail(Project project)
@@ -403,19 +371,13 @@ namespace CollAction.Services.Projects
             ApplicationUser applicationUser = await userManager.GetUserAsync(user);
             if (applicationUser == null && string.IsNullOrEmpty(email))
             {
-                return new AddParticipantResult()
-                {
-                    Error = "E-mail address not valid"
-                };
+                return new AddParticipantResult(error: "E-mail address not valid");
             }
 
             Project project = await context.Projects.FindAsync(new object[] { projectId }, token);
             if (project == null)
             {
-                return new AddParticipantResult()
-                {
-                    Error = "Project not found"
-                };
+                return new AddParticipantResult("Project not found");
             }
 
             logger.LogInformation("Adding participant to project");
@@ -428,15 +390,7 @@ namespace CollAction.Services.Projects
                 result.Scenario != AddParticipantScenario.AnonymousNotRegisteredPresentAndAlreadyParticipating &&
                 result.Scenario != AddParticipantScenario.AnonymousAlreadyRegisteredAndAlreadyParticipating)
             {
-                var commitEmailViewModel = new ProjectCommitEmailViewModel()
-                {
-                    Project = project,
-                    Result = result,
-                    User = applicationUser,
-                    PublicAddress = siteOptions.PublicAddress,
-                    ProjectUrl = $"https://{siteOptions.PublicAddress}/{project.Url}"
-                };
-
+                var commitEmailViewModel = new ProjectCommitEmailViewModel(project: project, result: result, user: applicationUser, publicAddress: siteOptions.PublicAddress, projectUrl: $"https://{siteOptions.PublicAddress}/{project.Url}");
                 await emailSender.SendEmailTemplated(email, $"Thank you for participating in the \"{project.Name}\" project on CollAction", "ProjectCommit", commitEmailViewModel);
 
                 logger.LogInformation("Added participant to project");
@@ -480,30 +434,24 @@ namespace CollAction.Services.Projects
 
         private async Task<AddParticipantResult> AddAnonymousParticipant(Project project, string email, CancellationToken token)
         {
-            var result = new AddParticipantResult();
             var user = new ApplicationUser(email: email, registrationDate: DateTime.UtcNow);
             IdentityResult creationResult = await userManager.CreateAsync(user);
             if (!creationResult.Succeeded)
             {
                 string errors = string.Join(',', creationResult.Errors.Select(e => $"{e.Code}: {e.Description}"));
-                return new AddParticipantResult()
-                {
-                    Error = $"Could not create new unregistered user {email}: {errors}"
-                };
+                return new AddParticipantResult($"Could not create new unregistered user {email}: {errors}");
             }
 
-            result.UserCreated = true;
+            var userAdded = await InsertParticipant(project.Id, user.Id, token);
 
-            result.UserAdded = await InsertParticipant(project.Id, user.Id, token);
-            result.UserAlreadyActive = user.Activated;
-
-            if (!result.UserAlreadyActive)
+            if (!user.Activated)
             {
-                result.ParticipantEmail = user.Email;
-                result.PasswordResetToken = await userManager.GeneratePasswordResetTokenAsync(user);
+                return new AddParticipantResult(userCreated: true, userAdded: userAdded, userAlreadyActive: user.Activated, participantEmail: user.Email, passwordResetToken: await userManager.GeneratePasswordResetTokenAsync(user));
             }
-
-            return result;
+            else
+            {
+                return new AddParticipantResult(userCreated: true, userAdded: userAdded, userAlreadyActive: user.Activated);
+            }
         }
 
         private async Task<AddParticipantResult> AddLoggedInParticipant(Project project, ApplicationUser user, CancellationToken token)
@@ -512,13 +460,10 @@ namespace CollAction.Services.Projects
             if (!added)
             {
                 // This is not a valid scenario
-                return new AddParticipantResult()
-                {
-                    Error = $"User {user.Id} is already participating in project {project.Name}."
-                };
+                return new AddParticipantResult($"User {user.Id} is already participating in project {project.Name}.");
             }
 
-            return new AddParticipantResult { LoggedIn = true, UserAdded = true };
+            return new AddParticipantResult(loggedIn: true, userAdded: true);
         }
 
         private Task RefreshParticipantCountMaterializedView(CancellationToken token)

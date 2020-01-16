@@ -6,6 +6,15 @@ namespace CollAction.ViewModels.Email
 {
     public sealed class ProjectCommitEmailViewModel
     {
+        public ProjectCommitEmailViewModel(Project project, AddParticipantResult result, ApplicationUser? user, string publicAddress, string projectUrl)
+        {
+            Project = project;
+            Result = result;
+            User = user;
+            PublicAddress = publicAddress;
+            ProjectUrl = projectUrl;
+        }
+
         public Project Project { get; set; }
 
         public AddParticipantResult Result { get; set; }

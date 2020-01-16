@@ -1,9 +1,7 @@
 ﻿using CollAction.Models;
-using CollAction.Services;
 using GraphQL.Types;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using System.Linq;
 
 namespace CollAction.GraphQl.Queries

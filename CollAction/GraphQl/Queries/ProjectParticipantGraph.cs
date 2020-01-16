@@ -11,6 +11,8 @@ namespace CollAction.GraphQl.Queries
             Field(x => x.SubscribedToProjectEmails);
             Field(x => x.UnsubscribeToken);
             Field(x => x.ParticipationDate);
+            Field(x => x.UserId);
+            Field(x => x.ProjectId);
             AddNavigationField(nameof(ProjectParticipant.Project), c => c.Source.Project);
             AddNavigationField(nameof(ProjectParticipant.User), c => c.Source.User);
         }

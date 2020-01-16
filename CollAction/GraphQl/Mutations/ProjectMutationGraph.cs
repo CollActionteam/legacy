@@ -40,7 +40,7 @@ namespace CollAction.GraphQl.Mutations
                     return await context.ServiceProvider
                                         .GetRequiredService<IProjectService>()
                                         .UpdateProject(project, context.User, c.CancellationToken);
-                }).AuthorizeWith(Constants.GraphQlAdminPolicy);
+                }).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
 
             FieldAsync<AddParticipantResultGraph, AddParticipantResult>(
                 "commitToProject",

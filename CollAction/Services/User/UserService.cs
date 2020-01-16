@@ -64,12 +64,12 @@ namespace CollAction.Services.User
                     logger.LogInformation("Created user from external login");
                 }
 
-                return new UserResult() { User = user, Result = result };
+                return new UserResult(user, result);
             }
             else
             {
                 LogErrors("Creating user", result);
-                return new UserResult() { Result = result };
+                return new UserResult(result);
             }
         }
 
@@ -78,10 +78,7 @@ namespace CollAction.Services.User
             IEnumerable<IdentityError> validationResults = ValidationHelper.ValidateAsIdentity(newUser, serviceProvider);
             if (validationResults.Any())
             {
-                return new UserResult()
-                {
-                    Result = IdentityResult.Failed(validationResults.ToArray())
-                };
+                return new UserResult(IdentityResult.Failed(validationResults.ToArray()));
             }
 
             ApplicationUser user = new ApplicationUser(email: newUser.Email, firstName: newUser.FirstName, lastName: newUser.LastName, registrationDate: DateTime.UtcNow);
@@ -89,12 +86,12 @@ namespace CollAction.Services.User
             if (result.Succeeded)
             {
                 newsletterService.SetSubscriptionBackground(newUser.Email, newUser.IsSubscribedNewsletter);
-                return new UserResult() { User = user, Result = result };
+                return new UserResult(user, result);
             }
             else
             {
                 LogErrors("Creating user", result);
-                return new UserResult() { Result = result };
+                return new UserResult(result);
             }
         }
 
@@ -144,7 +141,7 @@ namespace CollAction.Services.User
             var user = await userManager.FindByEmailAsync(newUser.Email);
             if (user == null)
             {
-                return new UserResult() { Result = IdentityResult.Failed(new IdentityError() { Code = "NOUSER", Description = "This user doesn't exist" }) };
+                return new UserResult(IdentityResult.Failed(new IdentityError() { Code = "NOUSER", Description = "This user doesn't exist" }));
             }
 
             logger.LogInformation("Finishing user registration");
@@ -152,7 +149,7 @@ namespace CollAction.Services.User
             if (!result.Succeeded)
             {
                 LogErrors("Finishing registration, resetting password", result);
-                return new UserResult { Result = result };
+                return new UserResult(result);
             }
 
             user.FirstName = newUser.FirstName;
@@ -169,7 +166,7 @@ namespace CollAction.Services.User
                 LogErrors("Finishing registration, updating user", result);
             }
 
-            return new UserResult() { Result = result, User = user };
+            return new UserResult(user, result);
         }
 
         public async Task<UserResult> UpdateUser(UpdatedUser updatedUser, ClaimsPrincipal loggedIn)
@@ -177,24 +174,21 @@ namespace CollAction.Services.User
             IEnumerable<IdentityError> validationResults = ValidationHelper.ValidateAsIdentity(updatedUser, serviceProvider);
             if (validationResults.Any())
             {
-                return new UserResult()
-                {
-                    Result = IdentityResult.Failed(validationResults.ToArray())
-                };
+                return new UserResult(IdentityResult.Failed(validationResults.ToArray()));
             }
 
             var user = await userManager.FindByIdAsync(updatedUser.Id);
             if (user == null)
             {
-                return new UserResult() { Result = IdentityResult.Failed(new IdentityError() { Code = "NOUSER", Description = "This user doesn't exist" }) };
+                return new UserResult(IdentityResult.Failed(new IdentityError() { Code = "NOUSER", Description = "This user doesn't exist" }));
             }
 
             var loggedInUser = await userManager.GetUserAsync(loggedIn);
 
             // need to be logged in as either admin, or the user being updated, only admins can update RepresentsNumberUsers
-            if (!(loggedIn.IsInRole(Constants.AdminRole) || loggedInUser.Id == user.Id) || (!loggedIn.IsInRole(Constants.AdminRole) && updatedUser.RepresentsNumberUsers != user.RepresentsNumberParticipants)) 
+            if (!(loggedIn.IsInRole(AuthorizationConstants.AdminRole) || loggedInUser.Id == user.Id) || (!loggedIn.IsInRole(AuthorizationConstants.AdminRole) && updatedUser.RepresentsNumberUsers != user.RepresentsNumberParticipants)) 
             {
-                return new UserResult() { Result = IdentityResult.Failed(new IdentityError() { Code = "NOPERM", Description = "You don't have permission to update this user" }) };
+                return new UserResult(IdentityResult.Failed(new IdentityError() { Code = "NOPERM", Description = "You don't have permission to update this user" }));
             }
 
             logger.LogInformation("Updating user");
@@ -206,7 +200,7 @@ namespace CollAction.Services.User
             if (!result.Succeeded)
             {
                 LogErrors("Error updating user", result);
-                return new UserResult() { Result = result };
+                return new UserResult(result);
             }
             else
             {
@@ -218,11 +212,11 @@ namespace CollAction.Services.User
                 {
                     var newsletterResult = IdentityResult.Failed(new IdentityError() { Code = "NEWSSUBCR", Description = $"Newsletter subscription failed: {e.Message}" });
                     LogErrors("Error updating user", newsletterResult);
-                    return new UserResult() { Result = newsletterResult };
+                    return new UserResult(newsletterResult);
                 }
 
                 logger.LogInformation("Updated user");
-                return new UserResult() { Result = IdentityResult.Success, User = user };
+                return new UserResult(user, IdentityResult.Success);
             }
         }
 
@@ -253,12 +247,7 @@ namespace CollAction.Services.User
             logger.LogInformation("Ingesting user event information");
             ApplicationUser user = await userManager.GetUserAsync(trackedUser);
             string? trackedUserId = canTrack ? user?.Id : null;
-            var userEvent = new UserEvent()
-            {
-                EventLoggedAt = DateTime.UtcNow,
-                EventData = eventData.ToString(),
-                UserId = trackedUserId
-            };
+            var userEvent = new UserEvent(eventData.ToString(), DateTime.UtcNow, trackedUserId);
             context.UserEvents.Add(userEvent);
             await context.SaveChangesAsync(token);
             return userEvent.Id;
@@ -270,7 +259,7 @@ namespace CollAction.Services.User
             ApplicationUser user = await userManager.FindByIdAsync(userId);
             ApplicationUser loggedIn = await userManager.GetUserAsync(loggedInUser);
 
-            if (!loggedInUser.IsInRole(Constants.AdminRole) && user.Id != loggedIn?.Id)
+            if (!loggedInUser.IsInRole(AuthorizationConstants.AdminRole) && user.Id != loggedIn?.Id)
             {
                 var permissionResult = IdentityResult.Failed(new IdentityError() { Code = "NOPERM", Description = "You don't have permission to delete this user" });
                 LogErrors("Deleting user", permissionResult);

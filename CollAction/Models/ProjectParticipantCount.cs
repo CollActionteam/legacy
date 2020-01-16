@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CollAction.Models
@@ -18,8 +19,13 @@ namespace CollAction.Models
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ProjectId { get; set; }
 
+        private Project? project;
         [ForeignKey("ProjectId")]
-        public Project Project { get; set; }
+        public Project Project
+        {
+            get => project ?? throw new InvalidOperationException($"Uninitialized navigation property: {nameof(Project)}");
+            set => project = value;
+        }
 
         public int Count { get; set; }
     }

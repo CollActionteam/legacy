@@ -47,7 +47,7 @@ namespace CollAction.Models
         public string? OwnerId { get; set; }
 
         [ForeignKey("OwnerId")]
-        public ApplicationUser Owner { get; set; }
+        public ApplicationUser? Owner { get; set; }
 
         public int Target { get; set; }
 
@@ -84,14 +84,14 @@ namespace CollAction.Models
         public int? BannerImageFileId { get; set; }
 
         [ForeignKey("BannerImageFileId")]
-        public ImageFile BannerImage { get; set; }
+        public ImageFile? BannerImage { get; set; }
 
         public int? DescriptiveImageFileId { get; set; }
 
         [ForeignKey("DescriptiveImageFileId")]
-        public ImageFile DescriptiveImage { get; set; }
+        public ImageFile? DescriptiveImage { get; set; }
 
-        public ProjectParticipantCount ParticipantCounts { get; set; }
+        public ProjectParticipantCount? ParticipantCounts { get; set; }
 
         public ICollection<ProjectParticipant> Participants { get; set; } = new List<ProjectParticipant>();
 
@@ -114,12 +114,12 @@ namespace CollAction.Models
         [NotMapped]
         public bool IsSuccessfull
             => IsClosed &&
-               ParticipantCounts.Count + AnonymousUserParticipants >= Target;
+               (ParticipantCounts?.Count ?? throw new InvalidOperationException("ParticipantCounts not available")) + AnonymousUserParticipants >= Target;
 
         [NotMapped]
         public bool IsFailed
             => IsClosed &&
-               ParticipantCounts.Count + AnonymousUserParticipants < Target;
+               (ParticipantCounts?.Count ?? throw new InvalidOperationException("ParticipantCounts not available")) + AnonymousUserParticipants < Target;
 
         [NotMapped]
         public string NameNormalized

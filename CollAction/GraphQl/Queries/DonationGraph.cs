@@ -12,8 +12,8 @@ namespace CollAction.GraphQl.Queries
             FieldAsync<BooleanGraphType>(
                 "hasIDealPaymentSucceeded",
                 arguments: new QueryArguments(
-                    new QueryArgument<StringGraphType>() { Name = "source" },
-                    new QueryArgument<StringGraphType>() { Name = "clientSecret" }),
+                    new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "source" },
+                    new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "clientSecret" }),
                 resolve: async c =>
                 {
                     string source = c.GetArgument<string>("source");

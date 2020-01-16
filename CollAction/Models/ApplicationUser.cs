@@ -22,7 +22,7 @@ namespace CollAction.Models
         {
         }
 
-        public ApplicationUser(string email, string firstName, string lastName, DateTime registrationDate): this(email, email, false, firstName, lastName, registrationDate)
+        public ApplicationUser(string email, string? firstName, string? lastName, DateTime registrationDate): this(email, email, false, firstName, lastName, registrationDate)
         {
         }
 
@@ -35,8 +35,24 @@ namespace CollAction.Models
         public DateTime RegistrationDate { get; set; }
 
         [NotMapped]
-        public string FullName
-            => $"{FirstName} {LastName}".Trim();
+        public string? FullName
+        {
+            get
+            {
+                if (FirstName == null)
+                {
+                    return LastName;
+                }
+                else if (LastName == null)
+                {
+                    return FirstName;
+                }
+                else
+                {
+                    return $"{FirstName} {LastName}".Trim();
+                }
+            }
+        }
 
         [NotMapped]
         public bool Activated

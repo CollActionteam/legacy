@@ -173,13 +173,13 @@ namespace CollAction.Tests.Integration.Endpoint
                        Assert.ThrowsException<KeyNotFoundException>(() => result.RootElement.GetProperty("errors"), content);
                    });
 
-        private static async Task<HttpResponseMessage> PerformGraphQlQuery(TestServer testServer, string query, dynamic? variables)
+        private static async Task<HttpResponseMessage> PerformGraphQlQuery(TestServer testServer, string query, dynamic variables)
         {
             using var httpClient = testServer.CreateClient();
             return await PerformGraphQlQuery(httpClient, query, variables);
         }
 
-        private static async Task<HttpResponseMessage> PerformGraphQlQuery(HttpClient httpClient, string query, dynamic? variables)
+        private static async Task<HttpResponseMessage> PerformGraphQlQuery(HttpClient httpClient, string query, dynamic variables)
         {
             // Test with columns provided
             string jsonBody =

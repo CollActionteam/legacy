@@ -17,13 +17,25 @@ namespace CollAction.Models
 
         [Required]
         public string UserId { get; set; }
+
+        private ApplicationUser? user;
         [ForeignKey("UserId")]
-        public ApplicationUser User { get; set; }
+        public ApplicationUser User
+        {
+            get => user ?? throw new InvalidOperationException($"Uninitialized navigation property: {nameof(User)}");
+            set => user = value;
+        }
 
         [Required]
         public int ProjectId { get; set; }
+
+        private Project? project;
         [ForeignKey("ProjectId")]
-        public Project Project { get; set; }
+        public Project Project
+        {
+            get => project ?? throw new InvalidOperationException($"Uninitialized navigation property: {nameof(Project)}");
+            set => project = value;
+        }
 
         public bool SubscribedToProjectEmails { get; set; }
 

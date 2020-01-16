@@ -1,6 +1,6 @@
 ﻿namespace CollAction
 {
-    public sealed class Constants
+    public sealed class AuthorizationConstants
     {
         public const string AdminRole = "admin";
         public const string GraphQlAdminPolicy = "AdminPolicy";

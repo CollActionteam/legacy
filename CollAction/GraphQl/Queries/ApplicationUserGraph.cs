@@ -18,16 +18,16 @@ namespace CollAction.GraphQl.Queries
         {
             Field(x => x.Id);
             Field(x => x.Email);
-            Field(x => x.FirstName);
-            Field(x => x.FullName);
-            Field(x => x.LastName);
+            Field(x => x.FirstName, true);
+            Field(x => x.FullName, true);
+            Field(x => x.LastName, true);
             Field(x => x.RepresentsNumberParticipants);
             Field(x => x.UserName);
             Field(x => x.Activated);
             Field(x => x.RegistrationDate);
             Field<BooleanGraphType>(
                 "isAdmin", 
-                resolve: c => ((UserContext)c.UserContext).User.IsInRole(Constants.AdminRole));
+                resolve: c => ((UserContext)c.UserContext).User.IsInRole(AuthorizationConstants.AdminRole));
             FieldAsync<BooleanGraphType>(
                 "isSubscribedNewsletter", 
                 resolve: async c =>
@@ -52,8 +52,8 @@ namespace CollAction.GraphQl.Queries
                 });
             AddNavigationListField(nameof(ApplicationUser.Projects), c => c.Source.Projects);
             AddNavigationListField(nameof(ApplicationUser.Participates), c => c.Source.Participates);
-            AddNavigationListField(nameof(ApplicationUser.UserEvents), c => c.Source.UserEvents).AuthorizeWith(Constants.GraphQlAdminPolicy);
-            AddNavigationListField(nameof(ApplicationUser.DonationEvents), c => c.Source.DonationEvents).AuthorizeWith(Constants.GraphQlAdminPolicy);
+            AddNavigationListField(nameof(ApplicationUser.UserEvents), c => c.Source.UserEvents).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
+            AddNavigationListField(nameof(ApplicationUser.DonationEvents), c => c.Source.DonationEvents).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
         }
     }
 }

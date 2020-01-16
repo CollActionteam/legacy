@@ -66,7 +66,7 @@ namespace CollAction.GraphQl
             {
                 var authSettings = new AuthorizationSettings();
 
-                authSettings.AddPolicy(Constants.GraphQlAdminPolicy, _ => _.RequireClaim(ClaimTypes.Role, Constants.AdminRole));
+                authSettings.AddPolicy(AuthorizationConstants.GraphQlAdminPolicy, _ => _.RequireClaim(ClaimTypes.Role, AuthorizationConstants.AdminRole));
 
                 return authSettings;
             });

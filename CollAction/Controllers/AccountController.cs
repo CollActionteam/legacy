@@ -11,6 +11,8 @@ using CollAction.Services.User;
 using System.Linq;
 using Microsoft.AspNetCore.Authentication;
 using CollAction.Services.User.Models;
+using System.ComponentModel.DataAnnotations;
+using CollAction.Helpers;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace CollAction.Controllers
@@ -36,7 +38,7 @@ namespace CollAction.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return Redirect($"{model.ErrorUrl}?error=validation");
+                return Redirect($"{model.ErrorUrl}?error=validation&message={WebUtility.UrlEncode(ModelState.GetValidationString())}");
             }
 
             SignInResult result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: true);
@@ -90,6 +92,11 @@ namespace CollAction.Controllers
         [HttpPost]
         public IActionResult ExternalLogin(ExternalLoginViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                throw new ValidationException(ModelState.GetValidationString());
+            }
+
             string redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { model.ErrorUrl, model.ReturnUrl, model.RememberMe });
             AuthenticationProperties properties = signInManager.ConfigureExternalAuthenticationProperties(model.Provider, redirectUrl);
             return Challenge(properties, model.Provider);
@@ -98,6 +105,11 @@ namespace CollAction.Controllers
         [HttpGet]
         public async Task<IActionResult> ExternalLoginCallback(ExternalLoginCallbackViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                throw new ValidationException(ModelState.GetValidationString());
+            }
+
             if (model.RemoteError != null)
             {
                 string error = $"Error from external login: {model.RemoteError}";

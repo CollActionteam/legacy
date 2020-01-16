@@ -28,7 +28,7 @@ namespace CollAction.GraphQl.Queries
             Field(x => x.IsComingSoon);
             Field(x => x.Name);
             Field(x => x.NumberProjectEmailsSend);
-            Field(x => x.OwnerId);
+            Field(x => x.OwnerId, true);
             Field(x => x.Proposal);
             Field(x => x.RemainingTime);
             Field(x => x.Start);
@@ -36,14 +36,14 @@ namespace CollAction.GraphQl.Queries
             Field(x => x.Target);
             Field(x => x.NameNormalized);
             Field(x => x.Url);
-            Field<BooleanGraphType>(
+            Field<NonNullGraphType<BooleanGraphType>>(
                 "canSendProjectEmail",
                 resolve: c =>
                 {
                     using var scope = serviceScopeFactory.CreateScope();
                     return scope.ServiceProvider.GetRequiredService<IProjectService>().CanSendProjectEmail(c.Source);
                 });
-            FieldAsync<BooleanGraphType>(
+            FieldAsync<NonNullGraphType<BooleanGraphType>>(
                 nameof(Project.IsSuccessfull),
                 resolve: async c =>
                 {
@@ -54,7 +54,7 @@ namespace CollAction.GraphQl.Queries
 
                     return c.Source.IsSuccessfull;   
                 });
-            FieldAsync<BooleanGraphType>(
+            FieldAsync<NonNullGraphType<BooleanGraphType>>(
                 nameof(Project.IsFailed),
                 resolve: async c =>
                 {
@@ -68,9 +68,9 @@ namespace CollAction.GraphQl.Queries
             AddNavigationField(nameof(Project.DescriptiveImage), c => c.Source.DescriptiveImage);
             AddNavigationField(nameof(Project.BannerImage), c => c.Source.BannerImage);
             AddNavigationField(nameof(Project.ParticipantCounts), c => c.Source.ParticipantCounts);
-            AddNavigationField(nameof(Project.Owner), c => c.Source.Owner).AuthorizeWith(Constants.GraphQlAdminPolicy);
+            AddNavigationField(nameof(Project.Owner), c => c.Source.Owner).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
             AddNavigationListField(nameof(Project.Categories), c => c.Source.Categories);
-            AddNavigationListField(nameof(Project.Participants), c => c.Source.Participants).AuthorizeWith(Constants.GraphQlAdminPolicy);
+            AddNavigationListField(nameof(Project.Participants), c => c.Source.Participants).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
             AddNavigationListField(nameof(Project.Tags), c => c.Source.Tags);
         }
     }

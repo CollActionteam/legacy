@@ -17,7 +17,7 @@ namespace CollAction.GraphQl.Queries
             Field(x => x.Filepath);
             Field(x => x.Height);
             Field(x => x.Width);
-            Field<StringGraphType>(
+            Field<NonNullGraphType<StringGraphType>>(
                 "url",
                 resolve: c =>
                 {

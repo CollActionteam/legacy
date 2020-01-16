@@ -3,7 +3,6 @@ using CollAction.ValidationAttributes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Security.Claims;
 
 namespace CollAction.Services.Projects.Models
 {
@@ -13,30 +12,30 @@ namespace CollAction.Services.Projects.Models
 
         [Required(ErrorMessage = "You must provide a unique name for your project")]
         [StringLength(50, ErrorMessage = "Keep the name short, no more then 50 characters")]
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
         [Range(1, 1000000, ErrorMessage = "You can choose up to a maximum of one million participants as your target number")]
         public int Target { get; set; }
 
         [Required(ErrorMessage = "Describe your proposal.")]
         [StringLength(300, ErrorMessage = "You best keep the proposal short, no more then 300 characters")]
-        public string Proposal { get; set; }
-
-        public ClaimsPrincipal Owner { get; set; }
+        public string Proposal { get; set; } = null!;
 
         [Required(ErrorMessage = "Give a succinct description of the issues your project is designed to address")]
         [StringLength(10000, ErrorMessage = "Please use no more then 10.000 characters")]
         [SecureHtml]
-        public string Description { get; set; }
+        public string Description { get; set; } = null!;
 
         [Required(ErrorMessage = "Describe what you hope to have achieved upon successful completion of your project")]
         [StringLength(10000, ErrorMessage = "Please use no more then 10.000 characters")]
         [SecureHtml]
-        public string Goal { get; set; }
+        public string Goal { get; set; } = null!;
 
         [StringLength(20000, ErrorMessage = "Please use no more then 20.000 characters")]
         [SecureHtml]
-        public string CreatorComments { get; set; }
+        public string? CreatorComments { get; set; }
+
+        public string? OwnerId { get; set; }
 
         [DataType(DataType.Date)]
         [WithinMonthsAfterToday(12, ErrorMessage = "Please ensure your project starts within the next 12 months")]
@@ -51,7 +50,7 @@ namespace CollAction.Services.Projects.Models
         public int? DescriptiveImageFileId { get; set; }
 
         [RegularExpression(@"^https://www.youtube.com/watch\?v=[^& ]+$", ErrorMessage = "Only YouTube links of the form http://www.youtube.com/watch?v=<your-video-id> are accepted.")]
-        public string DescriptionVideoLink { get; set; }
+        public string? DescriptionVideoLink { get; set; }
 
         public ProjectDisplayPriority DisplayPriority { get; set; }
 
@@ -61,9 +60,9 @@ namespace CollAction.Services.Projects.Models
         public int NumberProjectEmailsSend { get; set; }
 
         [Tags]
-        public ICollection<string> Tags { get; set; }
+        public ICollection<string> Tags { get; set; } = new List<string>();
 
         [Categories]
-        public ICollection<Category> Categories { get; set; }
+        public ICollection<Category> Categories { get; set; } = new List<Category>();
     }
 }

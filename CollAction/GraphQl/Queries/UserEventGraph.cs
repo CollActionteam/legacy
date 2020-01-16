@@ -5,7 +5,7 @@ using GraphQL.EntityFramework;
 
 namespace CollAction.GraphQl.Queries
 {
-    [GraphQLAuthorize(Policy = Constants.GraphQlAdminPolicy)]
+    [GraphQLAuthorize(Policy = AuthorizationConstants.GraphQlAdminPolicy)]
     public sealed class UserEventGraph : EfObjectGraphType<ApplicationDbContext, UserEvent>
     {
         public UserEventGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService) : base(entityFrameworkGraphQlService)
@@ -13,8 +13,8 @@ namespace CollAction.GraphQl.Queries
             Field(x => x.Id);
             Field(x => x.EventData);
             Field(x => x.EventLoggedAt);
-            Field(x => x.User);
-            Field(x => x.UserId);
+            Field(x => x.UserId, true);
+            AddNavigationField(nameof(UserEvent.User), c => c.Source.User);
         }
     }
 }

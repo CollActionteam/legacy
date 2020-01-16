@@ -24,6 +24,20 @@ namespace CollAction.Tests.Integration.Service
         private Mock<IFormFile> upload;
         private IImageService imageService;
 
+        public ImageServicesTests()
+        {
+            upload = new Mock<IFormFile>();
+            upload.Setup(u => u.OpenReadStream()).Returns(new MemoryStream(testImage));
+            jobClient = new Mock<IBackgroundJobClient>();
+            jobClient.Setup(jc => jc.Create(It.IsAny<Job>(), It.IsAny<IState>()))
+                      .Returns<Job, IState>(
+                          (job, state) =>
+                          {
+                              Task.Run(() => (Task)job.Method.Invoke(imageService, job.Args.ToArray())).Wait();
+                              return string.Empty;
+                          });
+        }
+
         [TestMethod]
         public Task TestUpload()
             => WithServiceProvider(
@@ -62,16 +76,6 @@ namespace CollAction.Tests.Integration.Service
 
         protected override void ConfigureReplacementServicesProvider(IServiceCollection collection)
         {
-            upload = new Mock<IFormFile>();
-            upload.Setup(u => u.OpenReadStream()).Returns(new MemoryStream(testImage));
-            jobClient = new Mock<IBackgroundJobClient>();
-            jobClient.Setup(jc => jc.Create(It.IsAny<Job>(), It.IsAny<IState>()))
-                      .Returns<Job, IState>(
-                          (job, state) =>
-                          {
-                              Task.Run(() => (Task)job.Method.Invoke(imageService, job.Args.ToArray())).Wait();
-                              return string.Empty;
-                          });
             collection.AddScoped(s => jobClient.Object);
         }
 

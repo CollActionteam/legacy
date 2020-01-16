@@ -6,6 +6,13 @@ namespace CollAction.Models
 {
     public sealed class UserEvent
     {
+        public UserEvent(string eventData, DateTime eventLoggedAt, string? userId)
+        {
+            EventData = eventData;
+            EventLoggedAt = eventLoggedAt;
+            UserId = userId;
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
@@ -18,6 +25,6 @@ namespace CollAction.Models
 
         public string? UserId { get; set; }
         [ForeignKey("UserId")]
-        public ApplicationUser User { get; set; }
+        public ApplicationUser? User { get; set; }
     }
 }
