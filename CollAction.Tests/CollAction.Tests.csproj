@@ -7,8 +7,8 @@
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.IServiceCollection.AddIUrlHelper" Version="1.1.0" />
-    <PackageReference Include="AWSSDK.S3" Version="3.3.109" />
-    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.101.78" />
+    <PackageReference Include="AWSSDK.S3" Version="3.3.110.12" />
+    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.101.94" />
     <PackageReference Include="GraphiQL" Version="1.2.0" />
     <PackageReference Include="GraphQL" Version="2.4.0" />
     <PackageReference Include="GraphQL.Authorization" Version="2.1.29" />
@@ -17,7 +17,7 @@
     <PackageReference Include="Hangfire.PostgreSql" Version="1.6.3" />
     <PackageReference Include="HtmlSanitizer" Version="4.0.217" />
     <PackageReference Include="MailChimp.Net.V3" Version="4.2.1" />
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.8.2" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.12.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="3.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="3.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="3.1.0" />
