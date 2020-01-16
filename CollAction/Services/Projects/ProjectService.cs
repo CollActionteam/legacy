@@ -518,8 +518,9 @@ namespace CollAction.Services.Projects
 
                 return true;
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException e)
             {
+                logger.LogWarning(e, "Duplicate project subscription");
                 // User is already participating
                 return false;
             }

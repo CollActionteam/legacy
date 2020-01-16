@@ -100,7 +100,7 @@ namespace CollAction.Data
                    .HasForeignKey(e => e.UserId);
         }
 
-        private async Task CreateAdminRoleAndUser(SeedOptions seedOptions, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        private static async Task CreateAdminRoleAndUser(SeedOptions seedOptions, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             // Create admin role if not exists
             IdentityRole adminRole = await roleManager.FindByNameAsync(AuthorizationConstants.AdminRole);

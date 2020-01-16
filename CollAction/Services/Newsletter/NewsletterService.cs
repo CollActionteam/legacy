@@ -99,9 +99,10 @@ namespace CollAction.Services.Newsletter
                 member.Status = Status.Unsubscribed;
                 await mailChimpManager.Members.AddOrUpdateAsync(newsletterListId, member);
             }
-            catch (MailChimpNotFoundException)
+            catch (MailChimpNotFoundException e)
             {
                 // Doesn't exist, so already unsubscribed
+                logger.LogWarning(e, "Error unsubscribing, already unsubscribed");
             }
 
             logger.LogInformation("Successfully unsubscribed from newsletter");

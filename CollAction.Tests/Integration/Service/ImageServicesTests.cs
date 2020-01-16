@@ -20,8 +20,8 @@ namespace CollAction.Tests.Integration.Service
     public sealed class ImageServicesTests : IntegrationTestBase
     {
         private readonly byte[] testImage = new byte[] { 0x42, 0x4D, 0x1E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1A, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x00, 0xFF, 0x00 };
-        private Mock<IBackgroundJobClient> jobClient;
-        private Mock<IFormFile> upload;
+        private readonly Mock<IBackgroundJobClient> jobClient;
+        private readonly Mock<IFormFile> upload;
         private IImageService imageService;
 
         public ImageServicesTests()
