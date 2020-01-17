@@ -3,8 +3,7 @@ module.exports = {
     title: "CollAction",
     author: "CollAction",
     description: "CollAction",
-    backendUrl: "https://localhost:44301",
-    frontendUrl: "http://localhost:8000",
+    backendUrl: process.env.GATSBY_BACKEND_URL ? process.env.GATSBY_BACKEND_URL : "https://localhost:44301",
     mailchimpListId: "1a035c45ca",
     loginProviders: [
       {

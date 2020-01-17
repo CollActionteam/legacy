@@ -37,6 +37,7 @@ using AspNetCore.IServiceCollection.AddIUrlHelper;
 using CollAction.Services.HtmlValidator;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace CollAction
 {
@@ -138,18 +139,21 @@ namespace CollAction
                     .Services
                     .Configure<KeyManagementOptions>(options => options.XmlRepository = new DataProtectionRepository(new DbContextOptionsBuilder<ApplicationDbContext>().UseNpgsql(connectionString).Options));
 
-            services.AddCors(c =>
+            if (Environment.IsProduction())
             {
                 string publicAddress = Configuration["PublicAddress"];
-                c.AddPolicy(
-                    corsPolicy,
-                    builder =>
-                        builder.AllowAnyMethod()
-                               .AllowAnyHeader()
-                               .AllowCredentials()
-                               .SetIsOriginAllowed(o => o == publicAddress)
-                               .WithOrigins(publicAddress));
-            });
+                services.AddCors(c =>
+                {
+                    c.AddPolicy(
+                        corsPolicy,
+                        builder =>
+                            builder.AllowAnyMethod()
+                                   .AllowAnyHeader()
+                                   .AllowCredentials()
+                                   .SetIsOriginAllowed(o => o == publicAddress)
+                                   .WithOrigins(publicAddress));
+                });
+            }
 
             services.AddUrlHelper();
             services.AddHealthChecks();
@@ -196,13 +200,13 @@ namespace CollAction
             });
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime applicationLifetime)
+        public void Configure(IApplicationBuilder app, IHostApplicationLifetime applicationLifetime)
         {
             app.UseRouting();
-            app.UseCors(corsPolicy);
 
-            if (env.IsProduction())
+            if (Environment.IsProduction())
             {
+                app.UseCors(corsPolicy);
                 // Ensure our middleware handles proxied https, see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-Proto
                 var forwardedHeaderOptions = new ForwardedHeadersOptions()
                 {
@@ -214,18 +218,14 @@ namespace CollAction
                 app.UseForwardedHeaders(forwardedHeaderOptions);
                 app.UseRewriter(new RewriteOptions().AddRedirectToHttpsPermanent());
                 app.UseHsts();
+                app.UseExceptionHandler("/error");
 
                 applicationLifetime.ApplicationStopping.Register(() => Log.CloseAndFlush());
             }
-
-            if (env.IsDevelopment())
+            else if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseGraphiQl("/graphiql", "/graphql");
-            }
-            else
-            {
-                app.UseExceptionHandler("/error");
             }
 
             app.UseAuthentication();

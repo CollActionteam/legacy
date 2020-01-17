@@ -32,6 +32,8 @@ services:
     build:
       context: Frontend
       dockerfile: Dockerfile
+      args:
+        - GATSBY_BACKEND_URL=https://localhost:44301
     ports:
       - "8000:8000"
 
