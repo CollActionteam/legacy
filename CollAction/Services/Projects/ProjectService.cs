@@ -432,6 +432,32 @@ namespace CollAction.Services.Projects
             return projects;
         }
 
+        public async Task SeedRandomProjects(ApplicationUser owningUser, CancellationToken cancellationToken)
+        {
+            Random r = new Random();
+            context.Projects.AddRange(
+                Enumerable.Range(0, r.Next(20, 200))
+                          .Select(i =>
+                              new Project(
+                                  name: Guid.NewGuid().ToString(),
+                                  description: Guid.NewGuid().ToString(),
+                                  start: DateTime.Now.AddDays(r.Next(-10, 10)),
+                                  end: DateTime.Now.AddDays(r.Next(20, 30)),
+                                  categories: new List<ProjectCategory>() { new ProjectCategory((Category)r.Next(2)), new ProjectCategory((Category)(r.Next(3) + 2)) },
+                                  tags: new List<ProjectTag>(),
+                                  creatorComments: Guid.NewGuid().ToString(),
+                                  displayPriority: (ProjectDisplayPriority)r.Next(0, 2),
+                                  goal: Guid.NewGuid().ToString(),
+                                  ownerId: owningUser.Id,
+                                  proposal: Guid.NewGuid().ToString(),
+                                  status: (ProjectStatus)r.Next(0, 3),
+                                  target: r.Next(1, 100000),
+                                  anonymousUserParticipants: r.Next(1, 10000),
+                                  descriptionVideoLink: $"https://www.youtube.com/watch?v={Guid.NewGuid()}")));
+            await context.SaveChangesAsync(cancellationToken);
+            await RefreshParticipantCountMaterializedView(cancellationToken);
+        }
+
         private async Task<AddParticipantResult> AddAnonymousParticipant(Project project, string email, CancellationToken token)
         {
             var user = new ApplicationUser(email: email, registrationDate: DateTime.UtcNow);

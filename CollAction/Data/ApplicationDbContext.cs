@@ -9,7 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using CollAction.Services;
 using Microsoft.Extensions.Options;
-using System.Collections.Generic;
+using CollAction.Services.Projects;
+using System.Threading;
 
 namespace CollAction.Data
 {
@@ -42,23 +43,25 @@ namespace CollAction.Data
 
         public static async Task InitializeDatabase(IServiceScope scope)
         {
-            var userManager = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
-            var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
-            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            var logger = scope.ServiceProvider.GetRequiredService<ILogger<ApplicationDbContext>>();
-            var seedOptions = scope.ServiceProvider.GetRequiredService<IOptions<SeedOptions>>().Value;
+            var provider = scope.ServiceProvider;
+            var userManager = provider.GetService<UserManager<ApplicationUser>>();
+            var roleManager = provider.GetService<RoleManager<IdentityRole>>();
+            var context = provider.GetRequiredService<ApplicationDbContext>();
+            var logger = provider.GetRequiredService<ILogger<ApplicationDbContext>>();
+            var seedOptions = provider.GetRequiredService<IOptions<SeedOptions>>().Value;
+            var projectService = provider.GetRequiredService<IProjectService>();
 
             logger.LogInformation("migrating database");
             await context.Database.MigrateAsync();
             logger.LogInformation("seeding database");
-            await context.Seed(seedOptions, userManager, roleManager);
+            await context.Seed(seedOptions, userManager, roleManager, projectService);
             logger.LogInformation("done starting up");
         }
 
-        public async Task Seed(SeedOptions seedOptions, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public async Task Seed(SeedOptions seedOptions, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IProjectService projectService)
         {
             await CreateAdminRoleAndUser(seedOptions, userManager, roleManager);
-            await SeedTestProjects(seedOptions, userManager);
+            await SeedTestProjects(seedOptions, userManager, projectService);
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -137,31 +140,12 @@ namespace CollAction.Data
             }
         }
 
-        private async Task SeedTestProjects(SeedOptions seedOptions, UserManager<ApplicationUser> userManager)
+        private static async Task SeedTestProjects(SeedOptions seedOptions, UserManager<ApplicationUser> userManager, IProjectService projectService)
         {
-            if (seedOptions.SeedTestProjects && !(await Projects.AnyAsync()))
+            if (seedOptions.SeedTestProjects && !(await projectService.SearchProjects(null, null).AnyAsync()))
             {
-                Random r = new Random();
                 ApplicationUser admin = await userManager.FindByEmailAsync(seedOptions.AdminEmail);
-                Projects.AddRange(
-                    Enumerable.Range(0, r.Next(20, 200))
-                              .Select(i =>
-                                  new Project(
-                                      name: Guid.NewGuid().ToString(),
-                                      description: Guid.NewGuid().ToString(),
-                                      start: DateTime.Now.AddDays(r.Next(-10, 10)),
-                                      end: DateTime.Now.AddDays(r.Next(20, 30)),
-                                      categories: new List<ProjectCategory>() { new ProjectCategory((Category)r.Next(2)), new ProjectCategory((Category)(r.Next(3) + 2)) },
-                                      tags: new List<ProjectTag>(),
-                                      creatorComments: Guid.NewGuid().ToString(),
-                                      displayPriority: (ProjectDisplayPriority)r.Next(0, 2),
-                                      goal: Guid.NewGuid().ToString(),
-                                      ownerId: admin.Id,
-                                      proposal: Guid.NewGuid().ToString(),
-                                      status: (ProjectStatus)r.Next(0, 3),
-                                      target: r.Next(1, 100000),
-                                      descriptionVideoLink: Guid.NewGuid().ToString())));
-                await SaveChangesAsync();
+                await projectService.SeedRandomProjects(admin, CancellationToken.None);
             }
         }
     }

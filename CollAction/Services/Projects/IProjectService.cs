@@ -24,5 +24,7 @@ namespace CollAction.Services.Projects
         bool CanSendProjectEmail(Project project);
 
         IQueryable<Project> SearchProjects(Category? category, SearchProjectStatus? status);
+
+        Task SeedRandomProjects(ApplicationUser owningUser, CancellationToken cancellationToken);
     }
 }

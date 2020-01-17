@@ -10,11 +10,11 @@ namespace CollAction.Models
 {
     public sealed class Project
     {
-        public Project(string name, ProjectStatus status, string? ownerId, int target, DateTime start, DateTime end, string description, string goal, string proposal, string? creatorComments, string? descriptionVideoLink, ProjectDisplayPriority displayPriority = ProjectDisplayPriority.Medium, int? bannerImageFileId = null, int? descriptiveImageFileId = null): this(name, status, ownerId, target, start, end, description, goal, proposal, creatorComments, descriptionVideoLink, new List<ProjectCategory>(), new List<ProjectTag>(), displayPriority, bannerImageFileId, descriptiveImageFileId)
+        public Project(string name, ProjectStatus status, string? ownerId, int target, DateTime start, DateTime end, string description, string goal, string proposal, string? creatorComments, string? descriptionVideoLink, ProjectDisplayPriority displayPriority = ProjectDisplayPriority.Medium, int? bannerImageFileId = null, int? descriptiveImageFileId = null, int anonymousUserParticipants = 0): this(name, status, ownerId, target, start, end, description, goal, proposal, creatorComments, descriptionVideoLink, new List<ProjectCategory>(), new List<ProjectTag>(), displayPriority, bannerImageFileId, descriptiveImageFileId, anonymousUserParticipants)
         {
         }
 
-        public Project(string name, ProjectStatus status, string? ownerId, int target, DateTime start, DateTime end, string description, string goal, string proposal, string? creatorComments, string? descriptionVideoLink, ICollection<ProjectCategory> categories, ICollection<ProjectTag> tags, ProjectDisplayPriority displayPriority = ProjectDisplayPriority.Medium, int? bannerImageFileId = null, int? descriptiveImageFileId = null)
+        public Project(string name, ProjectStatus status, string? ownerId, int target, DateTime start, DateTime end, string description, string goal, string proposal, string? creatorComments, string? descriptionVideoLink, ICollection<ProjectCategory> categories, ICollection<ProjectTag> tags, ProjectDisplayPriority displayPriority = ProjectDisplayPriority.Medium, int? bannerImageFileId = null, int? descriptiveImageFileId = null, int anonymousUserParticipants = 0)
         {
             Name = name;
             Status = status;
