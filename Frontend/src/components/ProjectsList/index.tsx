@@ -8,7 +8,7 @@ import Loader from "../Loader";
 
 interface IProjectListProps {
   category?: string;
-  status?: string;
+  status: string;
 }
 
 export default ({
@@ -17,7 +17,7 @@ export default ({
 }: IProjectListProps) => {
   const query = useQuery(
                     FIND_PROJECTS, 
-                    (typeof category != 'undefined' && category) ? 
+                    category ? 
                       {
                         variables: {
                           category: category,
