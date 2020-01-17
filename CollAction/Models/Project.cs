@@ -112,14 +112,18 @@ namespace CollAction.Models
             => Status == ProjectStatus.Running && End < DateTime.UtcNow;
 
         [NotMapped]
+        public int TotalParticipants
+            => (ParticipantCounts?.Count ?? throw new InvalidOperationException("ParticipantCounts not available")) + AnonymousUserParticipants;
+
+        [NotMapped]
         public bool IsSuccessfull
             => IsClosed &&
-               (ParticipantCounts?.Count ?? throw new InvalidOperationException("ParticipantCounts not available")) + AnonymousUserParticipants >= Target;
+               TotalParticipants >= Target;
 
         [NotMapped]
         public bool IsFailed
             => IsClosed &&
-               (ParticipantCounts?.Count ?? throw new InvalidOperationException("ParticipantCounts not available")) + AnonymousUserParticipants < Target;
+               TotalParticipants < Target;
 
         [NotMapped]
         public string NameNormalized

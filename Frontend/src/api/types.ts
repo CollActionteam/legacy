@@ -26,10 +26,6 @@ export interface IImageFile {
   width: number;
 }
 
-export interface IParticipantCount {
-  count: number;
-}
-
 export interface IProjectCategory {
   color: number;
   colorHex: string;
@@ -73,17 +69,19 @@ export interface IProject {
   isActive: boolean;
   isClosed: boolean;
   isComingSoon: boolean;
+  isSuccessfull: boolean;
+  isFailed: boolean;
   name: string;
   nameNormalized: string;
   numberProjectsEmailSend: number;
   owner: IUser;
   ownerId: string;
   participants: IProjectParticipant[];
-  participantCounts: IParticipantCount;
   proposal: string;
   remainingTime: any;
   start: Date;
   status: ProjectStatus;
+  totalParticipants: number;
   tags: IProjectTag[];
   target: number;
   url: string;
@@ -105,9 +103,9 @@ export enum ProjectStatus {
 }
 
 export enum ProjectStatusFilter {
-  Active = "isActive",
-  Closed = "isClosed",
-  ComingSoon = "isComingSoon",
+  Active = "OPEN",
+  Closed = "CLOSED",
+  ComingSoon = "COMING_SOON",
 }
 
 export interface IProjectTag {

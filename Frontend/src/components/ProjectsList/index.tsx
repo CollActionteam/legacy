@@ -7,24 +7,28 @@ import { ProjectStatusFilter } from "../../api/types";
 import Loader from "../Loader";
 
 interface IProjectListProps {
-  categoryId?: string;
+  category?: string;
   status?: string;
 }
 
 export default ({
-  categoryId = "",
+  category = undefined,
   status = ProjectStatusFilter.Active,
 }: IProjectListProps) => {
-  const query = categoryId
-    ? useQuery(FIND_PROJECTS, {
-        variables: {
-          categoryId: categoryId,
-          isActive: `${status === ProjectStatusFilter.Active}`,
-          isClosed: `${status === ProjectStatusFilter.Closed}`,
-          isComingSoon: `${status === ProjectStatusFilter.ComingSoon}`,
-        },
-      })
-    : useQuery(GET_PROJECTS);
+  const query = useQuery(
+                    FIND_PROJECTS, 
+                    (typeof category != 'undefined' && category) ? 
+                      {
+                        variables: {
+                          category: category,
+                          status: status
+                        },
+                      } : 
+                      {
+                        variables: {
+                          status: status
+                        }
+                      })
 
   const { data, loading, error } = query;
 
@@ -54,56 +58,15 @@ export default ({
   );
 };
 
-const GET_PROJECTS = gql`
-  query {
-    projects {
-      id
-      description
-      name
-      url
-      category {
-        colorHex
-        name
-      }
-      descriptiveImage {
-        filepath
-        url
-      }
-      goal
-      end
-      remainingTime
-      target
-      participantCounts {
-        count
-      }
-      status
-      url
-    }
-  }
-`;
-
 const FIND_PROJECTS = gql`
-  query FindProjects(
-    $categoryId: [String]
-    $isActive: String = "true"
-    $isClosed: String = "false"
-    $isComingSoon: String = "false"
-  ) {
-    projects(
-      where: [
-        { path: "categoryId", comparison: equal, value: $categoryId }
-        { path: "isActive", comparison: equal, value: [$isActive] }
-        { path: "isClosed", comparison: equal, value: [$isClosed] }
-        { path: "isComingSoon", comparison: equal, value: [$isComingSoon] }
-      ]
-    ) {
+  query FindProjects($category: Category, $status: SearchProjectStatus) {
+    projects(category: $category, status: $status) {
       id
       name
       description
       url
-      category {
-        colorHex
-        name
+      categories {
+        category
       }
       descriptiveImage {
         filepath
@@ -113,10 +76,13 @@ const FIND_PROJECTS = gql`
       end
       target
       remainingTime
-      participantCounts {
-        count
-      }
-      status
+      totalParticipants
+      displayPriority
+      isActive
+      isComingSoon
+      isClosed
+      isSuccessfull
+      isFailed
     }
   }
 `;

@@ -65,6 +65,17 @@ namespace CollAction.GraphQl.Queries
 
                     return c.Source.IsFailed;   
                 });
+            FieldAsync<NonNullGraphType<IntGraphType>>(
+                nameof(Project.TotalParticipants),
+                resolve: async c =>
+                {
+                    if (c.Source.ParticipantCounts == null)
+                    {
+                        c.Source.ParticipantCounts = await c.GetUserContext().Context.ProjectParticipantCounts.FindAsync(c.Source.Id);
+                    }
+
+                    return c.Source.TotalParticipants;
+                });
             AddNavigationField(nameof(Project.DescriptiveImage), c => c.Source.DescriptiveImage);
             AddNavigationField(nameof(Project.BannerImage), c => c.Source.BannerImage);
             AddNavigationField(nameof(Project.ParticipantCounts), c => c.Source.ParticipantCounts);

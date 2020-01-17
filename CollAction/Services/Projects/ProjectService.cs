@@ -409,7 +409,7 @@ namespace CollAction.Services.Projects
 
         public IQueryable<Project> SearchProjects(Category? category, SearchProjectStatus? searchProjectStatus)
         {
-            var projects = context.Projects.AsQueryable();
+            var projects = context.Projects.Include(p => p.ParticipantCounts).AsQueryable();
 
             switch (searchProjectStatus)
             {
@@ -426,7 +426,7 @@ namespace CollAction.Services.Projects
 
             if (category != null)
             {
-                projects = projects.Where(p => p.Categories.Any(projectCategory => projectCategory.Category == category));
+                projects = projects.Include(p => p.Categories).Where(p => p.Categories.Any(projectCategory => projectCategory.Category == category));
             }
 
             return projects;

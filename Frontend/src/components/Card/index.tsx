@@ -5,9 +5,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ProgressRing from "../ProgressRing";
 
 export default ({ project }: { project: IProject }) => {
-  const percentage = project.participantCounts
-    ? Math.round(project.participantCounts.count / project.target)
-    : 0;
+    const percentage = project.totalParticipants
+        ? Math.round(project.totalParticipants / project.target)
+        : 0;
 
   return (
     <a href={project.url} className={styles.card}>
@@ -42,11 +42,7 @@ export default ({ project }: { project: IProject }) => {
           </div>
           <div>
             <div className={styles.count}>
-              {project.participantCounts ? (
-                <span>{project.participantCounts.count}</span>
-              ) : (
-                <span>?</span>
-              )}
+              <span>{project.totalParticipants}</span>
               <span> of {project.target} participants</span>
             </div>
             <div className={styles.remainingTime}>

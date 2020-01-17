@@ -58,9 +58,9 @@ export default () => (
                     <select value={category} onChange={handleCategoryChange}>
                       <option value="">All</option>
                       {data
-                        ? data.categories.map((c, i) => (
-                            <option key={i} value={c.id}>
-                              {c.name}
+                        ? data.__type.enumValues.map(v => (
+                            <option key={v.name} value={v.name}>
+                              {v.name}
                             </option>
                           ))
                         : null}
@@ -85,7 +85,7 @@ export default () => (
             </Section>
           </Banner>
           <Section>
-            <ProjectsList categoryId={category} status={status} />
+            <ProjectsList category={category} status={status} />
           </Section>
         </Layout>
       );
@@ -95,9 +95,9 @@ export default () => (
 
 const GET_CATEGORIES = gql`
   query {
-    categories {
-      id
-      name
+    __type(name:"Category") {
+      enumValues {
+        name
+      }
     }
-  }
-`;
+  }`;
