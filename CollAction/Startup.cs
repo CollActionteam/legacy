@@ -139,21 +139,18 @@ namespace CollAction
                     .Services
                     .Configure<KeyManagementOptions>(options => options.XmlRepository = new DataProtectionRepository(new DbContextOptionsBuilder<ApplicationDbContext>().UseNpgsql(connectionString).Options));
 
-            if (Environment.IsProduction())
+            string publicAddress = Configuration["PublicAddress"];
+            services.AddCors(c =>
             {
-                string publicAddress = Configuration["PublicAddress"];
-                services.AddCors(c =>
-                {
-                    c.AddPolicy(
-                        corsPolicy,
-                        builder =>
-                            builder.AllowAnyMethod()
-                                   .AllowAnyHeader()
-                                   .AllowCredentials()
-                                   .SetIsOriginAllowed(o => o == publicAddress)
-                                   .WithOrigins(publicAddress));
-                });
-            }
+                c.AddPolicy(
+                    corsPolicy,
+                    builder =>
+                        builder.AllowAnyMethod()
+                               .SetIsOriginAllowedToAllowWildcardSubdomains()
+                               .AllowAnyHeader()
+                               .AllowCredentials()
+                               .WithOrigins(publicAddress));
+            });
 
             services.AddUrlHelper();
             services.AddHealthChecks();
@@ -203,10 +200,10 @@ namespace CollAction
         public void Configure(IApplicationBuilder app, IHostApplicationLifetime applicationLifetime)
         {
             app.UseRouting();
+            app.UseCors(corsPolicy);
 
             if (Environment.IsProduction())
             {
-                app.UseCors(corsPolicy);
                 // Ensure our middleware handles proxied https, see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-Proto
                 var forwardedHeaderOptions = new ForwardedHeadersOptions()
                 {
