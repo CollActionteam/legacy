@@ -445,7 +445,7 @@ namespace CollAction.Services.Projects
                                   name: Faker.Company.Name() + r.Next(10),
                                   description: $"<p>{string.Join("</p><p>", Faker.Lorem.Paragraphs(r.Next(3) + 1))}</p>",
                                   start: start,
-                                  end: start.AddDays(r.Next(10, 40)),
+                                  end: start.AddDays(r.Next(10, 40)).AddHours(23).AddMinutes(59).AddSeconds(59),
                                   categories: new[] { r.Next(5), r.Next(5) }.Distinct().Select(i => new ProjectCategory((Category)i)).ToList(),
                                   tags: new List<ProjectTag>(),
                                   creatorComments: $"<p>{string.Join("</p><p>", Faker.Lorem.Paragraphs(r.Next(3) + 1))}</p>",
