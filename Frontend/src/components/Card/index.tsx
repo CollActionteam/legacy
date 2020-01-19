@@ -48,9 +48,9 @@ export default ({ project }: { project: IProject }) => {
             </div>
           </div>
         </div>
-        <div className={styles.category}>
-          { project.categories.map(c => Utils.formatCategory(c.category)).join(" - ") }
-        </div>
+        { 
+          project.categories.map(c => <div className={styles.category}>{Utils.formatCategory(c.category)}</div>)
+        }
       </div>
     </a>
   );
