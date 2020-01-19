@@ -440,12 +440,13 @@ namespace CollAction.Services.Projects
                           .Select(i =>
                           {
                               DateTime start = DateTime.Now.Date.AddDays(r.Next(-20, 20));
+
                               return new Project(
                                   name: Faker.Company.Name() + r.Next(10),
                                   description: $"<p>{string.Join("</p><p>", Faker.Lorem.Paragraphs(r.Next(3) + 1))}</p>",
                                   start: start,
                                   end: start.AddDays(r.Next(10, 40)),
-                                  categories: new List<ProjectCategory>() { new ProjectCategory((Category)r.Next(2)), new ProjectCategory((Category)(r.Next(3) + 2)) },
+                                  categories: new[] { r.Next(5), r.Next(5) }.Distinct().Select(i => new ProjectCategory((Category)i)).ToList(),
                                   tags: new List<ProjectTag>(),
                                   creatorComments: $"<p>{string.Join("</p><p>", Faker.Lorem.Paragraphs(r.Next(3) + 1))}</p>",
                                   displayPriority: (ProjectDisplayPriority)r.Next(0, 2),
