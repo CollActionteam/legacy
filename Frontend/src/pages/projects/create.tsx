@@ -77,7 +77,14 @@ export default ({ data }) => {
     mutation Create($project: NewProjectInputGraph!) {
       project {
         createProject(project: $project) {
-          id
+          succeeded
+          errors {
+            errorMessage
+            memberNames
+          }
+          project {
+            id
+          }
         }
       }
     }
