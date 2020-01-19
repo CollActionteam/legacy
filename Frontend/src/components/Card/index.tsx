@@ -12,7 +12,14 @@ export default ({ project }: { project: IProject }) => {
         {project.bannerImage ? (
           <img src={project.bannerImage.filepath} alt={project.name} />
         ) : (
-          <img src={"/assets/default_banners/" + project.categories[0].category + ".jpg"} alt={project.name} />
+          <img
+            src={
+              "/assets/default_banners/" +
+              project.categories[0].category +
+              ".jpg"
+            }
+            alt={project.name}
+          />
         )}
       </figure>
       <div className={styles.content}>
@@ -21,12 +28,8 @@ export default ({ project }: { project: IProject }) => {
           {project.isComingSoon ? <span>Coming soon</span> : null}
           {project.isClosed ? <span>Signup closed</span> : null}
         </div>
-        <h3 className={styles.title}>
-          {project.name}
-        </h3>
-        <div className={styles.proposal}>
-          {project.proposal}
-        </div>
+        <h3 className={styles.title}>{project.name}</h3>
+        <div className={styles.proposal}>{project.proposal}</div>
         <div className={styles.stats}>
           <div className={styles.percentage}>
             <ProgressRing progress={project.percentage} />
@@ -48,9 +51,11 @@ export default ({ project }: { project: IProject }) => {
             </div>
           </div>
         </div>
-        { 
-          project.categories.map(c => <div className={styles.category}>{Utils.formatCategory(c.category)}</div>)
-        }
+        {project.categories.map(c => (
+          <div key={c.category} className={styles.category}>
+            {Utils.formatCategory(c.category)}
+          </div>
+        ))}
       </div>
     </a>
   );

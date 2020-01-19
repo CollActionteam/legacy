@@ -5,7 +5,8 @@ export default ({ progress = 0, radius = 30, stroke = 4 }) => {
   const normalizedRadius = radius - stroke * 2;
   const circumference = normalizedRadius * 2 * Math.PI;
   const chompedProgress = progress > 100 ? 100 : progress;
-  const strokeDashoffset = circumference - (chompedProgress / 100) * circumference;
+  const strokeDashoffset =
+    circumference - (chompedProgress / 100) * circumference;
 
   return (
     <svg className={styles.ring} height={radius * 2} width={radius * 2}>
