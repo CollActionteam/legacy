@@ -32,6 +32,7 @@ namespace CollAction.Models
             DescriptiveImageFileId = descriptiveImageFileId;
             Categories = categories;
             Tags = tags;
+            AnonymousUserParticipants = anonymousUserParticipants;
         }
 
         [Key]
@@ -114,6 +115,10 @@ namespace CollAction.Models
         [NotMapped]
         public int TotalParticipants
             => (ParticipantCounts?.Count ?? throw new InvalidOperationException("ParticipantCounts not available")) + AnonymousUserParticipants;
+
+        [NotMapped]
+        public int Percentage
+            => (int)Math.Round(100 * (double)TotalParticipants / Target, 0);
 
         [NotMapped]
         public bool IsSuccessfull

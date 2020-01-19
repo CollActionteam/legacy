@@ -3,22 +3,16 @@ import styles from "./style.module.scss";
 import { IProject } from "../../api/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ProgressRing from "../ProgressRing";
+import Utils from "../../utils";
 
 export default ({ project }: { project: IProject }) => {
-    const percentage = project.totalParticipants
-        ? Math.round(project.totalParticipants / project.target)
-        : 0;
-
   return (
     <a href={project.url} className={styles.card}>
       <figure className={styles.image}>
         {project.descriptiveImage ? (
           <img src={project.descriptiveImage.filepath} alt={project.name} />
         ) : (
-          <img
-            src={"/assets/default_banners/" + project.categories[0].category + ".jpg"}
-            alt={project.name}
-          />
+          <img src={"/assets/default_banners/" + project.categories[0].category + ".jpg"} alt={project.name} />
         )}
       </figure>
       <div className={styles.content}>
@@ -31,11 +25,11 @@ export default ({ project }: { project: IProject }) => {
           {project.name}
         </h3>
         <div className={styles.description}>
-          {project.description}
+          {project.proposal}
         </div>
         <div className={styles.stats}>
           <div className={styles.percentage}>
-            <ProgressRing progress={percentage} />
+            <ProgressRing progress={project.percentage} />
           </div>
           <div>
             <div className={styles.count}>
@@ -55,7 +49,7 @@ export default ({ project }: { project: IProject }) => {
           </div>
         </div>
         <div className={styles.category}>
-          { project.categories.map(c => c.category).join(" ") }
+          { project.categories.map(c => Utils.formatCategory(c.category)).join(" - ") }
         </div>
       </div>
     </a>

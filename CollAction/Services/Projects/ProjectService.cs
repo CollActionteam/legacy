@@ -409,7 +409,7 @@ namespace CollAction.Services.Projects
 
         public IQueryable<Project> SearchProjects(Category? category, SearchProjectStatus? searchProjectStatus)
         {
-            var projects = context.Projects.Include(p => p.ParticipantCounts).AsQueryable();
+            var projects = context.Projects.Include(p => p.ParticipantCounts).OrderBy(p => p.DisplayPriority).AsQueryable();
 
             switch (searchProjectStatus)
             {
@@ -439,7 +439,7 @@ namespace CollAction.Services.Projects
                 Enumerable.Range(0, r.Next(20, 200))
                           .Select(i =>
                               new Project(
-                                  name: Faker.Company.Name(),
+                                  name: Faker.Company.Name() + r.Next(10),
                                   description: $"<p>{string.Join("</p><p>", Faker.Lorem.Paragraphs(r.Next(3) + 1))}</p>",
                                   start: DateTime.Now.AddDays(r.Next(-10, 10)),
                                   end: DateTime.Now.AddDays(r.Next(20, 30)),

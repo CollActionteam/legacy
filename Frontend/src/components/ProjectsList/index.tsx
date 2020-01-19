@@ -75,8 +75,10 @@ const FIND_PROJECTS = gql`
       goal
       end
       target
+      proposal
       remainingTime
       totalParticipants
+      percentage
       displayPriority
       isActive
       isComingSoon

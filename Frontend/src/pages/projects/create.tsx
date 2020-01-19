@@ -16,6 +16,7 @@ import styles from "./create.module.scss";
 import gql from "graphql-tag";
 import { useQuery, useMutation } from "react-apollo";
 import Loader from "../../components/Loader";
+import Utils from "../../utils";
 
 export const query = graphql`
   query {
@@ -58,13 +59,6 @@ export default ({ data }) => {
       .min(minDate, "Please ensure your sign up ends after it starts :-)")
       .max(maxDate, "The deadline must be within a year of the start date");
   };
-
-  const formatCategory = (name: string) =>
-    name.charAt(0).toUpperCase() +
-    name
-      .substring(1)
-      .replace("_", " ")
-      .toLowerCase();
 
   const validate = async (props: FormikProps<any>) => {
     const errors = Object.keys(await props.validateForm());
@@ -225,7 +219,7 @@ export default ({ data }) => {
                     {categoryResponse
                       ? categoryResponse.__type.enumValues.map(c => (
                           <MenuItem key={c.name} value={c.name}>
-                            {formatCategory(c.name)}
+                            {Utils.formatCategory(c.name)}
                           </MenuItem>
                         ))
                       : null}

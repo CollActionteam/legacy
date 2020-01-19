@@ -10,6 +10,7 @@ import { ProjectStatusFilter } from "../../api/types";
 import styles from "./find.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Loader from "../../components/Loader";
+import Utils from "../../utils";
 
 export default () => (
   <StaticQuery
@@ -60,7 +61,7 @@ export default () => (
                       {data
                         ? data.__type.enumValues.map(v => (
                             <option key={v.name} value={v.name}>
-                              {v.name}
+                              {Utils.formatCategory(v.name)}
                             </option>
                           ))
                         : null}

@@ -74,6 +74,7 @@ export interface IProject {
   ownerId: string;
   participants: IProjectParticipant[];
   proposal: string;
+  percentage: number;
   remainingTime: any;
   start: Date;
   status: ProjectStatus;

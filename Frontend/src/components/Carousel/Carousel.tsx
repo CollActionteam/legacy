@@ -81,12 +81,11 @@ const GET_CAROUSEL_PROJECTS = gql`
   query GetCarouselProjects {
     projects(take: 6) {
       id
-      description
       name
+      description
       url
-      category {
-        colorHex
-        name
+      categories {
+        category
       }
       descriptiveImage {
         filepath
@@ -94,13 +93,17 @@ const GET_CAROUSEL_PROJECTS = gql`
       }
       goal
       end
-      remainingTime
       target
-      participantCounts {
-        count
-      }
-      status
-      url
+      percentage
+      proposal
+      remainingTime
+      totalParticipants
+      displayPriority
+      isActive
+      isComingSoon
+      isClosed
+      isSuccessfull
+      isFailed
     }
   }
 `;
