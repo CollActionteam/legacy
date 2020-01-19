@@ -438,11 +438,13 @@ namespace CollAction.Services.Projects
             context.Projects.AddRange(
                 Enumerable.Range(0, r.Next(20, 200))
                           .Select(i =>
-                              new Project(
+                          {
+                              DateTime start = DateTime.Now.Date.AddDays(r.Next(-20, 20));
+                              return new Project(
                                   name: Faker.Company.Name() + r.Next(10),
                                   description: $"<p>{string.Join("</p><p>", Faker.Lorem.Paragraphs(r.Next(3) + 1))}</p>",
-                                  start: DateTime.Now.AddDays(r.Next(-10, 10)),
-                                  end: DateTime.Now.AddDays(r.Next(20, 30)),
+                                  start: start,
+                                  end: start.AddDays(r.Next(10, 40)),
                                   categories: new List<ProjectCategory>() { new ProjectCategory((Category)r.Next(2)), new ProjectCategory((Category)(r.Next(3) + 2)) },
                                   tags: new List<ProjectTag>(),
                                   creatorComments: $"<p>{string.Join("</p><p>", Faker.Lorem.Paragraphs(r.Next(3) + 1))}</p>",
@@ -453,7 +455,8 @@ namespace CollAction.Services.Projects
                                   status: (ProjectStatus)r.Next(0, 3),
                                   target: r.Next(1, 10000),
                                   anonymousUserParticipants: r.Next(1, 10000),
-                                  descriptionVideoLink: $"https://www.youtube.com/watch?v={Guid.NewGuid()}")));
+                                  descriptionVideoLink: $"https://www.youtube.com/watch?v={Guid.NewGuid()}");
+                          }));
             await context.SaveChangesAsync(cancellationToken);
             await RefreshParticipantCountMaterializedView(cancellationToken);
         }
