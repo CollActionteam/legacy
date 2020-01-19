@@ -149,7 +149,7 @@ namespace CollAction
                                .SetIsOriginAllowedToAllowWildcardSubdomains()
                                .AllowAnyHeader()
                                .AllowCredentials()
-                               .WithOrigins(publicAddress));
+                               .WithOrigins(publicAddress.Split(";")));
             });
 
             services.AddUrlHelper();
