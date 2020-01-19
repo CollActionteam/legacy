@@ -14,6 +14,14 @@
 
 3.  **Start developing.**
 
+    Set the GATSBY_BACKEND_URL:
+
+    ```sh
+    export GATSBY_BACKEND_URL=https://test.collaction.org
+    ```
+
+    And then start developing:
+
     ```sh
     gatsby develop
     ```
