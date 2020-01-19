@@ -457,7 +457,7 @@ namespace CollAction.Services.Projects
                                   target: r.Next(1, 10000),
                                   anonymousUserParticipants: r.Next(1, 10000),
                                   descriptionVideoLink: $"https://www.youtube.com/watch?v={Guid.NewGuid()}");
-                          }).Distinct(new LambdaEqualityComparer<Project, string>(p => p.Name)));
+                          }).Distinct(new LambdaEqualityComparer<Project, string>(p => p?.Name)));
             await context.SaveChangesAsync(cancellationToken);
             await RefreshParticipantCountMaterializedView(cancellationToken);
         }

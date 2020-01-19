@@ -4,11 +4,11 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace CollAction.Helpers
 {
-    public class LambdaEqualityComparer<TClass, TProp> : IEqualityComparer<TClass>
+    public class LambdaEqualityComparer<TClass, TProp> : IEqualityComparer<TClass> where TClass : class where TProp : class
     {
-        private readonly Func<TClass, TProp> getProp;
+        private readonly Func<TClass?, TProp?> getProp;
 
-        public LambdaEqualityComparer(Func<TClass, TProp> getProp)
+        public LambdaEqualityComparer(Func<TClass?, TProp?> getProp)
         {
             this.getProp = getProp;
         }
