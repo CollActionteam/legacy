@@ -9,8 +9,8 @@ export default ({ project }: { project: IProject }) => {
   return (
     <a href={project.url} className={styles.card}>
       <figure className={styles.image}>
-        {project.descriptiveImage ? (
-          <img src={project.descriptiveImage.filepath} alt={project.name} />
+        {project.bannerImage ? (
+          <img src={project.bannerImage.filepath} alt={project.name} />
         ) : (
           <img src={"/assets/default_banners/" + project.categories[0].category + ".jpg"} alt={project.name} />
         )}
@@ -24,7 +24,7 @@ export default ({ project }: { project: IProject }) => {
         <h3 className={styles.title}>
           {project.name}
         </h3>
-        <div className={styles.description}>
+        <div className={styles.proposal}>
           {project.proposal}
         </div>
         <div className={styles.stats}>
