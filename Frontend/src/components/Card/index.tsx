@@ -16,7 +16,7 @@ export default ({ project }: { project: IProject }) => {
           <img src={project.descriptiveImage.filepath} alt={project.name} />
         ) : (
           <img
-            src={`https://via.placeholder.com/370x270.png/d8d8d8/ffffff/?text=${project.name}`}
+            src={"/assets/default_banners/" + project.categories[0].category + ".jpg"}
             alt={project.name}
           />
         )}
@@ -28,13 +28,10 @@ export default ({ project }: { project: IProject }) => {
           {project.isClosed ? <span>Signup closed</span> : null}
         </div>
         <h3 className={styles.title}>
-          Carbon Neutral Travel 2019
-          {/* {project.title} */}
+          {project.name}
         </h3>
         <div className={styles.description}>
-          If 50 people commit to (1) thinking twice about each flight they take,
-          and (2) … purchasing carbon offsets ...
-          {/* {project.description} */}
+          {project.description}
         </div>
         <div className={styles.stats}>
           <div className={styles.percentage}>
@@ -58,8 +55,7 @@ export default ({ project }: { project: IProject }) => {
           </div>
         </div>
         <div className={styles.category}>
-          Well-being
-          {/* {project.category} */}
+          { project.categories.map(c => c.category).join(" ") }
         </div>
       </div>
     </a>

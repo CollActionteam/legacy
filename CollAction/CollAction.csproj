@@ -10,6 +10,7 @@
     <PackageReference Include="AspNetCore.IServiceCollection.AddIUrlHelper" Version="1.1.0" />
     <PackageReference Include="AWSSDK.S3" Version="3.3.110.12" />
     <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.101.94" />
+    <PackageReference Include="Faker.Net" Version="1.1.1" />
     <PackageReference Include="GraphiQL" Version="1.2.0" />
     <PackageReference Include="GraphQL" Version="2.4.0" />
     <PackageReference Include="GraphQL.Authorization" Version="2.1.29" />

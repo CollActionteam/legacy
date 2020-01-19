@@ -27,10 +27,7 @@ export interface IImageFile {
 }
 
 export interface IProjectCategory {
-  color: number;
-  colorHex: string;
-  id: number;
-  name: string;
+  category: string;
 }
 
 export interface IMiscellaneous {
@@ -55,8 +52,7 @@ export interface IProject {
   bannerImage: IImageFile;
   bannerImageField: number;
   canSendProjectEmail: boolean;
-  category: IProjectCategory;
-  categoryId: number;
+  categories: IProjectCategory[];
   creatorComments: string;
   description: string;
   descriptionVideoLink: string;

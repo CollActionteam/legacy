@@ -439,19 +439,19 @@ namespace CollAction.Services.Projects
                 Enumerable.Range(0, r.Next(20, 200))
                           .Select(i =>
                               new Project(
-                                  name: Guid.NewGuid().ToString(),
-                                  description: Guid.NewGuid().ToString(),
+                                  name: Faker.Company.Name(),
+                                  description: $"<p>{string.Join("</p><p>", Faker.Lorem.Paragraphs(r.Next(3) + 1))}</p>",
                                   start: DateTime.Now.AddDays(r.Next(-10, 10)),
                                   end: DateTime.Now.AddDays(r.Next(20, 30)),
                                   categories: new List<ProjectCategory>() { new ProjectCategory((Category)r.Next(2)), new ProjectCategory((Category)(r.Next(3) + 2)) },
                                   tags: new List<ProjectTag>(),
-                                  creatorComments: Guid.NewGuid().ToString(),
+                                  creatorComments: $"<p>{string.Join("</p><p>", Faker.Lorem.Paragraphs(r.Next(3) + 1))}</p>",
                                   displayPriority: (ProjectDisplayPriority)r.Next(0, 2),
-                                  goal: Guid.NewGuid().ToString(),
+                                  goal: Faker.Company.CatchPhrase(),
                                   ownerId: owningUser.Id,
-                                  proposal: Guid.NewGuid().ToString(),
+                                  proposal: Faker.Company.BS(),
                                   status: (ProjectStatus)r.Next(0, 3),
-                                  target: r.Next(1, 100000),
+                                  target: r.Next(1, 10000),
                                   anonymousUserParticipants: r.Next(1, 10000),
                                   descriptionVideoLink: $"https://www.youtube.com/watch?v={Guid.NewGuid()}")));
             await context.SaveChangesAsync(cancellationToken);
