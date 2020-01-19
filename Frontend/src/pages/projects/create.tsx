@@ -23,7 +23,6 @@ export const query = graphql`
     site {
       siteMetadata {
         title
-        backendUrl
       }
     }
   }
@@ -134,7 +133,7 @@ export default ({ data }) => {
     body.append("Image", file);
     body.append("ImageDescription", description);
 
-    return await fetch(`${data.site.siteMetadata.backendUrl}/image`, {
+    return await fetch(`${process.env.GATSBY_BACKEND_URL}/image`, {
       method: "POST",
       body,
       credentials: "include",

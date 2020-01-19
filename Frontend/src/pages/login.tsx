@@ -22,7 +22,6 @@ export default () => (
           query BackendQuery {
             site {
               siteMetadata {
-                backendUrl
                 loginProviders {
                   name
                 }
@@ -31,8 +30,8 @@ export default () => (
           }
         `}
         render={data => {
-          const actionLogin = `${data.site.siteMetadata.backendUrl}/account/login`;
-          const actionExternalLogin = `${data.site.siteMetadata.backendUrl}/account/externalLogin`;
+          const actionLogin = `${process.env.GATSBY_BACKEND_URL}/account/login`;
+          const actionExternalLogin = `${process.env.GATSBY_BACKEND_URL}/account/externalLogin`;
           const returnUrl = location.href;
           const errorUrl = `${returnUrl}/error`;
           return (
