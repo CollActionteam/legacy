@@ -442,7 +442,7 @@ namespace CollAction.Services.Projects
                               DateTime start = DateTime.Now.Date.AddDays(r.Next(-20, 20));
 
                               return new Project(
-                                  name: Faker.Company.Name() + r.Next(10),
+                                  name: Faker.Company.Name(),
                                   description: $"<p>{string.Join("</p><p>", Faker.Lorem.Paragraphs(r.Next(3) + 1))}</p>",
                                   start: start,
                                   end: start.AddDays(r.Next(10, 40)).AddHours(23).AddMinutes(59).AddSeconds(59),
