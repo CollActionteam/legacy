@@ -96,9 +96,10 @@ export default () => (
 
 const GET_CATEGORIES = gql`
   query {
-    __type(name:"Category") {
+    __type(name: "Category") {
       enumValues {
         name
       }
     }
-  }`;
+  }
+`;

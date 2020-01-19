@@ -3,7 +3,7 @@ import { graphql, StaticQuery } from "gatsby";
 import Layout from "../components/Layout";
 import { Button } from "../components/Button/Button";
 import { Section } from "../components/Section";
-import { Location } from '@reach/router';
+import { Location } from "@reach/router";
 import {
   Grid,
   TextField,
@@ -16,7 +16,7 @@ import styles from "./login.module.scss";
 
 export default () => (
   <Location>
-    {({ location }) => 
+    {({ location }) => (
       <StaticQuery
         query={graphql`
           query BackendQuery {
@@ -48,7 +48,11 @@ export default () => (
                   <Grid item sm={6}>
                     <form method="post" action={actionExternalLogin}>
                       <FormGroup>
-                        <input type="hidden" name="returnUrl" value={returnUrl} />
+                        <input
+                          type="hidden"
+                          name="returnUrl"
+                          value={returnUrl}
+                        />
                         <input type="hidden" name="errorUrl" value={errorUrl} />
                         {data.site.siteMetadata.loginProviders.map(
                           (provider, index) => (
@@ -85,7 +89,11 @@ export default () => (
                           control={<Checkbox color="default" />}
                           label="Remember me"
                         />
-                        <input type="hidden" name="returnUrl" value={returnUrl} />
+                        <input
+                          type="hidden"
+                          name="returnUrl"
+                          value={returnUrl}
+                        />
                         <input type="hidden" name="errorUrl" value={errorUrl} />
                         <Button type="submit">Login</Button>
                       </FormGroup>
@@ -95,8 +103,8 @@ export default () => (
               </Section>
             </Layout>
           );
-      }}
-    />
-    }
+        }}
+      />
+    )}
   </Location>
 );
