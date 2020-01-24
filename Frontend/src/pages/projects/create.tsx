@@ -87,6 +87,7 @@ export default () => {
   `);
 
   const commit = async (form, setStatus) => {
+    setStatus(null);
     let bannerId;
     if (form.banner) {
       bannerId = await uploadImage(form.banner, form.projectName);
