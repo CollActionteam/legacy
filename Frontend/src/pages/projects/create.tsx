@@ -78,7 +78,7 @@ export default () => {
         createProject(project: $project) {
           succeeded
           errors {
-            errorMessage,
+            errorMessage
             memberNames
           }
         }
