@@ -105,3 +105,13 @@
 .formControl {
   margin: var(--spacing) 0 var(--spacing) 0 !important;
 }
+
+.submitErrors {
+  text-align: center;
+  color: var(--c-red);
+  
+  ul {
+    list-style: none;
+    margin-left: 0;
+  }
+}
