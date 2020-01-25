@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using CollAction.Data;
 using CollAction.Models;
 using Microsoft.AspNetCore.Identity;
@@ -14,7 +13,6 @@ using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Hangfire;
 using Hangfire.PostgreSql;
 using CollAction.Helpers;
-using Hangfire.Dashboard;
 using CollAction.Services.Email;
 using CollAction.Services.Projects;
 using CollAction.Services.Newsletter;
@@ -37,31 +35,27 @@ using AspNetCore.IServiceCollection.AddIUrlHelper;
 using CollAction.Services.HtmlValidator;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
-using System;
 
 namespace CollAction
 {
     public sealed class Startup
     {
-        private readonly string corsPolicy = "FrontendCors";
-
-        public Startup(IWebHostEnvironment env, IConfiguration configuration, ILogger<Startup> logger)
+        public Startup(IWebHostEnvironment environment, IConfiguration configuration)
         {
-            Configuration = configuration;
-            Environment = env;
-            Logger = logger;
+            this.configuration = configuration;
+            this.environment = environment;
+            publicAddress = this.configuration["PublicAddress"];
+            connectionString = $"Host={this.configuration["DbHost"]};Username={this.configuration["DbUser"]};Password={this.configuration["DbPassword"]};Database={this.configuration["Db"]};Port={this.configuration["DbPort"]}";
         }
 
-        public ILogger<Startup> Logger { get; }
-
-        public IConfiguration Configuration { get; }
-
-        public IWebHostEnvironment Environment { get; }
+        private readonly string corsPolicy = "FrontendCors";
+        private readonly string publicAddress;
+        private readonly string connectionString;
+        private readonly IConfiguration configuration;
+        private readonly IWebHostEnvironment environment;
 
         public void ConfigureServices(IServiceCollection services)
         {
-            string connectionString = $"Host={Configuration["DbHost"]};Username={Configuration["DbUser"]};Password={Configuration["DbPassword"]};Database={Configuration["Db"]};Port={Configuration["DbPort"]}";
-
             services.AddGraphQl();
             services.AddGraphQlAuth();
 
@@ -82,36 +76,36 @@ namespace CollAction
 
             var authenticationBuilder = services.AddAuthentication();
 
-            if (Configuration["Authentication:Facebook:AppId"] != null)
+            if (configuration["Authentication:Facebook:AppId"] != null)
             {
                 authenticationBuilder = authenticationBuilder.AddFacebook(options =>
                 {
-                    options.AppId = Configuration["Authentication:Facebook:AppId"];
-                    options.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+                    options.AppId = configuration["Authentication:Facebook:AppId"];
+                    options.AppSecret = configuration["Authentication:Facebook:AppSecret"];
                     options.Scope.Add("email");
                 });
             }
 
-            if (Configuration["Authentication:Google:ClientId"] != null)
+            if (configuration["Authentication:Google:ClientId"] != null)
             {
                 authenticationBuilder = authenticationBuilder.AddGoogle(options =>
                 {
-                    options.ClientId = Configuration["Authentication:Google:ClientId"];
-                    options.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+                    options.ClientId = configuration["Authentication:Google:ClientId"];
+                    options.ClientSecret = configuration["Authentication:Google:ClientSecret"];
                     options.Scope.Add("email");
                 });
             }
 
-            if (Configuration["Authentication:Twitter:ConsumerKey"] != null)
+            if (configuration["Authentication:Twitter:ConsumerKey"] != null)
             {
                 authenticationBuilder = authenticationBuilder.AddTwitter(options =>
                 {
-                    options.ConsumerKey = Configuration["Authentication:Twitter:ConsumerKey"];
-                    options.ConsumerSecret = Configuration["Authentication:Twitter:ConsumerSecret"];
+                    options.ConsumerKey = configuration["Authentication:Twitter:ConsumerKey"];
+                    options.ConsumerSecret = configuration["Authentication:Twitter:ConsumerSecret"];
                 });
             }
 
-            services.AddApplicationInsightsTelemetry(Configuration);
+            services.AddApplicationInsightsTelemetry(configuration);
 
             services.AddLogging(loggingBuilder =>
             {
@@ -119,7 +113,7 @@ namespace CollAction
                        .WriteTo.Console(LogEventLevel.Information)
                        .WriteTo.ApplicationInsights(TelemetryConfiguration.Active, TelemetryConverter.Traces);
 
-                string slackHook = Configuration["SlackHook"];
+                string slackHook = this.configuration["SlackHook"];
                 if (slackHook != null)
                 {
                     configuration.WriteTo.Slack(slackHook, restrictedToMinimumLevel: LogEventLevel.Error);
@@ -133,13 +127,14 @@ namespace CollAction
                     .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                     .AddNewtonsoftJson();
 
-            services.AddHangfire(config => config.UsePostgreSqlStorage(connectionString));
+            services.AddHangfire(
+                config => config.UseSerilogLogProvider()
+                                .UsePostgreSqlStorage(connectionString));
 
             services.AddDataProtection()
                     .Services
                     .Configure<KeyManagementOptions>(options => options.XmlRepository = new DataProtectionRepository(new DbContextOptionsBuilder<ApplicationDbContext>().UseNpgsql(connectionString).Options));
 
-            string publicAddress = Configuration["PublicAddress"];
             services.AddCors(c =>
             {
                 c.AddPolicy(
@@ -167,25 +162,25 @@ namespace CollAction
             services.AddTransient<IHtmlInputValidator, HtmlInputValidator>();
 
             // Configure application options
-            services.Configure<StripeSignatures>(Configuration);
-            services.Configure<SiteOptions>(Configuration);
-            services.Configure<AuthMessageSenderOptions>(Configuration);
-            services.Configure<ImageServiceOptions>(Configuration);
-            services.Configure<ImageProcessingOptions>(Configuration);
-            services.Configure<NewsletterServiceOptions>(Configuration);
-            services.Configure<ProjectEmailOptions>(Configuration);
-            services.Configure<SeedOptions>(Configuration);
+            services.Configure<StripeSignatures>(configuration);
+            services.Configure<SiteOptions>(configuration);
+            services.Configure<AuthMessageSenderOptions>(configuration);
+            services.Configure<ImageServiceOptions>(configuration);
+            services.Configure<ImageProcessingOptions>(configuration);
+            services.Configure<NewsletterServiceOptions>(configuration);
+            services.Configure<ProjectEmailOptions>(configuration);
+            services.Configure<SeedOptions>(configuration);
             services.Configure<MailChimpOptions>(options =>
             {
-                options.ApiKey = Configuration["MailChimpKey"];
+                options.ApiKey = configuration["MailChimpKey"];
             });
             services.Configure<RequestOptions>(options =>
             {
-                options.ApiKey = Configuration["StripeSecretApiKey"];
+                options.ApiKey = configuration["StripeSecretApiKey"];
             });
             services.Configure<StripePublicOptions>(options =>
             {
-                options.StripePublicKey = Configuration["StripePublicApiKey"];
+                options.StripePublicKey = configuration["StripePublicApiKey"];
             });
             services.Configure<IdentityOptions>(options =>
             {
@@ -202,7 +197,7 @@ namespace CollAction
             app.UseRouting();
             app.UseCors(corsPolicy);
 
-            if (Environment.IsProduction())
+            if (environment.IsProduction())
             {
                 // Ensure our middleware handles proxied https, see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-Proto
                 var forwardedHeaderOptions = new ForwardedHeadersOptions()
@@ -219,7 +214,7 @@ namespace CollAction
 
                 applicationLifetime.ApplicationStopping.Register(() => Log.CloseAndFlush());
             }
-            else if (Environment.IsDevelopment())
+            else if (environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseGraphiQl("/graphiql", "/graphql");
@@ -231,17 +226,14 @@ namespace CollAction
 
             app.UseHangfireServer(new BackgroundJobServerOptions() { WorkerCount = 1 });
 
-            app.UseHangfireDashboard(
-                options: new DashboardOptions()
-                {
-                    Authorization = new IDashboardAuthorizationFilter[]
-                    {
-                        new HangfireAdminAuthorizationFilter()
-                    }
-                });
-
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHangfireDashboard(new DashboardOptions()
+                {
+                    AppPath = publicAddress,
+                    DashboardTitle = "CollAction Jobs",
+                    Authorization = new[] { new HangfireAdminAuthorizationFilter() }
+                });
                 endpoints.MapControllerRoute("Default", "{controller}/{action}");
                 endpoints.MapHealthChecks("/health");
             });
