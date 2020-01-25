@@ -9,14 +9,12 @@ using Microsoft.AspNetCore.Identity;
 using Serilog;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Rewrite;
-using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Hangfire;
 using Hangfire.PostgreSql;
 using CollAction.Helpers;
 using CollAction.Services.Email;
 using CollAction.Services.Projects;
 using CollAction.Services.Newsletter;
-using CollAction.Services.DataProtection;
 using CollAction.Services.Image;
 using Stripe;
 using CollAction.Services.Donation;
@@ -35,6 +33,7 @@ using AspNetCore.IServiceCollection.AddIUrlHelper;
 using CollAction.Services.HtmlValidator;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace CollAction
 {
@@ -132,8 +131,7 @@ namespace CollAction
                                 .UsePostgreSqlStorage(connectionString));
 
             services.AddDataProtection()
-                    .Services
-                    .Configure<KeyManagementOptions>(options => options.XmlRepository = new DataProtectionRepository(new DbContextOptionsBuilder<ApplicationDbContext>().UseNpgsql(connectionString).Options));
+                    .PersistKeysToDbContext<ApplicationDbContext>();
 
             services.AddCors(c =>
             {

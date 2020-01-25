@@ -11,10 +11,11 @@ using CollAction.Services;
 using Microsoft.Extensions.Options;
 using CollAction.Services.Projects;
 using System.Threading;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 
 namespace CollAction.Data
 {
-    public sealed class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public sealed class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IDataProtectionKeyContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -54,14 +55,8 @@ namespace CollAction.Data
             logger.LogInformation("migrating database");
             await context.Database.MigrateAsync();
             logger.LogInformation("seeding database");
-            await context.Seed(seedOptions, userManager, roleManager, projectService);
+            await Seed(seedOptions, userManager, roleManager, projectService);
             logger.LogInformation("done starting up");
-        }
-
-        public async Task Seed(SeedOptions seedOptions, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IProjectService projectService)
-        {
-            await CreateAdminRoleAndUser(seedOptions, userManager, roleManager);
-            await SeedTestProjects(seedOptions, userManager, projectService);
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -101,6 +96,12 @@ namespace CollAction.Data
                    .HasOne(e => e.User)
                    .WithMany(u => u!.UserEvents)
                    .HasForeignKey(e => e.UserId);
+        }
+
+        private static async Task Seed(SeedOptions seedOptions, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IProjectService projectService)
+        {
+            await CreateAdminRoleAndUser(seedOptions, userManager, roleManager);
+            await SeedTestProjects(seedOptions, userManager, projectService);
         }
 
         private static async Task CreateAdminRoleAndUser(SeedOptions seedOptions, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
