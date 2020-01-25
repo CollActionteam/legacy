@@ -148,7 +148,8 @@ namespace CollAction
             });
 
             services.AddUrlHelper();
-            services.AddHealthChecks();
+            services.AddHealthChecks()
+                    .AddDbContextCheck<ApplicationDbContext>();
 
             // Add application services.
             services.AddScoped<IImageService, AmazonS3ImageService>();
