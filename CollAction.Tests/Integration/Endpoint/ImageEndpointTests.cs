@@ -4,6 +4,8 @@ using CollAction.Services.Image;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Globalization;
 using System.IO;
 using System.Net.Http;
 using System.Threading;
@@ -28,19 +30,19 @@ namespace CollAction.Tests.Integration.Endpoint
                        using var descriptionContent = new StringContent("My Description");
                        using var client = testServer.CreateClient();
                        SeedOptions seedOptions = scope.ServiceProvider.GetRequiredService<IOptions<SeedOptions>>().Value;
-                       client.DefaultRequestHeaders.Add("Cookie", await GetAuthCookie(client, seedOptions));
+                       client.DefaultRequestHeaders.Add("Cookie", await GetAuthCookie(client, seedOptions).ConfigureAwait(false));
                        content.Add(streamContent, "Image", "test.png");
                        content.Add(descriptionContent, "ImageDescription");
-                       using var response = await client.PostAsync("/image", content);
-                       string body = await response.Content.ReadAsStringAsync();
+                       using var response = await client.PostAsync(new Uri("/image", UriKind.Relative), content).ConfigureAwait(false);
+                       string body = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                        Assert.IsTrue(response.IsSuccessStatusCode, body);
-                       int imageId = int.Parse(body);
+                       int imageId = int.Parse(body, CultureInfo.InvariantCulture);
 
                        // Cleanup
                        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                        var imageService = scope.ServiceProvider.GetRequiredService<IImageService>();
                        var image = await context.ImageFiles.FindAsync(imageId);
-                       await imageService.DeleteImage(image, CancellationToken.None);
+                       await imageService.DeleteImage(image, CancellationToken.None).ConfigureAwait(false);
                    });
     }
 }

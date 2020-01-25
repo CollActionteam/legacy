@@ -95,7 +95,7 @@ namespace CollAction.Controllers
 #if (DEBUG)
             DateTime start = DateTime.Now;
 #endif
-            ExecutionResult result = await executer.ExecuteAsync(options);
+            ExecutionResult result = await executer.ExecuteAsync(options).ConfigureAwait(false);
 
 #if (DEBUG)
             try

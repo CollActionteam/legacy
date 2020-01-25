@@ -26,7 +26,8 @@ namespace CollAction.GraphQl.Mutations
                     var context = c.GetUserContext();
                     return await context.ServiceProvider
                                         .GetRequiredService<IProjectService>()
-                                        .CreateProject(project, context.User, c.CancellationToken);
+                                        .CreateProject(project, context.User, c.CancellationToken)
+                                        .ConfigureAwait(false);
                 });
 
             FieldAsync<ProjectResultGraph, ProjectResult>(
@@ -39,7 +40,8 @@ namespace CollAction.GraphQl.Mutations
                     var context = c.GetUserContext();
                     return await context.ServiceProvider
                                         .GetRequiredService<IProjectService>()
-                                        .UpdateProject(project, context.User, c.CancellationToken);
+                                        .UpdateProject(project, context.User, c.CancellationToken)
+                                        .ConfigureAwait(false);
                 }).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
 
             FieldAsync<AddParticipantResultGraph, AddParticipantResult>(
@@ -54,7 +56,8 @@ namespace CollAction.GraphQl.Mutations
                     var context = c.GetUserContext();
                     return await context.ServiceProvider
                                         .GetRequiredService<IProjectService>()
-                                        .CommitToProject(email, projectId, context.User, c.CancellationToken);
+                                        .CommitToProject(email, projectId, context.User, c.CancellationToken)
+                                        .ConfigureAwait(false);
                 });
 
             FieldAsync<ProjectResultGraph, ProjectResult>(
@@ -71,7 +74,8 @@ namespace CollAction.GraphQl.Mutations
                     var context = c.GetUserContext();
                     return await context.ServiceProvider
                                         .GetRequiredService<IProjectService>()
-                                        .SendProjectEmail(projectId, subject, message, context.User, c.CancellationToken);
+                                        .SendProjectEmail(projectId, subject, message, context.User, c.CancellationToken)
+                                        .ConfigureAwait(false);
                 });
 
             FieldAsync<ProjectParticipantGraph, ProjectParticipant>(
@@ -90,7 +94,8 @@ namespace CollAction.GraphQl.Mutations
                     var context = c.GetUserContext();
                     return await context.ServiceProvider
                                         .GetRequiredService<IProjectService>()
-                                        .SetEmailProjectSubscription(projectId, userId, Guid.Parse(token), isSubscribed, c.CancellationToken);
+                                        .SetEmailProjectSubscription(projectId, userId, Guid.Parse(token), isSubscribed, c.CancellationToken)
+                                        .ConfigureAwait(false);
                 });
         }
     }

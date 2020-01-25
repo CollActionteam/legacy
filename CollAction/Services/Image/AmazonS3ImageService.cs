@@ -46,7 +46,7 @@ namespace CollAction.Services.Image
         public async Task<ImageFile> UploadImage(IFormFile fileUploaded, string imageDescription, CancellationToken token)
         {
             logger.LogInformation("Uploading image");
-            using Image<Rgba32> image = await UploadToImage(fileUploaded, token);
+            using Image<Rgba32> image = await UploadToImage(fileUploaded, token).ConfigureAwait(false);
             var currentImage = new ImageFile(filepath: $"{Guid.NewGuid()}.png", date: DateTime.UtcNow, description: imageDescription, height: image.Height, width: image.Width);
 
             logger.LogInformation("Queuing for s3 upload");
@@ -55,7 +55,7 @@ namespace CollAction.Services.Image
 
             logger.LogInformation("Saving image information to database");
             context.ImageFiles.Add(currentImage);
-            await context.SaveChangesAsync(token);
+            await context.SaveChangesAsync(token).ConfigureAwait(false);
 
             logger.LogInformation("Done uploading image");
 
@@ -68,15 +68,15 @@ namespace CollAction.Services.Image
             {
                 logger.LogInformation("Deleting image");
                 context.ImageFiles.Remove(imageFile);
-                await context.SaveChangesAsync(token);
+                await context.SaveChangesAsync(token).ConfigureAwait(false);
                 
                 logger.LogInformation("Queueing image removal from s3");
                 jobClient.Enqueue(() => DeleteObject(imageFile.Filepath, token));
             }
         }
 
-        public string GetUrl(ImageFile imageFile)
-            => $"https://{bucket}.s3.{region}.amazonaws.com/{imageFile.Filepath}";
+        public Uri GetUrl(ImageFile imageFile)
+            => new Uri($"https://{bucket}.s3.{region}.amazonaws.com/{imageFile.Filepath}");
 
         public async Task DeleteObject(string filePath, CancellationToken token)
         {
@@ -87,7 +87,7 @@ namespace CollAction.Services.Image
             };
 
             logger.LogInformation("Deleting image from s3");
-            DeleteObjectResponse response = await client.DeleteObjectAsync(deleteRequest, token);
+            DeleteObjectResponse response = await client.DeleteObjectAsync(deleteRequest, token).ConfigureAwait(false);
             if (!response.HttpStatusCode.IsSuccess())
             {
                 logger.LogError("Error removing image from s3");
@@ -111,7 +111,7 @@ namespace CollAction.Services.Image
                 AutoCloseStream = false
             };
 
-            PutObjectResponse response = await client.PutObjectAsync(putRequest);
+            PutObjectResponse response = await client.PutObjectAsync(putRequest).ConfigureAwait(false);
             if (!response.HttpStatusCode.IsSuccess())
             {
                 logger.LogError("Error uploading image to s3");
@@ -132,12 +132,12 @@ namespace CollAction.Services.Image
                       SELECT NULL
                       FROM public.""Projects"" P
                       WHERE P.""BannerImageFileId"" = I.""Id"" OR P.""DescriptiveImageFileId"" = I.""Id""
-                  ) AND I.""Date"" < 'now'::timestamp - '1 hour'::interval").ToListAsync();
+                  ) AND I.""Date"" < 'now'::timestamp - '1 hour'::interval").ToListAsync().ConfigureAwait(false);
 
             danglingImages.ForEach(i => jobClient.ContinueJobWith(performContext.BackgroundJob.Id, () => DeleteObject(i.Filepath, token)));
 
             context.ImageFiles.RemoveRange(danglingImages);
-            await context.SaveChangesAsync();
+            await context.SaveChangesAsync().ConfigureAwait(false);
         }
 
         public void InitializeDanglingImageJob()
@@ -154,7 +154,7 @@ namespace CollAction.Services.Image
         {
             using Stream uploadStream = fileUploaded.OpenReadStream();
             using MemoryStream ms = new MemoryStream();
-            await uploadStream.CopyToAsync(ms, token);
+            await uploadStream.CopyToAsync(ms, token).ConfigureAwait(false);
             var image = SixLabors.ImageSharp.Image.Load(ms.ToArray());
             var scaleRatio = GetScaleRatioForImage(image);
             if (scaleRatio != 1.0)

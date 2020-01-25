@@ -49,7 +49,7 @@ namespace CollAction.Services.Email
         public async Task SendEmailsTemplated<TModel>(IEnumerable<string> emails, string subject, string emailTemplate, TModel model)
         {
             var viewRenderer = serviceProvider.GetService<IViewRenderService>(); // This dependency is not available from tasks, so we have to inject it like this
-            string message = await viewRenderer.Render($"Views/Emails/{emailTemplate}.cshtml", model);
+            string message = await viewRenderer.Render($"Views/Emails/{emailTemplate}.cshtml", model).ConfigureAwait(false);
             SendEmails(emails, subject, message);
         }
 
@@ -72,7 +72,7 @@ namespace CollAction.Services.Email
             };
 
             using AmazonSimpleEmailServiceClient client = new AmazonSimpleEmailServiceClient(authOptions.SesAwsAccessKeyID, authOptions.SesAwsAccessKey, RegionEndpoint.GetBySystemName(authOptions.SesRegion));
-            SendEmailResponse response = await client.SendEmailAsync(emailRequest);
+            SendEmailResponse response = await client.SendEmailAsync(emailRequest).ConfigureAwait(false);
             if (!response.HttpStatusCode.IsSuccess())
             {
                 logger.LogError("failed to send email to {0}", string.Join(", ", emails));

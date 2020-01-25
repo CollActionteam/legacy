@@ -19,9 +19,9 @@ namespace CollAction.Controllers
         public async Task<IActionResult> PaymentEvent(CancellationToken token)
         {
             using var streamReader = new StreamReader(HttpContext.Request.Body);
-            string json = await streamReader.ReadToEndAsync();
+            string json = await streamReader.ReadToEndAsync().ConfigureAwait(false);
             string signature = Request.Headers["Stripe-Signature"];
-            await donationService.LogPaymentEvent(json, signature, token);
+            await donationService.LogPaymentEvent(json, signature, token).ConfigureAwait(false);
             return Ok();
         }
 
@@ -29,7 +29,7 @@ namespace CollAction.Controllers
         public async Task<IActionResult> Chargeable()
         {
             using var streamReader = new StreamReader(HttpContext.Request.Body);
-            string json = await streamReader.ReadToEndAsync();
+            string json = await streamReader.ReadToEndAsync().ConfigureAwait(false);
             string signature = Request.Headers["Stripe-Signature"];
             donationService.HandleChargeable(json, signature);
             return Ok();

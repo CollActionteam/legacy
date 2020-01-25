@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using System;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -24,6 +25,7 @@ namespace CollAction.Tests.Integration.Service
         private readonly Mock<IFormFile> upload;
         private IImageService imageService;
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "MemoryStream is mocked")]
         public ImageServicesTests()
         {
             upload = new Mock<IFormFile>();
@@ -44,7 +46,7 @@ namespace CollAction.Tests.Integration.Service
                    async scope =>
                    {
                        imageService = scope.ServiceProvider.GetRequiredService<IImageService>();
-                       Models.ImageFile imageFile = await imageService.UploadImage(upload.Object, "test", CancellationToken.None);
+                       Models.ImageFile imageFile = await imageService.UploadImage(upload.Object, "test", CancellationToken.None).ConfigureAwait(false);
 
                        Assert.IsNotNull(imageFile);
                        Assert.IsNotNull(imageFile.Filepath);
@@ -53,9 +55,9 @@ namespace CollAction.Tests.Integration.Service
                        upload.VerifyNoOtherCalls();
                        jobClient.Verify(jc => jc.Create(It.IsAny<Job>(), It.IsAny<IState>()));
                        jobClient.VerifyNoOtherCalls();
-                       Assert.AreEqual(HttpStatusCode.OK, await CheckUrl(imageService.GetUrl(imageFile)));
+                       Assert.AreEqual(HttpStatusCode.OK, await CheckUrl(imageService.GetUrl(imageFile)).ConfigureAwait(false));
 
-                       await imageService.DeleteImage(imageFile, CancellationToken.None);
+                       await imageService.DeleteImage(imageFile, CancellationToken.None).ConfigureAwait(false);
                    });
 
         [TestMethod]
@@ -64,14 +66,14 @@ namespace CollAction.Tests.Integration.Service
                    async scope =>
                    {
                        imageService = scope.ServiceProvider.GetRequiredService<IImageService>();
-                       Models.ImageFile imageFile = await imageService.UploadImage(upload.Object, "test", CancellationToken.None);
-                       await imageService.DeleteImage(imageFile, CancellationToken.None);
+                       Models.ImageFile imageFile = await imageService.UploadImage(upload.Object, "test", CancellationToken.None).ConfigureAwait(false);
+                       await imageService.DeleteImage(imageFile, CancellationToken.None).ConfigureAwait(false);
 
                        upload.Verify(f => f.OpenReadStream());
                        upload.VerifyNoOtherCalls();
                        jobClient.Verify(jc => jc.Create(It.IsAny<Job>(), It.IsAny<IState>()));
                        jobClient.VerifyNoOtherCalls();
-                       Assert.AreEqual(HttpStatusCode.Forbidden, await CheckUrl(imageService.GetUrl(imageFile)));
+                       Assert.AreEqual(HttpStatusCode.Forbidden, await CheckUrl(imageService.GetUrl(imageFile)).ConfigureAwait(false));
                    });
 
         protected override void ConfigureReplacementServicesProvider(IServiceCollection collection)
@@ -79,10 +81,10 @@ namespace CollAction.Tests.Integration.Service
             collection.AddScoped(s => jobClient.Object);
         }
 
-        private async Task<HttpStatusCode> CheckUrl(string url)
+        private async Task<HttpStatusCode> CheckUrl(Uri url)
         {
             using HttpClient client = new HttpClient();
-            using HttpResponseMessage response = await client.GetAsync(url);
+            using HttpResponseMessage response = await client.GetAsync(url).ConfigureAwait(false);
             return response.StatusCode;
         }
     }

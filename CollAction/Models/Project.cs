@@ -135,8 +135,8 @@ namespace CollAction.Models
             => ToUrlSlug(RemoveDiacriticsFromString(Name));
 
         [NotMapped]
-        public string Url
-            => $"/projects/{NameNormalized}/{Id}";
+        public Uri Url
+            => new Uri($"/projects/{NameNormalized}/{Id}", UriKind.Relative);
 
         [NotMapped]
         public TimeSpan RemainingTime

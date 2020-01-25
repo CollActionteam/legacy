@@ -14,10 +14,10 @@ namespace CollAction
 
             using (IServiceScope scope = host.Services.CreateScope())
             {
-                await ApplicationDbContext.InitializeDatabase(scope);
+                await ApplicationDbContext.InitializeDatabase(scope).ConfigureAwait(false);
             }
 
-            await host.RunAsync();
+            await host.RunAsync().ConfigureAwait(false);
         }
 
         public static IWebHostBuilder CreateHostBuilder(string[] args)

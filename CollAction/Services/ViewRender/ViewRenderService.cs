@@ -48,7 +48,7 @@ namespace CollAction.Services.ViewRender
                 Writer = output
             };
 
-            await view.RenderAsync(viewContext);
+            await view.RenderAsync(viewContext).ConfigureAwait(false);
 
             return output.ToString();
         }

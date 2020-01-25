@@ -32,14 +32,14 @@ namespace CollAction.GraphQl.Queries
                 "isSubscribedNewsletter", 
                 resolve: async c =>
                 {
-                    return await dependencyResolver.Resolve<INewsletterService>().IsSubscribedAsync(c.Source.Email);
+                    return await dependencyResolver.Resolve<INewsletterService>().IsSubscribedAsync(c.Source.Email).ConfigureAwait(false);
                 });
             FieldAsync<ListGraphType<DonationSubscriptionGraph>>(
                 "donationSubscriptions",
                 resolve: async c =>
                 {
                     using var scope = serviceScopeFactory.CreateScope();
-                    return await scope.ServiceProvider.GetRequiredService<IDonationService>().GetSubscriptionsFor(c.Source, c.CancellationToken);
+                    return await scope.ServiceProvider.GetRequiredService<IDonationService>().GetSubscriptionsFor(c.Source, c.CancellationToken).ConfigureAwait(false);
                 });
             FieldAsync<ListGraphType<StringGraphType>>(
                 "loginProviders",
@@ -47,7 +47,7 @@ namespace CollAction.GraphQl.Queries
                 {
                     using var scope = serviceScopeFactory.CreateScope();
                     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-                    var providers = await userManager.GetLoginsAsync(c.Source);
+                    var providers = await userManager.GetLoginsAsync(c.Source).ConfigureAwait(false);
                     return providers.Select(p => p.LoginProvider);
                 });
             AddNavigationListField(nameof(ApplicationUser.Projects), c => c.Source.Projects);

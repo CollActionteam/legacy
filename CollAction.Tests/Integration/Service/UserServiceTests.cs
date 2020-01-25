@@ -30,7 +30,7 @@ namespace CollAction.Tests.Integration.Service
                     var signInManager = scope.ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>();
                     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-                    var (result, code) = await userService.ForgotPassword("nonexistent@collaction.org");
+                    var (result, code) = await userService.ForgotPassword("nonexistent@collaction.org").ConfigureAwait(false);
                     Assert.IsFalse(result.Succeeded);
 
                     string testEmail = GetTestEmail();
@@ -42,25 +42,25 @@ namespace CollAction.Tests.Integration.Service
                             LastName = testEmail, 
                             IsSubscribedNewsletter = false, 
                             Password = Guid.NewGuid().ToString() 
-                        });
+                        }).ConfigureAwait(false);
                     ApplicationUser user = testUserCreation.User;
-                    (result, code) = await userService.ForgotPassword(user.Email);
+                    (result, code) = await userService.ForgotPassword(user.Email).ConfigureAwait(false);
                     Assert.IsTrue(result.Succeeded);
                     Assert.IsNotNull(code);
 
-                    result = await userService.ResetPassword(user.Email, code, "");
+                    result = await userService.ResetPassword(user.Email, code, "").ConfigureAwait(false);
                     Assert.IsFalse(result.Succeeded);
-                    result = await userService.ResetPassword(user.Email, "", "Test_0_tesT");
+                    result = await userService.ResetPassword(user.Email, "", "Test_0_tesT").ConfigureAwait(false);
                     Assert.IsFalse(result.Succeeded);
-                    result = await userService.ResetPassword(user.Email, code, "Test_0_tesT");
+                    result = await userService.ResetPassword(user.Email, code, "Test_0_tesT").ConfigureAwait(false);
                     Assert.IsTrue(result.Succeeded);
 
-                    var principal = await signInManager.CreateUserPrincipalAsync(user);
-                    result = await userService.ChangePassword(principal, "Test_0_tesT", "");
+                    var principal = await signInManager.CreateUserPrincipalAsync(user).ConfigureAwait(false);
+                    result = await userService.ChangePassword(principal, "Test_0_tesT", "").ConfigureAwait(false);
                     Assert.IsFalse(result.Succeeded);
-                    result = await userService.ChangePassword(new ClaimsPrincipal(), "Test_0_tesT", "Test_1_tesT");
+                    result = await userService.ChangePassword(new ClaimsPrincipal(), "Test_0_tesT", "Test_1_tesT").ConfigureAwait(false);
                     Assert.IsFalse(result.Succeeded);
-                    result = await userService.ChangePassword(principal, "Test_0_tesT", "Test_1_tesT");
+                    result = await userService.ChangePassword(principal, "Test_0_tesT", "Test_1_tesT").ConfigureAwait(false);
                     Assert.IsTrue(result.Succeeded);
                 });
 
@@ -81,11 +81,11 @@ namespace CollAction.Tests.Integration.Service
                             LastName = GetRandomString(),
                             Password = GetRandomString(),
                             IsSubscribedNewsletter = true
-                        });
+                        }).ConfigureAwait(false);
                     var user = result.User;
                     Assert.IsTrue(result.Result.Succeeded);
 
-                    var principal = await signInManager.CreateUserPrincipalAsync(result.User);
+                    var principal = await signInManager.CreateUserPrincipalAsync(result.User).ConfigureAwait(false);
                     result = await userService.UpdateUser(
                         new UpdatedUser()
                         {
@@ -96,7 +96,7 @@ namespace CollAction.Tests.Integration.Service
                             IsSubscribedNewsletter = false,
                             Id = result.User.Id
                         },
-                        principal);
+                        principal).ConfigureAwait(false);
                     Assert.IsTrue(result.Result.Succeeded);
 
                     result = await userService.UpdateUser(
@@ -109,12 +109,12 @@ namespace CollAction.Tests.Integration.Service
                             IsSubscribedNewsletter = false,
                             Id = result.User.Id
                         },
-                        principal);
+                        principal).ConfigureAwait(false);
                     Assert.IsFalse(result.Result.Succeeded);
 
-                    var deleteResult = await userService.DeleteUser(user.Id, new ClaimsPrincipal());
+                    var deleteResult = await userService.DeleteUser(user.Id, new ClaimsPrincipal()).ConfigureAwait(false);
                     Assert.IsFalse(deleteResult.Succeeded);
-                    deleteResult = await userService.DeleteUser(user.Id, principal);
+                    deleteResult = await userService.DeleteUser(user.Id, principal).ConfigureAwait(false);
                     Assert.IsTrue(deleteResult.Succeeded);
                 });
 
@@ -128,9 +128,9 @@ namespace CollAction.Tests.Integration.Service
                     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                     var projectService = scope.ServiceProvider.GetRequiredService<IProjectService>();
 
-                    var currentProject = await context.Projects.Include(p => p.Owner).FirstOrDefaultAsync();
+                    var currentProject = await context.Projects.Include(p => p.Owner).FirstOrDefaultAsync().ConfigureAwait(false);
                     string testEmail = GetTestEmail();
-                    AddParticipantResult commitResult = await projectService.CommitToProject(testEmail, currentProject.Id, new ClaimsPrincipal(), CancellationToken.None);
+                    AddParticipantResult commitResult = await projectService.CommitToProject(testEmail, currentProject.Id, new ClaimsPrincipal(), CancellationToken.None).ConfigureAwait(false);
                     Assert.AreEqual(AddParticipantScenario.AnonymousCreatedAndAdded, commitResult.Scenario);
 
                     var finishRegistrationResult = await userService.FinishRegistration(
@@ -142,7 +142,7 @@ namespace CollAction.Tests.Integration.Service
                             IsSubscribedNewsletter = false,
                             Password = "Test_0_tesT"
                         },
-                        commitResult.PasswordResetToken);
+                        commitResult.PasswordResetToken).ConfigureAwait(false);
                     Assert.IsTrue(finishRegistrationResult.Result.Succeeded);
                     Assert.IsNotNull(finishRegistrationResult.User);
                 });

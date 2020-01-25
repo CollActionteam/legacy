@@ -24,7 +24,8 @@ namespace CollAction.GraphQl.Queries
                     using var scope = serviceScopeFactory.CreateScope();
                     return scope.ServiceProvider
                                 .GetRequiredService<IImageService>()
-                                .GetUrl(c.Source);
+                                .GetUrl(c.Source)
+                                .ToString();
                 });
         }
     }

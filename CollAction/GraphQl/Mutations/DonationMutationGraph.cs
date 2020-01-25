@@ -26,7 +26,8 @@ namespace CollAction.GraphQl.Mutations
                     bool recurring = c.GetArgument<bool>("recurring");
                     var provider = c.GetUserContext().ServiceProvider;
                     return await provider.GetRequiredService<IDonationService>()
-                                         .InitializeCreditCardCheckout(currency, amount, name, email, recurring, c.CancellationToken);
+                                         .InitializeCreditCardCheckout(currency, amount, name, email, recurring, c.CancellationToken)
+                                         .ConfigureAwait(false);
                 });
 
             FieldAsync<StringGraphType, string>(
@@ -44,7 +45,8 @@ namespace CollAction.GraphQl.Mutations
                     string email = c.GetArgument<string>("email");
                     var provider = c.GetUserContext().ServiceProvider;
                     await provider.GetRequiredService<IDonationService>()
-                                  .InitializeSepaDirect(sourceId, name, email, amount, c.CancellationToken);
+                                  .InitializeSepaDirect(sourceId, name, email, amount, c.CancellationToken)
+                                  .ConfigureAwait(false);
                     return sourceId;
                 });
 
@@ -61,7 +63,8 @@ namespace CollAction.GraphQl.Mutations
                     string email = c.GetArgument<string>("email");
                     var provider = c.GetUserContext().ServiceProvider;
                     await provider.GetRequiredService<IDonationService>()
-                                  .InitializeIdealCheckout(sourceId, name, email, c.CancellationToken);
+                                  .InitializeIdealCheckout(sourceId, name, email, c.CancellationToken)
+                                  .ConfigureAwait(false);
                     return sourceId;
                 });
 
@@ -75,7 +78,8 @@ namespace CollAction.GraphQl.Mutations
                     var context = c.GetUserContext();
                     await context.ServiceProvider
                                  .GetRequiredService<IDonationService>()
-                                 .CancelSubscription(subscriptionId, context.User, c.CancellationToken);
+                                 .CancelSubscription(subscriptionId, context.User, c.CancellationToken)
+                                 .ConfigureAwait(false);
                     return subscriptionId;
                 });
         }

@@ -23,7 +23,7 @@ namespace CollAction.GraphQl
         public static void AddGraphQl(this IServiceCollection services)
         {
             services.AddSingleton<IDependencyResolver>(provider => new FuncDependencyResolver(provider.GetRequiredService));
-            services.AddSingleton<ISchema, Schema>();
+            services.AddSingleton<ISchema, GraphQlSchema>();
 
             // Ensure queries are executed in serial instead of parallel
             services.AddSingleton<IDocumentExecuter, EfDocumentExecuter>();

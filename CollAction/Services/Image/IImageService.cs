@@ -12,7 +12,7 @@ namespace CollAction.Services.Image
 
         Task DeleteImage(ImageFile imageFile, CancellationToken token);
 
-        string GetUrl(ImageFile imageFile);
+        Uri GetUrl(ImageFile imageFile);
 
         void InitializeDanglingImageJob();
     }

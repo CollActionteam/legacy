@@ -14,7 +14,7 @@ namespace CollAction.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20180622012655_DataProtection")]
-    partial class DataProtection
+    partial class AddDataProtection
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

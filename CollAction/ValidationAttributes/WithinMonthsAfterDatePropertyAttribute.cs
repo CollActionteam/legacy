@@ -39,6 +39,7 @@ namespace CollAction.ValidationAttributes
             }
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "dataProperty is an argument of the attribute")]
         private DateTime GetReferencedDate(object instance)
         {
             PropertyInfo? propertyInfo = instance.GetType().GetProperty(dateProperty);

@@ -2,7 +2,7 @@
 
 namespace CollAction.Migrations
 {
-    public partial class CA_256_change_category_names : Migration
+    public partial class CA256ChangeCategoryNames : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

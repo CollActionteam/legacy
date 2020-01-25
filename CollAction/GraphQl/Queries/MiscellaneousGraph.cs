@@ -18,7 +18,8 @@ namespace CollAction.GraphQl.Queries
                     var externalSchemes =
                         await scope.ServiceProvider
                             .GetRequiredService<SignInManager<ApplicationUser>>()
-                            .GetExternalAuthenticationSchemesAsync();
+                            .GetExternalAuthenticationSchemesAsync()
+                            .ConfigureAwait(false);
                     return externalSchemes.Select(s => s.Name);
                 });
         }

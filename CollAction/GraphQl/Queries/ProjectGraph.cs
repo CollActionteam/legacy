@@ -35,7 +35,7 @@ namespace CollAction.GraphQl.Queries
             Field(x => x.Status);
             Field(x => x.Target);
             Field(x => x.NameNormalized);
-            Field(x => x.Url);
+            Field<StringGraphType>(nameof(Project.Url), resolve: p => p.Source.Url.ToString());
             Field<NonNullGraphType<BooleanGraphType>>(
                 "canSendProjectEmail",
                 resolve: c =>

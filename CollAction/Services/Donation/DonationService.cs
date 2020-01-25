@@ -97,7 +97,7 @@ namespace CollAction.Services.Donation
 
         public async Task<bool> HasIDealPaymentSucceeded(string sourceId, string clientSecret, CancellationToken token)
         {
-            Source source = await sourceService.GetAsync(sourceId, cancellationToken: token);
+            Source source = await sourceService.GetAsync(sourceId, cancellationToken: token).ConfigureAwait(false);
             return (source.Status == StatusChargeable || source.Status == StatusConsumed) && 
                    clientSecret == source.ClientSecret;
         }
@@ -109,7 +109,7 @@ namespace CollAction.Services.Donation
         {
             ValidateDetails(amount, name, email);
 
-            ApplicationUser user = await userManager.FindByEmailAsync(email);
+            ApplicationUser user = await userManager.FindByEmailAsync(email).ConfigureAwait(false);
 
             var sessionOptions = new SessionCreateOptions()
             {
@@ -131,7 +131,7 @@ namespace CollAction.Services.Donation
                     {
                         new SessionSubscriptionDataItemOptions()
                         {
-                            PlanId = (await CreateRecurringPlan(amount, currency, token)).Id,
+                            PlanId = (await CreateRecurringPlan(amount, currency, token).ConfigureAwait(false)).Id,
                             Quantity = 1
                         }
                     }
@@ -140,7 +140,7 @@ namespace CollAction.Services.Donation
             else
             {
                 logger.LogInformation("Initializing credit card checkout session");
-                Customer customer = await GetOrCreateCustomer(name, email, token);
+                Customer customer = await GetOrCreateCustomer(name, email, token).ConfigureAwait(false);
                 sessionOptions.CustomerId = customer.Id;
                 sessionOptions.LineItems = new List<SessionLineItemOptions>()
                 {
@@ -155,10 +155,10 @@ namespace CollAction.Services.Donation
                 };
             }
 
-            Session session = await sessionService.CreateAsync(sessionOptions, cancellationToken: token);
+            Session session = await sessionService.CreateAsync(sessionOptions, cancellationToken: token).ConfigureAwait(false);
 
             context.DonationEventLog.Add(new DonationEventLog(eventData: session.ToJson(), type: DonationEventType.Internal, userId: user?.Id));
-            await context.SaveChangesAsync(token);
+            await context.SaveChangesAsync(token).ConfigureAwait(false);
             logger.LogInformation("Done initializing credit card checkout session");
 
             return session.Id;
@@ -172,16 +172,16 @@ namespace CollAction.Services.Donation
             ValidateDetails(amount, name, email);
 
             logger.LogInformation("Initializing sepa direct");
-            ApplicationUser user = await userManager.FindByEmailAsync(email);
-            Customer customer = await GetOrCreateCustomer(name, email, token);
+            ApplicationUser user = await userManager.FindByEmailAsync(email).ConfigureAwait(false);
+            Customer customer = await GetOrCreateCustomer(name, email, token).ConfigureAwait(false);
             Source source = await sourceService.AttachAsync(
                 customer.Id,
                 new SourceAttachOptions()
                 {
                     Source = sourceId
                 },
-                cancellationToken: token);
-            Plan plan = await CreateRecurringPlan(amount, "eur", token);
+                cancellationToken: token).ConfigureAwait(false);
+            Plan plan = await CreateRecurringPlan(amount, "eur", token).ConfigureAwait(false);
             Subscription subscription = await subscriptionService.CreateAsync(
                 new SubscriptionCreateOptions()
                 {
@@ -197,10 +197,10 @@ namespace CollAction.Services.Donation
                         }
                     }
                 },
-                cancellationToken: token);
+                cancellationToken: token).ConfigureAwait(false);
 
             context.DonationEventLog.Add(new DonationEventLog(userId: user?.Id, type: DonationEventType.Internal, eventData: subscription.ToJson()));
-            await context.SaveChangesAsync(token);
+            await context.SaveChangesAsync(token).ConfigureAwait(false);
             logger.LogInformation("Done initializing sepa direct");
         }
 
@@ -213,18 +213,18 @@ namespace CollAction.Services.Donation
             logger.LogInformation("Initializing iDeal");
             ValidateDetails(name, email);
 
-            ApplicationUser user = await userManager.FindByEmailAsync(email);
-            Customer customer = await GetOrCreateCustomer(name, email, token);
+            ApplicationUser user = await userManager.FindByEmailAsync(email).ConfigureAwait(false);
+            Customer customer = await GetOrCreateCustomer(name, email, token).ConfigureAwait(false);
             Source source = await sourceService.AttachAsync(
                 customer.Id, 
                 new SourceAttachOptions()
                 {
                     Source = sourceId
                 },
-                cancellationToken: token);
+                cancellationToken: token).ConfigureAwait(false);
 
             context.DonationEventLog.Add(new DonationEventLog(userId: user?.Id, type: DonationEventType.Internal, eventData: source.ToJson()));
-            await context.SaveChangesAsync(token);
+            await context.SaveChangesAsync(token).ConfigureAwait(false);
             logger.LogInformation("Done initializing iDeal");
         }
 
@@ -256,7 +256,7 @@ namespace CollAction.Services.Donation
             Event stripeEvent = EventUtility.ConstructEvent(json, signature, stripeSignatures.StripePaymentEventWebhookSecret);
 
             context.DonationEventLog.Add(new DonationEventLog(type: DonationEventType.External, eventData: stripeEvent.ToJson()));
-            await context.SaveChangesAsync(token);
+            await context.SaveChangesAsync(token).ConfigureAwait(false);
 
             if (stripeEvent.Type == EventTypeChargeSucceeded)
             {
@@ -266,9 +266,9 @@ namespace CollAction.Services.Donation
                     {
                         CustomerId = charge.CustomerId
                     },
-                    cancellationToken: token);
-                Customer customer = await customerService.GetAsync(charge.CustomerId, cancellationToken: token);
-                await SendDonationThankYou(customer, subscriptions.Any());
+                    cancellationToken: token).ConfigureAwait(false);
+                Customer customer = await customerService.GetAsync(charge.CustomerId, cancellationToken: token).ConfigureAwait(false);
+                await SendDonationThankYou(customer, subscriptions.Any()).ConfigureAwait(false);
             }
         }
 
@@ -278,7 +278,7 @@ namespace CollAction.Services.Donation
         public async Task Charge(string sourceId)
         {
             logger.LogInformation("Processing chargeable");
-            Source source = await sourceService.GetAsync(sourceId);
+            Source source = await sourceService.GetAsync(sourceId).ConfigureAwait(false);
             if (source.Status == StatusChargeable)
             {
                 Charge charge;
@@ -291,7 +291,7 @@ namespace CollAction.Services.Donation
                         SourceId = sourceId,
                         CustomerId = source.Customer,
                         Description = "A donation to Stichting CollAction"
-                    });
+                    }).ConfigureAwait(false);
                 }
                 catch (StripeException e)
                 {
@@ -299,10 +299,10 @@ namespace CollAction.Services.Donation
                     throw;
                 }
 
-                Customer customer = await customerService.GetAsync(source.Customer);
-                ApplicationUser? user = customer != null ? await userManager.FindByEmailAsync(customer.Email) : null;
+                Customer customer = await customerService.GetAsync(source.Customer).ConfigureAwait(false);
+                ApplicationUser? user = customer != null ? await userManager.FindByEmailAsync(customer.Email).ConfigureAwait(false) : null;
                 context.DonationEventLog.Add(new DonationEventLog(userId: user?.Id, type: DonationEventType.Internal, eventData: charge.ToJson()));
-                await context.SaveChangesAsync();
+                await context.SaveChangesAsync().ConfigureAwait(false);
             }
             else
             {
@@ -318,7 +318,7 @@ namespace CollAction.Services.Donation
                 {
                     Email = userFor.Email
                 }, 
-                cancellationToken: token);
+                cancellationToken: token).ConfigureAwait(false);
 
             var subscriptions = await Task.WhenAll(
                 customers.Select(c =>
@@ -327,26 +327,26 @@ namespace CollAction.Services.Donation
                         {
                             CustomerId = c.Id
                         },
-                        cancellationToken: token)));
+                        cancellationToken: token))).ConfigureAwait(false);
 
             return subscriptions.SelectMany(s => s);
         }
 
         public async Task CancelSubscription(string subscriptionId, ClaimsPrincipal userFor, CancellationToken token)
         {
-            var user = await userManager.GetUserAsync(userFor);
-            Subscription subscription = await subscriptionService.GetAsync(subscriptionId, cancellationToken: token);
-            Customer customer = await customerService.GetAsync(subscription.CustomerId, cancellationToken: token);
+            var user = await userManager.GetUserAsync(userFor).ConfigureAwait(false);
+            Subscription subscription = await subscriptionService.GetAsync(subscriptionId, cancellationToken: token).ConfigureAwait(false);
+            Customer customer = await customerService.GetAsync(subscription.CustomerId, cancellationToken: token).ConfigureAwait(false);
 
             if (!customer.Email.Equals(user.Email, StringComparison.OrdinalIgnoreCase))
             {
                 throw new InvalidOperationException($"User {user.Email} doesn't match subscription e-mail {subscription.Customer.Email}");
             }
 
-            subscription = await subscriptionService.CancelAsync(subscriptionId, new SubscriptionCancelOptions(), cancellationToken: token);
+            subscription = await subscriptionService.CancelAsync(subscriptionId, new SubscriptionCancelOptions(), cancellationToken: token).ConfigureAwait(false);
 
             context.DonationEventLog.Add(new DonationEventLog(userId: user.Id, type: DonationEventType.Internal, eventData: subscription.ToJson()));
-            await context.SaveChangesAsync(token);
+            await context.SaveChangesAsync(token).ConfigureAwait(false);
         }
 
         private static void ValidateDetails(string name, string email)
@@ -359,7 +359,7 @@ namespace CollAction.Services.Donation
 
         private async Task<Plan> CreateRecurringPlan(int amount, string currency, CancellationToken token)
         {
-            Product product = await GetOrCreateRecurringDonationProduct(token);
+            Product product = await GetOrCreateRecurringDonationProduct(token).ConfigureAwait(false);
             return await planService.CreateAsync(
                 new PlanCreateOptions()
                 {
@@ -372,7 +372,7 @@ namespace CollAction.Services.Donation
                     UsageType = "licensed",
                     IntervalCount = 1
                 },
-                cancellationToken: token);
+                cancellationToken: token).ConfigureAwait(false);
         }
 
         private async Task<Product> GetOrCreateRecurringDonationProduct(CancellationToken token)
@@ -383,7 +383,7 @@ namespace CollAction.Services.Donation
                     Active = true,
                     Type = "service"
                 },
-                cancellationToken: token);
+                cancellationToken: token).ConfigureAwait(false);
             Product product = products.FirstOrDefault(p => p.Name == RecurringDonationProduct);
             if (product == null)
             {
@@ -395,7 +395,7 @@ namespace CollAction.Services.Donation
                         StatementDescriptor = "Donation CollAction",
                         Type = "service"
                     },
-                    cancellationToken: token);
+                    cancellationToken: token).ConfigureAwait(false);
             }
 
             return product;
@@ -403,7 +403,7 @@ namespace CollAction.Services.Donation
 
         private async Task<Customer> GetOrCreateCustomer(string name, string email, CancellationToken token)
         {
-            Customer customer = (await customerService.ListAsync(new CustomerListOptions() { Email = email, Limit = 1 }, requestOptions, token)).FirstOrDefault();
+            Customer customer = (await customerService.ListAsync(new CustomerListOptions() { Email = email, Limit = 1 }, requestOptions, token).ConfigureAwait(false)).FirstOrDefault();
             string? metadataName = null;
             customer?.Metadata?.TryGetValue(NameKey, out metadataName);
             var metadata = new Dictionary<string, string>() { { NameKey, name } };
@@ -415,7 +415,7 @@ namespace CollAction.Services.Donation
                         Email = email,
                         Metadata = metadata
                     },
-                    cancellationToken: token);
+                    cancellationToken: token).ConfigureAwait(false);
             }
             else if (!name.Equals(metadataName, StringComparison.Ordinal))
             {
@@ -425,7 +425,7 @@ namespace CollAction.Services.Donation
                     {
                         Metadata = metadata
                     },
-                    cancellationToken: token);
+                    cancellationToken: token).ConfigureAwait(false);
             }
 
             return customer;

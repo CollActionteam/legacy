@@ -53,9 +53,9 @@ namespace CollAction.Data
             var projectService = provider.GetRequiredService<IProjectService>();
 
             logger.LogInformation("migrating database");
-            await context.Database.MigrateAsync();
+            await context.Database.MigrateAsync().ConfigureAwait(false);
             logger.LogInformation("seeding database");
-            await Seed(seedOptions, userManager, roleManager, projectService);
+            await Seed(seedOptions, userManager, roleManager, projectService).ConfigureAwait(false);
             logger.LogInformation("done starting up");
         }
 
@@ -100,18 +100,18 @@ namespace CollAction.Data
 
         private static async Task Seed(SeedOptions seedOptions, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IProjectService projectService)
         {
-            await CreateAdminRoleAndUser(seedOptions, userManager, roleManager);
-            await SeedTestProjects(seedOptions, userManager, projectService);
+            await CreateAdminRoleAndUser(seedOptions, userManager, roleManager).ConfigureAwait(false);
+            await SeedTestProjects(seedOptions, userManager, projectService).ConfigureAwait(false);
         }
 
         private static async Task CreateAdminRoleAndUser(SeedOptions seedOptions, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             // Create admin role if not exists
-            IdentityRole adminRole = await roleManager.FindByNameAsync(AuthorizationConstants.AdminRole);
+            IdentityRole adminRole = await roleManager.FindByNameAsync(AuthorizationConstants.AdminRole).ConfigureAwait(false);
             if (adminRole == null)
             {
                 adminRole = new IdentityRole(AuthorizationConstants.AdminRole) { NormalizedName = AuthorizationConstants.AdminRole };
-                IdentityResult result = await roleManager.CreateAsync(adminRole);
+                IdentityResult result = await roleManager.CreateAsync(adminRole).ConfigureAwait(false);
                 if (!result.Succeeded)
                 {
                     throw new InvalidOperationException($"Error creating role.{Environment.NewLine}{string.Join(Environment.NewLine, result.Errors.Select(e => $"{e.Code}: {e.Description}"))}");
@@ -119,11 +119,11 @@ namespace CollAction.Data
             }
 
             // Create admin user if not exists
-            ApplicationUser admin = await userManager.FindByEmailAsync(seedOptions.AdminEmail);
+            ApplicationUser admin = await userManager.FindByEmailAsync(seedOptions.AdminEmail).ConfigureAwait(false);
             if (admin == null)
             {
                 admin = new ApplicationUser(userName: seedOptions.AdminEmail, email: seedOptions.AdminEmail, emailConfirmed: true, registrationDate: DateTime.UtcNow, firstName: null, lastName: null);
-                IdentityResult result = await userManager.CreateAsync(admin, seedOptions.AdminPassword);
+                IdentityResult result = await userManager.CreateAsync(admin, seedOptions.AdminPassword).ConfigureAwait(false);
                 if (!result.Succeeded)
                 {
                     throw new InvalidOperationException($"Error creating user.{Environment.NewLine}{string.Join(Environment.NewLine, result.Errors.Select(e => $"{e.Code}: {e.Description}"))}");
@@ -131,9 +131,9 @@ namespace CollAction.Data
             }
 
             // Assign admin role if not assigned
-            if (!(await userManager.IsInRoleAsync(admin, AuthorizationConstants.AdminRole)))
+            if (!(await userManager.IsInRoleAsync(admin, AuthorizationConstants.AdminRole).ConfigureAwait(false)))
             {
-                IdentityResult result = await userManager.AddToRoleAsync(admin, AuthorizationConstants.AdminRole);
+                IdentityResult result = await userManager.AddToRoleAsync(admin, AuthorizationConstants.AdminRole).ConfigureAwait(false);
                 if (!result.Succeeded)
                 {
                     throw new InvalidOperationException($"Error assigning admin role.{Environment.NewLine}{string.Join(Environment.NewLine, result.Errors.Select(e => $"{e.Code}: {e.Description}"))}");
@@ -143,10 +143,10 @@ namespace CollAction.Data
 
         private static async Task SeedTestProjects(SeedOptions seedOptions, UserManager<ApplicationUser> userManager, IProjectService projectService)
         {
-            if (seedOptions.SeedTestProjects && !(await projectService.SearchProjects(null, null).AnyAsync()))
+            if (seedOptions.SeedTestProjects && !(await projectService.SearchProjects(null, null).AnyAsync().ConfigureAwait(false)))
             {
-                ApplicationUser admin = await userManager.FindByEmailAsync(seedOptions.AdminEmail);
-                await projectService.SeedRandomProjects(admin, CancellationToken.None);
+                ApplicationUser admin = await userManager.FindByEmailAsync(seedOptions.AdminEmail).ConfigureAwait(false);
+                await projectService.SeedRandomProjects(admin, CancellationToken.None).ConfigureAwait(false);
             }
         }
     }

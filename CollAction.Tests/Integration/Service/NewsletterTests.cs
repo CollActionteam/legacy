@@ -21,7 +21,7 @@ namespace CollAction.Tests.Integration.Service
                 {
                     var newsletterService = scope.ServiceProvider.GetRequiredService<INewsletterService>();
                     string email = GetTestEmail();
-                    Assert.IsFalse(await newsletterService.IsSubscribedAsync(email));
+                    Assert.IsFalse(await newsletterService.IsSubscribedAsync(email).ConfigureAwait(false));
                 });
 
         [TestMethod]
@@ -34,14 +34,14 @@ namespace CollAction.Tests.Integration.Service
 
                        try
                        {
-                           await newsletterService.SetSubscription(email, true, true);
-                           Status status = await newsletterService.GetListMemberStatus(email);
+                           await newsletterService.SetSubscription(email, true, true).ConfigureAwait(false);
+                           Status status = await newsletterService.GetListMemberStatus(email).ConfigureAwait(false);
                            Assert.AreEqual(Status.Pending, status);
-                           Assert.IsTrue(await newsletterService.IsSubscribedAsync(email));
+                           Assert.IsTrue(await newsletterService.IsSubscribedAsync(email).ConfigureAwait(false));
                        }
                        finally
                        {
-                           await newsletterService.UnsubscribeMember(email);
+                           await newsletterService.UnsubscribeMember(email).ConfigureAwait(false);
                        }
                    });
 
@@ -55,14 +55,14 @@ namespace CollAction.Tests.Integration.Service
 
                        try
                        {
-                           await newsletterService.SetSubscription(email, true, false);
-                           Status status = await newsletterService.GetListMemberStatus(email);
+                           await newsletterService.SetSubscription(email, true, false).ConfigureAwait(false);
+                           Status status = await newsletterService.GetListMemberStatus(email).ConfigureAwait(false);
                            Assert.AreEqual(Status.Subscribed, status);
-                           Assert.IsTrue(await newsletterService.IsSubscribedAsync(email));
+                           Assert.IsTrue(await newsletterService.IsSubscribedAsync(email).ConfigureAwait(false));
                        }
                        finally
                        {
-                           await newsletterService.UnsubscribeMember(email);
+                           await newsletterService.UnsubscribeMember(email).ConfigureAwait(false);
                        }
                    });
 
@@ -76,16 +76,16 @@ namespace CollAction.Tests.Integration.Service
 
                        try
                        {
-                           await newsletterService.SetSubscription(email, true, true);
-                           Status status = await newsletterService.GetListMemberStatus(email);
+                           await newsletterService.SetSubscription(email, true, true).ConfigureAwait(false);
+                           Status status = await newsletterService.GetListMemberStatus(email).ConfigureAwait(false);
                            Assert.AreEqual(Status.Pending, status);
    
-                           await newsletterService.SetSubscription(email, false, false);
-                           Assert.IsFalse(await newsletterService.IsSubscribedAsync(email));
+                           await newsletterService.SetSubscription(email, false, false).ConfigureAwait(false);
+                           Assert.IsFalse(await newsletterService.IsSubscribedAsync(email).ConfigureAwait(false));
                        }
                        finally
                        {
-                           await newsletterService.SetSubscription(email, false, false);
+                           await newsletterService.SetSubscription(email, false, false).ConfigureAwait(false);
                        }
                    });
 
@@ -103,17 +103,17 @@ namespace CollAction.Tests.Integration.Service
                            {
                                for (bool requireEmail = true; requireEmail; requireEmail = !requireEmail)
                                {
-                                   await newsletterService.SetSubscription(email, true, requireEmail);
-                                   Assert.IsTrue(await newsletterService.IsSubscribedAsync(email));
+                                   await newsletterService.SetSubscription(email, true, requireEmail).ConfigureAwait(false);
+                                   Assert.IsTrue(await newsletterService.IsSubscribedAsync(email).ConfigureAwait(false));
 
-                                   await newsletterService.SetSubscription(email, false, requireEmail);
-                                   Assert.IsFalse(await newsletterService.IsSubscribedAsync(email));
+                                   await newsletterService.SetSubscription(email, false, requireEmail).ConfigureAwait(false);
+                                   Assert.IsFalse(await newsletterService.IsSubscribedAsync(email).ConfigureAwait(false));
                                }
                            }
                        }
                        finally
                        {
-                           await newsletterService.SetSubscription(email, false, true);
+                           await newsletterService.SetSubscription(email, false, true).ConfigureAwait(false);
                        }
                    });
 
@@ -125,8 +125,8 @@ namespace CollAction.Tests.Integration.Service
                        var newsletterService = scope.ServiceProvider.GetRequiredService<INewsletterService>();
                        string email = GetTestEmail();
 
-                       await newsletterService.SetSubscription(email, false, false);
-                       Assert.IsFalse(await newsletterService.IsSubscribedAsync(email));
+                       await newsletterService.SetSubscription(email, false, false).ConfigureAwait(false);
+                       Assert.IsFalse(await newsletterService.IsSubscribedAsync(email).ConfigureAwait(false));
                    });
 
         protected override void ConfigureReplacementServicesProvider(IServiceCollection collection)

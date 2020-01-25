@@ -51,10 +51,10 @@ namespace CollAction.Services.User
         {
             logger.LogInformation("Creating user from external login");
             ApplicationUser user = new ApplicationUser(email: email, registrationDate: DateTime.UtcNow);
-            IdentityResult result = await userManager.CreateAsync(user);
+            IdentityResult result = await userManager.CreateAsync(user).ConfigureAwait(false);
             if (result.Succeeded)
             {
-                result = await userManager.AddLoginAsync(user, info);
+                result = await userManager.AddLoginAsync(user, info).ConfigureAwait(false);
                 if (!result.Succeeded)
                 {
                     LogErrors("Adding external login", result);
@@ -82,7 +82,7 @@ namespace CollAction.Services.User
             }
 
             ApplicationUser user = new ApplicationUser(email: newUser.Email, firstName: newUser.FirstName, lastName: newUser.LastName, registrationDate: DateTime.UtcNow);
-            IdentityResult result = await userManager.CreateAsync(user, newUser.Password);
+            IdentityResult result = await userManager.CreateAsync(user, newUser.Password).ConfigureAwait(false);
             if (result.Succeeded)
             {
                 newsletterService.SetSubscriptionBackground(newUser.Email, newUser.IsSubscribedNewsletter);
@@ -97,7 +97,7 @@ namespace CollAction.Services.User
 
         public async Task<(IdentityResult Result, string? ResetCode)> ForgotPassword(string email)
         {
-            ApplicationUser user = await userManager.FindByEmailAsync(email);
+            ApplicationUser user = await userManager.FindByEmailAsync(email).ConfigureAwait(false);
             if (user == null)
             {
                 var result = IdentityResult.Failed(new IdentityError() { Code = "NOUSER", Description = "This user doesn't exist" });
@@ -106,15 +106,15 @@ namespace CollAction.Services.User
             }
 
             logger.LogInformation("Sending reset password for user");
-            string code = await userManager.GeneratePasswordResetTokenAsync(user);
+            string code = await userManager.GeneratePasswordResetTokenAsync(user).ConfigureAwait(false);
             string callbackUrl = $"{siteOptions.PublicAddress}/Manage/ResetPassword?code={WebUtility.UrlEncode(code)}&email={WebUtility.UrlEncode(email)}";
-            await emailSender.SendEmailTemplated(email, "Reset Password", "ResetPassword", callbackUrl);
+            await emailSender.SendEmailTemplated(email, "Reset Password", "ResetPassword", callbackUrl).ConfigureAwait(false);
             return (IdentityResult.Success, code);
         }
 
         public async Task<IdentityResult> ResetPassword(string email, string code, string password)
         {
-            ApplicationUser user = await userManager.FindByEmailAsync(email);
+            ApplicationUser user = await userManager.FindByEmailAsync(email).ConfigureAwait(false);
             if (user == null)
             {
                 var userResult = IdentityResult.Failed(new IdentityError() { Code = "NOUSER", Description = "This user doesn't exist" });
@@ -123,7 +123,7 @@ namespace CollAction.Services.User
             }
 
             logger.LogInformation("Resetting password for user");
-            var result = await userManager.ResetPasswordAsync(user, code, password);
+            var result = await userManager.ResetPasswordAsync(user, code, password).ConfigureAwait(false);
             if (result.Succeeded)
             {
                 logger.LogInformation("Reset password successfully for user");
@@ -138,14 +138,14 @@ namespace CollAction.Services.User
 
         public async Task<UserResult> FinishRegistration(NewUser newUser, string code)
         {
-            var user = await userManager.FindByEmailAsync(newUser.Email);
+            var user = await userManager.FindByEmailAsync(newUser.Email).ConfigureAwait(false);
             if (user == null)
             {
                 return new UserResult(IdentityResult.Failed(new IdentityError() { Code = "NOUSER", Description = "This user doesn't exist" }));
             }
 
             logger.LogInformation("Finishing user registration");
-            var result = await userManager.ResetPasswordAsync(user, code, newUser.Password);
+            var result = await userManager.ResetPasswordAsync(user, code, newUser.Password).ConfigureAwait(false);
             if (!result.Succeeded)
             {
                 LogErrors("Finishing registration, resetting password", result);
@@ -154,7 +154,7 @@ namespace CollAction.Services.User
 
             user.FirstName = newUser.FirstName;
             user.LastName = newUser.LastName;
-            result = await userManager.UpdateAsync(user);
+            result = await userManager.UpdateAsync(user).ConfigureAwait(false);
             
             if (result.Succeeded)
             {
@@ -177,13 +177,13 @@ namespace CollAction.Services.User
                 return new UserResult(IdentityResult.Failed(validationResults.ToArray()));
             }
 
-            var user = await userManager.FindByIdAsync(updatedUser.Id);
+            var user = await userManager.FindByIdAsync(updatedUser.Id).ConfigureAwait(false);
             if (user == null)
             {
                 return new UserResult(IdentityResult.Failed(new IdentityError() { Code = "NOUSER", Description = "This user doesn't exist" }));
             }
 
-            var loggedInUser = await userManager.GetUserAsync(loggedIn);
+            var loggedInUser = await userManager.GetUserAsync(loggedIn).ConfigureAwait(false);
 
             // need to be logged in as either admin, or the user being updated, only admins can update RepresentsNumberUsers
             if (!(loggedIn.IsInRole(AuthorizationConstants.AdminRole) || loggedInUser.Id == user.Id) || (!loggedIn.IsInRole(AuthorizationConstants.AdminRole) && updatedUser.RepresentsNumberUsers != user.RepresentsNumberParticipants)) 
@@ -196,7 +196,7 @@ namespace CollAction.Services.User
             user.FirstName = updatedUser.FirstName;
             user.LastName = updatedUser.LastName;
             user.RepresentsNumberParticipants = updatedUser.RepresentsNumberUsers;
-            var result = await userManager.UpdateAsync(user);
+            var result = await userManager.UpdateAsync(user).ConfigureAwait(false);
             if (!result.Succeeded)
             {
                 LogErrors("Error updating user", result);
@@ -206,7 +206,7 @@ namespace CollAction.Services.User
             {
                 try
                 {
-                    await newsletterService.SetSubscription(user.Email, updatedUser.IsSubscribedNewsletter);
+                    await newsletterService.SetSubscription(user.Email, updatedUser.IsSubscribedNewsletter).ConfigureAwait(false);
                 }
                 catch (Exception e)
                 {
@@ -222,14 +222,14 @@ namespace CollAction.Services.User
 
         public async Task<IdentityResult> ChangePassword(ClaimsPrincipal claimsUser, string currentPassword, string newPassword)
         {
-            var user = await userManager.GetUserAsync(claimsUser);
+            var user = await userManager.GetUserAsync(claimsUser).ConfigureAwait(false);
             if (user == null)
             {
                 return IdentityResult.Failed(new IdentityError() { Code = "NOUSER", Description = "This user doesn't exist" });
             }
 
             logger.LogInformation("Changing user password");
-            var result = await userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+            var result = await userManager.ChangePasswordAsync(user, currentPassword, newPassword).ConfigureAwait(false);
             if (result.Succeeded)
             {
                 logger.LogInformation("Successfully changed user password");
@@ -245,19 +245,19 @@ namespace CollAction.Services.User
         public async Task<int> IngestUserEvent(ClaimsPrincipal trackedUser, JObject eventData, bool canTrack, CancellationToken token)
         {
             logger.LogInformation("Ingesting user event information");
-            ApplicationUser user = await userManager.GetUserAsync(trackedUser);
+            ApplicationUser user = await userManager.GetUserAsync(trackedUser).ConfigureAwait(false);
             string? trackedUserId = canTrack ? user?.Id : null;
             var userEvent = new UserEvent(eventData.ToString(), DateTime.UtcNow, trackedUserId);
             context.UserEvents.Add(userEvent);
-            await context.SaveChangesAsync(token);
+            await context.SaveChangesAsync(token).ConfigureAwait(false);
             return userEvent.Id;
         }
 
         public async Task<IdentityResult> DeleteUser(string userId, ClaimsPrincipal loggedInUser)
         {
             logger.LogInformation("Deleting user permanently");
-            ApplicationUser user = await userManager.FindByIdAsync(userId);
-            ApplicationUser loggedIn = await userManager.GetUserAsync(loggedInUser);
+            ApplicationUser user = await userManager.FindByIdAsync(userId).ConfigureAwait(false);
+            ApplicationUser loggedIn = await userManager.GetUserAsync(loggedInUser).ConfigureAwait(false);
 
             if (!loggedInUser.IsInRole(AuthorizationConstants.AdminRole) && user.Id != loggedIn?.Id)
             {
@@ -271,15 +271,15 @@ namespace CollAction.Services.User
                              .Include(p => p.Project)
                              .Where(p => p.UserId == userId && p.Project.End < DateTime.UtcNow)
                              .Select(p => p.Project)
-                             .ToListAsync();
+                             .ToListAsync().ConfigureAwait(false);
 
             foreach (Project p in projects)
             {
                 p.AnonymousUserParticipants += 1;
             }
 
-            await context.SaveChangesAsync();
-            var result = await userManager.DeleteAsync(user);
+            await context.SaveChangesAsync().ConfigureAwait(false);
+            var result = await userManager.DeleteAsync(user).ConfigureAwait(false);
 
             if (result.Succeeded)
             {

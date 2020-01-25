@@ -11,6 +11,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;
@@ -30,8 +31,8 @@ namespace CollAction.Tests.Integration.Service
                        IProjectService projectService = scope.ServiceProvider.GetRequiredService<IProjectService>();
                        ApplicationDbContext context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                        SignInManager<ApplicationUser> signInManager = scope.ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>();
-                       var user = await context.Users.FirstAsync();
-                       var claimsPrincipal = await signInManager.CreateUserPrincipalAsync(user);
+                       var user = await context.Users.FirstAsync().ConfigureAwait(false);
+                       var claimsPrincipal = await signInManager.CreateUserPrincipalAsync(user).ConfigureAwait(false);
                        var r = new Random();
 
                        var newProject =
@@ -47,12 +48,12 @@ namespace CollAction.Tests.Integration.Service
                                CreatorComments = Guid.NewGuid().ToString(),
                                Proposal = Guid.NewGuid().ToString(),
                                Target = 40,
-                               Tags = new string[3] { r.Next(1000).ToString(), r.Next(1000).ToString(), r.Next(1000).ToString() }
+                               Tags = new string[3] { r.Next(1000).ToString(CultureInfo.InvariantCulture), r.Next(1000).ToString(CultureInfo.InvariantCulture), r.Next(1000).ToString(CultureInfo.InvariantCulture) }
                            };
-                       ProjectResult projectResult = await projectService.CreateProject(newProject, claimsPrincipal, CancellationToken.None);
+                       ProjectResult projectResult = await projectService.CreateProject(newProject, claimsPrincipal, CancellationToken.None).ConfigureAwait(false);
                        int? projectId = projectResult.Project?.Id;
                        Assert.IsNotNull(projectId);
-                       Project retrievedProject = await context.Projects.Include(p => p.Tags).ThenInclude(t => t.Tag).FirstOrDefaultAsync(p => p.Id == projectId);
+                       Project retrievedProject = await context.Projects.Include(p => p.Tags).ThenInclude(t => t.Tag).FirstOrDefaultAsync(p => p.Id == projectId).ConfigureAwait(false);
                        Assert.IsNotNull(retrievedProject);
 
                        Assert.IsTrue(projectResult.Succeeded);
@@ -71,10 +72,10 @@ namespace CollAction.Tests.Integration.Service
                        SignInManager<ApplicationUser> signInManager = scope.ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>();
                        UserManager<ApplicationUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-                       Project currentProject = await context.Projects.Include(p => p.Owner).FirstAsync(p => p.OwnerId != null);
-                       var admin = (await userManager.GetUsersInRoleAsync(AuthorizationConstants.AdminRole)).First();
-                       var adminClaims = await signInManager.CreateUserPrincipalAsync(admin);
-                       var owner = await signInManager.CreateUserPrincipalAsync(currentProject.Owner ?? throw new InvalidOperationException("Owner is null"));
+                       Project currentProject = await context.Projects.Include(p => p.Owner).FirstAsync(p => p.OwnerId != null).ConfigureAwait(false);
+                       var admin = (await userManager.GetUsersInRoleAsync(AuthorizationConstants.AdminRole).ConfigureAwait(false)).First();
+                       var adminClaims = await signInManager.CreateUserPrincipalAsync(admin).ConfigureAwait(false);
+                       var owner = await signInManager.CreateUserPrincipalAsync(currentProject.Owner ?? throw new InvalidOperationException("Owner is null")).ConfigureAwait(false);
                        var r = new Random();
                        var updatedProject =
                            new UpdatedProject()
@@ -91,18 +92,18 @@ namespace CollAction.Tests.Integration.Service
                                End = DateTime.Now.AddDays(30),
                                Start = DateTime.Now.AddDays(10),
                                Goal = Guid.NewGuid().ToString(),
-                               Tags = new string[3] { r.Next(1000).ToString(), r.Next(1000).ToString(), r.Next(1000).ToString() },
+                               Tags = new string[3] { r.Next(1000).ToString(CultureInfo.InvariantCulture), r.Next(1000).ToString(CultureInfo.InvariantCulture), r.Next(1000).ToString(CultureInfo.InvariantCulture) },
                                Id = currentProject.Id,
                                NumberProjectEmailsSend = 3,
                                Proposal = currentProject.Proposal,
                                Status = ProjectStatus.Running,
                                Target = 33
                            };
-                       var newProjectResult = await projectService.UpdateProject(updatedProject, adminClaims, CancellationToken.None);
+                       var newProjectResult = await projectService.UpdateProject(updatedProject, adminClaims, CancellationToken.None).ConfigureAwait(false);
                        Assert.IsTrue(newProjectResult.Succeeded);
                        int? newProjectId = newProjectResult.Project?.Id;
                        Assert.IsNotNull(newProjectId);
-                       var retrievedProject = await context.Projects.Include(p => p.Tags).ThenInclude(t => t.Tag).FirstOrDefaultAsync(p => p.Id == newProjectId);
+                       var retrievedProject = await context.Projects.Include(p => p.Tags).ThenInclude(t => t.Tag).FirstOrDefaultAsync(p => p.Id == newProjectId).ConfigureAwait(false);
 
                        Assert.AreEqual(updatedProject.Name, retrievedProject.Name);
                        Assert.IsTrue(Enumerable.SequenceEqual(updatedProject.Tags.OrderBy(t => t), retrievedProject.Tags.Select(t => t.Tag.Name).OrderBy(t => t)));
@@ -117,11 +118,11 @@ namespace CollAction.Tests.Integration.Service
                        ApplicationDbContext context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                        SignInManager<ApplicationUser> signInManager = scope.ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>();
                        UserManager<ApplicationUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-                       var user = await context.Users.FirstAsync();
-                       var currentProject = await context.Projects.Include(p => p.Owner).FirstOrDefaultAsync();
+                       var user = await context.Users.FirstAsync().ConfigureAwait(false);
+                       var currentProject = await context.Projects.Include(p => p.Owner).FirstOrDefaultAsync().ConfigureAwait(false);
 
                        string testEmail = GetTestEmail();
-                       var result = await projectService.CommitToProject(testEmail, currentProject.Id, new ClaimsPrincipal(), CancellationToken.None);
+                       var result = await projectService.CommitToProject(testEmail, currentProject.Id, new ClaimsPrincipal(), CancellationToken.None).ConfigureAwait(false);
                        Assert.AreEqual(AddParticipantScenario.AnonymousCreatedAndAdded, result.Scenario);
                    });
 
@@ -134,8 +135,8 @@ namespace CollAction.Tests.Integration.Service
                        ApplicationDbContext context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                        SignInManager<ApplicationUser> signInManager = scope.ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>();
                        UserManager<ApplicationUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-                       var user = await context.Users.FirstAsync();
-                       var claimsUser = await signInManager.CreateUserPrincipalAsync(user);
+                       var user = await context.Users.FirstAsync().ConfigureAwait(false);
+                       var claimsUser = await signInManager.CreateUserPrincipalAsync(user).ConfigureAwait(false);
                        var newProject =
                            new Project(
                                name: $"test{Guid.NewGuid()}",
@@ -153,16 +154,16 @@ namespace CollAction.Tests.Integration.Service
                                displayPriority: ProjectDisplayPriority.Medium,
                                ownerId: user.Id);
                        context.Projects.Add(newProject);
-                       await context.SaveChangesAsync();
+                       await context.SaveChangesAsync().ConfigureAwait(false);
 
                        Assert.AreEqual(0, newProject.NumberProjectEmailsSend);
                        Assert.IsTrue(projectService.CanSendProjectEmail(newProject));
-                       await projectService.SendProjectEmail(newProject.Id, "test", "test", claimsUser, CancellationToken.None);
+                       await projectService.SendProjectEmail(newProject.Id, "test", "test", claimsUser, CancellationToken.None).ConfigureAwait(false);
                        Assert.AreEqual(1, newProject.NumberProjectEmailsSend);
                        Assert.IsTrue(projectService.CanSendProjectEmail(newProject));
                        for (int i = 0; i < 3; i++)
                        {
-                           await projectService.SendProjectEmail(newProject.Id, "test", "test", claimsUser, CancellationToken.None);
+                           await projectService.SendProjectEmail(newProject.Id, "test", "test", claimsUser, CancellationToken.None).ConfigureAwait(false);
                        }
 
                        Assert.AreEqual(4, newProject.NumberProjectEmailsSend);
@@ -177,16 +178,16 @@ namespace CollAction.Tests.Integration.Service
                        IProjectService projectService = scope.ServiceProvider.GetRequiredService<IProjectService>();
                        Random r = new Random();
 
-                       Assert.IsTrue(await projectService.SearchProjects(null, null).AnyAsync());
+                       Assert.IsTrue(await projectService.SearchProjects(null, null).AnyAsync().ConfigureAwait(false));
 
                        Category searchCategory = (Category)r.Next(7);
-                       Assert.IsTrue(await projectService.SearchProjects(searchCategory, null).Include(p => p.Categories).AllAsync(p => p.Categories.Any(pc => pc.Category == searchCategory)));
-                       Assert.IsTrue(await projectService.SearchProjects(null, SearchProjectStatus.Closed).AllAsync(p => p.End < DateTime.UtcNow));
-                       Assert.IsTrue(await projectService.SearchProjects(searchCategory, SearchProjectStatus.Closed).AllAsync(p => p.End < DateTime.UtcNow));
-                       Assert.IsTrue(await projectService.SearchProjects(null, SearchProjectStatus.ComingSoon).AllAsync(p => p.Start > DateTime.UtcNow && p.Status == ProjectStatus.Running));
-                       Assert.IsTrue(await projectService.SearchProjects(searchCategory, SearchProjectStatus.ComingSoon).AllAsync(p => p.Start > DateTime.UtcNow && p.Status == ProjectStatus.Running));
-                       Assert.IsTrue(await projectService.SearchProjects(null, SearchProjectStatus.Open).AllAsync(p => p.Start <= DateTime.UtcNow && p.End >= DateTime.UtcNow && p.Status == ProjectStatus.Running));
-                       Assert.IsTrue(await projectService.SearchProjects(searchCategory, SearchProjectStatus.Open).AllAsync(p => p.Start <= DateTime.UtcNow && p.End >= DateTime.UtcNow && p.Status == ProjectStatus.Running));
+                       Assert.IsTrue(await projectService.SearchProjects(searchCategory, null).Include(p => p.Categories).AllAsync(p => p.Categories.Any(pc => pc.Category == searchCategory)).ConfigureAwait(false));
+                       Assert.IsTrue(await projectService.SearchProjects(null, SearchProjectStatus.Closed).AllAsync(p => p.End < DateTime.UtcNow).ConfigureAwait(false));
+                       Assert.IsTrue(await projectService.SearchProjects(searchCategory, SearchProjectStatus.Closed).AllAsync(p => p.End < DateTime.UtcNow).ConfigureAwait(false));
+                       Assert.IsTrue(await projectService.SearchProjects(null, SearchProjectStatus.ComingSoon).AllAsync(p => p.Start > DateTime.UtcNow && p.Status == ProjectStatus.Running).ConfigureAwait(false));
+                       Assert.IsTrue(await projectService.SearchProjects(searchCategory, SearchProjectStatus.ComingSoon).AllAsync(p => p.Start > DateTime.UtcNow && p.Status == ProjectStatus.Running).ConfigureAwait(false));
+                       Assert.IsTrue(await projectService.SearchProjects(null, SearchProjectStatus.Open).AllAsync(p => p.Start <= DateTime.UtcNow && p.End >= DateTime.UtcNow && p.Status == ProjectStatus.Running).ConfigureAwait(false));
+                       Assert.IsTrue(await projectService.SearchProjects(searchCategory, SearchProjectStatus.Open).AllAsync(p => p.Start <= DateTime.UtcNow && p.End >= DateTime.UtcNow && p.Status == ProjectStatus.Running).ConfigureAwait(false));
                    });
 
         protected override void ConfigureReplacementServicesProvider(IServiceCollection collection)

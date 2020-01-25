@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using CollAction.Services;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
+using System.Globalization;
 
 namespace CollAction.Tests.Integration.Endpoint
 {
@@ -37,8 +38,8 @@ namespace CollAction.Tests.Integration.Endpoint
                                }
                            }";
 
-                       HttpResponseMessage response = await PerformGraphQlQuery(testServer, QueryProjects, null);
-                       string content = await response.Content.ReadAsStringAsync();
+                       HttpResponseMessage response = await PerformGraphQlQuery(testServer, QueryProjects, null).ConfigureAwait(false);
+                       string content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                        Assert.IsTrue(response.IsSuccessStatusCode, content);
                        JsonDocument result = JsonDocument.Parse(content);
                        Assert.ThrowsException<KeyNotFoundException>(() => result.RootElement.GetProperty("errors"), content);
@@ -58,7 +59,7 @@ namespace CollAction.Tests.Integration.Endpoint
                            }";
                        dynamic variables = new { projectId };
                        response = await PerformGraphQlQuery(testServer, QueryProject, variables);
-                       content = await response.Content.ReadAsStringAsync();
+                       content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                        Assert.IsTrue(response.IsSuccessStatusCode, content);
                        result = JsonDocument.Parse(content);
                        Assert.ThrowsException<KeyNotFoundException>(() => result.RootElement.GetProperty("errors"), content);
@@ -84,8 +85,8 @@ namespace CollAction.Tests.Integration.Endpoint
                                }
                            }";
 
-                       HttpResponseMessage response = await PerformGraphQlQuery(testServer, QueryProjects, null);
-                       string content = await response.Content.ReadAsStringAsync();
+                       HttpResponseMessage response = await PerformGraphQlQuery(testServer, QueryProjects, null).ConfigureAwait(false);
+                       string content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                        Assert.IsTrue(response.IsSuccessStatusCode, content);
                        JsonDocument result = JsonDocument.Parse(content);
                        Assert.ThrowsException<KeyNotFoundException>(() => result.RootElement.GetProperty("errors"), content);
@@ -112,8 +113,8 @@ namespace CollAction.Tests.Integration.Endpoint
                                }
                            }";
 
-                       HttpResponseMessage response = await PerformGraphQlQuery(testServer, QueryProjects, null);
-                       string content = await response.Content.ReadAsStringAsync();
+                       HttpResponseMessage response = await PerformGraphQlQuery(testServer, QueryProjects, null).ConfigureAwait(false);
+                       string content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                        Assert.IsTrue(response.IsSuccessStatusCode, content);
                        JsonDocument result = JsonDocument.Parse(content);
                        Assert.IsNotNull(result.RootElement.GetProperty("errors"), content);
@@ -121,9 +122,9 @@ namespace CollAction.Tests.Integration.Endpoint
                        SeedOptions seedOptions = scope.ServiceProvider.GetRequiredService<IOptions<SeedOptions>>().Value;
                        using var httpClient = testServer.CreateClient();
                        // Retry call as admin
-                       httpClient.DefaultRequestHeaders.Add("Cookie", await GetAuthCookie(httpClient, seedOptions));
-                       response = await PerformGraphQlQuery(httpClient, QueryProjects, null);
-                       content = await response.Content.ReadAsStringAsync();
+                       httpClient.DefaultRequestHeaders.Add("Cookie", await GetAuthCookie(httpClient, seedOptions).ConfigureAwait(false));
+                       response = await PerformGraphQlQuery(httpClient, QueryProjects, null).ConfigureAwait(false);
+                       content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                        Assert.IsTrue(response.IsSuccessStatusCode, content);
                        result = JsonDocument.Parse(content);
                        Assert.ThrowsException<KeyNotFoundException>(() => result.RootElement.GetProperty("errors"), content);
@@ -146,8 +147,8 @@ namespace CollAction.Tests.Integration.Endpoint
                                            description: ""test"",
                                            goal: ""dd"",
                                            creatorComments: ""dd"",
-                                           start: ""{DateTime.UtcNow.AddDays(10).ToString("o")}"",
-                                           end: ""{DateTime.UtcNow.AddDays(20).ToString("o")}"",
+                                           start: ""{DateTime.UtcNow.AddDays(10).ToString("o", CultureInfo.InvariantCulture)}"",
+                                           end: ""{DateTime.UtcNow.AddDays(20).ToString("o", CultureInfo.InvariantCulture)}"",
                                            descriptionVideoLink: ""https://www.youtube.com/watch?v=a1"",
                                            tags:[""b"", ""a""]
                                        }}) {{
@@ -165,9 +166,9 @@ namespace CollAction.Tests.Integration.Endpoint
 
                        SeedOptions seedOptions = scope.ServiceProvider.GetRequiredService<IOptions<SeedOptions>>().Value;
                        using var httpClient = testServer.CreateClient();
-                       httpClient.DefaultRequestHeaders.Add("Cookie", await GetAuthCookie(httpClient, seedOptions));
-                       HttpResponseMessage response = await PerformGraphQlQuery(httpClient, createProject, null);
-                       string content = await response.Content.ReadAsStringAsync();
+                       httpClient.DefaultRequestHeaders.Add("Cookie", await GetAuthCookie(httpClient, seedOptions).ConfigureAwait(false));
+                       HttpResponseMessage response = await PerformGraphQlQuery(httpClient, createProject, null).ConfigureAwait(false);
+                       string content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                        JsonDocument result = JsonDocument.Parse(content);
                        Assert.IsTrue(response.IsSuccessStatusCode, content);
                        Assert.ThrowsException<KeyNotFoundException>(() => result.RootElement.GetProperty("errors"), content);

@@ -89,7 +89,7 @@ namespace CollAction.GraphQl.Mutations
                     string email = c.GetArgument<string>("email");
                     var provider = c.GetUserContext().ServiceProvider;
                     var userService = provider.GetRequiredService<IUserService>();
-                    return (await userService.ForgotPassword(email)).Result;
+                    return (await userService.ForgotPassword(email).ConfigureAwait(false)).Result;
                 });
 
             FieldAsync<IdentityResultGraph, IdentityResult>(

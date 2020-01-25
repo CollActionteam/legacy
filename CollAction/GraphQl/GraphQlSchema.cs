@@ -4,9 +4,9 @@ using GraphQL;
 
 namespace CollAction.GraphQl
 {
-    public sealed class Schema : GraphQL.Types.Schema
+    public sealed class GraphQlSchema : GraphQL.Types.Schema
     {
-        public Schema(IDependencyResolver resolver) : base(resolver)
+        public GraphQlSchema(IDependencyResolver resolver) : base(resolver)
         {
             Query = resolver.Resolve<QueryGraph>();
             Mutation = resolver.Resolve<MutationGraph>();

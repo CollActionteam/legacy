@@ -28,7 +28,7 @@ namespace CollAction.Services.Newsletter
         {
             try
             {
-                Status status = await GetListMemberStatus(email);
+                Status status = await GetListMemberStatus(email).ConfigureAwait(false);
                 return status == Status.Pending || status == Status.Subscribed;
             }
             catch (MailChimpNotFoundException)
@@ -57,9 +57,9 @@ namespace CollAction.Services.Newsletter
         {
             try
             {
-                Member member = await mailChimpManager.Members.GetAsync(newsletterListId, email);
+                Member member = await mailChimpManager.Members.GetAsync(newsletterListId, email).ConfigureAwait(false);
                 member.Status = Status.Subscribed;
-                await mailChimpManager.Members.AddOrUpdateAsync(newsletterListId, member);
+                await mailChimpManager.Members.AddOrUpdateAsync(newsletterListId, member).ConfigureAwait(false);
             }
             catch (MailChimpNotFoundException)
             {
@@ -73,7 +73,7 @@ namespace CollAction.Services.Newsletter
                             EmailAddress = email,
                             StatusIfNew = usePendingStatusIfNew ? Status.Pending : Status.Subscribed,
                             Status = Status.Subscribed
-                        });
+                        }).ConfigureAwait(false);
                 }
                 catch (MailChimpException e)
                 {
@@ -95,9 +95,9 @@ namespace CollAction.Services.Newsletter
         {
             try
             {
-                Member member = await mailChimpManager.Members.GetAsync(newsletterListId, email);
+                Member member = await mailChimpManager.Members.GetAsync(newsletterListId, email).ConfigureAwait(false);
                 member.Status = Status.Unsubscribed;
-                await mailChimpManager.Members.AddOrUpdateAsync(newsletterListId, member);
+                await mailChimpManager.Members.AddOrUpdateAsync(newsletterListId, member).ConfigureAwait(false);
             }
             catch (MailChimpNotFoundException e)
             {
@@ -109,6 +109,6 @@ namespace CollAction.Services.Newsletter
         }
 
         public async Task<Status> GetListMemberStatus(string email)
-            => (await mailChimpManager.Members.GetAsync(newsletterListId, email)).Status;
+            => (await mailChimpManager.Members.GetAsync(newsletterListId, email).ConfigureAwait(false)).Status;
     }
 }

@@ -19,7 +19,7 @@ namespace CollAction.GraphQl.Queries
                     string source = c.GetArgument<string>("source");
                     string clientSecret = c.GetArgument<string>("clientSecret");
                     using var scope = serviceScopeFactory.CreateScope();
-                    return await scope.ServiceProvider.GetRequiredService<IDonationService>().HasIDealPaymentSucceeded(source, clientSecret, c.CancellationToken);
+                    return await scope.ServiceProvider.GetRequiredService<IDonationService>().HasIDealPaymentSucceeded(source, clientSecret, c.CancellationToken).ConfigureAwait(false);
                 });
 
             Field<NonNullGraphType<StringGraphType>>(

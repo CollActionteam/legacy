@@ -10,6 +10,7 @@ using CollAction.Services;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CollAction.Tests.Integration
 {
@@ -19,8 +20,8 @@ namespace CollAction.Tests.Integration
         {
             using IWebHost host = GetHost(ConfigureReplacementServicesProvider).Build();
             using IServiceScope scope = host.Services.CreateScope();
-            await ApplicationDbContext.InitializeDatabase(scope);
-            await executeTests(scope);
+            await ApplicationDbContext.InitializeDatabase(scope).ConfigureAwait(false);
+            await executeTests(scope).ConfigureAwait(false);
         }
 
         public Task WithTestServer(Func<IServiceScope, TestServer, Task> executeTests)
@@ -28,7 +29,7 @@ namespace CollAction.Tests.Integration
                 async scope =>
                 {
                     using var testServer = new TestServer(GetHost(ConfigureReplacementServicesTestServer));
-                    await executeTests(scope, testServer);
+                    await executeTests(scope, testServer).ConfigureAwait(false);
                 });
 
         protected static async Task<string> GetAuthCookie(HttpClient httpClient, SeedOptions seedOptions)
@@ -40,8 +41,8 @@ namespace CollAction.Tests.Integration
                 { "Password", seedOptions.AdminPassword }
             };
             using var formContent = new FormUrlEncodedContent(loginContent);
-            HttpResponseMessage authResult = await httpClient.PostAsync(new Uri("/account/login", UriKind.Relative), formContent);
-            string authResultContent = await authResult.Content.ReadAsStringAsync();
+            HttpResponseMessage authResult = await httpClient.PostAsync(new Uri("/account/login", UriKind.Relative), formContent).ConfigureAwait(false);
+            string authResultContent = await authResult.Content.ReadAsStringAsync().ConfigureAwait(false);
             Assert.IsTrue(authResult.IsSuccessStatusCode, authResultContent);
             string cookie = authResult.Headers.Single(h => h.Key == "Set-Cookie").Value.Single().Split(";").First();
             Assert.IsTrue(authResult.IsSuccessStatusCode, authResultContent);

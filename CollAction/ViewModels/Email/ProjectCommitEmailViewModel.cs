@@ -1,12 +1,13 @@
 ﻿using CollAction.Models;
 using CollAction.Services.Projects.Models;
+using System;
 using System.Net;
 
 namespace CollAction.ViewModels.Email
 {
     public sealed class ProjectCommitEmailViewModel
     {
-        public ProjectCommitEmailViewModel(Project project, AddParticipantResult result, ApplicationUser? user, string publicAddress, string projectUrl)
+        public ProjectCommitEmailViewModel(Project project, AddParticipantResult result, ApplicationUser? user, Uri publicAddress, Uri projectUrl)
         {
             Project = project;
             Result = result;
@@ -21,15 +22,15 @@ namespace CollAction.ViewModels.Email
 
         public ApplicationUser? User { get; set; }
 
-        public string PublicAddress { get; set; }
+        public Uri PublicAddress { get; set; }
 
-        public string ProjectUrl { get; set; }
+        public Uri ProjectUrl { get; set; }
 
-        public string StartLink
-            => $"{PublicAddress}/Start";
+        public Uri StartLink
+            => new Uri($"{PublicAddress}/Start");
 
-        public string FinishRegistrationLink
-            => $"{PublicAddress}/Account/FinishRegistration?email={WebUtility.UrlEncode(Result.ParticipantEmail)}&code={WebUtility.UrlEncode(Result.PasswordResetToken)}";
+        public Uri FinishRegistrationLink
+            => new Uri($"{PublicAddress}/Account/FinishRegistration?email={WebUtility.UrlEncode(Result.ParticipantEmail)}&code={WebUtility.UrlEncode(Result.PasswordResetToken)}");
 
         public string FacebookLink
             => $"https://www.facebook.com/sharer/sharer.php?u={ProjectUrl}";

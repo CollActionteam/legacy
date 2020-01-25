@@ -2,7 +2,7 @@
 
 namespace CollAction.Migrations
 {
-    public partial class DataProtection : Migration
+    public partial class AddDataProtection : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

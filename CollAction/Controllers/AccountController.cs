@@ -41,7 +41,7 @@ namespace CollAction.Controllers
                 return Redirect($"{model.ErrorUrl}?error=validation&message={WebUtility.UrlEncode(ModelState.GetValidationString())}");
             }
 
-            SignInResult result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: true);
+            SignInResult result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: true).ConfigureAwait(false);
             if (result.Succeeded)
             {
                 logger.LogInformation("User logged in");
@@ -84,7 +84,7 @@ namespace CollAction.Controllers
         [Authorize]
         public async Task<IActionResult> LogOff()
         {
-            await signInManager.SignOutAsync();
+            await signInManager.SignOutAsync().ConfigureAwait(false);
             logger.LogInformation("User logged out.");
             return Redirect("/");
         }
@@ -117,7 +117,7 @@ namespace CollAction.Controllers
                 return Redirect($"{model.ErrorUrl}?error={WebUtility.UrlEncode(error)}");
             }
 
-            ExternalLoginInfo info = await signInManager.GetExternalLoginInfoAsync();
+            ExternalLoginInfo info = await signInManager.GetExternalLoginInfoAsync().ConfigureAwait(false);
             if (info == null)
             {
                 string error = $"Error from external login: unable to retrieve user data";
@@ -126,7 +126,7 @@ namespace CollAction.Controllers
             }
 
             // Sign in the user with this external login provider if the user already has a login.
-            SignInResult result = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false);
+            SignInResult result = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false).ConfigureAwait(false);
             if (result.Succeeded)
             {
                 logger.LogInformation("User logged in with {0} provider.", info.LoginProvider);
@@ -140,7 +140,7 @@ namespace CollAction.Controllers
 
             // If the user does not have an account, create one
             string email = info.Principal.FindFirstValue(ClaimTypes.Email);
-            UserResult newUserResult = await userService.CreateUser(email, info);
+            UserResult newUserResult = await userService.CreateUser(email, info).ConfigureAwait(false);
             if (newUserResult.Result.Succeeded)
             {
                 return Redirect(model.ReturnUrl);
