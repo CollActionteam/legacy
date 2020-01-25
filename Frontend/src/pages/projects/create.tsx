@@ -14,7 +14,7 @@ import UploadDescriptiveImage from "./upload-descriptive-image";
 
 import styles from "./create.module.scss";
 import gql from "graphql-tag";
-import { useQuery, useMutation } from "react-apollo";
+import { useQuery, useMutation, ExecutionResult } from "react-apollo";
 import Loader from "../../components/Loader";
 import Utils from "../../utils";
 
@@ -39,7 +39,7 @@ const GET_CATEGORIES = gql`
   }
 `;
 
-export default ({ data }) => {
+export default () => {
   const minStartDate = new Date();
   const maxStartDate = new Date(minStartDate);
   maxStartDate.setMonth(new Date().getMonth() + 12);
@@ -73,7 +73,7 @@ export default ({ data }) => {
   const { data: categoryResponse, loading } = useQuery(GET_CATEGORIES);
 
   const [createProject] = useMutation(gql`
-    mutation Create($project: NewProjectInputGraph!) {
+    mutation Create($project: NewProjectInputGraph) {
       project {
         createProject(project: $project) {
           succeeded
@@ -81,15 +81,13 @@ export default ({ data }) => {
             errorMessage
             memberNames
           }
-          project {
-            id
-          }
         }
       }
     }
   `);
 
-  const commit = async form => {
+  const commit = async (form, setStatus) => {
+    setStatus(null);
     let bannerId;
     if (form.banner) {
       bannerId = await uploadImage(form.banner, form.projectName);
@@ -101,7 +99,7 @@ export default ({ data }) => {
     }
 
     try {
-      const response = await createProject({
+      const response = (await createProject({
         variables: {
           project: {
             name: form.projectName,
@@ -119,11 +117,20 @@ export default ({ data }) => {
             descriptionVideoLink: form.youtube || null,
           },
         },
-      });
+      })) as ExecutionResult;
+
+      if (!response || !response.data) {
+        throw new Error("No response from graphql endpoint");
+      }
+
+      if (!response.data.project.createProject.succeeded) {
+        setStatus(response.data.project.createProject.errors);
+        return;
+      }
 
       navigate("projects/thank-you-create");
     } catch (error) {
-      // TODO: error handling
+      // TODO: handle errors
       console.error("Could not create project", error);
     }
   };
@@ -138,6 +145,22 @@ export default ({ data }) => {
       body,
       credentials: "include",
     }).then(response => response.json());
+  };
+
+  const renderFormStatusErrors = (status: any) => {
+    if (!status) {
+      return;
+    }
+
+    return (
+      <ul>
+        {status
+          .filter(error => error !== undefined)
+          .map((error, idx) => (
+            <li key={idx}>{error.errorMessage}</li>
+          ))}
+      </ul>
+    );
   };
 
   return (
@@ -201,9 +224,8 @@ export default ({ data }) => {
                 .matches(/^(http|https):\/\/www.youtube.com\/watch\?v=((?:\w|-){11}?)$/, "Only YouTube links of the form http://www.youtube.com/watch?v= are accepted.")
               // tslint:enable: prettier
           })}
-          onSubmit={async (values, { setSubmitting }) => {
-            await commit(values);
-            setSubmitting(false);
+          onSubmit={async (values, { setStatus }) => {
+            await commit(values, setStatus);
           }}
         >
           {props => (
@@ -353,6 +375,9 @@ export default ({ data }) => {
                           Submit
                         </Button>
                       )}
+                      <div className={styles.submitErrors}>
+                        {renderFormStatusErrors(props.status)}
+                      </div>
                     </Section>
                   </Grid>
                 </Grid>

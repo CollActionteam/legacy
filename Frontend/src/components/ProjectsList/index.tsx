@@ -12,23 +12,24 @@ interface IProjectListProps {
 }
 
 export default ({
-  category = undefined,
+  category,
   status = ProjectStatusFilter.Active,
 }: IProjectListProps) => {
   const query = useQuery(
-                    FIND_PROJECTS, 
-                    category ? 
-                      {
-                        variables: {
-                          category: category,
-                          status: status
-                        },
-                      } : 
-                      {
-                        variables: {
-                          status: status
-                        }
-                      })
+    FIND_PROJECTS,
+    category
+      ? {
+          variables: {
+            category: category,
+            status: status,
+          },
+        }
+      : {
+          variables: {
+            status: status,
+          },
+        }
+  );
 
   const { data, loading, error } = query;
 
