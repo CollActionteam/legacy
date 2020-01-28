@@ -71,6 +71,7 @@ namespace CollAction
             {
                 o.Cookie.HttpOnly = false;
                 o.Cookie.SameSite = SameSiteMode.None;
+                o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             });
 
             var authenticationBuilder = services.AddAuthentication();
