@@ -1,0 +1,10 @@
+.category {
+  display: inline-block;
+  margin-top: var(--spacing);
+  padding: var(--spacing-xs);
+  background-color: var(--c-grey);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  margin-right: 5px;
+}

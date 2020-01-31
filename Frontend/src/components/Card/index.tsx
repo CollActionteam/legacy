@@ -3,7 +3,7 @@ import styles from "./style.module.scss";
 import { IProject } from "../../api/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ProgressRing from "../ProgressRing";
-import Utils from "../../utils";
+import CategoryTags from "../CategoryTags";
 
 export default ({ project }: { project: IProject }) => {
   return (
@@ -51,11 +51,7 @@ export default ({ project }: { project: IProject }) => {
             </div>
           </div>
         </div>
-        {project.categories.map(c => (
-          <div key={c.category} className={styles.category}>
-            {Utils.formatCategory(c.category)}
-          </div>
-        ))}
+        <CategoryTags categories={project.categories}></CategoryTags>
       </div>
     </a>
   );
