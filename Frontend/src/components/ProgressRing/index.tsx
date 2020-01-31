@@ -1,7 +1,12 @@
 import React from "react";
 import styles from "./style.module.scss";
 
-export default ({ progress = 0, radius = 30, stroke = 4 }) => {
+export default ({
+  progress = 0,
+  radius = 30,
+  stroke = 4,
+  fontSize = "var(--font-size-sm)",
+}) => {
   const normalizedRadius = radius - stroke * 2;
   const circumference = normalizedRadius * 2 * Math.PI;
   const chompedProgress = progress > 100 ? 100 : progress;
@@ -27,13 +32,7 @@ export default ({ progress = 0, radius = 30, stroke = 4 }) => {
         cx={radius}
         cy={radius}
       />
-      <text
-        x="50%"
-        y="50%"
-        textAnchor="middle"
-        dy=".2rem"
-        fontSize="var(--font-size-sm)"
-      >
+      <text x="50%" y="50%" textAnchor="middle" dy=".2rem" fontSize={fontSize}>
         {progress}%
       </text>
     </svg>
