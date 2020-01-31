@@ -7,7 +7,7 @@ require("dotenv").config({
 })
 
 exports.createPages = async ({ graphql, actions }) => {
-  const { createPage, createRedirect } = actions;
+  const { createPage } = actions;
 
   // Project details page
   createPage({
