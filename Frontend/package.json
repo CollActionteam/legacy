@@ -1,11 +1,10 @@
 {
   "name": "collaction-frontend",
-  "version": "0.1.0",
   "description": "CollAction Frontend Application",
   "private": true,
   "author": "CollAction",
   "bugs": {
-    "url": "https://github.com/gatsbyjs/gatsby/issues"
+    "url": "https://github.com/collactionteam/collaction/issues"
   },
   "dependencies": {
     "@apollo/react-hooks": "^3.0.0",
@@ -90,15 +89,15 @@
     "tslint-react": "^4.1.0",
     "typescript": "^3.6.3"
   },
-  "homepage": "https://github.com/gatsbyjs/gatsby-starter-blog#readme",
+  "homepage": "https://collaction.org",
   "keywords": [
-    "gatsby"
+    "collaction"
   ],
-  "license": "MIT",
+  "license": "AGPL-3",
   "main": "n/a",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gatsbyjs/gatsby-starter-blog.git"
+    "url": "git+https://github.com/collactionteam/collaction.git"
   },
   "scripts": {
     "build": "gatsby build",
