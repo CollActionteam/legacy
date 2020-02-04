@@ -14,7 +14,7 @@ namespace CollAction.GraphQl.Queries
             Field(x => x.EventData);
             Field(x => x.EventLoggedAt);
             Field(x => x.UserId, true);
-            AddNavigationField(nameof(UserEvent.User), c => c.Source.User);
+            AddNavigationField(nameof(UserEvent.User), c => c.Source.User, typeof(ApplicationUserGraph));
         }
     }
 }

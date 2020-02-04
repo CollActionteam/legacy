@@ -40,11 +40,13 @@ namespace CollAction.GraphQl.Queries
 
             AddQueryField(
                 nameof(ApplicationDbContext.Users),
-                c => c.DbContext.Users).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
+                c => c.DbContext.Users,
+                typeof(ApplicationUserGraph)).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
 
             AddSingleField(
                 name: "user",
-                resolve: c => c.DbContext.Users).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
+                resolve: c => c.DbContext.Users,
+                graphType: typeof(ApplicationUserGraph)).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
 
             AddSingleField(
                 name: "currentUser",
@@ -60,7 +62,8 @@ namespace CollAction.GraphQl.Queries
                     {
                         return userContext.Context.Users.Where(u => u.Id == null);
                     }
-                });
+                },
+                graphType: typeof(ApplicationUserGraph));
 
             Field<DonationGraph>(
                 "donation",

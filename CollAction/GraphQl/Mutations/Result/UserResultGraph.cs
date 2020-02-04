@@ -1,4 +1,6 @@
-﻿using CollAction.Services.User.Models;
+﻿using CollAction.GraphQl.Queries;
+using CollAction.Models;
+using CollAction.Services.User.Models;
 using GraphQL.Types;
 
 namespace CollAction.GraphQl.Mutations
@@ -7,7 +9,7 @@ namespace CollAction.GraphQl.Mutations
     {
         public UserResultGraph()
         {
-            Field(x => x.User, true);
+            Field<ApplicationUserGraph, ApplicationUser?>(nameof(UserResult.User)).Resolve(c => c.Source.User);
             Field(x => x.Result);
         }
     }

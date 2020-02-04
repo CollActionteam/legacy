@@ -14,7 +14,7 @@ namespace CollAction.GraphQl.Queries
             Field(x => x.UserId, true);
             Field(x => x.EventData);
 
-            AddNavigationField(nameof(DonationEventLog.User), c => c.Source.User).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
+            AddNavigationField(nameof(DonationEventLog.User), c => c.Source.User, typeof(ApplicationUserGraph)).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
         }
     }
 }

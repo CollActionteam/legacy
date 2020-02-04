@@ -90,7 +90,8 @@ namespace CollAction.GraphQl.Queries
             AddNavigationField(nameof(Project.DescriptiveImage), c => c.Source.DescriptiveImage);
             AddNavigationField(nameof(Project.BannerImage), c => c.Source.BannerImage);
             AddNavigationField(nameof(Project.ParticipantCounts), c => c.Source.ParticipantCounts);
-            AddNavigationField(nameof(Project.Owner), c => c.Source.Owner).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
+            AddNavigationField("RestrictedOwner", c => c.Source.Owner, typeof(RestrictedApplicationUserGraph));
+            AddNavigationField(nameof(Project.Owner), c => c.Source.Owner, typeof(ApplicationUserGraph)).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
             AddNavigationListField(nameof(Project.Categories), c => c.Source.Categories);
             AddNavigationListField(nameof(Project.Participants), c => c.Source.Participants).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
             AddNavigationListField(nameof(Project.Tags), c => c.Source.Tags);
