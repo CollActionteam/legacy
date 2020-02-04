@@ -19,6 +19,10 @@ using CollAction.Services.HtmlValidator;
 using CollAction.GraphQl.Mutations.Input;
 using Hangfire;
 using CollAction.Helpers;
+using Microsoft.AspNetCore.Http;
+using CollAction.Services.Image;
+using System.IO;
+using System.Net.Http;
 
 namespace CollAction.Services.Projects
 {
@@ -33,6 +37,7 @@ namespace CollAction.Services.Projects
         private readonly IHtmlInputValidator htmlInputValidator;
         private readonly IServiceProvider serviceProvider;
         private readonly IBackgroundJobClient jobClient;
+        private readonly IImageService imageService;
 
         public ProjectService(
             UserManager<ApplicationUser> userManager,
@@ -43,7 +48,8 @@ namespace CollAction.Services.Projects
             IOptions<SiteOptions> siteOptions,
             IHtmlInputValidator htmlInputValidator,
             IServiceProvider serviceProvider,
-            IBackgroundJobClient jobClient)
+            IBackgroundJobClient jobClient,
+            IImageService imageService)
         {
             this.userManager = userManager;
             this.context = context;
@@ -54,6 +60,7 @@ namespace CollAction.Services.Projects
             this.htmlInputValidator = htmlInputValidator;
             this.serviceProvider = serviceProvider;
             this.jobClient = jobClient;
+            this.imageService = imageService;
         }
 
         public async Task<ProjectResult> CreateProject(NewProject newProject, ClaimsPrincipal user, CancellationToken token)
@@ -436,7 +443,7 @@ namespace CollAction.Services.Projects
         {
             Random r = new Random();
 
-            var videoLinks = new[]
+            string?[] videoLinks = new[]
             {
                 "https://www.youtube.com/watch?v=aLzM_L5fjCQ",
                 "https://www.youtube.com/watch?v=Zvugem-tKyI",
@@ -445,48 +452,91 @@ namespace CollAction.Services.Projects
                 null
             };
 
-            var tags = Enumerable.Range(0, r.Next(100))
-                                 .Select(i => new Tag(Faker.Internet.DomainWord()))
-                                 .Distinct(new LambdaEqualityComparer<Tag, string>(t => t?.Name))
-                                 .ToList();
+            string?[] bannerImagePaths = new[]
+            {
+                "https://collaction-production.s3.eu-central-1.amazonaws.com/57136ed4-b7f6-4dd2-a822-9341e2e60d1e.png",
+                "https://collaction-production.s3.eu-central-1.amazonaws.com/765bc57b-748e-4bb8-a27e-08db6b99ea3e.png",
+                "https://collaction-production.s3.eu-central-1.amazonaws.com/e06bbc2d-02f7-4a9b-a744-6923d5b21f51.png",
+                null,
+            };
+
+            string?[] descriptiveImagePaths = new[]
+            {
+                "https://collaction-production.s3.eu-central-1.amazonaws.com/107104bc-deeb-4f48-b3a5-f25585bebf89.png",
+                "https://collaction-production.s3.eu-central-1.amazonaws.com/365f2dc9-1784-45ea-9cc7-d5f0ef1a480c.png",
+                "https://collaction-production.s3.eu-central-1.amazonaws.com/6e6c12b1-eaae-4811-aa1c-c169d10f1a59.png",
+                null,
+            };
+
+            List<Tag> tags = Enumerable.Range(0, r.Next(60))
+                                       .Select(i => new Tag(Faker.Internet.DomainWord()))
+                                       .Distinct(new LambdaEqualityComparer<Tag, string>(t => t?.Name))
+                                       .ToList();
             context.Tags.AddRange(tags);
             await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
-            context.Projects.AddRange(
-                Enumerable.Range(0, r.Next(20, 200))
-                          .Select(i =>
-                          {
-                              DateTime start = DateTime.Now.Date.AddDays(r.Next(-20, 20));
-                              List<ProjectTag> projectTags = 
-                                  Enumerable.Range(0, r.Next(10))
-                                            .Select(i => r.Next(tags.Count))
-                                            .Distinct()
-                                            .Select(i => new ProjectTag(tags.ElementAt(i).Id))
-                                            .ToList();
-                              List<ProjectCategory> categories =
-                                  new[] { r.Next(7), r.Next(7) }.Distinct()
-                                                                .Select(i => new ProjectCategory((Category)i))
-                                                                .ToList();
+            var projectNames =
+                Enumerable.Range(0, r.Next(20, 50))
+                          .Select(i => Faker.Company.Name())
+                          .Distinct();
 
-                              return new Project(
-                                  name: Faker.Company.Name(),
-                                  description: $"<p>{string.Join("</p><p>", Faker.Lorem.Paragraphs(r.Next(3) + 1))}</p>",
-                                  start: start,
-                                  end: start.AddDays(r.Next(10, 40)).AddHours(23).AddMinutes(59).AddSeconds(59),
-                                  categories: categories,
-                                  tags: projectTags,
-                                  creatorComments: r.Next(4) == 0 ? null : $"<p>{string.Join("</p><p>", Faker.Lorem.Paragraphs(r.Next(3) + 1))}</p>",
-                                  displayPriority: (ProjectDisplayPriority)r.Next(0, 2),
-                                  goal: Faker.Company.CatchPhrase(),
-                                  ownerId: users.ElementAt(r.Next(users.Count())).Id,
-                                  proposal: Faker.Company.BS(),
-                                  status: (ProjectStatus)r.Next(0, 3),
-                                  target: r.Next(1, 10000),
-                                  anonymousUserParticipants: r.Next(1, 10000),
-                                  descriptionVideoLink: videoLinks.ElementAt(r.Next(videoLinks.Length)));
-                          }).Distinct(new LambdaEqualityComparer<Project, string>(p => p?.Name)));
+            foreach (string projectName in projectNames)
+            {
+                DateTime start = DateTime.Now.Date.AddDays(r.Next(-20, 20));
+
+                List<ProjectTag> projectTags =
+                    Enumerable.Range(0, r.Next(5))
+                              .Select(i => r.Next(tags.Count))
+                              .Distinct()
+                              .Select(i => new ProjectTag(tags.ElementAt(i).Id))
+                              .ToList();
+
+                List<ProjectCategory> categories =
+                    new[] { r.Next(7), r.Next(7) }.Distinct()
+                                                  .Select(i => new ProjectCategory((Category)i))
+                                                  .ToList();
+
+                string? descriptiveImageUrl = descriptiveImagePaths[r.Next(descriptiveImagePaths.Length)];
+                ImageFile? descriptiveImage = descriptiveImageUrl == null
+                                                  ? null
+                                                  : await imageService.UploadImage(await DownloadFileToFormFile(new Uri(descriptiveImageUrl), cancellationToken).ConfigureAwait(false), Faker.Company.BS(), cancellationToken).ConfigureAwait(false);
+
+                string? bannerImageUrl = bannerImagePaths[r.Next(bannerImagePaths.Length)];
+                ImageFile? bannerImage = bannerImageUrl == null 
+                                             ? null
+                                             : await imageService.UploadImage(await DownloadFileToFormFile(new Uri(bannerImageUrl), cancellationToken).ConfigureAwait(false), Faker.Company.BS(), cancellationToken).ConfigureAwait(false);
+
+                context.Projects.Add(
+                    new Project(
+                        name: projectName,
+                        description: $"<p>{string.Join("</p><p>", Faker.Lorem.Paragraphs(r.Next(3) + 1))}</p>",
+                        start: start,
+                        end: start.AddDays(r.Next(10, 40)).AddHours(23).AddMinutes(59).AddSeconds(59),
+                        categories: categories,
+                        tags: projectTags,
+                        bannerImageFileId: bannerImage?.Id,
+                        descriptiveImageFileId: descriptiveImage?.Id,
+                        creatorComments: r.Next(4) == 0 ? null : $"<p>{string.Join("</p><p>", Faker.Lorem.Paragraphs(r.Next(3) + 1))}</p>",
+                        displayPriority: (ProjectDisplayPriority)r.Next(0, 2),
+                        goal: Faker.Company.CatchPhrase(),
+                        ownerId: users.ElementAt(r.Next(users.Count())).Id,
+                        proposal: Faker.Company.BS(),
+                        status: (ProjectStatus)r.Next(0, 3),
+                        target: r.Next(1, 10000),
+                        anonymousUserParticipants: r.Next(1, 8000),
+                        descriptionVideoLink: videoLinks.ElementAt(r.Next(videoLinks.Length))));
+            }
+            
             await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             await RefreshParticipantCountMaterializedView(cancellationToken).ConfigureAwait(false);
+        }
+
+        private async Task<IFormFile> DownloadFileToFormFile(Uri url, CancellationToken cancellationToken)
+        {
+            using var client = new HttpClient();
+            using var response = await client.GetAsync(url, cancellationToken).ConfigureAwait(false);
+            byte[] imageBytes = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+            return new FormFile(new MemoryStream(imageBytes), 0, imageBytes.Length, url.LocalPath, url.LocalPath);
         }
 
         private async Task<AddParticipantResult> AddAnonymousParticipant(Project project, string email, CancellationToken token)
