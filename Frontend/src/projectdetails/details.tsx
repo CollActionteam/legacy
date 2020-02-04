@@ -51,7 +51,7 @@ const ProjectDetailsPage = ({ projectId }) => {
   };
 
   const banner = project.bannerImage
-    ? project.bannerImage.filepath
+    ? project.bannerImage.url
     : `/assets/default_banners/${project.categories[0].category}.jpg`;
 
   const renderStats = () => {
@@ -65,7 +65,7 @@ const ProjectDetailsPage = ({ projectId }) => {
             <span>{Math.round(project.remainingTime / 3600 / 24)} days</span>
           </div>
           <div className={styles.join}>
-            <Button onClick={join}>Join crowsaction</Button>
+            <Button onClick={join}>Join crowdaction</Button>
           </div>
           <div className={styles.deadline}>
             <span>
@@ -134,19 +134,31 @@ const ProjectDetailsPage = ({ projectId }) => {
             {project.descriptiveImage && (
               <div>
                 <figure className={styles.image}>
-                  <img src={project.descriptiveImage.filepath}></img>
+                  <img src={project.descriptiveImage.url}></img>
                   <p>{project.descriptiveImage.description}</p>
                 </figure>
               </div>
             )}
             <div>
+              <h3 className={styles.header}>Other comments</h3>
               <p dangerouslySetInnerHTML={comments}></p>
             </div>
+
+            {project.descriptionVideoLink && (
+              <div className={styles.video}>
+                <iframe
+                  title="Collective actions"
+                  src={project.descriptionVideoLink}
+                  frameBorder="0"
+                  allowFullScreen
+                ></iframe>
+              </div>
+            )}
           </Grid>
         </Grid>
       </Section>
 
-      {/* {JSON.stringify(data)} */}
+      {JSON.stringify(data)}
     </Layout>
   );
 };
@@ -165,11 +177,14 @@ const GET_PROJECT = gql`
       }
       descriptiveImage {
         url
+        description
       }
       goal
       end
       target
       proposal
+      creatorComments
+      descriptionVideoLink
       remainingTime
       totalParticipants
       percentage
