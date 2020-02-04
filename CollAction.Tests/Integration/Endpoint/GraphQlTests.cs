@@ -68,33 +68,6 @@ namespace CollAction.Tests.Integration.Endpoint
                    });
 
         [TestMethod]
-        public Task TestProjectFilter()
-            => WithTestServer(
-                   async (scope, testServer) =>
-                   {
-                       const string QueryProjects = @"
-                           query {
-                               projects(status: COMING_SOON, category: ENVIRONMENT) {
-                                   id
-                                   categories {
-                                     category
-                                   }
-                                   start
-                                   end
-                                   status
-                               }
-                           }";
-
-                       HttpResponseMessage response = await PerformGraphQlQuery(testServer, QueryProjects, null).ConfigureAwait(false);
-                       string content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                       Assert.IsTrue(response.IsSuccessStatusCode, content);
-                       JsonDocument result = JsonDocument.Parse(content);
-                       Assert.ThrowsException<KeyNotFoundException>(() => result.RootElement.GetProperty("errors"), content);
-                       JsonElement.ArrayEnumerator projects = result.RootElement.GetProperty("data").GetProperty("projects").EnumerateArray();
-                       Assert.IsTrue(projects.Any(), content);
-                   });
-
-        [TestMethod]
         public Task TestAuthorization()
             => WithTestServer(
                    async (scope, testServer) =>
