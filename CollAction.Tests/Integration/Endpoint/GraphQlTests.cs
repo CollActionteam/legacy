@@ -77,13 +77,15 @@ namespace CollAction.Tests.Integration.Endpoint
                                projects {
                                    id
                                    name
-                                   owner {
-                                       id
+                                   participants {
+                                       user {
+                                           userName
+                                       }
                                    }
                                    isSuccessfull
                                    isFailed
                                    canSendProjectEmail
-                               }
+                             }
                            }";
 
                        HttpResponseMessage response = await PerformGraphQlQuery(testServer, QueryProjects, null).ConfigureAwait(false);
