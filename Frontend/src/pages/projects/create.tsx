@@ -221,7 +221,7 @@ export default () => {
               imageDescription: Yup.string()
                 .max(2000, "Keep it short, no more then 2000 characters"),
               youtube: Yup.string()
-                .matches(/^(http|https):\/\/www.youtube.com\/watch\?v=((?:\w|-){11}?)$/, "Only YouTube links of the form http://www.youtube.com/watch?v= are accepted.")
+                .matches(/^(https):\/\/www.youtube.com\/embed\/((?:\w|-){11}?)$/, "Only YouTube links of the form https://www.youtube.com/embed/... are accepted.")
               // tslint:enable: prettier
           })}
           onSubmit={async (values, { setStatus }) => {
