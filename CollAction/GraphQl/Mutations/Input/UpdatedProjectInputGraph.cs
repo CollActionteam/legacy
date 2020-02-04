@@ -7,7 +7,7 @@ namespace CollAction.GraphQl.Mutations.Input
     {
         public UpdatedProjectInputGraph()
         {
-            Field(x => X.Id);
+            Field(x => x.Id);
             Field(x => x.Name);
             Field(x => x.Categories);
             Field(x => x.Target);
