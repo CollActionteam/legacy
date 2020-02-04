@@ -10,7 +10,6 @@ using CollAction.Services;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Diagnostics.CodeAnalysis;
 
 namespace CollAction.Tests.Integration
 {

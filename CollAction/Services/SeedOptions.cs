@@ -10,6 +10,6 @@ namespace CollAction.Services
         [Required]
         public string AdminPassword { get; set; } = null!;
 
-        public bool SeedTestProjects { get; set; } = false;
+        public bool SeedTestData { get; set; } = false;
     }
 }

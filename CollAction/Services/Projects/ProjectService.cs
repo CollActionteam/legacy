@@ -432,7 +432,7 @@ namespace CollAction.Services.Projects
             return projects;
         }
 
-        public async Task SeedRandomProjects(ApplicationUser owningUser, CancellationToken cancellationToken)
+        public async Task SeedRandomProjects(IEnumerable<ApplicationUser> users, CancellationToken cancellationToken)
         {
             Random r = new Random();
 
@@ -478,7 +478,7 @@ namespace CollAction.Services.Projects
                                   creatorComments: r.Next(4) == 0 ? null : $"<p>{string.Join("</p><p>", Faker.Lorem.Paragraphs(r.Next(3) + 1))}</p>",
                                   displayPriority: (ProjectDisplayPriority)r.Next(0, 2),
                                   goal: Faker.Company.CatchPhrase(),
-                                  ownerId: owningUser.Id,
+                                  ownerId: users.ElementAt(r.Next(users.Count())).Id,
                                   proposal: Faker.Company.BS(),
                                   status: (ProjectStatus)r.Next(0, 3),
                                   target: r.Next(1, 10000),

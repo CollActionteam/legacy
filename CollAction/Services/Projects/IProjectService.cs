@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;
@@ -25,6 +26,6 @@ namespace CollAction.Services.Projects
 
         IQueryable<Project> SearchProjects(Category? category, SearchProjectStatus? status);
 
-        Task SeedRandomProjects(ApplicationUser owningUser, CancellationToken cancellationToken);
+        Task SeedRandomProjects(IEnumerable<ApplicationUser> users, CancellationToken cancellationToken);
     }
 }

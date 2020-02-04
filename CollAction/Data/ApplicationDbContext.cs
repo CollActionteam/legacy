@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using CollAction.Services.Projects;
 using System.Threading;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
+using CollAction.Services.User;
 
 namespace CollAction.Data
 {
@@ -51,11 +52,13 @@ namespace CollAction.Data
             var logger = provider.GetRequiredService<ILogger<ApplicationDbContext>>();
             var seedOptions = provider.GetRequiredService<IOptions<SeedOptions>>().Value;
             var projectService = provider.GetRequiredService<IProjectService>();
+            var userService = provider.GetRequiredService<IUserService>();
 
             logger.LogInformation("migrating database");
             await context.Database.MigrateAsync().ConfigureAwait(false);
             logger.LogInformation("seeding database");
-            await Seed(seedOptions, userManager, roleManager, projectService).ConfigureAwait(false);
+            await CreateAdminRoleAndUser(seedOptions, userManager, roleManager).ConfigureAwait(false);
+            await SeedTestData(seedOptions, userService, projectService).ConfigureAwait(false);
             logger.LogInformation("done starting up");
         }
 
@@ -98,12 +101,6 @@ namespace CollAction.Data
                    .HasForeignKey(e => e.UserId);
         }
 
-        private static async Task Seed(SeedOptions seedOptions, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IProjectService projectService)
-        {
-            await CreateAdminRoleAndUser(seedOptions, userManager, roleManager).ConfigureAwait(false);
-            await SeedTestProjects(seedOptions, userManager, projectService).ConfigureAwait(false);
-        }
-
         private static async Task CreateAdminRoleAndUser(SeedOptions seedOptions, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             // Create admin role if not exists
@@ -141,12 +138,12 @@ namespace CollAction.Data
             }
         }
 
-        private static async Task SeedTestProjects(SeedOptions seedOptions, UserManager<ApplicationUser> userManager, IProjectService projectService)
+        private static async Task SeedTestData(SeedOptions seedOptions, IUserService userService, IProjectService projectService)
         {
-            if (seedOptions.SeedTestProjects && !(await projectService.SearchProjects(null, null).AnyAsync().ConfigureAwait(false)))
+            if (seedOptions.SeedTestData && !(await projectService.SearchProjects(null, null).AnyAsync().ConfigureAwait(false)))
             {
-                ApplicationUser admin = await userManager.FindByEmailAsync(seedOptions.AdminEmail).ConfigureAwait(false);
-                await projectService.SeedRandomProjects(admin, CancellationToken.None).ConfigureAwait(false);
+                var seededUsers = await userService.SeedTestUsers(CancellationToken.None).ConfigureAwait(false);
+                await projectService.SeedRandomProjects(seededUsers, CancellationToken.None).ConfigureAwait(false);
             }
         }
     }
