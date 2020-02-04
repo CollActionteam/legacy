@@ -435,20 +435,47 @@ namespace CollAction.Services.Projects
         public async Task SeedRandomProjects(ApplicationUser owningUser, CancellationToken cancellationToken)
         {
             Random r = new Random();
+
+            var videoLinks = new[]
+            {
+                "https://www.youtube.com/watch?v=aLzM_L5fjCQ",
+                "https://www.youtube.com/watch?v=Zvugem-tKyI",
+                "https://www.youtube.com/watch?v=xY0XTysJUDY",
+                "https://www.youtube.com/watch?v=2yfPLxQQG-k",
+                null
+            };
+
+            var tags = Enumerable.Range(0, r.Next(100))
+                                 .Select(i => new Tag(Faker.Internet.DomainWord()))
+                                 .Distinct(new LambdaEqualityComparer<Tag, string>(t => t?.Name))
+                                 .ToList();
+            context.Tags.AddRange(tags);
+            await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+
             context.Projects.AddRange(
                 Enumerable.Range(0, r.Next(20, 200))
                           .Select(i =>
                           {
                               DateTime start = DateTime.Now.Date.AddDays(r.Next(-20, 20));
+                              List<ProjectTag> projectTags = 
+                                  Enumerable.Range(0, r.Next(10))
+                                            .Select(i => r.Next(tags.Count))
+                                            .Distinct()
+                                            .Select(i => new ProjectTag(tags.ElementAt(i).Id))
+                                            .ToList();
+                              List<ProjectCategory> categories =
+                                  new[] { r.Next(7), r.Next(7) }.Distinct()
+                                                                .Select(i => new ProjectCategory((Category)i))
+                                                                .ToList();
 
                               return new Project(
                                   name: Faker.Company.Name(),
                                   description: $"<p>{string.Join("</p><p>", Faker.Lorem.Paragraphs(r.Next(3) + 1))}</p>",
                                   start: start,
                                   end: start.AddDays(r.Next(10, 40)).AddHours(23).AddMinutes(59).AddSeconds(59),
-                                  categories: new[] { r.Next(7), r.Next(7) }.Distinct().Select(i => new ProjectCategory((Category)i)).ToList(),
-                                  tags: new List<ProjectTag>(),
-                                  creatorComments: $"<p>{string.Join("</p><p>", Faker.Lorem.Paragraphs(r.Next(3) + 1))}</p>",
+                                  categories: categories,
+                                  tags: projectTags,
+                                  creatorComments: r.Next(4) == 0 ? null : $"<p>{string.Join("</p><p>", Faker.Lorem.Paragraphs(r.Next(3) + 1))}</p>",
                                   displayPriority: (ProjectDisplayPriority)r.Next(0, 2),
                                   goal: Faker.Company.CatchPhrase(),
                                   ownerId: owningUser.Id,
@@ -456,7 +483,7 @@ namespace CollAction.Services.Projects
                                   status: (ProjectStatus)r.Next(0, 3),
                                   target: r.Next(1, 10000),
                                   anonymousUserParticipants: r.Next(1, 10000),
-                                  descriptionVideoLink: $"https://www.youtube.com/watch?v={Guid.NewGuid()}");
+                                  descriptionVideoLink: videoLinks.ElementAt(r.Next(videoLinks.Length)));
                           }).Distinct(new LambdaEqualityComparer<Project, string>(p => p?.Name)));
             await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             await RefreshParticipantCountMaterializedView(cancellationToken).ConfigureAwait(false);
