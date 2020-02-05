@@ -476,7 +476,7 @@ namespace CollAction.Services.Projects
             await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
             var projectNames =
-                Enumerable.Range(0, r.Next(20, 50))
+                Enumerable.Range(0, r.Next(40, 80))
                           .Select(i => Faker.Company.Name())
                           .Distinct();
 
