@@ -24,7 +24,6 @@ namespace CollAction.Controllers
         public async Task<IActionResult> UploadImage([FromForm] UploadImageViewModel uploadImage, CancellationToken token)
         {
             ImageFile image = await imageService.UploadImage(uploadImage.Image, uploadImage.ImageDescription, token).ConfigureAwait(false);
-            imageService.InitializeDanglingImageJob();
             return Ok(image.Id);
         }
     }
