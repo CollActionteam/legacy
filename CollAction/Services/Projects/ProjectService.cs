@@ -458,7 +458,6 @@ namespace CollAction.Services.Projects
                 "https://collaction-production.s3.eu-central-1.amazonaws.com/765bc57b-748e-4bb8-a27e-08db6b99ea3e.png",
                 "https://collaction-production.s3.eu-central-1.amazonaws.com/e06bbc2d-02f7-4a9b-a744-6923d5b21f51.png",
             }.Select(b => new Uri(b)).Select(b => (b, DownloadFile(b, cancellationToken))).ToList();
-            await Task.WhenAll(bannerImages.Select(b => b.bannerImageBytes)).ConfigureAwait(false);
 
             List<(Uri descriptiveImageUrl, Task<byte[]> descriptiveImageBytes)> descriptiveImages = new[]
             {
@@ -466,7 +465,8 @@ namespace CollAction.Services.Projects
                 "https://collaction-production.s3.eu-central-1.amazonaws.com/365f2dc9-1784-45ea-9cc7-d5f0ef1a480c.png",
                 "https://collaction-production.s3.eu-central-1.amazonaws.com/6e6c12b1-eaae-4811-aa1c-c169d10f1a59.png",
             }.Select(b => new Uri(b)).Select(b => (b, DownloadFile(b, cancellationToken))).ToList();
-            await Task.WhenAll(descriptiveImages.Select(d => d.descriptiveImageBytes)).ConfigureAwait(false);
+
+            await Task.WhenAll(descriptiveImages.Select(d => d.descriptiveImageBytes).Concat(bannerImages.Select(b => b.bannerImageBytes))).ConfigureAwait(false);
 
             List<Tag> tags = Enumerable.Range(0, r.Next(60))
                                        .Select(i => new Tag(Faker.Internet.DomainWord()))
