@@ -10,7 +10,7 @@ import { Section } from "../components/Section";
 import styles from "./style.module.scss";
 import CategoryTags from "../components/CategoryTags";
 import { IProject } from "../api/types";
-import { Grid } from "@material-ui/core";
+import { Grid, Container, Avatar } from "@material-ui/core";
 import ProgressRing from "../components/ProgressRing";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "../components/Button/Button";
@@ -98,12 +98,14 @@ const ProjectDetailsPage = ({ projectId }) => {
       <Section color="grey">
         <Grid container>
           <Grid item md={7} xs={12}>
-            <figure className={styles.image}>
-              <img src={banner} alt={project.name}></img>
-            </figure>
+            <Container>
+              <figure className={styles.image}>
+                <img src={banner} alt={project.name}></img>
+              </figure>
+            </Container>
           </Grid>
           <Grid item md={5} xs={12}>
-            <div className={styles.stats}>
+            <Container className={styles.stats}>
               <div className={styles.percentage}>
                 <ProgressRing
                   progress={project.percentage}
@@ -117,43 +119,59 @@ const ProjectDetailsPage = ({ projectId }) => {
                 </span>
               </div>
               {renderStats()}
-            </div>
+            </Container>
           </Grid>
         </Grid>
       </Section>
       <Section>
         <Grid container>
           <Grid item md={7} xs={12}>
-            <div>
-              <h3 className={styles.header}>Description</h3>
-              <p dangerouslySetInnerHTML={description}></p>
-
-              <h3 className={styles.header}>Goal</h3>
-              <p dangerouslySetInnerHTML={goal}></p>
-            </div>
-            {project.descriptiveImage && (
+            <Container>
               <div>
-                <figure className={styles.image}>
-                  <img src={project.descriptiveImage.url}></img>
-                  <p>{project.descriptiveImage.description}</p>
-                </figure>
-              </div>
-            )}
-            <div>
-              <h3 className={styles.header}>Other comments</h3>
-              <p dangerouslySetInnerHTML={comments}></p>
-            </div>
+                <h3 className={styles.header}>Description</h3>
+                <p dangerouslySetInnerHTML={description}></p>
 
-            {project.descriptionVideoLink && (
-              <div className={styles.video}>
-                <iframe
-                  title="Collective actions"
-                  src={project.descriptionVideoLink}
-                  frameBorder="0"
-                  allowFullScreen
-                ></iframe>
+                <h3 className={styles.header}>Goal</h3>
+                <p dangerouslySetInnerHTML={goal}></p>
               </div>
-            )}
+              {project.descriptiveImage && (
+                <div>
+                  <figure className={styles.image}>
+                    <img src={project.descriptiveImage.url}></img>
+                    <p>{project.descriptiveImage.description}</p>
+                  </figure>
+                </div>
+              )}
+              <div>
+                <h3 className={styles.header}>Other comments</h3>
+                <p dangerouslySetInnerHTML={comments}></p>
+              </div>
+
+              {project.descriptionVideoLink && (
+                <div className={styles.video}>
+                  <iframe
+                    width="560"
+                    height="315"
+                    src={project.descriptionVideoLink}
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    frameBorder="0"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+              )}
+            </Container>
+          </Grid>
+
+          <Grid item md={5} xs={12}>
+            <Container>
+              <div className={styles.projectStarter}>
+                <div className={styles.avatarContainer}>
+                  <Avatar className={styles.avatar}>EW</Avatar>
+                </div>
+                <h4>{project.owner.fullName}</h4>
+                <p className={styles.projectStarterTitle}>Project starter</p>
+              </div>
+            </Container>
           </Grid>
         </Grid>
       </Section>
@@ -185,6 +203,9 @@ const GET_PROJECT = gql`
       proposal
       creatorComments
       descriptionVideoLink
+      owner {
+        fullName
+      }
       remainingTime
       totalParticipants
       percentage
