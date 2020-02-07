@@ -44,7 +44,7 @@
 }
 
 .join {
-  padding-bottom: var(--spacing);
+  margin-bottom: var(--spacing);
 }
 
 .deadline {
@@ -76,10 +76,12 @@
   }
 }
 
-.projectStarter {
+.box {
   border: 1px solid var(--c-grey-d10);
   border-radius: var(--border-radius-sm);
-  padding: var(--spacing);  
+  padding: var(--spacing);
+  
+  margin-bottom: var(--spacing);
 }
 
 .avatarContainer {
@@ -95,4 +97,19 @@
 
 .projectStarterTitle {
   font-size: var(--font-size-sm);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  
+  // ui-material creates an extra div around the form controls
+  & > div {
+    display: flex;
+    flex-direction: column;
+
+    & > div {
+      margin: var(--spacing) 0 var(--spacing) 0;
+    }
+  }
 }
