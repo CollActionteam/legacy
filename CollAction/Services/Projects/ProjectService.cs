@@ -445,10 +445,10 @@ namespace CollAction.Services.Projects
 
             string?[] videoLinks = new[]
             {
-                "https://www.youtube.com/watch?v=aLzM_L5fjCQ",
-                "https://www.youtube.com/watch?v=Zvugem-tKyI",
-                "https://www.youtube.com/watch?v=xY0XTysJUDY",
-                "https://www.youtube.com/watch?v=2yfPLxQQG-k",
+                "https://www.youtube.com/embed/aLzM_L5fjCQ",
+                "https://www.youtube.com/embed/Zvugem-tKyI",
+                "https://www.youtube.com/embed/xY0XTysJUDY",
+                "https://www.youtube.com/embed/2yfPLxQQG-k",
                 null
             };
 

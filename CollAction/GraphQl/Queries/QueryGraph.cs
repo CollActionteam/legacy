@@ -60,7 +60,7 @@ namespace CollAction.GraphQl.Queries
                     }
                     else
                     {
-                        return userContext.Context.Users.Where(u => u.Id == null);
+                        return userContext.Context.Users.Where(u => 0 == 1);
                     }
                 },
                 graphType: typeof(ApplicationUserGraph));

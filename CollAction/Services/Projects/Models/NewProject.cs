@@ -46,7 +46,7 @@ namespace CollAction.Services.Projects.Models
 
         public int? DescriptiveImageFileId { get; set; }
 
-        [RegularExpression(@"^https://www.youtube.com/watch\?v=[^& ]+$", ErrorMessage = "Only YouTube links of the form http://www.youtube.com/watch?v=<your-video-id> are accepted.")]
+        [RegularExpression(@"^https://www.youtube.com/embed/[A-Za-z_\-0-9]+$", ErrorMessage = "Only embedded youtube links are accepted. If you don't know how to get one, see: https://support.google.com/youtube/answer/171780?hl=en")]
         public string? DescriptionVideoLink { get; set; }
 
         [Categories]
