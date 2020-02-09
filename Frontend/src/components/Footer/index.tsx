@@ -93,9 +93,9 @@ export default () => (
           </nav>
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
-          <h3>Follow us</h3>
+          <h5 className={styles.title}>Follow us</h5>
           <SocialMedia />
-          <h3>Newsletter</h3>
+          <h5 className={styles.title}>Newsletter</h5>
           <StaticQuery
             query={graphql`
               query {

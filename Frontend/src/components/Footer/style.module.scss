@@ -36,3 +36,10 @@
     font-weight: 700;
     text-decoration: none;
 }
+
+.title {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+    margin-bottom: var(--spacing-sm);
+}
