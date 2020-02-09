@@ -54,6 +54,7 @@ input {
 .submitIcon {
     padding-left: var(--spacing-sm);
     padding-right: var(--spacing-xs);
+    width: auto;
 
     .submit:disabled & {
         padding-right: var(--spacing-sm);

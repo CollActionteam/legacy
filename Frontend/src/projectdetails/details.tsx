@@ -1,19 +1,21 @@
-import React from "react";
-import { Router } from "@reach/router";
-import Layout from "../components/Layout";
-import gql from "graphql-tag";
-import Loader from "../components/Loader";
-import { useQuery } from "react-apollo";
-import { navigate } from "gatsby";
-import { Section } from "../components/Section";
-
-import styles from "./style.module.scss";
-import CategoryTags from "../components/CategoryTags";
-import { IProject } from "../api/types";
-import { Grid } from "@material-ui/core";
-import ProgressRing from "../components/ProgressRing";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Avatar, Container, Grid, FormControl } from "@material-ui/core";
+import { Router } from "@reach/router";
+import { navigate } from "gatsby";
+import gql from "graphql-tag";
+import React from "react";
+import { useQuery, ExecutionResult, useMutation } from "react-apollo";
+import { IProject } from "../api/types";
 import { Button } from "../components/Button/Button";
+import CategoryTags from "../components/CategoryTags";
+import Layout from "../components/Layout";
+import Loader from "../components/Loader";
+import ProgressRing from "../components/ProgressRing";
+import { Section } from "../components/Section";
+import styles from "./style.module.scss";
+import { Formik, Form, Field } from "formik";
+import * as Yup from "yup";
+import { TextField } from "formik-material-ui";
 
 const ProjectDetails = () => {
   return (
@@ -27,6 +29,29 @@ const ProjectDetailsPage = ({ projectId }) => {
   const query = useQuery(GET_PROJECT, { variables: { id: projectId } });
 
   const { data, loading } = query;
+
+  const [commitToProject] = useMutation(gql`
+    mutation Commit($projectId: Int!, $email: String!) {
+      project {
+        commitToProject(projectId: $projectId, email: $email) {
+          error
+          userAdded
+          userAlreadyActive
+          userCreated
+        }
+      }
+    }
+  `);
+
+  const commit = async (form: any) => {
+    const response = (await commitToProject({
+      variables: {
+        projectId: project.id,
+        email: form.participantEmail,
+      },
+    })) as ExecutionResult;
+    console.log(response);
+  };
 
   if (loading) {
     return <Loader />;
@@ -65,7 +90,16 @@ const ProjectDetailsPage = ({ projectId }) => {
             <span>{Math.round(project.remainingTime / 3600 / 24)} days</span>
           </div>
           <div className={styles.join}>
-            <Button onClick={join}>Join crowdaction</Button>
+            <Button
+              onClick={() => {
+                const join = document.getElementById("join");
+                if (join) {
+                  join.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
+            >
+              Join crowdaction
+            </Button>
           </div>
           <div className={styles.deadline}>
             <span>
@@ -85,10 +119,6 @@ const ProjectDetailsPage = ({ projectId }) => {
     }
   };
 
-  const join = () => {
-    alert("Join!");
-  };
-
   return (
     <Layout>
       <Section center className={styles.title} title={project.name}>
@@ -98,12 +128,14 @@ const ProjectDetailsPage = ({ projectId }) => {
       <Section color="grey">
         <Grid container>
           <Grid item md={7} xs={12}>
-            <figure className={styles.image}>
-              <img src={banner} alt={project.name}></img>
-            </figure>
+            <Container>
+              <figure className={styles.image}>
+                <img src={banner} alt={project.name}></img>
+              </figure>
+            </Container>
           </Grid>
           <Grid item md={5} xs={12}>
-            <div className={styles.stats}>
+            <Container className={styles.stats}>
               <div className={styles.percentage}>
                 <ProgressRing
                   progress={project.percentage}
@@ -117,48 +149,103 @@ const ProjectDetailsPage = ({ projectId }) => {
                 </span>
               </div>
               {renderStats()}
-            </div>
+            </Container>
           </Grid>
         </Grid>
       </Section>
       <Section>
         <Grid container>
           <Grid item md={7} xs={12}>
-            <div>
-              <h3 className={styles.header}>Description</h3>
-              <p dangerouslySetInnerHTML={description}></p>
-
-              <h3 className={styles.header}>Goal</h3>
-              <p dangerouslySetInnerHTML={goal}></p>
-            </div>
-            {project.descriptiveImage && (
+            <Container>
               <div>
-                <figure className={styles.image}>
-                  <img src={project.descriptiveImage.url}></img>
-                  <p>{project.descriptiveImage.description}</p>
-                </figure>
-              </div>
-            )}
-            <div>
-              <h3 className={styles.header}>Other comments</h3>
-              <p dangerouslySetInnerHTML={comments}></p>
-            </div>
+                <h3 className={styles.header}>Description</h3>
+                <p dangerouslySetInnerHTML={description}></p>
 
-            {project.descriptionVideoLink && (
-              <div className={styles.video}>
-                <iframe
-                  title="Collective actions"
-                  src={project.descriptionVideoLink}
-                  frameBorder="0"
-                  allowFullScreen
-                ></iframe>
+                <h3 className={styles.header}>Goal</h3>
+                <p dangerouslySetInnerHTML={goal}></p>
               </div>
-            )}
+              {project.descriptiveImage && (
+                <div>
+                  <figure className={styles.image}>
+                    <img src={project.descriptiveImage.url}></img>
+                    <p>{project.descriptiveImage.description}</p>
+                  </figure>
+                </div>
+              )}
+              <div>
+                <h3 className={styles.header}>Other comments</h3>
+                <p dangerouslySetInnerHTML={comments}></p>
+              </div>
+
+              {project.descriptionVideoLink && (
+                <div className={styles.video}>
+                  <iframe
+                    width="560"
+                    height="315"
+                    src={project.descriptionVideoLink}
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    frameBorder="0"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+              )}
+            </Container>
+          </Grid>
+
+          <Grid item md={5} xs={12}>
+            <Container>
+              <div className={styles.box}>
+                <div className={styles.avatarContainer}>
+                  <Avatar className={styles.avatar}>
+                    {project.owner.firstName.charAt(0)}
+                    {project.owner.lastName.charAt(0)}
+                  </Avatar>
+                </div>
+                <h4>{project.owner.fullName}</h4>
+                <p className={styles.projectStarterTitle}>Project starter</p>
+              </div>
+              <div id="join" className={styles.box}>
+                <Formik
+                  initialValues={{
+                    participantEmail: "",
+                  }}
+                  validateOnChange={false}
+                  validateOnBlur={true}
+                  validateOnMount={false}
+                  validationSchema={Yup.object({
+                    participantEmail: Yup.string()
+                      .required("Please enter your e-mail address")
+                      .email("Please enter a valid e-mail address"),
+                  })}
+                  onSubmit={async values => {
+                    await commit(values);
+                  }}
+                >
+                  {props => (
+                    <Form className={styles.form}>
+                      <span>
+                        Want to participate? Enter your e-mail address and join
+                        this crowdaction!
+                      </span>
+                      <FormControl>
+                        <Field
+                          name="participantEmail"
+                          label="Your e-mail address"
+                          component={TextField}
+                          fullWidth
+                        ></Field>
+                      </FormControl>
+                      <Button type="submit" disabled={props.isSubmitting}>
+                        Join CrowdAction
+                      </Button>
+                    </Form>
+                  )}
+                </Formik>
+              </div>
+            </Container>
           </Grid>
         </Grid>
       </Section>
-
-      {JSON.stringify(data)}
     </Layout>
   );
 };
@@ -185,6 +272,11 @@ const GET_PROJECT = gql`
       proposal
       creatorComments
       descriptionVideoLink
+      owner {
+        fullName
+        firstName
+        lastName
+      }
       remainingTime
       totalParticipants
       percentage

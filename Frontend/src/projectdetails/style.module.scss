@@ -44,7 +44,7 @@
 }
 
 .join {
-  padding-bottom: var(--spacing);
+  margin-bottom: var(--spacing);
 }
 
 .deadline {
@@ -73,5 +73,43 @@
     height: 100%;
     border: 0;
     z-index: -1; // Render below mobile menu
+  }
+}
+
+.box {
+  border: 1px solid var(--c-grey-d10);
+  border-radius: var(--border-radius-sm);
+  padding: var(--spacing);
+  
+  margin-bottom: var(--spacing);
+}
+
+.avatarContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.avatar {
+  margin-top: calc(var(--spacing-xlg) / 2 * -1.5);
+  width: var(--spacing-xlg) !important;
+  height: var(--spacing-xlg) !important;
+}
+
+.projectStarterTitle {
+  font-size: var(--font-size-sm);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  
+  // ui-material creates an extra div around the form controls
+  & > div {
+    display: flex;
+    flex-direction: column;
+
+    & > div {
+      margin: var(--spacing) 0 var(--spacing) 0;
+    }
   }
 }
