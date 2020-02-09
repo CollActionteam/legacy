@@ -196,7 +196,10 @@ const ProjectDetailsPage = ({ projectId }) => {
             <Container>
               <div className={styles.box}>
                 <div className={styles.avatarContainer}>
-                  <Avatar className={styles.avatar}>EW</Avatar>
+                  <Avatar className={styles.avatar}>
+                    {project.owner.firstName.charAt(0)}
+                    {project.owner.lastName.charAt(0)}
+                  </Avatar>
                 </div>
                 <h4>{project.owner.fullName}</h4>
                 <p className={styles.projectStarterTitle}>Project starter</p>
@@ -271,6 +274,8 @@ const GET_PROJECT = gql`
       descriptionVideoLink
       owner {
         fullName
+        firstName
+        lastName
       }
       remainingTime
       totalParticipants
