@@ -468,9 +468,10 @@ namespace CollAction.Services.Projects
 
             await Task.WhenAll(descriptiveImages.Select(d => d.descriptiveImageBytes).Concat(bannerImages.Select(b => b.bannerImageBytes))).ConfigureAwait(false);
 
-            List<Tag> tags = Enumerable.Range(0, r.Next(60))
-                                       .Select(i => new Tag(Faker.Internet.DomainWord()))
-                                       .Distinct(new LambdaEqualityComparer<Tag, string>(t => t?.Name))
+            List<Tag> tags = Enumerable.Range(10, r.Next(60))
+                                       .Select(r => Faker.Internet.DomainWord())
+                                       .Distinct()
+                                       .Select(r => new Tag(r))
                                        .ToList();
             context.Tags.AddRange(tags);
             await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
