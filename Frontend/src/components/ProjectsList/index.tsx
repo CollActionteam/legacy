@@ -15,22 +15,14 @@ export default ({
   categoryId,
   status = ProjectStatusFilter.Active,
 }: IProjectListProps) => {
-  const query = useQuery(
-    FIND_PROJECTS,
-    categoryId
-      ? {
-          variables: {
-            categoryId: categoryId,
-            // status: status,
-          },
-        }
-      : {
-          variables: {
-            categoryId: "1",
-            // status: status,
-          },
-        }
-  );
+  const query = categoryId
+    ? useQuery(FIND_PROJECTS, {
+        variables: {
+          categoryId: categoryId,
+          status: status,
+        },
+      })
+    : useQuery(FIND_ALL_PROJECTS);
 
   const { data, loading, error } = query;
 
@@ -65,6 +57,39 @@ const FIND_PROJECTS = gql`
     projects(
       where: [{ path: "categoryId", comparison: equal, value: $categoryId }]
     ) {
+      id
+      name
+      description
+      url
+      categoryId
+      category {
+        color
+        colorHex
+        name
+      }
+      descriptiveImage {
+        filepath
+        url
+      }
+      goal
+      end
+      target
+      proposal
+      remainingTime
+      participantCounts {
+        count
+      }
+      displayPriority
+      isActive
+      isComingSoon
+      isClosed
+    }
+  }
+`;
+
+const FIND_ALL_PROJECTS = gql`
+  query FindAllProjects {
+    projects {
       id
       name
       description

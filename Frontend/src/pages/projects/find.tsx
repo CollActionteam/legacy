@@ -33,12 +33,12 @@ export default () => (
         .map(e => e.node)
         .find(n => (n.name = "photos"));
 
-      const [category, setCategory] = useState("");
+      const [categoryId, setCategoryId] = useState("");
       const [status, setStatus] = useState(ProjectStatusFilter.Active);
       const { data, loading } = useQuery(GET_CATEGORIES);
 
       const handleCategoryChange = (e: React.ChangeEvent) => {
-        setCategory((e.target as any).value.toString());
+        setCategoryId((e.target as any).value.toString());
       };
 
       const handleStatusChange = (e: React.ChangeEvent) => {
@@ -56,11 +56,11 @@ export default () => (
                   <span>Show me</span>
 
                   <div className={styles.selectWrapper}>
-                    <select value={category} onChange={handleCategoryChange}>
+                    <select value={categoryId} onChange={handleCategoryChange}>
                       <option value="">All</option>
                       {data
                         ? data.categories.map(v => (
-                            <option key={v.name} value={v.name}>
+                            <option key={v.name} value={v.id}>
                               {Utils.formatCategory(v.name)}
                             </option>
                           ))
@@ -86,7 +86,7 @@ export default () => (
             </Section>
           </Banner>
           <Section>
-            <ProjectsList categoryId={category} status={status} />
+            <ProjectsList categoryId={categoryId} status={status} />
           </Section>
         </Layout>
       );
