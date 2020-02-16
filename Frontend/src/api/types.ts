@@ -55,6 +55,7 @@ export interface IProject {
   bannerImage: IImageFile;
   bannerImageField: number;
   canSendProjectEmail: boolean;
+  categoryId: string;
   category: IProjectCategory;
   creatorComments: string;
   description: string;
@@ -75,11 +76,9 @@ export interface IProject {
   ownerId: string;
   participantCounts: IProjectParticipantCount;
   proposal: string;
-  percentage: number;
   remainingTime: any;
   start: Date;
   status: ProjectStatus;
-  totalParticipants: number;
   tags: IProjectTag[];
   target: number;
   url: string;

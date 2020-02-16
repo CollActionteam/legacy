@@ -4,6 +4,8 @@
     cursor: pointer;
     color: var(--c-black);
     font-weight: var(--font-weight-regular);
+    border: 1px solid var(--c-grey-d10);
+    border-radius: var(--border-radius-sm);
     text-decoration: none;
 
     &::after {
@@ -51,10 +53,6 @@
 
 .content {
     padding: calc(var(--spacing-md) * 1.5);
-    border: 1px solid var(--c-grey-d10);
-    border-top: 0;
-    border-bottom-left-radius: var(--border-radius-sm);
-    border-bottom-right-radius: var(--border-radius-sm);
 }
 
 .proposal {
@@ -77,8 +75,6 @@
 }
 
 .image {
-    border-top-left-radius: var(--border-radius-sm);
-    border-top-right-radius: var(--border-radius-sm);
     width: 389px;
     height: 259px;
     padding-bottom: 66.66%;

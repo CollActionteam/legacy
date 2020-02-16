@@ -2,11 +2,14 @@ import React from "react";
 import styles from "./style.module.scss";
 
 export default ({
-  progress = 0,
+  project,
   radius = 30,
   stroke = 4,
   fontSize = "var(--font-size-sm)",
 }) => {
+  const progress = project.participantCounts
+    ? project.participantCounts.count / project.target
+    : 0;
   const normalizedRadius = radius - stroke * 2;
   const circumference = normalizedRadius * 2 * Math.PI;
   const chompedProgress = progress > 100 ? 100 : progress;

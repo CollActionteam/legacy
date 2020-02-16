@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import Card from "../Card";
 import gql from "graphql-tag";
+import { Fragments } from "../../api/fragments";
 import { Grid } from "@material-ui/core";
 import { ProjectStatusFilter } from "../../api/types";
 import Loader from "../Loader";
@@ -57,65 +58,17 @@ const FIND_PROJECTS = gql`
     projects(
       where: [{ path: "categoryId", comparison: equal, value: $categoryId }]
     ) {
-      id
-      name
-      description
-      url
-      categoryId
-      category {
-        color
-        colorHex
-        name
-      }
-      descriptiveImage {
-        filepath
-        url
-      }
-      goal
-      end
-      target
-      proposal
-      remainingTime
-      participantCounts {
-        count
-      }
-      displayPriority
-      isActive
-      isComingSoon
-      isClosed
+      ...ProjectDetail
     }
   }
+  ${Fragments.projectDetail}
 `;
 
 const FIND_ALL_PROJECTS = gql`
   query FindAllProjects {
     projects {
-      id
-      name
-      description
-      url
-      categoryId
-      category {
-        color
-        colorHex
-        name
-      }
-      descriptiveImage {
-        filepath
-        url
-      }
-      goal
-      end
-      target
-      proposal
-      remainingTime
-      participantCounts {
-        count
-      }
-      displayPriority
-      isActive
-      isComingSoon
-      isClosed
+      ...ProjectDetail
     }
   }
+  ${Fragments.projectDetail}
 `;

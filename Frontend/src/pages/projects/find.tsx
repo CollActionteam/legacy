@@ -11,6 +11,7 @@ import styles from "./find.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Loader from "../../components/Loader";
 import Utils from "../../utils";
+import { Fragments } from "../../api/fragments";
 
 export default () => (
   <StaticQuery
@@ -97,8 +98,8 @@ export default () => (
 const GET_CATEGORIES = gql`
   query {
     categories {
-      id
-      name
+      ...Category
     }
   }
+  ${Fragments.category}
 `;
