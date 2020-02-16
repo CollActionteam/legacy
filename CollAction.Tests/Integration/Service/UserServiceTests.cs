@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -71,7 +72,6 @@ namespace CollAction.Tests.Integration.Service
                 {
                     var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
                     var signInManager = scope.ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>();
-                    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
                     var result = await userService.CreateUser(
                         new NewUser()
@@ -123,14 +123,19 @@ namespace CollAction.Tests.Integration.Service
             => WithServiceProvider(
                 async scope =>
                 {
+                    // Setup
+                    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                    var project = new Project($"test-{Guid.NewGuid()}", ProjectStatus.Running, await context.Users.Select(u => u.Id).FirstAsync().ConfigureAwait(false), 10, DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1), "t", "t", "t", null, null);
+                    context.Projects.Add(project);
+                    await context.SaveChangesAsync().ConfigureAwait(false);
+
+                    // Test
                     var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
                     var signInManager = scope.ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>();
-                    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                     var projectService = scope.ServiceProvider.GetRequiredService<IProjectService>();
 
-                    var currentProject = await context.Projects.Include(p => p.Owner).FirstOrDefaultAsync().ConfigureAwait(false);
                     string testEmail = GetTestEmail();
-                    AddParticipantResult commitResult = await projectService.CommitToProject(testEmail, currentProject.Id, new ClaimsPrincipal(), CancellationToken.None).ConfigureAwait(false);
+                    AddParticipantResult commitResult = await projectService.CommitToProjectAnonymous(testEmail, project.Id, CancellationToken.None).ConfigureAwait(false);
                     Assert.AreEqual(AddParticipantScenario.AnonymousCreatedAndAdded, commitResult.Scenario);
 
                     var finishRegistrationResult = await userService.FinishRegistration(

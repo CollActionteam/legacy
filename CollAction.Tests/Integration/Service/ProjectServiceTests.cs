@@ -110,20 +110,49 @@ namespace CollAction.Tests.Integration.Service
                    });
 
         [TestMethod]
-        public Task TestProjectCommit()
+        public Task TestProjectCommitAnonymous()
             => WithServiceProvider(
                    async scope =>
                    {
-                       IProjectService projectService = scope.ServiceProvider.GetRequiredService<IProjectService>();
+                       // Setup
                        ApplicationDbContext context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                       IProjectService projectService = scope.ServiceProvider.GetRequiredService<IProjectService>();
                        SignInManager<ApplicationUser> signInManager = scope.ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>();
                        UserManager<ApplicationUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
                        var user = await context.Users.FirstAsync().ConfigureAwait(false);
-                       var currentProject = await context.Projects.Include(p => p.Owner).FirstOrDefaultAsync().ConfigureAwait(false);
+                       Project project = new Project($"test-{Guid.NewGuid()}", ProjectStatus.Running, user.Id, 10, DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1), "t", "t", "t", null, null);
+                       context.Projects.Add(project);
+                       await context.SaveChangesAsync().ConfigureAwait(false);
 
+                       // Test
                        string testEmail = GetTestEmail();
-                       var result = await projectService.CommitToProject(testEmail, currentProject.Id, new ClaimsPrincipal(), CancellationToken.None).ConfigureAwait(false);
+                       var result = await projectService.CommitToProjectAnonymous(testEmail, project.Id, CancellationToken.None).ConfigureAwait(false);
                        Assert.AreEqual(AddParticipantScenario.AnonymousCreatedAndAdded, result.Scenario);
+                       result = await projectService.CommitToProjectAnonymous(testEmail, project.Id, CancellationToken.None).ConfigureAwait(false);
+                       Assert.AreEqual(AddParticipantScenario.AnonymousNotRegisteredPresentAndAlreadyParticipating, result.Scenario);
+                   });
+
+        [TestMethod]
+        public Task TestProjectCommitLoggedIn()
+            => WithServiceProvider(
+                   async scope =>
+                   {
+                       // Setup
+                       ApplicationDbContext context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                       IProjectService projectService = scope.ServiceProvider.GetRequiredService<IProjectService>();
+                       SignInManager<ApplicationUser> signInManager = scope.ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>();
+                       UserManager<ApplicationUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+                       var user = await context.Users.FirstAsync().ConfigureAwait(false);
+                       var userClaim = await signInManager.CreateUserPrincipalAsync(user).ConfigureAwait(false);
+                       var project = new Project($"test-{Guid.NewGuid()}", ProjectStatus.Running, user.Id, 10, DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1), "t", "t", "t", null, null);
+                       context.Projects.Add(project);
+                       await context.SaveChangesAsync().ConfigureAwait(false);
+
+                       // Test
+                       var result = await projectService.CommitToProjectLoggedIn(userClaim, project.Id, CancellationToken.None).ConfigureAwait(false);
+                       Assert.AreEqual(AddParticipantScenario.LoggedInAndAdded, result.Scenario);
+                       result = await projectService.CommitToProjectLoggedIn(userClaim, project.Id, CancellationToken.None).ConfigureAwait(false);
+                       Assert.AreEqual(AddParticipantScenario.LoggedInAndNotAdded, result.Scenario);
                    });
 
         [TestMethod]

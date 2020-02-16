@@ -45,7 +45,20 @@ namespace CollAction.GraphQl.Mutations
                 }).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
 
             FieldAsync<AddParticipantResultGraph, AddParticipantResult>(
-                "commitToProject",
+                "commitToProjectLoggedIn",
+                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<IntGraphType>>() { Name = "projectId" }),
+                resolve: async c =>
+                {
+                    int projectId = c.GetArgument<int>("projectId");
+                    var context = c.GetUserContext();
+                    return await context.ServiceProvider
+                                        .GetRequiredService<IProjectService>()
+                                        .CommitToProjectLoggedIn(context.User, projectId, c.CancellationToken)
+                                        .ConfigureAwait(false);
+                });
+
+            FieldAsync<AddParticipantResultGraph, AddParticipantResult>(
+                "commitToProjectAnonymous",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IntGraphType>>() { Name = "projectId" },
                     new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "email" }),
@@ -56,7 +69,7 @@ namespace CollAction.GraphQl.Mutations
                     var context = c.GetUserContext();
                     return await context.ServiceProvider
                                         .GetRequiredService<IProjectService>()
-                                        .CommitToProject(email, projectId, context.User, c.CancellationToken)
+                                        .CommitToProjectAnonymous(email, projectId, c.CancellationToken)
                                         .ConfigureAwait(false);
                 });
 

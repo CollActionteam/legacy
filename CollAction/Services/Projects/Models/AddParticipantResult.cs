@@ -4,6 +4,10 @@ namespace CollAction.Services.Projects.Models
 {
     public sealed class AddParticipantResult
     {
+        public AddParticipantResult()
+        {
+        }
+
         public AddParticipantResult(string error)
         {
             Error = error;
@@ -56,6 +60,10 @@ namespace CollAction.Services.Projects.Models
                 else if (LoggedIn && UserAdded)
                 {
                     return AddParticipantScenario.LoggedInAndAdded;
+                }
+                else if (LoggedIn && !UserAdded)
+                {
+                    return AddParticipantScenario.LoggedInAndNotAdded;
                 }
                 else if (!LoggedIn && UserCreated && UserAdded)
                 {

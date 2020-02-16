@@ -3,6 +3,7 @@
     public enum AddParticipantScenario
     {
         LoggedInAndAdded,
+        LoggedInAndNotAdded,
         AnonymousCreatedAndAdded,
         AnonymousAlreadyRegisteredAndAdded,
         AnonymousNotRegisteredPresentAndAdded,

@@ -7,9 +7,8 @@ namespace CollAction.GraphQl.Mutations
     {
         public AddParticipantResultGraph()
         {
-            Field(x => x.Error);
+            Field(x => x.Error, true);
             Field(x => x.LoggedIn);
-            Field(x => x.ParticipantEmail);
             Field(x => x.Scenario);
             Field(x => x.UserAdded);
             Field(x => x.UserAlreadyActive);

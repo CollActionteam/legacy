@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Http;
 using CollAction.Services.Image;
 using System.IO;
 using System.Net.Http;
+using System.Net.Mail;
 
 namespace CollAction.Services.Projects
 {
@@ -373,63 +374,98 @@ namespace CollAction.Services.Projects
             return participant;
         }
 
-        public async Task<AddParticipantResult> CommitToProject(string email, int projectId, ClaimsPrincipal user, CancellationToken token)
+        public async Task<AddParticipantResult> CommitToProjectAnonymous(string email, int projectId, CancellationToken token)
         {
-            ApplicationUser applicationUser = await userManager.GetUserAsync(user).ConfigureAwait(false);
-            if (applicationUser == null && string.IsNullOrEmpty(email))
-            {
-                return new AddParticipantResult(error: "E-mail address not valid");
-            }
-
             Project project = await context.Projects.FindAsync(new object[] { projectId }, token);
-            if (project == null)
+            if (project == null || !project.IsActive)
             {
-                return new AddParticipantResult("Project not found");
+                logger.LogError("Project not found or active: {0}", projectId);
+                return new AddParticipantResult($"Project not found or is not active");
             }
 
-            logger.LogInformation("Adding participant to project");
+            if (!IsValidEmail(email))
+            {
+                logger.LogWarning("Invalid e-mail signing up to project");
+                return new AddParticipantResult("Invalid e-mail address");
+            }
 
-            AddParticipantResult result = applicationUser != null
-                ? await AddLoggedInParticipant(project, applicationUser, token).ConfigureAwait(false)
-                : await AddAnonymousParticipant(project, email, token).ConfigureAwait(false);
+            var result = new AddParticipantResult();
+            ApplicationUser? user = await userManager.FindByEmailAsync(email).ConfigureAwait(false);
+            if (user == null)
+            {
+                user = new ApplicationUser(email: email, registrationDate: DateTime.UtcNow);
+                IdentityResult creationResult = await userManager.CreateAsync(user).ConfigureAwait(false);
+                if (!creationResult.Succeeded)
+                {
+                    string errors = string.Join(',', creationResult.Errors.Select(e => $"{e.Code}: {e.Description}"));
+                    logger.LogError("Could not create new unregistered user for project commit: {0}", errors);
+                    return new AddParticipantResult($"Could not create new unregistered user: {errors}");
+                }
+                result.UserCreated = true;
+            }
 
-            if (result.Scenario != AddParticipantScenario.Error &&
-                result.Scenario != AddParticipantScenario.AnonymousNotRegisteredPresentAndAlreadyParticipating &&
+            result.UserAdded = await InsertParticipant(project.Id, user.Id, token).ConfigureAwait(false);
+            result.UserAlreadyActive = user.Activated;
+
+            logger.LogInformation("Added participant to project: {0}, {1}", user.Id, projectId);
+
+            if (!user.Activated)
+            {
+                result.ParticipantEmail = user.Email;
+                result.PasswordResetToken = await userManager.GeneratePasswordResetTokenAsync(user).ConfigureAwait(false);
+            }
+
+            if (result.Scenario != AddParticipantScenario.AnonymousNotRegisteredPresentAndAlreadyParticipating &&
                 result.Scenario != AddParticipantScenario.AnonymousAlreadyRegisteredAndAlreadyParticipating)
             {
-                var commitEmailViewModel = new ProjectCommitEmailViewModel(project: project, result: result, user: applicationUser, publicAddress: new Uri(siteOptions.PublicAddress), projectUrl: new Uri($"https://{siteOptions.PublicAddress}/{project.Url}"));
-                await emailSender.SendEmailTemplated(email, $"Thank you for participating in the \"{project.Name}\" project on CollAction", "ProjectCommit", commitEmailViewModel).ConfigureAwait(false);
+                await SendCommitEmail(project, result, user, user.Email).ConfigureAwait(false);
+            }
 
-                logger.LogInformation("Added participant to project");
-            }
-            else if (result.Error != null)
+            logger.LogInformation("Added participant '{0}' to project '{1}' with scenario '{2}'", user.Id, projectId, result.Scenario);
+
+            return result;
+        }
+
+        public async Task<AddParticipantResult> CommitToProjectLoggedIn(ClaimsPrincipal user, int projectId, CancellationToken token)
+        {
+            Project project = await context.Projects.FindAsync(new object[] { projectId }, token);
+            if (project == null || !project.IsActive)
             {
-                logger.LogError("Error adding participant to project: {0}", result.Error);
+                logger.LogError("Project not found or active: {0}", projectId);
+                return new AddParticipantResult("Project not found or not active");
             }
-            else
+
+            ApplicationUser applicationUser = await userManager.GetUserAsync(user).ConfigureAwait(false);
+            if (applicationUser == null)
             {
-                logger.LogInformation("Participation adding ended with: {0}", result.Scenario);
+                logger.LogError("User not logged in when committing");
+                return new AddParticipantResult(error: "User not logged in");
             }
+
+            bool added = await InsertParticipant(project.Id, applicationUser.Id, token).ConfigureAwait(false);
+            var result = new AddParticipantResult(loggedIn: true, userAdded: added);
+
+            if (added)
+            {
+                await SendCommitEmail(project, result, applicationUser, applicationUser.Email).ConfigureAwait(false);
+            }
+
+            logger.LogInformation("Added participant '{0}' to project '{1}' with scenario '{2}'", applicationUser.Id, projectId, result.Scenario);
 
             return result;
         }
 
         public IQueryable<Project> SearchProjects(Category? category, SearchProjectStatus? searchProjectStatus)
         {
-            var projects = context.Projects.Include(p => p.ParticipantCounts).OrderBy(p => p.DisplayPriority).AsQueryable();
+            IQueryable<Project> projects = context.Projects.Include(p => p.ParticipantCounts).OrderBy(p => p.DisplayPriority).AsQueryable();
 
-            switch (searchProjectStatus)
+            projects = searchProjectStatus switch
             {
-                case SearchProjectStatus.Closed:
-                    projects = projects.Where(p => p.End < DateTime.UtcNow && p.Status == ProjectStatus.Running);
-                    break;
-                case SearchProjectStatus.ComingSoon:
-                    projects = projects.Where(p => p.Start > DateTime.UtcNow && p.Status == ProjectStatus.Running);
-                    break;
-                case SearchProjectStatus.Open:
-                    projects = projects.Where(p => p.Start <= DateTime.UtcNow && p.End >= DateTime.UtcNow && p.Status == ProjectStatus.Running);
-                    break;
-            }
+                SearchProjectStatus.Closed => projects.Where(p => p.End < DateTime.UtcNow && p.Status == ProjectStatus.Running),
+                SearchProjectStatus.ComingSoon => projects.Where(p => p.Start > DateTime.UtcNow && p.Status == ProjectStatus.Running),
+                SearchProjectStatus.Open => projects.Where(p => p.Start <= DateTime.UtcNow && p.End >= DateTime.UtcNow && p.Status == ProjectStatus.Running),
+                _ => projects
+            };
 
             if (category != null)
             {
@@ -544,38 +580,10 @@ namespace CollAction.Services.Projects
             return await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
         }
 
-        private async Task<AddParticipantResult> AddAnonymousParticipant(Project project, string email, CancellationToken token)
+        private async Task SendCommitEmail(Project project, AddParticipantResult result, ApplicationUser applicationUser, string email)
         {
-            var user = new ApplicationUser(email: email, registrationDate: DateTime.UtcNow);
-            IdentityResult creationResult = await userManager.CreateAsync(user).ConfigureAwait(false);
-            if (!creationResult.Succeeded)
-            {
-                string errors = string.Join(',', creationResult.Errors.Select(e => $"{e.Code}: {e.Description}"));
-                return new AddParticipantResult($"Could not create new unregistered user {email}: {errors}");
-            }
-
-            var userAdded = await InsertParticipant(project.Id, user.Id, token).ConfigureAwait(false);
-
-            if (!user.Activated)
-            {
-                return new AddParticipantResult(userCreated: true, userAdded: userAdded, userAlreadyActive: user.Activated, participantEmail: user.Email, passwordResetToken: await userManager.GeneratePasswordResetTokenAsync(user).ConfigureAwait(false));
-            }
-            else
-            {
-                return new AddParticipantResult(userCreated: true, userAdded: userAdded, userAlreadyActive: user.Activated);
-            }
-        }
-
-        private async Task<AddParticipantResult> AddLoggedInParticipant(Project project, ApplicationUser user, CancellationToken token)
-        {
-            bool added = await InsertParticipant(project.Id, user.Id, token).ConfigureAwait(false);
-            if (!added)
-            {
-                // This is not a valid scenario
-                return new AddParticipantResult($"User {user.Id} is already participating in project {project.Name}.");
-            }
-
-            return new AddParticipantResult(loggedIn: true, userAdded: true);
+            var commitEmailViewModel = new ProjectCommitEmailViewModel(project: project, result: result, user: applicationUser, publicAddress: new Uri(siteOptions.PublicAddress), projectUrl: new Uri($"https://{siteOptions.PublicAddress}/{project.Url}"));
+            await emailSender.SendEmailTemplated(email, $"Thank you for participating in the \"{project.Name}\" project on CollAction", "ProjectCommit", commitEmailViewModel).ConfigureAwait(false);
         }
 
         private Task RefreshParticipantCountMaterializedView(CancellationToken token)
@@ -613,6 +621,8 @@ namespace CollAction.Services.Projects
 
         private async Task<bool> InsertParticipant(int projectId, string userId, CancellationToken token)
         {
+            logger.LogInformation("Adding participant '{0}' to project '{1}'", userId, projectId);
+
             if (await context.ProjectParticipants.AnyAsync(part => part.UserId == userId && part.ProjectId == projectId).ConfigureAwait(false))
             {
                 return false;
@@ -628,12 +638,27 @@ namespace CollAction.Services.Projects
 
                 await RefreshParticipantCountMaterializedView(token).ConfigureAwait(false);
 
+                logger.LogInformation("Added participant '{0}' to project '{1}'", userId, projectId);
+
                 return true;
             }
             catch (DbUpdateException e)
             {
-                logger.LogWarning(e, "Duplicate project subscription");
+                logger.LogWarning(e, "Duplicate project subscription, failure adding participant '{0}' to project '{1}'", userId, projectId);
                 // User is already participating
+                return false;
+            }
+        }
+
+        private static bool IsValidEmail(string email)
+        {
+            try
+            {
+                _ = new MailAddress(email);
+                return true;
+            }
+            catch
+            {
                 return false;
             }
         }
