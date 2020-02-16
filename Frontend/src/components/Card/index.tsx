@@ -13,11 +13,7 @@ export default ({ project }: { project: IProject }) => {
           <img src={project.bannerImage.filepath} alt={project.name} />
         ) : (
           <img
-            src={
-              "/assets/default_banners/" +
-              project.categories[0].category +
-              ".jpg"
-            }
+            src={"/assets/default_banners/" + project.category.name + ".jpg"}
             alt={project.name}
           />
         )}
@@ -31,12 +27,12 @@ export default ({ project }: { project: IProject }) => {
         <h3 className={styles.title}>{project.name}</h3>
         <div className={styles.proposal}>{project.proposal}</div>
         <div className={styles.stats}>
-          <div className={styles.percentage}>
+          {/* <div className={styles.percentage}>
             <ProgressRing progress={project.percentage} />
-          </div>
+          </div> */}
           <div>
             <div className={styles.count}>
-              <span>{project.totalParticipants}</span>
+              <span>{project.participantCounts}</span>
               <span> of {project.target} participants</span>
             </div>
             <div className={styles.remainingTime}>
@@ -51,7 +47,7 @@ export default ({ project }: { project: IProject }) => {
             </div>
           </div>
         </div>
-        <CategoryTags categories={project.categories}></CategoryTags>
+        <CategoryTags category={project.category}></CategoryTags>
       </div>
     </a>
   );

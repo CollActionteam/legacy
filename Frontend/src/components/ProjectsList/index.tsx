@@ -7,26 +7,27 @@ import { ProjectStatusFilter } from "../../api/types";
 import Loader from "../Loader";
 
 interface IProjectListProps {
-  category?: string;
-  status: string;
+  categoryId?: string;
+  status?: string;
 }
 
 export default ({
-  category,
+  categoryId,
   status = ProjectStatusFilter.Active,
 }: IProjectListProps) => {
   const query = useQuery(
     FIND_PROJECTS,
-    category
+    categoryId
       ? {
           variables: {
-            category: category,
-            status: status,
+            categoryId: categoryId,
+            // status: status,
           },
         }
       : {
           variables: {
-            status: status,
+            categoryId: "1",
+            // status: status,
           },
         }
   );
@@ -60,14 +61,19 @@ export default ({
 };
 
 const FIND_PROJECTS = gql`
-  query FindProjects($category: Category, $status: SearchProjectStatus) {
-    projects(category: $category, status: $status) {
+  query FindProjects($categoryId: [String]) {
+    projects(
+      where: [{ path: "categoryId", comparison: equal, value: $categoryId }]
+    ) {
       id
       name
       description
       url
-      categories {
-        category
+      categoryId
+      category {
+        color
+        colorHex
+        name
       }
       descriptiveImage {
         filepath
@@ -78,14 +84,13 @@ const FIND_PROJECTS = gql`
       target
       proposal
       remainingTime
-      totalParticipants
-      percentage
+      participantCounts {
+        count
+      }
       displayPriority
       isActive
       isComingSoon
       isClosed
-      isSuccessfull
-      isFailed
     }
   }
 `;

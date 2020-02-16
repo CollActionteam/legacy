@@ -37,7 +37,7 @@ export default ({ title, text }: ICarouselProps) => {
   const query = useQuery(GET_CAROUSEL_PROJECTS);
   const { data, loading, error } = query;
 
-  if (error) {
+  if (error || !data) {
     console.error(error);
     return null;
   }
@@ -84,8 +84,11 @@ const GET_CAROUSEL_PROJECTS = gql`
       name
       description
       url
-      categories {
-        category
+      category {
+        color
+        colorHex
+        id
+        name
       }
       descriptiveImage {
         filepath
@@ -94,16 +97,15 @@ const GET_CAROUSEL_PROJECTS = gql`
       goal
       end
       target
-      percentage
       proposal
       remainingTime
-      totalParticipants
+      participantCounts {
+        count
+      }
       displayPriority
       isActive
       isComingSoon
       isClosed
-      isSuccessfull
-      isFailed
     }
   }
 `;
