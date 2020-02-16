@@ -6,6 +6,7 @@ import { Grid, Container } from "@material-ui/core";
 import Card from "../Card";
 import Loader from "../Loader";
 import { SecondaryButton, SecondaryGhostButton } from "../Button/Button";
+import { Fragments } from "../../api/fragments";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -80,32 +81,8 @@ export default ({ title, text }: ICarouselProps) => {
 const GET_CAROUSEL_PROJECTS = gql`
   query GetCarouselProjects {
     projects(take: 6) {
-      id
-      name
-      description
-      url
-      category {
-        color
-        colorHex
-        id
-        name
-      }
-      descriptiveImage {
-        filepath
-        url
-      }
-      goal
-      end
-      target
-      proposal
-      remainingTime
-      participantCounts {
-        count
-      }
-      displayPriority
-      isActive
-      isComingSoon
-      isClosed
+      ...ProjectDetail
     }
   }
+  ${Fragments.projectDetail}
 `;

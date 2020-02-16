@@ -4,13 +4,17 @@ import { IProjectCategory } from "../../api/types";
 import Utils from "../../utils";
 
 interface ICategoryTagProperties {
-  category: IProjectCategory;
+  categories: IProjectCategory[];
 }
 
-export default ({ category }: ICategoryTagProperties) => {
+export default ({ categories }: ICategoryTagProperties) => {
   return (
-    <div key={category.id} className={styles.category}>
-      {Utils.formatCategory(category.name)}
+    <div>
+      {categories.map((item: IProjectCategory) => (
+        <div key={item.category} className={styles.category}>
+          {Utils.formatCategory(item.category)}
+        </div>
+      ))}
     </div>
   );
 };

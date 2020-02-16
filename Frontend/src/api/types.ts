@@ -27,10 +27,7 @@ export interface IImageFile {
 }
 
 export interface IProjectCategory {
-  color: number;
-  colorHex: string;
-  id: number;
-  name: string;
+  category: string;
 }
 
 export interface IMiscellaneous {
@@ -55,8 +52,7 @@ export interface IProject {
   bannerImage: IImageFile;
   bannerImageField: number;
   canSendProjectEmail: boolean;
-  categoryId: string;
-  category: IProjectCategory;
+  categories: IProjectCategory[];
   creatorComments: string;
   description: string;
   descriptionVideoLink: string;
@@ -69,18 +65,22 @@ export interface IProject {
   isActive: boolean;
   isClosed: boolean;
   isComingSoon: boolean;
+  isSuccessfull: boolean;
+  isFailed: boolean;
   name: string;
   nameNormalized: string;
   numberProjectsEmailSend: number;
   owner: IUser;
   ownerId: string;
-  participantCounts: IProjectParticipantCount;
+  percentage: number;
+  participants: IProjectParticipant[];
   proposal: string;
   remainingTime: any;
   start: Date;
   status: ProjectStatus;
   tags: IProjectTag[];
   target: number;
+  totalParticipants: number;
   url: string;
 }
 
@@ -89,10 +89,6 @@ export interface IProjectParticipant {
   subscribedToProjectEmails: boolean;
   unsubscribeToken: any;
   user: IUser;
-}
-
-export interface IProjectParticipantCount {
-  count: number;
 }
 
 export enum ProjectStatus {

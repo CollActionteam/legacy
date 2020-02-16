@@ -11,7 +11,6 @@ import styles from "./find.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Loader from "../../components/Loader";
 import Utils from "../../utils";
-import { Fragments } from "../../api/fragments";
 
 export default () => (
   <StaticQuery
@@ -34,12 +33,12 @@ export default () => (
         .map(e => e.node)
         .find(n => (n.name = "photos"));
 
-      const [categoryId, setCategoryId] = useState("");
+      const [category, setCategory] = useState("");
       const [status, setStatus] = useState(ProjectStatusFilter.Active);
       const { data, loading } = useQuery(GET_CATEGORIES);
 
       const handleCategoryChange = (e: React.ChangeEvent) => {
-        setCategoryId((e.target as any).value.toString());
+        setCategory((e.target as any).value.toString());
       };
 
       const handleStatusChange = (e: React.ChangeEvent) => {
@@ -57,11 +56,11 @@ export default () => (
                   <span>Show me</span>
 
                   <div className={styles.selectWrapper}>
-                    <select value={categoryId} onChange={handleCategoryChange}>
+                    <select value={category} onChange={handleCategoryChange}>
                       <option value="">All</option>
                       {data
-                        ? data.categories.map(v => (
-                            <option key={v.name} value={v.id}>
+                        ? data.__type.enumValues.map(v => (
+                            <option key={v.name} value={v.name}>
                               {Utils.formatCategory(v.name)}
                             </option>
                           ))
@@ -87,7 +86,7 @@ export default () => (
             </Section>
           </Banner>
           <Section>
-            <ProjectsList categoryId={categoryId} status={status} />
+            <ProjectsList category={category} status={status} />
           </Section>
         </Layout>
       );
@@ -97,9 +96,10 @@ export default () => (
 
 const GET_CATEGORIES = gql`
   query {
-    categories {
-      ...Category
+    __type(name: "Category") {
+      enumValues {
+        name
+      }
     }
   }
-  ${Fragments.category}
 `;

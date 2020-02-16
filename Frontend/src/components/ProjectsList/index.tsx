@@ -8,22 +8,29 @@ import { ProjectStatusFilter } from "../../api/types";
 import Loader from "../Loader";
 
 interface IProjectListProps {
-  categoryId?: string;
+  category?: string;
   status?: string;
 }
 
 export default ({
-  categoryId,
+  category,
   status = ProjectStatusFilter.Active,
 }: IProjectListProps) => {
-  const query = categoryId
-    ? useQuery(FIND_PROJECTS, {
-        variables: {
-          categoryId: categoryId,
-          status: status,
-        },
-      })
-    : useQuery(FIND_ALL_PROJECTS);
+  const query = useQuery(
+    FIND_PROJECTS,
+    category
+      ? {
+          variables: {
+            category: category,
+            status: status,
+          },
+        }
+      : {
+          variables: {
+            status: status,
+          },
+        }
+  );
 
   const { data, loading, error } = query;
 
@@ -54,19 +61,8 @@ export default ({
 };
 
 const FIND_PROJECTS = gql`
-  query FindProjects($categoryId: [String]) {
-    projects(
-      where: [{ path: "categoryId", comparison: equal, value: $categoryId }]
-    ) {
-      ...ProjectDetail
-    }
-  }
-  ${Fragments.projectDetail}
-`;
-
-const FIND_ALL_PROJECTS = gql`
-  query FindAllProjects {
-    projects {
+  query FindProjects($category: Category, $status: SearchProjectStatus) {
+    projects(category: $category, status: $status) {
       ...ProjectDetail
     }
   }

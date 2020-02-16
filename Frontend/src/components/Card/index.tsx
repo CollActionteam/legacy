@@ -6,6 +6,9 @@ import ProgressRing from "../ProgressRing";
 import CategoryTags from "../CategoryTags";
 
 export default ({ project }: { project: IProject }) => {
+  const imageName = project.categories[0]
+    ? project.categories[0].category
+    : "default";
   return (
     <a href={project.url} className={styles.card}>
       <figure className={styles.image}>
@@ -13,7 +16,7 @@ export default ({ project }: { project: IProject }) => {
           <img src={project.bannerImage.filepath} alt={project.name} />
         ) : (
           <img
-            src={"/assets/default_banners/" + project.categoryId + ".jpg"}
+            src={"/assets/default_banners/" + imageName + ".jpg"}
             alt={project.name}
           />
         )}
@@ -28,11 +31,11 @@ export default ({ project }: { project: IProject }) => {
         <div className={styles.proposal}>{project.proposal}</div>
         <div className={styles.stats}>
           <div className={styles.percentage}>
-            <ProgressRing project={project} />
+            <ProgressRing progress={project.percentage} />
           </div>
           <div>
             <div className={styles.count}>
-              <span>{project.participantCounts}</span>
+              <span>{project.totalParticipants}</span>
               <span> of {project.target} participants</span>
             </div>
             <div className={styles.remainingTime}>
@@ -47,7 +50,7 @@ export default ({ project }: { project: IProject }) => {
             </div>
           </div>
         </div>
-        {/* <CategoryTags category={project.category}></CategoryTags> */}
+        <CategoryTags categories={project.categories}></CategoryTags>
       </div>
     </a>
   );
