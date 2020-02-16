@@ -2,7 +2,7 @@ import React from 'react';
 import Header from '../Header/Header';
 import Helmet from 'react-helmet';
 
-const Layout = ({ children }) => {
+const Layout = ({ children } : any) => {
     return (
         <React.Fragment>
             <Helmet>
