@@ -84,7 +84,7 @@
     margin-bottom: var(--spacing-xlg);
 
     @include breakpoint-up(md) {
-        margin-top: var(--spacing-xlg);
+        margin-top: var(--spacing-lg);
         padding-left: 3rem;
         padding-right: 3rem;
     }
