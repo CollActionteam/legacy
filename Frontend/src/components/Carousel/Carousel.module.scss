@@ -6,6 +6,7 @@
 
         @include breakpoint-down(sm) {
             margin-top: var(--spacing-lg);
+            overflow-x: auto; // Horizontal scroll on mobile
         }
     }
 
@@ -68,7 +69,7 @@
         }
 
         @include breakpoint-up(lg) {
-            left: -38.5%;
+            left: -39%;
         }
     }
 
@@ -88,7 +89,7 @@
         padding-right: 3rem;
     }
 
-    @include breakpoint-up(lg) {
+    @include breakpoint-up(xl) {
         padding: 0;
     }
 }
@@ -136,6 +137,11 @@
 }
 
 .sliderContainer {
+    // Horizontal scroll on mobile
+    @include breakpoint-down(sm) {
+        overflow: hidden;
+    }
+
     @include breakpoint-up(sm) {
         padding: var(--spacing-xlg) 3rem;
     }
