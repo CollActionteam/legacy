@@ -8,7 +8,7 @@ import CategoryTags from "../CategoryTags";
 export default ({ project }: { project: IProject }) => {
   const imageName = project.categories[0]
     ? project.categories[0].category
-    : "default";
+    : "OTHER";
   return (
     <a href={project.url} className={styles.card}>
       <figure className={styles.image}>
