@@ -8,6 +8,7 @@ import { Facebook, Twitter, LinkedIn, Email } from "../components/Share";
 import { Section } from "../components/Section";
 import Carousel from "../components/Carousel/Carousel";
 import ProjectsList from "../components/ProjectsList";
+import Stats from "../components/Stats";
 
 export default () => (
   <StaticQuery
@@ -48,7 +49,7 @@ export default () => (
             <p>Time to act</p>
           </Section>
           <Section center color="grey" title="Our collective impact">
-            <p>Stats</p>
+            <Stats />
           </Section>
           <Section center title="Join a crowdaction">
             <ProjectsList />
