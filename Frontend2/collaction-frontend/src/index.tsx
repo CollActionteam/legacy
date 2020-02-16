@@ -4,23 +4,23 @@ import * as serviceWorker from './serviceWorker';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 
 import Apollo from './providers/apollo';
-import App from './App';
-import FindPage from './pages/Find/FindPage';
-import NotFoundPage from './pages/404/404';
-import Layout from './components/Layout/Layout';
+import HomePage from './pages/Home/Home';
+import FindPage from './pages/Find/Find';
+import NotFoundPage from './pages/NotFound/NotFound';
+import Layout from './components/Layout';
 
 const routing = (
-    <Apollo>
-        <Router>
+    <Router>
+        <Apollo>
             <Layout>
                 <Switch>
-                    <Route exact path="/" component={App} />
-                    <Route path="/find" component={FindPage} />
+                    <Route exact path="/" component={HomePage} />
+                    <Route path="/projects/find" component={FindPage} />
                     <Route component={NotFoundPage} />
                 </Switch>
             </Layout>
-        </Router>
-    </Apollo>
+        </Apollo>
+    </Router>
 );
 
 ReactDOM.render(routing, document.getElementById('root'));
