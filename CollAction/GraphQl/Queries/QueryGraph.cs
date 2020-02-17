@@ -72,6 +72,10 @@ namespace CollAction.GraphQl.Queries
             Field<MiscellaneousGraph>(
                 "miscellaneous",
                 resolve: c => new object());
+
+            Field<StatisticsGraph>(
+                "statistics",
+                resolve: c => new object());
         }
     }
 } 
