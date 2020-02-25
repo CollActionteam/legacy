@@ -164,7 +164,7 @@ export default class UploadDescriptiveImage extends UploadImage<
                   <img
                     className={styles.descriptiveImagePreview}
                     src={this.state.image}
-                    alt="Preview image"
+                    alt="Preview"
                   ></img>
                 )}
               </div>

@@ -1,45 +1,49 @@
-import React from "react";
-import { Grid } from "@material-ui/core";
+import React from 'react';
+import { Grid } from '@material-ui/core';
 
-import styles from "./About.module.scss";
-import { Section } from "../../components/Section";
-import { Faq } from "../../components/Faq";
+import styles from './About.module.scss';
+import { Section } from '../../components/Section';
+import { Faq } from '../../components/Faq';
+
+import { useTranslation } from 'react-i18next';
 
 const AboutPage = () => {
+  const { t } = useTranslation();
+
   const videos = {
-    mainvideo: ""
+    mainvideo: ''
   };
 
   const mission = {
-    html: ""
+    html: ''
   };
 
   const about = {
-    html: ""
+    html: ''
   };
 
   const join = {
-    html: ""
+    html: ''
   };
 
   const partners = {
-    html: ""
+    html: ''
   };
 
   const meetTheTeam = {
-    title: "Meet the team",
+    title: 'Meet the team',
     team: [
       {
-        name: "Testname",
-        photo: ""
+        name: 'Testname',
+        photo: ''
       }
     ]
   };
 
   const faqs = [
     {
-      name: "",
-      html: ""
+      name: '',
+      html: ''
     }
   ];
 
@@ -61,7 +65,8 @@ const AboutPage = () => {
         ></iframe>
       </Grid>
       <Section color="green">
-        <span dangerouslySetInnerHTML={{ __html: mission.html }}></span>
+        <h2>{t('about.mission.title')}</h2>
+        <span dangerouslySetInnerHTML={{ __html: t('about.mission.html') }}></span>
       </Section>
       <Section>
         <span dangerouslySetInnerHTML={{ __html: about.html }}></span>
@@ -78,16 +83,12 @@ const AboutPage = () => {
         <span dangerouslySetInnerHTML={{ __html: partners.html }}></span>
       </Section>
       <Section title="Frequently Asked Questions">
-        {faqs.map(faq => (
-          <Faq
-            key={faq.name}
-            title={faq.name}
-            content={faq.html}
-          ></Faq>
+        {faqs.map((faq) => (
+          <Faq key={faq.name} title={faq.name} content={faq.html}></Faq>
         ))}
       </Section>
     </React.Fragment>
   );
-}
+};
 
 export default AboutPage;

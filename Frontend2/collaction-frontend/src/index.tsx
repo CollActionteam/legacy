@@ -4,7 +4,8 @@ import * as serviceWorker from './serviceWorker';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import Apollo from './providers/apollo';
 import Layout from './components/Layout';
-import './i18n';
+import i18n from './i18n';
+import { I18nextProvider } from 'react-i18next';
 
 // General pages
 import HomePage from './pages/Home/Home';
@@ -20,23 +21,25 @@ import ThankYouPage from './pages/projects/ThankYouCreate/ThankYouCreate';
 import ProjectDetailsPage from './pages/projects/Detail/ProjectDetails';
 
 const routing = (
-    <Router>
-        <Apollo>
-            <Layout>
-                <Switch>
-                    <Route exact path="/" component={HomePage} />
-                    <Route path="/login" component={LoginPage} />
-                    <Route path="/about" component={AboutPage} />
-                    <Route path="/projects/find" component={FindPage} />
-                    <Route path="/projects/start" component={StartProjectPage} />
-                    <Route path="/projects/create" component={CreateProjectPage} />
-                    <Route path="/projects/thank-you-create" component={ThankYouPage} />
-                    <Route path="/projects/:slug/:projectId" render={routeProps => <ProjectDetailsPage {...routeProps} />} />
-                    <Route component={NotFoundPage} />
-                </Switch>
-            </Layout>
-        </Apollo>
-    </Router>
+    <I18nextProvider i18n={i18n}>
+        <Router>
+            <Apollo>
+                <Layout>
+                    <Switch>
+                        <Route exact path="/" component={HomePage} />
+                        <Route path="/login" component={LoginPage} />
+                        <Route path="/about" component={AboutPage} />
+                        <Route path="/projects/find" component={FindPage} />
+                        <Route path="/projects/start" component={StartProjectPage} />
+                        <Route path="/projects/create" component={CreateProjectPage} />
+                        <Route path="/projects/thank-you-create" component={ThankYouPage} />
+                        <Route path="/projects/:slug/:projectId" render={routeProps => <ProjectDetailsPage {...routeProps} />} />
+                        <Route component={NotFoundPage} />
+                    </Switch>
+                </Layout>
+            </Apollo>
+        </Router>
+    </I18nextProvider>
 );
 
 ReactDOM.render(routing, document.getElementById('root'));
