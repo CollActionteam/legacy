@@ -1,10 +1,11 @@
 import React from "react";
-import styles from "./style.module.scss";
 import { Grid } from "@material-ui/core";
 
+import styles from "./Banner.module.scss";
+
 export const Banner = ({ children, photo, dots = false }: any) => (
-  <React.Fragment>
+  <div className={styles.banner}>
     {dots ? <div className={styles.dots}></div> : null}
     <Grid container>{children}</Grid>
-  </React.Fragment>
+  </div>
 );

@@ -1,0 +1,10 @@
+@import '../../../components/Styles/responsive';
+
+@include breakpoint-down(sm) {
+  .thankYouOverlay {
+    &Title,
+    &Subtitle {
+      text-align: center;
+    }
+  }
+}

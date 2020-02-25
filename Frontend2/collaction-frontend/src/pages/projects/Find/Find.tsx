@@ -3,15 +3,15 @@ import {useQuery} from '@apollo/react-hooks';
 import {gql} from 'apollo-boost';
 import {Helmet} from 'react-helmet';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ProjectStatusFilter } from '../../api/types';
+import { ProjectStatusFilter } from '../../../api/types';
 
-import { Banner } from '../../components/Banner';
-import Loader from '../../components/Loader';
-import { Section } from '../../components/Section';
-import ProjectsList from '../../components/ProjectsList';
+import { Banner } from '../../../components/Banner/Banner';
+import Loader from '../../../components/Loader';
+import { Section } from '../../../components/Section';
+import ProjectsList from '../../../components/ProjectsList';
 
 import styles from "./Find.module.scss";
-import Utils from '../../utils';
+import Utils from '../../../utils';
 
 const FindPage = () => {
   const [category, setCategory] = useState("");
