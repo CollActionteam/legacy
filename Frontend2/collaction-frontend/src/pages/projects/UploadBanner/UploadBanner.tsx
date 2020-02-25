@@ -94,7 +94,7 @@ export default class UploadBanner extends UploadImage<
 
           {this.state.preview && (
             <div className={styles.imagePreview}>
-              <img src={BrowserSizeImage}></img>
+              <img src={BrowserSizeImage} alt="Resize your browser"></img>
               <div className={styles.dropzoneInstruction}>
                 Resize your browser or rotate your device to see if the image is
                 suitable.

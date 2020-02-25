@@ -87,7 +87,7 @@ export default class UploadDescriptiveImage extends UploadImage<
                 : "The image description will appear here"}
             </p>
             <div className={styles.imagePreview}>
-              <img src={BrowserSizeImage}></img>
+              <img src={BrowserSizeImage} alt="Resize your browser" />
               <div className={styles.dropzoneInstruction}>
                 Resize your browser or rotate your device to see if the image
                 suitable.
@@ -164,6 +164,7 @@ export default class UploadDescriptiveImage extends UploadImage<
                   <img
                     className={styles.descriptiveImagePreview}
                     src={this.state.image}
+                    alt="Preview image"
                   ></img>
                 )}
               </div>

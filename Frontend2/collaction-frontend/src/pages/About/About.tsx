@@ -10,7 +10,6 @@ const AboutPage = () => {
     mainvideo: ""
   };
 
-  const sections = [];
   const mission = {
     html: ""
   };

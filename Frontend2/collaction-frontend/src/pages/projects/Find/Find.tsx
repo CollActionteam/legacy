@@ -16,7 +16,7 @@ import Utils from '../../../utils';
 const FindPage = () => {
   const [category, setCategory] = useState("");
   const [status, setStatus] = useState(ProjectStatusFilter.Active);
-  const { error, data, loading } = useQuery(GET_CATEGORIES);
+  const { data, loading } = useQuery(GET_CATEGORIES);
 
   const handleCategoryChange = (e: React.ChangeEvent) => {
     setCategory((e.target as any).value.toString());

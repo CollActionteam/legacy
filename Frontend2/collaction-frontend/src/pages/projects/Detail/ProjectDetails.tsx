@@ -16,7 +16,7 @@ import ProgressRing from "../../../components/ProgressRing";
 import { Section } from "../../../components/Section";
 
 import styles from "./ProjectDetails.module.scss";
-import { useHistory, RouteComponentProps} from "react-router-dom";
+import { RouteComponentProps} from "react-router-dom";
 
 type TParams = {
   slug: string,
@@ -169,7 +169,7 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
               {project.descriptiveImage && (
                 <div>
                   <figure className={styles.image}>
-                    <img src={project.descriptiveImage.url}></img>
+                    <img src={project.descriptiveImage.url} alt={project.descriptiveImage.description} />
                     <p>{project.descriptiveImage.description}</p>
                   </figure>
                 </div>
@@ -188,6 +188,7 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
                     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                     frameBorder="0"
                     allowFullScreen
+                    title="video"
                   ></iframe>
                 </div>
               )}
