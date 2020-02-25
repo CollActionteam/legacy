@@ -1,4 +1,28 @@
 {
+    "home" : {
+        "carousel" : {
+            "title" : "Power to the crowd",
+            "text": "We help people solve collective action problems through crowdacting."
+        },
+        "intro" : {
+            "title" : "Together we make waves",
+            "text" : "Do you want to make the world a better place, but do you sometimes feel that your actions are only a drop in the ocean? Well, not anymore, because we are introducing crowdacting: taking action knowing that you are one of many. We revamp the neighbourhood with a hundred people or switch to renewable energy with hundreds or thousands of people at the same time. [Find out more about what crowdacting](/about), take action collectively with one of the existing projects, or [start your own crowdacting  project](/projects/start)."
+        },
+        "timeToAct" : {
+            "title" : "Time to act",
+            "text" : ""
+        },
+        "stats" : {
+            "title" : "Our collective impact"
+        },
+        "projects" : {
+            "title" : "Join a crowaction",
+            "button" : "Find more projects"
+        },
+        "share" : {
+            "title" : "Spread it further"
+        }
+    },
     "about": {
         "mission": {
             "title" : "Title",
