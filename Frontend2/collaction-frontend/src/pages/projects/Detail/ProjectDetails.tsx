@@ -16,9 +16,15 @@ import ProgressRing from "../../../components/ProgressRing";
 import { Section } from "../../../components/Section";
 
 import styles from "./ProjectDetails.module.scss";
+import { useHistory, RouteComponentProps} from "react-router-dom";
 
-const ProjectDetailsPage = () => {
-  const projectId = "";
+type TParams = {
+  slug: string,
+  projectId: string
+}
+
+const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
+  const projectId = match.params.projectId;
 
   const query = useQuery(GET_PROJECT, { variables: { id: projectId } });
 

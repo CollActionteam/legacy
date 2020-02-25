@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, Container } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 
 import styles from "./About.module.scss";
 import { Section } from "../../components/Section";

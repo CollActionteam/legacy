@@ -5,7 +5,7 @@ import { Section } from "../../../components/Section";
 import styles from "./ThankYouCreate.module.scss";
 
 const ThankYouPage = ({ data } : any) => {
-  const name = data.name || "ProjectName";
+  const name = "ProjectName";
   const photos = {
       thankyoucreatephoto: ""
   };

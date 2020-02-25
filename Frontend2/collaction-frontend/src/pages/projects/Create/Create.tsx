@@ -16,6 +16,8 @@ import Loader from '../../../components/Loader';
 
 import styles from './Create.module.scss';
 import Utils from '../../../utils';
+import { useHistory } from 'react-router-dom';
+import Helmet from 'react-helmet';
 
 const GET_CATEGORIES = gql`
   query {
@@ -29,6 +31,7 @@ const GET_CATEGORIES = gql`
 `;
 
 const CreateProjectPage = () => {
+  const history = useHistory();
   const minStartDate = new Date();
   const maxStartDate = new Date(minStartDate);
   maxStartDate.setMonth(new Date().getMonth() + 12);
@@ -117,7 +120,7 @@ const CreateProjectPage = () => {
         return;
       }
 
-      //   navigate("projects/thank-you-create");
+        history.push("projects/thank-you-create");
     } catch (error) {
       // TODO: handle errors
       console.error('Could not create project', error);
@@ -153,7 +156,11 @@ const CreateProjectPage = () => {
   };
 
   return (
-    <React.Fragment>
+    <div className="CreateProjectPage">
+      <Helmet>
+        <title>Create a project</title>
+        <meta name="description" content="Create a project" />
+      </Helmet>
       {loading ? (
         <Loader />
       ) : (
@@ -408,7 +415,7 @@ const CreateProjectPage = () => {
           )}
         </Formik>
       )}
-    </React.Fragment>
+    </div>
   );
 };
 

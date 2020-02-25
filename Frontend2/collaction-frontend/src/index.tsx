@@ -29,8 +29,8 @@ const routing = (
                     <Route path="/projects/find" component={FindPage} />
                     <Route path="/projects/start" component={StartProjectPage} />
                     <Route path="/projects/create" component={CreateProjectPage} />
-                    <Route path="/projects/thank-you" component={ThankYouPage} />
-                    {/* <Route path="/projects/:slug/:projectId" component={ProjectDetailsPage} /> */}
+                    <Route path="/projects/thank-you-create" component={ThankYouPage} />
+                    <Route path="/projects/:slug/:projectId" render={routeProps => <ProjectDetailsPage {...routeProps} />} />
                     <Route component={NotFoundPage} />
                 </Switch>
             </Layout>

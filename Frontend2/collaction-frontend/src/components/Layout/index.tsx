@@ -47,15 +47,13 @@ export default ({ children }: any) => (
         { name: "keywords", content: "collaction" },
       ]}
     ></Helmet>
-    <Grid container className="site">
-      <Header />
-      <Grid container className="site-content">
-        <Grid item xs={12}>
-          {children}
-        </Grid>
+    <Header />
+    <Grid container className="site-content">
+      <Grid item xs={12}>
+        {children}
       </Grid>
-      <Footer></Footer>
     </Grid>
+    <Footer></Footer>
   </React.Fragment>
 );
 
