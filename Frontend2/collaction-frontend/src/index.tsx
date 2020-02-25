@@ -4,6 +4,7 @@ import * as serviceWorker from './serviceWorker';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import Apollo from './providers/apollo';
 import Layout from './components/Layout';
+import './i18n';
 
 // General pages
 import HomePage from './pages/Home/Home';
