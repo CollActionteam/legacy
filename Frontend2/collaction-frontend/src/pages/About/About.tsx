@@ -16,12 +16,15 @@ const AboutPage = () => {
     mainvideo: ''
   };
 
-  const generateMemberPhoto = (member: any) => (
-    <li key={member.name} className={styles.teamMember}>
-      <img src={member.photo} alt={member.name} title={member.name} />
-      <span>{member.name}</span>
-    </li>
-  );
+  const generateMemberPhoto = (member: any) => {
+    const photo = require(`../../assets/${member.photo}`);
+    return (
+      <li key={member.name} className={styles.teamMember}>
+        <img src={photo} alt={member.name} title={member.name} />
+        <span>{member.name}</span>
+      </li>
+    );
+  };
 
   return (
     <React.Fragment>
