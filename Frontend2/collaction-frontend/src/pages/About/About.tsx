@@ -9,43 +9,12 @@ import { useTranslation } from 'react-i18next';
 
 const AboutPage = () => {
   const { t } = useTranslation();
-
+  const faqs: any[] = t('about.faqs', { returnObjects: true });
+  const team: any[] = t('about.team.team', { returnObjects: true });
+  
   const videos = {
     mainvideo: ''
   };
-
-  const mission = {
-    html: ''
-  };
-
-  const about = {
-    html: ''
-  };
-
-  const join = {
-    html: ''
-  };
-
-  const partners = {
-    html: ''
-  };
-
-  const meetTheTeam = {
-    title: 'Meet the team',
-    team: [
-      {
-        name: 'Testname',
-        photo: ''
-      }
-    ]
-  };
-
-  const faqs = [
-    {
-      name: '',
-      html: ''
-    }
-  ];
 
   const generateMemberPhoto = (member: any) => (
     <li key={member.name} className={styles.teamMember}>
@@ -64,27 +33,26 @@ const AboutPage = () => {
           allowFullScreen
         ></iframe>
       </Grid>
-      <Section color="green">
-        <h2>{t('about.mission.title')}</h2>
-        <span dangerouslySetInnerHTML={{ __html: t('about.mission.html') }}></span>
+      <Section color="green" title={(t('about.mission.title'))}>
+        <span dangerouslySetInnerHTML={{ __html: t('about.mission.text') }}></span>
       </Section>
-      <Section>
-        <span dangerouslySetInnerHTML={{ __html: about.html }}></span>
+      <Section title={t('about.about.title')}>
+        <span dangerouslySetInnerHTML={{ __html: t('about.about.text') }}></span>
       </Section>
-      <Section color="grey" title={meetTheTeam.title}>
+      <Section color="grey" title={t('about.team.title')}>
         <ul className={styles.team}>
-          {meetTheTeam.team.map(generateMemberPhoto)}
+          {team.map(generateMemberPhoto)}
         </ul>
       </Section>
-      <Section>
-        <span dangerouslySetInnerHTML={{ __html: join.html }}></span>
+      <Section title={t('about.join.title')}>
+        <span dangerouslySetInnerHTML={{ __html: t('about.join.text') }}></span>
       </Section>
-      <Section color="grey">
-        <span dangerouslySetInnerHTML={{ __html: partners.html }}></span>
+      <Section color="grey" title={t('about.partners.title')}>
+        <span dangerouslySetInnerHTML={{ __html: t('about.partners.text') }}></span>
       </Section>
       <Section title="Frequently Asked Questions">
         {faqs.map((faq) => (
-          <Faq key={faq.name} title={faq.name} content={faq.html}></Faq>
+          <Faq key={faq.title} title={faq.title} content={faq.text}></Faq>
         ))}
       </Section>
     </React.Fragment>
