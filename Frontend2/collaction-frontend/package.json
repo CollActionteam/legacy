@@ -25,6 +25,7 @@
     "draft-js-export-html": "^1.4.1",
     "formik": "^2.1.4",
     "graphql": "^14.6.0",
+    "gray-matter": "^4.0.2",
     "i18next": "^19.3.2",
     "mui-rte": "^1.12.0",
     "node-sass": "^4.13.1",
