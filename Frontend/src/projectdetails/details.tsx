@@ -89,7 +89,7 @@ const ProjectDetailsPage = ({ projectId }) => {
             <FontAwesomeIcon icon="clock"></FontAwesomeIcon>
             <span>{Math.round(project.remainingTime / 3600 / 24)} days</span>
           </div>
-          <div className={styles.join}>
+          <div className={styles.joinButton}>
             <Button
               onClick={() => {
                 const join = document.getElementById("join");
@@ -121,6 +121,11 @@ const ProjectDetailsPage = ({ projectId }) => {
 
   return (
     <Layout>
+      <div className={styles.mobileBannerImage}>
+        <figure>
+          <img src={banner} alt={project.name}></img>
+        </figure>
+      </div>
       <Section center className={styles.title} title={project.name}>
         <p>{project.proposal}</p>
         <CategoryTags categories={project.categories}></CategoryTags>
@@ -194,7 +199,7 @@ const ProjectDetailsPage = ({ projectId }) => {
 
           <Grid item md={5} xs={12}>
             <Container>
-              <div className={styles.box}>
+              <div className={styles.projectStarter}>
                 <div className={styles.avatarContainer}>
                   <Avatar className={styles.avatar}>
                     {project.owner.firstName.charAt(0)}
@@ -204,7 +209,7 @@ const ProjectDetailsPage = ({ projectId }) => {
                 <h4>{project.owner.fullName}</h4>
                 <p className={styles.projectStarterTitle}>Project starter</p>
               </div>
-              <div id="join" className={styles.box}>
+              <div id="join" className={styles.joinSection}>
                 <Formik
                   initialValues={{
                     participantEmail: currentEmail || "",

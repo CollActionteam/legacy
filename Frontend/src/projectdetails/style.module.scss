@@ -7,11 +7,25 @@
   background-color: var(--c-grey);
 }
 
-.bannerImage {
+.mobileBannerImage {
+  img {
+    width: 100%;
+  }
+
+  @include breakpoint-up(sm) {
+    display: none;
+  }
+}
+
+.bannerImage {  
   display: flex;
   flex-direction: column;
   height: 100%;
   justify-content: center;
+
+  @include breakpoint-down(sm) {
+    display: none;
+  }
 }
 
 .title {
@@ -59,7 +73,7 @@
   }
 }
 
-.join {
+.joinButton {
   margin-bottom: var(--spacing);
 }
 
@@ -91,12 +105,20 @@
   }
 }
 
-.box {
+@mixin box {
   border: 1px solid var(--c-grey-d10);
   border-radius: var(--border-radius-sm);
   padding: var(--spacing);
   
   margin-bottom: var(--spacing);
+}
+
+.projectStarter {
+  @include box();
+
+  @include breakpoint-down(sm) {
+    margin-top: var(--spacing-xlg);
+  }
 }
 
 .avatarContainer {
@@ -112,6 +134,10 @@
 
 .projectStarterTitle {
   font-size: var(--font-size-sm);
+}
+
+.joinSection {
+  @include box();
 }
 
 .form {
