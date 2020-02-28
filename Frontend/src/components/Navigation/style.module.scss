@@ -19,6 +19,7 @@
         opacity: 1;
         transition: opacity 100ms,
                     transform 150ms;
+        z-index: 1;
 
         .collapsed & {
             opacity: 0;

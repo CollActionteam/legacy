@@ -27,7 +27,6 @@ const ProjectDetails = () => {
 
 const ProjectDetailsPage = ({ projectId }) => {
   const query = useQuery(GET_PROJECT, { variables: { id: projectId } });
-
   const { data, loading } = query;
 
   const [commitToProject] = useMutation(gql`
@@ -62,6 +61,7 @@ const ProjectDetailsPage = ({ projectId }) => {
   }
 
   const project = data.project as IProject;
+  const currentEmail = data.currentUser.email as string;
 
   const description = {
     __html: project.description,
@@ -125,10 +125,10 @@ const ProjectDetailsPage = ({ projectId }) => {
         <p>{project.proposal}</p>
         <CategoryTags categories={project.categories}></CategoryTags>
       </Section>
-      <Section color="grey">
+      <Section className={styles.banner}>
         <Grid container>
           <Grid item md={7} xs={12}>
-            <Container>
+            <Container className={styles.bannerImage}>
               <figure className={styles.image}>
                 <img src={banner} alt={project.name}></img>
               </figure>
@@ -207,7 +207,7 @@ const ProjectDetailsPage = ({ projectId }) => {
               <div id="join" className={styles.box}>
                 <Formik
                   initialValues={{
-                    participantEmail: "",
+                    participantEmail: currentEmail || "",
                   }}
                   validateOnChange={false}
                   validateOnBlur={true}
@@ -285,6 +285,9 @@ const GET_PROJECT = gql`
       isClosed
       isSuccessfull
       isFailed
+    }
+    currentUser {
+      email
     }
   }
 `;
