@@ -32,7 +32,7 @@ const ProjectDetailsPage = ({ projectId }) => {
   const [commitToProject] = useMutation(gql`
     mutation Commit($projectId: Int!, $email: String!) {
       project {
-        commitToProject(projectId: $projectId, email: $email) {
+        commitToProjectAnonymous(projectId: $projectId, email: $email) {
           error
           userAdded
           userAlreadyActive
