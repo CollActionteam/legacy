@@ -29,18 +29,7 @@ const ProjectDetailsPage = ({ projectId }) => {
   const query = useQuery(GET_PROJECT, { variables: { id: projectId } });
   const { data, loading } = query;
 
-  const [commitToProject] = useMutation(gql`
-    mutation Commit($projectId: Int!, $email: String!) {
-      project {
-        commitToProjectAnonymous(projectId: $projectId, email: $email) {
-          error
-          userAdded
-          userAlreadyActive
-          userCreated
-        }
-      }
-    }
-  `);
+  const [commitToProject] = useMutation(COMMIT_ANONYMOUS);
 
   const commit = async (form: any) => {
     const response = (await commitToProject({
@@ -58,10 +47,14 @@ const ProjectDetailsPage = ({ projectId }) => {
 
   if (!data) {
     navigate("/404");
+    return <div></div>;
   }
 
   const project = data.project as IProject;
-  const currentEmail = data.currentUser.email as string;
+
+  const loggedInUser = data.currentUser
+    ? (data.currentUser.firstName as string)
+    : undefined;
 
   const description = {
     __html: project.description,
@@ -212,7 +205,7 @@ const ProjectDetailsPage = ({ projectId }) => {
               <div id="join" className={styles.joinSection}>
                 <Formik
                   initialValues={{
-                    participantEmail: currentEmail || "",
+                    participantEmail: "",
                   }}
                   validateOnChange={false}
                   validateOnBlur={true}
@@ -291,8 +284,26 @@ const GET_PROJECT = gql`
       isSuccessfull
       isFailed
     }
+  }
+`;
+
+const GET_CURRENT_USER = gql`
+  {
     currentUser {
-      email
+      firstName
+    }
+  }
+`;
+
+const COMMIT_ANONYMOUS = gql`
+  mutation Commit($projectId: Int!, $email: String!) {
+    project {
+      commitToProjectAnonymous(projectId: $projectId, email: $email) {
+        error
+        userAdded
+        userAlreadyActive
+        userCreated
+      }
     }
   }
 `;
