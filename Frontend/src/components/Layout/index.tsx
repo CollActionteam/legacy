@@ -1,6 +1,5 @@
 import React from "react";
 import Helmet from "react-helmet";
-import { graphql, StaticQuery } from "gatsby";
 
 // Styling
 import "normalize.css";
@@ -39,40 +38,22 @@ library.add(
   faSignInAlt
 );
 
-export default ({ children }) => (
-  <StaticQuery
-    query={graphql`
-      query SiteTitleQuery {
-        site {
-          siteMetadata {
-            title
-            menuLinks {
-              name
-              link
-            }
-          }
-        }
-      }
-    `}
-    render={data => (
-      <React.Fragment>
-        <Helmet
-          title={data.site.siteMetadata.title}
-          meta={[
-            { name: "description", content: "CollAction" },
-            { name: "keywords", content: "collaction" },
-          ]}
-        ></Helmet>
-        <Grid container className="site">
-          <Header />
-          <Grid container className="site-content">
-            <Grid item xs={12}>
-              {children}
-            </Grid>
-          </Grid>
-          <Footer></Footer>
-        </Grid>
-      </React.Fragment>
-    )}
-  />
+export default ({ children }: any) => (
+  <React.Fragment>
+    <Helmet
+      title="CollAction"
+      meta={[
+        { name: "description", content: "CollAction" },
+        { name: "keywords", content: "collaction" },
+      ]}
+    ></Helmet>
+    <Header />
+    <Grid container className="site-content">
+      <Grid item xs={12}>
+        {children}
+      </Grid>
+    </Grid>
+    <Footer></Footer>
+  </React.Fragment>
 );
+

@@ -1,38 +1,18 @@
-import React from "react";
-import Grid from "@material-ui/core/Grid";
-import Drop from "../../../static/assets/logo.svg";
-import styles from "./style.module.scss";
-import { graphql, StaticQuery } from "gatsby";
+import React from 'react';
+import Grid from '@material-ui/core/Grid';
+import Drop from '../../assets/svg/drop.svg';
+import styles from './style.module.scss';
 
-export default () => (
-  <StaticQuery
-    query={graphql`
-      stats: allMarkdownRemark(
-        filter: { frontmatter: { type: { eq: "stats" } } }
-        sort: { fields: frontmatter___sequence }
-      ) {
-        nodes {
-          html
-          frontmatter {
-            name
-          }
-        }
-      }
-    }
-    `}
-    render={data => {
-      const stats = data.stats.nodes;
-      return (
-        <Grid container className={styles.main}>
-          {stats.map((stat, index) => (
-            <Grid key={index} item xs={12} md={4} className={styles.stat}>
-              <h2>{stat.frontmatter.name}</h2>
-              <span dangerouslySetInnerHTML={{ __html: stat.html }}></span>
-              <img src={Drop} />
-            </Grid>
-          ))}
+export default () => {
+  const stats: any = [];
+  return (
+    <Grid container className={styles.main}>
+      {stats.map((stat: any, index: number) => (
+        <Grid key={index} item xs={12} md={4} className={styles.stat}>
+          <h2>{stat.name}</h2>
+          <img src={Drop} alt={stat.name} />
         </Grid>
-      );
-    }}
-  />
-);
+      ))}
+    </Grid>
+  );
+};

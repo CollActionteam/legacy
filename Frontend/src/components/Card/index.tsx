@@ -4,11 +4,13 @@ import { IProject } from "../../api/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ProgressRing from "../ProgressRing";
 import CategoryTags from "../CategoryTags";
-
 export default ({ project }: { project: IProject }) => {
-  const imageName = project.categories[0]
+  const defaultCategoryImage = project.categories[0]
     ? project.categories[0].category
     : "OTHER";
+
+  const Image = require(`../../assets/default_banners/${defaultCategoryImage}.jpg`);
+
   return (
     <a href={project.url} className={styles.card}>
       <figure className={styles.image}>
@@ -16,7 +18,7 @@ export default ({ project }: { project: IProject }) => {
           <img src={project.bannerImage.filepath} alt={project.name} />
         ) : (
           <img
-            src={"/assets/default_banners/" + imageName + ".jpg"}
+            src={Image}
             alt={project.name}
           />
         )}

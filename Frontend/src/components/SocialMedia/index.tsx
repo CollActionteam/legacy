@@ -1,14 +1,11 @@
 import React from "react";
-import { useStaticQuery, graphql } from "gatsby";
 import styles from "./style.module.scss";
 import { IconButton } from "../Button/Button";
 
-export default () => {
-  const data = useStaticQuery(query);
-
+export default ({ socialMedia } : any) => {
   return (
     <ul className={styles.list}>
-      {data.site.siteMetadata.socialMedia.map((item, index) => (
+      {socialMedia.map((item: any, index: number) => (
         <li key={index} className={styles.listItem}>
           <IconButton url={item.url} icon={["fab", item.icon]} />
         </li>
@@ -16,17 +13,3 @@ export default () => {
     </ul>
   );
 };
-
-const query = graphql`
-  query SocialMediaQuery {
-    site {
-      siteMetadata {
-        socialMedia {
-          name
-          url
-          icon
-        }
-      }
-    }
-  }
-`;

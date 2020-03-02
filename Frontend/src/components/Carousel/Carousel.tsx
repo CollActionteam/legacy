@@ -1,6 +1,6 @@
 import React from "react";
-import { useQuery } from "react-apollo";
-import gql from "graphql-tag";
+import { useQuery } from "@apollo/react-hooks";
+import { gql } from "apollo-boost";
 import Slider from "react-slick";
 import { Grid, Container } from "@material-ui/core";
 import Card from "../Card";
@@ -11,6 +11,7 @@ import { Fragments } from "../../api/fragments";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import styles from "./Carousel.module.scss";
+import { IProject } from "../../api/types";
 
 interface ICarouselProps {
   title?: string;
@@ -65,10 +66,8 @@ export default ({ title, text }: ICarouselProps) => {
           {loading && <Loader />}
           {data.projects && (
             <Slider {...settings}>
-              {data.projects.map((project, index) => (
-                // <Grid item xs={12} sm={6} md={4} key={index}>
+              {data.projects.map((project: IProject, index: number) => (
                 <Card project={project} key={index} />
-                // </Grid>
               ))}
             </Slider>
           )}

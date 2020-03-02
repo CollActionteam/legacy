@@ -1,12 +1,11 @@
 import React from "react";
-import { Link } from "gatsby";
-import { Button } from "../Button/Button";
 import { Hidden } from "@material-ui/core";
 import styles from "./style.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
 
 interface INavigationProps {
-  items: any;
+  items: { name: string, link: string }[];
 }
 
 interface INavigationState {
@@ -17,7 +16,7 @@ export default class Navigation extends React.Component<
   INavigationProps,
   INavigationState
 > {
-  constructor(props) {
+  constructor(props: INavigationProps) {
     super(props);
     this.toggleNavigation = this.toggleNavigation.bind(this);
     this.state = {
@@ -33,10 +32,10 @@ export default class Navigation extends React.Component<
 
   render() {
     return (
-      <div className={this.state.collapsed ? styles.collapsed : null}>
+      <div className={this.state.collapsed ? styles.collapsed : ""}>
         <nav className={styles.navigation}>
           <ul className={styles.navigationList}>
-            {this.props.items.map(link => (
+            {this.props.items.map((link) => (
               <li key={link.name} className={styles.navigationItem}>
                 <Link className={styles.navigationLink} to={link.link}>
                   {link.name}

@@ -16,7 +16,7 @@ export default class NewsletterSignup extends React.Component<
   INewsletterSignupProps,
   INewsletterSignupState
 > {
-  constructor(props) {
+  constructor(props: INewsletterSignupProps) {
     super(props);
     this.state = {
       email: "",
@@ -27,20 +27,20 @@ export default class NewsletterSignup extends React.Component<
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(event) {
+  handleChange(event: any) {
     this.setState({
       email: event.target.value,
       error: "",
     });
   }
 
-  handleKeyUp(event) {
+  handleKeyUp(event: any) {
     if (event.keyCode === 13) {
       return this.handleSubmit(event);
     }
   }
 
-  handleSubmit(event) {
+  handleSubmit(event: any) {
     if (this.state.error) {
       event.preventDefault();
     }
