@@ -73,6 +73,10 @@ section {
 .green {
   color: var(--c-white);
   background-color: var(--c-green);
+
+  .title {
+    color: var(--c-white);
+  }
 }
 
 .grey {

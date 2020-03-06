@@ -8,7 +8,7 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import { faAt } from "@fortawesome/free-solid-svg-icons";
 
-export const Facebook = ({ url }) => {
+export const Facebook = ({ url }: { url: string}) => {
   return (
     <a
       target="_blank"
@@ -25,7 +25,7 @@ export const Facebook = ({ url }) => {
   );
 };
 
-export const Twitter = ({ url }) => {
+export const Twitter = ({ url }: { url: string}) => {
   return (
     <a
       target="_blank"
@@ -42,7 +42,7 @@ export const Twitter = ({ url }) => {
   );
 };
 
-export const LinkedIn = ({ url }) => {
+export const LinkedIn = ({ url }: { url: string}) => {
   return (
     <a
       target="_blank"

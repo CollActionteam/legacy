@@ -1,0 +1,47 @@
+@import '../../components/Styles/responsive';
+
+.video {
+  position: relative;
+  display: block;
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+  padding-bottom: 56.25%;
+
+  iframe {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+}
+
+.team {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-left: 0;
+}
+
+$image-size: 6rem;
+
+.teamMember {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  margin-bottom: var(--spacing-md);
+  margin-right: var(--spacing-lg);
+  width: $image-size;
+
+  img {
+    width: 100%;
+    height: $image-size;
+    background-color: var(--c-gray);
+    border-radius: 50px;
+    margin-bottom: var(--spacing)
+  }
+}

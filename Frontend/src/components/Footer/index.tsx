@@ -1,63 +1,12 @@
 import React from "react";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
-import { Link } from "gatsby";
-import logo from "../../../static/assets/logo.svg";
+import logo from "../../assets/svg/logo.svg";
 import styles from "./style.module.scss";
 import SocialMedia from "../SocialMedia";
 import NewsletterSignup from "../NewsletterSignup";
-import { graphql, StaticQuery } from "gatsby";
-
-const navigation = [
-  {
-    link: "/",
-    name: "Home",
-  },
-  {
-    link: "/projects/find",
-    name: "Find Project",
-  },
-  {
-    link: "/projects/start",
-    name: "Start Project",
-  },
-  {
-    link: "/about",
-    name: "About Us",
-  },
-  {
-    link: "/login",
-    name: "Login",
-  },
-  {
-    link: "/signup",
-    name: "Sign Up",
-  },
-  {
-    link: "/about",
-    name: "Mission",
-  },
-  {
-    link: "/about",
-    name: "Team",
-  },
-  {
-    link: "/donate",
-    name: "Donate",
-  },
-  {
-    link: "/about",
-    name: "Partners",
-  },
-  {
-    link: "/about",
-    name: "Press",
-  },
-  {
-    link: "/about",
-    name: "FAQs",
-  },
-];
+import { Link } from "react-router-dom";
+import { siteData } from "../../api/site";
 
 export default () => (
   <div className={styles.footer}>
@@ -82,7 +31,7 @@ export default () => (
         <Grid item xs={12} sm={6} md={5}>
           <nav className={styles.navigation}>
             <ul className={styles.navigationList}>
-              {navigation.map((link, index) => (
+              {siteData.footerLinks.map((link: any, index: number) => (
                 <li key={index} className={styles.navigationItem}>
                   <Link className={styles.navigationLink} to={link.link}>
                     {link.name}
@@ -94,26 +43,9 @@ export default () => (
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
           <h5 className={styles.title}>Follow us</h5>
-          <SocialMedia />
+          <SocialMedia socialMedia={siteData.socialMedia} />
           <h5 className={styles.title}>Newsletter</h5>
-          <StaticQuery
-            query={graphql`
-              query {
-                site {
-                  siteMetadata {
-                    mailchimpListId
-                  }
-                }
-              }
-            `}
-            render={data => {
-              return (
-                <NewsletterSignup
-                  mailchimpListId={data.site.siteMetadata.mailchimpListId}
-                />
-              );
-            }}
-          />
+          <NewsletterSignup mailchimpListId={siteData.mailchimpListId} />
         </Grid>
       </Grid>
     </Container>

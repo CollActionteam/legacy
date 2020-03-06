@@ -6,7 +6,7 @@ export default ({
   radius = 30,
   stroke = 4,
   fontSize = "var(--font-size-sm)",
-}) => {
+}: any) => {
   const normalizedRadius = radius - stroke * 2;
   const circumference = normalizedRadius * 2 * Math.PI;
   const chompedProgress = progress > 100 ? 100 : progress;

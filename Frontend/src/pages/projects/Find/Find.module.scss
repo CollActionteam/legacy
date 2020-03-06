@@ -1,0 +1,58 @@
+@import '../../../components/Styles/responsive.scss';
+
+.filter {
+    color: var(--c-grey);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-regular);
+    margin: 0;
+
+    @include breakpoint-down(md) {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: var(--font-size-md);
+    }
+
+    @include breakpoint-down(sm) {
+        span {
+            display: none;
+        }
+    }
+}
+
+.selectWrapper {
+    position: relative;
+    display: inline-block;
+
+    select {
+        appearance: none;
+        user-select: none;
+        margin-left: var(--spacing);
+        margin-right: var(--spacing);
+        color: var(--c-grey);
+        border: 3px solid var(--c-grey);
+        padding: var(--spacing-sm) var(--spacing-lg);
+        border-radius: calc(var(--border-radius) * 1.5);
+        background: transparent;
+        padding-right: calc(var(--spacing-lg) * 2);
+        cursor: pointer;
+        transition: background-color var(--transition-duration);
+
+        &:hover,
+        &:focus {
+            background-color: rgba(white, 0.1);
+        }
+    }
+
+    svg {
+        position: absolute;
+        right: calc(var(--spacing-lg) * 1.5);
+        top: 50%;
+        transform: translate3d(0, -50%, 0);
+    }
+
+    @include breakpoint-down(lg) {
+        padding-top: var(--spacing);
+        padding-bottom: var(--spacing);
+    }
+}

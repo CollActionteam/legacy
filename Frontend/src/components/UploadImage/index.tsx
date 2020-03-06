@@ -23,7 +23,7 @@ export default abstract class UploadImage<
     this.resetImage = this.resetImage.bind(this);
   }
 
-  abstract render();
+  abstract render(): any;
 
   protected createInitialState(): IUploadImageState {
     return {
@@ -33,7 +33,7 @@ export default abstract class UploadImage<
     };
   }
 
-  protected loadImage(accepted: File[], onLoaded) {
+  protected loadImage(accepted: File[], onLoaded: any) {
     if (this.state.preview) {
       // On Safari and Chrome, setBannerImageUploadInput triggers this function again.
       // On Firefox it does not... so, if preview is already in progress, we can stop.

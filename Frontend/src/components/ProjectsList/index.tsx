@@ -1,10 +1,11 @@
 import React, { Fragment } from "react";
 import { useQuery } from "@apollo/react-hooks";
-import Card from "../Card";
-import gql from "graphql-tag";
+import {gql} from "apollo-boost";
 import { Fragments } from "../../api/fragments";
+
 import { Grid } from "@material-ui/core";
-import { ProjectStatusFilter } from "../../api/types";
+import Card from "../Card";
+import { ProjectStatusFilter, IProject } from "../../api/types";
 import Loader from "../Loader";
 
 interface IProjectListProps {
@@ -47,7 +48,7 @@ export default ({
     <Fragment>
       <Grid container spacing={3}>
         {data.projects && data.projects.length ? (
-          data.projects.map((project, index) => (
+          data.projects.map((project: IProject, index: number) => (
             <Grid item xs={12} sm={6} md={4} key={index}>
               <Card project={project} />
             </Grid>

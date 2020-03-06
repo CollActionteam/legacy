@@ -77,7 +77,7 @@ export class RichTextEditorFormControl extends React.Component<
             error={this.hasError()}
             label={this.props.hint}
             controls={this.richTextControls}
-            onChange={state => {
+            onChange={(state: any)=> {
               const content = state.getCurrentContent();
               this.props.formik.setFieldValue(
                 this.props.name,

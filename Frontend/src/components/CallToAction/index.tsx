@@ -8,7 +8,7 @@ import { CircleButton, CircleButtonContainer, Button } from "../Button/Button";
 
 import styles from "./style.module.scss";
 
-export const CallToAction = ({ title }) => {
+export const CallToAction = ({ title }: any) => {
   return (
     <div className={styles.callToAction}>
       <Grid container>
