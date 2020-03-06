@@ -16,7 +16,7 @@ import ProgressRing from "../../../components/ProgressRing";
 import { Section } from "../../../components/Section";
 
 import styles from "./ProjectDetails.module.scss";
-import { RouteComponentProps} from "react-router-dom";
+import { RouteComponentProps, Redirect} from "react-router-dom";
 
 type TParams = {
   slug: string,
@@ -46,15 +46,10 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
   }
 
   if (!data) {
-    navigate("/404");
-    return <div></div>;
+    return <Redirect to="/404"></Redirect>
   }
 
   const project = data.project as IProject;
-
-  const loggedInUser = data.currentUser
-    ? (data.currentUser.firstName as string)
-    : undefined;
 
   const description = {
     __html: project.description,
@@ -279,14 +274,6 @@ const GET_PROJECT = gql`
       isClosed
       isSuccessfull
       isFailed
-    }
-  }
-`;
-
-const GET_CURRENT_USER = gql`
-  {
-    currentUser {
-      firstName
     }
   }
 `;
