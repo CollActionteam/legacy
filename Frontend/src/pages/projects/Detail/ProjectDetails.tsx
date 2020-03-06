@@ -27,21 +27,9 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
   const projectId = match.params.projectId;
 
   const query = useQuery(GET_PROJECT, { variables: { id: projectId } });
-
   const { data, loading } = query;
 
-  const [commitToProject] = useMutation(gql`
-    mutation Commit($projectId: Int!, $email: String!) {
-      project {
-        commitToProject(projectId: $projectId, email: $email) {
-          error
-          userAdded
-          userAlreadyActive
-          userCreated
-        }
-      }
-    }
-  `);
+  const [commitToProject] = useMutation(COMMIT_ANONYMOUS);
 
   const commit = async (form: any) => {
     const response = (await commitToProject({
@@ -58,12 +46,15 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
   }
 
   if (!data) {
-    console.error("Could not show project details");
-    return;
-    // navigate("/404");
+    navigate("/404");
+    return <div></div>;
   }
 
   const project = data.project as IProject;
+
+  const loggedInUser = data.currentUser
+    ? (data.currentUser.firstName as string)
+    : undefined;
 
   const description = {
     __html: project.description,
@@ -91,7 +82,7 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
             <FontAwesomeIcon icon="clock"></FontAwesomeIcon>
             <span>{Math.round(project.remainingTime / 3600 / 24)} days</span>
           </div>
-          <div className={styles.join}>
+          <div className={styles.joinButton}>
             <Button
               onClick={() => {
                 const join = document.getElementById("join");
@@ -127,10 +118,10 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
         <p>{project.proposal}</p>
         <CategoryTags categories={project.categories}></CategoryTags>
       </Section>
-      <Section color="grey">
+      <Section className={styles.banner}>
         <Grid container>
           <Grid item md={7} xs={12}>
-            <Container>
+            <Container className={styles.bannerImage}>
               <figure className={styles.image}>
                 <img src={banner} alt={project.name}></img>
               </figure>
@@ -197,7 +188,7 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
 
           <Grid item md={5} xs={12}>
             <Container>
-              <div className={styles.box}>
+              <div className={styles.projectStarter}>
                 <div className={styles.avatarContainer}>
                   <Avatar className={styles.avatar}>
                     {project.owner.firstName.charAt(0)}
@@ -207,7 +198,7 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
                 <h4>{project.owner.fullName}</h4>
                 <p className={styles.projectStarterTitle}>Project starter</p>
               </div>
-              <div id="join" className={styles.box}>
+              <div id="join" className={styles.joinSection}>
                 <Formik
                   initialValues={{
                     participantEmail: "",
@@ -288,6 +279,27 @@ const GET_PROJECT = gql`
       isClosed
       isSuccessfull
       isFailed
+    }
+  }
+`;
+
+const GET_CURRENT_USER = gql`
+  {
+    currentUser {
+      firstName
+    }
+  }
+`;
+
+const COMMIT_ANONYMOUS = gql`
+  mutation Commit($projectId: Int!, $email: String!) {
+    project {
+      commitToProjectAnonymous(projectId: $projectId, email: $email) {
+        error
+        userAdded
+        userAlreadyActive
+        userCreated
+      }
     }
   }
 `;
