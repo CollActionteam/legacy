@@ -111,6 +111,8 @@ namespace CollAction.Services.Image
                 AutoCloseStream = false
             };
 
+            putRequest.Headers.CacheControl = "max-age=31556952"; // We don't change these images, one year caching header
+
             PutObjectResponse response = await client.PutObjectAsync(putRequest).ConfigureAwait(false);
             if (!response.HttpStatusCode.IsSuccess())
             {
