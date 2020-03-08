@@ -132,7 +132,7 @@ const CreateProjectPage = () => {
     body.append('Image', file);
     body.append('ImageDescription', description);
 
-    return await fetch(`${process.env.BACKEND_URL}/image`, {
+    return await fetch(`${process.env.REACT_APP_BACKEND_URL}/image`, {
       method: 'POST',
       body,
       credentials: 'include'

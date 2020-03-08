@@ -15,8 +15,8 @@ import styles from "./Login.module.scss";
 import { siteData } from '../../api/site';
 
 const LoginPage = () => {
-  const actionLogin = `${process.env.BACKEND_URL}/account/login`;
-  const actionExternalLogin = `${process.env.BACKEND_URL}/account/externalLogin`;
+  const actionLogin = `${process.env.REACT_APP_BACKEND_URL}/account/login`;
+  const actionExternalLogin = `${process.env.REACT_APP_BACKEND_URL}/account/externalLogin`;
   const returnUrl = window.location.href;
   const errorUrl = `${returnUrl}/error`;
 
