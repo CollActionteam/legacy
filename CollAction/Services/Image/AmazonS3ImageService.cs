@@ -51,7 +51,7 @@ namespace CollAction.Services.Image
 
             logger.LogInformation("Queuing for s3 upload");
             byte[] imageBytes = ConvertImageToPng(image);
-            jobClient.Enqueue(() => UploadToS3(imageBytes, currentImage.Filepath));
+            jobClient.Enqueue(() => UploadToS3(imageBytes, currentImage.Filepath, CancellationToken.None));
 
             logger.LogInformation("Saving image information to database");
             context.ImageFiles.Add(currentImage);
@@ -97,7 +97,7 @@ namespace CollAction.Services.Image
             logger.LogInformation("Successfully removed image from s3");
         }
 
-        public async Task UploadToS3(byte[] image, string path)
+        public async Task UploadToS3(byte[] image, string path, CancellationToken cancellationToken)
         {
             logger.LogInformation("Adding image to s3");
             using MemoryStream ms = new MemoryStream(image);
@@ -113,7 +113,7 @@ namespace CollAction.Services.Image
 
             putRequest.Headers.CacheControl = "max-age=31556952"; // We don't change these images, one year caching header
 
-            PutObjectResponse response = await client.PutObjectAsync(putRequest).ConfigureAwait(false);
+            PutObjectResponse response = await client.PutObjectAsync(putRequest, cancellationToken).ConfigureAwait(false);
             if (!response.HttpStatusCode.IsSuccess())
             {
                 logger.LogError("Error uploading image to s3");
