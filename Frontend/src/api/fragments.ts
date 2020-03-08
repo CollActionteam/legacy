@@ -8,11 +8,9 @@ export const Fragments = {
       category
     }
     bannerImage {
-      filepath
       url
     }
     descriptiveImage {
-      filepath
       url
     }
     goal
