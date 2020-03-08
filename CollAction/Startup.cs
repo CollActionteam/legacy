@@ -45,17 +45,16 @@ namespace CollAction
             this.configuration = configuration;
             this.environment = environment;
             publicAddress = this.configuration["PublicAddress"];
-            connectionString = $"Host={this.configuration["DbHost"]};Username={this.configuration["DbUser"]};Password={this.configuration["DbPassword"]};Database={this.configuration["Db"]};Port={this.configuration["DbPort"]}";
         }
 
         private readonly string corsPolicy = "FrontendCors";
         private readonly string publicAddress;
-        private readonly string connectionString;
         private readonly IConfiguration configuration;
         private readonly IWebHostEnvironment environment;
 
         public void ConfigureServices(IServiceCollection services)
         {
+            string connectionString = $"Host={configuration["DbHost"]};Username={configuration["DbUser"]};Password={this.configuration["DbPassword"]};Database={configuration["Db"]};Port={configuration["DbPort"]}";
             services.AddGraphQl();
             services.AddGraphQlAuth();
 
@@ -71,8 +70,9 @@ namespace CollAction
             services.ConfigureApplicationCookie(o =>
             {
                 o.Cookie.HttpOnly = false;
-                o.Cookie.SameSite = SameSiteMode.None;
+                o.Cookie.SameSite = environment.IsProduction() ? SameSiteMode.Lax : SameSiteMode.None;
                 o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                o.Cookie.IsEssential = true;
             });
 
             var authenticationBuilder = services.AddAuthentication();
