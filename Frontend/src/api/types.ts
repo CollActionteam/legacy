@@ -50,7 +50,7 @@ export enum ProjectDisplayPriority {
 export interface IProject {
   anonymousUserParticipants: number;
   bannerImage: IImageFile;
-  bannerImageField: number;
+  bannerImageFileId: number;
   canSendProjectEmail: boolean;
   categories: IProjectCategory[];
   creatorComments: string;

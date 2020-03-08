@@ -15,7 +15,7 @@ export default ({ project }: { project: IProject }) => {
     <a href={project.url} className={styles.card}>
       <figure className={styles.image}>
         {project.bannerImage ? (
-          <img src={project.bannerImage.filepath} alt={project.name} />
+          <img src={project.bannerImage.url} alt={project.name} />
         ) : (
           <img
             src={Image}
