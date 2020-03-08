@@ -7,6 +7,10 @@ export const Fragments = {
     categories {
       category
     }
+    bannerImage {
+      filepath
+      url
+    }
     descriptiveImage {
       filepath
       url
