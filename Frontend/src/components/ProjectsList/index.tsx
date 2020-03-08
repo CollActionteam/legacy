@@ -64,8 +64,7 @@ export default ({
 const FIND_PROJECTS = gql`
   query FindProjects($category: Category, $status: SearchProjectStatus) {
     projects(category: $category, status: $status) {
-      ...ProjectDetail
+      ${Fragments.projectDetail}
     }
   }
-  ${Fragments.projectDetail}
 `;
