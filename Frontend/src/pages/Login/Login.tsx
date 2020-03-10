@@ -30,15 +30,15 @@ const LoginPage = () => {
 
   return (
     <React.Fragment>
-      {
-        errorMessage ? <Alert type="error" text={errorMessage} /> : null
-      }
       <Section className={styles.intro}>
         <h1 className={styles.title}>Login</h1>
         <h2 className={styles.subtitle}>
           (Use a local account to log in )
         </h2>
       </Section>
+      {
+        errorMessage ? <Alert type="error" text={errorMessage} /> : null
+      }
       <Section color="grey">
         <Grid container justify="center">
           <Grid item sm={6}>
