@@ -64,7 +64,7 @@ namespace CollAction.Tests.Integration.Endpoint
                        result = JsonDocument.Parse(content);
                        Assert.ThrowsException<KeyNotFoundException>(() => result.RootElement.GetProperty("errors"), content);
                        JsonElement project = result.RootElement.GetProperty("data").GetProperty("project");
-                       Assert.AreEqual(projectId, project.GetProperty("id").GetInt32());
+                       Assert.AreEqual(projectId.ToString(CultureInfo.InvariantCulture), project.GetProperty("id").GetString());
                    });
 
         [TestMethod]
