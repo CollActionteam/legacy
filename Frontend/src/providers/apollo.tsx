@@ -4,7 +4,7 @@ import ApolloClient from 'apollo-boost';
 
 export default ({ children } : any) => {
   const client = new ApolloClient({
-    uri: process.env.REACT_APP_BACKEND_URL,
+    uri: `${process.env.REACT_APP_BACKEND_URL}/graphql`,
     credentials: 'include'
   });
 
