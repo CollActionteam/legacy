@@ -60,7 +60,7 @@ namespace CollAction.Controllers
                 logger.LogInformation("User is locked out");
                 if (model.ErrorUrl != null)
                 {
-                    return Redirect($"{model.ErrorUrl}?error=lockout");
+                    return Redirect($"{model.ErrorUrl}?error=lockout&message={WebUtility.UrlEncode("User is locked out")}");
                 }
                 else
                 {
@@ -72,7 +72,7 @@ namespace CollAction.Controllers
                 logger.LogInformation("User is unable to log in");
                 if (model.ErrorUrl != null)
                 {
-                    return Redirect($"{model.ErrorUrl}?error=invalid-credentials");
+                    return Redirect($"{model.ErrorUrl}?error=invalid-credentials&message={WebUtility.UrlEncode("Invalid credentials")}");
                 }
                 else
                 {
