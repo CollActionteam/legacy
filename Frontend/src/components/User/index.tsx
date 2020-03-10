@@ -7,7 +7,7 @@ import { IUser } from "../../api/types";
 export const UserContext = React.createContext({ user: undefined as (IUser | undefined), setUser: (_user: IUser) => { } });
 
 export default ({ children }: any) => {
-  let { data, loading, error } = useQuery(GET_USER);
+  let { data, error } = useQuery(GET_USER);
 
   if (error) {
     console.error(error);
@@ -20,7 +20,6 @@ export default ({ children }: any) => {
 
   return <React.Fragment>
     <UserContext.Provider value={contextValue}>
-      {loading && <Loader />}
       {children}
     </UserContext.Provider>
   </React.Fragment>
