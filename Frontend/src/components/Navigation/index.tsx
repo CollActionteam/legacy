@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import { IUser } from "../../api/types";
 import { UserContext } from "../User";
+import { Button } from "../../components/Button/Button";
 
 interface INavigationProps {
   items: { name: string, link: string }[];
@@ -34,6 +35,8 @@ export default class Navigation extends React.Component<
 
   render() {
     let user: IUser | undefined = this.context;
+    const returnUrl = window.location.href;
+    const logoutUrl = `${process.env.REACT_APP_BACKEND_URL}/account/logout`;
     return (
       <div className={this.state.collapsed ? styles.collapsed : ""}>
         <nav className={styles.navigation}>
@@ -62,10 +65,13 @@ export default class Navigation extends React.Component<
                     </Link>
                   </li> 
                   <li className={styles.navigationItem}>
-                    <Link className={styles.navigationButton} to="/logout">
-                      <FontAwesomeIcon icon="sign-out" />
-                      Logout
-                    </Link>
+                    <form method="post" action={logoutUrl}>
+                      <input type="hidden" name="returnUrl" value={returnUrl} />
+                      <Button type="submit">
+                        <FontAwesomeIcon icon="sign-out" />
+                        Logout
+                      </Button>
+                    </form>
                   </li> 
                 </React.Fragment>
               :

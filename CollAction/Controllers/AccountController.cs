@@ -14,6 +14,7 @@ using CollAction.Services.User.Models;
 using System.ComponentModel.DataAnnotations;
 using CollAction.Helpers;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
+using System;
 
 namespace CollAction.Controllers
 {
@@ -82,11 +83,16 @@ namespace CollAction.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> LogOff()
+        public async Task<IActionResult> Logout(LogoutViewModel logoutViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                throw new ArgumentException(nameof(LogoutViewModel));
+            }
+
             await signInManager.SignOutAsync().ConfigureAwait(false);
             logger.LogInformation("User logged out.");
-            return Redirect("/");
+            return Redirect(logoutViewModel.ReturnUrl);
         }
 
         [HttpPost]
