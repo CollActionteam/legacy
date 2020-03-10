@@ -1,7 +1,6 @@
 import React from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { gql } from "apollo-boost";
-import Loader from "../Loader";
 import { IUser } from "../../api/types";
 
 export const UserContext = React.createContext({ user: undefined as (IUser | undefined), setUser: (_user: IUser) => { } });
