@@ -3,6 +3,8 @@ import { Hidden } from "@material-ui/core";
 import styles from "./style.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
+import { IUser } from "../../api/types";
+import { UserContext } from "../User";
 
 interface INavigationProps {
   items: { name: string, link: string }[];
@@ -31,6 +33,7 @@ export default class Navigation extends React.Component<
   }
 
   render() {
+    let user: IUser | undefined = this.context;
     return (
       <div className={this.state.collapsed ? styles.collapsed : ""}>
         <nav className={styles.navigation}>
@@ -50,12 +53,29 @@ export default class Navigation extends React.Component<
                 Donate
               </Link>
             </li>
-            <li className={styles.navigationItem}>
-              <Link className={styles.navigationButton} to="/login">
-                <FontAwesomeIcon icon="sign-in-alt" />
-                Login
-              </Link>
-            </li>
+            { user ?
+                <React.Fragment>
+                  <li className={styles.navigationItem}>
+                    <Link className={styles.navigationButton} to="/profile">
+                      <FontAwesomeIcon icon="user" />
+                      Profile
+                    </Link>
+                  </li> 
+                  <li className={styles.navigationItem}>
+                    <Link className={styles.navigationButton} to="/logout">
+                      <FontAwesomeIcon icon="sign-out" />
+                      Logout
+                    </Link>
+                  </li> 
+                </React.Fragment>
+              :
+                <li className={styles.navigationItem}>
+                  <Link className={styles.navigationButton} to="/login">
+                    <FontAwesomeIcon icon="sign-in-alt" />
+                    Login
+                  </Link>
+                </li> 
+            }
           </ul>
         </nav>
         <Hidden mdUp>
@@ -74,3 +94,5 @@ export default class Navigation extends React.Component<
     );
   }
 }
+
+Navigation.contextType = UserContext;

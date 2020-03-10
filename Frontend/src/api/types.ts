@@ -119,22 +119,20 @@ export interface ITag {
 }
 
 export interface IUser {
-  activated: boolean;
   donationEvents: IDonationEventLog[];
   donationSubscriptions: IDonationSubscription[];
   email: string;
-  firstName: string;
   fullName: string;
+  firstName: string;
+  lastName: string;
   id: string;
   isAdmin: boolean;
   isSubscribedNewsletter: boolean;
-  lastName: string;
   loginProviders: string[];
   participates: IProjectParticipant[];
   projects: IProject[];
   representsNumberParticipants: number;
   userEvents: IUserEvent[];
-  username: string;
 }
 
 export interface IUserEvent {

@@ -17,7 +17,7 @@ services:
     ports:
       - "44301:44301"
     environment:
-      - PublicAddress=http://localhost:8000
+      - PublicAddress=http://localhost:8000;http://localhost:3000
       - DbHost=db
       - DbUser=postgres
       - DbPassword=test
