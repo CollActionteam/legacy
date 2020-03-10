@@ -46,7 +46,7 @@ namespace CollAction.Tests.Integration.Endpoint
                        JsonElement.ArrayEnumerator projects = result.RootElement.GetProperty("data").GetProperty("projects").EnumerateArray();
                        Assert.IsTrue(projects.Any(), content);
 
-                       int projectId = projects.First().GetProperty("id").GetInt32();
+                       string projectId = projects.First().GetProperty("id").GetString();
                        const string QueryProject = @"
                            query($projectId : ID!) {
                                project(id: $projectId) {
