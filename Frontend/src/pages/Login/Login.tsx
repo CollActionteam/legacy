@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "../../components/Button/Button";
 import { Section } from "../../components/Section";
+import { Alert } from "../../components/Alert";
 
 import {
   Grid,
@@ -17,11 +18,21 @@ import { siteData } from '../../api/site';
 const LoginPage = () => {
   const actionLogin = `${process.env.REACT_APP_BACKEND_URL}/account/login`;
   const actionExternalLogin = `${process.env.REACT_APP_BACKEND_URL}/account/externalLogin`;
-  const returnUrl = window.location.href;
-  const errorUrl = `${returnUrl}/error`;
+  const returnUrl = window.location.origin;
+  const errorUrl = `${returnUrl}/login`;
+  const searchParams = new URLSearchParams(window.location.search);
+  const errorType = searchParams.get("error");
+  const errorMessage = searchParams.get("message");
+  if (errorType && errorMessage)
+  {
+    console.error({ errorType, errorMessage });
+  }
 
   return (
     <React.Fragment>
+      {
+        errorMessage ? <Alert type="error" text={errorMessage} /> : null
+      }
       <Section className={styles.intro}>
         <h1 className={styles.title}>Login</h1>
         <h2 className={styles.subtitle}>
