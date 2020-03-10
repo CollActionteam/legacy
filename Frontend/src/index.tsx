@@ -20,6 +20,9 @@ import StartProjectPage from './pages/projects/Start/Start';
 import CreateProjectPage from './pages/projects/Create/Create';
 import ThankYouPage from './pages/projects/ThankYouCreate/ThankYouCreate';
 import ProjectDetailsPage from './pages/projects/Detail/ProjectDetails';
+import ProfilePage from './pages/Donation/Donation';
+import AdminPage from './pages/Admin/Admin';
+import DonationPage from './pages/Donation/Donation';
 
 const routing = (
     <I18nextProvider i18n={i18n}>
@@ -31,6 +34,9 @@ const routing = (
                             <Route exact path="/" component={HomePage} />
                             <Route path="/login" component={LoginPage} />
                             <Route path="/about" component={AboutPage} />
+                            <Route path="/profile" component={ProfilePage} />
+                            <Route path="/admin" component={AdminPage} />
+                            <Route path="/donate" component={DonationPage} />
                             <Route path="/projects/find" component={FindPage} />
                             <Route path="/projects/start" component={StartProjectPage} />
                             <Route path="/projects/create" component={CreateProjectPage} />
