@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import { UserContext } from "../User";
 import { Button } from "../../components/Button/Button";
+import { IUser } from "../../api/types";
 
 interface INavigationProps {
   items: { name: string, link: string }[];
@@ -32,12 +33,50 @@ export default class Navigation extends React.Component<
     });
   }
 
-  render() {
+  renderWithUser(user: IUser) {
     const returnUrl = window.location.href;
     const logoutUrl = `${process.env.REACT_APP_BACKEND_URL}/account/logout`;
+    return <React.Fragment>
+        <li className={styles.navigationItem}>
+          <Link className={styles.navigationButton} to="/profile">
+            <FontAwesomeIcon icon="user" />
+            Profile
+          </Link>
+        </li> 
+        { user.isAdmin ?
+          <li className={styles.navigationItem}>
+            <Link className={styles.navigationButton} to="/admin">
+              <FontAwesomeIcon icon="tools" />
+              Admin
+            </Link>
+          </li> 
+          : null 
+        }
+        <li className={styles.navigationItem}>
+          <form method="post" action={logoutUrl}>
+            <input type="hidden" name="returnUrl" value={returnUrl} />
+            <Button type="submit">
+              <FontAwesomeIcon icon="sign-out" />
+              Logout
+            </Button>
+          </form>
+        </li> 
+      </React.Fragment>;
+  }
+
+  renderWithoutUser() {
+    return <li className={styles.navigationItem}>
+      <Link className={styles.navigationButton} to="/login">
+        <FontAwesomeIcon icon="sign-in-alt" />
+        Login
+      </Link>
+    </li>;
+  }
+
+  render() {
     return (
       <UserContext.Consumer>
-        {user =>
+        {({user}) =>
           <div className={this.state.collapsed ? styles.collapsed : ""}>
             <nav className={styles.navigation}>
               <ul className={styles.navigationList}>
@@ -56,42 +95,7 @@ export default class Navigation extends React.Component<
                     Donate
                   </Link>
                 </li>
-                { user ?
-                    <React.Fragment>
-                      <li className={styles.navigationItem}>
-                        <Link className={styles.navigationButton} to="/profile">
-                          <FontAwesomeIcon icon="user" />
-                          Profile
-                        </Link>
-                      </li> 
-                      {
-                        user.isAdmin ?
-                          <li className={styles.navigationItem}>
-                            <Link className={styles.navigationButton} to="/admin">
-                              <FontAwesomeIcon icon="tools" />
-                              Admin
-                            </Link>
-                          </li> 
-                          : null
-                      }
-                      <li className={styles.navigationItem}>
-                        <form method="post" action={logoutUrl}>
-                          <input type="hidden" name="returnUrl" value={returnUrl} />
-                          <Button type="submit">
-                            <FontAwesomeIcon icon="sign-out" />
-                            Logout
-                          </Button>
-                        </form>
-                      </li> 
-                    </React.Fragment>
-                  :
-                    <li className={styles.navigationItem}>
-                      <Link className={styles.navigationButton} to="/login">
-                        <FontAwesomeIcon icon="sign-in-alt" />
-                        Login
-                      </Link>
-                    </li> 
-                }
+                { user ? this.renderWithUser(user) : this.renderWithoutUser() }
               </ul>
             </nav>
             <Hidden mdUp>

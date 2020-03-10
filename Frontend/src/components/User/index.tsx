@@ -4,17 +4,22 @@ import { gql } from "apollo-boost";
 import Loader from "../Loader";
 import { IUser } from "../../api/types";
 
-export const UserContext = React.createContext<IUser | undefined>(undefined);
+export const UserContext = React.createContext({ user: undefined as (IUser | undefined), setUser: (_user: IUser) => { } });
 
 export default ({ children }: any) => {
-  const { data, loading, error } = useQuery<IUser>(GET_USER);
+  let { data, loading, error } = useQuery(GET_USER);
 
   if (error) {
     console.error(error);
   }
 
+  let contextValue = {
+    user: data?.currentUser as IUser | undefined,
+    setUser: (newUser: IUser) => { contextValue.user = newUser; }
+  };
+
   return <React.Fragment>
-    <UserContext.Provider value={data}>
+    <UserContext.Provider value={contextValue}>
       {loading && <Loader />}
       {children}
     </UserContext.Provider>
