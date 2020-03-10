@@ -14,8 +14,8 @@ namespace CollAction.Services.HtmlValidator
             }
 
             var sanitizer = new HtmlSanitizer(
-                allowedTags: 
-                    new[] 
+                allowedTags:
+                    new[]
                     {
                         "p",
                         "br",
@@ -28,26 +28,24 @@ namespace CollAction.Services.HtmlValidator
                         "ul",
                         "li"
                     },
-                allowedSchemes: 
+                allowedSchemes:
                     new string[]
                     {
                         "http",
                         "https"
                     },
-                allowedAttributes: 
-                    new[] 
+                allowedAttributes:
+                    new[]
                     {
                         "target",
                         "href"
                     },
-                uriAttributes: 
-                    new[] 
+                uriAttributes:
+                    new[]
                     {
                         "href"
                     },
-                allowedCssProperties: 
-                    Enumerable.Empty<string>(),
-                allowedCssClasses: 
+                allowedCssProperties:
                     Enumerable.Empty<string>());
 
             bool isSafe = true;

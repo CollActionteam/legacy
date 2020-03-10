@@ -7,7 +7,7 @@ namespace CollAction.GraphQl.Queries
     {
         public DonationSubscriptionGraph()
         {
-            Field(x => x.Id);
+            Field<NonNullGraphType<IdGraphType>>(nameof(Subscription.Id), resolve: x => x.Source.Id);
             Field(x => x.CanceledAt, true);
             Field(x => x.StartDate, true);
         }

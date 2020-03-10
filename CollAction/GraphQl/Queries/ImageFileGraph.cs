@@ -11,7 +11,7 @@ namespace CollAction.GraphQl.Queries
     {
         public ImageFileGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService, IServiceScopeFactory serviceScopeFactory) : base(entityFrameworkGraphQlService)
         {
-            Field(x => x.Id);
+            Field<NonNullGraphType<IdGraphType>>(nameof(ImageFile.Id), resolve: x => x.Source.Id);
             Field(x => x.Date);
             Field(x => x.Description);
             Field(x => x.Filepath);

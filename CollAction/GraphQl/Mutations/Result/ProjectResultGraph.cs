@@ -7,7 +7,7 @@ namespace CollAction.GraphQl.Mutations.Result
     {
         public ProjectResultGraph()
         {
-            Field(x => x.Project);
+            Field(x => x.Project, true);
             Field(x => x.Succeeded);
             Field(x => x.Errors);
         }

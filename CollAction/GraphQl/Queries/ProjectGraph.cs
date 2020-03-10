@@ -13,7 +13,7 @@ namespace CollAction.GraphQl.Queries
     {
         public ProjectGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService, IServiceScopeFactory serviceScopeFactory) : base(entityFrameworkGraphQlService)
         {
-            Field(x => x.Id);
+            Field<NonNullGraphType<IdGraphType>>(nameof(Project.Id), resolve: x => x.Source.Id);
             Field(x => x.AnonymousUserParticipants);
             Field(x => x.BannerImageFileId, true);
             Field(x => x.CreatorComments, true);
@@ -28,14 +28,14 @@ namespace CollAction.GraphQl.Queries
             Field(x => x.IsComingSoon);
             Field(x => x.Name);
             Field(x => x.NumberProjectEmailsSend);
-            Field(x => x.OwnerId, true);
+            Field<IdGraphType>(nameof(Project.OwnerId), resolve: x => x.Source.OwnerId);
             Field(x => x.Proposal);
             Field(x => x.RemainingTime);
             Field(x => x.Start);
             Field(x => x.Status);
             Field(x => x.Target);
             Field(x => x.NameNormalized);
-            Field<StringGraphType>(nameof(Project.Url), resolve: p => p.Source.Url.ToString());
+            Field<NonNullGraphType<StringGraphType>>(nameof(Project.Url), resolve: p => p.Source.Url.ToString());
             Field<NonNullGraphType<BooleanGraphType>>(
                 "canSendProjectEmail",
                 resolve: c =>

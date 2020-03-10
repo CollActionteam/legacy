@@ -9,7 +9,7 @@ namespace CollAction.GraphQl.Queries
     {
         public StatisticsGraph()
         {
-            FieldAsync<IntGraphType>(
+            FieldAsync<NonNullGraphType<IntGraphType>>(
                 "numberActionsTaken",
                 resolve: async c =>
                 {
@@ -20,7 +20,7 @@ namespace CollAction.GraphQl.Queries
                                   .ConfigureAwait(false);
                 });
 
-            FieldAsync<IntGraphType>(
+            FieldAsync<NonNullGraphType<IntGraphType>>(
                 "numberProjects",
                 resolve: async c =>
                 {
@@ -31,7 +31,7 @@ namespace CollAction.GraphQl.Queries
                                   .ConfigureAwait(false);
                 });
 
-            FieldAsync<IntGraphType>(
+            FieldAsync<NonNullGraphType<IntGraphType>>(
                 "numberUsers",
                 resolve: async c =>
                 {

@@ -43,10 +43,10 @@ namespace CollAction.GraphQl.Mutations
             FieldAsync<IdentityResultGraph, IdentityResult>(
                 "deleteUser",
                 arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "userId" }),
+                    new QueryArgument<NonNullGraphType<IdGraphType>>() { Name = "id" }),
                 resolve: c =>
                 {
-                    string userId = c.GetArgument<string>("userId");
+                    string userId = c.GetArgument<string>("id");
                     var context = c.GetUserContext();
                     var userService = context.ServiceProvider.GetRequiredService<IUserService>();
                     return userService.DeleteUser(userId, context.User);

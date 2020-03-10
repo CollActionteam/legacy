@@ -16,7 +16,7 @@ namespace CollAction.GraphQl.Queries
     {
         public ApplicationUserGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService, IDependencyResolver dependencyResolver, IServiceScopeFactory serviceScopeFactory) : base(entityFrameworkGraphQlService)
         {
-            Field(x => x.Id);
+            Field<IdGraphType>(nameof(ApplicationUser.Id), resolve: x => x.Source.Id);
             Field(x => x.Email);
             Field(x => x.FirstName, true);
             Field(x => x.FullName, true);

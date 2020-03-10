@@ -46,7 +46,7 @@ namespace CollAction.GraphQl.Mutations
 
             FieldAsync<AddParticipantResultGraph, AddParticipantResult>(
                 "commitToProjectLoggedIn",
-                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<IntGraphType>>() { Name = "projectId" }),
+                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<IdGraphType>>() { Name = "projectId" }),
                 resolve: async c =>
                 {
                     int projectId = c.GetArgument<int>("projectId");
@@ -60,7 +60,7 @@ namespace CollAction.GraphQl.Mutations
             FieldAsync<AddParticipantResultGraph, AddParticipantResult>(
                 "commitToProjectAnonymous",
                 arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<IntGraphType>>() { Name = "projectId" },
+                    new QueryArgument<NonNullGraphType<IdGraphType>>() { Name = "projectId" },
                     new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "email" }),
                 resolve: async c =>
                 {
@@ -76,7 +76,7 @@ namespace CollAction.GraphQl.Mutations
             FieldAsync<ProjectResultGraph, ProjectResult>(
                 "sendProjectEmail",
                 arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<IntGraphType>>() { Name = "projectId" },
+                    new QueryArgument<NonNullGraphType<IdGraphType>>() { Name = "projectId" },
                     new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "subject" },
                     new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "message" }),
                 resolve: async c =>
@@ -94,7 +94,7 @@ namespace CollAction.GraphQl.Mutations
             FieldAsync<ProjectParticipantGraph, ProjectParticipant>(
                 "changeProjectSubscription",
                 arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<IntGraphType>>() { Name = "projectId" },
+                    new QueryArgument<NonNullGraphType<IdGraphType>>() { Name = "projectId" },
                     new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "userId" },
                     new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "token" },
                     new QueryArgument<NonNullGraphType<BooleanGraphType>>() { Name = "isSubscribed" }),

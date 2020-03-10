@@ -33,7 +33,7 @@ namespace CollAction.GraphQl.Mutations
             FieldAsync<StringGraphType, string>(
                 "initializeSepaDirect",
                 arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "sourceId" },
+                    new QueryArgument<NonNullGraphType<IdGraphType>>() { Name = "sourceId" },
                     new QueryArgument<NonNullGraphType<IntGraphType>>() { Name = "amount" },
                     new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "name" },
                     new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "email" }),
@@ -53,7 +53,7 @@ namespace CollAction.GraphQl.Mutations
             FieldAsync<StringGraphType, string>(
                 "initializeIdealCheckout",
                 arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "sourceId" },
+                    new QueryArgument<NonNullGraphType<IdGraphType>>() { Name = "sourceId" },
                     new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "name" },
                     new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "email" }),
                 resolve: async c =>
