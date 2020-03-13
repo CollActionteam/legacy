@@ -9,6 +9,7 @@ import { Button } from "../../../components/Button/Button";
 
 import styles from "./Start.module.scss";
 import ProjectStartFaqs from "./ProjectStartFaqs";
+import Kickstart from "./Kickstart";
 
 const StartProjectPage = () => {
   return (
@@ -31,9 +32,21 @@ const StartProjectPage = () => {
       </Grid>
 
       <Grid container>
-        <Section title="Frequently Asked Questions">
-          <ProjectStartFaqs></ProjectStartFaqs>
-        </Section>
+        <Grid item md={2}></Grid>
+        <Grid item md={8} xs={12}>
+          <Section title="Frequently Asked Questions">
+            <ProjectStartFaqs></ProjectStartFaqs>
+          </Section>
+        </Grid>
+      </Grid>
+
+      <Grid container>
+        <Grid item md={2}></Grid>
+        <Grid item md={8} xs={12}>
+          <div className={styles.kickstart}>
+            <Kickstart></Kickstart>
+          </div>
+        </Grid>
       </Grid>
     </React.Fragment>
   );
