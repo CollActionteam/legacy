@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import Apollo from './providers/apollo';
-import User from './components/User';
+import User from './providers/user';
 import Layout from './components/Layout';
 import i18n from './i18n';
 import { I18nextProvider } from 'react-i18next';

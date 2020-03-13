@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { gql } from "@apollo/client";
-import { IUser } from "../../api/types";
+import { IUser } from "../api/types";
 
 export const UserContext = React.createContext({ user: null as (IUser | null), setUser: (_user: IUser | null) => { } });
 

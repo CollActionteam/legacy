@@ -1,6 +1,6 @@
 import { Grid } from "@material-ui/core";
 import React from "react";
-import { UserContext } from "../../components/User";
+import { UserContext } from "../../providers/user";
 import ResetPassword from "../../components/Profile/ResetPassword";
 import NewsletterSubscription from "../../components/Profile/NewsletterSubscription";
 import RecurringDonations from "../../components/Profile/RecurringDonations";
