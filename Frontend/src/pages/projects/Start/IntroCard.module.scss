@@ -1,0 +1,36 @@
+@import '../../../components/Styles/responsive';
+
+.card {
+  // Position the card
+  width: 450px;
+  margin: -350px var(--spacing-xlg) auto auto;
+
+  // Card layout
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius);
+  background-color: var(--c-green);
+
+  @include breakpoint-down(md) {
+    margin-left: var(--spacing);
+    margin-right: var(--spacing);
+    width: unset;
+  }
+
+  .cardContent {
+    color: var(--c-white);
+    
+    a {
+      color: var(--c-white);
+      text-decoration: underline;
+    }
+
+    p {
+      margin-top: var(--spacing);
+    }
+  }
+
+  .callToAction {
+    margin-top: var(--spacing);
+    text-align: center;
+  }
+}
