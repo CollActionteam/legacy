@@ -18,11 +18,9 @@ export default ({ children }: any) => {
     setUser: setManualUser
   };
 
-  return <React.Fragment>
-    <UserContext.Provider value={contextValue}>
-      {children}
-    </UserContext.Provider>
-  </React.Fragment>
+  return <UserContext.Provider value={contextValue}>
+    {children}
+  </UserContext.Provider>;
 };
 
 const GET_USER = gql`
