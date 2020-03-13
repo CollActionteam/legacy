@@ -1,9 +1,9 @@
 import React from "react";
-import { useQuery } from "@apollo/react-hooks";
-import { gql } from "apollo-boost";
+import { useQuery } from "@apollo/client";
+import { gql } from "@apollo/client";
 import Slider from "react-slick";
 import { Grid, Container } from "@material-ui/core";
-import Card from "../Card";
+import ProjectCard from "../ProjectCard";
 import Loader from "../Loader";
 import { SecondaryButton, SecondaryGhostButton } from "../Button/Button";
 import { Fragments } from "../../api/fragments";
@@ -67,7 +67,7 @@ export default ({ title, text }: ICarouselProps) => {
           {data.projects && (
             <Slider {...settings}>
               {data.projects.map((project: IProject, index: number) => (
-                <Card project={project} key={index} />
+                <ProjectCard project={project} key={index} />
               ))}
             </Slider>
           )}

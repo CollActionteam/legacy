@@ -1,20 +1,21 @@
-import React from "react";
-import { useQuery } from "@apollo/react-hooks";
-import { gql } from "apollo-boost";
+import React, { useState } from "react";
+import { useQuery } from "@apollo/client";
+import { gql } from "@apollo/client";
 import { IUser } from "../../api/types";
 
-export const UserContext = React.createContext({ user: undefined as (IUser | undefined), setUser: (_user: IUser) => { } });
+export const UserContext = React.createContext({ user: null as (IUser | null), setUser: (_user: IUser | null) => { } });
 
 export default ({ children }: any) => {
   let { data, error } = useQuery(GET_USER);
+  const [manualUser, setManualUser] = useState<IUser | null>(null);
 
   if (error) {
     console.error(error);
   }
 
   let contextValue = {
-    user: data?.currentUser as IUser | undefined,
-    setUser: (newUser: IUser) => { contextValue.user = newUser; }
+    user: (manualUser ?? data?.currentUser ?? null) as IUser | null,
+    setUser: setManualUser
   };
 
   return <React.Fragment>

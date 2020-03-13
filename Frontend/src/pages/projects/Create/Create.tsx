@@ -1,6 +1,6 @@
 import React from 'react';
-import { useQuery, useMutation } from '@apollo/react-hooks';
-import { gql, ExecutionResult } from 'apollo-boost';
+import { useQuery, useMutation } from '@apollo/client';
+import { gql, ExecutionResult } from '@apollo/client';
 
 import { Formik, Field, Form, FormikProps } from 'formik';
 import * as Yup from 'yup';

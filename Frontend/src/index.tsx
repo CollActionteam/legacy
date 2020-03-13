@@ -20,7 +20,7 @@ import StartProjectPage from './pages/projects/Start/Start';
 import CreateProjectPage from './pages/projects/Create/Create';
 import ThankYouPage from './pages/projects/ThankYouCreate/ThankYouCreate';
 import ProjectDetailsPage from './pages/projects/Detail/ProjectDetails';
-import ProfilePage from './pages/Donation/Donation';
+import ProfilePage from './pages/Profile/Profile';
 import AdminPage from './pages/Admin/Admin';
 import DonationPage from './pages/Donation/Donation';
 

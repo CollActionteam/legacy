@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import {useQuery} from '@apollo/react-hooks';
-import {gql} from 'apollo-boost';
+import {useQuery} from '@apollo/client';
+import {gql} from '@apollo/client';
 import {Helmet} from 'react-helmet';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ProjectStatusFilter } from '../../../api/types';

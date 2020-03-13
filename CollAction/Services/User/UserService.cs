@@ -257,6 +257,12 @@ namespace CollAction.Services.User
         {
             logger.LogInformation("Deleting user permanently");
             ApplicationUser user = await userManager.FindByIdAsync(userId).ConfigureAwait(false);
+
+            if (user == null)
+            {
+                return IdentityResult.Failed(new IdentityError() { Code = "NOUSER", Description = "This user doesn't exist" });
+            }
+
             ApplicationUser loggedIn = await userManager.GetUserAsync(loggedInUser).ConfigureAwait(false);
 
             if (!loggedInUser.IsInRole(AuthorizationConstants.AdminRole) && user.Id != loggedIn?.Id)
@@ -283,7 +289,8 @@ namespace CollAction.Services.User
 
             if (result.Succeeded)
             {
-                logger.LogInformation("Deleted user permanently");
+                await emailSender.SendEmailTemplated(user.Email, "CollAction Account Deleted", "DeleteAccount").ConfigureAwait(false);
+                logger.LogInformation("Deleted user permanently: {0}", user.Id);
             }
             else
             {
