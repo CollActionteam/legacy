@@ -41,7 +41,7 @@ export default ({ user }: IResetPasswordProps) => {
 
     return <React.Fragment>
         { errorMessage ? <Alert type="error" text={errorMessage} /> : null }
-        { success ? <Alert type="info" text="Your password has been changed" /> : null }
+        { success ? <Alert type="success" text="Your password has been changed" /> : null }
         <Card>
             <CardContent>
                 <h3>Password</h3>
@@ -50,7 +50,7 @@ export default ({ user }: IResetPasswordProps) => {
             <CardActions>
                 <FormGroup>
                     <TextField onChange={(action) => setCurrentPassword(action.target.value)} value={currentPassword} required label="Current Password" type="password" />
-                    <TextField onChange={(action) => setNewPassword(action.target.value)} value={newPassword} required error={newPassword !== confirmNewPassword} label="New Password" type="password" />
+                    <TextField onChange={(action) => setNewPassword(action.target.value)} value={newPassword} required label="New Password" type="password" />
                     <TextField onChange={(action) => setConfirmNewPassword(action.target.value)} value={confirmNewPassword} required error={newPassword !== confirmNewPassword} label="Confirm New Password" type="password" />
                     <Button onClick={() => changePassword()} disabled={!isValid}>Change your password</Button>
                 </FormGroup>
