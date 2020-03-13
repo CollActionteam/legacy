@@ -1,12 +1,14 @@
 import React from "react";
-import { Banner } from "../../../components/Banner/Banner";
 
-import styles from "./Start.module.scss";
+import { Banner } from "../../../components/Banner/Banner";
 import { Grid } from "@material-ui/core";
 import { Section } from "../../../components/Section";
 import IntroCard from "./IntroCard";
 import { StartProjectSteps } from "./StartProjectSteps";
 import { Button } from "../../../components/Button/Button";
+
+import styles from "./Start.module.scss";
+import ProjectStartFaqs from "./ProjectStartFaqs";
 
 const StartProjectPage = () => {
   return (
@@ -30,6 +32,7 @@ const StartProjectPage = () => {
 
       <Grid container>
         <Section title="Frequently Asked Questions">
+          <ProjectStartFaqs></ProjectStartFaqs>
         </Section>
       </Grid>
     </React.Fragment>

@@ -9,27 +9,3 @@
   height: 40px;
   margin-bottom: var(--spacing);
 }
-
-.main {
-  text-align: center;
-
-  .step {
-    text-align: center;
-    padding: 0 var(--spacing-md);
-    margin-bottom: var(--spacing-lg);
-    
-    > * {
-      margin: var(--spacing-md) auto;
-    }
-  
-    img {
-      height: 40px;
-    }
-
-    h2 {
-      color: inherit;
-      letter-spacing: inherit;
-    }
-  }
-    
-}
