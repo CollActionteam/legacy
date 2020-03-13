@@ -18,7 +18,7 @@ export default () => {
               <ResetPassword user={user!} />
             </Grid>
             <Grid item xs={6}>
-              <NewsletterSubscription user={user!} />
+              <NewsletterSubscription user={user!} setUser={setUser} />
             </Grid>
             <Grid item xs={6}>
               <DeleteAccount user={user!} setUser={setUser} />
