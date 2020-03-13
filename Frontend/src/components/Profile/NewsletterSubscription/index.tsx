@@ -46,7 +46,7 @@ export default ({ user, setUser }: INewsletterSubscriptionProps) => {
                     {
                         user.isSubscribedNewsletter ? 
                             <p>Unsubscribe from our newsletter, we'll be sad to see you go!</p> : 
-                            <p>Subscribe to our newsletter if you would like to receive an update from CollAction every once in a while - don't worry, we like spam as little as you do! 🙂</p>
+                            <p>Subscribe to our newsletter if you would like to receive an update from CollAction every once in a while - don't worry, we like spam as little as you do! <span role="img" aria-label="smiley">🙂</span></p>
                     }
                 </CardContent>
                 <CardActions>
