@@ -24,8 +24,7 @@ export default ({ user, setUser }: INewsletterSubscriptionProps) => {
                         isSubscribedNewsletter: !user.isSubscribedNewsletter
                     }
                 },
-                onCompleted: (data) =>
-                {
+                onCompleted: (data) => {
                     if (data?.applicationUser?.updateUser?.result?.succeeded) {
                         user.isSubscribedNewsletter = !user.isSubscribedNewsletter;
                         setUser(user);
