@@ -11,7 +11,7 @@ export default ({ user }: IRecurringDonationProps) => {
     return <Card>
         <CardContent>
             <h3>Donation Subscriptions</h3>
-            { user?.donationSubscriptions.length > 0 ?
+            { user.donationSubscriptions.length > 0 ?
                 <List>
                     { user.donationSubscriptions.map(subscription => <RecurringDonationSubscription user={user} subscription={subscription} />) }
                 </List> : 

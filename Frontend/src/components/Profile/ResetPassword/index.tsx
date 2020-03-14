@@ -17,7 +17,7 @@ export default () => {
                 newPassword: newPassword
             },
             onCompleted: (data) => {
-                if (data?.applicationUser?.changePassword?.succeeded) {
+                if (data.applicationUser.changePassword.succeeded) {
                     setSuccess(true);
                 } else {
                     let error = data.applicationUser.changePassword.errors.map((e: any) => e.description).join(", ");

@@ -21,7 +21,7 @@ export default ({ user }: IDeleteAccountProps) => {
                     variables: { userId: user.id },
                     onCompleted: (data) =>
                     {
-                        if (data?.applicationUser?.deleteUser?.succeeded) {
+                        if (data.applicationUser.deleteUser.succeeded) {
                             setDone(true);
                         } else {
                             let error = data.applicationUser.deleteUser.errors.map((e: any) => e.description).join(", ");

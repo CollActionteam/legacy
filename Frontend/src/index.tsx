@@ -23,6 +23,9 @@ import ProjectDetailsPage from './pages/projects/Detail/ProjectDetails';
 import ProfilePage from './pages/Profile/Profile';
 import AdminPage from './pages/Admin/Admin';
 import DonationPage from './pages/Donation/Donation';
+import ForgotPasswordPage from './pages/ForgotPassword/ForgotPassword';
+import RegisterUserPage from './pages/RegisterUser/RegisterUser';
+import ResetPasswordPage from './pages/ResetPassword/ResetPassword';
 
 const routing = (
     <I18nextProvider i18n={i18n}>
@@ -33,6 +36,9 @@ const routing = (
                         <Switch>
                             <Route exact path="/" component={HomePage} />
                             <Route path="/login" component={LoginPage} />
+                            <Route path="/forgot-password" component={ForgotPasswordPage} />
+                            <Route path="/reset-password" component={ResetPasswordPage} />
+                            <Route path="/register-user" component={RegisterUserPage} />
                             <Route path="/about" component={AboutPage} />
                             <Route path="/profile" component={ProfilePage} />
                             <Route path="/admin" component={AdminPage} />

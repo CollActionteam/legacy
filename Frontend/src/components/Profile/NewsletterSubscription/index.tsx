@@ -24,7 +24,7 @@ export default ({ user }: INewsletterSubscriptionProps) => {
                     }
                 },
                 onCompleted: (data) => {
-                    if (data?.applicationUser?.updateUser?.result?.succeeded) {
+                    if (data.applicationUser.updateUser.result.succeeded) {
                         user.isSubscribedNewsletter = !user.isSubscribedNewsletter;
                     } else {
                         let error = data.applicationUser.updateUser.errors.map((e: any) => e.description).join(", ");
