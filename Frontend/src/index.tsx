@@ -26,6 +26,7 @@ import DonationPage from './pages/Donation/Donation';
 import ForgotPasswordPage from './pages/ForgotPassword/ForgotPassword';
 import RegisterUserPage from './pages/RegisterUser/RegisterUser';
 import ResetPasswordPage from './pages/ResetPassword/ResetPassword';
+import PrivacyPolicyPage from './pages/PrivacyPolicy/PrivacyPolicy';
 
 const routing = (
     <I18nextProvider i18n={i18n}>
@@ -43,6 +44,7 @@ const routing = (
                             <Route path="/profile" component={ProfilePage} />
                             <Route path="/admin" component={AdminPage} />
                             <Route path="/donate" component={DonationPage} />
+                            <Route path="/privacy-policy" component={PrivacyPolicyPage} />
                             <Route path="/projects/find" component={FindPage} />
                             <Route path="/projects/start" component={StartProjectPage} />
                             <Route path="/projects/create" component={CreateProjectPage} />
