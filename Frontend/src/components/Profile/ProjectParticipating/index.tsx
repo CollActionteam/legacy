@@ -14,8 +14,8 @@ export default ({ user, participant }: IProjectParticipatingProps) => {
         SET_PROJECT_SUBSCRIPTION,
         {
             variables: {
-                projectId: participant.projectId,
-                userId: participant.userId,
+                projectId: participant.project.id,
+                userId: user.id,
                 token: participant.unsubscribeToken,
                 isSubscribed: !participant.subscribedToProjectEmails
             }

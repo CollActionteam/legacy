@@ -86,11 +86,9 @@ export interface IProject {
 
 export interface IProjectParticipant {
   project: IProject;
-  projectId: string;
   subscribedToProjectEmails: boolean;
   unsubscribeToken: any;
   user: IUser;
-  userId: string;
 }
 
 export enum ProjectStatus {
