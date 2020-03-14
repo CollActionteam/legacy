@@ -3,7 +3,6 @@ import { Card, CardContent, CardActions, Button } from "@material-ui/core";
 import { IUser } from "../../../api/types";
 import { useMutation, gql } from "@apollo/client";
 import { Alert } from "../../Alert";
-import { GET_USER } from "../../../providers/user";
 
 interface INewsletterSubscriptionProps {
     user: IUser;
@@ -34,12 +33,7 @@ export default ({ user }: INewsletterSubscriptionProps) => {
                 },
                 onError: (data) => {
                     setErrorMessage(data.message);
-                },
-                refetchQueries: [
-                    {
-                        query: GET_USER
-                    }
-                ]
+                }
             });
 
     return <React.Fragment>
@@ -65,6 +59,10 @@ const UPDATE_USER = gql`
     {  
         applicationUser {
             updateUser(user:$updatedUser) {
+                user {
+                    id
+                    isSubscribedNewsletter
+                }
                 result {
                     succeeded
                     errors {

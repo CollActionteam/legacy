@@ -9,6 +9,7 @@ namespace CollAction.GraphQl.Queries
     {
         public ProjectParticipantGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService) : base(entityFrameworkGraphQlService)
         {
+            Field<IdGraphType>("id", resolve: c => $"{c.Source.ProjectId}_{c.Source.UserId}");
             Field(x => x.SubscribedToProjectEmails);
             Field(x => x.UnsubscribeToken);
             Field(x => x.ParticipationDate);

@@ -38,6 +38,7 @@ export const GET_USER = gql`
         ${Fragments.projectDetail}
       }
       participates {
+        id
         subscribedToProjectEmails
         unsubscribeToken
         project {
