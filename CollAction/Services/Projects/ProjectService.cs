@@ -517,6 +517,8 @@ namespace CollAction.Services.Projects
                           .Select(i => Faker.Company.Name())
                           .Distinct();
 
+            List<string> userIds = await context.Users.Select(u => u.Id).ToListAsync().ConfigureAwait(false);
+
             // Generate random projects
             foreach (string projectName in projectNames)
             {
@@ -544,6 +546,11 @@ namespace CollAction.Services.Projects
                                              ? null
                                              : await imageService.UploadImage(ToFormFile(bannerImageBytes.Result, bannerImageUrl), Faker.Company.BS(), cancellationToken).ConfigureAwait(false);
 
+                List<ProjectParticipant> projectParticipants = userIds
+                        .Where(userId => r.Next(3) == 0)
+                        .Select(userId => new ProjectParticipant(userId, 0, r.Next(2) == 1, DateTime.UtcNow, Guid.NewGuid()))
+                        .ToList();
+
                 context.Projects.Add(
                     new Project(
                         name: projectName,
@@ -562,22 +569,10 @@ namespace CollAction.Services.Projects
                         status: (ProjectStatus)r.Next(0, 3),
                         target: r.Next(1, 10000),
                         anonymousUserParticipants: r.Next(1, 8000),
-                        descriptionVideoLink: videoLinks.ElementAt(r.Next(videoLinks.Length))));
+                        descriptionVideoLink: videoLinks.ElementAt(r.Next(videoLinks.Length))) { Participants = projectParticipants });
             }
             
             await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-
-            // And then assign random users to those projects
-            List<string> userIds = await context.Users.Select(u => u.Id).ToListAsync().ConfigureAwait(false);
-            List<int> projectIds = await context.Projects.Where(p => p.Status == ProjectStatus.Running && DateTime.UtcNow >= p.Start).Select(p => p.Id).ToListAsync().ConfigureAwait(false);
-
-            IEnumerable<ProjectParticipant> projectParticipants = userIds
-                .SelectMany(userId =>
-                    projectIds.Where(projectId => r.Next(3) == 0)
-                              .Select(projectId => new ProjectParticipant(userId, projectId, r.Next(2) == 1, DateTime.UtcNow, Guid.NewGuid())));
-            context.ProjectParticipants.AddRange(projectParticipants);
-            await context.SaveChangesAsync().ConfigureAwait(false);
-
             await RefreshParticipantCountMaterializedView(cancellationToken).ConfigureAwait(false);
         }
 
