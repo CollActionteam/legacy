@@ -1,6 +1,6 @@
 import React from "react";
 import { IUser } from "../../../api/types";
-import { CardActions, CardContent, Card, Button } from "@material-ui/core";
+import { CardContent, Card } from "@material-ui/core";
 import ProjectCard from "../../ProjectCard";
 
 interface IProjectCreatedProps {

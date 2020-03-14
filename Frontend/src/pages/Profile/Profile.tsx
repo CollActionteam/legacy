@@ -30,7 +30,7 @@ export default () => {
               <ProjectsParticipating user={user!} />
             </Grid>
             <Grid item xs={6}>
-              <RecurringDonations user={user!} />
+              <RecurringDonations user={user!} setUser={setUser} />
             </Grid>
           </Grid>;
         } else {

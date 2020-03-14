@@ -71,7 +71,7 @@ namespace CollAction.GraphQl.Mutations
             FieldAsync<StringGraphType, string>(
                 "cancelSubscription",
                 arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "subscriptionId" }),
+                    new QueryArgument<NonNullGraphType<IdGraphType>>() { Name = "subscriptionId" }),
                 resolve: async c =>
                 {
                     string subscriptionId = c.GetArgument<string>("subscriptionId");
