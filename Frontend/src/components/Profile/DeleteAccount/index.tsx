@@ -11,10 +11,10 @@ interface IDeleteAccountProps {
 }
 
 export default (props: IDeleteAccountProps) => {
-    const [hasDeletePopup, setHasDeletePopup] = useState(false);
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    const [done, setDone] = useState(false);
-    const [deleteUser ] =
+    const [ hasDeletePopup, setHasDeletePopup] = useState(false);
+    const [ errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [ done, setDone] = useState(false);
+    const [ deleteUser ] =
             useMutation(
                 DELETE_USER,
                 {
