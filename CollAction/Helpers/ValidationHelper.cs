@@ -13,7 +13,7 @@ namespace CollAction.Helpers
         {
             var validationContext = new ValidationContext(item, serviceProvider: serviceProvider, items: null);
             var validationResults = new List<ValidationResult>();
-            Validator.TryValidateObject(item, validationContext, validationResults);
+            Validator.TryValidateObject(item, validationContext, validationResults, true);
             return validationResults;
         }
 

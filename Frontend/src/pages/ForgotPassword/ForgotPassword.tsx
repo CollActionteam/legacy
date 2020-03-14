@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { Section } from "../../components/Section";
 import { Alert } from "../../components/Alert";
-import { Grid, FormGroup, TextField, Button, FormControl } from "@material-ui/core";
+import { Grid, FormGroup, TextField, Button } from "@material-ui/core";
 import { gql, useMutation } from "@apollo/client";
 import styles from "./ForgotPassword.module.scss";
 
 const ForgotPasswordPage = () => {
     const [ errorMessage, setErrorMessage ] = useState<string | null>(null);
     const [ infoMessage, setInfoMessage ] = useState<string | null>(null);
-    const [ email, setEmail ] = useState<string>("");
+    const [ email, setEmail ] = useState("");
     const [ forgotPassword ] = useMutation(
         FORGOT_PASSWORD,
         {

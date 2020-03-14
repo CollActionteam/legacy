@@ -9,8 +9,8 @@ const ResetPasswordPage = () => {
     const searchParams = new URLSearchParams(window.location.search);
     const resetCode = searchParams.get("code");
     const email = searchParams.get("email");
-    const [ password, setPassword ] = useState<string | null>(null);
-    const [ confirmPassword, setConfirmPassword ] = useState<string | null>(null);
+    const [ password, setPassword ] = useState("");
+    const [ confirmPassword, setConfirmPassword ] = useState("");
     const [ errorMessage, setErrorMessage ] = useState<string | null>(null);
     const [ infoMessage, setInfoMessage ] = useState<string | null>(null);
     const valid = resetCode !== null && email !== null && password !== confirmPassword;
