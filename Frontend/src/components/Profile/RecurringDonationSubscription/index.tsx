@@ -50,6 +50,6 @@ const STOP_SUBSCRIPTION = gql`
 mutation StopSubscription($subscriptionId: ID!)
 {  
   donation {
-    cancelSubscription($subscriptionId)
+    cancelSubscription(subscriptionId: $subscriptionId)
   }
 }`;

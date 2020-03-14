@@ -3,11 +3,11 @@ import { IUser } from "../../../api/types";
 import { CardContent, Card } from "@material-ui/core";
 import ProjectCard from "../../ProjectCard";
 
-interface IProjectCreatedProps {
+interface IProjectsCreatedProps {
     user: IUser;
 }
 
-export default ({ user }: IProjectCreatedProps) => {
+export default ({ user }: IProjectsCreatedProps) => {
     return <Card>
             <CardContent>
                 <h3>Projects Created</h3>
