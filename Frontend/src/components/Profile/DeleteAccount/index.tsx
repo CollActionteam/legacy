@@ -4,13 +4,13 @@ import { IUser } from "../../../api/types";
 import { gql, useMutation } from "@apollo/client";
 import { Alert } from "../../Alert";
 import { Redirect } from "react-router-dom";
+import { GET_USER } from "../../../providers/user";
 
 interface IDeleteAccountProps {
     user: IUser;
-    setUser(user: IUser | null): void;
 }
 
-export default (props: IDeleteAccountProps) => {
+export default ({ user }: IDeleteAccountProps) => {
     const [ hasDeletePopup, setHasDeletePopup] = useState(false);
     const [ errorMessage, setErrorMessage] = useState<string | null>(null);
     const [ done, setDone] = useState(false);
@@ -18,11 +18,10 @@ export default (props: IDeleteAccountProps) => {
             useMutation(
                 DELETE_USER,
                 {
-                    variables: { userId: props.user.id },
+                    variables: { userId: user.id },
                     onCompleted: (data) =>
                     {
                         if (data?.applicationUser?.deleteUser?.succeeded) {
-                            props.setUser(null);
                             setDone(true);
                         } else {
                             let error = data.applicationUser.deleteUser.errors.map((e: any) => e.description).join(", ");
@@ -31,7 +30,10 @@ export default (props: IDeleteAccountProps) => {
                     },
                     onError: (data) => {
                         setErrorMessage(data.message);
-                    }
+                    },
+                    refetchQueries: [{
+                        query: GET_USER
+                    }]
                 });
 
     return <React.Fragment>

@@ -5,14 +5,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMutation } from "@apollo/client/react/hooks/useMutation";
 import { gql } from "@apollo/client";
 import { Alert } from "../../Alert";
+import { GET_USER } from "../../../providers/user";
 
 interface IRecurringDonationItemProps {
     user: IUser;
-    setUser(user: IUser | null): void;
     subscription: IDonationSubscription;
 }
 
-export default ({ user, setUser, subscription }: IRecurringDonationItemProps) => {
+export default ({ user, subscription }: IRecurringDonationItemProps) => {
     const [ stopSubscription ] = useMutation(STOP_SUBSCRIPTION,
         {
             variables: {
@@ -20,11 +20,13 @@ export default ({ user, setUser, subscription }: IRecurringDonationItemProps) =>
             },
             onCompleted: (_) => {
                 user.donationSubscriptions = user.donationSubscriptions.filter(sub => sub.id !== subscription.id);
-                setUser(user);
             },
             onError: (data) => {
                 setErrorMessage(data.message);
-            }
+            },
+            refetchQueries: [{
+                query: GET_USER
+            }]
         });
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 

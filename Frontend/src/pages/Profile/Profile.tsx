@@ -13,17 +13,17 @@ import { Link } from "react-router-dom";
 export default () => {
   return <UserContext.Consumer>
     {
-      ({user, setUser}) => {
+      ({ user }) => {
         if (user !== null) {
           return <Grid container spacing={5}>
             <Grid item xs={6}>
-              <ResetPassword user={user!} />
+              <ResetPassword />
             </Grid>
             <Grid item xs={6}>
-              <NewsletterSubscription user={user!} setUser={setUser} />
+              <NewsletterSubscription user={user!} />
             </Grid>
             <Grid item xs={6}>
-              <DeleteAccount user={user!} setUser={setUser} />
+              <DeleteAccount user={user!} />
             </Grid>
             <Grid item xs={6}>
               <ProjectsCreated user={user!} />
@@ -32,7 +32,7 @@ export default () => {
               <ProjectsParticipating user={user!} />
             </Grid>
             <Grid item xs={6}>
-              <RecurringDonations user={user!} setUser={setUser} />
+              <RecurringDonations user={user!} />
             </Grid>
             {
               user.isAdmin ?

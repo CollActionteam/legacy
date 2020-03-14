@@ -1,14 +1,9 @@
 import React, { useState } from "react";
 import { Card, CardContent, CardActions, Button, TextField, FormGroup } from "@material-ui/core";
-import { IUser } from "../../../api/types";
 import { gql, useMutation } from "@apollo/client";
 import { Alert } from "../../Alert";
 
-interface IResetPasswordProps {
-    user: IUser;
-}
-
-export default ({ user }: IResetPasswordProps) => {
+export default () => {
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmNewPassword, setConfirmNewPassword] = useState("");

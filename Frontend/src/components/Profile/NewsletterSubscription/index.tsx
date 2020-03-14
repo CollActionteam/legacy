@@ -3,13 +3,13 @@ import { Card, CardContent, CardActions, Button } from "@material-ui/core";
 import { IUser } from "../../../api/types";
 import { useMutation, gql } from "@apollo/client";
 import { Alert } from "../../Alert";
+import { GET_USER } from "../../../providers/user";
 
 interface INewsletterSubscriptionProps {
     user: IUser;
-    setUser(user: IUser | null): void;
 }
 
-export default ({ user, setUser }: INewsletterSubscriptionProps) => {
+export default ({ user }: INewsletterSubscriptionProps) => {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [toggleSubscription] =
         useMutation(
@@ -27,7 +27,6 @@ export default ({ user, setUser }: INewsletterSubscriptionProps) => {
                 onCompleted: (data) => {
                     if (data?.applicationUser?.updateUser?.result?.succeeded) {
                         user.isSubscribedNewsletter = !user.isSubscribedNewsletter;
-                        setUser(user);
                     } else {
                         let error = data.applicationUser.updateUser.errors.map((e: any) => e.description).join(", ");
                         setErrorMessage(error);
@@ -35,7 +34,12 @@ export default ({ user, setUser }: INewsletterSubscriptionProps) => {
                 },
                 onError: (data) => {
                     setErrorMessage(data.message);
-                }
+                },
+                refetchQueries: [
+                    {
+                        query: GET_USER
+                    }
+                ]
             });
 
     return <React.Fragment>
