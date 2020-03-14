@@ -94,3 +94,9 @@ When you run the site, you can configure the following settings through either e
 * StripePaymentEventWebhookSecret: The webhook secret used for the event endpoint (used for logging stripe events)
 * ASPNETCORE_URLS: Which ports/protocols to expose (example: https://*:44301) 
 * ASPNETCORE_ENVIRONMENT: Which environment are we hosting in (Development/Staging/Production)
+
+Our test configuration files contain configuration enough to get a minimum version of the site up for development and testing, they don't contain any secrets. When creating a pull-request, be careful about checking in production secrets. Use dotnet-secrets for secrets/keys that shouldn't be in git.
+
+## Contribute
+
+If you want to contribute to this project, e-mail collactionteam@gmail.com.
