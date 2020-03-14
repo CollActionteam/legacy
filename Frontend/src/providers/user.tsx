@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { gql } from "@apollo/client";
 import { IUser } from "../api/types";
+import { Fragments } from "../api/fragments";
 
 export const UserContext = React.createContext({ user: null as (IUser | null), setUser: (_user: IUser | null) => { } });
 
@@ -40,15 +41,13 @@ const GET_USER = gql`
         canceledAt
       }
       projects {
-        id
-        name
+        ${Fragments.projectDetail}
       }
       participates {
         subscribedToProjectEmails
         unsubscribeToken
         project {
-          id
-          name
+          ${Fragments.projectDetail}
         }
       }
     }
