@@ -1,0 +1,11 @@
+@import '../../../components/Styles/responsive';
+
+.step {
+  text-align: center;
+  padding: 0 var(--spacing-lg);
+}
+
+.image {
+  height: 40px;
+  margin-bottom: var(--spacing);
+}
