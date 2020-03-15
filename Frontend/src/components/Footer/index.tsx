@@ -5,8 +5,9 @@ import logo from "../../assets/svg/logo.svg";
 import styles from "./style.module.scss";
 import SocialMedia from "../SocialMedia";
 import NewsletterSignup from "../NewsletterSignup";
-import { Link } from "react-router-dom";
 import { siteData } from "../../api/site";
+import { HashLink } from 'react-router-hash-link';
+import { Link } from "react-router-dom";
 
 export default () => (
   <div className={styles.footer}>
@@ -25,7 +26,7 @@ export default () => (
             .<br />
             Would you like to get an occasional update on CollAction and
             crowdacting? Sign up for our newsletter (to your right)! We will be
-            careful with your data, see our Privacy Policy.
+            careful with your data, see our <Link to="/privacy-policy">Privacy Policy</Link>.
           </div>
         </Grid>
         <Grid item xs={12} sm={6} md={5}>
@@ -33,9 +34,9 @@ export default () => (
             <ul className={styles.navigationList}>
               {siteData.footerLinks.map((link: any, index: number) => (
                 <li key={index} className={styles.navigationItem}>
-                  <Link className={styles.navigationLink} to={link.link}>
+                  <HashLink className={styles.navigationLink} to={link.link}>
                     {link.name}
-                  </Link>
+                  </HashLink>
                 </li>
               ))}
             </ul>

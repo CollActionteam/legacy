@@ -8,6 +8,7 @@ interface ISectionProps {
   color?: string;
   title?: string;
   className?: string;
+  anchor?: string;
 }
 
 export const Section = ({
@@ -15,6 +16,7 @@ export const Section = ({
   center,
   color,
   title,
+  anchor,
   className,
 }: ISectionProps) => {
   // tslint:disable-next-line: prettier
@@ -22,8 +24,8 @@ export const Section = ({
   return (
     <section className={classes}>
       <Container>
-        {title ? <h2 className={styles.title}>{title}</h2> : null}
-        {children}
+        { title ? <h2 className={styles.title} id={anchor}>{ title }</h2> : null }
+        { children }
       </Container>
     </section>
   );
