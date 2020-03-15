@@ -17,10 +17,10 @@ export default () => {
                 newPassword: newPassword
             },
             onCompleted: (data) => {
-                if (data.applicationUser.changePassword.succeeded) {
+                if (data.user.changePassword.succeeded) {
                     setSuccess(true);
                 } else {
-                    let error = data.applicationUser.changePassword.errors.map((e: any) => e.description).join(", ");
+                    let error = data.user.changePassword.errors.map((e: any) => e.description).join(", ");
                     setSuccess(false);
                     setErrorMessage(error);
                 }
@@ -57,7 +57,7 @@ export default () => {
 const CHANGE_PASSWORD = gql`
     mutation ChangePassword($currentPassword: String!, $newPassword: String!)
     {  
-        applicationUser {
+        user {
             changePassword(currentPassword: $currentPassword, newPassword: $newPassword) {
             succeeded
             errors {

@@ -6,8 +6,8 @@ namespace CollAction.GraphQl.Mutations
     {
         public MutationGraph()
         {
-            Field<ApplicationUserMutationGraph>(
-                "applicationUser",
+            Field<UserMutationGraph>(
+                "user",
                 resolve: c => new object());
 
             Field<DonationMutationGraph>(

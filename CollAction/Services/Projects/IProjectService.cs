@@ -16,6 +16,8 @@ namespace CollAction.Services.Projects
 
         Task<ProjectResult> UpdateProject(UpdatedProject updatedProject, ClaimsPrincipal user, CancellationToken token);
 
+        Task<int> DeleteProject(int id, CancellationToken token);
+
         Task<AddParticipantResult> CommitToProjectAnonymous(string email, int projectId, CancellationToken token);
 
         Task<AddParticipantResult> CommitToProjectLoggedIn(ClaimsPrincipal user, int projectId, CancellationToken token);

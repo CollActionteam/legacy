@@ -31,7 +31,13 @@
     "slick-carousel": "^1.8.1",
     "yup": "^0.28.3",
     "draft-js": "0.11.4",
-    "immutable": "^3.8.2"
+    "react-admin": "^3.3.1",
+    "ra-data-graphql": "3.2.2",
+    "ra-core": "^3.3.1",
+    "history": "^4.10.1",
+    "immutable": "^3.8.2",
+    "seamless-immutable": "^7.1.4",
+    "prop-types": "^15.7.2"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.1.1",

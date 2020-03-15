@@ -23,11 +23,11 @@ const ResetPasswordPage = () => {
                 password: password
             },
             onCompleted: (data) => {
-                if (data.applicationUser.resetPassword.succeeded) {
+                if (data.user.resetPassword.succeeded) {
                     setErrorMessage(null);
                     setInfoMessage("Your password has been reset. You can log in with your new password now.");
                 } else {
-                    let error = data.applicationUser.resetPassword.errors.map((e: any) => e.description).join(", ");
+                    let error = data.user.resetPassword.errors.map((e: any) => e.description).join(", ");
                     setErrorMessage(error);
                 }
             },
@@ -65,7 +65,7 @@ export default ResetPasswordPage;
 
 const FORGOT_PASSWORD = gql`
     mutation ResetPassword($email: String!, $code: String!, $password: String!) {
-        applicationUser {
+        user {
             resetPassword(email: $email, code: $code, password: $password) {
                 succeeded
                 errors {

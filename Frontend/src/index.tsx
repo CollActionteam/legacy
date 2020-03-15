@@ -33,8 +33,9 @@ const routing = (
         <Router>
             <Apollo>
                 <User>
-                    <Layout>
-                        <Switch>
+                    <Switch>
+                        <Route path="/admin" component={AdminPage} />
+                        <Layout>
                             <Route exact path="/" component={HomePage} />
                             <Route path="/login" component={LoginPage} />
                             <Route path="/forgot-password" component={ForgotPasswordPage} />
@@ -42,7 +43,6 @@ const routing = (
                             <Route path="/register-user" component={RegisterUserPage} />
                             <Route path="/about" component={AboutPage} />
                             <Route path="/profile" component={ProfilePage} />
-                            <Route path="/admin" component={AdminPage} />
                             <Route path="/donate" component={DonationPage} />
                             <Route path="/privacy-policy" component={PrivacyPolicyPage} />
                             <Route path="/projects/find" component={FindPage} />
@@ -51,8 +51,8 @@ const routing = (
                             <Route path="/projects/thank-you-create" component={ThankYouPage} />
                             <Route path="/projects/:slug/:projectId" render={routeProps => <ProjectDetailsPage {...routeProps} />} />
                             <Route component={NotFoundPage} />
-                        </Switch>
-                    </Layout>
+                        </Layout>
+                    </Switch>
                 </User>
             </Apollo>
         </Router>

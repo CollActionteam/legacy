@@ -12,6 +12,8 @@ namespace CollAction.GraphQl.Mutations.Input
             Field(x => x.FirstName, true);
             Field(x => x.LastName, true);
             Field(x => x.IsSubscribedNewsletter);
+            Field(x => x.RepresentsNumberUsers);
+            Field(x => x.IsAdmin);
         }
     }
 }

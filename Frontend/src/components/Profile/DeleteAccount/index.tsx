@@ -21,10 +21,10 @@ export default ({ user }: IDeleteAccountProps) => {
                     variables: { userId: user.id },
                     onCompleted: (data) =>
                     {
-                        if (data.applicationUser.deleteUser.succeeded) {
+                        if (data.user.deleteUser.succeeded) {
                             setDone(true);
                         } else {
-                            let error = data.applicationUser.deleteUser.errors.map((e: any) => e.description).join(", ");
+                            let error = data.user.deleteUser.errors.map((e: any) => e.description).join(", ");
                             setErrorMessage(error);
                         }
                     },
@@ -63,7 +63,7 @@ export default ({ user }: IDeleteAccountProps) => {
 const DELETE_USER = gql`
     mutation DeleteUser($userId: ID!)
     {  
-        applicationUser {
+        user {
             deleteUser(id: $userId) {
                 succeeded
                 errors {

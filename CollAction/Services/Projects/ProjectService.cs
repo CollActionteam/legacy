@@ -148,6 +148,21 @@ namespace CollAction.Services.Projects
             return new ProjectResult(project);
         }
 
+        public async Task<int> DeleteProject(int id, CancellationToken token)
+        {
+            var project = await context.Projects.FindAsync(id);
+
+            if (project == null)
+            {
+                throw new InvalidOperationException($"Project {id} doesn't exist");
+            }
+
+            project.Status = ProjectStatus.Deleted;
+            await context.SaveChangesAsync().ConfigureAwait(false);
+
+            return id;
+        }
+
         public async Task<ProjectResult> UpdateProject(UpdatedProject updatedProject, ClaimsPrincipal user, CancellationToken token)
         {
             logger.LogInformation("Validating updated project");

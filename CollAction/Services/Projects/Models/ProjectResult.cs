@@ -23,6 +23,11 @@ namespace CollAction.Services.Projects.Models
             Succeeded = true;
         }
 
+        public ProjectResult()
+        {
+            Succeeded = true;
+        }
+
         public Project? Project { get; set; }
 
         public bool Succeeded { get; set; } = false;

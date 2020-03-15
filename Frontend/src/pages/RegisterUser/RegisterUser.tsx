@@ -28,11 +28,11 @@ const RegisterUserPage = () => {
                 isSubscribedNewsletter: newsletter
             },
             onCompleted: (data) => {
-                if (data.applicationUser.createUser.result.succeeded) {
+                if (data.user.createUser.result.succeeded) {
                     setErrorMessage(null);
                     setInfoMessage("You have been registered. You can now login with your new account.");
                 } else {
-                    let error = data.applicationUser.createUser.result.errors.map((e: any) => e.description).join(", ");
+                    let error = data.user.createUser.result.errors.map((e: any) => e.description).join(", ");
                     setInfoMessage(null);
                     setErrorMessage(error);
                 }
@@ -87,7 +87,7 @@ export default RegisterUserPage;
 
 const REGISTER_USER = gql`
     mutation RegisterUser($email: String!, $firstName: String!, $lastName: String!, $password: String!, $isSubscribedNewsletter: Boolean!) {
-        applicationUser {
+        user {
             createUser(user: { email: $email, firstName: $firstName, lastName: $lastName, password: $password, isSubscribedNewsletter: $isSubscribedNewsletter}) {
                 result {
                     succeeded
