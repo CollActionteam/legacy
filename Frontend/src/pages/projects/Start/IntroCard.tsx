@@ -11,7 +11,7 @@ const IntroCard = () => {
           <p>
             Would you like to do something about social or environmental problems? 
             Would you like to lead the crowdacting movement? Start a project on 
-            CollAction now! Also, check our  <a href="https://docs.google.com/document/d/1JK058S_tZXntn3GzFYgiH3LWV5e9qQ0vXmEyV-89Tmw" target="_blank">handbook for project starters</a>.
+            CollAction now! Also, check our  <a href="https://docs.google.com/document/d/1JK058S_tZXntn3GzFYgiH3LWV5e9qQ0vXmEyV-89Tmw" target="_blank" rel="noopener noreferrer">handbook for project starters</a>.
           </p>
           <p>
             <b>It's really easy - we'll guide you through it.</b>

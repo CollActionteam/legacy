@@ -1,8 +1,6 @@
 
 import React from "react";
 
-import { Section } from "../../../components/Section";
-
 import Arrow from "../../../assets/step3.png";
 
 import styles from "./Kickstart.module.scss";
@@ -16,7 +14,7 @@ const Kickstart = () => {
           Want to discuss your project idea with the CollAction team? Send us an email at <a href="mailto:collactionteam@gmail.com">collactionteam@gmail.com</a>.
         </p>
       </div>
-      <img className={styles.image} src={Arrow}></img>
+      <img className={styles.image} src={Arrow} alt=""></img>
     </div>
   );
 }
