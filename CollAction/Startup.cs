@@ -35,6 +35,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.DataProtection;
 using CollAction.Services.Statistics;
+using System.Linq;
 
 namespace CollAction
 {
@@ -44,11 +45,9 @@ namespace CollAction
         {
             this.configuration = configuration;
             this.environment = environment;
-            publicAddress = this.configuration["PublicAddress"];
         }
 
         private readonly string corsPolicy = "FrontendCors";
-        private readonly string publicAddress;
         private readonly IConfiguration configuration;
         private readonly IWebHostEnvironment environment;
 
@@ -144,7 +143,7 @@ namespace CollAction
                                .SetIsOriginAllowedToAllowWildcardSubdomains()
                                .AllowAnyHeader()
                                .AllowCredentials()
-                               .WithOrigins(publicAddress.Split(";")));
+                               .WithOrigins(configuration.Get<SiteOptions>().PublicAddresses.ToArray()));
             });
 
             services.AddUrlHelper();
@@ -232,7 +231,7 @@ namespace CollAction
             {
                 endpoints.MapHangfireDashboard(new DashboardOptions()
                 {
-                    AppPath = publicAddress,
+                    AppPath = configuration.Get<SiteOptions>().CanonicalAddress,
                     DashboardTitle = "CollAction Jobs",
                     Authorization = new[] { new HangfireAdminAuthorizationFilter() }
                 });

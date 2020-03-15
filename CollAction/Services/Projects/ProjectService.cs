@@ -320,7 +320,7 @@ namespace CollAction.Services.Projects
 
             foreach (ProjectParticipant participant in participants)
             {
-                string unsubscribeLink = $"{siteOptions.PublicAddress}/Manage/ChangeSubscription?userId={WebUtility.UrlEncode(participant.UserId)}&projectId={project.Id}&token={WebUtility.UrlEncode(participant.UnsubscribeToken.ToString())}";
+                string unsubscribeLink = $"{siteOptions.CanonicalAddress}/Manage/ChangeSubscription?userId={WebUtility.UrlEncode(participant.UserId)}&projectId={project.Id}&token={WebUtility.UrlEncode(participant.UnsubscribeToken.ToString())}";
                 emailSender.SendEmail(participant.User.Email, subject, FormatEmailMessage(message, participant.User, unsubscribeLink));
             }
 
@@ -517,6 +517,9 @@ namespace CollAction.Services.Projects
                           .Select(i => Faker.Company.Name())
                           .Distinct();
 
+            List<string> userIds = await context.Users.Select(u => u.Id).ToListAsync().ConfigureAwait(false);
+
+            // Generate random projects
             foreach (string projectName in projectNames)
             {
                 DateTime start = DateTime.Now.Date.AddDays(r.Next(-20, 20));
@@ -543,6 +546,11 @@ namespace CollAction.Services.Projects
                                              ? null
                                              : await imageService.UploadImage(ToFormFile(bannerImageBytes.Result, bannerImageUrl), Faker.Company.BS(), cancellationToken).ConfigureAwait(false);
 
+                List<ProjectParticipant> projectParticipants = userIds
+                        .Where(userId => r.Next(3) == 0)
+                        .Select(userId => new ProjectParticipant(userId, 0, r.Next(2) == 1, DateTime.UtcNow, Guid.NewGuid()))
+                        .ToList();
+
                 context.Projects.Add(
                     new Project(
                         name: projectName,
@@ -561,7 +569,7 @@ namespace CollAction.Services.Projects
                         status: (ProjectStatus)r.Next(0, 3),
                         target: r.Next(1, 10000),
                         anonymousUserParticipants: r.Next(1, 8000),
-                        descriptionVideoLink: videoLinks.ElementAt(r.Next(videoLinks.Length))));
+                        descriptionVideoLink: videoLinks.ElementAt(r.Next(videoLinks.Length))) { Participants = projectParticipants });
             }
             
             await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
@@ -582,7 +590,7 @@ namespace CollAction.Services.Projects
 
         private async Task SendCommitEmail(Project project, AddParticipantResult result, ApplicationUser applicationUser, string email)
         {
-            var commitEmailViewModel = new ProjectCommitEmailViewModel(project: project, result: result, user: applicationUser, publicAddress: new Uri(siteOptions.PublicAddress), projectUrl: new Uri($"https://{siteOptions.PublicAddress}/{project.Url}"));
+            var commitEmailViewModel = new ProjectCommitEmailViewModel(project: project, result: result, user: applicationUser, publicAddress: new Uri(siteOptions.CanonicalAddress), projectUrl: new Uri($"https://{siteOptions.PublicAddress}/{project.Url}"));
             await emailSender.SendEmailTemplated(email, $"Thank you for participating in the \"{project.Name}\" project on CollAction", "ProjectCommit", commitEmailViewModel).ConfigureAwait(false);
         }
 

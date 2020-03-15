@@ -13,7 +13,7 @@ const AboutPage = () => {
   const team: any[] = t('about.team.team', { returnObjects: true });
   
   const videos = {
-    mainvideo: ''
+    mainvideo: 'https://www.youtube.com/embed/xnIJo91Gero?theme=dark&amp;rel=0&amp;wmode=transparent'
   };
 
   const generateMemberPhoto = (member: any) => {
@@ -36,13 +36,13 @@ const AboutPage = () => {
           allowFullScreen
         ></iframe>
       </Grid>
-      <Section color="green" title={(t('about.mission.title'))}>
+      <Section color="green" title={(t('about.mission.title'))} anchor="mission">
         <span dangerouslySetInnerHTML={{ __html: t('about.mission.text') }}></span>
       </Section>
       <Section title={t('about.about.title')}>
         <span dangerouslySetInnerHTML={{ __html: t('about.about.text') }}></span>
       </Section>
-      <Section color="grey" title={t('about.team.title')}>
+      <Section color="grey" title={t('about.team.title')} anchor="team">
         <ul className={styles.team}>
           {team.map(generateMemberPhoto)}
         </ul>
@@ -50,10 +50,10 @@ const AboutPage = () => {
       <Section title={t('about.join.title')}>
         <span dangerouslySetInnerHTML={{ __html: t('about.join.text') }}></span>
       </Section>
-      <Section color="grey" title={t('about.partners.title')}>
+      <Section color="grey" title={t('about.partners.title')} anchor="partners">
         <span dangerouslySetInnerHTML={{ __html: t('about.partners.text') }}></span>
       </Section>
-      <Section title="Frequently Asked Questions">
+      <Section title="Frequently Asked Questions" anchor="faq">
         {faqs.map((faq) => (
           <Faq key={faq.title} title={faq.title} content={faq.text}></Faq>
         ))}

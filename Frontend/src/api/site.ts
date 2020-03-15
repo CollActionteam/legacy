@@ -75,15 +75,15 @@ export const siteData = {
       name: "Login",
     },
     {
-      link: "/signup",
+      link: "/register-user",
       name: "Sign Up",
     },
     {
-      link: "/about",
+      link: "/about#mission",
       name: "Mission",
     },
     {
-      link: "/about",
+      link: "/about#team",
       name: "Team",
     },
     {
@@ -91,15 +91,15 @@ export const siteData = {
       name: "Donate",
     },
     {
-      link: "/about",
+      link: "/about#partners",
       name: "Partners",
     },
     {
-      link: "/about",
+      link: "/about#press",
       name: "Press",
     },
     {
-      link: "/about",
+      link: "/about#faq",
       name: "FAQs",
     },
   ],

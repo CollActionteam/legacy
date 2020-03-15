@@ -1,88 +1,63 @@
 import React, { useState } from "react";
 import { Card, CardContent, Button, CardActions, DialogTitle, Dialog, DialogActions } from "@material-ui/core";
 import { IUser } from "../../../api/types";
-import { gql, ApolloCache, ApolloConsumer, ApolloClient } from "@apollo/client";
-import { useQuery } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 import { Alert } from "../../Alert";
+import { Redirect } from "react-router-dom";
+import { GET_USER } from "../../../providers/user";
 
 interface IDeleteAccountProps {
     user: IUser;
-    setUser(user: IUser | null): void;
 }
 
-interface IDeleteAccountState {
-    hasDeletePopup: boolean;
-    busy: boolean;
-    errorMessage: string | null;
-}
-
-export default (props: IDeleteAccountProps) => {
-    const [hasDeletePopup, setHasDeletePopup] = useState(false);
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    const [isDeleting, setIsDeleting] = useState(false);
-
-    const deleteAccount = () => {
-        /*
-        if (busy) {
-            setBusy(true);
-            useQuery(
+export default ({ user }: IDeleteAccountProps) => {
+    const [ hasDeletePopup, setHasDeletePopup] = useState(false);
+    const [ errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [ done, setDone] = useState(false);
+    const [ deleteUser ] =
+            useMutation(
                 DELETE_USER,
                 {
-                    variables: { userId: props.user.id },
-                    onCompleted: (data) => deleteDone(data)
+                    variables: { userId: user.id },
+                    onCompleted: (data) =>
+                    {
+                        if (data.applicationUser.deleteUser.succeeded) {
+                            setDone(true);
+                        } else {
+                            let error = data.applicationUser.deleteUser.errors.map((e: any) => e.description).join(", ");
+                            setErrorMessage(error);
+                        }
+                    },
+                    onError: (data) => {
+                        setErrorMessage(data.message);
+                    },
+                    refetchQueries: [{
+                        query: GET_USER
+                    }]
                 });
-        }
-        */
-    }
 
-    const deleteDone = (data: any) => {
-        /*
-        closeDialog();
-        setBusy(false);
-        if (data.errors || !data?.applicationUser?.deleteUser?.succeeded) {
-            let errors: string[] =
-                data.errors ?
-                     data.errors :
-                     data.applicationUser.deleteUser.errors.map((e: any) => e.description);
-            setErrorMessage(errors.join(", "));
-        } else {
-            props.setUser(null);
-            window.location.href = '/';
-        }
-        */
-    }
-
-    const openDialog = () => {
-        /*
-        setHasDeletePopup(true);
-        */
-    }
-
-    const closeDialog = () => {
-        /*
-        setHasDeletePopup(false);
-        */
-    }
-
-    return <Card>
+    return <React.Fragment>
         { errorMessage ? <Alert type="error" text={errorMessage} /> : null }
-        <Dialog onClose={() => closeDialog()} open={hasDeletePopup}>
+        { done ? <Redirect to="/" /> : null }
+        <Dialog onClose={() => setHasDeletePopup(false)} open={hasDeletePopup}>
             <DialogTitle>
                 Are you sure you want to delete your account?
             </DialogTitle>
             <DialogActions>
-                <Button onClick={() => deleteAccount()}>Remove my account</Button>
-                <Button onClick={() => closeDialog()}>Don't remove my account</Button>
+                <Button onClick={() => deleteUser()}>Remove my account</Button>
+                <Button onClick={() => setHasDeletePopup(false)}>Don't remove my account</Button>
             </DialogActions>
         </Dialog>
-        <CardContent>
-            <h3>Delete Account</h3>
-            <p> We're sorry if you want to leave... however, if you really want to, you can delete your account here.</p>
-        </CardContent>
-        <CardActions>
-            <Button onClick={() => openDialog()}>Remove my account</Button>
-        </CardActions>
-    </Card>;
+        <Card>
+            <CardContent>
+                <h3>Delete Account</h3>
+                <p> We're sorry if you want to leave... however, if you really want to, you can delete your account here.</p>
+            </CardContent>
+            <CardActions>
+                <Button onClick={() => setHasDeletePopup(true)}>Remove my account</Button>
+            </CardActions>
+        </Card>
+    </React.Fragment>;
 };
 
 const DELETE_USER = gql`

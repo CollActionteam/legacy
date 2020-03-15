@@ -2,6 +2,7 @@ import React from "react";
 import { Button } from "../../components/Button/Button";
 import { Section } from "../../components/Section";
 import { Alert } from "../../components/Alert";
+import { Link } from "react-router-dom";
 
 import {
   Grid,
@@ -92,6 +93,8 @@ const LoginPage = () => {
                 />
                 <input type="hidden" name="errorUrl" value={errorUrl} />
                 <Button type="submit">Login</Button>
+                <Link to="/register-user">Register as new user</Link>
+                <Link to="/forgot-password">I forgot my password</Link>
               </FormGroup>
             </form>
           </Grid>

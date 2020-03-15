@@ -1,21 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import { useQuery } from "@apollo/client";
 import { gql } from "@apollo/client";
 import { IUser } from "../api/types";
+import { Fragments } from "../api/fragments";
 
-export const UserContext = React.createContext({ user: null as (IUser | null), setUser: (_user: IUser | null) => { } });
+export const UserContext = React.createContext({ user: null as (IUser | null) });
 
 export default ({ children }: any) => {
-  let { data, error } = useQuery(GET_USER);
-  const [manualUser, setManualUser] = useState<IUser | null>(null);
-
-  if (error) {
-    console.error(error);
-  }
+  let { data } = useQuery(GET_USER);
 
   let contextValue = {
-    user: (manualUser ?? data?.currentUser ?? null) as IUser | null,
-    setUser: setManualUser
+    user: (data?.currentUser ?? null) as IUser | null,
   };
 
   return <UserContext.Provider value={contextValue}>
@@ -23,7 +18,7 @@ export default ({ children }: any) => {
   </UserContext.Provider>;
 };
 
-const GET_USER = gql`
+export const GET_USER = gql`
   query GetUser {
     currentUser {  
       id
@@ -40,15 +35,14 @@ const GET_USER = gql`
         canceledAt
       }
       projects {
-        id
-        name
+        ${Fragments.projectDetail}
       }
       participates {
+        id
         subscribedToProjectEmails
         unsubscribeToken
         project {
-          id
-          name
+          ${Fragments.projectDetail}
         }
       }
     }

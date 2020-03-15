@@ -43,15 +43,6 @@ export default class Navigation extends React.Component<
             Profile
           </Link>
         </li> 
-        { user.isAdmin ?
-          <li className={styles.navigationItem}>
-            <Link className={styles.navigationButton} to="/admin">
-              <FontAwesomeIcon icon="tools" />
-              Admin
-            </Link>
-          </li> 
-          : null 
-        }
         <li className={styles.navigationItem}>
           <form method="post" action={logoutUrl}>
             <input type="hidden" name="returnUrl" value={returnUrl} />
