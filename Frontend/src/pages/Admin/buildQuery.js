@@ -61,6 +61,8 @@ const buildFieldList = (resource) => {
                 proposal
                 target
             `;
+        default:
+            throw new Error("Unknown resource");
     }
 }
 
@@ -121,7 +123,7 @@ const buildQuery = _introspectionResults => (raFetchType, resourceName, params) 
                     if (response.data.update.succeeded) {
                         return params.data;
                     } else {
-                        throw `Error updating: ${response.data.update.errors.map(e => e.description).join(", ")}`;
+                        throw new Error(`Error updating: ${response.data.update.errors.map(e => e.description).join(", ")}`);
                     }
                 },
             };
@@ -139,18 +141,20 @@ const buildQuery = _introspectionResults => (raFetchType, resourceName, params) 
                     if (response.data.update.succeeded) {
                         return params.data;
                     } else {
-                        throw `Error updating: ${response.data.update.errors.map(e => e.description).join(", ")}`;
+                        throw new Error(`Error updating: ${response.data.update.errors.map(e => e.description).join(", ")}`);
                     }
                 },
             };
         case DELETE_MANY:
             break;
         case UPDATE_MANY:
-            throw "Update many not allowed"
+            throw new Error("Update many not allowed");
         case GET_MANY_REFERENCE:
-            throw "No referenced objects";
+            throw new Error("No referenced objects");
         case CREATE:
-            throw "No creation of new objects possible";
+            throw new Error("No creation of new objects possible");
+        default:
+            throw new Error("Unknown query");
     }
 }
 

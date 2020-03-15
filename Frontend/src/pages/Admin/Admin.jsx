@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import buildGraphQLProvider from 'ra-data-graphql';
-import { Admin, Resource, Delete, List, Datagrid, Edit, Create, BooleanInput, NumberInput, SimpleForm, DateField, TextField, EditButton, TextInput, BooleanField, DateInput, NumberField, Show, SimpleShowLayout, ShowButton, DeleteButton } from 'react-admin';
+import { Admin, Resource, List, Datagrid, Edit, BooleanInput, NumberInput, SimpleForm, DateField, TextField, EditButton, TextInput, BooleanField, NumberField, Show, SimpleShowLayout, ShowButton, DeleteButton } from 'react-admin';
 
 import buildQuery from './buildQuery'; // see Specify your queries and mutations section below
 import { ApolloConsumer } from '@apollo/client';
