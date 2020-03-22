@@ -8,6 +8,7 @@ import { Facebook, Twitter, LinkedIn, Email } from "../components/Share";
 import { Section } from "../components/Section";
 import Carousel from "../components/Carousel/Carousel";
 import ProjectsList from "../components/ProjectsList";
+import TimeToAct from "../components/TimeToAct";
 
 export default () => (
   <StaticQuery
@@ -45,7 +46,7 @@ export default () => (
             <GhostButton to="/about">Learn more</GhostButton>
           </Section>
           <Section center className={styles.timeToAct} title="Time to act">
-            <p>Time to act</p>
+            <TimeToAct />
           </Section>
           <Section center color="grey" title="Our collective impact">
             <p>Stats</p>
