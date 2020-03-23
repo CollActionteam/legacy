@@ -38,7 +38,7 @@ export default ({ user }: IDeleteAccountProps) => {
 
     return <React.Fragment>
         { errorMessage ? <Alert type="error" text={errorMessage} /> : null }
-        { done ? <Redirect to="/" /> : null }
+        { done ? <Redirect to="/" push={true} /> : null }
         <Dialog onClose={() => setHasDeletePopup(false)} open={hasDeletePopup}>
             <DialogTitle>
                 Are you sure you want to delete your account?

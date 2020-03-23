@@ -13,7 +13,7 @@ import Loader from "../../../components/Loader";
 import ProgressRing from "../../../components/ProgressRing";
 import { Section } from "../../../components/Section";
 import styles from "./ProjectDetails.module.scss";
-import { RouteComponentProps, Redirect} from "react-router-dom";
+import { RouteComponentProps, Redirect, useHistory} from "react-router-dom";
 import { UserContext } from "../../../providers/user";
 import { Alert } from "../../../components/Alert";
 
@@ -37,7 +37,8 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
 const ProjectDetailsPageInner = ({ user, projectId, slug }: IProjectDetailsProps): any => {
   const { data, loading } = useQuery(GET_PROJECT, { variables: { id: projectId } });
   const [ errorMessage, setErrorMessage ] = useState<string | null>(null);
-  const [ succeeded, setSucceeded ] = useState(false);
+  const isParticipating = Boolean(user?.participates?.find((part) => part.project.id === projectId));
+  const history = useHistory();
   const formik = useFormik({
     initialValues: {
       email: ''
@@ -57,8 +58,8 @@ const ProjectDetailsPageInner = ({ user, projectId, slug }: IProjectDetailsProps
     if (error) {
       setErrorMessage(error);
     } else {
+      history.push(`/projects/${encodeURIComponent(slug)}/${projectId}/thankyou`);
       setErrorMessage(null);
-      setSucceeded(true);
     }
   }
   const [ commitToProjectAnonymous ] = useMutation(
@@ -218,37 +219,40 @@ const ProjectDetailsPageInner = ({ user, projectId, slug }: IProjectDetailsProps
                 <h4>{project.owner?.fullName}</h4>
                 <p className={styles.projectStarterTitle}>Project starter</p>
               </div>
-              <div id="join" className={styles.joinSection}>
-                <FormikContext.Provider value={formik}>
-                  <Form className={styles.form} onSubmit={formik.handleSubmit}>
-                    { user === null ?
-                        <React.Fragment>
-                          <span>
-                            Want to participate? Enter your e-mail address and join
-                            this crowdaction!
-                          </span>
-                          <FormControl>
-                            <TextField
-                              name="email"
-                              className={styles.formControl}
-                              label="Your e-mail address"
-                              type="e-mail"
-                              { ...formik.getFieldProps('email') }
-                            />
-                            { (formik.touched.email && formik.errors.email) ? <Alert type="error" text={formik.errors.email} /> : null }
-                          </FormControl>
-                        </React.Fragment> :
-                        <span>
-                          <input type="hidden" name="email" { ...formik.getFieldProps('email') } />
-                          Want to participate? Join this crowdaction!
-                        </span> 
-                    }
-                    <Button type="submit" disabled={formik.isSubmitting}>
-                      Join CrowdAction
-                    </Button>
-                  </Form>
-                </FormikContext.Provider>
-              </div>
+              { !isParticipating ?
+                  <div id="join" className={styles.joinSection}>
+                    <FormikContext.Provider value={formik}>
+                      <Form className={styles.form} onSubmit={formik.handleSubmit}>
+                        { user === null ?
+                            <React.Fragment>
+                              <span>
+                                Want to participate? Enter your e-mail address and join
+                                this crowdaction!
+                              </span>
+                              <FormControl>
+                                <TextField
+                                  name="email"
+                                  className={styles.formControl}
+                                  label="Your e-mail address"
+                                  type="e-mail"
+                                  { ...formik.getFieldProps('email') }
+                                />
+                                { (formik.touched.email && formik.errors.email) ? <Alert type="error" text={formik.errors.email} /> : null }
+                              </FormControl>
+                            </React.Fragment> :
+                            <span>
+                              <input type="hidden" name="email" { ...formik.getFieldProps('email') } />
+                              Want to participate? Join this crowdaction!
+                            </span> 
+                        }
+                        <Button type="submit" disabled={formik.isSubmitting}>
+                          Join CrowdAction
+                        </Button>
+                      </Form>
+                    </FormikContext.Provider>
+                  </div>
+                : null 
+              }
             </Container>
           </Grid>
         </Grid>
@@ -258,7 +262,6 @@ const ProjectDetailsPageInner = ({ user, projectId, slug }: IProjectDetailsProps
 
   return (
     <React.Fragment>
-      { succeeded ? <Redirect to={`/projects/${encodeURIComponent(slug)}/${projectId}/thankyou`} /> : null }
       { errorMessage ? <Alert type="error" text={errorMessage} /> : null }
       { !loading && !data ? <Redirect to="/404" /> : null }
       { loading ? <Loader /> : null }

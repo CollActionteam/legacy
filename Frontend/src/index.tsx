@@ -38,20 +38,20 @@ const routing = (
                         <Route path="/admin" component={AdminPage} />
                         <Layout>
                             <Route exact path="/" component={HomePage} />
-                            <Route path="/login" component={LoginPage} />
-                            <Route path="/forgot-password" component={ForgotPasswordPage} />
-                            <Route path="/reset-password" component={ResetPasswordPage} />
-                            <Route path="/register-user" component={RegisterUserPage} />
-                            <Route path="/about" component={AboutPage} />
-                            <Route path="/profile" component={ProfilePage} />
-                            <Route path="/donate" component={DonationPage} />
-                            <Route path="/privacy-policy" component={PrivacyPolicyPage} />
-                            <Route path="/projects/find" component={FindPage} />
-                            <Route path="/projects/start" component={StartProjectPage} />
-                            <Route path="/projects/create" component={CreateProjectPage} />
-                            <Route path="/projects/thank-you-create" component={ThankYouCreatePage} />
-                            <Route path="/projects/:slug/:projectId" render={routeProps => <ProjectDetailsPage {...routeProps} />} />
-                            <Route path="/projects/:slug/:projectId/thankyou" render={routeProps => <ThankYouCommitPage {...routeProps} />} />
+                            <Route exact path="/login" component={LoginPage} />
+                            <Route exact path="/forgot-password" component={ForgotPasswordPage} />
+                            <Route exact path="/reset-password" component={ResetPasswordPage} />
+                            <Route exact path="/register-user" component={RegisterUserPage} />
+                            <Route exact path="/about" component={AboutPage} />
+                            <Route exact path="/profile" component={ProfilePage} />
+                            <Route exact path="/donate" component={DonationPage} />
+                            <Route exact path="/privacy-policy" component={PrivacyPolicyPage} />
+                            <Route exact path="/projects/find" component={FindPage} />
+                            <Route exact path="/projects/start" component={StartProjectPage} />
+                            <Route exact path="/projects/create" component={CreateProjectPage} />
+                            <Route exact path="/projects/thank-you-create" component={ThankYouCreatePage} />
+                            <Route exact path="/projects/:slug/:projectId" component={ProjectDetailsPage} />
+                            <Route exact path="/projects/:slug/:projectId/thankyou" component={ThankYouCommitPage} />
                             <Route component={NotFoundPage} />
                         </Layout>
                     </Switch>

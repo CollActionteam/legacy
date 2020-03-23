@@ -5,9 +5,9 @@ export interface IDonation {
 
 export interface IDonationEventLog {
   eventData: string;
-  id: number;
+  id: string;
   user: IUser;
-  userId: number;
+  userId: string;
 }
 
 export interface IDonationSubscription {
@@ -21,7 +21,7 @@ export interface IImageFile {
   description: string;
   filepath: string;
   height: number;
-  id: number;
+  id: string;
   url: string;
   width: number;
 }
@@ -50,18 +50,18 @@ export enum ProjectDisplayPriority {
 export interface IProject {
   anonymousUserParticipants: number;
   bannerImage: IImageFile;
-  bannerImageFileId: number;
+  bannerImageFileId: string;
   canSendProjectEmail: boolean;
   categories: IProjectCategory[];
   creatorComments: string;
   description: string;
   descriptionVideoLink: string;
   descriptiveImage: IImageFile;
-  descriptiveImageFileId: number;
+  descriptiveImageFileId: string;
   displayPriority: ProjectDisplayPriority;
   end: Date;
   goal: string;
-  id: number;
+  id: string;
   isActive: boolean;
   isClosed: boolean;
   isComingSoon: boolean;
@@ -107,13 +107,13 @@ export enum ProjectStatusFilter {
 
 export interface IProjectTag {
   project: IProject;
-  projectId: number;
+  projectId: string;
   tag: ITag;
-  tagId: number;
+  tagId: string;
 }
 
 export interface ITag {
-  id: number;
+  id: string;
   name: string;
   projectTags: IProjectTag[];
 }
@@ -138,9 +138,9 @@ export interface IUser {
 export interface IUserEvent {
   eventData: string;
   eventLoggedAt: Date;
-  id: number;
+  id: string;
   user: IUser;
-  userId: number;
+  userId: string;
 }
 
 export interface IWhereExpression {

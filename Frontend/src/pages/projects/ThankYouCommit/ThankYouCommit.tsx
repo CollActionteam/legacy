@@ -7,7 +7,7 @@ type TParams = {
 }
 
 const ThankYouCommitPage = ({ match } : RouteComponentProps<TParams>): any => {
-  return <div></div>;
+  return <div>Thank you for participating in this project</div>; // TODO
 }
 
 export default ThankYouCommitPage;
