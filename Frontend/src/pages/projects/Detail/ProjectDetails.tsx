@@ -59,7 +59,6 @@ const ProjectDetailsPageInner = ({ user, projectId, slug }: IProjectDetailsProps
       setErrorMessage(error);
     } else {
       history.push(`/projects/${encodeURIComponent(slug)}/${projectId}/thankyou`);
-      setErrorMessage(null);
     }
   }
   const [ commitToProjectAnonymous ] = useMutation(
