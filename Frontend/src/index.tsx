@@ -18,7 +18,8 @@ import NotFoundPage from './pages/NotFound/NotFound';
 import FindPage from './pages/projects/Find/Find';
 import StartProjectPage from './pages/projects/Start/Start';
 import CreateProjectPage from './pages/projects/Create/Create';
-import ThankYouPage from './pages/projects/ThankYouCreate/ThankYouCreate';
+import ThankYouCreatePage from './pages/projects/ThankYouCreate/ThankYouCreate';
+import ThankYouCommitPage from './pages/projects/ThankYouCommit/ThankYouCommit';
 import ProjectDetailsPage from './pages/projects/Detail/ProjectDetails';
 import ProfilePage from './pages/Profile/Profile';
 import AdminPage from './pages/Admin/Admin';
@@ -48,8 +49,9 @@ const routing = (
                             <Route path="/projects/find" component={FindPage} />
                             <Route path="/projects/start" component={StartProjectPage} />
                             <Route path="/projects/create" component={CreateProjectPage} />
-                            <Route path="/projects/thank-you-create" component={ThankYouPage} />
+                            <Route path="/projects/thank-you-create" component={ThankYouCreatePage} />
                             <Route path="/projects/:slug/:projectId" render={routeProps => <ProjectDetailsPage {...routeProps} />} />
+                            <Route path="/projects/:slug/:projectId/thankyou" render={routeProps => <ThankYouCommitPage {...routeProps} />} />
                             <Route component={NotFoundPage} />
                         </Layout>
                     </Switch>

@@ -1,76 +1,87 @@
-import React from "react";
+import React, { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import gql from "graphql-tag";
-import { ExecutionResult } from "graphql";
-import { IProject } from "../../../api/types";
+import { IProject, IUser } from "../../../api/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Avatar, Container, Grid, FormControl } from "@material-ui/core";
-import { Formik, Form, Field } from "formik";
+import { Form, useFormik, FormikContext } from "formik";
 import * as Yup from "yup";
-import { TextField } from "formik-material-ui";
-
+import { TextField } from "@material-ui/core";
 import { Button } from "../../../components/Button/Button";
 import CategoryTags from "../../../components/CategoryTags";
 import Loader from "../../../components/Loader";
 import ProgressRing from "../../../components/ProgressRing";
 import { Section } from "../../../components/Section";
-
 import styles from "./ProjectDetails.module.scss";
 import { RouteComponentProps, Redirect} from "react-router-dom";
+import { UserContext } from "../../../providers/user";
+import { Alert } from "../../../components/Alert";
 
 type TParams = {
   slug: string,
   projectId: string
 }
 
+interface IProjectDetailsProps {
+  user: IUser | null;
+  slug: string,
+  projectId: string
+}
+
 const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
-  const projectId = match.params.projectId;
+  return <UserContext.Consumer>
+    { ({user}) => <ProjectDetailsPageInner projectId={match.params.projectId} slug={match.params.slug} user={user} /> }
+  </UserContext.Consumer>;
+}
 
-  const query = useQuery(GET_PROJECT, { variables: { id: projectId } });
-  const { data, loading } = query;
-
-  const [commitToProject] = useMutation(COMMIT_ANONYMOUS);
-
-  const commit = async (form: any) => {
-    const response = (await commitToProject({
-      variables: {
-        projectId: project.id,
-        email: form.participantEmail,
+const ProjectDetailsPageInner = ({ user, projectId, slug }: IProjectDetailsProps): any => {
+  const { data, loading } = useQuery(GET_PROJECT, { variables: { id: projectId } });
+  const [ errorMessage, setErrorMessage ] = useState<string | null>(null);
+  const [ succeeded, setSucceeded ] = useState(false);
+  const formik = useFormik({
+    initialValues: {
+      email: ''
+    },
+    validationSchema: Yup.object(
+      user === null ? {
+        email: Yup.string()
+          .required("Please enter your e-mail address")
+          .email("Please enter a valid e-mail address"),
+      } : {
+        email: Yup.string() 
+      }),
+    onSubmit: _values => { user === null ? commitToProjectAnonymous() : commitToProjectLoggedIn() }
+  });
+  const onCommit = (data: any) => {
+    const error = data.project.commit.error;
+    if (error) {
+      setErrorMessage(error);
+    } else {
+      setErrorMessage(null);
+      setSucceeded(true);
+    }
+  }
+  const [ commitToProjectAnonymous ] = useMutation(
+    COMMIT_ANONYMOUS,
+    {
+      variables: { 
+        projectId: projectId,
+        email: formik.values.email
       },
-    })) as ExecutionResult;
-    console.log(response);
-  };
+      onCompleted: onCommit
+    });
+  const [ commitToProjectLoggedIn ] = useMutation(
+    COMMIT_LOGGED_IN,
+    {
+      variables: { projectId: projectId },
+      onCompleted: onCommit
+    });
 
-  if (loading) {
-    return <Loader />;
-  }
+  const project = (data?.project ?? null) as IProject | null;
 
-  if (!data) {
-    return <Redirect to="/404"></Redirect>
-  }
-
-  const project = data.project as IProject;
-
-  const description = {
-    __html: project.description,
-  };
-
-  const goal = {
-    __html: project.goal,
-  };
-
-  const comments = {
-    __html: project.creatorComments,
-  };
-
-  const banner = project.bannerImage
-    ? project.bannerImage.url
-    : `/assets/default_banners/${project.categories[0].category}.jpg`;
-
-  const renderStats = () => {
-    const endDate = new Date(project.end);
-
-    if (project.remainingTime) {
+  const renderStats = (project: IProject) => {
+    if (project && project.remainingTime) {
+      const endDate = new Date(project.end);
       return (
         <div>
           <div className={styles.remainingTime}>
@@ -107,8 +118,22 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
     }
   };
 
-  return (
-    <React.Fragment>
+  const renderProject = (project: IProject) => {
+    const description = {
+      __html: project.description,
+    };
+
+    const goal = {
+      __html: project.goal,
+    };
+
+    const comments = {
+      __html: project.creatorComments,
+    };
+
+    const defaultBanner = require(`../../../assets/default_banners/${project.categories[0] ? project.categories[0].category : "OTHER"}.jpg`);
+
+    return <React.Fragment>
       <Section center className={styles.title} title={project.name}>
         <p>{project.proposal}</p>
         <CategoryTags categories={project.categories}></CategoryTags>
@@ -118,7 +143,7 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
           <Grid item md={7} xs={12}>
             <Container className={styles.bannerImage}>
               <figure className={styles.image}>
-                <img src={banner} alt={project.name}></img>
+                { project.bannerImage ? <img src={project.bannerImage.url} alt={project.name} /> : <img src={defaultBanner} alt={project.name} /> }
               </figure>
             </Container>
           </Grid>
@@ -136,7 +161,7 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
                   {project.totalParticipants} of {project.target} signups
                 </span>
               </div>
-              {renderStats()}
+              {renderStats(project)}
             </Container>
           </Grid>
         </Grid>
@@ -186,55 +211,58 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
               <div className={styles.projectStarter}>
                 <div className={styles.avatarContainer}>
                   <Avatar className={styles.avatar}>
-                    {project.owner.firstName.charAt(0)}
-                    {project.owner.lastName.charAt(0)}
+                    {project.owner?.firstName?.charAt(0)}
+                    {project.owner?.lastName?.charAt(0)}
                   </Avatar>
                 </div>
-                <h4>{project.owner.fullName}</h4>
+                <h4>{project.owner?.fullName}</h4>
                 <p className={styles.projectStarterTitle}>Project starter</p>
               </div>
               <div id="join" className={styles.joinSection}>
-                <Formik
-                  initialValues={{
-                    participantEmail: "",
-                  }}
-                  validateOnChange={false}
-                  validateOnBlur={true}
-                  validateOnMount={false}
-                  validationSchema={Yup.object({
-                    participantEmail: Yup.string()
-                      .required("Please enter your e-mail address")
-                      .email("Please enter a valid e-mail address"),
-                  })}
-                  onSubmit={async values => {
-                    await commit(values);
-                  }}
-                >
-                  {props => (
-                    <Form className={styles.form}>
-                      <span>
-                        Want to participate? Enter your e-mail address and join
-                        this crowdaction!
-                      </span>
-                      <FormControl>
-                        <Field
-                          name="participantEmail"
-                          label="Your e-mail address"
-                          component={TextField}
-                          fullWidth
-                        ></Field>
-                      </FormControl>
-                      <Button type="submit" disabled={props.isSubmitting}>
-                        Join CrowdAction
-                      </Button>
-                    </Form>
-                  )}
-                </Formik>
+                <FormikContext.Provider value={formik}>
+                  <Form className={styles.form} onSubmit={formik.handleSubmit}>
+                    { user === null ?
+                        <React.Fragment>
+                          <span>
+                            Want to participate? Enter your e-mail address and join
+                            this crowdaction!
+                          </span>
+                          <FormControl>
+                            <TextField
+                              name="email"
+                              className={styles.formControl}
+                              label="Your e-mail address"
+                              type="e-mail"
+                              { ...formik.getFieldProps('email') }
+                            />
+                            { (formik.touched.email && formik.errors.email) ? <Alert type="error" text={formik.errors.email} /> : null }
+                          </FormControl>
+                        </React.Fragment> :
+                        <span>
+                          <input type="hidden" name="email" { ...formik.getFieldProps('email') } />
+                          Want to participate? Join this crowdaction!
+                        </span> 
+                    }
+                    <Button type="submit" disabled={formik.isSubmitting}>
+                      Join CrowdAction
+                    </Button>
+                  </Form>
+                </FormikContext.Provider>
               </div>
             </Container>
           </Grid>
         </Grid>
       </Section>
+    </React.Fragment>;
+  }
+
+  return (
+    <React.Fragment>
+      { succeeded ? <Redirect to={`/projects/${encodeURIComponent(slug)}/${projectId}/thankyou`} /> : null }
+      { errorMessage ? <Alert type="error" text={errorMessage} /> : null }
+      { !loading && !data ? <Redirect to="/404" /> : null }
+      { loading ? <Loader /> : null }
+      { project ? renderProject(project) : null }
     </React.Fragment>
   );
 };
@@ -279,10 +307,27 @@ const GET_PROJECT = gql`
 `;
 
 const COMMIT_ANONYMOUS = gql`
-  mutation Commit($projectId: Int!, $email: String!) {
+  mutation CommitAnonymous($projectId: ID!, $email: String!) {
     project {
-      commitToProjectAnonymous(projectId: $projectId, email: $email) {
+      commit: commitToProjectAnonymous(projectId: $projectId, email: $email) {
         error
+        loggedIn
+        scenario
+        userAdded
+        userAlreadyActive
+        userCreated
+      }
+    }
+  }
+`;
+
+const COMMIT_LOGGED_IN = gql`
+  mutation CommitLoggedIn($projectId: ID!) {
+    project {
+      commit: commitToProjectLoggedIn(projectId: $projectId) {
+        error
+        loggedIn
+        scenario
         userAdded
         userAlreadyActive
         userCreated

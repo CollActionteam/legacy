@@ -9,19 +9,12 @@ export default ({ project }: { project: IProject }) => {
     ? project.categories[0].category
     : "OTHER";
 
-  const Image = require(`../../assets/default_banners/${defaultCategoryImage}.jpg`);
+  const defaultBanner = require(`../../assets/default_banners/${defaultCategoryImage}.jpg`);
 
   return (
     <a href={project.url} className={styles.card}>
       <figure className={styles.image}>
-        {project.bannerImage ? (
-          <img src={project.bannerImage.url} alt={project.name} />
-        ) : (
-          <img
-            src={Image}
-            alt={project.name}
-          />
-        )}
+        { project.bannerImage ? <img src={project.bannerImage.url} alt={project.name} /> : <img src={defaultBanner} alt={project.name} /> }
       </figure>
       <div className={styles.content}>
         <div className={styles.statusLabel}>
