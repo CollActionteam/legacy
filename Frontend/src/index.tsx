@@ -34,10 +34,10 @@ const routing = (
         <Router>
             <Apollo>
                 <User>
-                    <Switch>
-                        <Route path="/admin" component={AdminPage} />
-                        <Layout>
+                    <Layout>
+                        <Switch>
                             <Route exact path="/" component={HomePage} />
+                            <Route exact path="/admin" component={AdminPage} />
                             <Route exact path="/login" component={LoginPage} />
                             <Route exact path="/forgot-password" component={ForgotPasswordPage} />
                             <Route exact path="/reset-password" component={ResetPasswordPage} />
@@ -53,8 +53,8 @@ const routing = (
                             <Route exact path="/projects/:slug/:projectId" component={ProjectDetailsPage} />
                             <Route exact path="/projects/:slug/:projectId/thankyou" component={ThankYouCommitPage} />
                             <Route component={NotFoundPage} />
-                        </Layout>
-                    </Switch>
+                        </Switch>
+                    </Layout>
                 </User>
             </Apollo>
         </Router>

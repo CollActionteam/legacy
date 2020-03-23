@@ -27,6 +27,7 @@ import {
   faSignOutAlt
 } from "@fortawesome/free-solid-svg-icons";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
+import { Switch, Route } from "react-router-dom";
 
 library.add(
   fab,
@@ -44,20 +45,27 @@ library.add(
 
 export default ({ children }: any) => (
   <React.Fragment>
-    <Helmet
-      title="CollAction"
-      meta={[
-        { name: "description", content: "CollAction" },
-        { name: "keywords", content: "collaction" },
-      ]}
-    ></Helmet>
-    <Header />
-    <Grid container className="site-content">
-      <Grid item xs={12}>
-        {children}
-      </Grid>
-    </Grid>
-    <Footer></Footer>
+    <Switch>
+      <Route path="/admin" component={() => <React.Fragment>{ children }</React.Fragment>} />
+      <Route path="*" component={() =>
+        <React.Fragment>
+          <Helmet
+            title="CollAction"
+            meta={[
+              { name: "description", content: "CollAction" },
+              { name: "keywords", content: "collaction" },
+            ]}
+          ></Helmet>
+          <Header />
+          <Grid container className="site-content">
+            <Grid item xs={12}>
+              {children}
+            </Grid>
+          </Grid>
+          <Footer></Footer>
+        </React.Fragment>
+      } />
+    </Switch>
   </React.Fragment>
 );
 
