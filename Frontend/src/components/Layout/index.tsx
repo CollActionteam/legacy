@@ -23,6 +23,8 @@ import {
   faSpinner,
   faClock,
   faSignInAlt,
+  faUser,
+  faSignOutAlt
 } from "@fortawesome/free-solid-svg-icons";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 
@@ -35,7 +37,9 @@ library.add(
   faAngleDown,
   faSpinner,
   faClock,
-  faSignInAlt
+  faSignInAlt,
+  faSignOutAlt,
+  faUser
 );
 
 export default ({ children }: any) => (

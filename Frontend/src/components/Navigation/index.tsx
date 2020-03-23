@@ -46,8 +46,8 @@ export default class Navigation extends React.Component<
         <li className={styles.navigationItem}>
           <form method="post" action={logoutUrl}>
             <input type="hidden" name="returnUrl" value={returnUrl} />
-            <Button type="submit">
-              <FontAwesomeIcon icon="sign-out" />
+            <Button type="submit" className={styles.navigationSubmit}>
+              <FontAwesomeIcon icon="sign-out-alt" />
               Logout
             </Button>
           </form>
