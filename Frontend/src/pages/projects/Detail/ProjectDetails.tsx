@@ -249,8 +249,10 @@ const ProjectDetailsPageInner = ({ user, projectId, slug }: IProjectDetailsProps
                         </Button>
                       </Form>
                     </FormikContext.Provider>
+                  </div> : 
+                  <div id="join" className={styles.joinSection}>
+                    <span>You are already participating in this project</span>
                   </div>
-                : null 
               }
             </Container>
           </Grid>
