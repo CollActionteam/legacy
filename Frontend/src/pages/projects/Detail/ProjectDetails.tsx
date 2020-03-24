@@ -36,8 +36,10 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
 
 const ProjectDetailsPageInner = ({ user, projectId, slug }: IProjectDetailsProps): any => {
   const { data, loading } = useQuery(GET_PROJECT, { variables: { id: projectId } });
+  const project = (data?.project ?? null) as IProject | null;
   const [ errorMessage, setErrorMessage ] = useState<string | null>(null);
   const isParticipating = Boolean(user?.participates?.find((part) => part.project.id === projectId));
+  const isActive = Boolean(project?.isActive);
   const history = useHistory();
   const formik = useFormik({
     initialValues: {
@@ -76,8 +78,6 @@ const ProjectDetailsPageInner = ({ user, projectId, slug }: IProjectDetailsProps
       variables: { projectId: projectId },
       onCompleted: onCommit
     });
-
-  const project = (data?.project ?? null) as IProject | null;
 
   const renderStats = (project: IProject) => {
     if (project && project.remainingTime) {
@@ -218,7 +218,7 @@ const ProjectDetailsPageInner = ({ user, projectId, slug }: IProjectDetailsProps
                 <h4>{project.owner?.fullName}</h4>
                 <p className={styles.projectStarterTitle}>Project starter</p>
               </div>
-              { !isParticipating ?
+              { !isParticipating && isActive ?
                   <div id="join" className={styles.joinSection}>
                     <FormikContext.Provider value={formik}>
                       <Form className={styles.form} onSubmit={formik.handleSubmit}>
@@ -250,9 +250,13 @@ const ProjectDetailsPageInner = ({ user, projectId, slug }: IProjectDetailsProps
                       </Form>
                     </FormikContext.Provider>
                   </div> : 
-                  <div id="join" className={styles.joinSection}>
-                    <span>You are already participating in this project</span>
-                  </div>
+                    isActive ?
+                    <div id="join" className={styles.joinSection}>
+                      <span>You are already participating in this project</span>
+                    </div> :
+                    <div id="join" className={styles.joinSection}>
+                      <span>You can't join this project anymore</span>
+                    </div>
               }
             </Container>
           </Grid>
@@ -288,7 +292,9 @@ const GET_PROJECT = gql`
         description
       }
       goal
+      start
       end
+      status
       target
       proposal
       creatorComments

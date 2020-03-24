@@ -44,6 +44,7 @@ const buildFieldList = (resource) => {
                 displayPriority
                 start
                 end
+                status
                 goal
                 name
                 numberProjectEmailsSend

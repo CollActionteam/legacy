@@ -59,6 +59,7 @@ export interface IProject {
   descriptiveImage: IImageFile;
   descriptiveImageFileId: string;
   displayPriority: ProjectDisplayPriority;
+  start: Date;
   end: Date;
   goal: string;
   id: string;
@@ -76,7 +77,6 @@ export interface IProject {
   participants: IProjectParticipant[];
   proposal: string;
   remainingTime: any;
-  start: Date;
   status: ProjectStatus;
   tags: IProjectTag[];
   target: number;
