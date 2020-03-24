@@ -16,6 +16,32 @@ export default () => {
       ({ user }) => {
         if (user !== null) {
           return <Grid container spacing={5}>
+            {
+              user.isAdmin ?
+                <React.Fragment>
+                  <Grid item xs={6}>
+                    <Card>
+                      <CardActions>
+                        <Link to="/admin">
+                          <FontAwesomeIcon icon="tools" />
+                          Manage Site
+                        </Link>
+                      </CardActions>
+                    </Card>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Card>
+                      <CardActions>
+                        <a href={`${process.env.REACT_APP_BACKEND_URL}/hangfire`}>
+                          <FontAwesomeIcon icon="tools" />
+                          Jobs
+                        </a>
+                      </CardActions>
+                    </Card>
+                  </Grid>
+                </React.Fragment> :
+                null
+            }
             <Grid item xs={6}>
               <ResetPassword />
             </Grid>
@@ -34,20 +60,6 @@ export default () => {
             <Grid item xs={6}>
               <RecurringDonations user={user!} />
             </Grid>
-            {
-              user.isAdmin ?
-                <Grid item xs={6}>
-                  <Card>
-                    <CardActions>
-                      <Link to="/admin">
-                        <FontAwesomeIcon icon="tools" />
-                        Manage Site
-                      </Link>
-                    </CardActions>
-                  </Card>
-                </Grid> :
-                null
-            }
           </Grid>;
         } else {
           return <h1>Please log in before viewing your profile</h1>;

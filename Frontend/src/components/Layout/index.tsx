@@ -24,7 +24,8 @@ import {
   faClock,
   faSignInAlt,
   faUser,
-  faSignOutAlt
+  faSignOutAlt,
+  faTools
 } from "@fortawesome/free-solid-svg-icons";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 import { Switch, Route } from "react-router-dom";
@@ -40,7 +41,8 @@ library.add(
   faClock,
   faSignInAlt,
   faSignOutAlt,
-  faUser
+  faUser,
+  faTools
 );
 
 export default ({ children }: any) => (
