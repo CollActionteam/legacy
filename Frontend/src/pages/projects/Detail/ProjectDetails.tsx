@@ -14,7 +14,7 @@ import ProgressRing from "../../../components/ProgressRing";
 import { Section } from "../../../components/Section";
 import styles from "./ProjectDetails.module.scss";
 import { RouteComponentProps, Redirect, useHistory} from "react-router-dom";
-import { UserContext } from "../../../providers/user";
+import { UserContext, GET_USER } from "../../../providers/user";
 import { Alert } from "../../../components/Alert";
 
 type TParams = {
@@ -70,13 +70,18 @@ const ProjectDetailsPageInner = ({ user, projectId, slug }: IProjectDetailsProps
         projectId: projectId,
         email: formik.values.email
       },
+      onError: (data) => setErrorMessage(data.message),
       onCompleted: onCommit
     });
   const [ commitToProjectLoggedIn ] = useMutation(
     COMMIT_LOGGED_IN,
     {
       variables: { projectId: projectId },
-      onCompleted: onCommit
+      onCompleted: onCommit,
+      onError: (data) => setErrorMessage(data.message),
+      refetchQueries: [{
+        query: GET_USER
+      }]
     });
 
   const renderStats = (project: IProject) => {
