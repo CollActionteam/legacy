@@ -472,7 +472,12 @@ namespace CollAction.Services.Projects
 
         public IQueryable<Project> SearchProjects(Category? category, SearchProjectStatus? searchProjectStatus)
         {
-            IQueryable<Project> projects = context.Projects.Include(p => p.ParticipantCounts).OrderBy(p => p.DisplayPriority).AsQueryable();
+            IQueryable<Project> projects = context
+                .Projects
+                .Where(p => p.Status != ProjectStatus.Deleted)
+                .Include(p => p.ParticipantCounts)
+                .OrderBy(p => p.DisplayPriority)
+                .AsQueryable();
 
             projects = searchProjectStatus switch
             {

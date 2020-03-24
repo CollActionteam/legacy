@@ -37,7 +37,7 @@ namespace CollAction.GraphQl.Queries
 
             AddSingleField(
                 name: nameof(Project),
-                resolve: c => c.DbContext.Projects);
+                resolve: c => c.GetUserContext().ServiceProvider.GetRequiredService<IProjectService>().SearchProjects(null, null));
 
             FieldAsync<IntGraphType>(
                 "projectCount",
