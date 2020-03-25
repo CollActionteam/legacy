@@ -22,9 +22,6 @@ import {
   faAngleDown,
   faSpinner,
   faClock,
-  faSignInAlt,
-  faUser,
-  faSignOutAlt,
   faTools
 } from "@fortawesome/free-solid-svg-icons";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
@@ -39,9 +36,6 @@ library.add(
   faAngleDown,
   faSpinner,
   faClock,
-  faSignInAlt,
-  faSignOutAlt,
-  faUser,
   faTools
 );
 

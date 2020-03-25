@@ -15,52 +15,52 @@ export default () => {
     {
       ({ user }) => {
         if (user !== null) {
-          return <Grid container spacing={5}>
-            {
-              user.isAdmin ?
-                <React.Fragment>
-                  <Grid item xs={6}>
-                    <Card>
-                      <CardActions>
-                        <Link to="/admin">
-                          <FontAwesomeIcon icon="tools" />
-                          Manage Site
-                        </Link>
-                      </CardActions>
-                    </Card>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Card>
-                      <CardActions>
-                        <a href={`${process.env.REACT_APP_BACKEND_URL}/hangfire`}>
-                          <FontAwesomeIcon icon="tools" />
-                          Jobs
-                        </a>
-                      </CardActions>
-                    </Card>
-                  </Grid>
-                </React.Fragment> :
-                null
-            }
-            <Grid item xs={6}>
-              <ResetPassword />
+          return <div style={{ padding: 20 }}>
+              <Grid container spacing={5}>
+              {
+                user.isAdmin ?
+                  <React.Fragment>
+                    <Grid item xs={12} md={6}>
+                      <Card>
+                        <CardActions>
+                          <Link to="/admin">
+                            <FontAwesomeIcon icon="tools" />&nbsp; Manage Site
+                          </Link>
+                        </CardActions>
+                      </Card>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <Card>
+                        <CardActions>
+                          <a href={`${process.env.REACT_APP_BACKEND_URL}/hangfire`}>
+                            <FontAwesomeIcon icon="tools" />&nbsp; Jobs
+                          </a>
+                        </CardActions>
+                      </Card>
+                    </Grid>
+                  </React.Fragment> :
+                  null
+              }
+              <Grid item xs={12} md={6}>
+                <ResetPassword />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <NewsletterSubscription user={user!} />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <DeleteAccount user={user!} />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <ProjectsCreated user={user!} />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <ProjectsParticipating user={user!} />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <RecurringDonations user={user!} />
+              </Grid>
             </Grid>
-            <Grid item xs={6}>
-              <NewsletterSubscription user={user!} />
-            </Grid>
-            <Grid item xs={6}>
-              <DeleteAccount user={user!} />
-            </Grid>
-            <Grid item xs={6}>
-              <ProjectsCreated user={user!} />
-            </Grid>
-            <Grid item xs={6}>
-              <ProjectsParticipating user={user!} />
-            </Grid>
-            <Grid item xs={6}>
-              <RecurringDonations user={user!} />
-            </Grid>
-          </Grid>;
+          </div>;
         } else {
           return <h1>Please log in before viewing your profile</h1>;
         }
