@@ -1,7 +1,7 @@
 @import '../../../components/Styles/responsive.scss';
 
 .filter {
-    color: var(--c-grey);
+    color: var(--c-grey-d30);
     font-size: var(--font-size-lg);
     font-weight: var(--font-weight-regular);
     margin: 0;
@@ -29,8 +29,8 @@
         user-select: none;
         margin-left: var(--spacing);
         margin-right: var(--spacing);
-        color: var(--c-grey);
-        border: 3px solid var(--c-grey);
+        color: var(--c-grey-d30);
+        border: 3px solid var(--c-grey-d30);
         padding: var(--spacing-sm) var(--spacing-lg);
         border-radius: calc(var(--border-radius) * 1.5);
         background: transparent;
