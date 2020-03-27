@@ -44,6 +44,18 @@ namespace CollAction.GraphQl.Mutations
                                         .ConfigureAwait(false);
                 }).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
 
+            FieldAsync<IdGraphType, int>(
+                "deleteProject",
+                arguments: new QueryArguments(new QueryArgument<IdGraphType>() { Name = "id" }),
+                resolve: c =>
+                {
+                    var context = c.GetUserContext();
+                    int id = c.GetArgument<int>("id");
+                    return context.ServiceProvider
+                                  .GetRequiredService<IProjectService>()
+                                  .DeleteProject(id, c.CancellationToken);
+                }).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
+
             FieldAsync<AddParticipantResultGraph, AddParticipantResult>(
                 "commitToProjectLoggedIn",
                 arguments: new QueryArguments(new QueryArgument<NonNullGraphType<IdGraphType>>() { Name = "projectId" }),

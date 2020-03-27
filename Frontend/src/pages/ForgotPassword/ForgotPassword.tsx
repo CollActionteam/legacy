@@ -16,11 +16,11 @@ const ForgotPasswordPage = () => {
                 email: email
             },
             onCompleted: (data) => {
-                if (data.applicationUser.forgotPassword.succeeded) {
+                if (data.user.forgotPassword.succeeded) {
                     setErrorMessage(null);
                     setInfoMessage("An e-mail has been sent, click on the link in that e-mail to reset your password");
                 } else {
-                    let error = data.applicationUser.forgotPassword.errors.map((e: any) => e.description).join(", ");
+                    let error = data.user.forgotPassword.errors.map((e: any) => e.description).join(", ");
                     setErrorMessage(error);
                 }
             },
@@ -56,7 +56,7 @@ export default ForgotPasswordPage;
 
 const FORGOT_PASSWORD = gql`
     mutation ForgotPassword($email: String!) {
-        applicationUser {
+        user {
             forgotPassword(email: $email) {
                 succeeded
                 errors {

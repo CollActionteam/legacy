@@ -39,15 +39,13 @@ export default class Navigation extends React.Component<
     return <React.Fragment>
         <li className={styles.navigationItem}>
           <Link className={styles.navigationButton} to="/profile">
-            <FontAwesomeIcon icon="user" />
             Profile
           </Link>
         </li> 
         <li className={styles.navigationItem}>
           <form method="post" action={logoutUrl}>
             <input type="hidden" name="returnUrl" value={returnUrl} />
-            <Button type="submit">
-              <FontAwesomeIcon icon="sign-out" />
+            <Button type="submit" className={styles.navigationSubmit}>
               Logout
             </Button>
           </form>
@@ -58,7 +56,6 @@ export default class Navigation extends React.Component<
   renderWithoutUser() {
     return <li className={styles.navigationItem}>
       <Link className={styles.navigationButton} to="/login">
-        <FontAwesomeIcon icon="sign-in-alt" />
         Login
       </Link>
     </li>;

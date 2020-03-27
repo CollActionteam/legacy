@@ -14,7 +14,9 @@ export const Fragments = {
       url
     }
     goal
+    start
     end
+    status
     target
     proposal
     remainingTime

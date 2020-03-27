@@ -18,5 +18,7 @@ namespace CollAction.Services.User.Models
         public int RepresentsNumberUsers { get; set; }
 
         public bool IsSubscribedNewsletter { get; set; }
+
+        public bool IsAdmin { get; set; }
     }
 }

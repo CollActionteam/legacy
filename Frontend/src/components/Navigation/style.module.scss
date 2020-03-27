@@ -78,6 +78,28 @@
     cursor: pointer;
 }
 
+.navigationSubmit {
+    background: none!important;
+    border: none;
+    padding: 0!important;
+    color: var(--c-green);
+    text-decoration: none;
+    font-weight: var(--font-weight-bold);
+    
+    svg {
+        padding-right: var(--spacing-xs);
+        transition: transform var(--transition-duration);
+    }
+
+    &:hover,
+    &:focus {
+        text-decoration: underline;
+        svg {
+            transform: scale(1.1);
+        }
+    }
+}
+
 .navigationButton {
     color: var(--c-green);
     text-decoration: none;

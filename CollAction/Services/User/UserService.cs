@@ -185,8 +185,9 @@ namespace CollAction.Services.User
 
             var loggedInUser = await userManager.GetUserAsync(loggedIn).ConfigureAwait(false);
 
-            // need to be logged in as either admin, or the user being updated, only admins can update RepresentsNumberUsers
-            if (!(loggedIn.IsInRole(AuthorizationConstants.AdminRole) || loggedInUser.Id == user.Id) || (!loggedIn.IsInRole(AuthorizationConstants.AdminRole) && updatedUser.RepresentsNumberUsers != user.RepresentsNumberParticipants)) 
+            // need to be logged in as either admin, or the user being updated, only admins can update RepresentsNumberUsers or change a user to admin
+            if (!(loggedIn.IsInRole(AuthorizationConstants.AdminRole) || loggedInUser.Id == user.Id) || 
+                (!loggedIn.IsInRole(AuthorizationConstants.AdminRole) && (updatedUser.RepresentsNumberUsers != user.RepresentsNumberParticipants || updatedUser.IsAdmin))) 
             {
                 return new UserResult(IdentityResult.Failed(new IdentityError() { Code = "NOPERM", Description = "You don't have permission to update this user" }));
             }
@@ -197,6 +198,11 @@ namespace CollAction.Services.User
             user.LastName = updatedUser.LastName;
             user.RepresentsNumberParticipants = updatedUser.RepresentsNumberUsers;
             var result = await userManager.UpdateAsync(user).ConfigureAwait(false);
+            if (updatedUser.IsAdmin)
+            {
+                await userManager.AddToRoleAsync(user, AuthorizationConstants.AdminRole).ConfigureAwait(false);
+            }
+
             if (!result.Succeeded)
             {
                 LogErrors("Error updating user", result);

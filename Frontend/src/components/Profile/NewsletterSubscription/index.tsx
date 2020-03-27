@@ -20,14 +20,16 @@ export default ({ user }: INewsletterSubscriptionProps) => {
                         email: user.email,
                         firstName: user.firstName,
                         lastName: user.lastName,
-                        isSubscribedNewsletter: !user.isSubscribedNewsletter
+                        isSubscribedNewsletter: !user.isSubscribedNewsletter,
+                        representsNumberParticipants: user.representsNumberParticipants,
+                        isAdmin: user.isAdmin
                     }
                 },
                 onCompleted: (data) => {
-                    if (data.applicationUser.updateUser.result.succeeded) {
+                    if (data.user.updateUser.result.succeeded) {
                         user.isSubscribedNewsletter = !user.isSubscribedNewsletter;
                     } else {
-                        let error = data.applicationUser.updateUser.errors.map((e: any) => e.description).join(", ");
+                        let error = data.user.updateUser.errors.map((e: any) => e.description).join(", ");
                         setErrorMessage(error);
                     }
                 },
@@ -57,7 +59,7 @@ export default ({ user }: INewsletterSubscriptionProps) => {
 const UPDATE_USER = gql`
     mutation UpdateUser($updatedUser: UpdatedUserInputGraph!)
     {  
-        applicationUser {
+        user {
             updateUser(user:$updatedUser) {
                 user {
                     id

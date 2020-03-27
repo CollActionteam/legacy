@@ -10,9 +10,9 @@ using Newtonsoft.Json.Linq;
 
 namespace CollAction.GraphQl.Mutations
 {
-    public sealed class ApplicationUserMutationGraph : ObjectGraphType
+    public sealed class UserMutationGraph : ObjectGraphType
     {
-        public ApplicationUserMutationGraph()
+        public UserMutationGraph()
         {
             FieldAsync<UserResultGraph, UserResult>(
                 "createUser",
