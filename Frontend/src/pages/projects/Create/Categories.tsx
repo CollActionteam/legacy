@@ -29,7 +29,7 @@ const Categories = (formik: any) => {
       <Field 
         name="category" 
         component={Select} 
-        error={formik.props.touched && Boolean(formik.props.errors.category)}
+        error={formik.props.touched.category && Boolean(formik.props.errors.category)}
       >
         {categories && categories.map((category: string) => (
           <MenuItem key={category} value={category}>
@@ -37,7 +37,7 @@ const Categories = (formik: any) => {
           </MenuItem>
         ))}
       </Field>
-      <FormHelperText error={formik.props.touched && Boolean(formik.props.errors.category)}>
+      <FormHelperText error={formik.props.touched.category && Boolean(formik.props.errors.category)}>
         {formik.props.errors.category}
       </FormHelperText>
     </FormControl>

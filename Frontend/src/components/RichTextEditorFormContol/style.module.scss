@@ -1,4 +1,3 @@
 .label {
-  // Fake a ui-material label
-  font-size: 0.8rem !important;
+  top: calc(var(--spacing) * -1) !important;
 }

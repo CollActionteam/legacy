@@ -6,7 +6,11 @@ export const initialValues = {
   category: '',
   target: '',
   startDate: '',
-  endDate: ''
+  hashTags: '',
+  endDate: '',
+  description: '',
+  goal: '',
+  comments: ''
 };
 
 const determineEndDateValidation = (startDate: any, schema: any) => {
@@ -47,6 +51,16 @@ export const validations = Yup.object({
     .max(maximumDate, 'Please ensure your sign up starts within the next 12 months'),
   endDate: Yup.date()
     .required('Please enter the date until which people can sign up for the campaign')
-    .when('startDate', determineEndDateValidation)
-
+    .when('startDate', determineEndDateValidation),
+  hashtags: Yup.string()
+    .max(30, 'Please keep the number of hashtags civil, no more then 30 characters')
+    .matches(/^[a-zA-Z_0-9]+(;[a-zA-Z_0-9]+)*$/, 'Don\'t use spaces or #, must contain a letter, can contain digits and underscores. Seperate multiple tags with a colon \';\''),
+  description: Yup.string()
+    .required('Give a succinct description of the issues your project is designed to address')
+    .max(10000, 'Please use no more then 10.000 characters'),
+  goal: Yup.string()
+    .required('Describe what you hope to have achieved upon successful completion of your project')
+    .max(10000, 'Please use no more then 10.000 characters'),
+  comments: Yup.string()
+    .max(20000, 'Please use no more then 20.000 characters')
 });

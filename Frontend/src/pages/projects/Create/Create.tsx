@@ -1,14 +1,14 @@
-import { Grid } from '@material-ui/core';
+import { Grid, FormControl } from '@material-ui/core';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import React from 'react';
 import Helmet from 'react-helmet';
 import { Button } from '../../../components/Button/Button';
+import { RichTextEditorFormControl } from '../../../components/RichTextEditorFormContol';
 import { Section } from '../../../components/Section';
 import Categories from './Categories';
 import styles from './Create.module.scss';
 import { initialValues, validations } from './form';
-
 
 const CreateProjectPage = () => {
   
@@ -101,9 +101,60 @@ const CreateProjectPage = () => {
                     fullWidth
                   >
                   </Field>
-            </Grid>
-          </Grid>
+                  <Field
+                    name="hashtags"
+                    label="Hashtags"
+                    helperText="No #, seperate tags with ; e.g. tag1;tag2"
+                    component={TextField}
+                    className={styles.formRow}
+                    fullWidth
+                  >
+                  </Field>
+                </Grid>
+              </Grid>
+            </Section>
 
+            <Section>
+              <Grid container>
+                <Grid item md={7} xs={12}>
+                  <RichTextEditorFormControl
+                    formik={props}
+                    name="description"
+                    label="Short description"
+                    hint="E.g. reduce plastic waste and save our oceans!"
+                    className={styles.formRow}
+                    >
+                  </RichTextEditorFormControl>
+                  <RichTextEditorFormControl
+                    formik={props}
+                    name="goal"
+                    label="Goal/impact"
+                    hint="What is the problem you are trying to solve?"
+                    className={styles.formRow}
+                  >
+                  </RichTextEditorFormControl>
+                  <FormControl>
+                    <p>Descriptive image here</p>
+                  </FormControl>
+                  <RichTextEditorFormControl
+                    formik={props}
+                    name="comments"
+                    label="Other comments (optional)"
+                    hint="E.g. background, process, FAQs, about the initiator"
+                    className={styles.formRow}
+                  >
+                  </RichTextEditorFormControl>
+                  <Field
+                    name="youtube"
+                    label="YouTube Video Link"
+                    helperText="Descriptive video, e.g. http://www.youtube.com/watch?v=-wtIMTCHWuI"
+                    component={TextField}
+                    fullWidth
+                    className={styles.formRow}
+                  >                    
+                  </Field>
+                </Grid>
+              </Grid>              
             </Section>
 
             <Section>
@@ -115,7 +166,6 @@ const CreateProjectPage = () => {
                 </Grid>
               </Grid>
             </Section>
-
           </Form>
         )}
       </Formik>
