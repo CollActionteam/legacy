@@ -10,6 +10,7 @@ export const initialValues = {
   endDate: '',
   description: '',
   goal: '',
+  imageDescription: '',
   comments: '',
   youtube: ''
 };

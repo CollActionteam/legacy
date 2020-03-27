@@ -3,6 +3,7 @@ import { FormikProps } from "formik";
 
 export interface IUploadImageProps {
   formik: FormikProps<any>;
+  className?: string;
 }
 
 export interface IUploadImageState {

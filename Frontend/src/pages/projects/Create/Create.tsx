@@ -1,4 +1,4 @@
-import { Grid, FormControl } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
 import React from 'react';
@@ -6,6 +6,7 @@ import Helmet from 'react-helmet';
 import { Button } from '../../../components/Button/Button';
 import { RichTextEditorFormControl } from '../../../components/RichTextEditorFormContol';
 import { Section } from '../../../components/Section';
+import UploadDescriptiveImage from './UploadDescriptiveImage';
 import Categories from './Categories';
 import styles from './Create.module.scss';
 import { initialValues, validations } from './form';
@@ -126,6 +127,7 @@ const CreateProjectPage = () => {
                     fullWidth
                   >
                   </RichTextEditorFormControl>
+                  
                   <RichTextEditorFormControl
                     formik={props}
                     name="goal"
@@ -135,9 +137,12 @@ const CreateProjectPage = () => {
                     fullWidth
                   >
                   </RichTextEditorFormControl>
-                  <FormControl>
-                    <p>Descriptive image here</p>
-                  </FormControl>
+                  
+                  <UploadDescriptiveImage 
+                    formik={props}
+                    className={styles.formRow}
+                  ></UploadDescriptiveImage>
+                  
                   <RichTextEditorFormControl
                     formik={props}
                     name="comments"
@@ -147,6 +152,7 @@ const CreateProjectPage = () => {
                     fullWidth
                   >
                   </RichTextEditorFormControl>
+                  
                   <Field
                     name="youtube"
                     label="YouTube Video Link"

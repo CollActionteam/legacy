@@ -11,7 +11,7 @@ import { Section } from '../../../components/Section';
 import { RichTextEditorFormControl } from '../../../components/RichTextEditorFormContol';
 import { Button } from '../../../components/Button/Button';
 import UploadBanner from '../UploadBanner/UploadBanner';
-import UploadDescriptiveImage from '../UploadDescriptiveImage/UploadDescriptiveImage';
+import UploadDescriptiveImage from './UploadDescriptiveImage';
 import Loader from '../../../components/Loader';
 
 import styles from './CreateOld.module.scss';
