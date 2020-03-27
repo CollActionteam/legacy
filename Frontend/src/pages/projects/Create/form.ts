@@ -10,7 +10,8 @@ export const initialValues = {
   endDate: '',
   description: '',
   goal: '',
-  comments: ''
+  comments: '',
+  youtube: ''
 };
 
 const determineEndDateValidation = (startDate: any, schema: any) => {
@@ -62,5 +63,7 @@ export const validations = Yup.object({
     .required('Describe what you hope to have achieved upon successful completion of your project')
     .max(10000, 'Please use no more then 10.000 characters'),
   comments: Yup.string()
-    .max(20000, 'Please use no more then 20.000 characters')
+    .max(20000, 'Please use no more then 20.000 characters'),
+  youtube: Yup.string()
+    .matches(/^(https):\/\/www.youtube.com\/embed\/((?:\w|-){11}?)$/, 'Only YouTube links of the form https://www.youtube.com/embed/... are accepted.')
 });

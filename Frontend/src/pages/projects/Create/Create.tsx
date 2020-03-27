@@ -123,7 +123,8 @@ const CreateProjectPage = () => {
                     label="Short description"
                     hint="E.g. reduce plastic waste and save our oceans!"
                     className={styles.formRow}
-                    >
+                    fullWidth
+                  >
                   </RichTextEditorFormControl>
                   <RichTextEditorFormControl
                     formik={props}
@@ -131,6 +132,7 @@ const CreateProjectPage = () => {
                     label="Goal/impact"
                     hint="What is the problem you are trying to solve?"
                     className={styles.formRow}
+                    fullWidth
                   >
                   </RichTextEditorFormControl>
                   <FormControl>
@@ -142,6 +144,7 @@ const CreateProjectPage = () => {
                     label="Other comments (optional)"
                     hint="E.g. background, process, FAQs, about the initiator"
                     className={styles.formRow}
+                    fullWidth
                   >
                   </RichTextEditorFormControl>
                   <Field
@@ -149,8 +152,8 @@ const CreateProjectPage = () => {
                     label="YouTube Video Link"
                     helperText="Descriptive video, e.g. http://www.youtube.com/watch?v=-wtIMTCHWuI"
                     component={TextField}
-                    fullWidth
                     className={styles.formRow}
+                    fullWidth
                   >                    
                   </Field>
                 </Grid>
