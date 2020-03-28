@@ -38,11 +38,9 @@ namespace CollAction.Services.Projects.Models
         public string? OwnerId { get; set; }
 
         [DataType(DataType.Date)]
-        [WithinMonthsAfterToday(12, ErrorMessage = "Please ensure your project starts within the next 12 months")]
         public DateTime Start { get; set; }
 
         [DataType(DataType.Date)]
-        [WithinMonthsAfterDateProperty(12, "Start", ErrorMessage = "The deadline must be within a year of the start date")]
         public DateTime End { get; set; }
 
         public int? BannerImageFileId { get; set; }
