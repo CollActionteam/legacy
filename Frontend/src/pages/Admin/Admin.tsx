@@ -1,8 +1,11 @@
 import React from "react";
-import { ManageProjects, EditProject } from "../../components/Admin/ManageProjects";
-import { ManageUsers, EditUser } from "../../components/Admin/ManageUsers";
 import { RouteComponentProps, Redirect } from "react-router-dom";
-import { AdminSidebar } from "../../components/Admin/Sidebar";
+import { UserContext } from "../../providers/user";
+import AdminSidebar from "../../components/Admin/AdminSidebar";
+import AdminEditUser from "../../components/Admin/Users/AdminEditUser";
+import AdminEditProject from "../../components/Admin/Projects/AdminEditProject";
+import AdminListUsers from "../../components/Admin/Users/AdminListUsers";
+import AdminListProjects from "../../components/Admin/Projects/AdminListProjects";
 
 type TParams = {
   type: string;
@@ -13,15 +16,15 @@ type TParams = {
 const AdminPageInner = ({ match } : RouteComponentProps<TParams>): any => {
   if (match.params.action === "list") {
     if (match.params.type === "projects") {
-      return <ManageProjects />
+      return <AdminListProjects />
     } else if (match.params.type === "users") {
-      return <ManageUsers />
+      return <AdminListUsers />
     }
   } else if (match.params.action === "edit" && match.params.id !== undefined) {
     if (match.params.type === "projects") {
-      return <EditProject projectId={match.params.id} />
+      return <AdminEditProject projectId={match.params.id} />
     } else if (match.params.type === "users") {
-      return <EditUser userId={match.params.id} />
+      return <AdminEditUser userId={match.params.id} />
     }
   }
 
@@ -29,6 +32,6 @@ const AdminPageInner = ({ match } : RouteComponentProps<TParams>): any => {
 };
 
 const AdminPage = (props : RouteComponentProps<TParams>): any => 
-  <AdminSidebar><AdminPageInner history={props.history} location={props.location} match={props.match} /></AdminSidebar>;
+  <AdminSidebar><UserContext.Consumer>{ ({user}) => user?.isAdmin ? <AdminPageInner history={props.history} location={props.location} match={props.match} /> : <h1>Not allowed</h1> }</UserContext.Consumer></AdminSidebar>;
 
 export default AdminPage;

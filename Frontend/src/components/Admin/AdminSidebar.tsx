@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-export const AdminSidebar = ({ children }: any) => {
+export default ({ children }: any) => {
     const classes = useStyles();
     const history = useHistory();
     return <div className={classes.root}>
