@@ -19,6 +19,10 @@ const editUserStyles = makeStyles(theme => ({
       width: '25ch'
     },
   },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  }
 }));
 
 export const EditUser = ({ userId } : IEditUserProps): any => {
@@ -96,7 +100,7 @@ export const EditUser = ({ userId } : IEditUserProps): any => {
                             type="text"
                             { ...formik.getFieldProps('firstName') }
                         />
-                        { (formik.touched.firstName && formik.errors.firstName) ? <Alert type="error" text={formik.errors.firstName} /> : null }
+                        <Alert type="error" text={formik.errors.firstName} />
                     </FormControl>
                     <FormControl>
                         <TextField
@@ -105,7 +109,7 @@ export const EditUser = ({ userId } : IEditUserProps): any => {
                             type="text"
                             { ...formik.getFieldProps('lastName') }
                         />
-                        { (formik.touched.lastName && formik.errors.lastName) ? <Alert type="error" text={formik.errors.lastName} /> : null }
+                        <Alert type="error" text={formik.errors.lastName} />
                     </FormControl>
                     <FormControl>
                         <TextField
@@ -114,9 +118,9 @@ export const EditUser = ({ userId } : IEditUserProps): any => {
                             type="number"
                             { ...formik.getFieldProps('representsNumberParticipants') }
                         />
-                        { (formik.touched.representsNumberParticipants && formik.errors.representsNumberParticipants) ? <Alert type="error" text={formik.errors.representsNumberParticipants} /> : null }
+                        <Alert type="error" text={formik.errors.representsNumberParticipants} />
                     </FormControl>
-                    <FormControl>
+                    <FormControl className={classes.formControl}>
                         <FormControlLabel
                             control={<Checkbox
                                 name="isAdmin"
@@ -125,7 +129,7 @@ export const EditUser = ({ userId } : IEditUserProps): any => {
                             />}
                             label="Is Admin"
                         />
-                        { (formik.touched.isAdmin && formik.errors.isAdmin) ? <Alert type="error" text={formik.errors.isAdmin} /> : null }
+                        <Alert type="error" text={formik.errors.isAdmin} />
                     </FormControl>
                     <Button type="submit" disabled={formik.isSubmitting}>Submit</Button>
                 </FormGroup>

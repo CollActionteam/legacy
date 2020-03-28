@@ -25,10 +25,7 @@ const editProjectStyles = makeStyles(theme => ({
   formControl: {
     margin: theme.spacing(1),
     minWidth: 120,
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
-  },
+  }
 }));
 
 export const EditProject = ({ projectId } : IEditProjectProps): any => {
@@ -166,8 +163,8 @@ export const EditProject = ({ projectId } : IEditProjectProps): any => {
             secondCategory: data.project.categories[1]?.category ?? "NONE",
             tags: data.project.tags.map((t: any) => t.tag.name).join(";"),
             numberProjectEmailsSend: data.project.numberProjectEmailsSend,
-            bannerImageDescription: data.project.bannerImage?.description,
-            descriptiveImageDescription: data.project.descriptiveImage?.description
+            bannerImageDescription: data.project.bannerImage?.description ?? "",
+            descriptiveImageDescription: data.project.descriptiveImage?.description ?? ""
         });
     }
     const { data: ownerData, error: ownerError } = useQuery(
@@ -207,7 +204,7 @@ export const EditProject = ({ projectId } : IEditProjectProps): any => {
                             type="text"
                             { ...formik.getFieldProps('name') }
                         />
-                        { formik.touched.name ? <Alert type="error" text={formik.errors.name} /> : null }
+                        <Alert type="error" text={formik.errors.name} />
                     </FormControl>
                     <FormControl>
                         <TextField
@@ -216,7 +213,7 @@ export const EditProject = ({ projectId } : IEditProjectProps): any => {
                             type="text"
                             { ...formik.getFieldProps('description') }
                         />
-                        { formik.touched.description ? <Alert type="error" text={formik.errors.description} /> : null }
+                        <Alert type="error" text={formik.errors.description} />
                     </FormControl>
                     <FormControl>
                         <TextField
@@ -225,7 +222,7 @@ export const EditProject = ({ projectId } : IEditProjectProps): any => {
                             type="text"
                             { ...formik.getFieldProps('proposal') }
                         />
-                        { formik.touched.proposal ? <Alert type="error" text={formik.errors.proposal} /> : null }
+                        <Alert type="error" text={formik.errors.proposal} />
                     </FormControl>
                     <FormControl >
                         <TextField
@@ -234,7 +231,7 @@ export const EditProject = ({ projectId } : IEditProjectProps): any => {
                             type="text"
                             { ...formik.getFieldProps('goal') }
                         />
-                        { formik.touched.goal ? <Alert type="error" text={formik.errors.goal} /> : null }
+                        <Alert type="error" text={formik.errors.goal} />
                     </FormControl>
                     <FormControl >
                         <TextField
@@ -243,7 +240,7 @@ export const EditProject = ({ projectId } : IEditProjectProps): any => {
                             type="text"
                             { ...formik.getFieldProps('creatorComments') }
                         />
-                        { formik.touched.creatorComments ? <Alert type="error" text={formik.errors.creatorComments} /> : null }
+                        <Alert type="error" text={formik.errors.creatorComments} />
                     </FormControl>
                     <FormControl >
                         <TextField
@@ -252,7 +249,7 @@ export const EditProject = ({ projectId } : IEditProjectProps): any => {
                             type="number"
                             { ...formik.getFieldProps('target') }
                         />
-                        { formik.touched.target ? <Alert type="error" text={formik.errors.target} /> : null }
+                        <Alert type="error" text={formik.errors.target} />
                     </FormControl>
                     <FormControl >
                         <TextField
@@ -262,7 +259,7 @@ export const EditProject = ({ projectId } : IEditProjectProps): any => {
                             InputLabelProps={{ shrink: true }}
                             { ...formik.getFieldProps('start') }
                         />
-                        { formik.touched.start ? <Alert type="error" text={formik.errors.start} /> : null }
+                        <Alert type="error" text={formik.errors.start} />
                     </FormControl>
                     <FormControl >
                         <TextField
@@ -272,7 +269,7 @@ export const EditProject = ({ projectId } : IEditProjectProps): any => {
                             InputLabelProps={{ shrink: true }}
                             { ...formik.getFieldProps('end') }
                         />
-                        { formik.touched.end ? <Alert type="error" text={formik.errors.end} /> : null }
+                        <Alert type="error" text={formik.errors.end} />
                     </FormControl>
                     <FormControl >
                         <TextField
@@ -281,7 +278,7 @@ export const EditProject = ({ projectId } : IEditProjectProps): any => {
                             type="text"
                             { ...formik.getFieldProps('descriptionVideoLink') }
                         />
-                        { formik.touched.descriptionVideoLink ? <Alert type="error" text={formik.errors.descriptionVideoLink} /> : null }
+                        <Alert type="error" text={formik.errors.descriptionVideoLink} />
                     </FormControl>
                     <FormControl >
                         <TextField
@@ -290,7 +287,7 @@ export const EditProject = ({ projectId } : IEditProjectProps): any => {
                             type="text"
                             { ...formik.getFieldProps('ownerEmail') }
                         />
-                        { formik.touched.ownerEmail ? <Alert type="error" text={formik.errors.ownerEmail} /> : null }
+                        <Alert type="error" text={formik.errors.ownerEmail} />
                     </FormControl>
                     <FormControl >
                         <TextField
@@ -299,7 +296,7 @@ export const EditProject = ({ projectId } : IEditProjectProps): any => {
                             type="text"
                             { ...formik.getFieldProps('tags') }
                         />
-                        { formik.touched.tags ? <Alert type="error" text={formik.errors.tags} /> : null }
+                        <Alert type="error" text={formik.errors.tags} />
                     </FormControl>
                     <FormControl >
                         <TextField
@@ -308,7 +305,7 @@ export const EditProject = ({ projectId } : IEditProjectProps): any => {
                             type="number"
                             { ...formik.getFieldProps('numberProjectEmailsSend') }
                         />
-                        { formik.touched.numberProjectEmailsSend ? <Alert type="error" text={formik.errors.numberProjectEmailsSend} /> : null }
+                        <Alert type="error" text={formik.errors.numberProjectEmailsSend} />
                     </FormControl>
                     <FormControl >
                         <TextField
@@ -317,7 +314,7 @@ export const EditProject = ({ projectId } : IEditProjectProps): any => {
                             type="number"
                             { ...formik.getFieldProps('anonymousUserParticipants') }
                         />
-                        { formik.touched.anonymousUserParticipants ? <Alert type="error" text={formik.errors.anonymousUserParticipants} /> : null }
+                        <Alert type="error" text={formik.errors.anonymousUserParticipants} />
                     </FormControl>
                     <FormControl className={classes.formControl}>
                         <InputLabel shrink id="first-category-label">First Category</InputLabel>
@@ -325,7 +322,7 @@ export const EditProject = ({ projectId } : IEditProjectProps): any => {
                             <MenuItem key="" value="NONE">NONE</MenuItem>
                             { data?.categories.enumValues.map((c: any) => <MenuItem key={c.name} value={c.name}>{c.name}</MenuItem>) }
                         </Select>
-                        { formik.touched.firstCategory ? <Alert type="error" text={formik.errors.firstCategory} /> : null }
+                        <Alert type="error" text={formik.errors.firstCategory} />
                     </FormControl>
                     <FormControl className={classes.formControl}>
                         <InputLabel shrink id="second-category-label">Second Category</InputLabel>
@@ -333,21 +330,21 @@ export const EditProject = ({ projectId } : IEditProjectProps): any => {
                             <MenuItem key="" value="NONE">NONE</MenuItem>
                             { data?.categories.enumValues.map((c: any) => <MenuItem key={c.name} value={c.name}>{c.name}</MenuItem>) }
                         </Select>
-                        { formik.touched.secondCategory ? <Alert type="error" text={formik.errors.secondCategory} /> : null }
+                        <Alert type="error" text={formik.errors.secondCategory} />
                     </FormControl>
                     <FormControl className={classes.formControl}>
                         <InputLabel shrink id="status-label">Status</InputLabel>
                         <Select labelId="status-label" name="status" { ...formik.getFieldProps('status')}>
                             { data?.statusses.enumValues.map((c: any) => <MenuItem key={c.name} value={c.name}>{c.name}</MenuItem>) }
                         </Select>
-                        { formik.touched.status ? <Alert type="error" text={formik.errors.status} /> : null }
+                        <Alert type="error" text={formik.errors.status} />
                     </FormControl>
                     <FormControl className={classes.formControl}>
                         <InputLabel shrink id="display-priority-label">Display Priority</InputLabel>
                         <Select labelId="display-priority-label" name="displayPriority" { ...formik.getFieldProps('displayPriority')}>
                             { data?.displayPriorities.enumValues.map((c: any) => <MenuItem key={c.name} value={c.name}>{c.name}</MenuItem>) }
                         </Select>
-                        { formik.touched.displayPriority ? <Alert type="error" text={formik.errors.displayPriority} /> : null }
+                        <Alert type="error" text={formik.errors.displayPriority} />
                     </FormControl>
                     <FormControl >
                         <TextField
@@ -357,7 +354,7 @@ export const EditProject = ({ projectId } : IEditProjectProps): any => {
                             type="text"
                             { ...formik.getFieldProps('descriptiveImageDescription') }
                         />
-                        { formik.touched.descriptiveImageDescription ? <Alert type="error" text={formik.errors.descriptiveImageDescription} /> : null }
+                        <Alert type="error" text={formik.errors.descriptiveImageDescription} />
                     <FormControl className={classes.formControl}>
                         <div {...getDescriptiveImageRootProps()}>
                             <input {...getDescriptiveImageInputProps()} />
@@ -387,7 +384,7 @@ export const EditProject = ({ projectId } : IEditProjectProps): any => {
                             InputLabelProps={{ shrink: true }}
                             { ...formik.getFieldProps('bannerImageDescription') }
                         />
-                        { formik.touched.bannerImageDescription ? <Alert type="error" text={formik.errors.bannerImageDescription} /> : null }
+                        <Alert type="error" text={formik.errors.bannerImageDescription} />
                     </FormControl>
                     <FormControl className={classes.formControl}>
                         <div {...getBannerImageRootProps()}>
