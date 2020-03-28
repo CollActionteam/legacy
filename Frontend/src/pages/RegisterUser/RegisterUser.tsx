@@ -49,12 +49,8 @@ const RegisterUserPage = () => {
         <Section className={styles.intro}>
             <h1 className={styles.title}>Register User</h1>
         </Section>
-        {
-            errorMessage ? <Alert type="error" text={errorMessage} /> : null
-        }
-        {
-            infoMessage ? <Alert type="info" text={infoMessage} /> : null
-        }
+        <Alert type="error" text={errorMessage} />
+        <Alert type="info" text={infoMessage} />
         <Section color="grey">
             <Grid container justify="center">
                 <Grid item sm={6}>

@@ -37,9 +37,7 @@ const LoginPage = () => {
           (Use a local account to log in )
         </h2>
       </Section>
-      {
-        errorMessage ? <Alert type="error" text={errorMessage} /> : null
-      }
+      <Alert type="error" text={errorMessage} />
       <Section color="grey">
         <Grid container justify="center">
           <Grid item sm={6}>

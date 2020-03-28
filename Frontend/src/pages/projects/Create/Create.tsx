@@ -82,12 +82,12 @@ const CreateProjectPage = () => {
     setStatus(null);
     let bannerId;
     if (form.banner) {
-      bannerId = await uploadImage(form.banner, form.projectName);
+      bannerId = await Utils.uploadImage(form.banner, form.projectName);
     }
 
     let imageId;
     if (form.image) {
-      imageId = await uploadImage(form.image, form.imageDescription);
+      imageId = await Utils.uploadImage(form.image, form.imageDescription);
     }
 
     try {
@@ -125,18 +125,6 @@ const CreateProjectPage = () => {
       // TODO: handle errors
       console.error('Could not create project', error);
     }
-  };
-
-  const uploadImage = async (file: any, description: string) => {
-    const body = new FormData();
-    body.append('Image', file);
-    body.append('ImageDescription', description);
-
-    return await fetch(`${process.env.REACT_APP_BACKEND_URL}/image`, {
-      method: 'POST',
-      body,
-      credentials: 'include'
-    }).then((response) => response.json());
   };
 
   const renderFormStatusErrors = (status: any) => {

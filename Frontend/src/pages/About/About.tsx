@@ -13,7 +13,7 @@ const AboutPage = () => {
   const team: any[] = t('about.team.team', { returnObjects: true });
   
   const videos = {
-    mainvideo: 'https://www.youtube.com/embed/xnIJo91Gero?theme=dark&amp;rel=0&amp;wmode=transparent'
+    mainvideo: 'https://www.youtube-nocookie.com/embed/xnIJo91Gero?theme=dark&amp;rel=0&amp;wmode=transparent'
   };
 
   const generateMemberPhoto = (member: any) => {

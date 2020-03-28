@@ -84,7 +84,7 @@ namespace CollAction.Tests.Integration.Service
                                CreatorComments = currentProject.CreatorComments,
                                Description = currentProject.Description,
                                OwnerId = currentProject.OwnerId,
-                               DescriptionVideoLink = "https://www.youtube.com/embed/xY0XTysJUDY",
+                               DescriptionVideoLink = "https://www.youtube-nocookie.com/embed/xY0XTysJUDY",
                                DescriptiveImageFileId = currentProject.DescriptiveImageFileId,
                                DisplayPriority = ProjectDisplayPriority.Top,
                                End = DateTime.Now.AddDays(30),

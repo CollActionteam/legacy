@@ -31,7 +31,7 @@ export default ({ user, subscription }: IRecurringDonationItemProps) => {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     return <React.Fragment>
-        { errorMessage ? <Alert type="error" text={errorMessage} /> : null }
+        <Alert type="error" text={errorMessage} />
         <ListItem>
             <ListItemAvatar>
             <Avatar>

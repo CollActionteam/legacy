@@ -7,8 +7,8 @@ export default () => {
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmNewPassword, setConfirmNewPassword] = useState("");
-    const [success, setSuccess] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [ changePassword ] = useMutation(
         CHANGE_PASSWORD,
         {
@@ -18,15 +18,15 @@ export default () => {
             },
             onCompleted: (data) => {
                 if (data.user.changePassword.succeeded) {
-                    setSuccess(true);
+                    setSuccessMessage("Your password has been changed");
                 } else {
                     let error = data.user.changePassword.errors.map((e: any) => e.description).join(", ");
-                    setSuccess(false);
+                    setSuccessMessage(null);
                     setErrorMessage(error);
                 }
             },
             onError: (data) => {
-                setSuccess(false);
+                setSuccessMessage(null);
                 setErrorMessage(data.message);
             }
         }
@@ -35,8 +35,8 @@ export default () => {
     const isValid = confirmNewPassword === newPassword && currentPassword.length > 0 && newPassword.length > 0;
 
     return <React.Fragment>
-        { errorMessage ? <Alert type="error" text={errorMessage} /> : null }
-        { success ? <Alert type="success" text="Your password has been changed" /> : null }
+        <Alert type="error" text={errorMessage} />
+        <Alert type="success" text={successMessage} />
         <Card>
             <CardContent>
                 <h3>Password</h3>

@@ -133,6 +133,7 @@ export interface IUser {
   projects: IProject[];
   representsNumberParticipants: number;
   userEvents: IUserEvent[];
+  registrationDate: Date;
 }
 
 export interface IUserEvent {

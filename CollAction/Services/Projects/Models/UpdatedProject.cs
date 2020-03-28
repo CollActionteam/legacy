@@ -49,7 +49,7 @@ namespace CollAction.Services.Projects.Models
 
         public int? DescriptiveImageFileId { get; set; }
 
-        [RegularExpression(@"^https://www.youtube.com/embed/[A-Za-z_\-0-9]+$", ErrorMessage = "Only embedded youtube links are accepted. If you don't know how to get one, see: https://support.google.com/youtube/answer/171780?hl=en")]
+        [RegularExpression(@"^https://www.youtube(\-nocookie)?.com/embed/[A-Za-z_\-0-9]+$", ErrorMessage = "Only embedded youtube links are accepted. If you don't know how to get one, see: https://support.google.com/youtube/answer/171780?hl=en")]
         public string? DescriptionVideoLink { get; set; }
 
         public ProjectDisplayPriority DisplayPriority { get; set; }

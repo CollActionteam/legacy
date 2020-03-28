@@ -37,7 +37,6 @@ const routing = (
                     <Layout>
                         <Switch>
                             <Route exact path="/" component={HomePage} />
-                            <Route exact path="/admin" component={AdminPage} />
                             <Route exact path="/login" component={LoginPage} />
                             <Route exact path="/forgot-password" component={ForgotPasswordPage} />
                             <Route exact path="/reset-password" component={ResetPasswordPage} />
@@ -52,6 +51,7 @@ const routing = (
                             <Route exact path="/projects/thank-you-create" component={ThankYouCreatePage} />
                             <Route exact path="/projects/:slug/:projectId" component={ProjectDetailsPage} />
                             <Route exact path="/projects/:slug/:projectId/thankyou" component={ThankYouCommitPage} />
+                            <Route exact path="/admin/:type/:action/:id?" component={AdminPage} />
                             <Route component={NotFoundPage} />
                         </Switch>
                     </Layout>

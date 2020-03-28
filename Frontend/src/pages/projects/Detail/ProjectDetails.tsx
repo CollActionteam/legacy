@@ -16,6 +16,7 @@ import styles from "./ProjectDetails.module.scss";
 import { RouteComponentProps, Redirect, useHistory} from "react-router-dom";
 import { UserContext, GET_USER } from "../../../providers/user";
 import { Alert } from "../../../components/Alert";
+import { Fragments } from "../../../api/fragments";
 
 type TParams = {
   slug: string,
@@ -272,7 +273,7 @@ const ProjectDetailsPageInner = ({ user, projectId, slug }: IProjectDetailsProps
 
   return (
     <React.Fragment>
-      { errorMessage ? <Alert type="error" text={errorMessage} /> : null }
+      <Alert type="error" text={errorMessage} />
       { !loading && !data ? <Redirect to="/404" /> : null }
       { loading ? <Loader /> : null }
       { project ? renderProject(project) : null }
@@ -283,40 +284,7 @@ const ProjectDetailsPageInner = ({ user, projectId, slug }: IProjectDetailsProps
 const GET_PROJECT = gql`
   query GetProject($id: ID) {
     project(id: $id) {
-      id
-      name
-      description
-      categories {
-        category
-      }
-      bannerImage {
-        url
-      }
-      descriptiveImage {
-        url
-        description
-      }
-      goal
-      start
-      end
-      status
-      target
-      proposal
-      creatorComments
-      descriptionVideoLink
-      owner {
-        fullName
-        firstName
-        lastName
-      }
-      remainingTime
-      totalParticipants
-      percentage
-      isActive
-      isComingSoon
-      isClosed
-      isSuccessfull
-      isFailed
+      ${Fragments.projectDetail}
     }
   }
 `;

@@ -39,7 +39,7 @@ export default ({ user }: INewsletterSubscriptionProps) => {
             });
 
     return <React.Fragment>
-            { errorMessage ? <Alert type="error" text={errorMessage} /> : null }
+            <Alert type="error" text={errorMessage} />
             <Card>
                 <CardContent>
                     <h3>Newsletter subscription</h3>
