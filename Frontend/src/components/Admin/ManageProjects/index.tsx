@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { Paper, TableContainer, Table, TableHead, TableCell, TableRow, TableBody, Button, TablePagination, TableFooter, Checkbox, Dialog, DialogTitle, DialogContent, DialogActions, Card, TextField, makeStyles, FormGroup, FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
+import { Paper, TableContainer, Table, TableHead, TableCell, TableRow, TableBody, Button, TablePagination, Checkbox, Dialog, DialogTitle, DialogContent, DialogActions, Card, TextField, makeStyles, FormGroup, FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
 import { gql, useQuery, useMutation } from "@apollo/client";
 import Loader from "../../Loader";
 import { IProject } from "../../../api/types";
@@ -493,7 +493,7 @@ export const ManageProjects = () => {
                 </TableHead>
                 <TableBody>
                     { data?.projects.map((p: IProject) => (
-                        <TableRow key="test">
+                        <TableRow key={p.id}>
                             <TableCell component="th" scope="row">{ p.name }</TableCell>
                             <TableCell align="right">{ p.status }</TableCell>
                             <TableCell align="right">{ p.start }</TableCell>
@@ -503,10 +503,10 @@ export const ManageProjects = () => {
                             <TableCell align="right"><Button onClick={() => { setDeleteDialogOpen(true); setToDelete(p); }}>Delete</Button></TableCell>
                         </TableRow>))
                     }
+                    <TableRow>
+                        <TablePagination count={projectCount} page={page} rowsPerPageOptions={[5, 10, 25, 50]} rowsPerPage={rowsPerPage} onChangePage={(_ev, newPage) => setPage(newPage)} onChangeRowsPerPage={(ev) => { setPage(0); setRowsPerPage(parseInt((ev.target.value))) }} />
+                    </TableRow>
                 </TableBody>
-                <TableFooter>
-                    <TablePagination count={projectCount} page={page} rowsPerPageOptions={[5, 10, 25, 50]} rowsPerPage={rowsPerPage} onChangePage={(_ev, newPage) => setPage(newPage)} onChangeRowsPerPage={(ev) => { setPage(0); setRowsPerPage(parseInt((ev.target.value))) }} />
-                </TableFooter>
             </Table>
         </TableContainer>
     </React.Fragment>;

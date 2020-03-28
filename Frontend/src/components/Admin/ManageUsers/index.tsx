@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Paper, TableContainer, Table, TableHead, TableCell, TableRow, TableBody, Button, TablePagination, TableFooter, Checkbox, Dialog, DialogTitle, DialogContent, DialogActions, Card, TextField, FormControlLabel, makeStyles, FormGroup, FormControl } from "@material-ui/core";
+import { Paper, TableContainer, Table, TableHead, TableCell, TableRow, TableBody, Button, TablePagination, Checkbox, Dialog, DialogTitle, DialogContent, DialogActions, Card, TextField, FormControlLabel, makeStyles, FormGroup, FormControl } from "@material-ui/core";
 import { gql, useQuery, useMutation } from "@apollo/client";
 import Loader from "../../Loader";
 import { IUser } from "../../../api/types";
@@ -216,7 +216,7 @@ export const ManageUsers = () => {
                 </TableHead>
                 <TableBody>
                     { data?.users.map((u: IUser) => (
-                        <TableRow key="test">
+                        <TableRow key={u.id}>
                             <TableCell component="th" scope="row">{ u.email }</TableCell>
                             <TableCell align="right">{ u.firstName }</TableCell>
                             <TableCell align="right">{ u.lastName }</TableCell>
@@ -226,10 +226,10 @@ export const ManageUsers = () => {
                             <TableCell align="right"><Button onClick={() => { setDeleteDialogOpen(true); setToDelete(u); }}>Delete</Button></TableCell>
                         </TableRow>))
                     }
+                    <TableRow>
+                        <TablePagination count={userCount} page={page} rowsPerPageOptions={[5, 10, 25, 50]} rowsPerPage={rowsPerPage} onChangePage={(_ev, newPage) => setPage(newPage)} onChangeRowsPerPage={(ev) => { setPage(0); setRowsPerPage(parseInt((ev.target.value))) } } />
+                    </TableRow>
                 </TableBody>
-                <TableFooter>
-                    <TablePagination count={userCount} page={page} rowsPerPageOptions={[5, 10, 25, 50]} rowsPerPage={rowsPerPage} onChangePage={(_ev, newPage) => setPage(newPage)} onChangeRowsPerPage={(ev) => { setPage(0); setRowsPerPage(parseInt((ev.target.value))) } } />
-                </TableFooter>
             </Table>
         </TableContainer>
     </React.Fragment>;
