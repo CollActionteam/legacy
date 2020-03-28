@@ -103,11 +103,6 @@ export const EditProject = ({ projectId } : IEditProjectProps): any => {
             initialized: Yup.boolean().oneOf([true], "Data must be loaded")
         }),
         onSubmit: async (values: any) => {
-            if (values.ownerEmail !== "" && values.ownerId === -1) {
-                setError(`Owner ${values.ownerEmail} could not be found`);
-                return;
-            }
-
             const uploads = { banner: null, descriptive: null };
             if (bannerImage !== null) {
                 uploads.banner = await Utils.uploadImage(bannerImage, values.bannerImageDescription);
