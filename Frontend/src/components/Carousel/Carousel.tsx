@@ -64,7 +64,7 @@ export default ({ title, text }: ICarouselProps) => {
         </Grid>
         <Grid item sm={12} md={9} className={styles.sliderContainer}>
           {loading && <Loader />}
-          {data.projects && (
+          {data?.projects && (
             <Slider {...settings}>
               {data.projects.map((project: IProject, index: number) => (
                 <ProjectCard project={project} key={index} />
