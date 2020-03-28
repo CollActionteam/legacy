@@ -65,7 +65,7 @@ export const EditProject = ({ projectId } : IEditProjectProps): any => {
             start: "",
             end: "",
             ownerEmail: "",
-            ownerId: -1,
+            ownerId: "",
             goal: "",
             status: "",
             proposal: "",
@@ -87,8 +87,8 @@ export const EditProject = ({ projectId } : IEditProjectProps): any => {
             start: Yup.date(),
             end: Yup.date(),
             ownerEmail: Yup.string().email("Please enter a valid e-mail address")
-                                    .when('ownerId', (ownerId: number, schema: any) => ownerId === -1 ? schema.oneOf([""], "User with e-mail does not exist") : schema),
-            ownerId: Yup.number(),
+                                    .when('ownerId', (ownerId: string, schema: any) => ownerId === "" ? schema.oneOf([""], "User with e-mail does not exist") : schema),
+            ownerId: Yup.string(),
             goal: Yup.string(),
             status: Yup.string(),
             proposal: Yup.string(),
@@ -121,15 +121,15 @@ export const EditProject = ({ projectId } : IEditProjectProps): any => {
                         proposal: values.proposal,
                         description: values.description,
                         goal: values.goal,
-                        creatorComments: values.creatorComments,
+                        creatorComments: values.creatorComments === "" ? null : values.creatorComments,
                         start: values.start,
                         end: values.end,
-                        descriptionVideoLink: values.descriptionVideoLink,
+                        descriptionVideoLink: values.descriptionVideoLink === "" ? null : values.descriptionVideoLink,
                         displayPriority: values.displayPriority,
                         numberProjectEmailsSend: values.numberProjectEmailsSend,
                         status: values.status,
                         tags: values.tags.split(';').filter((i: string | null) => i),
-                        ownerId: values.ownerId ?? -1,
+                        ownerId: values.ownerId === "" ? null : values.ownerId,
                         bannerImageFileId: uploads.banner ?? data.project.bannerImage?.Id,
                         descriptiveImageFileId: uploads.descriptive ?? data.project.descriptiveImage?.Id
                     }
@@ -150,7 +150,7 @@ export const EditProject = ({ projectId } : IEditProjectProps): any => {
             displayPriority: data.project.displayPriority,
             start: data.project.start,
             end: data.project.end,
-            ownerEmail: data.project.owner?.email ?? "",
+            ownerEmail: data.project.ownerWithEmail?.email ?? "",
             ownerId: formik.values.ownerId,
             status: data.project.status,
             anonymousUserParticipants: data.project.anonymousUserParticipants,
@@ -170,11 +170,10 @@ export const EditProject = ({ projectId } : IEditProjectProps): any => {
             }
         }
     );
-    if (ownerData && formik.values.ownerId !== ownerData.user.id) {
+    if (ownerError && formik.values.ownerId !== "") {
+        formik.setFieldValue("ownerId", "");
+    } else if (!ownerError && ownerData && formik.values.ownerId !== ownerData.user.id) {
         formik.setFieldValue("ownerId", ownerData.user.id);
-    }
-    if (ownerError && formik.values.ownerId !== -1) {
-        formik.setFieldValue("ownerId", -1);
     }
     const onDropBanner = useCallback((acceptedFiles: File[]) => {
         const lastFile = acceptedFiles[acceptedFiles.length - 1];
@@ -533,6 +532,9 @@ const GET_PROJECT = gql`
         project(id: $id) {
             numberProjectEmailsSend
             anonymousUserParticipants
+            ownerWithEmail: owner {
+                email
+            }
             ${Fragments.projectDetail}
         }
         categories: __type(name: "Category") {
