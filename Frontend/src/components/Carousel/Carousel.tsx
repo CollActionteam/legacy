@@ -39,7 +39,7 @@ export default ({ title, text }: ICarouselProps) => {
   const query = useQuery(GET_CAROUSEL_PROJECTS);
   const { data, loading, error } = query;
 
-  if (error || !data) {
+  if (error) {
     console.error(error);
     return null;
   }
