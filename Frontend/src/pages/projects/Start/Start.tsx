@@ -4,7 +4,7 @@ import { Grid } from "@material-ui/core";
 import { Banner } from "../../../components/Banner/Banner";
 import { Section } from "../../../components/Section/Section";
 import { StartProjectSteps } from "../../../components/StartProjectSteps/StartProjectSteps";
-import { Button, SecondaryButton } from "../../../components/Button/Button";
+import { Button } from "../../../components/Button/Button";
 import IntroCard from "./IntroCard";
 import ProjectStartFaqs from "./ProjectStartFaqs";
 import Kickstart from "./Kickstart";

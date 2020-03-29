@@ -22,7 +22,7 @@ export default () => {
 
   if(error) {
     console.error(error);
-    return;
+    return null;
   }
 
   return (
