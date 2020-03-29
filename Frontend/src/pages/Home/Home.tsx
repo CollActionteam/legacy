@@ -1,10 +1,10 @@
 import React from "react";
 import { Button, GhostButton } from "../../components/Button/Button";
-import { Facebook, Twitter, LinkedIn, Email } from "../../components/Share";
-import { Section } from "../../components/Section";
+import { Facebook, Twitter, LinkedIn, Email } from "../../components/Share/Share";
+import { Section } from "../../components/Section/Section";
 import Carousel from "../../components/Carousel/Carousel";
-import ProjectsList from "../../components/ProjectsList";
-import Stats from "../../components/Stats";
+import ProjectsList from "../../components/ProjectsList/ProjectsList";
+import Stats from "../../components/Stats/Stats";
 
 import { useTranslation } from 'react-i18next';
 const HomePage = () => {

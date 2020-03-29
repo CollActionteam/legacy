@@ -1,6 +1,6 @@
 import React from "react";
 import { Overlay } from "../../../components/Overlay/Overlay";
-import { Section } from "../../../components/Section";
+import { Section } from "../../../components/Section/Section";
 
 import styles from "./ThankYouCreate.module.scss";
 

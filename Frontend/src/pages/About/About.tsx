@@ -2,8 +2,8 @@ import React from 'react';
 import { Grid } from '@material-ui/core';
 
 import styles from './About.module.scss';
-import { Section } from '../../components/Section';
-import { Faq } from '../../components/Faq';
+import { Section } from '../../components/Section/Section';
+import { Faq } from '../../components/Faq/Faq';
 
 import { useTranslation } from 'react-i18next';
 

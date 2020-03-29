@@ -1,13 +1,16 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { HashLink } from "react-router-hash-link";
+import { siteData } from "../../api/site";
+
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import logo from "../../assets/svg/logo.svg";
-import styles from "./style.module.scss";
-import SocialMedia from "../SocialMedia";
-import NewsletterSignup from "../NewsletterSignup";
-import { siteData } from "../../api/site";
-import { HashLink } from 'react-router-hash-link';
-import { Link } from "react-router-dom";
+
+import SocialMedia from "../SocialMedia/SocialMedia";
+import NewsletterSignup from "../NewsletterSignup/NewsletterSignup";
+
+import styles from "./Footer.module.scss";
 
 export default () => (
   <div className={styles.footer}>

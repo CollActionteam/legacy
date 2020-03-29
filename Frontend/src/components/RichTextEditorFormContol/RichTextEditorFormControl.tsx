@@ -10,7 +10,7 @@ import MUIRichTextEditor from "mui-rte";
 import { stateToHTML } from "draft-js-export-html";
 import { Field, ErrorMessage, FormikProps } from "formik";
 
-import styles from "./style.module.scss";
+import styles from "./RichTextEditorFormControl.module.scss";
 
 export interface IRichTextEditorProps {
   name: string;

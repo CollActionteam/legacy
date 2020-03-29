@@ -1,5 +1,4 @@
 import React from "react";
-import styles from "./style.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFacebookF,
@@ -7,6 +6,8 @@ import {
   faLinkedinIn,
 } from "@fortawesome/free-brands-svg-icons";
 import { faAt } from "@fortawesome/free-solid-svg-icons";
+
+import styles from "./Share.module.scss";
 
 export const Facebook = ({ url }: { url: string}) => {
   return (

@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
-
-import logo from '../../assets/svg/logo.svg';
-import styles from './style.module.scss';
-import Navigation from '../Navigation';
-
 import { siteData } from '../../api/site';
+import logo from '../../assets/svg/logo.svg';
+
+import Navigation from '../Navigation/Navigation';
+
+import styles from './Header.module.scss';
 
 export default () => {
   return (

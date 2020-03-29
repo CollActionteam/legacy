@@ -1,7 +1,7 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Drop from '../../assets/svg/drop.svg';
-import styles from './style.module.scss';
+import styles from './Stats.module.scss';
 
 export default () => {
   const stats: any = [];

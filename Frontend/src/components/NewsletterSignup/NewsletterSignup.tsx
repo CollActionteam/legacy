@@ -1,7 +1,8 @@
 import React from "react";
-import { Alert } from "../Alert";
-import styles from "./style.module.scss";
+import { Alert } from "../Alert/Alert";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import styles from "./NewsletterSignup.module.scss";
 
 interface INewsletterSignupState {
   email: string;

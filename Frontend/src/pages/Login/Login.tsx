@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "../../components/Button/Button";
-import { Section } from "../../components/Section";
-import { Alert } from "../../components/Alert";
+import { Section } from "../../components/Section/Section";
+import { Alert } from "../../components/Alert/Alert";
 import { Link } from "react-router-dom";
 
 import {
@@ -12,6 +12,7 @@ import {
   Checkbox,
   FormGroup,
 } from "@material-ui/core";
+
 import styles from "./Login.module.scss";
 
 import { siteData } from '../../api/site';

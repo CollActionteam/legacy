@@ -6,7 +6,7 @@ import { Hidden } from "@material-ui/core";
 
 import { CircleButton, CircleButtonContainer, Button } from "../Button/Button";
 
-import styles from "./style.module.scss";
+import styles from "./CallToAction.module.scss";
 
 export const CallToAction = ({ title }: any) => {
   return (

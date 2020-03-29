@@ -1,11 +1,12 @@
 import React from "react";
 import { Hidden } from "@material-ui/core";
-import styles from "./style.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import { UserContext } from "../../providers/user";
 import { Button } from "../../components/Button/Button";
 import { IUser } from "../../api/types";
+
+import styles from "./Navigation.module.scss";
 
 interface INavigationProps {
   items: { name: string, link: string }[];
