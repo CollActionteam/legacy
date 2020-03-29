@@ -13,7 +13,10 @@
             "text" : ""
         },
         "stats" : {
-            "title" : "Our collective impact"
+            "title" : "Our collective impact",
+            "numberActionsTaken" : "Actions taken",
+            "numberProjects" : "Crowdactions started",
+            "numberUsers" : "CollActivists"
         },
         "projects" : {
             "title" : "Join a crowaction",

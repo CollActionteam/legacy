@@ -3,3 +3,33 @@
 .stats {
   
 }
+
+.stat {
+    text-align: center;
+
+    @include breakpoint-down(md) {
+        padding-bottom: var(--spacing-lg);
+    }
+}
+
+.title {
+    margin-top: var(--spacing-md);
+    margin-bottom: 0;
+    font-size: var(--font-size-xl);
+}
+
+.circle {
+    position: relative;
+    display: inline-block;
+    background-color: var(--c-green);
+    border-radius: 100%;
+    width: 5.5rem;
+    height: 5.5rem;
+
+    img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate3d(-50%, -50%, 0);
+    }
+}

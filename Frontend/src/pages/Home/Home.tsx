@@ -7,6 +7,7 @@ import ProjectsList from "../../components/ProjectsList/ProjectsList";
 import Stats from "../../components/Stats/Stats";
 
 import { useTranslation } from 'react-i18next';
+
 const HomePage = () => {
   const { t } = useTranslation();
   return (
