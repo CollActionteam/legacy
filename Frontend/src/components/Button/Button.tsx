@@ -1,13 +1,18 @@
-import React from "react";
-import styles from "./Button.module.scss";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "react-router-dom";
+import React from 'react';
+import styles from './Button.module.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link } from 'react-router-dom';
 
-export const Button = ({ children, variant = "primary", ...props }: any) => {
+export const Button = ({ children, variant = 'primary', ...props }: any) => {
   // External link
   if (props.url) {
     return (
-      <a className={styles[variant]} href={props.url} target="_blank">
+      <a
+        className={styles[variant]}
+        href={props.url}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         {children}
       </a>
     );

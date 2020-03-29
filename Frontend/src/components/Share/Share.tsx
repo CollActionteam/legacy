@@ -1,11 +1,4 @@
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faFacebookF,
-  faTwitter,
-  faLinkedinIn,
-} from "@fortawesome/free-brands-svg-icons";
-import { faAt } from "@fortawesome/free-solid-svg-icons";
 import { useTranslation } from 'react-i18next';
 import { siteData } from "../../api/site";
 
