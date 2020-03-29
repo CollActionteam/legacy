@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Paper, TableContainer, Table, TableHead, TableCell, TableRow, TableBody, Button, TablePagination, Checkbox, Dialog, DialogTitle, DialogContent, DialogActions } from "@material-ui/core";
 import { gql, useQuery, useMutation } from "@apollo/client";
-import Loader from "../../Loader";
 import { IUser } from "../../../api/types";
 import { useHistory } from "react-router-dom";
-import { Alert } from "../../Alert";
+
+import { Alert } from "../../Alert/Alert";
+import Loader from "../../Loader/Loader";
 
 export default () => {
     const history = useHistory();

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Section } from "../../components/Section";
-import { Alert } from "../../components/Alert";
+import { Section } from "../../components/Section/Section";
+import { Alert } from "../../components/Alert/Alert";
 import { Grid, Checkbox, FormGroup, TextField, Button, FormControlLabel, FormControl, FormHelperText } from "@material-ui/core";
 import { gql, useMutation } from "@apollo/client";
 import styles from "./RegisterUser.module.scss";

@@ -1,13 +1,12 @@
 import React from 'react';
-import { useQuery } from '@apollo/react-hooks';
-import { gql } from 'apollo-boost';
+import { gql, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
+import Grid from '@material-ui/core/Grid';
 
 import Drop from '../../assets/svg/drop.svg';
 import Person from '../../assets/svg/person.svg';
 import Waves from '../../assets/svg/waves.svg';
 
-import Grid from '@material-ui/core/Grid';
 import Loader from '../Loader/Loader';
 
 import styles from './Stats.module.scss';
@@ -15,10 +14,15 @@ import styles from './Stats.module.scss';
 export default () => {
   const { t } = useTranslation();
   const query = useQuery(GET_STATISTICS);
-  const { data, loading } = query;
+  const { data, loading, error } = query;
 
   if (loading) {
     return <Loader />;
+  }
+
+  if(error) {
+    console.error(error);
+    return;
   }
 
   return (

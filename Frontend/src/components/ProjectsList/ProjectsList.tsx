@@ -1,20 +1,11 @@
 import React, { Fragment } from "react";
-<<<<<<< HEAD:Frontend/src/components/ProjectsList/index.tsx
-import { useQuery } from "@apollo/client";
-import { gql } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 import { Fragments } from "../../api/fragments";
+import { Grid } from "@material-ui/core";
 
-import { Grid } from "@material-ui/core";
 import ProjectCard from "../ProjectCard";
-=======
-import { useQuery } from "@apollo/react-hooks";
-import {gql} from "apollo-boost";
-import { Grid } from "@material-ui/core";
-import { Fragments } from "../../api/fragments";
->>>>>>> Renamed component files:Frontend/src/components/ProjectsList/ProjectsList.tsx
 import { ProjectStatusFilter, IProject } from "../../api/types";
 
-import Card from "../Card/Card";
 import Loader from "../Loader/Loader";
 
 interface IProjectListProps {

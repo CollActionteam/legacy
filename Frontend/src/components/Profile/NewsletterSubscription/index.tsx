@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Card, CardContent, CardActions, Button } from "@material-ui/core";
 import { IUser } from "../../../api/types";
 import { useMutation, gql } from "@apollo/client";
-import { Alert } from "../../Alert";
+import { Alert } from "../../Alert/Alert";
 
 interface INewsletterSubscriptionProps {
     user: IUser;

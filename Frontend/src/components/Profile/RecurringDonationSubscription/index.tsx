@@ -4,7 +4,7 @@ import { ListItemAvatar, Avatar, ListItemText, ListItemSecondaryAction, IconButt
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMutation } from "@apollo/client/react/hooks/useMutation";
 import { gql } from "@apollo/client";
-import { Alert } from "../../Alert";
+import { Alert } from "../../Alert/Alert";
 import { GET_USER } from "../../../providers/user";
 
 interface IRecurringDonationItemProps {
