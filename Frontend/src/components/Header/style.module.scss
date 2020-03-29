@@ -6,6 +6,13 @@
 .header {
     width: 100%;
     background-color: var(--c-white);
+
+    @include breakpoint-down(md) {
+        position: fixed;
+        width: 100vw;
+        height: var(--header-height);
+        z-index: 1;
+    }
 }
 
 .wrapper {
