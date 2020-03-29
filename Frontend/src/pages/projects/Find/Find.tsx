@@ -6,9 +6,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ProjectStatusFilter } from '../../../api/types';
 
 import { Banner } from '../../../components/Banner/Banner';
-import Loader from '../../../components/Loader';
-import { Section } from '../../../components/Section';
-import ProjectsList from '../../../components/ProjectsList';
+import Loader from '../../../components/Loader/Loader';
+import { Section } from '../../../components/Section/Section';
+import ProjectsList from '../../../components/ProjectsList/ProjectsList';
 
 import styles from "./Find.module.scss";
 import Utils from '../../../utils';

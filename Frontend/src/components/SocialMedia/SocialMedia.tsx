@@ -1,6 +1,7 @@
 import React from "react";
-import styles from "./style.module.scss";
 import { IconButton } from "../Button/Button";
+
+import styles from "./SocialMedia.module.scss";
 
 export default ({ socialMedia } : any) => {
   return (

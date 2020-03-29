@@ -1,12 +1,12 @@
 import React, { Fragment } from "react";
-import { useQuery } from "@apollo/client";
-import { gql } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 import { Fragments } from "../../api/fragments";
-
 import { Grid } from "@material-ui/core";
+
 import ProjectCard from "../ProjectCard";
 import { ProjectStatusFilter, IProject } from "../../api/types";
-import Loader from "../Loader";
+
+import Loader from "../Loader/Loader";
 
 interface IProjectListProps {
   category?: string;

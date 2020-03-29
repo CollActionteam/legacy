@@ -6,8 +6,8 @@ import "normalize.css";
 import "./style.scss";
 
 // Layout components
-import Header from "../Header";
-import Footer from "../Footer";
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
 
 // Material-UI
 import Grid from "@material-ui/core/Grid";

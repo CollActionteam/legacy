@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Button, Checkbox, Card, TextField, FormControlLabel, makeStyles, FormGroup, FormControl } from "@material-ui/core";
 import { gql, useQuery, useMutation } from "@apollo/client";
-import Loader from "../../Loader";
 import { useHistory } from "react-router-dom";
-import { Alert } from "../../Alert";
 import { Form, useFormik, FormikProvider } from "formik";
 import * as Yup from "yup";
+
+import Loader from "../../Loader/Loader";
+import { Alert } from "../../Alert/Alert";
 
 interface IEditUserProps {
     userId: string;

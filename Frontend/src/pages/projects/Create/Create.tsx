@@ -1,23 +1,23 @@
 import React from 'react';
-import { useQuery, useMutation } from '@apollo/client';
-import { gql, ExecutionResult } from '@apollo/client';
+import Helmet from 'react-helmet';
 
+import { useQuery, useMutation, gql, ExecutionResult } from '@apollo/client';
+import { useHistory } from 'react-router-dom';
 import { Formik, Field, Form, FormikProps } from 'formik';
 import * as Yup from 'yup';
+
 import { TextField, Select } from 'formik-material-ui';
 import { FormControl, InputLabel, MenuItem, Grid } from '@material-ui/core';
+import Utils from '../../../utils';
 
-import { Section } from '../../../components/Section';
-import { RichTextEditorFormControl } from '../../../components/RichTextEditorFormContol';
+import { Section } from '../../../components/Section/Section';
+import { RichTextEditorFormControl } from '../../../components/RichTextEditorFormContol/RichTextEditorFormControl';
 import { Button } from '../../../components/Button/Button';
 import UploadBanner from '../UploadBanner/UploadBanner';
 import UploadDescriptiveImage from '../UploadDescriptiveImage/UploadDescriptiveImage';
-import Loader from '../../../components/Loader';
+import Loader from '../../../components/Loader/Loader';
 
 import styles from './Create.module.scss';
-import Utils from '../../../utils';
-import { useHistory } from 'react-router-dom';
-import Helmet from 'react-helmet';
 
 const GET_CATEGORIES = gql`
   query {

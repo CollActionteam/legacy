@@ -1,14 +1,15 @@
 import React, { useState, useCallback } from "react";
+import { useHistory } from "react-router-dom";
 import { Button, Card, TextField, makeStyles, FormGroup, FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
 import { gql, useQuery, useMutation } from "@apollo/client";
-import Loader from "../../Loader";
-import { useHistory } from "react-router-dom";
-import { Alert } from "../../Alert";
 import { Form, useFormik, FormikProvider } from "formik";
+import { useDropzone } from "react-dropzone";
 import * as Yup from "yup";
 import { Fragments } from "../../../api/fragments";
-import { useDropzone } from "react-dropzone";
 import Utils from "../../../utils";
+
+import Loader from "../../Loader/Loader";
+import { Alert } from "../../Alert/Alert";
 
 interface IEditProjectProps {
     projectId: string;

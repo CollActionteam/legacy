@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./style.module.scss";
+import styles from "./CategoryTags.module.scss";
 import { IProjectCategory } from "../../api/types";
 import Utils from "../../utils";
 

@@ -13,14 +13,17 @@
             "text" : ""
         },
         "stats" : {
-            "title" : "Our collective impact"
+            "title" : "Our collective impact",
+            "numberActionsTaken" : "Actions taken",
+            "numberProjects" : "Crowdactions started",
+            "numberUsers" : "CollActivists"
         },
         "projects" : {
             "title" : "Join a crowaction",
             "button" : "Find more projects"
         },
         "share" : {
-            "title" : "Spread it further"
+            "title" : "Share now"
         }
     },
     "about": {

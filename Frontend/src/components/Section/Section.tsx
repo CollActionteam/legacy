@@ -1,6 +1,7 @@
 import React from "react";
-import styles from "./style.module.scss";
 import { Container } from "@material-ui/core";
+
+import styles from "./Section.module.scss";
 
 interface ISectionProps {
   children: any;
