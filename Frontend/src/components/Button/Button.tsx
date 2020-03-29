@@ -7,7 +7,7 @@ export const Button = ({ children, variant = "primary", ...props }: any) => {
   // External link
   if (props.url) {
     return (
-      <a className={styles[variant]} href={props.url}>
+      <a className={styles[variant]} href={props.url} target="_blank">
         {children}
       </a>
     );

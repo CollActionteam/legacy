@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, GhostButton } from "../../components/Button/Button";
-import { Facebook, Twitter, LinkedIn, Email } from "../../components/Share/Share";
+import Share from "../../components/Share/Share";
 import { Section } from "../../components/Section/Section";
 import Carousel from "../../components/Carousel/Carousel";
 import ProjectsList from "../../components/ProjectsList/ProjectsList";
@@ -22,28 +22,12 @@ const HomePage = () => {
       </Section>
       <Section center color="grey" title={t('home.stats.title')}>
         <Stats />
+        <Share />
       </Section>
       <Section center title={t('home.projects.title')}>
         <ProjectsList />
-        <Button to="/projects/find">{t('home.projects.button')}</Button>
-      </Section>
-      <Section center color="grey">
-      <div>
-          <h2>{t('home.share.title')}</h2>
-          <ul>
-            <li>
-              <Facebook url="https://www.collaction.org" />
-            </li>
-            <li>
-              <Twitter url="https://www.collaction.org" />
-            </li>
-            <li>
-              <LinkedIn url="https://www.collaction.org" />
-            </li>
-            <li>
-              <Email subject="CollAction" />
-            </li>
-          </ul>
+        <div style={{marginTop: 20 }}>
+          <Button to="/projects/find">{t('home.projects.button')}</Button>
         </div>
       </Section>
     </React.Fragment>
