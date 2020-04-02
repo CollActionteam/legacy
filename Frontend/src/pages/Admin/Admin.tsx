@@ -16,19 +16,19 @@ type TParams = {
 const AdminPageInner = ({ match } : RouteComponentProps<TParams>): any => {
   if (match.params.action === "list") {
     if (match.params.type === "projects") {
-      return <AdminListProjects />
+      return <AdminListProjects />;
     } else if (match.params.type === "users") {
-      return <AdminListUsers />
+      return <AdminListUsers />;
     }
   } else if (match.params.action === "edit" && match.params.id !== undefined) {
     if (match.params.type === "projects") {
-      return <AdminEditProject projectId={match.params.id} />
+      return <AdminEditProject projectId={match.params.id} />;
     } else if (match.params.type === "users") {
-      return <AdminEditUser userId={match.params.id} />
+      return <AdminEditUser userId={match.params.id} />;
     }
   }
 
-  return <Redirect to="/404" />
+  return <Redirect to="/404" />;
 };
 
 const AdminPage = (props : RouteComponentProps<TParams>): any => 

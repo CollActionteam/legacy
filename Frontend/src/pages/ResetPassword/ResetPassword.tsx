@@ -4,9 +4,10 @@ import { Alert } from "../../components/Alert/Alert";
 import { Grid, FormGroup, TextField, Button } from "@material-ui/core";
 import { gql, useMutation } from "@apollo/client";
 import styles from "./ResetPassword.module.scss";
+import { useLocation } from "react-router-dom";
 
 const ResetPasswordPage = () => {
-    const searchParams = new URLSearchParams(window.location.search);
+    const searchParams = new URLSearchParams(useLocation().search);
     const resetCode = searchParams.get("code");
     const email = searchParams.get("email");
     const [ password, setPassword ] = useState("");

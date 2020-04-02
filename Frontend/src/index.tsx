@@ -28,6 +28,8 @@ import ForgotPasswordPage from './pages/ForgotPassword/ForgotPassword';
 import RegisterUserPage from './pages/RegisterUser/RegisterUser';
 import ResetPasswordPage from './pages/ResetPassword/ResetPassword';
 import PrivacyPolicyPage from './pages/PrivacyPolicy/PrivacyPolicy';
+import DonationThankYouPage from './pages/Donation/DonationThankYou';
+import DonationReturnPage from './pages/Donation/DonationReturn';
 
 const routing = (
     <I18nextProvider i18n={i18n}>
@@ -44,6 +46,8 @@ const routing = (
                             <Route exact path="/about" component={AboutPage} />
                             <Route exact path="/profile" component={ProfilePage} />
                             <Route exact path="/donate" component={DonationPage} />
+                            <Route exact path="/donate/return" component={DonationReturnPage} />
+                            <Route exact path="/donate/thankyou" component={DonationThankYouPage} />
                             <Route exact path="/privacy-policy" component={PrivacyPolicyPage} />
                             <Route exact path="/projects/find" component={FindPage} />
                             <Route exact path="/projects/start" component={StartProjectPage} />
