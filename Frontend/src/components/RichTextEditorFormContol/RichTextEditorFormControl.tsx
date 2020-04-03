@@ -67,7 +67,7 @@ export class RichTextEditorFormControl extends React.Component<
   render() {
     return (
       <MuiThemeProvider theme={this.defaultTheme}>
-        <FormControl id={this.props.name} fullWidth={this.props.fullWidth} className={this.props.className}>
+        <FormControl id={this.props.name} fullWidth={this.props.fullWidth} className={`${styles.container} ${this.props.className}`}>
           <InputLabel
             error={this.hasError()}
             htmlFor={this.props.name}
