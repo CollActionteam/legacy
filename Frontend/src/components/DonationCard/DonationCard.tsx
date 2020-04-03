@@ -133,7 +133,7 @@ const InnerDonationCard = ({user}: IInnerDonationCardProps) => {
                         }
                     });
                     if (response.error) {
-                        console.error(`Unable to start the SEPA direct transaction: ${response.error}`);
+                        console.error(`Unable to start the SEPA direct transaction: ${response.error.message}`);
                         setError("We're unable to start your SEPA direct donation, something is wrong, please contact collactionteam@gmail.com with your issue");
                         return;
                     }
@@ -170,7 +170,7 @@ const InnerDonationCard = ({user}: IInnerDonationCardProps) => {
                         }
                     });
                     if (response.error) {
-                        console.error(`Unable to start the iDeal transaction: ${response.error}`);
+                        console.error(`Unable to start the iDeal transaction: ${response.error.message}`);
                         setError("We're unable to start your iDeal donation, something is wrong, please contact collactionteam@gmail.com with your issue");
                         return;
                     }
