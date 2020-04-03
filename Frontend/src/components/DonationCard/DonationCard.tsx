@@ -10,18 +10,28 @@ import bankCard from "../../assets/bank-card.png";
 import iDealLogo from "../../assets/i-deal-logo.png";
 import { useMutation, gql, useQuery } from "@apollo/client";
 import Loader from "../Loader/Loader";
-import {loadStripe } from '@stripe/stripe-js';
+import {loadStripe, StripeElement } from '@stripe/stripe-js';
 import {
   Elements,
   useStripe,
   IdealBankElement,
   IbanElement,
+  useElements,
 } from '@stripe/react-stripe-js';
 import { Button } from "../Button/Button";
+import { useHistory } from "react-router-dom";
 
 interface IInnerDonationCardProps {
     user: IUser | null;
 }
+
+type DonationValues = {
+    email: string;
+    name: string;
+    type: string;
+    amount: number;
+    recurring: boolean;
+};
 
 const STRIPE_PUBLIC_KEY = gql`
     query {
@@ -50,7 +60,7 @@ const INITIALIZE_IDEAL_CHECKOUT = gql`
 const INITIALIZE_SEPA_DIRECT = gql`
     mutation InitializeSEPADirect($checkout: SepaDirectCheckoutInputGraph!) {
         donation {
-            sourceId: initializeIdealCheckout(checkout: $checkout)
+            sourceId: initializeIDealCheckout(checkout: $checkout)
         }
     }
 `;
@@ -68,6 +78,8 @@ const InnerDonationCard = ({user}: IInnerDonationCardProps) => {
     const [ bankingPopupOpen, setBankingPopupOpen ] = useState(false);
     const stripe = useStripe();
     const dialogClasses = useDialogStyles();
+    const elements = useElements();
+    const history = useHistory();
     const amounts = [ 3, 5, 10, 20, 30, 50, 100 ];
 
     const [ initializeCreditCardCheckout ] = useMutation(
@@ -81,6 +93,107 @@ const InnerDonationCard = ({user}: IInnerDonationCardProps) => {
     const [ initializeSepaDirect ] = useMutation(
         INITIALIZE_SEPA_DIRECT
     );
+
+    const payCreditcard = async (values: DonationValues) => {
+        const creditCardResult = await initializeCreditCardCheckout({
+            variables: {
+                checkout: {
+                    amount: values.amount,
+                    currency: 'eur',
+                    name: values.name,
+                    email: values.email,
+                    recurring: values.recurring,
+                    successUrl: window.location.origin + '/donate/thankyou',
+                    cancelUrl: window.location.origin + '/donate'
+                }
+            },
+        });
+        if (creditCardResult.errors) {
+            setError(creditCardResult.errors.map(e => e.message).join(", "));
+            return;
+        }
+        await stripe!.redirectToCheckout({ sessionId: creditCardResult.data.donation.sourceId });
+    };
+
+    const payIban = async (values: DonationValues) => {
+        const ibanElement = elements?.getElement(IbanElement);
+        if (!ibanElement) {
+            console.error(`Unable to start the SEPA direct transaction: IBAN element not found`);
+            setError("We're unable to start your SEPA direct donation, something is wrong, please contact collactionteam@gmail.com with your issue");
+            return;
+        }
+        let response = await stripe!.createSource(ibanElement, {
+            type: "sepa_debit",
+            currency: "eur",
+            owner: {
+                name: values.name,
+                email: values.email
+            },
+            mandate: {
+                notification_method: 'email' // Automatically send a mandate notification email to your customer once the source is charged
+            }
+        });
+        if (response.error) {
+            console.error(`Unable to start the SEPA direct transaction: ${response.error.message}`);
+            setError("We're unable to start your SEPA direct donation, something is wrong, please contact collactionteam@gmail.com with your issue");
+            return;
+        }
+
+        const sourceId = response!.source!.id;
+        const initializeResult = await initializeSepaDirect({
+            variables: {
+                checkout: {
+                    sourceId: sourceId,
+                    name: values.name,
+                    email: values.email
+                }
+            }
+        });
+        if (initializeResult.errors) {
+            console.error(`Unable to start the SEPA direct transaction: ${initializeResult.errors.map(e => e.message).join(", ")}`);
+            setError("We're unable to start your SEPA direct donation, something is wrong, please contact collactionteam@gmail.com with your issue");
+            return;
+        }
+        history.push('/donate/thankyou');
+    };
+
+    const payIDeal = async (values: DonationValues) => {
+        const response = await stripe!.createSource({
+            type: "ideal",
+            amount: values.amount * 100,
+            currency: "eur",
+            statement_descriptor: "Donation CollAction",
+            owner: {
+                name: values.name,
+                email: values.email
+            },
+            redirect: {
+                return_url: window.location.origin + "/donate/return"
+            }
+        });
+        if (response.error) {
+            console.error(`Unable to start the iDeal transaction: ${response.error.message}`);
+            setError("We're unable to start your iDeal donation, something is wrong, please contact collactionteam@gmail.com with your issue");
+            return;
+        }
+        const sourceId = response!.source!.id;
+        const redirectUrl = response!.source!.redirect!.url;
+        const initializeResult = await initializeIdealCheckout({
+            variables: {
+                checkout: {
+                    sourceId: sourceId,
+                    name: values.name,
+                    email: values.email
+                }
+            }
+        });
+        if (initializeResult.errors) {
+            console.error(`Unable to start the iDeal transaction: ${initializeResult.errors.map(e => e.message).join(", ")}`);
+            setError("We're unable to start your iDeal donation, something is wrong, please contact collactionteam@gmail.com with your issue");
+            return;
+        }
+        window.location.href = redirectUrl;
+    };
 
     const formik = useFormik({
         initialValues: {
@@ -101,96 +214,12 @@ const InnerDonationCard = ({user}: IInnerDonationCardProps) => {
             if (values.type === "popup") {
                 setBankingPopupOpen(true);
             } else if (values.type === "credit") {
-                const creditCardResult = await initializeCreditCardCheckout({
-                    variables: {
-                        checkout: {
-                            amount: values.amount,
-                            currency: 'eur',
-                            name: values.name,
-                            email: values.email,
-                            recurring: values.recurring,
-                            successUrl: window.location.origin + '/donate/thankyou',
-                            cancelUrl: window.location.origin + '/donate'
-                        }
-                    },
-                });
-                if (creditCardResult.errors) {
-                    setError(creditCardResult.errors.map(e => e.message).join(", "));
-                    return;
-                }
-                await stripe!.redirectToCheckout({ sessionId: creditCardResult.data.donation.sourceId });
+                await payCreditcard(values);
             } else if (values.type === "debit") {
                 if (values.recurring) {
-                    let response = await stripe!.createSource({
-                        type: "sepa_debit",
-                        currency: "eur",
-                        owner: {
-                            name: values.name,
-                            email: values.email
-                        },
-                        mandate: {
-                            notification_method: 'email' // Automatically send a mandate notification email to your customer once the source is charged
-                        }
-                    });
-                    if (response.error) {
-                        console.error(`Unable to start the SEPA direct transaction: ${response.error.message}`);
-                        setError("We're unable to start your SEPA direct donation, something is wrong, please contact collactionteam@gmail.com with your issue");
-                        return;
-                    }
-
-                    const sourceId = response!.source!.id;
-                    const redirectUrl = response!.source!.redirect!.url;
-                    const initializeResult = await initializeSepaDirect({
-                        variables: {
-                            checkout: {
-                                sourceId: sourceId,
-                                name: values.name,
-                                email: values.email
-                            }
-                        }
-                    });
-                    if (initializeResult.errors) {
-                        console.error(`Unable to start the SEPA direct transaction: ${initializeResult.errors.map(e => e.message).join(", ")}`);
-                        setError("We're unable to start your SEPA direct donation, something is wrong, please contact collactionteam@gmail.com with your issue");
-                        return;
-                    }
-                    window.location.href = redirectUrl;
+                    await payIban(values);
                 } else {
-                    const response = await stripe!.createSource({
-                        type: "ideal",
-                        amount: values.amount * 100,
-                        currency: "eur",
-                        statement_descriptor: "Donation CollAction",
-                        owner: {
-                            name: values.name,
-                            email: values.email
-                        },
-                        redirect: {
-                            return_url: window.location.origin + "/donate/return"
-                        }
-                    });
-                    if (response.error) {
-                        console.error(`Unable to start the iDeal transaction: ${response.error.message}`);
-                        setError("We're unable to start your iDeal donation, something is wrong, please contact collactionteam@gmail.com with your issue");
-                        return;
-                    }
-                    const sourceId = response!.source!.id;
-                    const redirectUrl = response!.source!.redirect!.url;
-                    const initializeResult = await initializeIdealCheckout({
-                        variables: {
-                            checkout: {
-                                sourceId: sourceId,
-                                name: values.name,
-                                email: values.email
-                            }
-                        }
-                    });
-                    if (initializeResult.errors) {
-                        console.error(`Unable to start the iDeal transaction: ${initializeResult.errors.map(e => e.message).join(", ")}`);
-                        setError("We're unable to start your iDeal donation, something is wrong, please contact collactionteam@gmail.com with your issue");
-                        return;
-                    }
-                    window.location.href = redirectUrl;
+                    await payIDeal(values);
                 }
             }
         }
