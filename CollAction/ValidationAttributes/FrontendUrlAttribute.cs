@@ -10,12 +10,19 @@ namespace CollAction.ValidationAttributes
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            Uri canonicalAddress = new Uri(validationContext.GetRequiredService<IOptions<SiteOptions>>().Value.CanonicalAddress);
-            if (!(value is string givenAddress))
+            try
             {
-                return new ValidationResult("Given URL is not a string");
+                Uri canonicalAddress = new Uri(validationContext.GetRequiredService<IOptions<SiteOptions>>().Value.CanonicalAddress);
+                if (!(value is string givenAddress))
+                {
+                    return new ValidationResult("Given URL is not a string");
+                }
+                return canonicalAddress.Host.Equals(new Uri(givenAddress).Host, StringComparison.OrdinalIgnoreCase) ? ValidationResult.Success : new ValidationResult("URL doesn't have a valid host");
             }
-            return canonicalAddress.Host == new Uri(givenAddress).Host ? ValidationResult.Success : new ValidationResult("URL doesn't have a valid host");
+            catch (UriFormatException e)
+            {
+                return new ValidationResult($"{e.Message}: '{value}'");
+            }
         }
     }
 }
