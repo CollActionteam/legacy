@@ -15,6 +15,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 import styles from "./Carousel.module.scss";
+import { Alert } from "../Alert/Alert";
 
 interface ICarouselProps {
   title?: string;
@@ -43,8 +44,8 @@ export default ({ title, text }: ICarouselProps) => {
   const { data, loading, error } = query;
 
   if (error) {
-    console.error(error);
-    return null;
+    console.error(error.message);
+    return <Alert type="error" text={error.message} />;
   }
 
   return (

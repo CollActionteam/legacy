@@ -331,19 +331,20 @@ const InnerDonationCard = ({user}: IInnerDonationCardProps) => {
 }
 
 export default () => {
-    const { data, loading } = useQuery(
+    const { data, loading, error } = useQuery(
         STRIPE_PUBLIC_KEY
     );
 
     if (loading) {
         return <Loader />;
+    } else if (error) {
+        return <Alert type="error" text={error.message} />;
+    } else {
+        const stripePromise = loadStripe(data.donation.stripePublicKey);
+        return <Elements stripe={stripePromise}>
+            <UserContext.Consumer>
+                {({user}) => <InnerDonationCard user={user} />}
+            </UserContext.Consumer>
+        </Elements>;
     }
-
-    const stripePromise = loadStripe(data.donation.stripePublicKey);
-
-    return <Elements stripe={stripePromise}>
-        <UserContext.Consumer>
-            {({user}) => <InnerDonationCard user={user} />}
-        </UserContext.Consumer>
-    </Elements>;
 };
