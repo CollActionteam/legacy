@@ -83,7 +83,7 @@ export default ({ title, text }: ICarouselProps) => {
 
 const GET_CAROUSEL_PROJECTS = gql`
   query GetCarouselProjects {
-    projects(take: 6) {
+    projects(take: 6, status: ACTIVE) {
       ${Fragments.projectDetail}
     }
   }

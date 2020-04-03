@@ -4,6 +4,7 @@
     {
         Open,
         Closed,
-        ComingSoon
+        ComingSoon,
+        Active
     }
 }

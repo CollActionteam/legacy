@@ -474,7 +474,6 @@ namespace CollAction.Services.Projects
         {
             IQueryable<Project> projects = context
                 .Projects
-                .Where(p => p.Status != ProjectStatus.Deleted)
                 .Include(p => p.ParticipantCounts)
                 .OrderBy(p => p.DisplayPriority)
                 .AsQueryable();
@@ -484,7 +483,8 @@ namespace CollAction.Services.Projects
                 SearchProjectStatus.Closed => projects.Where(p => p.End < DateTime.UtcNow && p.Status == ProjectStatus.Running),
                 SearchProjectStatus.ComingSoon => projects.Where(p => p.Start > DateTime.UtcNow && p.Status == ProjectStatus.Running),
                 SearchProjectStatus.Open => projects.Where(p => p.Start <= DateTime.UtcNow && p.End >= DateTime.UtcNow && p.Status == ProjectStatus.Running),
-                _ => projects
+                SearchProjectStatus.Active => projects.Where(p => p.Status == ProjectStatus.Running),
+                _ => projects.Where(p => p.Status != ProjectStatus.Deleted)
             };
 
             if (category != null)
