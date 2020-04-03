@@ -19,6 +19,8 @@ export interface IRichTextEditorProps {
   height?: string;
 
   formik: FormikProps<any>;
+  className?: string;
+  fullWidth?: boolean;
 }
 
 export class RichTextEditorFormControl extends React.Component<
@@ -65,14 +67,15 @@ export class RichTextEditorFormControl extends React.Component<
   render() {
     return (
       <MuiThemeProvider theme={this.defaultTheme}>
-        <InputLabel
-          error={this.hasError()}
-          htmlFor={this.props.name}
-          className={styles.label}
-        >
-          {this.props.label}
-        </InputLabel>
-        <FormControl id={this.props.name}>
+        <FormControl id={this.props.name} fullWidth={this.props.fullWidth} className={`${styles.container} ${this.props.className}`}>
+          <InputLabel
+            error={this.hasError()}
+            htmlFor={this.props.name}
+            className={styles.label}
+            shrink
+          >
+            {this.props.label}
+          </InputLabel>
           <MUIRichTextEditor
             error={this.hasError()}
             label={this.props.hint}

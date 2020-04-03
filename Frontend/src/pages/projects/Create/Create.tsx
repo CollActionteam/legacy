@@ -1,56 +1,19 @@
+import { Container, Grid, InputLabel, FormHelperText } from '@material-ui/core';
+import { Field, Form, Formik, FormikProps } from 'formik';
+import { TextField } from 'formik-material-ui';
 import React from 'react';
 import Helmet from 'react-helmet';
-
-import { useQuery, useMutation, gql, ExecutionResult } from '@apollo/client';
-import { useHistory } from 'react-router-dom';
-import { Formik, Field, Form, FormikProps } from 'formik';
-import * as Yup from 'yup';
-
-import { TextField, Select } from 'formik-material-ui';
-import { FormControl, InputLabel, MenuItem, Grid } from '@material-ui/core';
-import Utils from '../../../utils';
-
-import { Section } from '../../../components/Section/Section';
-import { RichTextEditorFormControl } from '../../../components/RichTextEditorFormContol/RichTextEditorFormControl';
 import { Button } from '../../../components/Button/Button';
-import UploadBanner from '../UploadBanner/UploadBanner';
-import UploadDescriptiveImage from '../UploadDescriptiveImage/UploadDescriptiveImage';
-import Loader from '../../../components/Loader/Loader';
-
+import { RichTextEditorFormControl } from '../../../components/RichTextEditorFormContol/RichTextEditorFormControl';
+import { Section } from '../../../components/Section/Section';
+import Categories from './Categories';
 import styles from './Create.module.scss';
-
-const GET_CATEGORIES = gql`
-  query {
-    __type(name: "Category") {
-      enumValues {
-        name
-        description
-      }
-    }
-  }
-`;
+import { initialValues, validations, IProjectForm } from './form';
+import UploadImage from './UploadImage';
+import useSubmitProject from './submitproject';
 
 const CreateProjectPage = () => {
-  const history = useHistory();
-  const minStartDate = new Date();
-  const maxStartDate = new Date(minStartDate);
-  maxStartDate.setMonth(new Date().getMonth() + 12);
-
-  const setEndDateValidation = (startDate: any, schema: any) => {
-    if (!startDate) {
-      return;
-    }
-
-    const minDate = new Date(startDate) as Date;
-    minDate.setDate(minDate.getDate() + 1);
-    const maxDate = new Date(startDate);
-    maxDate.setMonth(maxDate.getMonth() + 12);
-
-    return schema
-      .min(minDate, 'Please ensure your sign up ends after it starts :-)')
-      .max(maxDate, 'The deadline must be within a year of the start date');
-  };
-
+  
   const validate = async (props: FormikProps<any>) => {
     const errors = Object.keys(await props.validateForm());
 
@@ -62,349 +25,212 @@ const CreateProjectPage = () => {
     }
   };
 
-  const { data: categoryResponse, loading } = useQuery(GET_CATEGORIES);
-
-  const [createProject] = useMutation(gql`
-    mutation Create($project: NewProjectInputGraph) {
-      project {
-        createProject(project: $project) {
-          succeeded
-          errors {
-            errorMessage
-            memberNames
-          }
-        }
-      }
-    }
-  `);
-
-  const commit = async (form: any, setStatus: any) => {
-    setStatus(null);
-    let bannerId;
-    if (form.banner) {
-      bannerId = await Utils.uploadImage(form.banner, form.projectName);
-    }
-
-    let imageId;
-    if (form.image) {
-      imageId = await Utils.uploadImage(form.image, form.imageDescription);
-    }
-
-    try {
-      const response = (await createProject({
-        variables: {
-          project: {
-            name: form.projectName,
-            bannerImageFileId: bannerId || null,
-            categories: [form.category],
-            target: form.target,
-            proposal: form.proposal,
-            description: form.description,
-            start: form.startDate,
-            end: form.endDate,
-            goal: form.goal,
-            tags: form.tags ? form.tags.split(';') : [],
-            creatorComments: form.comments || null,
-            descriptiveImageFileId: imageId || null,
-            descriptionVideoLink: form.youtube || null
-          }
-        }
-      })) as ExecutionResult;
-
-      if (!response || !response.data) {
-        throw new Error('No response from graphql endpoint');
-      }
-
-      if (!response.data.project.createProject.succeeded) {
-        setStatus(response.data.project.createProject.errors);
-        return;
-      }
-
-        history.push("projects/thank-you-create");
-    } catch (error) {
-      // TODO: handle errors
-      console.error('Could not create project', error);
-    }
-  };
-
-  const renderFormStatusErrors = (status: any) => {
-    if (!status) {
-      return;
-    }
-
-    return (
-      <ul>
-        {status
-          .filter((error: any) => error !== undefined)
-          .map((error: any, idx: any) => (
-            <li key={idx}>{error.errorMessage}</li>
-          ))}
-      </ul>
-    );
-  };
-
+  const useHandleSubmit = async (form: IProjectForm) => {
+    debugger;
+    const result = await useSubmitProject(form);
+    console.log(result);
+  }
+ 
   return (
-    <div className="CreateProjectPage">
+    <React.Fragment>
       <Helmet>
         <title>Create a project</title>
         <meta name="description" content="Create a project" />
       </Helmet>
-      {loading ? (
-        <Loader />
-      ) : (
-        <Formik
-          initialValues={{
-            banner: null,
-            projectName: '',
-            category: 1,
-            target: 0,
-            proposal: '',
-            description: '',
-            startDate: '',
-            endDate: '',
-            hashtags: '',
-            goal: '',
-            comments: '',
-            image: null,
-            imageDescription: '',
-            youtube: ''
-          }}
-          validateOnChange={false}
-          validateOnBlur={true}
-          validateOnMount={false}
-          validationSchema={Yup.object({
-            // tslint:disable: prettier
-            projectName: Yup.string()
-              .required('You must provide a name for your project')
-              .max(50, 'Keep the name short, no more then 50 characters'),
-            target: Yup.number()
-              .required('Please choose the target number of participants')
-              .moreThan(
-                0,
-                'You can choose up to a maximum of one million participants as your target number'
-              )
-              .lessThan(
-                1000001,
-                'You can choose up to a maximum of one million participants as your target number'
-              ),
-            proposal: Yup.string()
-              .required('Describe your proposal')
-              .max(
-                300,
-                'Best keep your proposal short, no more then 300 characters'
-              ),
-            description: Yup.string()
-              .required(
-                'Give a succinct description of the issues your project is designed to address'
-              )
-              .max(10000, 'Please use no more then 10.000 characters'),
-            startDate: Yup.date()
-              .required('Please enter the date on which the campaign opens')
-              .min(
-                minStartDate,
-                'Please ensure your sign up starts somewhere in the near future'
-              )
-              .max(
-                maxStartDate,
-                'Please ensure your sign up starts within the next 12 months'
-              ),
-            endDate: Yup.date()
-              .required(
-                'Please enter the date until which people can sign up for the campaign'
-              )
-              .when('startDate', setEndDateValidation),
-            hashtags: Yup.string()
-              .max(
-                30,
-                'Please keep the number of hashtags civil, no more then 30 characters'
-              )
-              .matches(
-                /^[a-zA-Z_0-9]+(;[a-zA-Z_0-9]+)*$/,
-                "Don't use spaces or #, must contain a letter, can contain digits and underscores. Seperate multiple tags with a colon ';'"
-              ),
-            goal: Yup.string()
-              .required(
-                'Describe what you hope to have achieved upon successful completion of your project'
-              )
-              .max(10000, 'Please use no more then 10.000 characters'),
-            comments: Yup.string().max(
-              20000,
-              'Please use no more then 20.000 characters'
-            ),
-            imageDescription: Yup.string().max(
-              2000,
-              'Keep it short, no more then 2000 characters'
-            ),
-            youtube: Yup.string().matches(
-              /^(https):\/\/www.youtube.com\/embed\/((?:\w|-){11}?)$/,
-              'Only YouTube links of the form https://www.youtube.com/embed/... are accepted.'
-            )
-            // tslint:enable: prettier
-          })}
-          onSubmit={async (values, { setStatus }) => {
-            await commit(values, setStatus);
-          }}
-        >
-          {(props) => (
-            <Form>
-              <UploadBanner formik={props}></UploadBanner>
 
-              <Section className={`${styles.projectInfoBlock} ${styles.form}`}>
-                <FormControl>
-                  <Field
-                    name="projectName"
-                    label="Project name"
-                    component={TextField}
-                  ></Field>
-                </FormControl>
-
-                <FormControl>
-                  <InputLabel htmlFor="category">Category</InputLabel>
-                  <Field name="category" component={Select}>
-                    {categoryResponse
-                      ? categoryResponse.__type.enumValues.map((c: any) => (
-                          <MenuItem key={c.name} value={c.name}>
-                            {Utils.formatCategory(c.name)}
-                          </MenuItem>
-                        ))
-                      : null}
-                  </Field>
-                </FormControl>
-
-                <FormControl>
-                  <Field
-                    name="target"
-                    type="number"
-                    label="Target"
-                    component={TextField}
-                  ></Field>
-                </FormControl>
-
-                <FormControl>
-                  <Field
-                    name="proposal"
-                    label="Proposal"
-                    multiline
-                    rows="4"
-                    helperText={`e.g. "If X people commit to Y, we'll all do it together!"`}
-                    component={TextField}
-                  ></Field>
-                </FormControl>
-              </Section>
-
-              <Section>
-                <Grid container>
-                  <Grid item xs={12} md={5}>
-                    <Section className={styles.form}>
-                      <RichTextEditorFormControl
-                        name="description"
-                        label="Short description"
-                        hint="E.g. reduce plastic waste and save our oceans!"
-                        height="calc(var(--spacing) * 12.8)"
-                        formik={props}
-                      ></RichTextEditorFormControl>
-
-                      <FormControl>
-                        <Field
-                          name="startDate"
-                          type="date"
-                          label="Sign up opens"
-                          InputLabelProps={{
-                            shrink: true
-                          }}
-                          component={TextField}
-                        ></Field>
-                      </FormControl>
-
-                      <FormControl>
-                        <Field
-                          name="endDate"
-                          type="date"
-                          label="Sign up closes"
-                          InputLabelProps={{
-                            shrink: true
-                          }}
-                          component={TextField}
-                        ></Field>
-                      </FormControl>
-
-                      <FormControl>
-                        <Field
-                          name="hashtags"
-                          label="Hashtags"
-                          helperText="No #, seperate tags with ; e.g. tag1;tag2"
-                          component={TextField}
-                        ></Field>
-                      </FormControl>
-                    </Section>
-                  </Grid>
-
-                  <Grid item xs={12} md={7}>
-                    <Section className={styles.form}>
-                      <RichTextEditorFormControl
-                        name="goal"
-                        label="Goal/impact"
-                        hint="What is the problem you are trying to solve?"
-                        height="24rem"
-                        formik={props}
-                      ></RichTextEditorFormControl>
-
-                      <RichTextEditorFormControl
-                        name="comments"
-                        label="Other comments"
-                        hint="E.g. background, process, FAQs, about the initiator"
-                        formik={props}
-                      ></RichTextEditorFormControl>
-                    </Section>
-                  </Grid>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validations}
+        validateOnChange={false}
+        validateOnMount={false}
+        validateOnBlur={true}        
+        onSubmit={useHandleSubmit}        
+      >
+        {(props: FormikProps<IProjectForm>) => (
+          <Form>
+            <Section center color="grey" title="Start a new crowdaction" className={styles.title}>
+              <p>Tell people about your crowdaction and why they should be excited!</p>
+            </Section>
+            <Section>
+              <Grid container>
+                <Grid item md={3}></Grid>
+                <Grid item md={6} xs={12} >
+                  <Container>
+                    <Field 
+                        name="projectName" 
+                        label="Title"
+                        helperText="Write a clear, brief title that helps people quicky understand the idea behind the crowdaction"
+                        component={TextField}
+                        className={styles.formRow}
+                        fullWidth
+                    >
+                    </Field>                  
+                    <Field
+                      name="proposal"
+                      label="Objective"
+                      helperText="Describe in a few words what the crowdaction aims to achieve"
+                      multiline
+                      rows="4"
+                      component={TextField}
+                      className={styles.formRow}
+                      fullWidth
+                    />
+                    <Categories props={props}></Categories>
+                  </Container>
                 </Grid>
+              </Grid>
+            </Section>
 
-                <UploadDescriptiveImage formik={props}></UploadDescriptiveImage>
-
-                <Grid container>
-                  <Grid item md={5}></Grid>
-                  <Grid item xs={12} md={7}>
-                    <Section className={styles.form}>
-                      <FormControl>
-                        <Field
-                          name="youtube"
-                          label="YouTube Video Link"
-                          helperText="Descriptive video, e.g. http://www.youtube.com/watch?v=-wtIMTCHWuI"
-                          component={TextField}
-                        ></Field>
-                      </FormControl>
-                    </Section>
-                  </Grid>
+            <Section color="grey">
+              <Grid container spacing={3}>
+                <Grid item md={7} xs={12}>
+                  <Container className={styles.bannerContainer}>
+                    <UploadImage name="banner" formik={props}></UploadImage>
+                  </Container>
                 </Grid>
-
-                <Grid container>
-                  <Grid item md={4}></Grid>
-                  <Grid item xs={12} md={4}>
-                    <Section className={styles.form}>
-                      {props.isSubmitting ? (
-                        <Loader></Loader>
-                      ) : (
-                        <Button
-                          type="submit"
-                          disabled={props.isSubmitting}
-                          onClick={() => validate(props)}
-                        >
-                          Submit
-                        </Button>
-                      )}
-                      <div className={styles.submitErrors}>
-                        {renderFormStatusErrors(props.status)}
-                      </div>
-                    </Section>
-                  </Grid>
+                <Grid item md={5} xs={12}>
+                  <Container>
+                    <Field
+                      name="target"
+                      label="Goal amount"
+                      helperText="Set an archievable number of people to join your crowdaction" 
+                      type="number"
+                      component={TextField}
+                      className={styles.formRow}
+                      fullWidth
+                    >
+                    </Field>
+                    <Field
+                      name="startDate"
+                      label="Launch date"
+                      type="date"
+                      helperText="Set a date from which people will be able to join the crowdaction"
+                      component={TextField}
+                      InputLabelProps={{
+                        shrink: true
+                      }}
+                      className={styles.formRow}
+                      fullWidth
+                    >
+                    </Field>
+                    <Field
+                      name="endDate"
+                      label="Sign-up duration"
+                      type="date"
+                      helperText="Set a specific end date for when the sign-up closes. Sign-up closes on 00:00 GMT on this date"
+                      component={TextField}
+                      InputLabelProps={{
+                        shrink: true
+                      }}
+                      className={styles.formRow}
+                      fullWidth
+                    >
+                    </Field>
+                    <Field
+                      name="tags"
+                      label="Hashtags"
+                      helperText="No #, seperate tags with ; e.g. tag1;tag2"
+                      component={TextField}
+                      className={styles.formRow}
+                      fullWidth
+                    >
+                    </Field>
+                  </Container>
                 </Grid>
-              </Section>
-            </Form>
+              </Grid>
+            </Section>
+
+            <Section>
+              <Grid container>
+                <Grid item md={7} xs={12}>
+                  <Container>
+                    <RichTextEditorFormControl
+                      formik={props}
+                      name="description"
+                      label="Description"
+                      hint="Describe what you're gathering participants for. Your description should be convincing and tell people everything they need to know. Get creative but be specific and be clear!"
+                      className={styles.formRow}
+                      fullWidth
+                    >
+                    </RichTextEditorFormControl>
+                    
+                    <RichTextEditorFormControl
+                      formik={props}
+                      name="goal"
+                      label="Goal"
+                      hint="Describe in more detail what you want to achive with your crowdaction. What is the problem you are trying to solve?"
+                      className={styles.formRow}
+                      fullWidth
+                    >
+                    </RichTextEditorFormControl>
+
+                    <div className={styles.formRow}>
+                      <InputLabel className={styles.label} shrink>
+                        Infograph or image
+                      </InputLabel>
+                      <UploadImage name="image" formik={props}></UploadImage>                      
+                      {!props.values.image &&
+                        <FormHelperText>Add an infograph or another descriptive image to support your description and your goal.</FormHelperText>
+                      }
+                    </div>
+
+
+                    {props.values.image &&
+                      <Field
+                        name="imageDescription"
+                        label="Image description"
+                        helperText="Provide a short description to go with the image"
+                        component={TextField}
+                        className={styles.formRow}
+                        fullWidth
+                      >
+                      </Field>
+                  }
+
+                    <RichTextEditorFormControl
+                      formik={props}
+                      name="comments"
+                      label="Other comments (optional)"
+                      hint="Anything else you want to tell about your crowdaction, e.g. the background, more about the process, why you care about this action, FAQs etc."
+                      className={styles.formRow}
+                      fullWidth
+                    >
+                    </RichTextEditorFormControl>
+                    
+                    <Field
+                      name="youtube"
+                      label="YouTube video link"
+                      helperText="A video to go with your crowdaction. Use the format http://www.youtube.com/embed/-wtIMTCHWuI"
+                      component={TextField}
+                      className={styles.formRow}
+                      fullWidth
+                    >                    
+                    </Field>
+                  </Container>
+                </Grid>
+              </Grid>              
+            </Section>
+
+            <Section>
+              <Grid container>
+                <Grid item xs={12}>
+                  <div className={styles.submit}>
+                    <Button 
+                      type="submit" 
+                      disabled={props.isSubmitting}
+                      onClick={() => validate(props)}
+                    >
+                      Submit crowdaction
+                    </Button>  
+                  </div>
+                </Grid>
+              </Grid>
+            </Section>
+          </Form>
           )}
-        </Formik>
-      )}
-    </div>
-  );
+      </Formik>
+    </React.Fragment>
+  )
 };
 
 export default CreateProjectPage;

@@ -150,3 +150,14 @@ export interface IWhereExpression {
   case: any;
   value: string[];
 }
+
+export interface IProjectResult {
+  succeeded: boolean;
+  project: IProject;
+  errors: ValidationResult[];
+}
+
+export interface ValidationResult {
+  errorMessage: string;
+  memberNames: string[];
+}
