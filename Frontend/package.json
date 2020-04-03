@@ -28,6 +28,8 @@
     "react-router-dom": "^5.1.2",
     "react-router-hash-link": "1.2.2",
     "react-slick": "^0.25.2",
+    "@stripe/react-stripe-js": "^1",
+    "@stripe/stripe-js": "1.3.0",
     "slick-carousel": "^1.8.1",
     "yup": "^0.28.3",
     "draft-js": "0.11.4",

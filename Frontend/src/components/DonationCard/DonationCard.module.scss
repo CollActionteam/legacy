@@ -1,0 +1,74 @@
+.donationForm {
+    width: 100%;
+
+    .paymentSelectionOptions {
+        width: 100%;
+
+        .paymentToggle {
+            position: relative;
+
+            input[type=radio] {
+                opacity: 0;
+                position: absolute;
+                width: 100%;
+            }
+
+            label {
+                color: var(--c-green);
+                display: inline-block;
+                cursor: pointer;
+                padding: 10px 0px;
+                border: solid 1px var(--c-green);
+                width: 100%;
+                text-align: center;
+                margin: 10px 0;
+            }
+
+            input[type=radio]:focus + label {
+                border: 1px solid var(--c-green);
+            }
+
+            input[type=radio]:checked + label {
+                color: white;
+                background: var(--c-green);
+            }
+
+            input[type=text] {
+                border: solid 1px var(--c-green);
+                display: inline-block;
+                width: 100%;
+                height: 46px;
+                margin: 10px 0 10px 0;
+                padding: 0 10px;
+                background-color: white;
+                border-radius: 0;
+
+                &::placeholder {
+                    color: #8a8a8a;
+                }
+            }
+        }
+    }
+    .paymentOptions {
+        .paymentButton {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f2f2f2;
+            border: solid 2px #dbdbdb;
+            color: #4b4b4b;
+            padding: 10px;
+            cursor: pointer;
+            width: 100%;
+            margin: 10px 0 10px 0;
+
+            img {
+                height: 30px;
+            }
+
+            img + div {
+                margin-left: 10px;
+            }
+        }
+    }
+}

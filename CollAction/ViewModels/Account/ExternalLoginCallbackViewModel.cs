@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CollAction.ValidationAttributes;
+using System.ComponentModel.DataAnnotations;
 
 namespace CollAction.ViewModels.Account
 {
@@ -6,9 +7,11 @@ namespace CollAction.ViewModels.Account
     public sealed class ExternalLoginCallbackViewModel
     {
         [Required]
+        [FrontendUrl]
         public string ReturnUrl { get; set; } = null!;
 
         [Required]
+        [FrontendUrl]
         public string ErrorUrl { get; set; } = null!;
 
         public string? RemoteError { get; set; }

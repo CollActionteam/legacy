@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "../../components/Button/Button";
 import { Section } from "../../components/Section/Section";
 import { Alert } from "../../components/Alert/Alert";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import {
   Grid,
@@ -22,7 +22,7 @@ const LoginPage = () => {
   const actionExternalLogin = `${process.env.REACT_APP_BACKEND_URL}/account/externalLogin`;
   const returnUrl = window.location.origin;
   const errorUrl = `${returnUrl}/login`;
-  const searchParams = new URLSearchParams(window.location.search);
+  const searchParams = new URLSearchParams(useLocation().search);
   const errorType = searchParams.get("error");
   const errorMessage = searchParams.get("message");
   if (errorType && errorMessage)
