@@ -32,7 +32,7 @@ const FindPage = () => {
         <title>Find Project</title>
         <meta name="description" content="Find project" />
       </Helmet>
-      <Banner dots={true}>
+      <Banner>
         <Section>
           {loading ? (
             <Loader />
