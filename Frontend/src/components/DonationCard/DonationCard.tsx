@@ -10,7 +10,7 @@ import bankCard from "../../assets/bank-card.png";
 import iDealLogo from "../../assets/i-deal-logo.png";
 import { useMutation, gql, useQuery } from "@apollo/client";
 import Loader from "../Loader/Loader";
-import {loadStripe, StripeElement } from '@stripe/stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import {
   Elements,
   useStripe,

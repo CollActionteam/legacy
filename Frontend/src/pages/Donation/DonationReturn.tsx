@@ -1,5 +1,5 @@
 import { gql, useQuery } from "@apollo/client";
-import { useLocation, useHistory, Redirect } from "react-router-dom";
+import { useLocation, Redirect } from "react-router-dom";
 import React from "react";
 import { Alert } from "../../components/Alert/Alert";
 import Loader from "../../components/Loader/Loader";
