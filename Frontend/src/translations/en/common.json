@@ -6,21 +6,24 @@
         },
         "intro" : {
             "title" : "Together we make waves",
-            "text" : "Do you want to make the world a better place, but do you sometimes feel that your actions are only a drop in the ocean? Well, not anymore, because we are introducing crowdacting: taking action knowing that you are one of many. We revamp the neighbourhood with a hundred people or switch to renewable energy with hundreds or thousands of people at the same time. [Find out more about what crowdacting](/about), take action collectively with one of the existing projects, or [start your own crowdacting  project](/projects/start)."
+            "text" : "Do you want to make the world a better place, but do you sometimes feel that your actions are only a drop in the ocean? Well, not anymore, because we are introducing crowdacting: taking action knowing that you are one of many. We revamp the neighbourhood with a hundred people or switch to renewable energy with hundreds or thousands of people at the same time. <a href=\"/about\">Find out more about what crowdacting</a>, take action collectively with one of the existing projects, or <a href=\"/projects/start\">start your own crowdacting  project</a>."
         },
         "timeToAct" : {
             "title" : "Time to act",
             "text" : ""
         },
         "stats" : {
-            "title" : "Our collective impact"
+            "title" : "Our collective impact",
+            "numberActionsTaken" : "Actions taken",
+            "numberProjects" : "Crowdactions started",
+            "numberUsers" : "CollActivists"
         },
         "projects" : {
             "title" : "Join a crowaction",
             "button" : "Find more projects"
         },
         "share" : {
-            "title" : "Spread it further"
+            "title" : "Share now"
         }
     },
     "about": {
@@ -34,7 +37,7 @@
         },
         "join" : {
             "title" : "Join our team!",
-            "text" : "CollAction is always looking for fun people who want to make a difference by making CollAction the next big thing! Please note that these are all volunteer positions for now (all current team members are volunteers as well :) )<br /><br />We’re looking for:<br /> <br />* **Communications guru**: As the communications guru you are responsible for developing and implementing our communications strategy and further build the growing CollAction community. For those who need a good excuse to spend all day on Facebook. [Email](mailto:collactionteam@gmail.com) us for more info!<br />* **Project Starter**: Do you sometimes think ‘AAAH THE WORLD IS ON FIRE, I NEED TO DO SOMETHING BUT WHAT!?’. Well, maybe chill out first and have some herbal tea :). Then get your hands dirty and [start a project here](/projects/start)."
+            "text" : "CollAction is always looking for fun people who want to make a difference by making CollAction the next big thing! Please note that these are all volunteer positions for now (all current team members are volunteers as well :) )<br /><br />We’re looking for:<br /> <br /><ul><li><strong>Communications guru</strong>: As the communications guru you are responsible for developing and implementing our communications strategy and further build the growing CollAction community. For those who need a good excuse to spend all day on Facebook. <a href=\"mailto:collactionteam@gmail.com\">Email</a> us for more info!</li><li><strong>Project Starter</strong>: Do you sometimes think ‘AAAH THE WORLD IS ON FIRE, I NEED TO DO SOMETHING BUT WHAT!?’. Well, maybe chill out first and have some herbal tea :). Then get your hands dirty and <a href=\"/projects/start\">Start a project here</a>."
         },
         "faqs" : [
             {

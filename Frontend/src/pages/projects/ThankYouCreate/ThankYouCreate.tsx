@@ -1,10 +1,10 @@
 import React from "react";
 import { Overlay } from "../../../components/Overlay/Overlay";
-import { Section } from "../../../components/Section";
+import { Section } from "../../../components/Section/Section";
 
 import styles from "./ThankYouCreate.module.scss";
 
-const ThankYouPage = ({ data } : any) => {
+const ThankYouCreatePage = ({ data } : any) => {
   const name = "ProjectName";
   const photos = {
       thankyoucreatephoto: ""
@@ -31,4 +31,4 @@ const ThankYouPage = ({ data } : any) => {
   );
 };
 
-export default ThankYouPage;
+export default ThankYouCreatePage;

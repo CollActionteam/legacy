@@ -6,8 +6,8 @@ import "normalize.css";
 import "./style.scss";
 
 // Layout components
-import Header from "../Header";
-import Footer from "../Footer";
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
 
 // Material-UI
 import Grid from "@material-ui/core/Grid";
@@ -19,10 +19,12 @@ import {
   faHeart,
   faTimes,
   faBars,
+  faUser,
   faAngleDown,
   faSpinner,
   faClock,
-  faSignInAlt,
+  faTools,
+  faExclamationCircle
 } from "@fortawesome/free-solid-svg-icons";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 
@@ -35,7 +37,9 @@ library.add(
   faAngleDown,
   faSpinner,
   faClock,
-  faSignInAlt
+  faUser,
+  faTools,
+  faExclamationCircle
 );
 
 export default ({ children }: any) => (
@@ -54,6 +58,5 @@ export default ({ children }: any) => (
       </Grid>
     </Grid>
     <Footer></Footer>
-  </React.Fragment>
-);
+  </React.Fragment>);
 

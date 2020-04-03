@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Card, CardContent, CardActions, Button } from "@material-ui/core";
 import { IUser } from "../../../api/types";
 import { useMutation, gql } from "@apollo/client";
-import { Alert } from "../../Alert";
+import { Alert } from "../../Alert/Alert";
 
 interface INewsletterSubscriptionProps {
     user: IUser;
@@ -20,14 +20,16 @@ export default ({ user }: INewsletterSubscriptionProps) => {
                         email: user.email,
                         firstName: user.firstName,
                         lastName: user.lastName,
-                        isSubscribedNewsletter: !user.isSubscribedNewsletter
+                        isSubscribedNewsletter: !user.isSubscribedNewsletter,
+                        representsNumberParticipants: user.representsNumberParticipants,
+                        isAdmin: user.isAdmin
                     }
                 },
                 onCompleted: (data) => {
-                    if (data.applicationUser.updateUser.result.succeeded) {
+                    if (data.user.updateUser.result.succeeded) {
                         user.isSubscribedNewsletter = !user.isSubscribedNewsletter;
                     } else {
-                        let error = data.applicationUser.updateUser.errors.map((e: any) => e.description).join(", ");
+                        let error = data.user.updateUser.result.errors.map((e: any) => e.description).join(", ");
                         setErrorMessage(error);
                     }
                 },
@@ -37,7 +39,7 @@ export default ({ user }: INewsletterSubscriptionProps) => {
             });
 
     return <React.Fragment>
-            { errorMessage ? <Alert type="error" text={errorMessage} /> : null }
+            <Alert type="error" text={errorMessage} />
             <Card>
                 <CardContent>
                     <h3>Newsletter subscription</h3>
@@ -57,7 +59,7 @@ export default ({ user }: INewsletterSubscriptionProps) => {
 const UPDATE_USER = gql`
     mutation UpdateUser($updatedUser: UpdatedUserInputGraph!)
     {  
-        applicationUser {
+        user {
             updateUser(user:$updatedUser) {
                 user {
                     id

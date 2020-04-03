@@ -1,4 +1,5 @@
 @import '../Styles/typography';
+@import '../Styles/responsive.scss';
 
 ///Global custom properties
 :root {
@@ -109,5 +110,11 @@ a {
 
     &:hover {
         text-decoration: underline;
+    }
+}
+
+.site-content {
+    @include breakpoint-down(md) {
+        padding-top: var(--header-height);
     }
 }

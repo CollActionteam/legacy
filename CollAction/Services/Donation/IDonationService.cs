@@ -1,4 +1,5 @@
 ﻿using CollAction.Models;
+using CollAction.Services.Donation.Models;
 using Stripe;
 using System.Collections.Generic;
 using System.Security.Claims;
@@ -9,11 +10,11 @@ namespace CollAction.Services.Donation
 {
     public interface IDonationService
     {
-        Task<string> InitializeCreditCardCheckout(string currency, int amount, string name, string email, bool recurring, CancellationToken token);
+        Task<string> InitializeCreditCardCheckout(CreditCardCheckout checkout, CancellationToken token);
 
-        Task InitializeIdealCheckout(string sourceId, string name, string email, CancellationToken token);
+        Task InitializeIDealCheckout(IDealCheckout checkout, CancellationToken token);
 
-        Task InitializeSepaDirect(string sourceId, string name, string email, int amount, CancellationToken token);
+        Task InitializeSepaDirect(SepaDirectCheckout checkout, CancellationToken token);
 
         Task<bool> HasIDealPaymentSucceeded(string sourceId, string clientSecret, CancellationToken token);
 

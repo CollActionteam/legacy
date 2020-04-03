@@ -124,7 +124,7 @@ namespace CollAction.Tests.Integration.Endpoint
                                            creatorComments: ""dd"",
                                            start: ""{DateTime.UtcNow.AddDays(10).ToString("o", CultureInfo.InvariantCulture)}"",
                                            end: ""{DateTime.UtcNow.AddDays(20).ToString("o", CultureInfo.InvariantCulture)}"",
-                                           descriptionVideoLink: ""https://www.youtube.com/watch?v=a1"",
+                                           descriptionVideoLink: ""https://www.youtube-nocookie.com/watch?v=a1"",
                                            tags:[""b"", ""a""]
                                        }}) {{
                                            succeeded

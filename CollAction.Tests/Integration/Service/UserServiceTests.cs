@@ -89,7 +89,7 @@ namespace CollAction.Tests.Integration.Service
                     result = await userService.UpdateUser(
                         new UpdatedUser()
                         {
-                            RepresentsNumberUsers = user.RepresentsNumberParticipants,
+                            representsNumberParticipants = user.RepresentsNumberParticipants,
                             FirstName = GetRandomString(),
                             LastName = GetRandomString(),
                             Email = result.User.Email,
@@ -102,7 +102,7 @@ namespace CollAction.Tests.Integration.Service
                     result = await userService.UpdateUser(
                         new UpdatedUser()
                         {
-                            RepresentsNumberUsers = user.RepresentsNumberParticipants + 1,
+                            representsNumberParticipants = user.RepresentsNumberParticipants + 1,
                             FirstName = GetRandomString(),
                             LastName = GetRandomString(),
                             Email = result.User.Email,

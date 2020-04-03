@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { Card, CardContent, CardActions, Button, TextField, FormGroup } from "@material-ui/core";
 import { gql, useMutation } from "@apollo/client";
-import { Alert } from "../../Alert";
+import { Alert } from "../../Alert/Alert";
 
 export default () => {
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmNewPassword, setConfirmNewPassword] = useState("");
-    const [success, setSuccess] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [ changePassword ] = useMutation(
         CHANGE_PASSWORD,
         {
@@ -17,16 +17,16 @@ export default () => {
                 newPassword: newPassword
             },
             onCompleted: (data) => {
-                if (data.applicationUser.changePassword.succeeded) {
-                    setSuccess(true);
+                if (data.user.changePassword.succeeded) {
+                    setSuccessMessage("Your password has been changed");
                 } else {
-                    let error = data.applicationUser.changePassword.errors.map((e: any) => e.description).join(", ");
-                    setSuccess(false);
+                    let error = data.user.changePassword.errors.map((e: any) => e.description).join(", ");
+                    setSuccessMessage(null);
                     setErrorMessage(error);
                 }
             },
             onError: (data) => {
-                setSuccess(false);
+                setSuccessMessage(null);
                 setErrorMessage(data.message);
             }
         }
@@ -35,8 +35,8 @@ export default () => {
     const isValid = confirmNewPassword === newPassword && currentPassword.length > 0 && newPassword.length > 0;
 
     return <React.Fragment>
-        { errorMessage ? <Alert type="error" text={errorMessage} /> : null }
-        { success ? <Alert type="success" text="Your password has been changed" /> : null }
+        <Alert type="error" text={errorMessage} />
+        <Alert type="success" text={successMessage} />
         <Card>
             <CardContent>
                 <h3>Password</h3>
@@ -57,7 +57,7 @@ export default () => {
 const CHANGE_PASSWORD = gql`
     mutation ChangePassword($currentPassword: String!, $newPassword: String!)
     {  
-        applicationUser {
+        user {
             changePassword(currentPassword: $currentPassword, newPassword: $newPassword) {
             succeeded
             errors {

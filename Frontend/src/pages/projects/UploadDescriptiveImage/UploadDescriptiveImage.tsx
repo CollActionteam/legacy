@@ -2,7 +2,7 @@ import * as React from "react";
 import UploadImage, {
   IUploadImageState,
   IUploadImageProps,
-} from "../../../components/UploadImage";
+} from "../../../components/UploadImage/UploadImage";
 import { TertiaryButton } from "../../../components/Button/Button";
 import DropZone from "react-dropzone";
 

@@ -1,4 +1,5 @@
 ﻿using CollAction.Data;
+using CollAction.Helpers;
 using CollAction.Models;
 using CollAction.Services.Donation;
 using CollAction.Services.Newsletter;
@@ -9,6 +10,7 @@ using GraphQL.Types;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq;
+using System.Security.Claims;
 
 namespace CollAction.GraphQl.Queries
 {
@@ -25,9 +27,13 @@ namespace CollAction.GraphQl.Queries
             Field(x => x.UserName);
             Field(x => x.Activated);
             Field(x => x.RegistrationDate);
-            Field<BooleanGraphType>(
-                "isAdmin", 
-                resolve: c => ((UserContext)c.UserContext).User.IsInRole(AuthorizationConstants.AdminRole));
+            FieldAsync<BooleanGraphType>(
+                "isAdmin",
+                resolve: async c =>
+                {
+                    ClaimsPrincipal principal = await c.GetUserContext().ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>().CreateUserPrincipalAsync(c.Source).ConfigureAwait(false);
+                    return principal.IsInRole(AuthorizationConstants.AdminRole);
+                });
             FieldAsync<BooleanGraphType>(
                 "isSubscribedNewsletter", 
                 resolve: async c =>

@@ -1,0 +1,28 @@
+@import '../Styles/responsive.scss';
+:root {
+    --header-height: 5.5rem;
+
+}
+.header {
+    width: 100%;
+    background-color: var(--c-white);
+
+    @include breakpoint-down(md) {
+        position: fixed;
+        width: 100vw;
+        height: var(--header-height);
+        z-index: 1;
+    }
+}
+
+.wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: var(--header-height);
+}
+
+.logo {
+    max-width: 250px;
+    z-index: 1;
+}

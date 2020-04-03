@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import { Section } from "../../components/Section";
-import { Alert } from "../../components/Alert";
+import { Section } from "../../components/Section/Section";
+import { Alert } from "../../components/Alert/Alert";
 import { Grid, FormGroup, TextField, Button } from "@material-ui/core";
 import { gql, useMutation } from "@apollo/client";
 import styles from "./ResetPassword.module.scss";
+import { useLocation } from "react-router-dom";
 
 const ResetPasswordPage = () => {
-    const searchParams = new URLSearchParams(window.location.search);
+    const searchParams = new URLSearchParams(useLocation().search);
     const resetCode = searchParams.get("code");
     const email = searchParams.get("email");
     const [ password, setPassword ] = useState("");
@@ -23,11 +24,11 @@ const ResetPasswordPage = () => {
                 password: password
             },
             onCompleted: (data) => {
-                if (data.applicationUser.resetPassword.succeeded) {
+                if (data.user.resetPassword.succeeded) {
                     setErrorMessage(null);
                     setInfoMessage("Your password has been reset. You can log in with your new password now.");
                 } else {
-                    let error = data.applicationUser.resetPassword.errors.map((e: any) => e.description).join(", ");
+                    let error = data.user.resetPassword.errors.map((e: any) => e.description).join(", ");
                     setErrorMessage(error);
                 }
             },
@@ -41,12 +42,8 @@ const ResetPasswordPage = () => {
         <Section className={styles.intro}>
             <h1 className={styles.title}>Reset Password</h1>
         </Section>
-        {
-            errorMessage ? <Alert type="error" text={errorMessage} /> : null
-        }
-        {
-            infoMessage ? <Alert type="info" text={infoMessage} /> : null
-        }
+        <Alert type="error" text={errorMessage} />
+        <Alert type="info" text={infoMessage} />
         <Section color="grey">
             <Grid container justify="center">
                 <Grid item sm={6}>
@@ -65,7 +62,7 @@ export default ResetPasswordPage;
 
 const FORGOT_PASSWORD = gql`
     mutation ResetPassword($email: String!, $code: String!, $password: String!) {
-        applicationUser {
+        user {
             resetPassword(email: $email, code: $code, password: $password) {
                 succeeded
                 errors {

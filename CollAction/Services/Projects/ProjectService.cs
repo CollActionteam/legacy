@@ -126,7 +126,7 @@ namespace CollAction.Services.Projects
                 goal: newProject.Goal, 
                 proposal: newProject.Proposal,
                 creatorComments: newProject.CreatorComments,
-                descriptionVideoLink: newProject.DescriptionVideoLink,
+                descriptionVideoLink: newProject.DescriptionVideoLink?.Replace("www.youtube.com", "www.youtube-nocookie.com", StringComparison.Ordinal),
                 displayPriority: ProjectDisplayPriority.Medium, 
                 bannerImageFileId: newProject.BannerImageFileId,
                 descriptiveImageFileId: newProject.DescriptiveImageFileId,
@@ -146,6 +146,21 @@ namespace CollAction.Services.Projects
             logger.LogInformation("Created project: {0}", newProject.Name);
 
             return new ProjectResult(project);
+        }
+
+        public async Task<int> DeleteProject(int id, CancellationToken token)
+        {
+            var project = await context.Projects.FindAsync(id);
+
+            if (project == null)
+            {
+                throw new InvalidOperationException($"Project {id} doesn't exist");
+            }
+
+            project.Status = ProjectStatus.Deleted;
+            await context.SaveChangesAsync().ConfigureAwait(false);
+
+            return id;
         }
 
         public async Task<ProjectResult> UpdateProject(UpdatedProject updatedProject, ClaimsPrincipal user, CancellationToken token)
@@ -196,7 +211,7 @@ namespace CollAction.Services.Projects
             project.End = updatedProject.End.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
             project.BannerImageFileId = updatedProject.BannerImageFileId;
             project.DescriptiveImageFileId = updatedProject.DescriptiveImageFileId;
-            project.DescriptionVideoLink = updatedProject.DescriptionVideoLink;
+            project.DescriptionVideoLink = updatedProject.DescriptionVideoLink?.Replace("www.youtube.com", "www.youtube-nocookie.com", StringComparison.Ordinal);
             project.Status = updatedProject.Status;
             project.DisplayPriority = updatedProject.DisplayPriority;
             project.NumberProjectEmailsSend = updatedProject.NumberProjectEmailsSend;
@@ -457,7 +472,12 @@ namespace CollAction.Services.Projects
 
         public IQueryable<Project> SearchProjects(Category? category, SearchProjectStatus? searchProjectStatus)
         {
-            IQueryable<Project> projects = context.Projects.Include(p => p.ParticipantCounts).OrderBy(p => p.DisplayPriority).AsQueryable();
+            IQueryable<Project> projects = context
+                .Projects
+                .Where(p => p.Status != ProjectStatus.Deleted)
+                .Include(p => p.ParticipantCounts)
+                .OrderBy(p => p.DisplayPriority)
+                .AsQueryable();
 
             projects = searchProjectStatus switch
             {
@@ -481,10 +501,10 @@ namespace CollAction.Services.Projects
 
             string?[] videoLinks = new[]
             {
-                "https://www.youtube.com/embed/aLzM_L5fjCQ",
-                "https://www.youtube.com/embed/Zvugem-tKyI",
-                "https://www.youtube.com/embed/xY0XTysJUDY",
-                "https://www.youtube.com/embed/2yfPLxQQG-k",
+                "https://www.youtube-nocookie.com/embed/aLzM_L5fjCQ",
+                "https://www.youtube-nocookie.com/embed/Zvugem-tKyI",
+                "https://www.youtube-nocookie.com/embed/xY0XTysJUDY",
+                "https://www.youtube-nocookie.com/embed/2yfPLxQQG-k",
                 null
             };
 

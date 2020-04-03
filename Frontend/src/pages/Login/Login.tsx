@@ -1,8 +1,8 @@
 import React from "react";
 import { Button } from "../../components/Button/Button";
-import { Section } from "../../components/Section";
-import { Alert } from "../../components/Alert";
-import { Link } from "react-router-dom";
+import { Section } from "../../components/Section/Section";
+import { Alert } from "../../components/Alert/Alert";
+import { Link, useLocation } from "react-router-dom";
 
 import {
   Grid,
@@ -12,6 +12,7 @@ import {
   Checkbox,
   FormGroup,
 } from "@material-ui/core";
+
 import styles from "./Login.module.scss";
 
 import { siteData } from '../../api/site';
@@ -21,7 +22,7 @@ const LoginPage = () => {
   const actionExternalLogin = `${process.env.REACT_APP_BACKEND_URL}/account/externalLogin`;
   const returnUrl = window.location.origin;
   const errorUrl = `${returnUrl}/login`;
-  const searchParams = new URLSearchParams(window.location.search);
+  const searchParams = new URLSearchParams(useLocation().search);
   const errorType = searchParams.get("error");
   const errorMessage = searchParams.get("message");
   if (errorType && errorMessage)
@@ -37,9 +38,7 @@ const LoginPage = () => {
           (Use a local account to log in )
         </h2>
       </Section>
-      {
-        errorMessage ? <Alert type="error" text={errorMessage} /> : null
-      }
+      <Alert type="error" text={errorMessage} />
       <Section color="grey">
         <Grid container justify="center">
           <Grid item sm={6}>

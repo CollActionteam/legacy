@@ -2,6 +2,7 @@
 using CollAction.Models;
 using GraphQL.EntityFramework;
 using GraphQL.Types;
+using GraphQL.Authorization;
 
 namespace CollAction.GraphQl.Queries
 {
@@ -14,6 +15,7 @@ namespace CollAction.GraphQl.Queries
             Field(x => x.FirstName, true);
             Field(x => x.FullName, true);
             Field(x => x.LastName, true);
+            Field(x => x.Email).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
         }
     }
 }

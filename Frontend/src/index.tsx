@@ -18,7 +18,8 @@ import NotFoundPage from './pages/NotFound/NotFound';
 import FindPage from './pages/projects/Find/Find';
 import StartProjectPage from './pages/projects/Start/Start';
 import CreateProjectPage from './pages/projects/Create/Create';
-import ThankYouPage from './pages/projects/ThankYouCreate/ThankYouCreate';
+import ThankYouCreatePage from './pages/projects/ThankYouCreate/ThankYouCreate';
+import ThankYouCommitPage from './pages/projects/ThankYouCommit/ThankYouCommit';
 import ProjectDetailsPage from './pages/projects/Detail/ProjectDetails';
 import ProfilePage from './pages/Profile/Profile';
 import AdminPage from './pages/Admin/Admin';
@@ -27,6 +28,8 @@ import ForgotPasswordPage from './pages/ForgotPassword/ForgotPassword';
 import RegisterUserPage from './pages/RegisterUser/RegisterUser';
 import ResetPasswordPage from './pages/ResetPassword/ResetPassword';
 import PrivacyPolicyPage from './pages/PrivacyPolicy/PrivacyPolicy';
+import DonationThankYouPage from './pages/Donation/DonationThankYou';
+import DonationReturnPage from './pages/Donation/DonationReturn';
 
 const routing = (
     <I18nextProvider i18n={i18n}>
@@ -36,20 +39,23 @@ const routing = (
                     <Layout>
                         <Switch>
                             <Route exact path="/" component={HomePage} />
-                            <Route path="/login" component={LoginPage} />
-                            <Route path="/forgot-password" component={ForgotPasswordPage} />
-                            <Route path="/reset-password" component={ResetPasswordPage} />
-                            <Route path="/register-user" component={RegisterUserPage} />
-                            <Route path="/about" component={AboutPage} />
-                            <Route path="/profile" component={ProfilePage} />
-                            <Route path="/admin" component={AdminPage} />
-                            <Route path="/donate" component={DonationPage} />
-                            <Route path="/privacy-policy" component={PrivacyPolicyPage} />
-                            <Route path="/projects/find" component={FindPage} />
-                            <Route path="/projects/start" component={StartProjectPage} />
-                            <Route path="/projects/create" component={CreateProjectPage} />
-                            <Route path="/projects/thank-you-create" component={ThankYouPage} />
-                            <Route path="/projects/:slug/:projectId" render={routeProps => <ProjectDetailsPage {...routeProps} />} />
+                            <Route exact path="/login" component={LoginPage} />
+                            <Route exact path="/forgot-password" component={ForgotPasswordPage} />
+                            <Route exact path="/reset-password" component={ResetPasswordPage} />
+                            <Route exact path="/register-user" component={RegisterUserPage} />
+                            <Route exact path="/about" component={AboutPage} />
+                            <Route exact path="/profile" component={ProfilePage} />
+                            <Route exact path="/donate" component={DonationPage} />
+                            <Route exact path="/donate/return" component={DonationReturnPage} />
+                            <Route exact path="/donate/thankyou" component={DonationThankYouPage} />
+                            <Route exact path="/privacy-policy" component={PrivacyPolicyPage} />
+                            <Route exact path="/projects/find" component={FindPage} />
+                            <Route exact path="/projects/start" component={StartProjectPage} />
+                            <Route exact path="/projects/create" component={CreateProjectPage} />
+                            <Route exact path="/projects/thank-you-create" component={ThankYouCreatePage} />
+                            <Route exact path="/projects/:slug/:projectId" component={ProjectDetailsPage} />
+                            <Route exact path="/projects/:slug/:projectId/thankyou" component={ThankYouCommitPage} />
+                            <Route exact path="/admin/:type/:action/:id?" component={AdminPage} />
                             <Route component={NotFoundPage} />
                         </Switch>
                     </Layout>

@@ -11,9 +11,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -41,14 +39,14 @@ namespace CollAction.Tests.Integration.Service
                                Name = "test" + Guid.NewGuid(),
                                Categories = new List<Category>() { Category.Other, Category.Health },
                                Description = Guid.NewGuid().ToString(),
-                               DescriptionVideoLink = "https://www.youtube.com/watch?v=a1",
+                               DescriptionVideoLink = "https://www.youtube.com/embed/xY0XTysJUDY",
                                End = DateTime.Now.AddDays(30),
                                Start = DateTime.Now.AddDays(10),
                                Goal = Guid.NewGuid().ToString(),
                                CreatorComments = Guid.NewGuid().ToString(),
                                Proposal = Guid.NewGuid().ToString(),
                                Target = 40,
-                               Tags = new string[3] { r.Next(1000).ToString(CultureInfo.InvariantCulture), r.Next(1000).ToString(CultureInfo.InvariantCulture), r.Next(1000).ToString(CultureInfo.InvariantCulture) }
+                               Tags = new string[3] { $"a{r.Next(1000)}", $"b{r.Next(1000)}", $"c{r.Next(1000)}" }
                            };
                        ProjectResult projectResult = await projectService.CreateProject(newProject, claimsPrincipal, CancellationToken.None).ConfigureAwait(false);
                        int? projectId = projectResult.Project?.Id;
@@ -86,13 +84,13 @@ namespace CollAction.Tests.Integration.Service
                                CreatorComments = currentProject.CreatorComments,
                                Description = currentProject.Description,
                                OwnerId = currentProject.OwnerId,
-                               DescriptionVideoLink = "https://www.youtube.com/watch?v=a1",
+                               DescriptionVideoLink = "https://www.youtube-nocookie.com/embed/xY0XTysJUDY",
                                DescriptiveImageFileId = currentProject.DescriptiveImageFileId,
                                DisplayPriority = ProjectDisplayPriority.Top,
                                End = DateTime.Now.AddDays(30),
                                Start = DateTime.Now.AddDays(10),
                                Goal = Guid.NewGuid().ToString(),
-                               Tags = new string[3] { r.Next(1000).ToString(CultureInfo.InvariantCulture), r.Next(1000).ToString(CultureInfo.InvariantCulture), r.Next(1000).ToString(CultureInfo.InvariantCulture) },
+                               Tags = new string[3] { $"a{r.Next(1000)}", $"b{r.Next(1000)}", $"c{r.Next(1000)}" },
                                Id = currentProject.Id,
                                NumberProjectEmailsSend = 3,
                                Proposal = currentProject.Proposal,
