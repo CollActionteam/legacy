@@ -32,25 +32,25 @@ const STRIPE_PUBLIC_KEY = gql`
 `;
 
 const INITIALIZE_CREDIT_CARD_CHECKOUT = gql`
-    mutation InitializeCreditCardCheckout($amount: Int!, $name: String!, $email: String!, $recurring: Boolean!) {
+    mutation InitializeCreditCardCheckout($checkout: CreditCardCheckoutInputGraph!) {
         donation {
-            sourceId: initializeCreditCardCheckout(currency: "eur", amount: $amount, name: $name, email: $email, recurring: $recurring)
+            sourceId: initializeCreditCardCheckout(checkout: $checkout)
         }
     }
 `;
 
 const INITIALIZE_IDEAL_CHECKOUT = gql`
-    mutation InitializeIDealCheckout($sourceId: ID!, $name: String!, $email: String!) {
+    mutation InitializeIDealCheckout($checkout: IDealCheckoutInputGraph!) {
         donation {
-            sourceId: initializeIdealCheckout(sourceId: $sourceId, name: $name, email: $email)
+            sourceId: initializeIDealCheckout(checkout: $checkout)
         }
     }
 `;
 
 const INITIALIZE_SEPA_DIRECT = gql`
-    mutation InitializeSEPADirect($sourceId: ID!, $name: String!, $email: String!) {
+    mutation InitializeSEPADirect($checkout: SepaDirectCheckoutInputGraph!) {
         donation {
-            sourceId: initializeIdealCheckout(sourceId: $sourceId, name: $name, email: $email)
+            sourceId: initializeIdealCheckout(checkout: $checkout)
         }
     }
 `;
@@ -103,10 +103,15 @@ const InnerDonationCard = ({user}: IInnerDonationCardProps) => {
             } else if (values.type === "credit") {
                 const creditCardResult = await initializeCreditCardCheckout({
                     variables: {
-                        amount: values.amount,
-                        name: values.name,
-                        email: values.email,
-                        recurring: values.recurring
+                        checkout: {
+                            amount: values.amount,
+                            currency: 'eur',
+                            name: values.name,
+                            email: values.email,
+                            recurring: values.recurring,
+                            successUrl: window.location.origin + '/donate/thankyou',
+                            cancelUrl: window.location.origin + '/donate'
+                        }
                     },
                 });
                 if (creditCardResult.errors) {
@@ -137,9 +142,11 @@ const InnerDonationCard = ({user}: IInnerDonationCardProps) => {
                     const redirectUrl = response!.source!.redirect!.url;
                     const initializeResult = await initializeSepaDirect({
                         variables: {
-                            sourceId: sourceId,
-                            name: values.name,
-                            email: values.email
+                            checkout: {
+                                sourceId: sourceId,
+                                name: values.name,
+                                email: values.email
+                            }
                         }
                     });
                     if (initializeResult.errors) {
@@ -171,9 +178,11 @@ const InnerDonationCard = ({user}: IInnerDonationCardProps) => {
                     const redirectUrl = response!.source!.redirect!.url;
                     const initializeResult = await initializeIdealCheckout({
                         variables: {
-                            sourceId: sourceId,
-                            name: values.name,
-                            email: values.email
+                            checkout: {
+                                sourceId: sourceId,
+                                name: values.name,
+                                email: values.email
+                            }
                         }
                     });
                     if (initializeResult.errors) {
@@ -197,7 +206,7 @@ const InnerDonationCard = ({user}: IInnerDonationCardProps) => {
         const IBAN_OPTIONS = {
             supportedCountries: ['SEPA']
         };
-        return <Dialog classes={{ paper: dialogClasses.dialogPaper }} open={bankingPopupOpen} onClose={() => { setBankingPopupOpen(false); }}>
+        return <Dialog fullWidth classes={{ paper: dialogClasses.dialogPaper }} open={bankingPopupOpen} onClose={() => { setBankingPopupOpen(false); }}>
             <DialogTitle>
                 Donate
             </DialogTitle>

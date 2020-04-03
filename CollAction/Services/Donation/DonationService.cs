@@ -123,8 +123,8 @@ namespace CollAction.Services.Donation
 
             var sessionOptions = new SessionCreateOptions()
             {
-                SuccessUrl = $"{siteOptions.CanonicalAddress}/donate/thankYou",
-                CancelUrl = $"{siteOptions.CanonicalAddress}/donate",
+                SuccessUrl = checkout.SuccessUrl,
+                CancelUrl = checkout.CancelUrl,
                 PaymentMethodTypes = new List<string>
                 {
                     "card",
