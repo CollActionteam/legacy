@@ -14,12 +14,40 @@
 .instruction {
   color: var(--c-black);
 
-  .highlight {
-    color: var(--c-green);
-  }
 }
 
+.highlight {
+  color: var(--c-green);
+}
 
 .subInstruction {
   color: var(--c-grey-d30);
+}
+  
+.invalid {
+  color: var(--c-red);
+}
+
+.previewContainer {
+  text-align: center;
+}
+
+.preview {
+  border-top-left-radius: var(--border-radius-sm);
+  border-top-right-radius: var(--border-radius-sm);
+
+  img {
+      width: 100%;
+      height: auto;
+  }
+}
+
+.previewInstruction {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  > small {
+    padding-right: var(--spacing);
+  }
 }

@@ -4,12 +4,14 @@ export const initialValues = {
   projectName: '',
   proposal: '',
   category: '',
+  banner: null,
   target: '',
   startDate: '',
   hashTags: '',
   endDate: '',
   description: '',
   goal: '',
+  image: null,
   imageDescription: '',
   comments: '',
   youtube: ''
@@ -63,6 +65,8 @@ export const validations = Yup.object({
   goal: Yup.string()
     .required('Describe what you hope to have achieved upon successful completion of your project')
     .max(10000, 'Please use no more then 10.000 characters'),
+  imageDescription: Yup.string()
+    .max(255, 'Please use no more then 255 characters'),
   comments: Yup.string()
     .max(20000, 'Please use no more then 20.000 characters'),
   youtube: Yup.string()

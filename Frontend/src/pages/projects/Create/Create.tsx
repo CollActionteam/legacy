@@ -1,7 +1,7 @@
-import { Grid, Container } from '@material-ui/core';
+import { Grid, Container, InputLabel, FormControl } from '@material-ui/core';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Helmet from 'react-helmet';
 import { Button } from '../../../components/Button/Button';
 import { RichTextEditorFormControl } from '../../../components/RichTextEditorFormContol/RichTextEditorFormControl';
@@ -12,6 +12,8 @@ import { initialValues, validations } from './form';
 import UploadImage from './UploadImage';
 
 const CreateProjectPage = () => {
+
+  const [imageDescriptionVisible, setImageDescriptionVisible] = useState(false);
   
   const handleSubmit = (values: any) => {
     console.log(values);
@@ -30,9 +32,9 @@ const CreateProjectPage = () => {
         validateOnChange={false}
         validateOnMount={false}
         validateOnBlur={true}        
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit}        
       >
-        {(props) => (
+        {props => (
           <Form>
             <Section center color="grey" title="Start a new crowdaction" className={styles.title}>
               <p>Tell people about your crowdaction and why they should be excited!</p>
@@ -70,7 +72,7 @@ const CreateProjectPage = () => {
               <Grid container spacing={3}>
                 <Grid item md={7} xs={12}>
                   <Container className={styles.bannerContainer}>
-                    <UploadImage></UploadImage>
+                    <UploadImage name="banner" formik={props}></UploadImage>
                   </Container>
                 </Grid>
                 <Grid item md={5} xs={12}>
@@ -128,7 +130,6 @@ const CreateProjectPage = () => {
               <Grid container>
                 <Grid item md={7} xs={12}>
                   <Container>
-
                     <RichTextEditorFormControl
                       formik={props}
                       name="description"
@@ -149,8 +150,25 @@ const CreateProjectPage = () => {
                     >
                     </RichTextEditorFormControl>
 
-                    <p>Image here</p>
-                                    
+                    <div className={styles.formRow}>
+                      <InputLabel className={styles.label} shrink>
+                        Descriptive image
+                      </InputLabel>
+                      <UploadImage name="image" formik={props}></UploadImage>                      
+                    </div>
+
+                    {props.values.image &&
+                      <Field
+                        name="imageDescription"
+                        label="Image description"
+                        helperText="Provide a short description to go with this image"
+                        component={TextField}
+                        className={styles.formRow}
+                        fullWidth
+                      >
+                      </Field>
+                  }
+
                     <RichTextEditorFormControl
                       formik={props}
                       name="comments"
@@ -185,7 +203,7 @@ const CreateProjectPage = () => {
               </Grid>
             </Section>
           </Form>
-        )}
+          )}
       </Formik>
     </React.Fragment>
   )
