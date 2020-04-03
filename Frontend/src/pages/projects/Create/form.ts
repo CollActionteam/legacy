@@ -55,32 +55,32 @@ maximumDate.setMonth(minimumDate.getMonth() + 12);
 
 export const validations = Yup.object({
   projectName: Yup.string()
-    .required('You must provide a name for your project')
+    .required('Please write a clear, brief title')
     .max(50, 'Keep the name short, no more then 50 characters'),
   proposal: Yup.string()
-    .required('Describe your proposal')
-    .max(300, 'Best keep your proposal short, no more then 300 characters'),
+    .required('Please describe your objective')
+    .max(300, 'Best keep the objective short, no more then 300 characters'),
   category: Yup.string()
-    .required('Select a category for your project'),
+    .required('Select a category that most closely aligns with your crowdaction'),
   target: Yup.number()
-    .required('Please choose the target number of participants')
-    .moreThan(0, 'You can choose up to a maximum of one million participants as your target number')
-    .lessThan(1000001, 'You can choose up to a maximum of one million participants as your target number'),
+    .required('Please choose the number of people you want to join')
+    .moreThan(0, 'You can choose up to one million participants')
+    .lessThan(1000001, 'Please choose no more then one million participants'),
   startDate: Yup.date()
-    .required('Please enter the date on which the campaign opens')
-    .min(minimumDate, 'Please ensure your sign up starts somewhere in the near future')
-    .max(maximumDate, 'Please ensure your sign up starts within the next 12 months'),
+    .required('Please set a launch date')
+    .min(minimumDate, 'Please ensure the launch date starts somewhere in the near future')
+    .max(maximumDate, 'Please ensure the launch date is within the next 12 months'),
   endDate: Yup.date()
-    .required('Please enter the date until which people can sign up for the campaign')
+    .required('Please enter the date when the sign-up closes')
     .when('startDate', determineEndDateValidation),
   hashtags: Yup.string()
     .max(30, 'Please keep the number of hashtags civil, no more then 30 characters')
     .matches(/^[a-zA-Z_0-9]+(;[a-zA-Z_0-9]+)*$/, 'Don\'t use spaces or #, must contain a letter, can contain digits and underscores. Seperate multiple tags with a colon \';\''),
   description: Yup.string()
-    .required('Give a succinct description of the issues your project is designed to address')
+    .required('Give a succinct description of what you are gathering participants for')
     .max(10000, 'Please use no more then 10.000 characters'),
   goal: Yup.string()
-    .required('Describe what you hope to have achieved upon successful completion of your project')
+    .required('Describe what you want achieve with your crowdaction')
     .max(10000, 'Please use no more then 10.000 characters'),
   imageDescription: Yup.string()
     .max(255, 'Please use no more then 255 characters'),

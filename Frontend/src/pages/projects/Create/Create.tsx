@@ -1,4 +1,4 @@
-import { Container, Grid, InputLabel } from '@material-ui/core';
+import { Container, Grid, InputLabel, FormHelperText } from '@material-ui/core';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import { TextField } from 'formik-material-ui';
 import React from 'react';
@@ -58,7 +58,8 @@ const CreateProjectPage = () => {
                   <Container>
                     <Field 
                         name="projectName" 
-                        label="Project name"
+                        label="Title"
+                        helperText="Write a clear, brief title that helps people quicky understand the idea behind the crowdaction"
                         component={TextField}
                         className={styles.formRow}
                         fullWidth
@@ -66,10 +67,10 @@ const CreateProjectPage = () => {
                     </Field>                  
                     <Field
                       name="proposal"
-                      label="Proposal"
+                      label="Objective"
+                      helperText="Describe in a few words what the crowdaction aims to achieve"
                       multiline
                       rows="4"
-                      helperText={`e.g. "If X people commit to Y, we'll all do it together!"`} 
                       component={TextField}
                       className={styles.formRow}
                       fullWidth
@@ -91,9 +92,9 @@ const CreateProjectPage = () => {
                   <Container>
                     <Field
                       name="target"
-                      label="Target"
+                      label="Goal amount"
+                      helperText="Set an archievable number of people to join your crowdaction" 
                       type="number"
-                      helperText="The minimum number of people that must participate in your crowdaction" 
                       component={TextField}
                       className={styles.formRow}
                       fullWidth
@@ -101,8 +102,9 @@ const CreateProjectPage = () => {
                     </Field>
                     <Field
                       name="startDate"
-                      label="Sign up opens"
+                      label="Launch date"
                       type="date"
+                      helperText="Set a date from which people will be able to join the crowdaction"
                       component={TextField}
                       InputLabelProps={{
                         shrink: true
@@ -113,9 +115,9 @@ const CreateProjectPage = () => {
                     </Field>
                     <Field
                       name="endDate"
-                      label="Sign up closes"
+                      label="Sign-up duration"
                       type="date"
-                      helperText="This crowdaction will only start if it reaches its goal by this date, 00:00 GMT"
+                      helperText="Set a specific end date for when the sign-up closes. Sign-up closes on 00:00 GMT on this date"
                       component={TextField}
                       InputLabelProps={{
                         shrink: true
@@ -145,8 +147,8 @@ const CreateProjectPage = () => {
                     <RichTextEditorFormControl
                       formik={props}
                       name="description"
-                      label="Short description"
-                      hint="E.g. reduce plastic waste and save our oceans!"
+                      label="Description"
+                      hint="Describe what you're gathering participants for. Your description should be convincing and tell people everything they need to know. Get creative but be specific and be clear!"
                       className={styles.formRow}
                       fullWidth
                     >
@@ -155,8 +157,8 @@ const CreateProjectPage = () => {
                     <RichTextEditorFormControl
                       formik={props}
                       name="goal"
-                      label="Goal/impact"
-                      hint="What is the problem you are trying to solve?"
+                      label="Goal"
+                      hint="Describe in more detail what you want to achive with your crowdaction. What is the problem you are trying to solve?"
                       className={styles.formRow}
                       fullWidth
                     >
@@ -164,16 +166,20 @@ const CreateProjectPage = () => {
 
                     <div className={styles.formRow}>
                       <InputLabel className={styles.label} shrink>
-                        Descriptive image
+                        Infograph or image
                       </InputLabel>
                       <UploadImage name="image" formik={props}></UploadImage>                      
+                      {!props.values.image &&
+                        <FormHelperText>Add an infograph or another descriptive image to support your description and your goal.</FormHelperText>
+                      }
                     </div>
+
 
                     {props.values.image &&
                       <Field
                         name="imageDescription"
                         label="Image description"
-                        helperText="Provide a short description to go with this image"
+                        helperText="Provide a short description to go with the image"
                         component={TextField}
                         className={styles.formRow}
                         fullWidth
@@ -185,7 +191,7 @@ const CreateProjectPage = () => {
                       formik={props}
                       name="comments"
                       label="Other comments (optional)"
-                      hint="E.g. background, process, FAQs, about the initiator"
+                      hint="Anything else you want to tell about your crowdaction, e.g. the background, more about the process, why you care about this action, FAQs etc."
                       className={styles.formRow}
                       fullWidth
                     >
@@ -193,8 +199,8 @@ const CreateProjectPage = () => {
                     
                     <Field
                       name="youtube"
-                      label="YouTube Video Link"
-                      helperText="Descriptive video, e.g. http://www.youtube.com/watch?v=-wtIMTCHWuI"
+                      label="YouTube video link"
+                      helperText="A video to go with your crowdaction. Use the format http://www.youtube.com/embed/-wtIMTCHWuI"
                       component={TextField}
                       className={styles.formRow}
                       fullWidth
@@ -214,7 +220,7 @@ const CreateProjectPage = () => {
                       disabled={props.isSubmitting}
                       onClick={() => validate(props)}
                     >
-                      Submit project
+                      Submit crowdaction
                     </Button>  
                   </div>
                 </Grid>

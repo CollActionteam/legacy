@@ -40,6 +40,9 @@ const Categories = (formik: any) => {
       <FormHelperText error={formik.props.touched.category && Boolean(formik.props.errors.category)}>
         {formik.props.errors.category}
       </FormHelperText>
+      <FormHelperText hidden={formik.props.touched.category && Boolean(formik.props.errors.category)}>
+        Choose the category that most closely aligns with your crowdaction
+      </FormHelperText>
     </FormControl>
   );
 }
