@@ -10,6 +10,11 @@ namespace CollAction.ValidationAttributes
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
+            if (value == null)
+            {
+                return ValidationResult.Success; // null should be handled with [Required]
+            }
+
             Uri canonicalAddress = new Uri(validationContext.GetRequiredService<IOptions<SiteOptions>>().Value.CanonicalAddress);
             if (!(value is string givenAddress))
             {
