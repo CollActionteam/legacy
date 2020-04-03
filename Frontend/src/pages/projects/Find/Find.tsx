@@ -12,11 +12,17 @@ import ProjectsList from '../../../components/ProjectsList/ProjectsList';
 
 import styles from "./Find.module.scss";
 import Utils from '../../../utils';
+import { Alert } from '../../../components/Alert/Alert';
 
 const FindPage = () => {
   const [category, setCategory] = useState("");
   const [status, setStatus] = useState(ProjectStatusFilter.Active);
-  const { data, loading } = useQuery(GET_CATEGORIES);
+  const { data, loading, error } = useQuery(GET_CATEGORIES);
+
+  if (error) {
+    console.error(error.message);
+    return <Alert type="error" text={error.message} />
+  }
 
   const handleCategoryChange = (e: React.ChangeEvent) => {
     setCategory((e.target as any).value.toString());
