@@ -1,13 +1,30 @@
 import * as Yup from 'yup';
 
-export const initialValues = {
+export interface IProjectForm {
+  projectName: string;
+  proposal: string;
+  category: string;
+  banner: any | null;
+  target: string;
+  startDate: string;
+  endDate: string;
+  tags: string;
+  description: string;
+  goal: string;
+  image: any | null;
+  imageDescription: string;
+  comments: string;
+  youtube: string;
+}
+
+export const initialValues: IProjectForm = {
   projectName: '',
   proposal: '',
   category: '',
   banner: null,
   target: '',
   startDate: '',
-  hashTags: '',
+  tags: '',
   endDate: '',
   description: '',
   goal: '',

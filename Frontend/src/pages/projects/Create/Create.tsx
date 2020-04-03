@@ -1,5 +1,5 @@
 import { Container, Grid, InputLabel } from '@material-ui/core';
-import { Field, Form, Formik } from 'formik';
+import { Field, Form, Formik, FormikProps } from 'formik';
 import { TextField } from 'formik-material-ui';
 import React from 'react';
 import Helmet from 'react-helmet';
@@ -8,13 +8,27 @@ import { RichTextEditorFormControl } from '../../../components/RichTextEditorFor
 import { Section } from '../../../components/Section/Section';
 import Categories from './Categories';
 import styles from './Create.module.scss';
-import { initialValues, validations } from './form';
+import { initialValues, validations, IProjectForm } from './form';
 import UploadImage from './UploadImage';
+import useSubmitProject from './submitproject';
 
 const CreateProjectPage = () => {
+  
+  const validate = async (props: FormikProps<any>) => {
+    const errors = Object.keys(await props.validateForm());
 
-  const handleSubmit = (values: any) => {
-    console.log(values);
+    if (errors.length) {
+      const el = document.getElementsByName(errors[0])[0];
+      if (el) {
+        el.scrollIntoView();
+      }
+    }
+  };
+
+  const useHandleSubmit = async (form: IProjectForm) => {
+    debugger;
+    const result = await useSubmitProject(form);
+    console.log(result);
   }
  
   return (
@@ -30,9 +44,9 @@ const CreateProjectPage = () => {
         validateOnChange={false}
         validateOnMount={false}
         validateOnBlur={true}        
-        onSubmit={handleSubmit}        
+        onSubmit={useHandleSubmit}        
       >
-        {props => (
+        {(props: FormikProps<IProjectForm>) => (
           <Form>
             <Section center color="grey" title="Start a new crowdaction" className={styles.title}>
               <p>Tell people about your crowdaction and why they should be excited!</p>
@@ -111,7 +125,7 @@ const CreateProjectPage = () => {
                     >
                     </Field>
                     <Field
-                      name="hashtags"
+                      name="tags"
                       label="Hashtags"
                       helperText="No #, seperate tags with ; e.g. tag1;tag2"
                       component={TextField}
@@ -195,7 +209,13 @@ const CreateProjectPage = () => {
               <Grid container>
                 <Grid item xs={12}>
                   <div className={styles.submit}>
-                    <Button type="submit">Submit project</Button>  
+                    <Button 
+                      type="submit" 
+                      disabled={props.isSubmitting}
+                      onClick={() => validate(props)}
+                    >
+                      Submit project
+                    </Button>  
                   </div>
                 </Grid>
               </Grid>
