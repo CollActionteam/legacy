@@ -17,7 +17,7 @@ services:
     ports:
       - "44301:44301"
     environment:
-      - PublicAddress=http://localhost:8000;http://localhost:3000
+      - PublicAddress=http://localhost:3000
       - DbHost=db
       - DbUser=postgres
       - DbPassword=test
@@ -35,7 +35,7 @@ services:
       args:
         - REACT_APP_BACKEND_URL=https://localhost:44301
     ports:
-      - "8000:8000"
+      - "3000:3000"
 
   db:
     image: postgres

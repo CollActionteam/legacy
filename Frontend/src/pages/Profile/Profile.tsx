@@ -23,7 +23,7 @@ export default () => {
                     <Grid item xs={12} md={6}>
                       <Card>
                         <CardActions>
-                          <Link to="/admin">
+                          <Link to="/admin/projects/list">
                             <FontAwesomeIcon icon="tools" />&nbsp; Manage Site
                           </Link>
                         </CardActions>

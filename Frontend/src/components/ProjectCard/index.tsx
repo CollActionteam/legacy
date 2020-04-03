@@ -2,8 +2,9 @@ import React from "react";
 import styles from "./style.module.scss";
 import { IProject } from "../../api/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ProgressRing from "../ProgressRing";
-import CategoryTags from "../CategoryTags";
+import ProgressRing from "../ProgressRing/ProgressRing";
+import CategoryTags from "../CategoryTags/CategoryTags";
+
 export default ({ project }: { project: IProject }) => {
   const defaultCategoryImage = project.categories[0]
     ? project.categories[0].category

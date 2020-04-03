@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import { Section } from "../../components/Section";
-import { Alert } from "../../components/Alert";
+import { Section } from "../../components/Section/Section";
+import { Alert } from "../../components/Alert/Alert";
 import { Grid, FormGroup, TextField, Button } from "@material-ui/core";
 import { gql, useMutation } from "@apollo/client";
 import styles from "./ResetPassword.module.scss";
+import { useLocation } from "react-router-dom";
 
 const ResetPasswordPage = () => {
-    const searchParams = new URLSearchParams(window.location.search);
+    const searchParams = new URLSearchParams(useLocation().search);
     const resetCode = searchParams.get("code");
     const email = searchParams.get("email");
     const [ password, setPassword ] = useState("");
@@ -41,12 +42,8 @@ const ResetPasswordPage = () => {
         <Section className={styles.intro}>
             <h1 className={styles.title}>Reset Password</h1>
         </Section>
-        {
-            errorMessage ? <Alert type="error" text={errorMessage} /> : null
-        }
-        {
-            infoMessage ? <Alert type="info" text={infoMessage} /> : null
-        }
+        <Alert type="error" text={errorMessage} />
+        <Alert type="info" text={infoMessage} />
         <Section color="grey">
             <Grid container justify="center">
                 <Grid item sm={6}>

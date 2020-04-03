@@ -1,6 +1,6 @@
 import * as React from "react";
 import DropZone from "react-dropzone";
-import UploadImage, { IUploadImageProps } from "../../../components/UploadImage";
+import UploadImage, { IUploadImageProps } from "../../../components/UploadImage/UploadImage";
 import styles from "./UploadDescriptiveImage.module.scss";
 import { Field } from "formik";
 import { TextField } from "formik-material-ui";

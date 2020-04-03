@@ -1,17 +1,20 @@
 import React from "react";
-import { useQuery } from "@apollo/client";
-import { gql } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 import Slider from "react-slick";
 import { Grid, Container } from "@material-ui/core";
-import ProjectCard from "../ProjectCard";
-import Loader from "../Loader";
-import { SecondaryButton, SecondaryGhostButton } from "../Button/Button";
+
+
 import { Fragments } from "../../api/fragments";
+import { IProject } from "../../api/types";
+
+import Loader from "../Loader/Loader";
+import ProjectCard from "../ProjectCard";
+import { SecondaryButton, SecondaryGhostButton } from "../Button/Button";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+
 import styles from "./Carousel.module.scss";
-import { IProject } from "../../api/types";
 
 interface ICarouselProps {
   title?: string;
@@ -39,7 +42,7 @@ export default ({ title, text }: ICarouselProps) => {
   const query = useQuery(GET_CAROUSEL_PROJECTS);
   const { data, loading, error } = query;
 
-  if (error || !data) {
+  if (error) {
     console.error(error);
     return null;
   }
@@ -64,7 +67,7 @@ export default ({ title, text }: ICarouselProps) => {
         </Grid>
         <Grid item sm={12} md={9} className={styles.sliderContainer}>
           {loading && <Loader />}
-          {data.projects && (
+          {data?.projects && (
             <Slider {...settings}>
               {data.projects.map((project: IProject, index: number) => (
                 <ProjectCard project={project} key={index} />

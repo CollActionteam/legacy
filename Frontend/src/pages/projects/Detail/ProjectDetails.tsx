@@ -1,21 +1,25 @@
 import React, { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import gql from "graphql-tag";
-import { IProject, IUser } from "../../../api/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Avatar, Container, Grid, FormControl } from "@material-ui/core";
+import { Avatar, Container, Grid, FormControl, TextField } from "@material-ui/core";
 import { Form, useFormik, FormikContext } from "formik";
 import * as Yup from "yup";
-import { TextField } from "@material-ui/core";
-import { Button } from "../../../components/Button/Button";
-import CategoryTags from "../../../components/CategoryTags";
-import Loader from "../../../components/Loader";
-import ProgressRing from "../../../components/ProgressRing";
-import { Section } from "../../../components/Section";
-import styles from "./ProjectDetails.module.scss";
-import { RouteComponentProps, Redirect, useHistory} from "react-router-dom";
+
+import { IProject, IUser } from "../../../api/types";
 import { UserContext, GET_USER } from "../../../providers/user";
-import { Alert } from "../../../components/Alert";
+
+import { RouteComponentProps, Redirect, useHistory} from "react-router-dom";
+import { Fragments } from "../../../api/fragments";
+
+import { Alert } from "../../../components/Alert/Alert";
+import { Button } from "../../../components/Button/Button";
+import CategoryTags from "../../../components/CategoryTags/CategoryTags";
+import Loader from "../../../components/Loader/Loader";
+import ProgressRing from "../../../components/ProgressRing/ProgressRing";
+import { Section } from "../../../components/Section/Section";
+
+import styles from "./ProjectDetails.module.scss";
 
 type TParams = {
   slug: string,
@@ -70,7 +74,7 @@ const ProjectDetailsPageInner = ({ user, projectId, slug }: IProjectDetailsProps
         projectId: projectId,
         email: formik.values.email
       },
-      onError: (data) => setErrorMessage(data.message),
+      onError: (data: any) => setErrorMessage(data.message),
       onCompleted: onCommit
     });
   const [ commitToProjectLoggedIn ] = useMutation(
@@ -78,7 +82,7 @@ const ProjectDetailsPageInner = ({ user, projectId, slug }: IProjectDetailsProps
     {
       variables: { projectId: projectId },
       onCompleted: onCommit,
-      onError: (data) => setErrorMessage(data.message),
+      onError: (data: any) => setErrorMessage(data.message),
       refetchQueries: [{
         query: GET_USER
       }]
@@ -272,7 +276,7 @@ const ProjectDetailsPageInner = ({ user, projectId, slug }: IProjectDetailsProps
 
   return (
     <React.Fragment>
-      { errorMessage ? <Alert type="error" text={errorMessage} /> : null }
+      <Alert type="error" text={errorMessage} />
       { !loading && !data ? <Redirect to="/404" /> : null }
       { loading ? <Loader /> : null }
       { project ? renderProject(project) : null }
@@ -283,40 +287,7 @@ const ProjectDetailsPageInner = ({ user, projectId, slug }: IProjectDetailsProps
 const GET_PROJECT = gql`
   query GetProject($id: ID) {
     project(id: $id) {
-      id
-      name
-      description
-      categories {
-        category
-      }
-      bannerImage {
-        url
-      }
-      descriptiveImage {
-        url
-        description
-      }
-      goal
-      start
-      end
-      status
-      target
-      proposal
-      creatorComments
-      descriptionVideoLink
-      owner {
-        fullName
-        firstName
-        lastName
-      }
-      remainingTime
-      totalParticipants
-      percentage
-      isActive
-      isComingSoon
-      isClosed
-      isSuccessfull
-      isFailed
+      ${Fragments.projectDetail}
     }
   }
 `;

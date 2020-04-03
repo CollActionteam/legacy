@@ -126,7 +126,7 @@ namespace CollAction.Services.Projects
                 goal: newProject.Goal, 
                 proposal: newProject.Proposal,
                 creatorComments: newProject.CreatorComments,
-                descriptionVideoLink: newProject.DescriptionVideoLink,
+                descriptionVideoLink: newProject.DescriptionVideoLink?.Replace("www.youtube.com", "www.youtube-nocookie.com", StringComparison.Ordinal),
                 displayPriority: ProjectDisplayPriority.Medium, 
                 bannerImageFileId: newProject.BannerImageFileId,
                 descriptiveImageFileId: newProject.DescriptiveImageFileId,
@@ -211,7 +211,7 @@ namespace CollAction.Services.Projects
             project.End = updatedProject.End.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
             project.BannerImageFileId = updatedProject.BannerImageFileId;
             project.DescriptiveImageFileId = updatedProject.DescriptiveImageFileId;
-            project.DescriptionVideoLink = updatedProject.DescriptionVideoLink;
+            project.DescriptionVideoLink = updatedProject.DescriptionVideoLink?.Replace("www.youtube.com", "www.youtube-nocookie.com", StringComparison.Ordinal);
             project.Status = updatedProject.Status;
             project.DisplayPriority = updatedProject.DisplayPriority;
             project.NumberProjectEmailsSend = updatedProject.NumberProjectEmailsSend;
@@ -501,10 +501,10 @@ namespace CollAction.Services.Projects
 
             string?[] videoLinks = new[]
             {
-                "https://www.youtube.com/embed/aLzM_L5fjCQ",
-                "https://www.youtube.com/embed/Zvugem-tKyI",
-                "https://www.youtube.com/embed/xY0XTysJUDY",
-                "https://www.youtube.com/embed/2yfPLxQQG-k",
+                "https://www.youtube-nocookie.com/embed/aLzM_L5fjCQ",
+                "https://www.youtube-nocookie.com/embed/Zvugem-tKyI",
+                "https://www.youtube-nocookie.com/embed/xY0XTysJUDY",
+                "https://www.youtube-nocookie.com/embed/2yfPLxQQG-k",
                 null
             };
 

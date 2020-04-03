@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Card, CardContent, CardActions, Button } from "@material-ui/core";
 import { IUser } from "../../../api/types";
 import { useMutation, gql } from "@apollo/client";
-import { Alert } from "../../Alert";
+import { Alert } from "../../Alert/Alert";
 
 interface INewsletterSubscriptionProps {
     user: IUser;
@@ -29,7 +29,7 @@ export default ({ user }: INewsletterSubscriptionProps) => {
                     if (data.user.updateUser.result.succeeded) {
                         user.isSubscribedNewsletter = !user.isSubscribedNewsletter;
                     } else {
-                        let error = data.user.updateUser.errors.map((e: any) => e.description).join(", ");
+                        let error = data.user.updateUser.result.errors.map((e: any) => e.description).join(", ");
                         setErrorMessage(error);
                     }
                 },
@@ -39,7 +39,7 @@ export default ({ user }: INewsletterSubscriptionProps) => {
             });
 
     return <React.Fragment>
-            { errorMessage ? <Alert type="error" text={errorMessage} /> : null }
+            <Alert type="error" text={errorMessage} />
             <Card>
                 <CardContent>
                     <h3>Newsletter subscription</h3>

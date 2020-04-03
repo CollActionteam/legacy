@@ -15,7 +15,7 @@ namespace CollAction.Services.User.Models
 
         public string? LastName { get; set; }
 
-        public int RepresentsNumberUsers { get; set; }
+        public int representsNumberParticipants { get; set; }
 
         public bool IsSubscribedNewsletter { get; set; }
 

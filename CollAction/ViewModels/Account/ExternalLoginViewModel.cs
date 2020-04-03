@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CollAction.ValidationAttributes;
+using System.ComponentModel.DataAnnotations;
 
 namespace CollAction.ViewModels.Account
 {
@@ -11,9 +12,11 @@ namespace CollAction.ViewModels.Account
         public bool RememberMe { get; set; }
 
         [Required]
+        [FrontendUrl]
         public string ReturnUrl { get; set; } = null!;
 
         [Required]
+        [FrontendUrl]
         public string ErrorUrl { get; set; } = null!;
     }
 }

@@ -7,12 +7,12 @@ import * as Yup from 'yup';
 import { TextField, Select } from 'formik-material-ui';
 import { FormControl, InputLabel, MenuItem, Grid } from '@material-ui/core';
 
-import { Section } from '../../../components/Section';
-import { RichTextEditorFormControl } from '../../../components/RichTextEditorFormContol';
+import { Section } from '../../../components/Section/Section';
+import { RichTextEditorFormControl } from '../../../components/RichTextEditorFormContol/RichTextEditorFormControl';
 import { Button } from '../../../components/Button/Button';
 import UploadBanner from '../UploadBanner/UploadBanner';
 import UploadDescriptiveImage from './UploadDescriptiveImage';
-import Loader from '../../../components/Loader';
+import Loader from '../../../components/Loader/Loader';
 
 import styles from './CreateOld.module.scss';
 import Utils from '../../../utils';

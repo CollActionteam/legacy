@@ -38,18 +38,16 @@ namespace CollAction.Services.Projects.Models
         public string? OwnerId { get; set; }
 
         [DataType(DataType.Date)]
-        [WithinMonthsAfterToday(12, ErrorMessage = "Please ensure your project starts within the next 12 months")]
         public DateTime Start { get; set; }
 
         [DataType(DataType.Date)]
-        [WithinMonthsAfterDateProperty(12, "Start", ErrorMessage = "The deadline must be within a year of the start date")]
         public DateTime End { get; set; }
 
         public int? BannerImageFileId { get; set; }
 
         public int? DescriptiveImageFileId { get; set; }
 
-        [RegularExpression(@"^https://www.youtube.com/embed/[A-Za-z_\-0-9]+$", ErrorMessage = "Only embedded youtube links are accepted. If you don't know how to get one, see: https://support.google.com/youtube/answer/171780?hl=en")]
+        [RegularExpression(@"^https://www.youtube(\-nocookie)?.com/embed/[A-Za-z_\-0-9]+$", ErrorMessage = "Only embedded youtube links are accepted. If you don't know how to get one, see: https://support.google.com/youtube/answer/171780?hl=en")]
         public string? DescriptionVideoLink { get; set; }
 
         public ProjectDisplayPriority DisplayPriority { get; set; }

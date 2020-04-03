@@ -3,7 +3,7 @@ import DropZone from "react-dropzone";
 import UploadImage, {
   IUploadImageState,
   IUploadImageProps,
-} from "../../../components/UploadImage";
+} from "../../../components/UploadImage/UploadImage";
 import { TertiaryButton } from "../../../components/Button/Button";
 
 import BrowserSizeImage from "../../../assets/BrowserSize.png";

@@ -8,10 +8,24 @@ export const Fragments = {
       category
     }
     bannerImage {
+      id
+      description
       url
     }
     descriptiveImage {
+      id
+      description
       url
+    }
+    owner {
+      fullName
+      firstName
+      lastName
+    }
+    tags {
+      tag {
+        name
+      }
     }
     goal
     start

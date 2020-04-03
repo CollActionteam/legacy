@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Card, CardContent, Button, CardActions, DialogTitle, Dialog, DialogActions } from "@material-ui/core";
 import { IUser } from "../../../api/types";
 import { gql, useMutation } from "@apollo/client";
-import { Alert } from "../../Alert";
-import { Redirect } from "react-router-dom";
+import { Alert } from "../../Alert/Alert";
+import { useHistory } from "react-router-dom";
 import { GET_USER } from "../../../providers/user";
 
 interface IDeleteAccountProps {
@@ -13,7 +13,7 @@ interface IDeleteAccountProps {
 export default ({ user }: IDeleteAccountProps) => {
     const [ hasDeletePopup, setHasDeletePopup] = useState(false);
     const [ errorMessage, setErrorMessage] = useState<string | null>(null);
-    const [ done, setDone] = useState(false);
+    const history = useHistory();
     const [ deleteUser ] =
             useMutation(
                 DELETE_USER,
@@ -22,7 +22,7 @@ export default ({ user }: IDeleteAccountProps) => {
                     onCompleted: (data) =>
                     {
                         if (data.user.deleteUser.succeeded) {
-                            setDone(true);
+                            history.push("/");
                         } else {
                             let error = data.user.deleteUser.errors.map((e: any) => e.description).join(", ");
                             setErrorMessage(error);
@@ -37,8 +37,7 @@ export default ({ user }: IDeleteAccountProps) => {
                 });
 
     return <React.Fragment>
-        { errorMessage ? <Alert type="error" text={errorMessage} /> : null }
-        { done ? <Redirect to="/" push={true} /> : null }
+        <Alert type="error" text={errorMessage} />
         <Dialog onClose={() => setHasDeletePopup(false)} open={hasDeletePopup}>
             <DialogTitle>
                 Are you sure you want to delete your account?
