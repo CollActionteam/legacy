@@ -1,0 +1,25 @@
+
+.box {
+  height: 100%;
+  border: 1px dashed var(--c-green);
+  border-radius: var(--border-radius);
+  padding: var(--spacing);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.instruction {
+  color: var(--c-black);
+
+  .highlight {
+    color: var(--c-green);
+  }
+}
+
+
+.subInstruction {
+  color: var(--c-grey-d30);
+}

@@ -1,5 +1,17 @@
+@import '../../../components//Styles/responsive.scss';
+
+.title {
+  h2, p {
+    margin-bottom: var(--spacing-md);
+  }
+}
+
 .formRow {
   margin-bottom: var(--spacing-lg) !important;
+}
+
+.bannerContainer {
+  height: 100%;
 }
 
 .submit {
