@@ -1,7 +1,7 @@
-import { Grid, Container, InputLabel, FormControl } from '@material-ui/core';
+import { Container, Grid, InputLabel } from '@material-ui/core';
 import { Field, Form, Formik } from 'formik';
 import { TextField } from 'formik-material-ui';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Helmet from 'react-helmet';
 import { Button } from '../../../components/Button/Button';
 import { RichTextEditorFormControl } from '../../../components/RichTextEditorFormContol/RichTextEditorFormControl';
@@ -13,8 +13,6 @@ import UploadImage from './UploadImage';
 
 const CreateProjectPage = () => {
 
-  const [imageDescriptionVisible, setImageDescriptionVisible] = useState(false);
-  
   const handleSubmit = (values: any) => {
     console.log(values);
   }

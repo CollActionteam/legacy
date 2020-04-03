@@ -1,8 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useDropzone } from "react-dropzone";
-
-import styles from './UploadImage.module.scss';
 import { Button } from '../../../components/Button/Button';
+import styles from './UploadImage.module.scss';
 
 const UploadImage = ({ name, formik }: any) => {
 
@@ -26,7 +25,7 @@ const UploadImage = ({ name, formik }: any) => {
     };
 
     reader.readAsDataURL(file);    
-  }, []);
+  }, [name, formik]);
 
   const {getRootProps, getInputProps, isDragActive} = useDropzone({
     accept: "image/jpeg, image/png, image/gif, image/bmp",
