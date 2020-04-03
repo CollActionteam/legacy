@@ -17,11 +17,11 @@ namespace CollAction.ViewModels.Account
         public bool RememberMe { get; set; }
 
         [Required]
-        [IsFrontendUrl]
+        [FrontendUrl]
         public string ReturnUrl { get; set; } = null!;
 
         [Required]
-        [IsFrontendUrl]
+        [FrontendUrl]
         public string ErrorUrl { get; set; } = null!;
     }
 }

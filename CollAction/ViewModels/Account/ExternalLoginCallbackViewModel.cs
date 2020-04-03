@@ -7,11 +7,11 @@ namespace CollAction.ViewModels.Account
     public sealed class ExternalLoginCallbackViewModel
     {
         [Required]
-        [IsFrontendUrl]
+        [FrontendUrl]
         public string ReturnUrl { get; set; } = null!;
 
         [Required]
-        [IsFrontendUrl]
+        [FrontendUrl]
         public string ErrorUrl { get; set; } = null!;
 
         public string? RemoteError { get; set; }

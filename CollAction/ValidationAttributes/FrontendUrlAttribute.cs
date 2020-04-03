@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CollAction.ValidationAttributes
 {
-    public sealed class IsFrontendUrlAttribute : ValidationAttribute
+    public sealed class FrontendUrlAttribute : ValidationAttribute
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {

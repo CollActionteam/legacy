@@ -1,5 +1,7 @@
-﻿using CollAction.Helpers;
+﻿using CollAction.GraphQl.Mutations.Input;
+using CollAction.Helpers;
 using CollAction.Services.Donation;
+using CollAction.Services.Donation.Models;
 using GraphQL.Types;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,61 +13,40 @@ namespace CollAction.GraphQl.Mutations
         {
             FieldAsync<StringGraphType, string>(
                 "initializeCreditCardCheckout",
-                arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "currency" },
-                    new QueryArgument<NonNullGraphType<IntGraphType>>() { Name = "amount" },
-                    new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "name" },
-                    new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "email" },
-                    new QueryArgument<NonNullGraphType<BooleanGraphType>>() { Name = "recurring" }),
+                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<CreditCardCheckoutInputGraph>>() { Name = "checkout" }),
                 resolve: async c =>
                 {
-                    string currency = c.GetArgument<string>("currency");
-                    int amount = c.GetArgument<int>("amount");
-                    string name = c.GetArgument<string>("name");
-                    string email = c.GetArgument<string>("email");
-                    bool recurring = c.GetArgument<bool>("recurring");
+                    CreditCardCheckout checkout = c.GetArgument<CreditCardCheckout>("checkout");
                     var provider = c.GetUserContext().ServiceProvider;
                     return await provider.GetRequiredService<IDonationService>()
-                                         .InitializeCreditCardCheckout(currency, amount, name, email, recurring, c.CancellationToken)
+                                         .InitializeCreditCardCheckout(checkout, c.CancellationToken)
                                          .ConfigureAwait(false);
                 });
 
             FieldAsync<StringGraphType, string>(
                 "initializeSepaDirect",
-                arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<IdGraphType>>() { Name = "sourceId" },
-                    new QueryArgument<NonNullGraphType<IntGraphType>>() { Name = "amount" },
-                    new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "name" },
-                    new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "email" }),
+                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<SepaDirectCheckoutInputGraph>>() { Name = "checkout" }),
                 resolve: async c =>
                 {
-                    string sourceId = c.GetArgument<string>("sourceId");
-                    int amount = c.GetArgument<int>("amount");
-                    string name = c.GetArgument<string>("name");
-                    string email = c.GetArgument<string>("email");
+                    SepaDirectCheckout checkout = c.GetArgument<SepaDirectCheckout>("checkout");
                     var provider = c.GetUserContext().ServiceProvider;
                     await provider.GetRequiredService<IDonationService>()
-                                  .InitializeSepaDirect(sourceId, name, email, amount, c.CancellationToken)
+                                  .InitializeSepaDirect(checkout, c.CancellationToken)
                                   .ConfigureAwait(false);
-                    return sourceId;
+                    return checkout.SourceId;
                 });
 
             FieldAsync<StringGraphType, string>(
-                "initializeIdealCheckout",
-                arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<IdGraphType>>() { Name = "sourceId" },
-                    new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "name" },
-                    new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "email" }),
+                "initializeIDealCheckout",
+                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<IDealCheckoutInputGraph>>() { Name = "checkout" }),
                 resolve: async c =>
                 {
-                    string sourceId = c.GetArgument<string>("sourceId");
-                    string name = c.GetArgument<string>("name");
-                    string email = c.GetArgument<string>("email");
+                    IDealCheckout checkout = c.GetArgument<IDealCheckout>("checkout");
                     var provider = c.GetUserContext().ServiceProvider;
                     await provider.GetRequiredService<IDonationService>()
-                                  .InitializeIdealCheckout(sourceId, name, email, c.CancellationToken)
+                                  .InitializeIDealCheckout(checkout, c.CancellationToken)
                                   .ConfigureAwait(false);
-                    return sourceId;
+                    return checkout.SourceId;
                 });
 
             FieldAsync<StringGraphType, string>(

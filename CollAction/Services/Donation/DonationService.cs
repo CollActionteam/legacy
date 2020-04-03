@@ -1,5 +1,7 @@
 ﻿using CollAction.Data;
+using CollAction.Helpers;
 using CollAction.Models;
+using CollAction.Services.Donation.Models;
 using CollAction.Services.Email;
 using Hangfire;
 using Microsoft.AspNetCore.Identity;
@@ -9,6 +11,7 @@ using Stripe;
 using Stripe.Checkout;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;
@@ -62,6 +65,7 @@ namespace CollAction.Services.Donation
         private readonly IBackgroundJobClient backgroundJobClient;
         private readonly IEmailSender emailSender;
         private readonly ILogger<DonationService> logger;
+        private readonly IServiceProvider serviceProvider;
         private readonly StripeSignatures stripeSignatures;
         private readonly ApplicationDbContext context;
         private readonly UserManager<ApplicationUser> userManager;
@@ -76,6 +80,7 @@ namespace CollAction.Services.Donation
             IBackgroundJobClient backgroundJobClient,
             IOptions<StripeSignatures> stripeSignatures,
             IEmailSender emailSender,
+            IServiceProvider serviceProvider,
             ILogger<DonationService> logger)
         {
             this.requestOptions = requestOptions.Value;
@@ -86,6 +91,7 @@ namespace CollAction.Services.Donation
             this.userManager = userManager;
             this.emailSender = emailSender;
             this.logger = logger;
+            this.serviceProvider = serviceProvider;
             customerService = new CustomerService(this.requestOptions.ApiKey);
             sourceService = new SourceService(this.requestOptions.ApiKey);
             chargeService = new ChargeService(this.requestOptions.ApiKey);
@@ -105,11 +111,15 @@ namespace CollAction.Services.Donation
         /*
          * Here we're initializing a stripe checkout session for paying with a credit card. The upcoming SCA regulations ensure we have to do it through this API, because it's the only one that /easily/ supports things like 3D secure.
          */
-        public async Task<string> InitializeCreditCardCheckout(string currency, int amount, string name, string email, bool recurring, CancellationToken token)
+        public async Task<string> InitializeCreditCardCheckout(CreditCardCheckout checkout, CancellationToken token)
         {
-            ValidateDetails(amount, name, email);
+            IEnumerable<ValidationResult> validationResults = ValidationHelper.Validate(checkout, serviceProvider);
+            if (validationResults.Any())
+            {
+                throw new InvalidOperationException(string.Join(",", validationResults.Select(v => $"{string.Join(", ", v.MemberNames)}: {v.ErrorMessage}")));
+            }
 
-            ApplicationUser user = await userManager.FindByEmailAsync(email).ConfigureAwait(false);
+            ApplicationUser user = await userManager.FindByEmailAsync(checkout.Email).ConfigureAwait(false);
 
             var sessionOptions = new SessionCreateOptions()
             {
@@ -121,17 +131,17 @@ namespace CollAction.Services.Donation
                 }
             };
 
-            if (recurring)
+            if (checkout.Recurring)
             {
                 logger.LogInformation("Initializing recurring credit card checkout session");
-                sessionOptions.CustomerEmail = email; // TODO: sessionOptions.CustomerId = customer.Id; // Once supported
+                sessionOptions.CustomerEmail = checkout.Email; // TODO: sessionOptions.CustomerId = customer.Id; // Once supported
                 sessionOptions.SubscriptionData = new SessionSubscriptionDataOptions()
                 {
                     Items = new List<SessionSubscriptionDataItemOptions>()
                     {
                         new SessionSubscriptionDataItemOptions()
                         {
-                            PlanId = (await CreateRecurringPlan(amount, currency, token).ConfigureAwait(false)).Id,
+                            PlanId = (await CreateRecurringPlan(checkout.Amount, checkout.Currency, token).ConfigureAwait(false)).Id,
                             Quantity = 1
                         }
                     }
@@ -140,14 +150,14 @@ namespace CollAction.Services.Donation
             else
             {
                 logger.LogInformation("Initializing credit card checkout session");
-                Customer customer = await GetOrCreateCustomer(name, email, token).ConfigureAwait(false);
+                Customer customer = await GetOrCreateCustomer(checkout.Name, checkout.Email, token).ConfigureAwait(false);
                 sessionOptions.CustomerId = customer.Id;
                 sessionOptions.LineItems = new List<SessionLineItemOptions>()
                 {
                     new SessionLineItemOptions()
                     {
-                        Amount = amount * 100,
-                        Currency = currency,
+                        Amount = checkout.Amount * 100,
+                        Currency = checkout.Currency,
                         Name = "donation",
                         Description = "A donation to Stichting CollAction",
                         Quantity = 1
@@ -167,21 +177,25 @@ namespace CollAction.Services.Donation
         /*
          * Here we're initializing a stripe SEPA subscription on a source with sepa/iban data. This subscription should auto-charge.
          */
-        public async Task InitializeSepaDirect(string sourceId, string name, string email, int amount, CancellationToken token)
+        public async Task InitializeSepaDirect(SepaDirectCheckout checkout, CancellationToken token)
         {
-            ValidateDetails(amount, name, email);
-
             logger.LogInformation("Initializing sepa direct");
-            ApplicationUser user = await userManager.FindByEmailAsync(email).ConfigureAwait(false);
-            Customer customer = await GetOrCreateCustomer(name, email, token).ConfigureAwait(false);
+            IEnumerable<ValidationResult> validationResults = ValidationHelper.Validate(checkout, serviceProvider);
+            if (validationResults.Any())
+            {
+                throw new InvalidOperationException(string.Join(",", validationResults.Select(v => $"{string.Join(", ", v.MemberNames)}: {v.ErrorMessage}")));
+            }
+
+            ApplicationUser user = await userManager.FindByEmailAsync(checkout.Email).ConfigureAwait(false);
+            Customer customer = await GetOrCreateCustomer(checkout.Name, checkout.Email, token).ConfigureAwait(false);
             Source source = await sourceService.AttachAsync(
                 customer.Id,
                 new SourceAttachOptions()
                 {
-                    Source = sourceId
+                    Source = checkout.SourceId
                 },
                 cancellationToken: token).ConfigureAwait(false);
-            Plan plan = await CreateRecurringPlan(amount, "eur", token).ConfigureAwait(false);
+            Plan plan = await CreateRecurringPlan(checkout.Amount, "eur", token).ConfigureAwait(false);
             Subscription subscription = await subscriptionService.CreateAsync(
                 new SubscriptionCreateOptions()
                 {
@@ -208,18 +222,22 @@ namespace CollAction.Services.Donation
          * Here we're initializing the part of the iDeal payment that has to happen on the backend. For now, that's only attaching an actual customer record to the payment source.
          * In the future to handle SCA, we might need to start using payment intents or checkout here. SCA starts from september the 14th. The support for iDeal is not there yet though, so we'll have to wait.
          */
-        public async Task InitializeIdealCheckout(string sourceId, string name, string email, CancellationToken token)
+        public async Task InitializeIDealCheckout(IDealCheckout checkout, CancellationToken token)
         {
             logger.LogInformation("Initializing iDeal");
-            ValidateDetails(name, email);
+            IEnumerable<ValidationResult> validationResults = ValidationHelper.Validate(checkout, serviceProvider);
+            if (validationResults.Any())
+            {
+                throw new InvalidOperationException(string.Join(",", validationResults.Select(v => $"{string.Join(", ", v.MemberNames)}: {v.ErrorMessage}")));
+            }
 
-            ApplicationUser user = await userManager.FindByEmailAsync(email).ConfigureAwait(false);
-            Customer customer = await GetOrCreateCustomer(name, email, token).ConfigureAwait(false);
+            ApplicationUser user = await userManager.FindByEmailAsync(checkout.Email).ConfigureAwait(false);
+            Customer customer = await GetOrCreateCustomer(checkout.Name, checkout.Email, token).ConfigureAwait(false);
             Source source = await sourceService.AttachAsync(
                 customer.Id, 
                 new SourceAttachOptions()
                 {
-                    Source = sourceId
+                    Source = checkout.SourceId
                 },
                 cancellationToken: token).ConfigureAwait(false);
 
@@ -349,14 +367,6 @@ namespace CollAction.Services.Donation
             await context.SaveChangesAsync(token).ConfigureAwait(false);
         }
 
-        private static void ValidateDetails(string name, string email)
-        {
-            if (string.IsNullOrEmpty(name) || !email.Contains("@", StringComparison.Ordinal))
-            {
-                throw new InvalidOperationException($"Invalid user-details");
-            }
-        }
-
         private async Task<Plan> CreateRecurringPlan(int amount, string currency, CancellationToken token)
         {
             Product product = await GetOrCreateRecurringDonationProduct(token).ConfigureAwait(false);
@@ -433,15 +443,5 @@ namespace CollAction.Services.Donation
 
         private Task SendDonationThankYou(Customer customer, bool hasSubscriptions)
             => emailSender.SendEmailTemplated(customer.Email, "Thank you for your donation", "DonationThankYou", hasSubscriptions);
-
-        private void ValidateDetails(int amount, string name, string email)
-        {
-            if (amount <= 0)
-            {
-                throw new InvalidOperationException($"Invalid amount requested: {amount}");
-            }
-
-            ValidateDetails(name, email);
-        }
     }
 }
