@@ -3,49 +3,22 @@ export const siteData = {
   author: 'CollAction',
   description: 'CollAction',
   mailchimpListId: '1a035c45ca',
-  loginProviders: [
-    {
-      name: 'Google'
-    },
-    {
-      name: 'Twitter'
-    },
-    {
-      name: 'Facebook'
-    }
-  ],
   menuLinks: [
     {
       name: 'Home',
-      link: '',
-      showInPrimaryNavigation: true
+      link: ''
     },
     {
       name: 'Find Project',
-      link: '/projects/find',
-      showInPrimaryNavigation: true
+      link: '/projects/find'
     },
     {
       name: 'Start Project',
-      link: '/projects/start',
-      showInPrimaryNavigation: true
+      link: '/projects/start'
     },
     {
       name: 'About',
-      link: '/about',
-      showInPrimaryNavigation: true
-    },
-    {
-      name: 'Login',
-      link: '/account/login'
-    },
-    {
-      name: 'Sign Up',
-      link: '/account/register'
-    },
-    {
-      name: 'Donate',
-      link: '/donate'
+      link: '/about'
     }
   ],
   footerLinks: [
@@ -66,11 +39,11 @@ export const siteData = {
       name: "About Us",
     },
     {
-      link: "/login",
+      link: "/account/login",
       name: "Login",
     },
     {
-      link: "/register-user",
+      link: "/account/register-user",
       name: "Sign Up",
     },
     {

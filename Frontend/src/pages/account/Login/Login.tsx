@@ -1,8 +1,10 @@
 import React from "react";
-import { Button } from "../../components/Button/Button";
-import { Section } from "../../components/Section/Section";
-import { Alert } from "../../components/Alert/Alert";
+import { Button } from "../../../components/Button/Button";
+import { Section } from "../../../components/Section/Section";
+import { Alert } from "../../../components/Alert/Alert";
 import { Link, useLocation } from "react-router-dom";
+import styles from "./Login.module.scss";
+import { gql, useQuery } from "@apollo/client";
 
 import {
   Grid,
@@ -13,18 +15,23 @@ import {
   FormGroup,
 } from "@material-ui/core";
 
-import styles from "./Login.module.scss";
-
-import { siteData } from '../../api/site';
+const GET_LOGIN_PROVIDERS = gql`
+  query {
+    miscellaneous {
+      externalLoginProviders
+    }
+  }
+`;
 
 const LoginPage = () => {
   const actionLogin = `${process.env.REACT_APP_BACKEND_URL}/account/login`;
   const actionExternalLogin = `${process.env.REACT_APP_BACKEND_URL}/account/externalLogin`;
   const returnUrl = window.location.origin;
-  const errorUrl = `${returnUrl}/login`;
+  const errorUrl = `${returnUrl}/account/login`;
   const searchParams = new URLSearchParams(useLocation().search);
   const errorType = searchParams.get("error");
   const errorMessage = searchParams.get("message");
+  const { data: dataLoginProviders, error: errorLoginProviders } = useQuery(GET_LOGIN_PROVIDERS);
   if (errorType && errorMessage)
   {
     console.error({ errorType, errorMessage });
@@ -39,6 +46,7 @@ const LoginPage = () => {
         </h2>
       </Section>
       <Alert type="error" text={errorMessage} />
+      <Alert type="error" text={errorLoginProviders?.message} />
       <Section color="grey">
         <Grid container justify="center">
           <Grid item sm={6}>
@@ -50,15 +58,15 @@ const LoginPage = () => {
                   value={returnUrl}
                 />
                 <input type="hidden" name="errorUrl" value={errorUrl} />
-                {siteData.loginProviders.map(
-                  (provider, index) => (
-                    <FormControl key={index} margin="normal">
-                      <Button name="provider" value={provider.name}>
-                        Login with {provider.name}
+                { dataLoginProviders?.miscellaneous?.externalLoginProviders?.map(
+                  (provider: string) => (
+                    <FormControl key={provider} margin="normal">
+                      <Button name="provider" value={provider}>
+                        Login with {provider}
                       </Button>
                     </FormControl>
                   )
-                )}
+                ) }
               </FormGroup>
             </form>
             <div className={styles.divider}>
@@ -92,8 +100,8 @@ const LoginPage = () => {
                 />
                 <input type="hidden" name="errorUrl" value={errorUrl} />
                 <Button type="submit">Login</Button>
-                <Link to="/register-user">Register as new user</Link>
-                <Link to="/forgot-password">I forgot my password</Link>
+                <Link to="/account/register-user">Register as new user</Link>
+                <Link to="/account/forgot-password">I forgot my password</Link>
               </FormGroup>
             </form>
           </Grid>

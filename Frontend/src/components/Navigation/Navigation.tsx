@@ -39,7 +39,7 @@ export default class Navigation extends React.Component<
     const logoutUrl = `${process.env.REACT_APP_BACKEND_URL}/account/logout`;
     return <React.Fragment>
         <li className={styles.navigationItem}>
-          <Link className={styles.navigationButton} to="/profile">
+          <Link className={styles.navigationButton} to="/account/profile">
             Profile
           </Link>
         </li> 
@@ -56,7 +56,7 @@ export default class Navigation extends React.Component<
 
   renderWithoutUser() {
     return <li className={styles.navigationItem}>
-      <Link className={styles.navigationButton} to="/login">
+      <Link className={styles.navigationButton} to="/account/login">
         Login
       </Link>
     </li>;

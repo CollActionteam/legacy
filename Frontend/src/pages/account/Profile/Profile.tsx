@@ -2,13 +2,13 @@ import { Grid, Card, CardActions } from "@material-ui/core";
 import React, { useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
-import { UserContext } from "../../providers/user";
-import ResetPassword from "../../components/Profile/ResetPassword";
-import RecurringDonations from "../../components/Profile/RecurringDonations";
-import ProjectsParticipating from "../../components/Profile/ProjectsParticipating";
-import NewsletterSubscription from "../../components/Profile/NewsletterSubscription";
-import DeleteAccount from "../../components/Profile/DeleteAccount";
-import ProjectsCreated from "../../components/Profile/ProjectsCreated";
+import { UserContext } from "../../../providers/user";
+import ResetPassword from "../../../components/Profile/ResetPassword";
+import RecurringDonations from "../../../components/Profile/RecurringDonations";
+import ProjectsParticipating from "../../../components/Profile/ProjectsParticipating";
+import NewsletterSubscription from "../../../components/Profile/NewsletterSubscription";
+import DeleteAccount from "../../../components/Profile/DeleteAccount";
+import ProjectsCreated from "../../../components/Profile/ProjectsCreated";
 
 export default () => {
   const { user } = useContext(UserContext);

@@ -50,7 +50,7 @@ else
 @if (Model.ShowYouCanLogin)
 {
     <p>
-        You can <a href="@(Model.PublicAddress)/Account/Login">log in</a> to keep track of the projects you are committed to, and even <a href="@Model.StartLink">start your own projects!</a>
+        You can <a href="@(Model.CanonicalAddress)/Account/Login">log in</a> to keep track of the projects you are committed to, and even <a href="@Model.StartLink">start your own projects!</a>
     </p>
 }
 
@@ -65,13 +65,13 @@ else
             Multiply your impact and share the project with the buttons below 🙂
         </p>
         <a href="@Model.FacebookLink">
-            <img style="width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;" src="@(Model.PublicAddress)/images/social/facebook.png" alt="Facebook" />
+            <img style="width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;" src="@(Model.CanonicalAddress)/images/social/facebook.png" alt="Facebook" />
         </a>
         <a href="@Model.LinkedinLink" target="_blank">
-            <img style="width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;" src="@(Model.PublicAddress)/images/social/linkedin.png" alt="LinkedIn" />
+            <img style="width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;" src="@(Model.CanonicalAddress)/images/social/linkedin.png" alt="LinkedIn" />
         </a>
         <a href="@Model.TwitterLink" target="_blank">
-            <img style="width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;" src="@(Model.PublicAddress)/images/social/twitter.png" alt="Twitter" />
+            <img style="width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;" src="@(Model.CanonicalAddress)/images/social/twitter.png" alt="Twitter" />
         </a>
     </div>
 </span>

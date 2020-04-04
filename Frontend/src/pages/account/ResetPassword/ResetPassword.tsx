@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Section } from "../../components/Section/Section";
-import { Alert } from "../../components/Alert/Alert";
+import { Section } from "../../../components/Section/Section";
+import { Alert } from "../../../components/Alert/Alert";
 import { Grid, FormGroup, TextField, Button } from "@material-ui/core";
 import { gql, useMutation } from "@apollo/client";
 import styles from "./ResetPassword.module.scss";

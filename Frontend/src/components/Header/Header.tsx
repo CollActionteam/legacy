@@ -16,7 +16,7 @@ export default () => {
           <Link to="/">
             <img alt="CollAction" className={styles.logo} src={logo}></img>
           </Link>
-          <Navigation items={siteData.menuLinks.filter((item: any) => !!item.showInPrimaryNavigation)} />
+          <Navigation items={siteData.menuLinks} />
         </div>
       </Container>
     </div>

@@ -10,7 +10,7 @@ import { I18nextProvider } from 'react-i18next';
 
 // General pages
 import HomePage from './pages/Home/Home';
-import LoginPage from './pages/Login/Login';
+import LoginPage from './pages/account/Login/Login';
 import AboutPage from './pages/About/About';
 import NotFoundPage from './pages/NotFound/NotFound';
 
@@ -21,16 +21,17 @@ import CreateProjectPage from './pages/projects/Create/Create';
 import ThankYouCreatePage from './pages/projects/ThankYouCreate/ThankYouCreate';
 import ThankYouCommitPage from './pages/projects/ThankYouCommit/ThankYouCommit';
 import ProjectDetailsPage from './pages/projects/Detail/ProjectDetails';
-import ProfilePage from './pages/Profile/Profile';
+import ProfilePage from './pages/account/Profile/Profile';
 import AdminPage from './pages/Admin/Admin';
 import DonationPage from './pages/Donation/Donation';
-import ForgotPasswordPage from './pages/ForgotPassword/ForgotPassword';
-import RegisterUserPage from './pages/RegisterUser/RegisterUser';
-import ResetPasswordPage from './pages/ResetPassword/ResetPassword';
+import ForgotPasswordPage from './pages/account/ForgotPassword/ForgotPassword';
+import RegisterUserPage from './pages/account/RegisterUser/RegisterUser';
+import ResetPasswordPage from './pages/account/ResetPassword/ResetPassword';
 import PrivacyPolicyPage from './pages/PrivacyPolicy/PrivacyPolicy';
 import DonationThankYouPage from './pages/Donation/DonationThankYou';
 import DonationReturnPage from './pages/Donation/DonationReturn';
 import UnsubscribeProjectPage from './pages/projects/UnsubscribeProject/UnsubscribeProject';
+import FinishRegistrationPage from './pages/account/FinishRegistration/FinishRegistration';
 
 const routing = (
     <I18nextProvider i18n={i18n}>
@@ -40,16 +41,17 @@ const routing = (
                     <Layout>
                         <Switch>
                             <Route exact path="/" component={HomePage} />
-                            <Route exact path="/login" component={LoginPage} />
-                            <Route exact path="/forgot-password" component={ForgotPasswordPage} />
-                            <Route exact path="/reset-password" component={ResetPasswordPage} />
-                            <Route exact path="/register-user" component={RegisterUserPage} />
                             <Route exact path="/about" component={AboutPage} />
-                            <Route exact path="/profile" component={ProfilePage} />
+                            <Route exact path="/privacy-policy" component={PrivacyPolicyPage} />
+                            <Route exact path="/account/login" component={LoginPage} />
+                            <Route exact path="/account/forgot-password" component={ForgotPasswordPage} />
+                            <Route exact path="/account/reset-password" component={ResetPasswordPage} />
+                            <Route exact path="/account/register-user" component={RegisterUserPage} />
+                            <Route exact path="/account/finish-registration" component={FinishRegistrationPage} />
+                            <Route exact path="/account/profile" component={ProfilePage} />
                             <Route exact path="/donate" component={DonationPage} />
                             <Route exact path="/donate/return" component={DonationReturnPage} />
                             <Route exact path="/donate/thankyou" component={DonationThankYouPage} />
-                            <Route exact path="/privacy-policy" component={PrivacyPolicyPage} />
                             <Route exact path="/projects/find" component={FindPage} />
                             <Route exact path="/projects/start" component={StartProjectPage} />
                             <Route exact path="/projects/create" component={CreateProjectPage} />
