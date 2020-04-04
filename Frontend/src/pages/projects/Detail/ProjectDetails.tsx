@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import gql from "graphql-tag";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -26,19 +26,9 @@ type TParams = {
   projectId: string
 }
 
-interface IProjectDetailsProps {
-  user: IUser | null;
-  slug: string,
-  projectId: string
-}
-
 const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
-  return <UserContext.Consumer>
-    { ({user}) => <ProjectDetailsPageInner projectId={match.params.projectId} slug={match.params.slug} user={user} /> }
-  </UserContext.Consumer>;
-}
-
-const ProjectDetailsPageInner = ({ user, projectId, slug }: IProjectDetailsProps): any => {
+  const { user } = useContext(UserContext);
+  const { slug, projectId } = match.params;
   const { data, loading } = useQuery(GET_PROJECT, { variables: { id: projectId } });
   const project = (data?.project ?? null) as IProject | null;
   const [ errorMessage, setErrorMessage ] = useState<string | null>(null);

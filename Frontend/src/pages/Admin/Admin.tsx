@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { RouteComponentProps, Redirect } from "react-router-dom";
 import { UserContext } from "../../providers/user";
 import AdminSidebar from "../../components/Admin/AdminSidebar";
@@ -13,25 +13,27 @@ type TParams = {
   id: string | undefined;
 }
 
-const AdminPageInner = ({ match } : RouteComponentProps<TParams>): any => {
-  if (match.params.action === "list") {
-    if (match.params.type === "projects") {
-      return <AdminListProjects />;
-    } else if (match.params.type === "users") {
-      return <AdminListUsers />;
-    }
-  } else if (match.params.action === "edit" && match.params.id !== undefined) {
-    if (match.params.type === "projects") {
-      return <AdminEditProject projectId={match.params.id} />;
-    } else if (match.params.type === "users") {
-      return <AdminEditUser userId={match.params.id} />;
-    }
-  }
+const AdminPage = ({ match } : RouteComponentProps<TParams>): any => {
+  const { user } = useContext(UserContext);
 
-  return <Redirect to="/404" />;
+  const adminInner = () => {
+    if (match.params.action === "list") {
+      if (match.params.type === "projects") {
+        return <AdminListProjects />;
+      } else if (match.params.type === "users") {
+        return <AdminListUsers />;
+      }
+    } else if (match.params.action === "edit" && match.params.id !== undefined) {
+      if (match.params.type === "projects") {
+        return <AdminEditProject projectId={match.params.id} />;
+      } else if (match.params.type === "users") {
+        return <AdminEditUser userId={match.params.id} />;
+      }
+    }
+    return <Redirect to="/404" />;
+  };
+
+  return <AdminSidebar>{ user?.isAdmin ? adminInner() : <h1>Not allowed</h1> }</AdminSidebar>;
 };
-
-const AdminPage = (props : RouteComponentProps<TParams>): any => 
-  <AdminSidebar><UserContext.Consumer>{ ({user}) => user?.isAdmin ? <AdminPageInner history={props.history} location={props.location} match={props.match} /> : <h1>Not allowed</h1> }</UserContext.Consumer></AdminSidebar>;
 
 export default AdminPage;

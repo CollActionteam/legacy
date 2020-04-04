@@ -1,8 +1,7 @@
-import { IProjectParticipant, IUser, IProject } from "../../api/types";
+import { IUser, IProject } from "../../api/types";
 import React, { useState } from "react";
 import ProjectCard from "../ProjectCard/ProjectCard";
 import { Card, CardActions, CardContent, Button, DialogContent, Dialog, DialogActions } from "@material-ui/core";
-import { useMutation, gql } from "@apollo/client";
 import { Form, useFormik, FormikContext } from "formik";
 
 interface IProjectParticipatingProps {
