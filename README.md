@@ -72,7 +72,7 @@ When you run the site, you can configure the following settings through either e
 * DbHost: The postgres host
 * Db: The postgres database
 * SeedTestData: Seed the database with random test data (true or false)
-* PublicAddress: A ;-separated list of frontend addresses that can access the backend. The first in the list is assumed to be the canonical address. CORS is used to restrict access to other addresses.
+* PublicAddress: The 'public' address where the frontend is hosted. This is used for links back to the frontend (in e-mails and endpoints). In production we use CORS and other validation to enforce this.
 * AdminPassword: The admin password used for the admin user
 * AdminEmail: The admin e-mail address used for the admin user
 * MaxNumberProjectEmails: How many project e-mails can project-owners send (defaults to 4)

@@ -10,7 +10,7 @@ namespace CollAction.GraphQl.Queries
 {
     public sealed class ImageFileGraph : EfObjectGraphType<ApplicationDbContext, ImageFile>
     {
-        public ImageFileGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService, IServiceScopeFactory serviceScopeFactory) : base(entityFrameworkGraphQlService)
+        public ImageFileGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService) : base(entityFrameworkGraphQlService)
         {
             Field<NonNullGraphType<IdGraphType>>(nameof(ImageFile.Id), resolve: x => x.Source.Id);
             Field(x => x.Date);

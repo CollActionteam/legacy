@@ -47,7 +47,6 @@ namespace CollAction
             this.environment = environment;
         }
 
-        private readonly string corsPolicy = "FrontendCors";
         private readonly IConfiguration configuration;
         private readonly IWebHostEnvironment environment;
 
@@ -136,14 +135,24 @@ namespace CollAction
 
             services.AddCors(c =>
             {
-                c.AddPolicy(
-                    corsPolicy,
-                    builder =>
-                        builder.AllowAnyMethod()
-                               .SetIsOriginAllowedToAllowWildcardSubdomains()
-                               .AllowAnyHeader()
-                               .AllowCredentials()
-                               .WithOrigins(configuration.Get<SiteOptions>().PublicAddresses.ToArray()));
+                if (environment.IsProduction())
+                {
+                    c.AddDefaultPolicy(
+                        builder =>
+                            builder.AllowAnyMethod()
+                                   .AllowAnyHeader()
+                                   .AllowCredentials()
+                                   .WithOrigins(configuration.Get<SiteOptions>().PublicAddress));
+                }
+                else
+                {
+                    c.AddDefaultPolicy(
+                        builder =>
+                            builder.AllowAnyMethod()
+                                   .AllowAnyHeader()
+                                   .AllowCredentials()
+                                   .SetIsOriginAllowed(_ => true));
+                }
             });
 
             services.AddUrlHelper();
@@ -195,7 +204,7 @@ namespace CollAction
         public void Configure(IApplicationBuilder app, IHostApplicationLifetime applicationLifetime)
         {
             app.UseRouting();
-            app.UseCors(corsPolicy);
+            app.UseCors();
 
             if (environment.IsProduction())
             {
@@ -230,7 +239,7 @@ namespace CollAction
             {
                 endpoints.MapHangfireDashboard(new DashboardOptions()
                 {
-                    AppPath = configuration.Get<SiteOptions>().CanonicalAddress,
+                    AppPath = configuration.Get<SiteOptions>().PublicAddress,
                     DashboardTitle = "CollAction Jobs",
                     Authorization = new[] { new HangfireAdminAuthorizationFilter() }
                 });

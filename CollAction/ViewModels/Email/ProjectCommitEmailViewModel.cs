@@ -7,12 +7,12 @@ namespace CollAction.ViewModels.Email
 {
     public sealed class ProjectCommitEmailViewModel
     {
-        public ProjectCommitEmailViewModel(Project project, AddParticipantResult result, ApplicationUser? user, Uri canonicalAddress, Uri projectUrl)
+        public ProjectCommitEmailViewModel(Project project, AddParticipantResult result, ApplicationUser? user, Uri publicAddress, Uri projectUrl)
         {
             Project = project;
             Result = result;
             User = user;
-            CanonicalAddress = canonicalAddress;
+            PublicAddress = publicAddress;
             ProjectUrl = projectUrl;
         }
 
@@ -22,15 +22,15 @@ namespace CollAction.ViewModels.Email
 
         public ApplicationUser? User { get; set; }
 
-        public Uri CanonicalAddress { get; set; }
+        public Uri PublicAddress { get; set; }
 
         public Uri ProjectUrl { get; set; }
 
         public Uri StartLink
-            => new Uri($"{CanonicalAddress}/projects/start");
+            => new Uri($"{PublicAddress}/projects/start");
 
         public Uri FinishRegistrationLink
-            => new Uri($"{CanonicalAddress}/account/finish-registration-user?email={WebUtility.UrlEncode(Result.ParticipantEmail)}&code={WebUtility.UrlEncode(Result.PasswordResetToken)}");
+            => new Uri($"{PublicAddress}/account/finish-registration-user?email={WebUtility.UrlEncode(Result.ParticipantEmail)}&code={WebUtility.UrlEncode(Result.PasswordResetToken)}");
 
         public string FacebookLink
             => $"https://www.facebook.com/sharer/sharer.php?u={ProjectUrl}";
