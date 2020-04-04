@@ -55,7 +55,7 @@ namespace CollAction.Services.Projects.Models
         public ProjectStatus Status { get; set; }
 
         [Range(0, int.MaxValue)]
-        public int NumberProjectEmailsSend { get; set; }
+        public int NumberProjectEmailsSent { get; set; }
 
         [Tags]
         public ICollection<string> Tags { get; set; } = new List<string>();

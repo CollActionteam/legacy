@@ -214,7 +214,7 @@ namespace CollAction.Services.Projects
             project.DescriptionVideoLink = updatedProject.DescriptionVideoLink?.Replace("www.youtube.com", "www.youtube-nocookie.com", StringComparison.Ordinal);
             project.Status = updatedProject.Status;
             project.DisplayPriority = updatedProject.DisplayPriority;
-            project.NumberProjectEmailsSend = updatedProject.NumberProjectEmailsSend;
+            project.NumberProjectEmailsSent = updatedProject.NumberProjectEmailsSent;
             project.OwnerId = updatedProject.OwnerId;
             context.Projects.Update(project);
 
@@ -350,7 +350,7 @@ namespace CollAction.Services.Projects
                 emailSender.SendEmail(project.Owner.Email, subject, FormatEmailMessage(message, project.Owner, null));
             }
 
-            project.NumberProjectEmailsSend += 1;
+            project.NumberProjectEmailsSent += 1;
             await context.SaveChangesAsync(token).ConfigureAwait(false);
 
             logger.LogInformation("done sending project email for '{0}' on {1} to {2} users", project.Name, subject, participants.Count());
@@ -360,7 +360,7 @@ namespace CollAction.Services.Projects
         public bool CanSendProjectEmail(Project project)
         {
             DateTime now = DateTime.UtcNow;
-            return project.NumberProjectEmailsSend < projectEmailOptions.MaxNumberProjectEmails &&
+            return project.NumberProjectEmailsSent < projectEmailOptions.MaxNumberProjectEmails &&
                    project.End + projectEmailOptions.TimeEmailAllowedAfterProjectEnd > now &&
                    project.Status != ProjectStatus.Deleted &&
                    project.Status != ProjectStatus.Hidden &&

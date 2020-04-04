@@ -27,7 +27,7 @@ namespace CollAction.GraphQl.Queries
             Field(x => x.IsClosed);
             Field(x => x.IsComingSoon);
             Field(x => x.Name);
-            Field(x => x.NumberProjectEmailsSend);
+            Field(x => x.NumberProjectEmailsSent);
             Field<IdGraphType>(nameof(Project.OwnerId), resolve: x => x.Source.OwnerId);
             Field(x => x.Proposal);
             Field(x => x.RemainingTime);

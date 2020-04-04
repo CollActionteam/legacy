@@ -92,7 +92,7 @@ namespace CollAction.Tests.Integration.Service
                                Goal = Guid.NewGuid().ToString(),
                                Tags = new string[3] { $"a{r.Next(1000)}", $"b{r.Next(1000)}", $"c{r.Next(1000)}" },
                                Id = currentProject.Id,
-                               NumberProjectEmailsSend = 3,
+                               NumberProjectEmailsSent = 3,
                                Proposal = currentProject.Proposal,
                                Status = ProjectStatus.Running,
                                Target = 33
@@ -183,17 +183,17 @@ namespace CollAction.Tests.Integration.Service
                        context.Projects.Add(newProject);
                        await context.SaveChangesAsync().ConfigureAwait(false);
 
-                       Assert.AreEqual(0, newProject.NumberProjectEmailsSend);
+                       Assert.AreEqual(0, newProject.NumberProjectEmailsSent);
                        Assert.IsTrue(projectService.CanSendProjectEmail(newProject));
                        await projectService.SendProjectEmail(newProject.Id, "test", "test", claimsUser, CancellationToken.None).ConfigureAwait(false);
-                       Assert.AreEqual(1, newProject.NumberProjectEmailsSend);
+                       Assert.AreEqual(1, newProject.NumberProjectEmailsSent);
                        Assert.IsTrue(projectService.CanSendProjectEmail(newProject));
                        for (int i = 0; i < 3; i++)
                        {
                            await projectService.SendProjectEmail(newProject.Id, "test", "test", claimsUser, CancellationToken.None).ConfigureAwait(false);
                        }
 
-                       Assert.AreEqual(4, newProject.NumberProjectEmailsSend);
+                       Assert.AreEqual(4, newProject.NumberProjectEmailsSent);
                        Assert.IsFalse(projectService.CanSendProjectEmail(newProject));
                    });
 
