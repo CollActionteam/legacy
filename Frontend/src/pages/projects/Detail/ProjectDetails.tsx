@@ -6,7 +6,7 @@ import { Avatar, Container, Grid, FormControl, TextField } from "@material-ui/co
 import { Form, useFormik, FormikContext } from "formik";
 import * as Yup from "yup";
 
-import { IProject, IUser } from "../../../api/types";
+import { IProject } from "../../../api/types";
 import { UserContext, GET_USER } from "../../../providers/user";
 
 import { RouteComponentProps, Redirect, useHistory} from "react-router-dom";
