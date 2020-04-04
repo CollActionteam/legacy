@@ -31,11 +31,6 @@ export const siteData = {
       showInPrimaryNavigation: true
     },
     {
-      name: 'Blog',
-      link: '/blogs',
-      showInPrimaryNavigation: true
-    },
-    {
       name: 'About',
       link: '/about',
       showInPrimaryNavigation: true
