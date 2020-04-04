@@ -16,7 +16,7 @@ namespace CollAction.GraphQl.Queries
 {
     public sealed class ApplicationUserGraph : EfObjectGraphType<ApplicationDbContext, ApplicationUser>
     {
-        public ApplicationUserGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService, IDependencyResolver dependencyResolver, IServiceScopeFactory serviceScopeFactory) : base(entityFrameworkGraphQlService)
+        public ApplicationUserGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService) : base(entityFrameworkGraphQlService)
         {
             Field<IdGraphType>(nameof(ApplicationUser.Id), resolve: x => x.Source.Id);
             Field(x => x.Email);
@@ -38,21 +38,19 @@ namespace CollAction.GraphQl.Queries
                 "isSubscribedNewsletter", 
                 resolve: async c =>
                 {
-                    return await dependencyResolver.Resolve<INewsletterService>().IsSubscribedAsync(c.Source.Email).ConfigureAwait(false);
+                    return await c.GetUserContext().ServiceProvider.GetRequiredService<INewsletterService>().IsSubscribedAsync(c.Source.Email).ConfigureAwait(false);
                 });
             FieldAsync<ListGraphType<DonationSubscriptionGraph>>(
                 "donationSubscriptions",
                 resolve: async c =>
                 {
-                    using var scope = serviceScopeFactory.CreateScope();
-                    return await scope.ServiceProvider.GetRequiredService<IDonationService>().GetSubscriptionsFor(c.Source, c.CancellationToken).ConfigureAwait(false);
+                    return await c.GetUserContext().ServiceProvider.GetRequiredService<IDonationService>().GetSubscriptionsFor(c.Source, c.CancellationToken).ConfigureAwait(false);
                 });
             FieldAsync<ListGraphType<StringGraphType>>(
                 "loginProviders",
                 resolve: async c =>
                 {
-                    using var scope = serviceScopeFactory.CreateScope();
-                    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+                    var userManager = c.GetUserContext().ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
                     var providers = await userManager.GetLoginsAsync(c.Source).ConfigureAwait(false);
                     return providers.Select(p => p.LoginProvider);
                 });

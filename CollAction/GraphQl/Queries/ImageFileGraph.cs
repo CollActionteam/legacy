@@ -4,6 +4,7 @@ using CollAction.Services.Image;
 using GraphQL.EntityFramework;
 using GraphQL.Types;
 using Microsoft.Extensions.DependencyInjection;
+using CollAction.Helpers;
 
 namespace CollAction.GraphQl.Queries
 {
@@ -21,11 +22,11 @@ namespace CollAction.GraphQl.Queries
                 "url",
                 resolve: c =>
                 {
-                    using var scope = serviceScopeFactory.CreateScope();
-                    return scope.ServiceProvider
-                                .GetRequiredService<IImageService>()
-                                .GetUrl(c.Source)
-                                .ToString();
+                    return c.GetUserContext()
+                            .ServiceProvider
+                            .GetRequiredService<IImageService>()
+                            .GetUrl(c.Source)
+                            .ToString();
                 });
         }
     }

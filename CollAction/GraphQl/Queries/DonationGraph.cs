@@ -2,12 +2,13 @@
 using GraphQL.Types;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using CollAction.Helpers;
 
 namespace CollAction.GraphQl.Queries
 {
     public sealed class DonationGraph : ObjectGraphType
     {
-        public DonationGraph(IServiceScopeFactory serviceScopeFactory, IOptions<StripePublicOptions> stripePublicOptions)
+        public DonationGraph(IOptions<StripePublicOptions> stripePublicOptions)
         {
             FieldAsync<BooleanGraphType>(
                 "hasIDealPaymentSucceeded",
@@ -18,8 +19,7 @@ namespace CollAction.GraphQl.Queries
                 {
                     string source = c.GetArgument<string>("source");
                     string clientSecret = c.GetArgument<string>("clientSecret");
-                    using var scope = serviceScopeFactory.CreateScope();
-                    return await scope.ServiceProvider.GetRequiredService<IDonationService>().HasIDealPaymentSucceeded(source, clientSecret, c.CancellationToken).ConfigureAwait(false);
+                    return await c.GetUserContext().ServiceProvider.GetRequiredService<IDonationService>().HasIDealPaymentSucceeded(source, clientSecret, c.CancellationToken).ConfigureAwait(false);
                 });
 
             Field<NonNullGraphType<StringGraphType>>(

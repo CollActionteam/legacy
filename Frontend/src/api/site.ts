@@ -2,7 +2,6 @@ export const siteData = {
   title: 'CollAction',
   author: 'CollAction',
   description: 'CollAction',
-  mailchimpListId: '1a035c45ca',
   menuLinks: [
     {
       name: 'Home',
@@ -75,7 +74,7 @@ export const siteData = {
     {
       name: 'Facebook',
       url: 'https://www.facebook.com/collaction.org',
-      shareUrl: (url: string) => `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+      shareUrl: (url: string) => `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
       icon: 'facebook-f'
     },
     {
@@ -86,7 +85,7 @@ export const siteData = {
     {
       name: 'Twitter',
       url: 'https://twitter.com/CollAction_org',
-      shareUrl: (url: string) => `https://twitter.com/intent/tweet?url=${url}`,
+      shareUrl: (url: string) => `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}`,
       icon: 'twitter'
     },
     {
@@ -97,7 +96,7 @@ export const siteData = {
     {
       name: 'LinkedIn',
       url: 'https://www.linkedin.com/company-beta/15079855',
-      shareUrl: (url: string) => `https://www.linkedin.com/shareArticle?mini=true&url=${url}&source=https%3A%2F%2Fcollaction.org`,
+      shareUrl: (url: string) => `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(url)}&source=https%3A%2F%2Fcollaction.org`,
       icon: 'linkedin-in'
     }
   ]

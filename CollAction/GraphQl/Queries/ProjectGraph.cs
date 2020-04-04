@@ -11,7 +11,7 @@ namespace CollAction.GraphQl.Queries
 {
     public sealed class ProjectGraph : EfObjectGraphType<ApplicationDbContext, Project>
     {
-        public ProjectGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService, IServiceScopeFactory serviceScopeFactory) : base(entityFrameworkGraphQlService)
+        public ProjectGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService) : base(entityFrameworkGraphQlService)
         {
             Field<NonNullGraphType<IdGraphType>>(nameof(Project.Id), resolve: x => x.Source.Id);
             Field(x => x.AnonymousUserParticipants);
@@ -40,8 +40,7 @@ namespace CollAction.GraphQl.Queries
                 "canSendProjectEmail",
                 resolve: c =>
                 {
-                    using var scope = serviceScopeFactory.CreateScope();
-                    return scope.ServiceProvider.GetRequiredService<IProjectService>().CanSendProjectEmail(c.Source);
+                    return c.GetUserContext().ServiceProvider.GetRequiredService<IProjectService>().CanSendProjectEmail(c.Source);
                 });
             FieldAsync<NonNullGraphType<BooleanGraphType>>(
                 nameof(Project.IsSuccessfull),

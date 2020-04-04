@@ -11,10 +11,23 @@ import SocialMedia from "../SocialMedia/SocialMedia";
 import NewsletterSignup from "../NewsletterSignup/NewsletterSignup";
 
 import styles from "./Footer.module.scss";
+import { gql, useQuery } from "@apollo/client";
+import { Alert } from "../Alert/Alert";
 
-export default () => (
-  <div className={styles.footer}>
+const GET_MAILCHIMP_LISTID = gql`
+  query {
+    miscellaneous {
+      mailChimpNewsletterListId
+    }
+  }
+`;
+
+export default () => {
+  const { data: mailchimpData, error } = useQuery(GET_MAILCHIMP_LISTID);
+  const mailChimpId = mailchimpData?.miscellaneous?.mailChimpNewsletterListId ?? "";
+  return <div className={styles.footer}>
     <Container>
+      <Alert type="error" text={error?.message} />
       <Link to="/">
         <img alt="CollAction" className={styles.logo} src={logo}></img>
       </Link>
@@ -49,9 +62,9 @@ export default () => (
           <h5 className={styles.title}>Follow us</h5>
           <SocialMedia socialMedia={siteData.socialMedia} />
           <h5 className={styles.title}>Newsletter</h5>
-          <NewsletterSignup mailchimpListId={siteData.mailchimpListId} />
+          <NewsletterSignup mailchimpListId={mailChimpId} />
         </Grid>
       </Grid>
     </Container>
-  </div>
-);
+  </div>;
+};
