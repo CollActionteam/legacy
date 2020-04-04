@@ -3,7 +3,7 @@ import { gql, useQuery } from "@apollo/client";
 import { Fragments } from "../../api/fragments";
 import { Grid } from "@material-ui/core";
 
-import ProjectCard from "../ProjectCard";
+import ProjectCard from "../ProjectCard/ProjectCard";
 import { ProjectStatusFilter, IProject } from "../../api/types";
 
 import Loader from "../Loader/Loader";
@@ -15,7 +15,7 @@ interface IProjectListProps {
 
 export default ({
   category,
-  status = ProjectStatusFilter.Active,
+  status = ProjectStatusFilter.Open,
 }: IProjectListProps) => {
   const query = useQuery(
     FIND_PROJECTS,

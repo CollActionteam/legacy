@@ -8,7 +8,7 @@ import { Fragments } from "../../api/fragments";
 import { IProject } from "../../api/types";
 
 import Loader from "../Loader/Loader";
-import ProjectCard from "../ProjectCard";
+import ProjectCard from "../ProjectCard/ProjectCard";
 import { SecondaryButton, SecondaryGhostButton } from "../Button/Button";
 
 import "slick-carousel/slick/slick.css";

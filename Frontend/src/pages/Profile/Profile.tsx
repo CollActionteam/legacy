@@ -1,14 +1,14 @@
 import { Grid, Card, CardActions } from "@material-ui/core";
 import React from "react";
-import { UserContext } from "../../providers/user";
-import ResetPassword from "../../components/Profile/ResetPassword";
-import NewsletterSubscription from "../../components/Profile/NewsletterSubscription";
-import RecurringDonations from "../../components/Profile/RecurringDonations";
-import DeleteAccount from "../../components/Profile/DeleteAccount";
-import ProjectsCreated from "../../components/Profile/ProjectsCreated";
-import ProjectsParticipating from "../../components/Profile/ProjectsParticipating";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
+import { UserContext } from "../../providers/user";
+import ResetPassword from "../../components/Profile/ResetPassword";
+import RecurringDonations from "../../components/Profile/RecurringDonations";
+import ProjectsParticipating from "../../components/Profile/ProjectsParticipating";
+import NewsletterSubscription from "../../components/Profile/NewsletterSubscription";
+import DeleteAccount from "../../components/Profile/DeleteAccount";
+import ProjectsCreated from "../../components/Profile/ProjectsCreated";
 
 export default () => {
   return <UserContext.Consumer>
@@ -51,13 +51,13 @@ export default () => {
                 <DeleteAccount user={user!} />
               </Grid>
               <Grid item xs={12} md={6}>
-                <ProjectsCreated user={user!} />
+                <RecurringDonations user={user!} />
               </Grid>
               <Grid item xs={12} md={6}>
                 <ProjectsParticipating user={user!} />
               </Grid>
               <Grid item xs={12} md={6}>
-                <RecurringDonations user={user!} />
+                <ProjectsCreated user={user!} />
               </Grid>
             </Grid>
           </div>;

@@ -4,7 +4,7 @@ import * as serviceWorker from './serviceWorker';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import Apollo from './providers/apollo';
 import User from './providers/user';
-import Layout from './components/Layout';
+import Layout from './components/Layout/Layout';
 import i18n from './i18n';
 import { I18nextProvider } from 'react-i18next';
 
@@ -30,6 +30,7 @@ import ResetPasswordPage from './pages/ResetPassword/ResetPassword';
 import PrivacyPolicyPage from './pages/PrivacyPolicy/PrivacyPolicy';
 import DonationThankYouPage from './pages/Donation/DonationThankYou';
 import DonationReturnPage from './pages/Donation/DonationReturn';
+import UnsubscribeProjectPage from './pages/projects/UnsubscribeProject/UnsubscribeProject';
 
 const routing = (
     <I18nextProvider i18n={i18n}>
@@ -55,6 +56,7 @@ const routing = (
                             <Route exact path="/projects/thank-you-create" component={ThankYouCreatePage} />
                             <Route exact path="/projects/:slug/:projectId" component={ProjectDetailsPage} />
                             <Route exact path="/projects/:slug/:projectId/thankyou" component={ThankYouCommitPage} />
+                            <Route exact path="/projects/:slug/:projectId/unsubscribe-email" component={UnsubscribeProjectPage} />
                             <Route exact path="/admin/:type/:action/:id?" component={AdminPage} />
                             <Route component={NotFoundPage} />
                         </Switch>

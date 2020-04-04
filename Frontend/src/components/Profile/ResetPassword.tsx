@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Card, CardContent, CardActions, Button, TextField, FormGroup } from "@material-ui/core";
 import { gql, useMutation } from "@apollo/client";
-import { Alert } from "../../Alert/Alert";
+import { Alert } from "../Alert/Alert";
 
 export default () => {
     const [currentPassword, setCurrentPassword] = useState("");

@@ -1,6 +1,6 @@
-import { IProjectParticipant, IUser } from "../../../api/types";
+import { IProjectParticipant, IUser } from "../../api/types";
 import React from "react";
-import ProjectCard from "../../ProjectCard";
+import ProjectCard from "../ProjectCard/ProjectCard";
 import { Card, CardActions, CardContent, Button } from "@material-ui/core";
 import { useMutation, gql } from "@apollo/client";
 
@@ -33,13 +33,12 @@ export default ({ user, participant }: IProjectParticipatingProps) => {
 }
 
 const SET_PROJECT_SUBSCRIPTION = gql`
-mutation SetProjectSubscription($projectId: ID!, $userId: String!, $token: String!, $isSubscribed: Boolean!)
-{  
-  project {
-    changeProjectSubscription(projectId: $projectId, userId: $userId, token: $token, isSubscribed: $isSubscribed) {
-      id
-      subscribedToProjectEmails
+    mutation SetProjectSubscription($projectId: ID!, $userId: String!, $token: String!, $isSubscribed: Boolean!) {  
+        project {
+            changeProjectSubscription(projectId: $projectId, userId: $userId, token: $token, isSubscribed: $isSubscribed) {
+                id
+                subscribedToProjectEmails
+            }
+        }
     }
-  }
-}
 `;

@@ -1,7 +1,7 @@
 import React from "react";
-import { IUser } from "../../../api/types";
+import { IUser } from "../../api/types";
 import { CardContent, Card } from "@material-ui/core";
-import ProjectParticipating from "../ProjectParticipating";
+import ProjectParticipating from "./ProjectParticipating";
 
 interface IProjectsParticipatingProps {
     user: IUser;

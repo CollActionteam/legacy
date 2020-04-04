@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Card, CardContent, CardActions, FormGroup, FormControl, TextField, Grid, Dialog, DialogTitle, DialogContent, DialogActions, makeStyles } from "@material-ui/core";
 import { useFormik, Form, FormikContext } from "formik";
 import { UserContext } from "../../providers/user";
 import * as Yup from "yup";
-import { IUser } from "../../api/types";
 import { Alert } from "../Alert/Alert";
 import styles from "./DonationCard.module.scss";
 import bankCard from "../../assets/bank-card.png";
@@ -20,10 +19,6 @@ import {
 } from '@stripe/react-stripe-js';
 import { Button } from "../Button/Button";
 import { useHistory } from "react-router-dom";
-
-interface IInnerDonationCardProps {
-    user: IUser | null;
-}
 
 type DonationValues = {
     email: string;
@@ -60,20 +55,20 @@ const INITIALIZE_IDEAL_CHECKOUT = gql`
 const INITIALIZE_SEPA_DIRECT = gql`
     mutation InitializeSEPADirect($checkout: SepaDirectCheckoutInputGraph!) {
         donation {
-            sourceId: initializeIDealCheckout(checkout: $checkout)
+            sourceId: initializeSepaDirect(checkout: $checkout)
         }
     }
 `;
 
 const dialogStyles = {
     dialogPaper: {
-        minHeight: '50vh',
-        maxHeight: '50vh'
+        minHeight: '390px'
     }
 };
 const useDialogStyles = makeStyles(dialogStyles);
 
-const InnerDonationCard = ({user}: IInnerDonationCardProps) => {
+const InnerDonationCard = () => {
+    const { user } = useContext(UserContext);
     const [ error, setError ] = useState<string | null>(null);
     const [ bankingPopupOpen, setBankingPopupOpen ] = useState(false);
     const stripe = useStripe();
@@ -145,7 +140,8 @@ const InnerDonationCard = ({user}: IInnerDonationCardProps) => {
                 checkout: {
                     sourceId: sourceId,
                     name: values.name,
-                    email: values.email
+                    email: values.email,
+                    amount: values.amount
                 }
             }
         });
@@ -342,9 +338,7 @@ export default () => {
     } else {
         const stripePromise = loadStripe(data.donation.stripePublicKey);
         return <Elements stripe={stripePromise}>
-            <UserContext.Consumer>
-                {({user}) => <InnerDonationCard user={user} />}
-            </UserContext.Consumer>
+            <InnerDonationCard />
         </Elements>;
     }
 };

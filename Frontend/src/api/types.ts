@@ -100,9 +100,10 @@ export enum ProjectStatus {
 }
 
 export enum ProjectStatusFilter {
-  Active = "OPEN",
+  Open = "OPEN",
   Closed = "CLOSED",
   ComingSoon = "COMING_SOON",
+  Active = "ACTIVE"
 }
 
 export interface IProjectTag {

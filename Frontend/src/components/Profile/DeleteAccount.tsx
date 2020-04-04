@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Card, CardContent, Button, CardActions, DialogTitle, Dialog, DialogActions } from "@material-ui/core";
-import { IUser } from "../../../api/types";
+import { IUser } from "../../api/types";
 import { gql, useMutation } from "@apollo/client";
-import { Alert } from "../../Alert/Alert";
+import { Alert } from "../Alert/Alert";
 import { useHistory } from "react-router-dom";
-import { GET_USER } from "../../../providers/user";
+import { GET_USER } from "../../providers/user";
 
 interface IDeleteAccountProps {
     user: IUser;

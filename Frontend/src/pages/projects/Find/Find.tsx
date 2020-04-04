@@ -16,7 +16,7 @@ import { Alert } from '../../../components/Alert/Alert';
 
 const FindPage = () => {
   const [category, setCategory] = useState("");
-  const [status, setStatus] = useState(ProjectStatusFilter.Active);
+  const [status, setStatus] = useState(ProjectStatusFilter.Open);
   const { data, loading, error } = useQuery(GET_CATEGORIES);
 
   if (error) {
@@ -64,7 +64,7 @@ const FindPage = () => {
 
               <div className={styles.selectWrapper}>
                 <select value={status} onChange={handleStatusChange}>
-                  <option value={ProjectStatusFilter.Active}>Open</option>
+                  <option value={ProjectStatusFilter.Open}>Open</option>
                   <option value={ProjectStatusFilter.Closed}>Closed</option>
                   <option value={ProjectStatusFilter.ComingSoon}>
                     Coming soon

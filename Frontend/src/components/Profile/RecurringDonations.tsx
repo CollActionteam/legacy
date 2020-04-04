@@ -1,7 +1,7 @@
 import React from "react";
-import { IUser } from "../../../api/types";
+import { IUser } from "../../api/types";
 import { Card, List, CardContent } from "@material-ui/core";
-import RecurringDonationSubscription from "../RecurringDonationSubscription";
+import RecurringDonationSubscription from "./RecurringDonationSubscription";
 
 interface IRecurringDonationProps {
     user: IUser;
