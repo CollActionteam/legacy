@@ -35,7 +35,7 @@ export default ({ user, subscription }: IRecurringDonationItemProps) => {
         <Alert type="error" text={errorMessage} />
         <Dialog onClose={() => setHasStopPopup(false)} open={hasStopPopup}>
             <DialogTitle>
-                Are you sure you want to delete your account?
+                Are you sure you want to stop this donation subscription?
             </DialogTitle>
             <DialogActions>
                 <Button onClick={() => stopSubscription()}>Stop this donation subscription</Button>
