@@ -52,7 +52,7 @@ namespace CollAction.Models
 
         public int Target { get; set; }
 
-        public int NumberProjectEmailsSend { get; set; }
+        public int NumberProjectEmailsSent { get; set; }
 
         public DateTime Start { get; set; }
         

@@ -22,7 +22,7 @@ namespace CollAction.GraphQl.Mutations.Input
             Field(x => x.DescriptionVideoLink, true);
             Field(x => x.Tags);
             Field(x => x.DisplayPriority);
-            Field(x => x.NumberProjectEmailsSend);
+            Field(x => x.NumberProjectEmailsSent);
             Field(x => x.Status);
             Field(x => x.OwnerId, true);
         }

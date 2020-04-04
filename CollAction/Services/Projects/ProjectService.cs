@@ -33,19 +33,19 @@ namespace CollAction.Services.Projects
         private readonly ApplicationDbContext context;
         private readonly IEmailSender emailSender;
         private readonly ILogger<ProjectService> logger;
-        private readonly ProjectEmailOptions projectEmailOptions;
         private readonly SiteOptions siteOptions;
         private readonly IHtmlInputValidator htmlInputValidator;
         private readonly IServiceProvider serviceProvider;
         private readonly IBackgroundJobClient jobClient;
         private readonly IImageService imageService;
+        private const int MaxNumberProjectEmails = 4;
+        private static TimeSpan TimeEmailAllowedAfterProjectEnd = TimeSpan.FromDays(180);
 
         public ProjectService(
             UserManager<ApplicationUser> userManager,
             ApplicationDbContext context,
             IEmailSender emailSender,
             ILogger<ProjectService> logger,
-            IOptions<ProjectEmailOptions> projectEmailOptions,
             IOptions<SiteOptions> siteOptions,
             IHtmlInputValidator htmlInputValidator,
             IServiceProvider serviceProvider,
@@ -56,7 +56,6 @@ namespace CollAction.Services.Projects
             this.context = context;
             this.emailSender = emailSender;
             this.logger = logger;
-            this.projectEmailOptions = projectEmailOptions.Value;
             this.siteOptions = siteOptions.Value;
             this.htmlInputValidator = htmlInputValidator;
             this.serviceProvider = serviceProvider;
@@ -214,7 +213,7 @@ namespace CollAction.Services.Projects
             project.DescriptionVideoLink = updatedProject.DescriptionVideoLink?.Replace("www.youtube.com", "www.youtube-nocookie.com", StringComparison.Ordinal);
             project.Status = updatedProject.Status;
             project.DisplayPriority = updatedProject.DisplayPriority;
-            project.NumberProjectEmailsSend = updatedProject.NumberProjectEmailsSend;
+            project.NumberProjectEmailsSent = updatedProject.NumberProjectEmailsSent;
             project.OwnerId = updatedProject.OwnerId;
             context.Projects.Update(project);
 
@@ -350,7 +349,7 @@ namespace CollAction.Services.Projects
                 emailSender.SendEmail(project.Owner.Email, subject, FormatEmailMessage(message, project.Owner, null));
             }
 
-            project.NumberProjectEmailsSend += 1;
+            project.NumberProjectEmailsSent += 1;
             await context.SaveChangesAsync(token).ConfigureAwait(false);
 
             logger.LogInformation("done sending project email for '{0}' on {1} to {2} users", project.Name, subject, participants.Count());
@@ -360,8 +359,8 @@ namespace CollAction.Services.Projects
         public bool CanSendProjectEmail(Project project)
         {
             DateTime now = DateTime.UtcNow;
-            return project.NumberProjectEmailsSend < projectEmailOptions.MaxNumberProjectEmails &&
-                   project.End + projectEmailOptions.TimeEmailAllowedAfterProjectEnd > now &&
+            return project.NumberProjectEmailsSent < MaxNumberProjectEmails &&
+                   project.End + TimeEmailAllowedAfterProjectEnd > now &&
                    project.Status != ProjectStatus.Deleted &&
                    project.Status != ProjectStatus.Hidden &&
                    now >= project.Start;

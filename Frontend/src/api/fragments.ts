@@ -42,5 +42,6 @@ export const Fragments = {
     isFailed
     totalParticipants
     percentage
+    numberProjectEmailsSent
   `,
 };

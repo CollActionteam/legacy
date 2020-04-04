@@ -74,7 +74,7 @@ export default ({ projectId } : IEditProjectProps): any => {
             firstCategory: "",
             secondCategory: "",
             tags: "",
-            numberProjectEmailsSend: 0,
+            numberProjectEmailsSent: 0,
             bannerImageDescription: "",
             descriptiveImageDescription: "",
         },
@@ -97,7 +97,7 @@ export default ({ projectId } : IEditProjectProps): any => {
             firstCategory: Yup.string(),
             secondCategory: Yup.string(),
             tags: Yup.string(),
-            numberProjectEmailsSend: Yup.number().required("Must be filled in").min(0, "Must be a positive number"),
+            numberProjectEmailsSent: Yup.number().required("Must be filled in").min(0, "Must be a positive number"),
             bannerImageDescription: Yup.string(),
             descriptiveImageDescription: Yup.string(),
             initialized: Yup.boolean().oneOf([true], "Data must be loaded")
@@ -126,7 +126,7 @@ export default ({ projectId } : IEditProjectProps): any => {
                         end: values.end,
                         descriptionVideoLink: values.descriptionVideoLink === "" ? null : values.descriptionVideoLink,
                         displayPriority: values.displayPriority,
-                        numberProjectEmailsSend: values.numberProjectEmailsSend,
+                        numberProjectEmailsSent: values.numberProjectEmailsSent,
                         status: values.status,
                         tags: values.tags.split(';').filter((i: string | null) => i),
                         ownerId: values.ownerId === "" ? null : values.ownerId,
@@ -157,7 +157,7 @@ export default ({ projectId } : IEditProjectProps): any => {
             firstCategory: data.project.categories[0]?.category ?? "NONE",
             secondCategory: data.project.categories[1]?.category ?? "NONE",
             tags: data.project.tags.map((t: any) => t.tag.name).join(";"),
-            numberProjectEmailsSend: data.project.numberProjectEmailsSend,
+            numberProjectEmailsSent: data.project.numberProjectEmailsSent,
             bannerImageDescription: data.project.bannerImage?.description ?? "",
             descriptiveImageDescription: data.project.descriptiveImage?.description ?? ""
         });
@@ -294,12 +294,12 @@ export default ({ projectId } : IEditProjectProps): any => {
                     </FormControl>
                     <FormControl >
                         <TextField
-                            name="numberProjectEmailsSend"
+                            name="numberProjectEmailsSent"
                             label="Number Project E-Mails Send"
                             type="number"
-                            { ...formik.getFieldProps('numberProjectEmailsSend') }
+                            { ...formik.getFieldProps('numberProjectEmailsSent') }
                         />
-                        <Alert type="error" text={formik.errors.numberProjectEmailsSend} />
+                        <Alert type="error" text={formik.errors.numberProjectEmailsSent} />
                     </FormControl>
                     <FormControl >
                         <TextField
@@ -435,7 +435,7 @@ const GET_OWNER = gql`
 const GET_PROJECT = gql`
     query GetProject($id: ID!) {
         project(id: $id) {
-            numberProjectEmailsSend
+            numberProjectEmailsSent
             anonymousUserParticipants
             ownerWithEmail: owner {
                 email

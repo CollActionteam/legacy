@@ -169,7 +169,6 @@ namespace CollAction
             services.Configure<ImageServiceOptions>(configuration);
             services.Configure<ImageProcessingOptions>(configuration);
             services.Configure<NewsletterServiceOptions>(configuration);
-            services.Configure<ProjectEmailOptions>(configuration);
             services.Configure<SeedOptions>(configuration);
             services.Configure<MailChimpOptions>(options =>
             {
