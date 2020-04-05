@@ -114,7 +114,7 @@ export default ({ user, project }: IProjectParticipatingProps) => {
             <ProjectCard project={project} />
         </CardContent>
         <CardActions>
-            { project.canSendProjectEmail ? <Button onClick={() => setShowSendProject(true)}>Send Project E-Mail</Button> : null }
+            <Button disabled={!project.canSendProjectEmail} onClick={() => setShowSendProject(true)}>Send Project E-Mail</Button>
         </CardActions>
     </Card>;
 }
