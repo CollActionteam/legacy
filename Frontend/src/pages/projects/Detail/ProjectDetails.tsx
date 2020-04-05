@@ -20,6 +20,7 @@ import ProgressRing from "../../../components/ProgressRing/ProgressRing";
 import { Section } from "../../../components/Section/Section";
 
 import styles from "./ProjectDetails.module.scss";
+import DisqusProjectComments from "../../../components/DisqusProjectComments/DisqusProjectComments";
 
 type TParams = {
   slug: string,
@@ -258,6 +259,11 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
                       </span>
                     </div>
               }
+            </Container>
+          </Grid>
+          <Grid item xs={12}>
+            <Container>
+              <DisqusProjectComments project={project} />
             </Container>
           </Grid>
         </Grid>
