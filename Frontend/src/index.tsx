@@ -9,7 +9,20 @@ import AllProviders from './providers/AllProviders';
 import HomePage from './pages/Home/Home';
 import LoginPage from './pages/account/Login/Login';
 import AboutPage from './pages/About/About';
+import AdminPage from './pages/Admin/Admin';
 import NotFoundPage from './pages/NotFound/NotFound';
+
+// Account pages
+import ProfilePage from './pages/account/Profile/Profile';
+import ForgotPasswordPage from './pages/account/ForgotPassword/ForgotPassword';
+import RegisterUserPage from './pages/account/RegisterUser/RegisterUser';
+import ResetPasswordPage from './pages/account/ResetPassword/ResetPassword';
+import FinishRegistrationPage from './pages/account/FinishRegistration/FinishRegistration';
+
+// Donation pages
+import DonationThankYouPage from './pages/Donation/DonationThankYou';
+import DonationReturnPage from './pages/Donation/DonationReturn';
+import DonationPage from './pages/Donation/Donation';
 
 // Project pages
 import FindPage from './pages/projects/Find/Find';
@@ -18,17 +31,8 @@ import CreateProjectPage from './pages/projects/Create/Create';
 import ThankYouCreatePage from './pages/projects/ThankYouCreate/ThankYouCreate';
 import ThankYouCommitPage from './pages/projects/ThankYouCommit/ThankYouCommit';
 import ProjectDetailsPage from './pages/projects/Detail/ProjectDetails';
-import ProfilePage from './pages/account/Profile/Profile';
-import AdminPage from './pages/Admin/Admin';
-import DonationPage from './pages/Donation/Donation';
-import ForgotPasswordPage from './pages/account/ForgotPassword/ForgotPassword';
-import RegisterUserPage from './pages/account/RegisterUser/RegisterUser';
-import ResetPasswordPage from './pages/account/ResetPassword/ResetPassword';
 import PrivacyPolicyPage from './pages/PrivacyPolicy/PrivacyPolicy';
-import DonationThankYouPage from './pages/Donation/DonationThankYou';
-import DonationReturnPage from './pages/Donation/DonationReturn';
 import UnsubscribeProjectPage from './pages/projects/UnsubscribeProject/UnsubscribeProject';
-import FinishRegistrationPage from './pages/account/FinishRegistration/FinishRegistration';
 
 const routing = (
     <Router>
