@@ -1,8 +1,8 @@
 import { Grid, Card, CardActions } from "@material-ui/core";
-import React, { useContext } from "react";
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
-import { UserContext } from "../../../providers/user";
+import { useUser } from "../../../providers/User";
 import ResetPassword from "../../../components/Profile/ResetPassword";
 import RecurringDonations from "../../../components/Profile/RecurringDonations";
 import ProjectsParticipating from "../../../components/Profile/ProjectsParticipating";
@@ -11,7 +11,7 @@ import DeleteAccount from "../../../components/Profile/DeleteAccount";
 import ProjectsCreated from "../../../components/Profile/ProjectsCreated";
 
 export default () => {
-  const { user } = useContext(UserContext);
+  const { user } = useUser();
   if (user !== null) {
     return <div style={{ padding: 20 }}>
         <Grid container spacing={5}>

@@ -1,7 +1,7 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardActions, FormGroup, FormControl, TextField, Grid, Dialog, DialogTitle, DialogContent, DialogActions, makeStyles } from "@material-ui/core";
 import { useFormik, Form, FormikContext } from "formik";
-import { UserContext } from "../../providers/user";
+import { useUser } from "../../providers/User";
 import * as Yup from "yup";
 import { Alert } from "../Alert/Alert";
 import styles from "./DonationCard.module.scss";
@@ -10,7 +10,7 @@ import iDealLogo from "../../assets/i-deal-logo.png";
 import { useMutation, gql, useQuery } from "@apollo/client";
 import Loader from "../Loader/Loader";
 import { loadStripe } from '@stripe/stripe-js';
-import { GET_USER } from "../../providers/user";
+import { GET_USER } from "../../providers/User";
 import {
   Elements,
   useStripe,
@@ -20,6 +20,7 @@ import {
 } from '@stripe/react-stripe-js';
 import { Button } from "../Button/Button";
 import { useHistory } from "react-router-dom";
+import { useConsent } from "../../providers/CookieConsent";
 
 type DonationValues = {
     email: string;
@@ -69,7 +70,7 @@ const dialogStyles = {
 const useDialogStyles = makeStyles(dialogStyles);
 
 const InnerDonationCard = () => {
-    const { user } = useContext(UserContext);
+    const { user } = useUser();
     const [ error, setError ] = useState<string | null>(null);
     const [ bankingPopupOpen, setBankingPopupOpen ] = useState(false);
     const stripe = useStripe();
@@ -338,11 +339,14 @@ export default () => {
     const { data, loading, error } = useQuery(
         STRIPE_PUBLIC_KEY
     );
+    const { consent } = useConsent();
 
     if (loading) {
         return <Loader />;
     } else if (error) {
         return <Alert type="error" text={error.message} />;
+    } else if (!consent.includes("stripe")) {
+        return <Alert type="error" text="You can't donate because you haven't given consent to the stripe donation integration" />;
     } else {
         const stripePromise = loadStripe(data.donation.stripePublicKey);
         return <Elements stripe={stripePromise}>

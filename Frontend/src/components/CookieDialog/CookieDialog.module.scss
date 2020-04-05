@@ -1,0 +1,15 @@
+.cookieDialog {
+    background-color: var(--c-green);
+    color: white;
+    padding: 20px;
+
+    a {
+        color: white;
+        text-decoration: underline;
+    }
+
+    button {
+        margin: 20px 5px 5px 5px;
+        border: 1px solid white;
+    }
+}

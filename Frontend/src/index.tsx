@@ -2,11 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
-import Apollo from './providers/apollo';
-import User from './providers/user';
 import Layout from './components/Layout/Layout';
 import i18n from './i18n';
 import { I18nextProvider } from 'react-i18next';
+import AllProviders from './providers/AllProviders';
 
 // General pages
 import HomePage from './pages/Home/Home';
@@ -34,39 +33,35 @@ import UnsubscribeProjectPage from './pages/projects/UnsubscribeProject/Unsubscr
 import FinishRegistrationPage from './pages/account/FinishRegistration/FinishRegistration';
 
 const routing = (
-    <I18nextProvider i18n={i18n}>
-        <Router>
-            <Apollo>
-                <User>
-                    <Layout>
-                        <Switch>
-                            <Route exact path="/" component={HomePage} />
-                            <Route exact path="/about" component={AboutPage} />
-                            <Route exact path="/privacy-policy" component={PrivacyPolicyPage} />
-                            <Route exact path="/account/login" component={LoginPage} />
-                            <Route exact path="/account/forgot-password" component={ForgotPasswordPage} />
-                            <Route exact path="/account/reset-password" component={ResetPasswordPage} />
-                            <Route exact path="/account/register-user" component={RegisterUserPage} />
-                            <Route exact path="/account/finish-registration" component={FinishRegistrationPage} />
-                            <Route exact path="/account/profile" component={ProfilePage} />
-                            <Route exact path="/donate" component={DonationPage} />
-                            <Route exact path="/donate/return" component={DonationReturnPage} />
-                            <Route exact path="/donate/thankyou" component={DonationThankYouPage} />
-                            <Route exact path="/projects/find" component={FindPage} />
-                            <Route exact path="/projects/start" component={StartProjectPage} />
-                            <Route exact path="/projects/create" component={CreateProjectPage} />
-                            <Route exact path="/projects/thank-you-create" component={ThankYouCreatePage} />
-                            <Route exact path="/projects/:slug/:projectId" component={ProjectDetailsPage} />
-                            <Route exact path="/projects/:slug/:projectId/thankyou" component={ThankYouCommitPage} />
-                            <Route exact path="/projects/:slug/:projectId/unsubscribe-email" component={UnsubscribeProjectPage} />
-                            <Route exact path="/admin/:type/:action/:id?" component={AdminPage} />
-                            <Route component={NotFoundPage} />
-                        </Switch>
-                    </Layout>
-                </User>
-            </Apollo>
-        </Router>
-    </I18nextProvider>
+    <Router>
+        <AllProviders>
+            <Layout>
+                <Switch>
+                    <Route exact path="/" component={HomePage} />
+                    <Route exact path="/about" component={AboutPage} />
+                    <Route exact path="/privacy-policy" component={PrivacyPolicyPage} />
+                    <Route exact path="/account/login" component={LoginPage} />
+                    <Route exact path="/account/forgot-password" component={ForgotPasswordPage} />
+                    <Route exact path="/account/reset-password" component={ResetPasswordPage} />
+                    <Route exact path="/account/register-user" component={RegisterUserPage} />
+                    <Route exact path="/account/finish-registration" component={FinishRegistrationPage} />
+                    <Route exact path="/account/profile" component={ProfilePage} />
+                    <Route exact path="/donate" component={DonationPage} />
+                    <Route exact path="/donate/return" component={DonationReturnPage} />
+                    <Route exact path="/donate/thankyou" component={DonationThankYouPage} />
+                    <Route exact path="/projects/find" component={FindPage} />
+                    <Route exact path="/projects/start" component={StartProjectPage} />
+                    <Route exact path="/projects/create" component={CreateProjectPage} />
+                    <Route exact path="/projects/thank-you-create" component={ThankYouCreatePage} />
+                    <Route exact path="/projects/:slug/:projectId" component={ProjectDetailsPage} />
+                    <Route exact path="/projects/:slug/:projectId/thankyou" component={ThankYouCommitPage} />
+                    <Route exact path="/projects/:slug/:projectId/unsubscribe-email" component={UnsubscribeProjectPage} />
+                    <Route exact path="/admin/:type/:action/:id?" component={AdminPage} />
+                    <Route component={NotFoundPage} />
+                </Switch>
+            </Layout>
+        </AllProviders>
+    </Router>
 );
 
 ReactDOM.render(routing, document.getElementById('root'));

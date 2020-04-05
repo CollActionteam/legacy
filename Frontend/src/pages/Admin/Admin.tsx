@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
+import React from "react";
 import { RouteComponentProps, Redirect } from "react-router-dom";
-import { UserContext } from "../../providers/user";
+import { useUser } from "../../providers/User";
 import AdminSidebar from "../../components/Admin/AdminSidebar";
 import AdminEditUser from "../../components/Admin/Users/AdminEditUser";
 import AdminEditProject from "../../components/Admin/Projects/AdminEditProject";
@@ -14,7 +14,7 @@ type TParams = {
 }
 
 const AdminPage = ({ match } : RouteComponentProps<TParams>): any => {
-  const { user } = useContext(UserContext);
+  const { user } = useUser();
 
   const adminInner = () => {
     if (match.params.action === "list") {

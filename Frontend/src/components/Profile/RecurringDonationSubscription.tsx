@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMutation } from "@apollo/client/react/hooks/useMutation";
 import { gql } from "@apollo/client";
 import { Alert } from "../Alert/Alert";
-import { GET_USER } from "../../providers/user";
+import { GET_USER } from "../../providers/User";
 
 interface IRecurringDonationItemProps {
     subscription: IDonationSubscription;

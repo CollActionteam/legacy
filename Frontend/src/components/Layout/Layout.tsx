@@ -29,6 +29,7 @@ import {
   faEuroSign
 } from "@fortawesome/free-solid-svg-icons";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
+import CookieDialog from "../CookieDialog/CookieDialog";
 
 library.add(
   fab,
@@ -57,6 +58,9 @@ export default ({ children }: any) => (
     ></Helmet>
     <Header />
     <Grid container className="site-content">
+      <Grid item xs={12}>
+        <CookieDialog alwaysShow={false} />
+      </Grid>
       <Grid item xs={12}>
         {children}
       </Grid>

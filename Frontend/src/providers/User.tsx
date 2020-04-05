@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useQuery } from "@apollo/client";
 import { gql } from "@apollo/client";
 import { IUser } from "../api/types";
@@ -14,9 +14,11 @@ export default ({ children }: any) => {
   };
 
   return <UserContext.Provider value={contextValue}>
-    {children}
+    { children }
   </UserContext.Provider>;
 };
+
+export const useUser = () => useContext(UserContext);
 
 export const GET_USER = gql`
   query GetUser {

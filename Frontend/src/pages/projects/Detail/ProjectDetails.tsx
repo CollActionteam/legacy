@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import gql from "graphql-tag";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,7 +7,7 @@ import { Form, useFormik, FormikContext } from "formik";
 import * as Yup from "yup";
 
 import { IProject } from "../../../api/types";
-import { UserContext, GET_USER } from "../../../providers/user";
+import { useUser, GET_USER } from "../../../providers/User";
 
 import { RouteComponentProps, Redirect, useHistory} from "react-router-dom";
 import { Fragments } from "../../../api/fragments";
@@ -28,7 +28,7 @@ type TParams = {
 }
 
 const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
-  const { user } = useContext(UserContext);
+  const { user } = useUser();
   const { slug, projectId } = match.params;
   const { data, loading } = useQuery(GET_PROJECT, { variables: { id: projectId } });
   const project = (data?.project ?? null) as IProject | null;
