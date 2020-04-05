@@ -346,7 +346,7 @@ export default () => {
     } else if (error) {
         return <Alert type="error" text={error.message} />;
     } else if (!consent.includes("stripe")) {
-        return <Alert type="error" text="You can't donate because you haven't given consent to the stripe donation integration" />;
+        return <Alert type="error" text="You can't donate because you haven't given consent for loading the stripe donation integration" />;
     } else {
         const stripePromise = loadStripe(data.donation.stripePublicKey);
         return <Elements stripe={stripePromise}>
