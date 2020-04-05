@@ -37,7 +37,7 @@ export default ({ project }: { project: IProject }) => {
             <div className={styles.remainingTime}>
               <FontAwesomeIcon icon="clock"></FontAwesomeIcon>
               <span>
-                { project?.remainingTimeUserFriendly }
+                { project.remainingTimeUserFriendly }
               </span>
             </div>
           </div>

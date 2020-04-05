@@ -250,10 +250,12 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
                     </FormikContext.Provider>
                   </div> : 
                     <div id="join" className={styles.joinSection}>
-                      <span>{ project?.isActive ? "You are already participating in this project" : 
-                              (project?.isComingSoon ? "This project is coming soon" : 
-                               (project?.isSuccessfull ? "This project is already done and is successfull" : 
-                                (project?.isFailed ? "This project is already done and has failed" : null))) }</span>
+                      <span>
+                        { project?.isActive ? "You are already participating in this project" : null }
+                        { project?.isComingSoon ? "This project is coming soon" : null }
+                        { project?.isSuccessfull ? "This project is already done and has completed successfully" : null }
+                        { project?.isFailed ? "This project is already done and has failed" : null }
+                      </span>
                     </div>
               }
             </Container>
