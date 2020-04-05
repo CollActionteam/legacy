@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, Button, CardActions, DialogTitle, Dialog, DialogActions } from "@material-ui/core";
 import { IUser } from "../../api/types";
 import { gql, useMutation } from "@apollo/client";
 import { Alert } from "../Alert/Alert";
-import { useHistory } from "react-router-dom";
 import { GET_USER } from "../../providers/user";
 
 interface IDeleteAccountProps {
@@ -13,7 +12,7 @@ interface IDeleteAccountProps {
 export default ({ user }: IDeleteAccountProps) => {
     const [ hasDeletePopup, setHasDeletePopup] = useState(false);
     const [ errorMessage, setErrorMessage] = useState<string | null>(null);
-    const history = useHistory();
+    const [ done, setDone ] = useState(false);
     const [ deleteUser ] =
             useMutation(
                 DELETE_USER,
@@ -22,7 +21,7 @@ export default ({ user }: IDeleteAccountProps) => {
                     onCompleted: (data) =>
                     {
                         if (data.user.deleteUser.succeeded) {
-                            history.push("/");
+                            setDone(true);
                         } else {
                             let error = data.user.deleteUser.errors.map((e: any) => e.description).join(", ");
                             console.error(error);
@@ -37,6 +36,13 @@ export default ({ user }: IDeleteAccountProps) => {
                         query: GET_USER
                     }]
                 });
+    
+    useEffect(() => {
+        if (done) {
+            // After the account is deleted, navigate to root with hard refresh so that the cache is cleared and the user is logged out
+            window.location.href = window.location.origin; 
+        }
+    }, [ done ]);
 
     return <React.Fragment>
         <Alert type="error" text={errorMessage} />
