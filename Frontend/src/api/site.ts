@@ -5,7 +5,7 @@ export const siteData = {
   menuLinks: [
     {
       name: 'Home',
-      link: ''
+      link: '/'
     },
     {
       name: 'Find Project',

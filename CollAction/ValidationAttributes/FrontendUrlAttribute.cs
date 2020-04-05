@@ -19,7 +19,7 @@ namespace CollAction.ValidationAttributes
             }
             else if (!validationContext.GetRequiredService<IWebHostEnvironment>().IsProduction())
             {
-                return ValidationResult.Success; // We only check this stuff is production environments
+                return ValidationResult.Success; // We only check this stuff in a production environment
             }
 
             string publicAddress = validationContext.GetRequiredService<IOptions<SiteOptions>>().Value.PublicAddress;
