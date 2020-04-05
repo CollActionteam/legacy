@@ -33,7 +33,6 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
   const project = (data?.project ?? null) as IProject | null;
   const [ errorMessage, setErrorMessage ] = useState<string | null>(null);
   const isParticipating = Boolean(user?.participates?.find((part) => part.project.id === projectId));
-  const isActive = Boolean(project?.isActive);
   const history = useHistory();
   const formik = useFormik({
     initialValues: {
@@ -86,7 +85,7 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
         <div>
           <div className={styles.remainingTime}>
             <FontAwesomeIcon icon="clock"></FontAwesomeIcon>
-            <span>{Math.round(project.remainingTime / 3600 / 24)} days</span>
+            <span>{ project?.remainingTimeUserFriendly }</span>
           </div>
           <div className={styles.joinButton}>
             <Button
@@ -218,7 +217,7 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
                 <h4>{project.owner?.fullName}</h4>
                 <p className={styles.projectStarterTitle}>Project starter</p>
               </div>
-              { !isParticipating && isActive ?
+              { !isParticipating && project?.isActive ?
                   <div id="join" className={styles.joinSection}>
                     <FormikContext.Provider value={formik}>
                       <Form className={styles.form} onSubmit={formik.handleSubmit}>
@@ -250,12 +249,11 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
                       </Form>
                     </FormikContext.Provider>
                   </div> : 
-                    isActive ?
                     <div id="join" className={styles.joinSection}>
-                      <span>You are already participating in this project</span>
-                    </div> :
-                    <div id="join" className={styles.joinSection}>
-                      <span>You can't join this project anymore</span>
+                      <span>{ project?.isActive ? "You are already participating in this project" : 
+                              (project?.isComingSoon ? "This project is coming soon" : 
+                               (project?.isSuccessfull ? "This project is already done and is successfull" : 
+                                (project?.isFailed ? "This project is already done and has failed" : null))) }</span>
                     </div>
               }
             </Container>

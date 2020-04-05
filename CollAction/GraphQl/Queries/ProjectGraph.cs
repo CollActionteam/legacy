@@ -42,6 +42,17 @@ namespace CollAction.GraphQl.Queries
                 {
                     return c.GetUserContext().ServiceProvider.GetRequiredService<IProjectService>().CanSendProjectEmail(c.Source);
                 });
+            FieldAsync<NonNullGraphType<StringGraphType>>(
+                nameof(Project.RemainingTimeUserFriendly),
+                resolve: async c =>
+                {
+                    if (c.Source.ParticipantCounts == null)
+                    {
+                        c.Source.ParticipantCounts = await c.GetUserContext().Context.ProjectParticipantCounts.FindAsync(c.Source.Id);
+                    }
+
+                    return c.Source.RemainingTimeUserFriendly;   
+                });
             FieldAsync<NonNullGraphType<BooleanGraphType>>(
                 nameof(Project.IsSuccessfull),
                 resolve: async c =>

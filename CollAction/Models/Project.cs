@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
+using CollAction.Helpers;
 
 namespace CollAction.Models
 {
@@ -137,6 +138,51 @@ namespace CollAction.Models
         [NotMapped]
         public Uri Url
             => new Uri($"/projects/{NameNormalized}/{Id}", UriKind.Relative);
+
+        [NotMapped]
+        public string RemainingTimeUserFriendly
+        {
+            get
+            {
+                TimeSpan remaining = RemainingTime;
+                if (remaining.Years() > 1)
+                {
+                    return $"{remaining.Years()} years";
+                }
+                else if (remaining.Months() > 1)
+                {
+                    return $"{remaining.Months()} months";
+                }
+                else if (remaining.Weeks() > 1)
+                {
+                    return $"{remaining.Weeks()} weeks";
+                }
+                else if (remaining.Days > 1)
+                {
+                    return $"{remaining.Days} days";
+                }
+                else if (remaining.Hours > 1)
+                {
+                    return $"{(int)remaining.TotalHours} hours";
+                }
+                else if (remaining.Minutes > 0)
+                {
+                    return $"{remaining.Minutes} minutes";
+                }
+                else if (IsSuccessfull)
+                {
+                    return "Successfull";
+                }
+                else if (IsFailed)
+                {
+                    return "Failed";
+                }
+                else
+                {
+                    return "Done";
+                }
+            }
+        }
 
         [NotMapped]
         public TimeSpan RemainingTime

@@ -36,13 +36,9 @@ export default ({ project }: { project: IProject }) => {
             </div>
             <div className={styles.remainingTime}>
               <FontAwesomeIcon icon="clock"></FontAwesomeIcon>
-              {project.remainingTime ? (
-                <span>
-                  {Math.round(project.remainingTime / 3600 / 24)} days
-                </span>
-              ) : (
-                <span>not active</span>
-              )}
+              <span>
+                { project?.remainingTimeUserFriendly }
+              </span>
             </div>
           </div>
         </div>

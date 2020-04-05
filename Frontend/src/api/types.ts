@@ -11,13 +11,13 @@ export interface IDonationEventLog {
 }
 
 export interface IDonationSubscription {
-  canceledAt: Date;
+  canceledAt: string;
   id: string;
-  startDate: Date;
+  startDate: string;
 }
 
 export interface IImageFile {
-  date: Date;
+  date: string;
   description: string;
   filepath: string;
   height: number;
@@ -59,8 +59,8 @@ export interface IProject {
   descriptiveImage: IImageFile;
   descriptiveImageFileId: string;
   displayPriority: ProjectDisplayPriority;
-  start: Date;
-  end: Date;
+  start: string;
+  end: string;
   goal: string;
   id: string;
   isActive: boolean;
@@ -77,6 +77,7 @@ export interface IProject {
   participants: IProjectParticipant[];
   proposal: string;
   remainingTime: any;
+  remainingTimeUserFriendly: string;
   status: ProjectStatus;
   tags: IProjectTag[];
   target: number;
@@ -135,12 +136,12 @@ export interface IUser {
   projects: IProject[];
   representsNumberParticipants: number;
   userEvents: IUserEvent[];
-  registrationDate: Date;
+  registrationDate: string;
 }
 
 export interface IUserEvent {
   eventData: string;
-  eventLoggedAt: Date;
+  eventLoggedAt: string;
   id: string;
   user: IUser;
   userId: string;
