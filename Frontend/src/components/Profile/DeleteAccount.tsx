@@ -40,7 +40,7 @@ export default ({ user }: IDeleteAccountProps) => {
     useEffect(() => {
         if (done) {
             // After the account is deleted, navigate to root with hard refresh so that the cache is cleared and the user is logged out
-            window.location.href = window.location.origin; 
+            window.location.href = '/';
         }
     }, [ done ]);
 
