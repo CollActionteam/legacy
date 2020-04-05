@@ -85,7 +85,7 @@ export default ({ user, project }: IProjectParticipatingProps) => {
             <Form onSubmit={formik.handleSubmit}>
                 <Dialog fullScreen open={showSendProject} onClose={() => setShowSendProject(false)}>
                     <DialogContent>
-                        <h3>Send project e-mail for '{project.name}'</h3>
+                        <h3>Send project e-mail for '{project.name}' project</h3>
                         <p>Hi {user.fullName ?? "project starter"}!</p>
                         <p>
                             You can send 4 e-mails in total (during and up to 180 days after the project ends). 
