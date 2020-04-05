@@ -9,7 +9,7 @@ import AdminListProjects from "../../components/Admin/Projects/AdminListProjects
 
 type TParams = {
   type: string;
-  action: string | undefined;
+  action: string;
   id: string | undefined;
 }
 

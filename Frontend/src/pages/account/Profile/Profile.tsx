@@ -43,19 +43,19 @@ export default () => {
           <ResetPassword />
         </Grid>
         <Grid item xs={12} md={6}>
-          <NewsletterSubscription user={user!} />
+          <NewsletterSubscription user={user} />
         </Grid>
         <Grid item xs={12} md={6}>
-          <DeleteAccount user={user!} />
+          <DeleteAccount user={user} />
         </Grid>
         <Grid item xs={12} md={6}>
-          <RecurringDonations user={user!} />
+          <RecurringDonations user={user} />
         </Grid>
         <Grid item xs={12} md={6}>
-          <ProjectsParticipating user={user!} />
+          <ProjectsParticipating user={user} />
         </Grid>
         <Grid item xs={12} md={6}>
-          <ProjectsCreated user={user!} />
+          <ProjectsCreated user={user} />
         </Grid>
       </Grid>
     </div>;
