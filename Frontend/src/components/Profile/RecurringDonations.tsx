@@ -13,7 +13,7 @@ export default ({ user }: IRecurringDonationProps) => {
             <h3>Donation Subscriptions</h3>
             { user.donationSubscriptions.length > 0 ?
                 <List>
-                    { user.donationSubscriptions.map(subscription => <RecurringDonationSubscription user={user} subscription={subscription} />) }
+                    { user.donationSubscriptions.map(subscription => <RecurringDonationSubscription key={subscription.id} subscription={subscription} />) }
                 </List> : 
                 <p>You have no recurring donations</p>
             }

@@ -23,6 +23,7 @@ export default () => {
                     let error = data.user.changePassword.errors.map((e: any) => e.description).join(", ");
                     setSuccessMessage(null);
                     setErrorMessage(error);
+                    console.error(error);
                 }
             },
             onError: (data) => {

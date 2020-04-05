@@ -45,12 +45,17 @@ export default ({ projectId } : IEditProjectProps): any => {
     const [ updateProject ] = useMutation(
         UDPATE_PROJECT,
         {
-            onError: (data) => setError(data.message),
+            onError: (data) => {
+                console.error(data.message);
+                setError(data.message) 
+            },
             onCompleted: (data) => {
                 if (data.project.updateProject.succeeded) {
                     history.push("/admin/projects/list");
                 } else {
-                    setError("Error updating project: " + data.project.updateProject.errors.map((e: any) => e.errorMessage).join(", "));
+                    const err = "Error updating project: " + data.project.updateProject.errors.map((e: any) => e.errorMessage).join(", ");
+                    console.error(err);
+                    setError(err);
                 }
             }
         });

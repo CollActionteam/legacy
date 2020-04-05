@@ -53,6 +53,7 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
     const error = data.project.commit.error;
     if (error) {
       setErrorMessage(error);
+      console.error(error);
     } else {
       history.push(`/projects/${encodeURIComponent(slug)}/${projectId}/thankyou`);
     }

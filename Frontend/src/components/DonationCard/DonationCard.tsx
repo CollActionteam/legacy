@@ -10,6 +10,7 @@ import iDealLogo from "../../assets/i-deal-logo.png";
 import { useMutation, gql, useQuery } from "@apollo/client";
 import Loader from "../Loader/Loader";
 import { loadStripe } from '@stripe/stripe-js';
+import { GET_USER } from "../../providers/user";
 import {
   Elements,
   useStripe,
@@ -86,7 +87,12 @@ const InnerDonationCard = () => {
     );
 
     const [ initializeSepaDirect ] = useMutation(
-        INITIALIZE_SEPA_DIRECT
+        INITIALIZE_SEPA_DIRECT,
+        {
+            refetchQueries: [{
+                query: GET_USER // Ensure the donation appears in the profile page after this call succeeds
+            }]
+        }
     );
 
     const payCreditcard = async (values: DonationValues) => {
@@ -104,7 +110,9 @@ const InnerDonationCard = () => {
             },
         });
         if (creditCardResult.errors) {
-            setError(creditCardResult.errors.map(e => e.message).join(", "));
+            const err = creditCardResult.errors.map(e => e.message).join(", ");
+            setError(err);
+            console.log(err);
             return;
         }
         await stripe!.redirectToCheckout({ sessionId: creditCardResult.data.donation.sourceId });

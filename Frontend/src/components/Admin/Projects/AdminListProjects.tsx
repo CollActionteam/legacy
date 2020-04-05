@@ -40,6 +40,7 @@ export default () => {
                 setDeleteDialogOpen(false);
                 setInfo(null);
                 setError(data.message);
+                console.error(data.message);
             },
             awaitRefetchQueries: true,
             refetchQueries: [{ 

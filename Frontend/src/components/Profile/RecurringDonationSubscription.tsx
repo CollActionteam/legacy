@@ -1,4 +1,4 @@
-import { IDonationSubscription, IUser } from "../../api/types";
+import { IDonationSubscription } from "../../api/types";
 import React, { useState } from "react";
 import { ListItemAvatar, Avatar, ListItemText, ListItemSecondaryAction, IconButton, ListItem, Button, Dialog, DialogTitle, DialogActions } from "@material-ui/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,20 +8,26 @@ import { Alert } from "../Alert/Alert";
 import { GET_USER } from "../../providers/user";
 
 interface IRecurringDonationItemProps {
-    user: IUser;
     subscription: IDonationSubscription;
 }
 
-export default ({ user, subscription }: IRecurringDonationItemProps) => {
+const STOP_SUBSCRIPTION = gql`
+    mutation StopSubscription($subscriptionId: ID!)
+    {  
+        donation {
+            cancelSubscription(subscriptionId: $subscriptionId)
+        }
+    }
+`;
+
+export default ({ subscription }: IRecurringDonationItemProps) => {
     const [ stopSubscription ] = useMutation(STOP_SUBSCRIPTION,
         {
             variables: {
                 subscriptionId: subscription.id
             },
-            onCompleted: (_) => {
-                user.donationSubscriptions = user.donationSubscriptions.filter(sub => sub.id !== subscription.id);
-            },
             onError: (data) => {
+                console.error(data.message);
                 setErrorMessage(data.message);
             },
             refetchQueries: [{
@@ -57,12 +63,3 @@ export default ({ user, subscription }: IRecurringDonationItemProps) => {
         </ListItem>
     </React.Fragment>;
 };
-
-const STOP_SUBSCRIPTION = gql`
-    mutation StopSubscription($subscriptionId: ID!)
-    {  
-        donation {
-            cancelSubscription(subscriptionId: $subscriptionId)
-        }
-    }
-`;

@@ -38,10 +38,12 @@ const RegisterUserPage = () => {
                     let error = data.user.createUser.result.errors.map((e: any) => e.description).join(", ");
                     setInfoMessage(null);
                     setErrorMessage(error);
+                    console.error(error);
                 }
             },
             onError: (data) => {
                 setErrorMessage(data.message);
+                console.error(data.message);
             }
         }
     );

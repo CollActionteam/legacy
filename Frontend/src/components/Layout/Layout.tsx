@@ -24,7 +24,9 @@ import {
   faSpinner,
   faClock,
   faTools,
-  faExclamationCircle
+  faExclamationCircle,
+  faTrash,
+  faEuroSign
 } from "@fortawesome/free-solid-svg-icons";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 
@@ -39,7 +41,9 @@ library.add(
   faClock,
   faUser,
   faTools,
-  faExclamationCircle
+  faExclamationCircle,
+  faTrash,
+  faEuroSign
 );
 
 export default ({ children }: any) => (

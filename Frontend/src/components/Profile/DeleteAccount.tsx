@@ -25,10 +25,12 @@ export default ({ user }: IDeleteAccountProps) => {
                             history.push("/");
                         } else {
                             let error = data.user.deleteUser.errors.map((e: any) => e.description).join(", ");
+                            console.error(error);
                             setErrorMessage(error);
                         }
                     },
                     onError: (data) => {
+                        console.error(data.message);
                         setErrorMessage(data.message);
                     },
                     refetchQueries: [{

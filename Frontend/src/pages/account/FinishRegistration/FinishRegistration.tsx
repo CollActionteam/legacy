@@ -45,6 +45,7 @@ const FinishRegistrationPage = () => {
             },
             onError: (data) => {
                 setErrorMessage(data.message);
+                console.error(data.message);
             }
         }
     );

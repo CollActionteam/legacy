@@ -40,12 +40,17 @@ export default ({ userId } : IEditUserProps): any => {
     const [ updateUser ] = useMutation(
         UDPATE_USER,
         {
-            onError: (data) => setError(data.message),
+            onError: (data) => {
+                console.error(data.message);
+                setError(data.message)
+            },
             onCompleted: (data) => {
                 if (data.user.updateUser.result.succeeded) {
                     history.push("/admin/users/list");
                 } else {
-                    setError("Error updating user: " + data.user.updateUser.result.errors.map((e: any) => e.description).join(", "));
+                    const err = "Error updating user: " + data.user.updateUser.result.errors.map((e: any) => e.description).join(", ");
+                    console.error(err);
+                    setError(err);
                 }
             }
         });

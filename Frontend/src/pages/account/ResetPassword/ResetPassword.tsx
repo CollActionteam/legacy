@@ -30,10 +30,12 @@ const ResetPasswordPage = () => {
                 } else {
                     let error = data.user.resetPassword.errors.map((e: any) => e.description).join(", ");
                     setErrorMessage(error);
+                    console.error(error);
                 }
             },
             onError: (data) => {
                 setErrorMessage(data.message);
+                console.error(data.message);
             }
         }
     );

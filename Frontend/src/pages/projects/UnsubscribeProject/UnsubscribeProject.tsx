@@ -29,7 +29,10 @@ const UnsubscribeProjectPage = ({ match } : RouteComponentProps<TManageProjectSu
                 isSubscribed: false
             },
             onCompleted: () => setIsUnsubscribed(true),
-            onError: (data) => setError(data.message)
+            onError: (data) => {
+                setError(data.message);
+                console.error(data.message);
+            }
         }
     );
 
