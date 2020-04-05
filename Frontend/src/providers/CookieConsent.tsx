@@ -2,7 +2,11 @@ import React, { useEffect, useState, useContext } from "react";
 
 export type Consent = "basics" | "analytics" | "stripe" | "disqus" | "social";
 
-export const ConsentContext = React.createContext({ consent: [] as Consent[], setConsent: (_: Consent[]) => { }, setAllowAllConsent: () => {} });
+const consentKey = "collaction-gdpr-consent";
+
+const initialConsentState = window.localStorage.getItem(consentKey)?.split(";")?.filter(c => c.length !== 0)?.map(c => c as Consent) ?? [];
+
+export const ConsentContext = React.createContext({ consent: initialConsentState, setConsent: (_: Consent[]) => { }, setAllowAllConsent: () => {} });
 
 export const AllowedConsents: Consent[] = [ "basics", "analytics", "stripe", "disqus", "social" ];
 
@@ -22,10 +26,6 @@ export const ConsentDescription = (consent: Consent) => {
 }
 
 export const useConsent = () => useContext(ConsentContext);
-
-const consentKey = "collaction-gdpr-consent";
-
-const initialConsentState = window.localStorage.getItem(consentKey)?.split(";")?.filter(c => c.length !== 0)?.map(c => c as Consent) ?? [];
 
 export default ({ children }: any) => {
   const [ consent, setConsent ] = useState(initialConsentState);

@@ -4,19 +4,28 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "../Button/Button";
 import { Container, FormControlLabel, Checkbox, FormGroup } from "@material-ui/core";
 import { AllowedConsents, Consent, ConsentDescription, useConsent } from "../../providers/CookieConsent";
-import { useFormik, Form, FormikProvider } from "formik";
+
+const initialConsentState = AllowedConsents.map(c => c === "basics" ? { key: c, value: true } : { key: c, value: false })
+                                           .reduce((map: { [id: string] : boolean }, { key, value }) => {
+                                               map[key] = value;
+                                               return map;
+                                           }, {});
 
 export default () => {
     const { consent, setConsent, setAllowAllConsent } = useConsent();
     const [ showMoreOptions, setShowMoreOptions ] = useState(false);
-    const formik = useFormik({
-        initialValues: new Map(AllowedConsents.map(c => c === "basics" ? [ c, true ] : [ c, false ])),
-        onSubmit: (values) => {
-            const selectedConsents = Object.entries(values).filter(([k, v]) => v).map(([k, v]) => k as Consent);
-            setConsent(selectedConsents);
-        }
-    });
-    const alwaysShow = useLocation().pathname === "/privacy-policy";
+    const [ formConsent, setFormConsent ] = useState(initialConsentState);
+    const location = useLocation();
+    const alwaysShow = location.pathname === "/privacy-policy";
+    const setFormConsentKey = (c: Consent, to: boolean) => {
+        const newConsentState = Object.assign({}, formConsent);
+        newConsentState[c] = to;
+        setFormConsent(newConsentState);
+    };
+    const submit = () => {
+        const selectedConsents = Object.entries(formConsent).filter(([k, v]) => v).map(([k, v]) => k as Consent);
+        setConsent(selectedConsents);
+    };
 
     if (consent.length > 0 && !alwaysShow) {
         return null;
@@ -32,25 +41,21 @@ export default () => {
             If you want to change your choice later, please visit our <Link to="/privacy-policy">privacy policy</Link> where you can edit your choices afterwards.
             { showMoreOptions ?
                 <div>
-                    <FormikProvider value={formik}>
-                        <Form onSubmit={formik.handleSubmit}>
-                            {
-                                AllowedConsents.map((c: Consent) => 
-                                    <FormGroup key={c}>
-                                        <FormControlLabel
-                                            control={<Checkbox
-                                                name={c}
-                                                checked={formik.values.get(c)}
-                                                { ...formik.getFieldProps(c) }
-                                            />}
-                                            label={ConsentDescription(c)}
-                                        />
-                                    </FormGroup>)
-                            }
-                            <Button type="submit" onClick={() => formik.submitForm()}>Save</Button>
-                            <Button type="button" onClick={() => setShowMoreOptions(false)}>Less options</Button>
-                        </Form>
-                    </FormikProvider>
+                    {
+                        AllowedConsents.map((c: Consent) => 
+                            <FormGroup key={c}>
+                                <FormControlLabel
+                                    control={<Checkbox
+                                        name={c}
+                                        checked={formConsent[c]}
+                                        onClick={(t) => setFormConsentKey(c, true)}
+                                    />}
+                                    label={ConsentDescription(c)}
+                                />
+                            </FormGroup>)
+                    }
+                    <Button onClick={() => submit()}>Save</Button>
+                    <Button onClick={() => setShowMoreOptions(false)}>Less options</Button>
                 </div> :
                 <div>
                     <Button onClick={() => setAllowAllConsent()}>Accept</Button>
