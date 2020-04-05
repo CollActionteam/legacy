@@ -59,7 +59,7 @@ export default ({ children }: any) => (
     <Header />
     <Grid container className="site-content">
       <Grid item xs={12}>
-        <CookieDialog alwaysShow={false} />
+        <CookieDialog />
       </Grid>
       <Grid item xs={12}>
         {children}
