@@ -12,7 +12,7 @@ export default ({ user }: IProjectsParticipatingProps) => {
             <CardContent>
                 <h3>Projects Participating</h3>
                 { 
-                    user.participates.map(participant => <ProjectParticipating user={user} participant={participant} />)
+                    user.participates.map(participant => <ProjectParticipating key={participant.id} user={user} participant={participant} />)
                 }
                 { user.participates.length === 0 ? <p>You have no projects you're participating in</p> : null }
             </CardContent>

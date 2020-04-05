@@ -12,7 +12,7 @@ export default ({ user }: IProjectsCreatedProps) => {
             <CardContent>
                 <h3>Projects Created</h3>
                 { 
-                    user.projects.map(project => <ProjectCreated project={project} user={user} />)
+                    user.projects.map(project => <ProjectCreated key={project.id} project={project} user={user} />)
                 }
                 { user.projects.length === 0 ? <p>You have no created projects</p> : null }
             </CardContent>

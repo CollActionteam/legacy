@@ -20,6 +20,9 @@ export default ({ user, project }: IProjectParticipatingProps) => {
             
         }
     });
+    const projectEmailsLeft = 4 - project.numberProjectEmailsSent;
+    const canSendUpTil = new Date(project.end);
+    canSendUpTil.setDate(canSendUpTil.getDate() + 180);
     return <Card>
         <FormikContext.Provider value={formik}>
             <Form onSubmit={formik.handleSubmit}>
@@ -29,10 +32,9 @@ export default ({ user, project }: IProjectParticipatingProps) => {
                         <p>Hi {user.fullName ?? "project starter"}!</p>
                         <p>
                             You can send 4 e-mails in total (during and up to 180 days after the project ends). 
-                            You have already sent { project.numberProjectEmailSent } e-mails, and can still send { 4 - project.numberProjectEmailSent } emails up until { new Date(project.end.getTime() + (1000 * 60 * 60 * 24 * 180)) } in the UTC (London) timezone. 
+                            You have already sent { project.numberProjectEmailsSent } e-mails, and can still send { projectEmailsLeft } emails up until { canSendUpTil } in the UTC (London) timezone. 
                             To personalize the message, you can add {'{firstname}'} and {'{lastname}'} to your message (including the brackets) - these will be substituted with the user's first and last name. 
                         </p>
-
                     </DialogContent>
                     <DialogActions>
                         <Button>Send E-Mail</Button>

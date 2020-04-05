@@ -70,7 +70,7 @@ export interface IProject {
   isFailed: boolean;
   name: string;
   nameNormalized: string;
-  numberProjectEmailSent: number;
+  numberProjectEmailsSent: number;
   owner: IUser;
   ownerId: string;
   percentage: number;
@@ -85,6 +85,7 @@ export interface IProject {
 }
 
 export interface IProjectParticipant {
+  id: string;
   project: IProject;
   subscribedToProjectEmails: boolean;
   unsubscribeToken: any;
