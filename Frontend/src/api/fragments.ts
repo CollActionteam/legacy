@@ -34,6 +34,7 @@ export const Fragments = {
     target
     proposal
     remainingTime
+    canSendProjectEmail
     displayPriority
     isActive
     isComingSoon
