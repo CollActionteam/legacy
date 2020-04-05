@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Section } from "../../../components/Section/Section";
 import { Alert } from "../../../components/Alert/Alert";
-import { Grid, Checkbox, FormGroup, TextField, Button, FormControlLabel, FormControl, FormHelperText } from "@material-ui/core";
+import { Grid, Checkbox, FormGroup, TextField, Button, FormControlLabel, FormControl } from "@material-ui/core";
 import { gql, useMutation } from "@apollo/client";
 import styles from "./FinishRegistration.module.scss";
 import { Link, useLocation } from "react-router-dom";
@@ -62,7 +62,8 @@ const FinishRegistrationPage = () => {
             lastName: Yup.string(),
             password: Yup.string().min(6, "Password must be at least six characters long")
                                   .required("Must fill in a password at least six characters long"),
-            confirmPassword: Yup.string().when("password", {
+            confirmPassword: Yup.string().required("Must fill in a confirmation password")
+                                         .when("password", {
                 is: val => val && val.length > 0,
                 then: Yup.string()
                          .oneOf([Yup.ref("password")], "Both passwords need to be the same")
@@ -101,9 +102,9 @@ const FinishRegistrationPage = () => {
                             <FormGroup>
                                 <TextField name="firstName" label="First Name" type="text" { ... formik.getFieldProps('firstName') } />
                                 <TextField name="lastName" label="Last Name" type="text" { ...formik.getFieldProps('lastName') } />
-                                <TextField name="password" label="Password" type="password" { ...formik.getFieldProps('password') } />
+                                <TextField name="password" label="Password" type="password" error={formik.touched.password && formik.errors.password !== undefined} { ...formik.getFieldProps('password') } />
                                 { formik.submitCount > 0 ? <Alert type="error" text={formik.errors.password} /> : null }
-                                <TextField name="confirmPassword" label="Confirm Password" type="password" { ...formik.getFieldProps('confirmPassword') } />
+                                <TextField name="confirmPassword" label="Confirm Password" type="password" error={formik.touched.confirmPassword && formik.errors.confirmPassword !== undefined} { ...formik.getFieldProps('confirmPassword') } />
                                 { formik.submitCount > 0 ? <Alert type="error" text={formik.errors.confirmPassword} /> : null }
                                 <FormControlLabel
                                     control={<Checkbox name="isSubscribedNewsletter" { ...formik.getFieldProps('isSubscribedNewsletter')} />}

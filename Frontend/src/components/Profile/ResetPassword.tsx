@@ -59,11 +59,11 @@ const CHANGE_PASSWORD = gql`
     {  
         user {
             changePassword(currentPassword: $currentPassword, newPassword: $newPassword) {
-            succeeded
-            errors {
-                code
-                description
-            }
+                succeeded
+                errors {
+                    code
+                    description
+                }
             }
         }
     }`;
