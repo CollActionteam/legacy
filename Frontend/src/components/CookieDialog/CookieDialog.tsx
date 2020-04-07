@@ -51,7 +51,7 @@ export default () => {
                                             control={<Checkbox
                                                 name={c}
                                                 checked={formik.values[c]}
-                                                {...formik.getFieldProps(c)}
+                                                { ... c === "basics" ? [] : formik.getFieldProps(c) }
                                             />}
                                             label={ConsentDescription(c)}
                                         />
