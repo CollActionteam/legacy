@@ -14,6 +14,7 @@ namespace CollAction.Services.Image
 
         Uri GetUrl(ImageFile imageFile);
 
+        // Removes images that have no associated project, to prevent costs in our S3 bucket
         void InitializeDanglingImageJob();
     }
 }
