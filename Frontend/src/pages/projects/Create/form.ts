@@ -49,6 +49,14 @@ const determineEndDateValidation = (startDate: any, schema: any) => {
     .max(maxDate, 'The deadline must be within a year of the start date');
 };
 
+const determineImageDescriptionValidation = (image: any, schema: any) => {
+  if (!image) {
+    return;
+  }
+
+  return schema.required('Please provide a short description for the image');
+}
+
 var minimumDate = new Date();
 var maximumDate = new Date();
 maximumDate.setMonth(minimumDate.getMonth() + 12);
@@ -83,7 +91,8 @@ export const validations = Yup.object({
     .required('Describe what you want achieve with your crowdaction')
     .max(10000, 'Please use no more then 10.000 characters'),
   imageDescription: Yup.string()
-    .max(255, 'Please use no more then 255 characters'),
+    .max(255, 'Please use no more then 255 characters')
+    .when('image', determineImageDescriptionValidation),
   comments: Yup.string()
     .max(20000, 'Please use no more then 20.000 characters'),
   youtube: Yup.string()
