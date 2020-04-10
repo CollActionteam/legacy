@@ -1,5 +1,9 @@
 @import '../../../components//Styles/responsive.scss';
 
+.login {
+  text-align: center;
+}
+
 .title {
   h2, p {
     margin-bottom: var(--spacing-md);

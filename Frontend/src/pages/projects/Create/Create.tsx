@@ -1,18 +1,18 @@
-import { Container, Grid, InputLabel, FormHelperText } from '@material-ui/core';
+import { Container, FormHelperText, Grid, InputLabel } from '@material-ui/core';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import { TextField } from 'formik-material-ui';
 import React from 'react';
 import Helmet from 'react-helmet';
 import { Button } from '../../../components/Button/Button';
+import { ProjectStarter } from '../../../components/ProjectStarter/ProjectStarter';
 import { RichTextEditorFormControl } from '../../../components/RichTextEditorFormContol/RichTextEditorFormControl';
 import { Section } from '../../../components/Section/Section';
+import { useUser } from '../../../providers/User';
 import Categories from './Categories';
 import styles from './Create.module.scss';
-import { initialValues, validations, IProjectForm } from './form';
+import { initialValues, IProjectForm, validations } from './form';
 import UploadImage from './UploadImage';
-import useSubmitProject from './submitproject';
-import { ProjectStarter } from '../../../components/ProjectStarter/ProjectStarter';
-import { useUser } from '../../../providers/User';
+import { Link } from 'react-router-dom';
 
 const CreateProjectPage = () => {
 
@@ -29,13 +29,26 @@ const CreateProjectPage = () => {
     }
   };
 
-  const useHandleSubmit = async (form: IProjectForm) => {
-    debugger;
-    const result = await useSubmitProject(form);
-    console.log(result);
+  const handleSubmit = (values: any, actions: any) => {
+    console.log(values);
+    console.log(actions);
   }
- 
-  return (
+
+  const pleaseLogin = (
+    <React.Fragment>
+      <Helmet>
+        <title>Create a project</title>
+        <meta name="description" content="Create a project" />
+      </Helmet>
+      <Section title="Start a new crowdaction" className={styles.title}>
+        <Container className={styles.login}>
+          <p>Please <Link to="/account/login">login</Link> in to start start your new collaction!</p>
+        </Container>
+      </Section>
+    </React.Fragment>
+  )
+
+  const createProjectForm = (
     <React.Fragment>
       <Helmet>
         <title>Create a project</title>
@@ -48,7 +61,7 @@ const CreateProjectPage = () => {
         validateOnChange={false}
         validateOnMount={false}
         validateOnBlur={true}        
-        onSubmit={useHandleSubmit}        
+        onSubmit={(values, actions) => handleSubmit(values, actions)}
       >
         {(props: FormikProps<IProjectForm>) => (
           <Form>
@@ -213,7 +226,7 @@ const CreateProjectPage = () => {
                   </Container>
                 </Grid>
 
-                <Grid md={5} xs={12}>
+                <Grid item md={5} xs={12}>
                   <Container>
                     <ProjectStarter user={user}></ProjectStarter>
                   </Container>
@@ -240,7 +253,9 @@ const CreateProjectPage = () => {
           )}
       </Formik>
     </React.Fragment>
-  )
+  );
+
+  return user ? createProjectForm : pleaseLogin;
 };
 
 export default CreateProjectPage;
