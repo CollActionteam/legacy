@@ -105,39 +105,12 @@
   }
 }
 
-@mixin box {
+.joinSection {
   border: 1px solid var(--c-grey-d10);
   border-radius: var(--border-radius-sm);
   padding: var(--spacing);
   
   margin-bottom: var(--spacing);
-}
-
-.projectStarter {
-  @include box();
-
-  @include breakpoint-down(sm) {
-    margin-top: var(--spacing-xlg);
-  }
-}
-
-.avatarContainer {
-  display: flex;
-  justify-content: center;
-}
-
-.avatar {
-  margin-top: calc(var(--spacing-xlg) / 2 * -1.5);
-  width: var(--spacing-xlg) !important;
-  height: var(--spacing-xlg) !important;
-}
-
-.projectStarterTitle {
-  font-size: var(--font-size-sm);
-}
-
-.joinSection {
-  @include box();
 }
 
 .form {

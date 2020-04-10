@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import gql from "graphql-tag";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Avatar, Container, Grid, FormControl, TextField } from "@material-ui/core";
+import { Container, Grid, FormControl, TextField } from "@material-ui/core";
 import { Form, useFormik, FormikContext } from "formik";
 import * as Yup from "yup";
 
@@ -21,6 +21,7 @@ import { Section } from "../../../components/Section/Section";
 
 import styles from "./ProjectDetails.module.scss";
 import DisqusProjectComments from "../../../components/DisqusProjectComments/DisqusProjectComments";
+import { ProjectStarter } from "../../../components/ProjectStarter/ProjectStarter";
 
 type TParams = {
   slug: string,
@@ -208,16 +209,10 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
 
           <Grid item md={5} xs={12}>
             <Container>
-              <div className={styles.projectStarter}>
-                <div className={styles.avatarContainer}>
-                  <Avatar className={styles.avatar}>
-                    {project.owner?.firstName?.charAt(0)}
-                    {project.owner?.lastName?.charAt(0)}
-                  </Avatar>
-                </div>
-                <h4>{project.owner?.fullName}</h4>
-                <p className={styles.projectStarterTitle}>Project starter</p>
-              </div>
+              { project.owner && 
+                <ProjectStarter user={project.owner}></ProjectStarter>
+              }
+              
               { !isParticipating && project?.isActive ?
                   <div id="join" className={styles.joinSection}>
                     <FormikContext.Provider value={formik}>

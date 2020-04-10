@@ -11,8 +11,12 @@ import styles from './Create.module.scss';
 import { initialValues, validations, IProjectForm } from './form';
 import UploadImage from './UploadImage';
 import useSubmitProject from './submitproject';
+import { ProjectStarter } from '../../../components/ProjectStarter/ProjectStarter';
+import { useUser } from '../../../providers/User';
 
 const CreateProjectPage = () => {
+
+  const { user } = useUser();
   
   const validate = async (props: FormikProps<any>) => {
     const errors = Object.keys(await props.validateForm());
@@ -206,6 +210,12 @@ const CreateProjectPage = () => {
                       fullWidth
                     >                    
                     </Field>
+                  </Container>
+                </Grid>
+
+                <Grid md={5} xs={12}>
+                  <Container>
+                    <ProjectStarter user={user}></ProjectStarter>
                   </Container>
                 </Grid>
               </Grid>              
