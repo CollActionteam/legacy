@@ -46,9 +46,9 @@ export default () => {
             </CardContent>
             <CardActions>
                 <FormGroup>
-                    <TextField onChange={(action) => setCurrentPassword(action.target.value)} value={currentPassword} required label="Current Password" type="password" />
-                    <TextField onChange={(action) => setNewPassword(action.target.value)} value={newPassword} required label="New Password" type="password" />
-                    <TextField onChange={(action) => setConfirmNewPassword(action.target.value)} value={confirmNewPassword} required error={newPassword !== confirmNewPassword} label="Confirm New Password" type="password" />
+                    <TextField margin="dense" onChange={(action) => setCurrentPassword(action.target.value)} value={currentPassword} required label="Current Password" type="password" />
+                    <TextField margin="dense" onChange={(action) => setNewPassword(action.target.value)} value={newPassword} required label="New Password" type="password" />
+                    <TextField margin="dense" onChange={(action) => setConfirmNewPassword(action.target.value)} value={confirmNewPassword} required error={newPassword !== confirmNewPassword} label="Confirm New Password" type="password" />
                     <Button onClick={() => changePassword()} disabled={!isValid}>Change your password</Button>
                 </FormGroup>
             </CardActions>

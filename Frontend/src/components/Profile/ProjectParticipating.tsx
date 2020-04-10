@@ -1,8 +1,9 @@
 import { IProjectParticipant, IUser } from "../../api/types";
 import React from "react";
 import ProjectCard from "../ProjectCard/ProjectCard";
-import { Card, CardActions, CardContent, Button } from "@material-ui/core";
+import { Card, CardActions, CardContent } from "@material-ui/core";
 import { useMutation, gql } from "@apollo/client";
+import { Button } from "../Button/Button";
 
 interface IProjectParticipatingProps {
     user: IUser;

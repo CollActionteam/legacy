@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardContent, Button, CardActions, DialogTitle, Dialog, DialogActions } from "@material-ui/core";
+import { Card, CardContent, CardActions, DialogTitle, Dialog, DialogActions } from "@material-ui/core";
 import { IUser } from "../../api/types";
 import { gql, useMutation } from "@apollo/client";
 import { Alert } from "../Alert/Alert";
 import { GET_USER } from "../../providers/User";
+import { Button } from "../Button/Button";
 
 interface IDeleteAccountProps {
     user: IUser;
