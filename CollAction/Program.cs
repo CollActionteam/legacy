@@ -1,5 +1,6 @@
 ﻿using CollAction.Data;
 using CollAction.Services.Image;
+using CollAction.Services.Projects;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +18,7 @@ namespace CollAction
             {
                 await ApplicationDbContext.InitializeDatabase(scope).ConfigureAwait(false);
                 scope.ServiceProvider.GetRequiredService<IImageService>().InitializeDanglingImageJob();
+                scope.ServiceProvider.GetRequiredService<IProjectService>().InitializeRefreshParticipantCountJob();
             }
 
             await host.RunAsync().ConfigureAwait(false);

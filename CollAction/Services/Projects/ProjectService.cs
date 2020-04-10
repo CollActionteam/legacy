@@ -38,6 +38,7 @@ namespace CollAction.Services.Projects
         private readonly IServiceProvider serviceProvider;
         private readonly IBackgroundJobClient jobClient;
         private readonly IImageService imageService;
+        private readonly IRecurringJobManager recurringJobManager;
         private const int MaxNumberProjectEmails = 4;
         private static TimeSpan TimeEmailAllowedAfterProjectEnd = TimeSpan.FromDays(180);
 
@@ -50,7 +51,8 @@ namespace CollAction.Services.Projects
             IHtmlInputValidator htmlInputValidator,
             IServiceProvider serviceProvider,
             IBackgroundJobClient jobClient,
-            IImageService imageService)
+            IImageService imageService,
+            IRecurringJobManager recurringJobManager)
         {
             this.userManager = userManager;
             this.context = context;
@@ -61,6 +63,7 @@ namespace CollAction.Services.Projects
             this.serviceProvider = serviceProvider;
             this.jobClient = jobClient;
             this.imageService = imageService;
+            this.recurringJobManager = recurringJobManager;
         }
 
         public async Task<ProjectResult> CreateProject(NewProject newProject, ClaimsPrincipal user, CancellationToken token)
@@ -135,7 +138,7 @@ namespace CollAction.Services.Projects
             context.Projects.Add(project);
             await context.SaveChangesAsync(token).ConfigureAwait(false);
 
-            await RefreshParticipantCountMaterializedView(token).ConfigureAwait(false);
+            await RefreshParticipantCount(token).ConfigureAwait(false);
 
             await emailSender.SendEmailTemplated(owner.Email, $"Thank you for submitting \"{project.Name}\" on CollAction", "ProjectConfirmation").ConfigureAwait(false);
 
@@ -592,7 +595,19 @@ namespace CollAction.Services.Projects
             }
             
             await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-            await RefreshParticipantCountMaterializedView(cancellationToken).ConfigureAwait(false);
+            await RefreshParticipantCount(cancellationToken).ConfigureAwait(false);
+        }
+
+        public Task RefreshParticipantCount(CancellationToken token)
+            => context.Database.ExecuteSqlRawAsync("REFRESH MATERIALIZED VIEW CONCURRENTLY \"ProjectParticipantCounts\";", token);
+
+        public void InitializeRefreshParticipantCountJob()
+        {
+            recurringJobManager.AddOrUpdate(
+                "refresh-participant-count-job", 
+                () => RefreshParticipantCount(CancellationToken.None), 
+                "*/5 * * * *" // Every 5 minutes
+                );
         }
 
         private IFormFile ToFormFile(byte[] imageBytes, Uri url)
@@ -612,9 +627,6 @@ namespace CollAction.Services.Projects
             var commitEmailViewModel = new ProjectCommitEmailViewModel(project: project, result: result, user: applicationUser, publicAddress: new Uri(siteOptions.PublicAddress), projectUrl: new Uri($"{siteOptions.PublicAddress}/{project.Url}"));
             await emailSender.SendEmailTemplated(email, $"Thank you for participating in the \"{project.Name}\" project on CollAction", "ProjectCommit", commitEmailViewModel).ConfigureAwait(false);
         }
-
-        private Task RefreshParticipantCountMaterializedView(CancellationToken token)
-            => context.Database.ExecuteSqlRawAsync("REFRESH MATERIALIZED VIEW CONCURRENTLY \"ProjectParticipantCounts\";", token);
 
         private string FormatEmailMessage(string message, ApplicationUser user, string? unsubscribeLink)
         {
@@ -662,8 +674,6 @@ namespace CollAction.Services.Projects
                 context.ProjectParticipants.Add(participant);
 
                 await context.SaveChangesAsync(token).ConfigureAwait(false);
-
-                await RefreshParticipantCountMaterializedView(token).ConfigureAwait(false);
 
                 logger.LogInformation("Added participant '{0}' to project '{1}'", userId, projectId);
 

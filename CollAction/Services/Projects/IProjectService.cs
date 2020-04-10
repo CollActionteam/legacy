@@ -31,5 +31,9 @@ namespace CollAction.Services.Projects
         IQueryable<Project> SearchProjects(Category? category, SearchProjectStatus? status);
 
         Task SeedRandomProjects(IEnumerable<ApplicationUser> users, CancellationToken cancellationToken);
+
+        Task RefreshParticipantCount(CancellationToken token);
+
+        void InitializeRefreshParticipantCountJob();
     }
 }
