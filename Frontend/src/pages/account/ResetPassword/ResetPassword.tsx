@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Section } from "../../../components/Section/Section";
 import { Alert } from "../../../components/Alert/Alert";
-import { Grid, FormGroup, TextField, Button } from "@material-ui/core";
+import { Grid, FormGroup, TextField } from "@material-ui/core";
 import { gql, useMutation } from "@apollo/client";
 import styles from "./ResetPassword.module.scss";
 import { useLocation } from "react-router-dom";
+import { Button } from "../../../components/Button/Button";
 
 const ResetPasswordPage = () => {
     const searchParams = new URLSearchParams(useLocation().search);
@@ -50,8 +51,8 @@ const ResetPasswordPage = () => {
             <Grid container justify="center">
                 <Grid item sm={6}>
                     <FormGroup>
-                        <TextField onChange={(action) => setPassword(action.target.value)} value={password} required label="Password" type="password" />
-                        <TextField onChange={(action) => setConfirmPassword(action.target.value)} value={confirmPassword} error={password !== confirmPassword} required label="Confirm Password" type="password" />
+                        <TextField margin="normal" onChange={(action) => setPassword(action.target.value)} value={password} required label="Password" type="password" />
+                        <TextField margin="normal" onChange={(action) => setConfirmPassword(action.target.value)} value={confirmPassword} error={password !== confirmPassword} required label="Confirm Password" type="password" />
                         <Button disabled={!valid} onClick={() => resetPassword()}>Reset my password</Button>
                     </FormGroup>
                 </Grid>

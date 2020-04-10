@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Section } from "../../../components/Section/Section";
 import { Alert } from "../../../components/Alert/Alert";
-import { Grid, Checkbox, FormGroup, TextField, Button, FormControlLabel, FormControl } from "@material-ui/core";
+import { Grid, Checkbox, FormGroup, TextField, FormControlLabel, FormControl } from "@material-ui/core";
 import { gql, useMutation } from "@apollo/client";
 import styles from "./RegisterUser.module.scss";
 import { Link } from "react-router-dom";
 import { useFormik, FormikProvider, Form } from "formik";
 import * as Yup from "yup";
+import { Button } from "../../../components/Button/Button";
 
 const REGISTER_USER = gql`
     mutation RegisterUser($user: NewUserInputGraph!) {

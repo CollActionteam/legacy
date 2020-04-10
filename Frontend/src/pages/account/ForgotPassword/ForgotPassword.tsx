@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Section } from "../../../components/Section/Section";
 import { Alert } from "../../../components/Alert/Alert";
-import { Grid, FormGroup, TextField, Button } from "@material-ui/core";
+import { Grid, FormGroup, TextField } from "@material-ui/core";
 import { gql, useMutation } from "@apollo/client";
 import styles from "./ForgotPassword.module.scss";
+import { Button } from "../../../components/Button/Button";
 
 const ForgotPasswordPage = () => {
     const [ errorMessage, setErrorMessage ] = useState<string | null>(null);
@@ -40,7 +41,7 @@ const ForgotPasswordPage = () => {
             <Grid container justify="center">
                 <Grid item sm={6}>
                     <FormGroup>
-                        <TextField onChange={(action) => setEmail(action.target.value)} value={email} required label="E-Mail Address" type="email" />
+                        <TextField margin="normal" onChange={(action) => setEmail(action.target.value)} value={email} required label="E-Mail Address" type="email" />
                         <Button onClick={() => forgotPassword()}>Reset my password</Button>
                     </FormGroup>
                 </Grid>
