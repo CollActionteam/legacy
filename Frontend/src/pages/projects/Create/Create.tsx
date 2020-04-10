@@ -12,11 +12,14 @@ import Categories from './Categories';
 import styles from './Create.module.scss';
 import { initialValues, IProjectForm, validations } from './form';
 import UploadImage from './UploadImage';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import { gql, useMutation, ExecutionResult } from '@apollo/client';
+import Loader from '../../../components/Loader/Loader';
 
 const CreateProjectPage = () => {
 
   const { user } = useUser();
+  const history = useHistory();
   
   const validate = async (props: FormikProps<any>) => {
     const errors = Object.keys(await props.validateForm());
@@ -29,9 +32,71 @@ const CreateProjectPage = () => {
     }
   };
 
-  const handleSubmit = (values: any, actions: any) => {
-    console.log(values);
-    console.log(actions);
+  const uploadImage = async (file: any, description: string) => {
+    const body = new FormData();
+    body.append('Image', file);
+    body.append('ImageDescription', description);
+  
+    return await fetch(`${process.env.REACT_APP_BACKEND_URL}/image`, {
+      method: 'POST',
+      body,
+      credentials: 'include'
+    }).then((response) => response.json());
+  };
+  
+  const [createProject] = useMutation(gql`
+    mutation Create($project: NewProjectInputGraph) {
+      project {
+        createProject(project: $project) {
+          succeeded
+          errors {
+            errorMessage
+            memberNames
+          }
+        }
+      }
+    }
+  `);
+
+  const handleSubmit = async (form: IProjectForm, { setSubmitting, setStatus }: any) => {
+    setSubmitting(true);
+    setStatus(null);
+
+    const bannerId = form.banner ? await uploadImage(form.banner, form.projectName) : null;
+    const imageId = form.image ? await uploadImage(form.image, form.imageDescription) : null;
+
+    const response = (await createProject({
+      variables: {
+        project: {
+          name: form.projectName,
+          bannerImageFileId: bannerId || null,
+          categories: [form.category],
+          target: form.target,
+          proposal: form.proposal,
+          description: form.description,
+          start: form.startDate,
+          end: form.endDate,
+          goal: form.goal,
+          tags: form.tags ? form.tags.split(';') : [],
+          creatorComments: form.comments || null,
+          descriptiveImageFileId: imageId || null,
+          descriptionVideoLink: form.youtube || null
+        }
+      }
+    })) as ExecutionResult;
+
+    if (!response || !response.data) {
+      throw new Error('No response from graphql endpoint');
+    }
+
+    const result = response.data.project.createProject;
+
+    if (!result.succeeded) {
+      setStatus(result.errors);	
+      return;      
+    }
+
+    history.push("projects/thank-you-create");
   }
 
   const pleaseLogin = (
@@ -61,7 +126,7 @@ const CreateProjectPage = () => {
         validateOnChange={false}
         validateOnMount={false}
         validateOnBlur={true}        
-        onSubmit={(values, actions) => handleSubmit(values, actions)}
+        onSubmit={async (values, actions) => handleSubmit(values, actions)}
       >
         {(props: FormikProps<IProjectForm>) => (
           <Form>
@@ -238,13 +303,25 @@ const CreateProjectPage = () => {
               <Grid container>
                 <Grid item xs={12}>
                   <div className={styles.submit}>
-                    <Button 
-                      type="submit" 
-                      disabled={props.isSubmitting}
-                      onClick={() => validate(props)}
-                    >
-                      Submit crowdaction
-                    </Button>  
+                    { props.isSubmitting 
+                      ? <Loader></Loader> 
+                      : <Button 
+                          type="submit" 
+                          disabled={props.isSubmitting}
+                          onClick={() => validate(props)}
+                        >
+                          Submit crowdaction
+                        </Button>
+                    }
+                    { props.status && 
+                      <div className={styles.submitErrors}>
+                        <ul>                            
+                          { props.status.filter((e: any) => e !== undefined).map((error: any, idx: number) => (
+                            <li key={idx}>{ error.errorMessage }</li>
+                          ))}
+                        </ul>
+                      </div>                      
+                    }
                   </div>
                 </Grid>
               </Grid>

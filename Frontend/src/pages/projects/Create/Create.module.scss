@@ -22,6 +22,17 @@
   text-align: center;
 }
 
+.submitErrors {	
+  margin-top: var(--spacing-lg);
+  text-align: center;	
+  color: var(--c-red);	
+
+  ul {	
+    list-style: none;	
+    margin-left: 0;	
+  }	
+}
+
 .label {
   margin-bottom: var(--spacing);
 }
