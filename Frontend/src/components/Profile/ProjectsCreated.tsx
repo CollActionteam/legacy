@@ -11,6 +11,7 @@ export default ({ user }: IProjectsCreatedProps) => {
     return <Card>
             <CardContent>
                 <h3>Projects Created</h3>
+                <br />
                 { 
                     user.projects.map(project => <ProjectCreated key={project.id} project={project} user={user} />)
                 }
