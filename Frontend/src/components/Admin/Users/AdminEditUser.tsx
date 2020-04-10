@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Checkbox, Card, TextField, FormControlLabel, makeStyles, FormGroup, FormControl } from "@material-ui/core";
+import { Checkbox, Card, TextField, FormControlLabel, makeStyles, FormGroup, FormControl } from "@material-ui/core";
 import { gql, useQuery, useMutation } from "@apollo/client";
 import { useHistory } from "react-router-dom";
 import { Form, useFormik, FormikProvider } from "formik";
@@ -7,6 +7,7 @@ import * as Yup from "yup";
 
 import Loader from "../../Loader/Loader";
 import { Alert } from "../../Alert/Alert";
+import { Button } from "../../Button/Button";
 
 interface IEditUserProps {
     userId: string;
@@ -15,8 +16,7 @@ interface IEditUserProps {
 const editUserStyles = makeStyles(theme => ({
   root: {
     '& .MuiTextField-root': {
-      margin: theme.spacing(1),
-      width: '25ch'
+      margin: theme.spacing(1)
     },
   },
   formControl: {

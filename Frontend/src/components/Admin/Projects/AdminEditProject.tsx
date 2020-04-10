@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { useHistory } from "react-router-dom";
-import { Button, Card, TextField, makeStyles, FormGroup, FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
+import { Card, TextField, makeStyles, FormGroup, FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
 import { gql, useQuery, useMutation } from "@apollo/client";
 import { Form, useFormik, FormikProvider } from "formik";
 import { useDropzone } from "react-dropzone";
@@ -10,6 +10,7 @@ import Utils from "../../../utils";
 
 import Loader from "../../Loader/Loader";
 import { Alert } from "../../Alert/Alert";
+import { Button } from "../../Button/Button";
 
 interface IEditProjectProps {
     projectId: string;
@@ -18,8 +19,7 @@ interface IEditProjectProps {
 const editProjectStyles = makeStyles(theme => ({
   root: {
     '& .MuiTextField-root': {
-      margin: theme.spacing(1),
-      width: '25ch'
+      margin: theme.spacing(1)
     },
   },
   formControl: {
@@ -210,6 +210,8 @@ export default ({ projectId } : IEditProjectProps): any => {
                             name="description"
                             label="Description"
                             type="text"
+                            multiline={true}
+                            rows={5}
                             { ...formik.getFieldProps('description') }
                         />
                         <Alert type="error" text={formik.errors.description} />
@@ -219,6 +221,8 @@ export default ({ projectId } : IEditProjectProps): any => {
                             name="proposal"
                             label="Project Proposal"
                             type="text"
+                            multiline={true}
+                            rows={5}
                             { ...formik.getFieldProps('proposal') }
                         />
                         <Alert type="error" text={formik.errors.proposal} />
@@ -228,6 +232,8 @@ export default ({ projectId } : IEditProjectProps): any => {
                             name="goal"
                             label="Project Goal"
                             type="text"
+                            multiline={true}
+                            rows={5}
                             { ...formik.getFieldProps('goal') }
                         />
                         <Alert type="error" text={formik.errors.goal} />
@@ -235,6 +241,8 @@ export default ({ projectId } : IEditProjectProps): any => {
                     <FormControl >
                         <TextField
                             name="creatorComments"
+                            multiline={true}
+                            rows={5}
                             label="Creator Comments"
                             type="text"
                             { ...formik.getFieldProps('creatorComments') }
