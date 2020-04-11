@@ -19,7 +19,7 @@ import {
 } from '@stripe/react-stripe-js';
 import { Button } from "../Button/Button";
 import { useHistory } from "react-router-dom";
-import { useConsent } from "../../providers/CookieConsentProvider";
+import { useConsent, Consent } from "../../providers/CookieConsentProvider";
 import { useSettings } from "../../providers/SettingsProvider";
 
 type DonationValues = {
@@ -331,7 +331,7 @@ export default () => {
     const { consent } = useConsent();
     const { stripePublicKey } = useSettings();
 
-    if (!consent.includes("stripe")) {
+    if (!consent.includes(Consent.Stripe)) {
         return <Alert type="error" text="You can't donate because you haven't given consent for loading the stripe donation integration" />;
     } else {
         const stripePromise = loadStripe(stripePublicKey);

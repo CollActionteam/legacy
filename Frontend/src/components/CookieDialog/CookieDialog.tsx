@@ -6,7 +6,7 @@ import { Container, FormControlLabel, Checkbox, FormGroup } from "@material-ui/c
 import { AllowedConsents, Consent, ConsentDescription, useConsent } from "../../providers/CookieConsentProvider";
 import { useFormik, Form, FormikProvider } from "formik";
 
-const initialConsentState = AllowedConsents.map(c => c === "basics" ? { key: c, value: true } : { key: c, value: false })
+const initialConsentState = AllowedConsents.map(c => c === Consent.Basics ? { key: c, value: true } : { key: c, value: false })
                                            .reduce((map: { [id: string] : boolean }, { key, value }) => {
                                                map[key] = value;
                                                return map;
@@ -23,7 +23,7 @@ export default () => {
             const selectedConsents = 
                 Object.entries(values)
                       .filter(([_k, v]) => v)
-                      .map(([k, _v]) => k as Consent);
+                      .map(([k, _v]) => parseInt(k) as Consent);
             setConsent(selectedConsents);
         }
     });
@@ -49,9 +49,9 @@ export default () => {
                                     <FormGroup key={c}>
                                         <FormControlLabel
                                             control={<Checkbox
-                                                name={c}
+                                                name={c.toString()}
                                                 checked={formik.values[c]}
-                                                { ... c === "basics" ? [] : formik.getFieldProps(c) }
+                                                { ... c === Consent.Basics ? [] : formik.getFieldProps(c) }
                                             />}
                                             label={ConsentDescription(c)}
                                         />
