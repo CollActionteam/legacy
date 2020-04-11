@@ -8,7 +8,7 @@ export default ({ socialMedia } : any) => {
     <ul className={styles.list}>
       {socialMedia.map((item: any, index: number) => (
         <li key={index} className={styles.listItem}>
-          <IconButton url={item.url} icon={["fab", item.icon]} />
+          <IconButton aria-label={`Share on ${item.name}`} url={item.url} icon={["fab", item.icon]} />
         </li>
       ))}
     </ul>

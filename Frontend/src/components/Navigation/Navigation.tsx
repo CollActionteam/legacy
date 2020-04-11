@@ -67,6 +67,7 @@ export default ({ items } : INavigationProps) => {
     </nav>
     <Hidden mdUp>
       <button
+        aria-label="Toggle navigation menu"
         className={styles.navigationToggle}
         onClick={toggleNavigation}
       >
