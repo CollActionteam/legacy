@@ -5,6 +5,7 @@ import { Button } from "../Button/Button";
 import { Container, FormControlLabel, Checkbox, FormGroup } from "@material-ui/core";
 import { AllowedConsents, Consent, ConsentDescription, useConsent } from "../../providers/CookieConsentProvider";
 import { useFormik, Form, FormikProvider } from "formik";
+import { Alert } from "../Alert/Alert";
 
 const initialConsentState = AllowedConsents.map(c => c === Consent.Basics ? { key: c, value: true } : { key: c, value: false })
                                            .reduce((map: { [id: string] : boolean }, { key, value }) => {
@@ -15,6 +16,7 @@ const initialConsentState = AllowedConsents.map(c => c === Consent.Basics ? { ke
 export default () => {
     const { consent, setConsent, setAllowAllConsent } = useConsent();
     const [ showMoreOptions, setShowMoreOptions ] = useState(false);
+    const [ info, setInfo ] = useState<string | null>(null);
     const location = useLocation();
     const alwaysShow = location.pathname === "/privacy-policy";
     const formik = useFormik({
@@ -25,6 +27,7 @@ export default () => {
                       .filter(([_k, v]) => v)
                       .map(([k, _v]) => parseInt(k) as Consent);
             setConsent(selectedConsents);
+            setInfo("You've given consent. This dialog will remain open in case you want to further update your choices.")
         }
     });
 
@@ -33,6 +36,7 @@ export default () => {
     }
 
     return <div className={styles.cookieDialog}>
+        <Alert type="info" text={info} />
         <Container>
             Thank you for visiting our website!
             Please note that our website uses cookies to analyze and improve the performance of our website and to make social media integration possible.
@@ -43,13 +47,13 @@ export default () => {
             { showMoreOptions ?
                 <div>
                     <FormikProvider value={formik}>
-                        <Form onSubmit={formik.submitForm}>
+                        <Form onSubmit={() => formik.submitForm()}>
                             {
                                 AllowedConsents.map((c: Consent) => 
                                     <FormGroup key={c}>
                                         <FormControlLabel
                                             control={<Checkbox
-                                                name={c.toString()}
+                                                name={`consent${c}`}
                                                 checked={formik.values[c]}
                                                 { ... c === Consent.Basics ? [] : formik.getFieldProps(c) }
                                             />}
@@ -57,14 +61,14 @@ export default () => {
                                         />
                                     </FormGroup>)
                             }
-                            <Button type="submit" disabled={formik.isSubmitting} onClick={() => formik.submitForm()}>Accept</Button>
-                            <Button type="button" disabled={formik.isSubmitting} onClick={() => setShowMoreOptions(false)}>Less options</Button>
+                            <Button key="accept" type="button" disabled={formik.isSubmitting} onClick={() => formik.submitForm()}>Accept</Button>
+                            <Button key="less" type="button" disabled={formik.isSubmitting} onClick={() => setShowMoreOptions(false)}>Less options</Button>
                         </Form>
                     </FormikProvider>
                 </div> :
                 <div>
-                    <Button onClick={() => setAllowAllConsent()}>Accept</Button>
-                    <Button onClick={() => setShowMoreOptions(true)}>More options</Button>
+                    <Button key="acceptall" onClick={() => setAllowAllConsent()}>Accept</Button>
+                    <Button key="more" onClick={() => setShowMoreOptions(true)}>More options</Button>
                 </div>
             }
         </Container>
