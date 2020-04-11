@@ -16,6 +16,16 @@ export const GET_SETTINGS = gql`
         name
       }
     }
+    displayPriorities: __type(name: "ProjectDisplayPriority") {
+        enumValues {
+            name
+        }
+    }
+    projectStatusses: __type(name: "ProjectStatus") {
+        enumValues {
+            name
+        }
+    }
   }
 `; 
 
@@ -24,7 +34,9 @@ const defaultSettings: ISettings = {
   stripePublicKey: "",
   disqusSiteId: "",
   externalLoginProviders: [],
-  categories: []
+  categories: [],
+  displayPriorities: [],
+  projectStatusses: []
 };
 
 export const SettingsContext = React.createContext(defaultSettings);
@@ -40,7 +52,9 @@ const mapSettings = (settingsData: any): ISettings => {
     stripePublicKey: misc.stripePublicKey,
     disqusSiteId: misc.disqusSiteId,
     externalLoginProviders: misc.externalLoginProviders,
-    categories: settingsData.categories.enumValues.map((v: any) => v.name)
+    categories: settingsData.categories.enumValues.map((v: any) => v.name),
+    displayPriorities: settingsData.displayPriorities.enumValues.map((v: any) => v.name),
+    projectStatusses: settingsData.projectStatusses.enumValues.map((v: any) => v.name)
   };
 };
 

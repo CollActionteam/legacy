@@ -9,6 +9,8 @@ export interface ISettings {
   stripePublicKey: string;
   externalLoginProviders: string[];
   categories: string[];
+  displayPriorities: string[];
+  projectStatusses: string[];
 }
 
 export interface IDonationEventLog {

@@ -11,6 +11,7 @@ import Utils from "../../../utils";
 import Loader from "../../Loader/Loader";
 import { Alert } from "../../Alert/Alert";
 import { Button } from "../../Button/Button";
+import { useSettings } from "../../../providers/SettingsProvider";
 
 interface IEditProjectProps {
     projectId: string;
@@ -31,6 +32,7 @@ const editProjectStyles = makeStyles(theme => ({
 export default ({ projectId } : IEditProjectProps): any => {
     const classes = editProjectStyles();
     const history = useHistory();
+    const { categories, displayPriorities, projectStatusses } = useSettings();
     const [ error, setError ] = useState<string | null>(null);
     const [ bannerImage, setBannerImage ] = useState<File | null>(null);
     const [ descriptiveImage, setDescriptiveImage ] = useState<File | null>(null);
@@ -328,7 +330,7 @@ export default ({ projectId } : IEditProjectProps): any => {
                         <InputLabel shrink id="first-category-label">First Category</InputLabel>
                         <Select name="firstCategory" labelId="first-category-label" { ...formik.getFieldProps('firstCategory')}>
                             <MenuItem key="" value="NONE">NONE</MenuItem>
-                            { data?.categories.enumValues.map((c: any) => <MenuItem key={c.name} value={c.name}>{c.name}</MenuItem>) }
+                            { categories.map(c => <MenuItem key={c} value={c}>{c}</MenuItem>) }
                         </Select>
                         <Alert type="error" text={formik.errors.firstCategory} />
                     </FormControl>
@@ -336,21 +338,21 @@ export default ({ projectId } : IEditProjectProps): any => {
                         <InputLabel shrink id="second-category-label">Second Category</InputLabel>
                         <Select labelId="second-category-label" name="secondCategory" { ...formik.getFieldProps('secondCategory')}>
                             <MenuItem key="" value="NONE">NONE</MenuItem>
-                            { data?.categories.enumValues.map((c: any) => <MenuItem key={c.name} value={c.name}>{c.name}</MenuItem>) }
+                            { categories.map(c => <MenuItem key={c} value={c}>{c}</MenuItem>) }
                         </Select>
                         <Alert type="error" text={formik.errors.secondCategory} />
                     </FormControl>
                     <FormControl className={classes.formControl}>
                         <InputLabel shrink id="status-label">Status</InputLabel>
                         <Select labelId="status-label" name="status" { ...formik.getFieldProps('status')}>
-                            { data?.statusses.enumValues.map((c: any) => <MenuItem key={c.name} value={c.name}>{c.name}</MenuItem>) }
+                            { projectStatusses.map(s => <MenuItem key={s} value={s}>{s}</MenuItem>) }
                         </Select>
                         <Alert type="error" text={formik.errors.status} />
                     </FormControl>
                     <FormControl className={classes.formControl}>
                         <InputLabel shrink id="display-priority-label">Display Priority</InputLabel>
                         <Select labelId="display-priority-label" name="displayPriority" { ...formik.getFieldProps('displayPriority')}>
-                            { data?.displayPriorities.enumValues.map((c: any) => <MenuItem key={c.name} value={c.name}>{c.name}</MenuItem>) }
+                            { displayPriorities.map(d => <MenuItem key={d} value={d}>{d}</MenuItem>) }
                         </Select>
                         <Alert type="error" text={formik.errors.displayPriority} />
                     </FormControl>
@@ -455,21 +457,6 @@ const GET_PROJECT = gql`
                 email
             }
             ${Fragments.projectDetail}
-        }
-        categories: __type(name: "Category") {
-            enumValues {
-                name
-            }
-        }
-        displayPriorities: __type(name: "ProjectDisplayPriority") {
-            enumValues {
-                name
-            }
-        }
-        statusses: __type(name: "ProjectStatus") {
-            enumValues {
-                name
-            }
         }
     }
 `;
