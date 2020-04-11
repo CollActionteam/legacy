@@ -15,7 +15,7 @@ export default () => {
     const [toDelete, setToDelete] = useState<IUser | null>(null);
     const [info, setInfo] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const {data, loading} = useQuery(
+    const {data, loading, error: loadingError} = useQuery(
         GET_USERS,
         {
             fetchPolicy: "cache-and-network", // To ensure it updates after deleting/editting
@@ -65,6 +65,7 @@ export default () => {
         { loading ? <Loader /> : null }
         <Alert type="info" text={info} />
         <Alert type="error" text={error} />
+        <Alert type="error" text={loadingError?.message} />
         <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
             <DialogTitle>Delete user { toDelete?.email }?</DialogTitle>
             <DialogContent>

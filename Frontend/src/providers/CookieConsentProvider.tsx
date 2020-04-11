@@ -13,9 +13,9 @@ export const AllowedConsents: Consent[] = [ "basics", "analytics", "stripe", "di
 export const ConsentDescription = (consent: Consent) => {
     switch (consent) {
         case 'basics':
-            return "Essential cookies & anonymous statistics";
+            return "Essential cookies & anonymous analytics";
         case 'analytics':
-            return "Detailed analytics";
+            return "Detailed personalized analytics";
         case 'stripe':
             return "Integration with stripe payments for handling our donations";
         case 'disqus':

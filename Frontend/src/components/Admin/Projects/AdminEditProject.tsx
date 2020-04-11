@@ -34,7 +34,7 @@ export default ({ projectId } : IEditProjectProps): any => {
     const [ error, setError ] = useState<string | null>(null);
     const [ bannerImage, setBannerImage ] = useState<File | null>(null);
     const [ descriptiveImage, setDescriptiveImage ] = useState<File | null>(null);
-    const { data, loading} = useQuery(
+    const { data, loading, error: loadingError } = useQuery(
         GET_PROJECT,
         {
             variables: {
@@ -194,6 +194,7 @@ export default ({ projectId } : IEditProjectProps): any => {
         { loading ? <Loader /> : null }
         <Card>
             <Alert type="error" text={error} />
+            <Alert type="error" text={loadingError?.message} />
             <Form className={classes.root} onSubmit={formik.handleSubmit}>
                 <FormGroup>
                     <FormControl>

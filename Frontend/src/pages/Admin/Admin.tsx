@@ -1,6 +1,6 @@
 import React from "react";
 import { RouteComponentProps, Redirect } from "react-router-dom";
-import { useUser } from "../../providers/User";
+import { useUser } from "../../providers/UserProvider";
 import AdminSidebar from "../../components/Admin/AdminSidebar";
 import AdminEditUser from "../../components/Admin/Users/AdminEditUser";
 import AdminEditProject from "../../components/Admin/Projects/AdminEditProject";

@@ -3,7 +3,7 @@ using GraphQL.Types;
 
 namespace CollAction.GraphQl.Mutations.Input
 {
-    public class IDealCheckoutInputGraph : InputObjectGraphType<IDealCheckout>
+    public sealed class IDealCheckoutInputGraph : InputObjectGraphType<IDealCheckout>
     {
         public IDealCheckoutInputGraph()
         {

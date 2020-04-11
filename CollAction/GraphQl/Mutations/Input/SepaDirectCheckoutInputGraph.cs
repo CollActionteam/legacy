@@ -3,7 +3,7 @@ using GraphQL.Types;
 
 namespace CollAction.GraphQl.Mutations.Input
 {
-    public class SepaDirectCheckoutInputGraph : InputObjectGraphType<SepaDirectCheckout>
+    public sealed class SepaDirectCheckoutInputGraph : InputObjectGraphType<SepaDirectCheckout>
     {
         public SepaDirectCheckoutInputGraph()
         {

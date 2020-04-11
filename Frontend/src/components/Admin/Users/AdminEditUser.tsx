@@ -29,7 +29,7 @@ export default ({ userId } : IEditUserProps): any => {
     const classes = editUserStyles();
     const history = useHistory();
     const [ error, setError ] = useState<string | null>(null);
-    const { data, loading } = useQuery(
+    const { data, loading, error: loadingError } = useQuery(
         GET_USER,
         {
             variables: {
@@ -96,6 +96,7 @@ export default ({ userId } : IEditUserProps): any => {
         { loading ? <Loader /> : null }
         <Card>
             <Alert type="error" text={error} />
+            <Alert type="error" text={loadingError?.message} />
             <Form className={classes.root} onSubmit={formik.handleSubmit}>
                 <FormGroup>
                     <FormControl>

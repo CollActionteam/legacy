@@ -13,11 +13,8 @@ interface IProjectListProps {
   status?: string;
 }
 
-export default ({
-  category,
-  status = ProjectStatusFilter.Open,
-}: IProjectListProps) => {
-  const query = useQuery(
+export default ({ category, status = ProjectStatusFilter.Open }: IProjectListProps) => {
+  const { data, loading, error } = useQuery(
     FIND_PROJECTS,
     category
       ? {
@@ -32,8 +29,6 @@ export default ({
           },
         }
   );
-
-  const { data, loading, error } = query;
 
   if (loading) {
     return <Loader />;

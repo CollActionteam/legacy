@@ -3,7 +3,7 @@ import { Card, CardContent, CardActions, DialogTitle, Dialog, DialogActions } fr
 import { IUser } from "../../api/types";
 import { gql, useMutation } from "@apollo/client";
 import { Alert } from "../Alert/Alert";
-import { GET_USER } from "../../providers/User";
+import { GET_USER } from "../../providers/UserProvider";
 import { Button } from "../Button/Button";
 
 interface IDeleteAccountProps {

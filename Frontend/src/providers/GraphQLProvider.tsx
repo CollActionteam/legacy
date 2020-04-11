@@ -9,4 +9,4 @@ export default ({ children } : any) => {
   });
 
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
-};
+}; 

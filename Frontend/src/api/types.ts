@@ -3,6 +3,14 @@ export interface IDonation {
   stripePublicKey: string;
 }
 
+export interface ISettings {
+  mailChimpNewsletterListId: string;
+  disqusSiteId: string;
+  stripePublicKey: string;
+  externalLoginProviders: string[];
+  categories: string[];
+}
+
 export interface IDonationEventLog {
   eventData: string;
   id: string;

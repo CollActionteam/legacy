@@ -3,7 +3,7 @@ using GraphQL.Types;
 
 namespace CollAction.GraphQl.Mutations.Input
 {
-    public class CreditCardCheckoutInputGraph : InputObjectGraphType<CreditCardCheckout>
+    public sealed class CreditCardCheckoutInputGraph : InputObjectGraphType<CreditCardCheckout>
     {
         public CreditCardCheckoutInputGraph()
         {

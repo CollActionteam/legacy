@@ -3,6 +3,7 @@ StripePublicApiKey=
 StripeChargeableWebhookSecret=
 StripePaymentEventWebhookSecret=
 SesRegion=eu-west-1
+DisqusSiteId=www-collaction-org
 SesAwsAccessKeyId=
 SesAwsAccessKey=
 SeedTestData=true

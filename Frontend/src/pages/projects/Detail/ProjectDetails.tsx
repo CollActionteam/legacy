@@ -7,7 +7,7 @@ import { Form, useFormik, FormikContext } from "formik";
 import * as Yup from "yup";
 
 import { IProject } from "../../../api/types";
-import { useUser, GET_USER } from "../../../providers/User";
+import { useUser, GET_USER } from "../../../providers/UserProvider";
 
 import { RouteComponentProps, Redirect, useHistory} from "react-router-dom";
 import { Fragments } from "../../../api/fragments";

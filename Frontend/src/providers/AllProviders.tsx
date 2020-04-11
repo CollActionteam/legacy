@@ -1,18 +1,21 @@
 import React from "react";
-import Apollo from "./Apollo";
-import CookieConsent from "./CookieConsent";
-import User from "./User";
 import { I18nextProvider } from "react-i18next";
 import i18n from "../i18n";
+import UserProvider from "./UserProvider";
+import CookieConsentProvider from "./CookieConsentProvider";
+import SettingsProvider from "./SettingsProvider";
+import GraphQLProvider from "./GraphQLProvider";
 
 export default ({ children }: any) => {
     return <I18nextProvider i18n={i18n}>
-        <Apollo>
-            <CookieConsent>
-                <User>
-                    { children }
-                </User>
-            </CookieConsent>
-        </Apollo>
+        <GraphQLProvider>
+            <SettingsProvider>
+                <CookieConsentProvider>
+                    <UserProvider>
+                        { children }
+                    </UserProvider>
+                </CookieConsentProvider>
+            </SettingsProvider>
+        </GraphQLProvider>
     </I18nextProvider>;
 };

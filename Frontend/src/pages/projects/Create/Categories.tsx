@@ -3,25 +3,13 @@ import { FormControl, InputLabel, MenuItem, FormHelperText } from '@material-ui/
 import { Select } from 'formik-material-ui';
 import styles from './Create.module.scss';
 import { Field } from 'formik';
-import { useQuery, gql } from '@apollo/client';
 
 import Utils from '../../../utils';
+import { useSettings } from '../../../providers/SettingsProvider';
 
 const Categories = (formik: any) => {
-
-  const { data: categoryResponse } = useQuery(gql`
-    query {
-      __type(name: "Category") {
-        enumValues {
-          name
-          description
-        }
-      }
-    }
-  `);  
-  const categories = categoryResponse 
-    ? categoryResponse.__type.enumValues.map((c: any) => Utils.formatCategory(c.name))
-    : [];
+  const { categories } = useSettings();
+  const categoryNames = categories.map(Utils.formatCategory);
 
   return (
     <FormControl fullWidth className={styles.formRow}>
@@ -31,7 +19,7 @@ const Categories = (formik: any) => {
         component={Select} 
         error={formik.props.touched.category && Boolean(formik.props.errors.category)}
       >
-        {categories && categories.map((category: string) => (
+        {categoryNames.map((category: string) => (
           <MenuItem key={category} value={category}>
             {category}
           </MenuItem>

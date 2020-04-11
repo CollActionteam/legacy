@@ -172,33 +172,34 @@ namespace CollAction
             services.AddTransient<IHtmlInputValidator, HtmlInputValidator>();
 
             // Configure application options
-            services.Configure<StripeSignatures>(configuration);
-            services.Configure<SiteOptions>(configuration);
-            services.Configure<AuthMessageSenderOptions>(configuration);
-            services.Configure<ImageServiceOptions>(configuration);
-            services.Configure<ImageProcessingOptions>(configuration);
-            services.Configure<NewsletterServiceOptions>(configuration);
-            services.Configure<SeedOptions>(configuration);
-            services.Configure<MailChimpOptions>(options =>
+            services.AddOptions<DisqusOptions>().Bind(configuration).ValidateDataAnnotations();
+            services.AddOptions<StripeSignatures>().Bind(configuration).ValidateDataAnnotations();
+            services.AddOptions<SiteOptions>().Bind(configuration).ValidateDataAnnotations();
+            services.AddOptions<AuthMessageSenderOptions>().Bind(configuration).ValidateDataAnnotations();
+            services.AddOptions<ImageServiceOptions>().Bind(configuration).ValidateDataAnnotations();
+            services.AddOptions<ImageProcessingOptions>().Bind(configuration).ValidateDataAnnotations();
+            services.AddOptions<NewsletterServiceOptions>().Bind(configuration).ValidateDataAnnotations();
+            services.AddOptions<SeedOptions>().Bind(configuration).ValidateDataAnnotations();
+            services.AddOptions<MailChimpOptions>().Configure(options =>
             {
                 options.ApiKey = configuration["MailChimpKey"];
-            });
-            services.Configure<RequestOptions>(options =>
+            }).ValidateDataAnnotations();
+            services.AddOptions<RequestOptions>().Configure(options =>
             {
                 options.ApiKey = configuration["StripeSecretApiKey"];
-            });
-            services.Configure<StripePublicOptions>(options =>
+            }).ValidateDataAnnotations();
+            services.AddOptions<StripePublicOptions>().Configure(options =>
             {
                 options.StripePublicKey = configuration["StripePublicApiKey"];
-            });
-            services.Configure<IdentityOptions>(options =>
+            }).ValidateDataAnnotations();
+            services.AddOptions<IdentityOptions>().Configure(options =>
             {
                 options.Password.RequireDigit = false;
                 options.Password.RequireLowercase = false;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredLength = 8;
-            });
+            }).ValidateDataAnnotations();
         }
 
         public void Configure(IApplicationBuilder app, IHostApplicationLifetime applicationLifetime)

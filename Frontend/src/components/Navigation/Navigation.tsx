@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Hidden } from "@material-ui/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
-import { useUser } from "../../providers/User";
+import { useUser } from "../../providers/UserProvider";
 import { Button } from "../../components/Button/Button";
 import { IUser } from "../../api/types";
 import styles from "./Navigation.module.scss";

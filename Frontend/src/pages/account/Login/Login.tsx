@@ -4,7 +4,6 @@ import { Section } from "../../../components/Section/Section";
 import { Alert } from "../../../components/Alert/Alert";
 import { Link, useLocation } from "react-router-dom";
 import styles from "./Login.module.scss";
-import { gql, useQuery } from "@apollo/client";
 
 import {
   Grid,
@@ -14,14 +13,7 @@ import {
   Checkbox,
   FormGroup,
 } from "@material-ui/core";
-
-const GET_LOGIN_PROVIDERS = gql`
-  query {
-    miscellaneous {
-      externalLoginProviders
-    }
-  }
-`;
+import { useSettings } from "../../../providers/SettingsProvider";
 
 const LoginPage = () => {
   const actionLogin = `${process.env.REACT_APP_BACKEND_URL}/account/login`;
@@ -31,7 +23,7 @@ const LoginPage = () => {
   const searchParams = new URLSearchParams(useLocation().search);
   const errorType = searchParams.get("error");
   const errorMessage = searchParams.get("message");
-  const { data: dataLoginProviders, error: errorLoginProviders } = useQuery(GET_LOGIN_PROVIDERS);
+  const { externalLoginProviders } = useSettings();
   if (errorType && errorMessage)
   {
     console.error({ errorType, errorMessage });
@@ -46,7 +38,6 @@ const LoginPage = () => {
         </h2>
       </Section>
       <Alert type="error" text={errorMessage} />
-      <Alert type="error" text={errorLoginProviders?.message} />
       <Section color="grey">
         <Grid container justify="center">
           <Grid item sm={6}>
@@ -58,7 +49,7 @@ const LoginPage = () => {
                   value={returnUrl}
                 />
                 <input type="hidden" name="errorUrl" value={errorUrl} />
-                { dataLoginProviders?.miscellaneous?.externalLoginProviders?.map(
+                { externalLoginProviders.map(
                   (provider: string) => (
                     <FormControl key={provider} margin="normal">
                       <Button name="provider" value={provider}>

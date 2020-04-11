@@ -3,7 +3,7 @@ import styles from "./CookieDialog.module.scss";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "../Button/Button";
 import { Container, FormControlLabel, Checkbox, FormGroup } from "@material-ui/core";
-import { AllowedConsents, Consent, ConsentDescription, useConsent } from "../../providers/CookieConsent";
+import { AllowedConsents, Consent, ConsentDescription, useConsent } from "../../providers/CookieConsentProvider";
 import { useFormik, Form, FormikProvider } from "formik";
 
 const initialConsentState = AllowedConsents.map(c => c === "basics" ? { key: c, value: true } : { key: c, value: false })

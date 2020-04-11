@@ -1,11 +1,12 @@
 import { DiscussionEmbed } from 'disqus-react';
 import { IProject } from '../../api/types';
 import React from 'react';
-import { useConsent } from '../../providers/CookieConsent';
+import { useConsent } from '../../providers/CookieConsentProvider';
+import { useSettings } from '../../providers/SettingsProvider';
 
 export default ({ project }: { project: IProject }) => {
     const disqusId = `${project.name}/${project.id}`;
-    const disqusSiteId = "www-collaction-org";
+    const { disqusSiteId } = useSettings();
     const { consent } = useConsent();
     if (!consent.includes("disqus")) {
         return null;

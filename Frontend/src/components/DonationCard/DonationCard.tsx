@@ -1,16 +1,15 @@
 import React, { useState } from "react";
 import { Card, CardContent, CardActions, FormGroup, FormControl, TextField, Grid, Dialog, DialogTitle, DialogContent, DialogActions, makeStyles } from "@material-ui/core";
 import { useFormik, Form, FormikContext } from "formik";
-import { useUser } from "../../providers/User";
+import { useUser } from "../../providers/UserProvider";
 import * as Yup from "yup";
 import { Alert } from "../Alert/Alert";
 import styles from "./DonationCard.module.scss";
 import bankCard from "../../assets/bank-card.png";
 import iDealLogo from "../../assets/i-deal-logo.png";
-import { useMutation, gql, useQuery } from "@apollo/client";
-import Loader from "../Loader/Loader";
+import { useMutation, gql } from "@apollo/client";
 import { loadStripe } from '@stripe/stripe-js';
-import { GET_USER } from "../../providers/User";
+import { GET_USER } from "../../providers/UserProvider";
 import {
   Elements,
   useStripe,
@@ -20,7 +19,8 @@ import {
 } from '@stripe/react-stripe-js';
 import { Button } from "../Button/Button";
 import { useHistory } from "react-router-dom";
-import { useConsent } from "../../providers/CookieConsent";
+import { useConsent } from "../../providers/CookieConsentProvider";
+import { useSettings } from "../../providers/SettingsProvider";
 
 type DonationValues = {
     email: string;
@@ -29,14 +29,6 @@ type DonationValues = {
     amount: number;
     recurring: boolean;
 };
-
-const STRIPE_PUBLIC_KEY = gql`
-    query {
-        donation {
-            stripePublicKey
-        }
-    }
-`;
 
 const INITIALIZE_CREDIT_CARD_CHECKOUT = gql`
     mutation InitializeCreditCardCheckout($checkout: CreditCardCheckoutInputGraph!) {
@@ -336,19 +328,13 @@ const InnerDonationCard = () => {
 }
 
 export default () => {
-    const { data, loading, error } = useQuery(
-        STRIPE_PUBLIC_KEY
-    );
     const { consent } = useConsent();
+    const { stripePublicKey } = useSettings();
 
-    if (loading) {
-        return <Loader />;
-    } else if (error) {
-        return <Alert type="error" text={error.message} />;
-    } else if (!consent.includes("stripe")) {
+    if (!consent.includes("stripe")) {
         return <Alert type="error" text="You can't donate because you haven't given consent for loading the stripe donation integration" />;
     } else {
-        const stripePromise = loadStripe(data.donation.stripePublicKey);
+        const stripePromise = loadStripe(stripePublicKey);
         return <Elements stripe={stripePromise}>
             <InnerDonationCard />
         </Elements>;

@@ -13,8 +13,7 @@ import styles from './Stats.module.scss';
 
 export default () => {
   const { t } = useTranslation();
-  const query = useQuery(GET_STATISTICS);
-  const { data, loading, error } = query;
+  const { data, loading, error } = useQuery(GET_STATISTICS);
 
   if (loading) {
     return <Loader />;

@@ -7,7 +7,7 @@ import { Button } from '../../../components/Button/Button';
 import { ProjectStarter } from '../../../components/ProjectStarter/ProjectStarter';
 import { RichTextEditorFormControl } from '../../../components/RichTextEditorFormContol/RichTextEditorFormControl';
 import { Section } from '../../../components/Section/Section';
-import { useUser } from '../../../providers/User';
+import { useUser } from '../../../providers/UserProvider';
 import Categories from './Categories';
 import styles from './Create.module.scss';
 import { initialValues, IProjectForm, validations } from './form';

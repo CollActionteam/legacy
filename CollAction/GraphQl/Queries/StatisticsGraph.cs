@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CollAction.GraphQl.Queries
 {
-    public class StatisticsGraph : ObjectGraphType
+    public sealed class StatisticsGraph : ObjectGraphType
     {
         public StatisticsGraph()
         {

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CollAction.Services.Statistics
 {
-    public class StatisticsService : IStatisticsService
+    public sealed class StatisticsService : IStatisticsService
     {
         private readonly ApplicationDbContext context;
 

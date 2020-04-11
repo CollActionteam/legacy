@@ -86,11 +86,8 @@ namespace CollAction.GraphQl.Queries
                         return userContext.Context.Users.Where(u => 0 == 1);
                     }
                 },
-                graphType: typeof(ApplicationUserGraph));
-
-            Field<DonationGraph>(
-                "donation",
-                resolve: c => new object());
+                graphType: typeof(ApplicationUserGraph),
+                nullable: true);
 
             Field<MiscellaneousGraph>(
                 "miscellaneous",

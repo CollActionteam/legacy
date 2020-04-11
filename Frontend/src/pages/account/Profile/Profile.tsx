@@ -2,7 +2,7 @@ import { Grid, Card, CardActions } from "@material-ui/core";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
-import { useUser } from "../../../providers/User";
+import { useUser } from "../../../providers/UserProvider";
 import ResetPassword from "../../../components/Profile/ResetPassword";
 import RecurringDonations from "../../../components/Profile/RecurringDonations";
 import ProjectsParticipating from "../../../components/Profile/ProjectsParticipating";

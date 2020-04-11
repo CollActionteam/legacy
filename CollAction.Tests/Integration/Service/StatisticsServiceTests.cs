@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace CollAction.Tests.Integration.Service
 {
     [TestClass]
-    public class StatisticsServiceTests : IntegrationTestBase
+    public sealed class StatisticsServiceTests : IntegrationTestBase
     {
         [TestMethod]
         public Task TestStatistics()

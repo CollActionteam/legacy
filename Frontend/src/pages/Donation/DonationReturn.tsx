@@ -4,6 +4,14 @@ import React from "react";
 import { Alert } from "../../components/Alert/Alert";
 import Loader from "../../components/Loader/Loader";
 
+const IDEAL_PAYMENT_SUCCEEDED = gql`
+    query IDealPaymentSucceeded($source: String!, $clientSecret: String!) {
+        miscellaneous {
+            hasIDealPaymentSucceeded(source: $source, clientSecret: $clientSecret)
+        }
+    }
+`;
+
 const DonationReturnPage = () => {
     const searchParams = new URLSearchParams(useLocation().search);
     const source = searchParams.get('source');
@@ -30,11 +38,3 @@ const DonationReturnPage = () => {
 };
 
 export default DonationReturnPage;
-
-const IDEAL_PAYMENT_SUCCEEDED = gql`
-    query IDealPaymentSucceeded($source: String!, $clientSecret: String!) {
-        donation {
-            hasIDealPaymentSucceeded(source: $source, clientSecret: $clientSecret)
-        }
-    }
-`;

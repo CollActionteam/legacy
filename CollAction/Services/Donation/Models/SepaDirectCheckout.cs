@@ -2,7 +2,7 @@
 
 namespace CollAction.Services.Donation.Models
 {
-    public class SepaDirectCheckout
+    public sealed class SepaDirectCheckout
     {
         [Required]
         public string SourceId { get; set; } = null!;
