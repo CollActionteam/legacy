@@ -29,7 +29,7 @@ type TParams = {
 }
 
 const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
-  const { user } = useUser();
+  const user = useUser();
   const { slug, projectId } = match.params;
   const { data, loading } = useQuery(GET_PROJECT, { variables: { id: projectId } });
   const project = (data?.project ?? null) as IProject | null;

@@ -17,8 +17,7 @@ import { gql, useMutation, ExecutionResult } from '@apollo/client';
 import Loader from '../../../components/Loader/Loader';
 
 const CreateProjectPage = () => {
-
-  const { user } = useUser();
+  const user = useUser();
   const history = useHistory();
   
   const validate = async (props: FormikProps<any>) => {

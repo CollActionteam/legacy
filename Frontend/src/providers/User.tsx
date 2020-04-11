@@ -4,16 +4,12 @@ import { gql } from "@apollo/client";
 import { IUser } from "../api/types";
 import { Fragments } from "../api/fragments";
 
-export const UserContext = React.createContext({ user: null as (IUser | null) });
+export const UserContext = React.createContext(null as (IUser | null));
 
 export default ({ children }: any) => {
   let { data } = useQuery(GET_USER);
 
-  let contextValue = {
-    user: (data?.currentUser ?? null) as IUser | null,
-  };
-
-  return <UserContext.Provider value={contextValue}>
+  return <UserContext.Provider value={(data?.currentUser ?? null) as IUser | null}>
     { children }
   </UserContext.Provider>;
 };

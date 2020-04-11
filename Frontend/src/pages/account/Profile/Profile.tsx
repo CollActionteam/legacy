@@ -11,7 +11,7 @@ import DeleteAccount from "../../../components/Profile/DeleteAccount";
 import ProjectsCreated from "../../../components/Profile/ProjectsCreated";
 
 export default () => {
-  const { user } = useUser();
+  const user = useUser();
   if (user !== null) {
     return <div style={{ padding: 20 }}>
         <Grid container spacing={5}>

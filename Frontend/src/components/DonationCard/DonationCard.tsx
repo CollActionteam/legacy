@@ -70,7 +70,7 @@ const dialogStyles = {
 const useDialogStyles = makeStyles(dialogStyles);
 
 const InnerDonationCard = () => {
-    const { user } = useUser();
+    const user = useUser();
     const [ error, setError ] = useState<string | null>(null);
     const [ bankingPopupOpen, setBankingPopupOpen ] = useState(false);
     const stripe = useStripe();

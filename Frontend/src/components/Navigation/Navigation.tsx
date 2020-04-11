@@ -65,7 +65,7 @@ export default class Navigation extends React.Component<
   render() {
     return (
       <UserContext.Consumer>
-        {({user}) =>
+        {(user) =>
           <div className={this.state.collapsed ? styles.collapsed : ""}>
             <nav className={styles.navigation}>
               <ul className={styles.navigationList}>

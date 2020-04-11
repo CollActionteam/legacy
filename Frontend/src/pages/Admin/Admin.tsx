@@ -14,7 +14,7 @@ type TParams = {
 }
 
 const AdminPage = ({ match } : RouteComponentProps<TParams>): any => {
-  const { user } = useUser();
+  const user = useUser();
 
   const adminInner = () => {
     if (match.params.action === "list") {
