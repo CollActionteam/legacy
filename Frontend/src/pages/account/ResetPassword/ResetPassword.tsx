@@ -6,6 +6,7 @@ import { gql, useMutation } from "@apollo/client";
 import styles from "./ResetPassword.module.scss";
 import { useLocation } from "react-router-dom";
 import { Button } from "../../../components/Button/Button";
+import Helmet from "react-helmet";
 
 const ResetPasswordPage = () => {
     const searchParams = new URLSearchParams(useLocation().search);
@@ -42,6 +43,10 @@ const ResetPasswordPage = () => {
     );
 
     return <React.Fragment>
+        <Helmet>
+          <title>Reset Password</title>
+          <meta name="description" content="Reset Password" />
+        </Helmet>
         <Section className={styles.intro}>
             <h1 className={styles.title}>Reset Password</h1>
         </Section>

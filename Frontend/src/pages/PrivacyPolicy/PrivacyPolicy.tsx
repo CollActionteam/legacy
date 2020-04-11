@@ -1,9 +1,14 @@
 import React from 'react'
 import { Section } from '../../components/Section/Section'
 import styles from "./PrivacyPolicy.module.scss";
+import Helmet from 'react-helmet';
 
 const PrivacyPolicyPage = () => { 
     return <React.Fragment>
+        <Helmet>
+            <title>Privacy Policy</title>
+            <meta name="description" content="Privacy Policy" />
+        </Helmet>
         <Section className={styles.intro}>
             <h1 className={styles.title}>Privacy and Cookie Policy CollAction</h1>
         </Section>

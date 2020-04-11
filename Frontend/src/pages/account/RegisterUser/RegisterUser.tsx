@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { useFormik, FormikProvider, Form } from "formik";
 import * as Yup from "yup";
 import { Button } from "../../../components/Button/Button";
+import Helmet from "react-helmet";
 
 const REGISTER_USER = gql`
     mutation RegisterUser($user: NewUserInputGraph!) {
@@ -98,6 +99,10 @@ const RegisterUserPage = () => {
     });
 
     return <React.Fragment>
+        <Helmet>
+          <title>Register User</title>
+          <meta name="description" content="Register User" />
+        </Helmet>
         <Section className={styles.intro}>
             <h1 className={styles.title}>Register User</h1>
         </Section>

@@ -9,11 +9,16 @@ import ProjectsParticipating from "../../../components/Profile/ProjectsParticipa
 import NewsletterSubscription from "../../../components/Profile/NewsletterSubscription";
 import DeleteAccount from "../../../components/Profile/DeleteAccount";
 import ProjectsCreated from "../../../components/Profile/ProjectsCreated";
+import Helmet from "react-helmet";
 
 export default () => {
   const user = useUser();
   if (user !== null) {
     return <div style={{ padding: 20 }}>
+        <Helmet>
+          <title>User Profile</title>
+          <meta name="description" content="User Profile" />
+        </Helmet>
         <Grid container spacing={5}>
         {
           user.isAdmin ?

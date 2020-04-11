@@ -8,6 +8,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useFormik, FormikProvider, Form } from "formik";
 import * as Yup from "yup";
 import { Button } from "../../../components/Button/Button";
+import Helmet from "react-helmet";
 
 const FINISH_REGISTRATION = gql`
     mutation FinishRegistration($user: NewUserInputGraph!, $code: String!) {
@@ -91,6 +92,10 @@ const FinishRegistrationPage = () => {
     });
 
     return <React.Fragment>
+        <Helmet>
+            <title>Finish Registration</title>
+            <meta name="description" content="Finish Registration" />
+        </Helmet>
         <Section className={styles.intro}>
             <h1 className={styles.title}>Finish User Registration</h1>
         </Section>

@@ -6,6 +6,7 @@ import AdminEditUser from "../../components/Admin/Users/AdminEditUser";
 import AdminEditProject from "../../components/Admin/Projects/AdminEditProject";
 import AdminListUsers from "../../components/Admin/Users/AdminListUsers";
 import AdminListProjects from "../../components/Admin/Projects/AdminListProjects";
+import Helmet from "react-helmet";
 
 type TParams = {
   type: string;
@@ -33,7 +34,13 @@ const AdminPage = ({ match } : RouteComponentProps<TParams>): any => {
     return <Redirect to="/404" />;
   };
 
-  return <AdminSidebar>{ user?.isAdmin ? adminInner() : <h1>Not allowed</h1> }</AdminSidebar>;
+  return <AdminSidebar>
+    <Helmet>
+      <title>Admin</title>
+      <meta name="description" content="Admin" />
+    </Helmet>
+    { user?.isAdmin ? adminInner() : <h1>Not allowed</h1> }
+  </AdminSidebar>;
 };
 
 export default AdminPage;

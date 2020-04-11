@@ -4,10 +4,15 @@ import { Grid } from "@material-ui/core";
 import styles from "./Donation.module.scss";
 import DonationCard from "../../components/DonationCard/DonationCard";
 import { Section } from "../../components/Section/Section";
+import Helmet from "react-helmet";
 
 const DonationPage = () => {
   return (
     <React.Fragment>
+      <Helmet>
+        <title>Donate To CollAction</title>
+        <meta name="description" content="Donate To CollAction" />
+      </Helmet>
       <Banner>
         <Grid container className={styles.banner}>
           <Section>

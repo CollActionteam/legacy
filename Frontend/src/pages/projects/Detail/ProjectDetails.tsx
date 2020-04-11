@@ -22,6 +22,7 @@ import { Section } from "../../../components/Section/Section";
 import styles from "./ProjectDetails.module.scss";
 import DisqusProjectComments from "../../../components/DisqusProjectComments/DisqusProjectComments";
 import { ProjectStarter } from "../../../components/ProjectStarter/ProjectStarter";
+import Helmet from "react-helmet";
 
 type TParams = {
   slug: string,
@@ -135,6 +136,10 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
     const defaultBanner = require(`../../../assets/default_banners/${project.categories[0] ? project.categories[0].category : "OTHER"}.jpg`);
 
     return <React.Fragment>
+      <Helmet>
+          <title>Project { project.name }</title>
+          <meta name="description" content={`Project ${project.name}`} />
+      </Helmet>
       <Section center className={styles.title} title={project.name}>
         <p>{project.proposal}</p>
         <CategoryTags categories={project.categories}></CategoryTags>

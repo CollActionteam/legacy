@@ -7,11 +7,16 @@ import ProjectsList from "../../components/ProjectsList/ProjectsList";
 import Stats from "../../components/Stats/Stats";
 
 import { useTranslation } from 'react-i18next';
+import Helmet from "react-helmet";
 
 const HomePage = () => {
   const { t } = useTranslation();
   return (
     <React.Fragment>
+      <Helmet>
+        <title>CollAction</title>
+        <meta name="description" content="CollAction" />
+      </Helmet>
       <Carousel title={t('home.carousel.title')} text={t('home.carousel.text')} />
       <Section center color="grey" title={t('home.intro.title')}>
         <p dangerouslySetInnerHTML={{ __html: t('home.intro.text') }} />

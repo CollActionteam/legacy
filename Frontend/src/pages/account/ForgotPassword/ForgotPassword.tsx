@@ -5,6 +5,7 @@ import { Grid, FormGroup, TextField } from "@material-ui/core";
 import { gql, useMutation } from "@apollo/client";
 import styles from "./ForgotPassword.module.scss";
 import { Button } from "../../../components/Button/Button";
+import Helmet from "react-helmet";
 
 const ForgotPasswordPage = () => {
     const [ errorMessage, setErrorMessage ] = useState<string | null>(null);
@@ -32,6 +33,10 @@ const ForgotPasswordPage = () => {
         }
     );
     return <React.Fragment>
+        <Helmet>
+            <title>Forgot Password CollAction</title>
+            <meta name="description" content="Forgot Password" />
+        </Helmet>
         <Section className={styles.intro}>
             <h1 className={styles.title}>Forgot Password</h1>
         </Section>

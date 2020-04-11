@@ -14,6 +14,7 @@ import {
   FormGroup,
 } from "@material-ui/core";
 import { useSettings } from "../../../providers/SettingsProvider";
+import Helmet from "react-helmet";
 
 const LoginPage = () => {
   const actionLogin = `${process.env.REACT_APP_BACKEND_URL}/account/login`;
@@ -31,6 +32,10 @@ const LoginPage = () => {
 
   return (
     <React.Fragment>
+      <Helmet>
+        <title>Login</title>
+        <meta name="description" content="Login" />
+      </Helmet>
       <Section className={styles.intro}>
         <h1 className={styles.title}>Login</h1>
         <h2 className={styles.subtitle}>

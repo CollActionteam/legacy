@@ -6,6 +6,7 @@ import { Section } from '../../components/Section/Section';
 import { Faq } from '../../components/Faq/Faq';
 
 import { useTranslation } from 'react-i18next';
+import Helmet from 'react-helmet';
 
 const AboutPage = () => {
   const { t } = useTranslation();
@@ -28,6 +29,10 @@ const AboutPage = () => {
 
   return (
     <React.Fragment>
+      <Helmet>
+        <title>About CollAction</title>
+        <meta name="description" content="About Collaction" />
+      </Helmet>
       <Grid className={styles.video}>
         <iframe
           title="Collective actions"
