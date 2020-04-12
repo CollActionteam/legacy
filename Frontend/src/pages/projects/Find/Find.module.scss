@@ -1,7 +1,16 @@
 @import '../../../components/Styles/responsive.scss';
 
+.banner {
+    display: flex;
+    align-items: center;
+    height: 380px;
+    background-image: url(../../../assets/find-projects.jpg);
+    background-size: cover;
+    background-position: center;
+}
+
 .filter {
-    color: var(--c-grey-d30);
+    color: white;
     font-size: var(--font-size-lg);
     font-weight: var(--font-weight-regular);
     margin: 0;
@@ -29,10 +38,10 @@
         user-select: none;
         margin-left: var(--spacing);
         margin-right: var(--spacing);
-        color: var(--c-grey-d30);
-        border: 3px solid var(--c-grey-d30);
+        color: white;
+        border: 3px solid white;
         padding: var(--spacing-sm) var(--spacing-lg);
-        border-radius: calc(var(--border-radius) * 1.5);
+        border-radius: 35px;
         background: transparent;
         padding-right: calc(var(--spacing-lg) * 2);
         cursor: pointer;

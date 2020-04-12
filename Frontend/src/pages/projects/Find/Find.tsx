@@ -10,6 +10,7 @@ import ProjectsList from '../../../components/ProjectsList/ProjectsList';
 import styles from "./Find.module.scss";
 import Utils from '../../../utils';
 import { useSettings } from '../../../providers/SettingsProvider';
+import { Grid } from '@material-ui/core';
 
 const FindPage = () => {
   const [category, setCategory] = useState("");
@@ -31,7 +32,7 @@ const FindPage = () => {
         <meta name="description" content="Find project" />
       </Helmet>
       <Banner>
-        <Section>
+        <Section className={styles.banner}>
           <div className={styles.filter}>
             <span>Show me</span>
 
