@@ -95,7 +95,7 @@ const CreateProjectPage = () => {
       return;      
     }
 
-    history.push("projects/thank-you-create");
+    history.push("/projects/thank-you-create");
   }
 
   const pleaseLogin = (
