@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import { useUser } from "../../providers/UserProvider";
 import { Button } from "../../components/Button/Button";
-import { IUser } from "../../api/types";
 import styles from "./Navigation.module.scss";
 
 interface INavigationProps {
@@ -16,7 +15,7 @@ export default ({ items } : INavigationProps) => {
   const toggleNavigation = () => setCollapsed(!collapsed);
   const user = useUser();
 
-  const renderWithUser = (user: IUser) => {
+  const renderWithUser = () => {
     const returnUrl = window.location.href;
     const logoutUrl = `${process.env.REACT_APP_BACKEND_URL}/account/logout`;
     return <React.Fragment>
@@ -62,7 +61,7 @@ export default ({ items } : INavigationProps) => {
             Donate
           </Link>
         </li>
-        { user ? renderWithUser(user) : renderWithoutUser() }
+        { user ? renderWithUser() : renderWithoutUser() }
       </ul>
     </nav>
     <Hidden mdUp>
