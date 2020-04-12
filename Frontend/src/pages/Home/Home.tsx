@@ -32,7 +32,7 @@ const HomePage = () => {
       <Section center title={t('home.projects.title')}>
         <ProjectsList />
         <div style={{marginTop: 20 }}>
-          <Button to="/projects/find">{t('home.projects.button')}</Button>
+          <GhostButton to="/projects/find">{t('home.projects.button')}</GhostButton>
         </div>
       </Section>
     </React.Fragment>
