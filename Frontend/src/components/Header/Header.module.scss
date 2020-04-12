@@ -9,7 +9,7 @@
 
     @include breakpoint-down(md) {
         position: fixed;
-        width: 100vw;
+        width: 100%;
         height: var(--header-height);
         z-index: 1;
     }
@@ -23,6 +23,7 @@
 }
 
 .logo {
+    display: block;
     max-width: 250px;
     z-index: 1;
 }

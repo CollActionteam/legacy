@@ -1,7 +1,8 @@
 .cookieDialog {
+    width: 100%;
     background-color: var(--c-green);
     color: white;
-    padding: 20px;
+    padding: var(--spacing) 0;
 
     a {
         color: white;
