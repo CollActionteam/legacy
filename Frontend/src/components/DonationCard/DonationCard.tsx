@@ -252,7 +252,7 @@ const InnerDonationCard = () => {
         </Dialog>
     };
 
-    return <Card>
+    return <div className={styles.card}>
         <Alert type="error" text={error} />
         <CardContent>
             <h2>Help us reach our mission by donating!</h2>
@@ -288,6 +288,7 @@ const InnerDonationCard = () => {
                                 { formik.touched.email ? <Alert type="error" text={formik.errors.email} /> : null }
                             </FormControl>
                         }
+                        <br />
                         <Grid container className={styles.paymentSelectionOptions}>
                             <Grid item key="one-off" xs={12} sm={6} className={styles.paymentToggle}>
                                 <input id="one-off-donation-button" type="radio" name="period" value="one-off" checked={formik.values.recurring === false} onChange={() => formik.setFieldValue("recurring", false)} />
@@ -298,7 +299,7 @@ const InnerDonationCard = () => {
                                 <label htmlFor="periodic-donation-button">Periodic</label>
                             </Grid>
                         </Grid>
-                        <Grid container className={styles.paymentSelectionOptions}>
+                        <Grid container spacing={4} className={styles.paymentSelectionOptions}>
                             { amounts.map((amount: number) => amountCheckbox(amount)) }
                             <Grid item key="custom" xs={6} sm={3} className={styles.paymentToggle}>
                                 <input name="customAmount" type="text" onChange={(e) => formik.setFieldValue('amount', parseInt(e.target.value))} placeholder="Other" />
@@ -324,7 +325,7 @@ const InnerDonationCard = () => {
                 </Form>
             </FormikContext.Provider>
         </CardActions>
-    </Card>;
+    </div>;
 }
 
 export default () => {
