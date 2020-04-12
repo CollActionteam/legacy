@@ -14,7 +14,7 @@ export default ({
   const strokeDashoffset =
     circumference - (chompedProgress / 100) * circumference;
 
-  return (
+  return <div className={styles.container}>
     <svg className={styles.ring} height={radius * 2} width={radius * 2}>
       <circle
         className={styles.backgroundCircle}
@@ -33,9 +33,11 @@ export default ({
         cx={radius}
         cy={radius}
       />
-      <text x="50%" y="50%" textAnchor="middle" dy=".2rem" fontSize={fontSize}>
-        {progress}%
-      </text>
     </svg>
-  );
+      <div
+          style={{lineHeight: radius*2 + "px"}}
+          className={styles.label}>
+          {progress}%
+      </div>
+  </div>;
 };
