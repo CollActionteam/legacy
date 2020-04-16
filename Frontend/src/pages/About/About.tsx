@@ -60,7 +60,7 @@ const AboutPage = () => {
       </Section>
       <Section title="Frequently Asked Questions" anchor="faq">
         {faqs.map((faq) => (
-          <Faq key={faq.title} title={faq.title} content={faq.text}></Faq>
+          <Faq key={faq.title} title={faq.title}>{faq.text}</Faq>
         ))}
       </Section>
     </React.Fragment>
