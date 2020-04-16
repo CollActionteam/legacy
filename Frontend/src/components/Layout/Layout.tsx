@@ -16,17 +16,19 @@ import Grid from "@material-ui/core/Grid";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import {
-  faHeart,
-  faTimes,
-  faBars,
-  faUser,
-  faAngleDown,
-  faSpinner,
-  faClock,
-  faTools,
-  faExclamationCircle,
-  faTrash,
-  faEuroSign
+    faHeart,
+    faTimes,
+    faBars,
+    faUser,
+    faAngleDown,
+    faSpinner,
+    faClock,
+    faTools,
+    faExclamationCircle,
+    faTrash,
+    faEuroSign,
+    faPlus,
+    faMinus
 } from "@fortawesome/free-solid-svg-icons";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 import CookieDialog from "../CookieDialog/CookieDialog";
@@ -44,7 +46,9 @@ library.add(
   faTools,
   faExclamationCircle,
   faTrash,
-  faEuroSign
+  faEuroSign,
+  faPlus,
+  faMinus,
 );
 
 export default ({ children }: any) => (
