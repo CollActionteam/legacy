@@ -54,7 +54,7 @@ const routing = (
                     <Route exact path="/projects/find" component={FindPage} />
                     <Route exact path="/projects/start" component={StartProjectPage} />
                     <Route exact path="/projects/create" component={CreateProjectPage} />
-                    <Route exact path="/projects/thank-you-create" component={ThankYouCreatePage} />
+                    <Route exact path="/projects/create/thankyou/:projectId" component={ThankYouCreatePage} />
                     <Route exact path="/projects/:slug/:projectId" component={ProjectDetailsPage} />
                     <Route exact path="/projects/:slug/:projectId/thankyou" component={ThankYouCommitPage} />
                     <Route exact path="/projects/:slug/:projectId/unsubscribe-email" component={UnsubscribeProjectPage} />

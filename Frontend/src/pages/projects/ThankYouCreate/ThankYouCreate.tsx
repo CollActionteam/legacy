@@ -3,11 +3,25 @@ import { Overlay } from "../../../components/Overlay/Overlay";
 import { Section } from "../../../components/Section/Section";
 
 import styles from "./ThankYouCreate.module.scss";
+import { RouteComponentProps, Redirect } from "react-router-dom";
+import { gql, useQuery } from "@apollo/client";
+import Loader from "../../../components/Loader/Loader";
 
-const ThankYouCreatePage = ({ data } : any) => {
-  const name = "ProjectName";
+type TParams = {
+  projectId: string
+}
+
+const GET_PROJECT = gql`
+  query GetProject($id: ID) {
+    project(id: $id) {
+      name
+    }
+  }
+`;
+
+const renderThankYou = (name: string) => {
   const photos = {
-      thankyoucreatephoto: ""
+    thankyoucreatephoto: ""
   };
 
   return (
@@ -28,7 +42,21 @@ const ThankYouCreatePage = ({ data } : any) => {
         Thanks!
     </Section>
     </Overlay>
-  );
+  )
+}
+
+const ThankYouCreatePage = ({ match } : RouteComponentProps<TParams>) => {
+  const { projectId } = match.params;
+  const { data, loading } = useQuery(GET_PROJECT, { variables: { id: projectId } });
+  const projectName = (data?.project.name ?? null) as string;
+
+  return (
+    <React.Fragment>
+      { !loading && !data ? <Redirect to="/404" /> : null }
+      { loading ? <Loader /> : null }
+      { renderThankYou(projectName) }
+    </React.Fragment>
+  )
 };
 
 export default ThankYouCreatePage;
