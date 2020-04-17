@@ -106,7 +106,7 @@ const CreateProjectPage = () => {
       </Helmet>
       <Section title="Start a new crowdaction" className={styles.title}>
         <Container className={styles.login}>
-          <p>Please <Link to="/account/login">login</Link> in to start start your new collaction!</p>
+          <p>Please <Link to="/account/login">login</Link> first to start your new collaction!</p>
         </Container>
       </Section>
     </React.Fragment>
