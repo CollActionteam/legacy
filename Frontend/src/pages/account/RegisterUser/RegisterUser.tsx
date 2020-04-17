@@ -1,14 +1,16 @@
-import React, { useState } from "react";
-import { Section } from "../../../components/Section/Section";
-import { Alert } from "../../../components/Alert/Alert";
-import { Grid, Checkbox, FormGroup, TextField, FormControlLabel, FormControl } from "@material-ui/core";
 import { gql, useMutation } from "@apollo/client";
-import styles from "./RegisterUser.module.scss";
-import { Link } from "react-router-dom";
-import { useFormik, FormikProvider, Form } from "formik";
-import * as Yup from "yup";
-import { Button } from "../../../components/Button/Button";
+import { FormControlLabel, Grid, FormHelperText, FormGroup } from "@material-ui/core";
+import { Field, Form, FormikProvider, useFormik } from "formik";
+import { Checkbox, TextField } from "formik-material-ui";
+import React, { useState } from "react";
 import Helmet from "react-helmet";
+import { Link, useHistory } from "react-router-dom";
+import * as Yup from "yup";
+import { Alert } from "../../../components/Alert/Alert";
+import { Button } from "../../../components/Button/Button";
+import Loader from "../../../components/Loader/Loader";
+import { Section } from "../../../components/Section/Section";
+import styles from "./RegisterUser.module.scss";
 
 const REGISTER_USER = gql`
     mutation RegisterUser($user: NewUserInputGraph!) {
@@ -27,6 +29,7 @@ const REGISTER_USER = gql`
 `;
 
 const RegisterUserPage = () => {
+    const history = useHistory();
     const [ errorMessage, setErrorMessage ] = useState<string | null>(null);
     const [ infoMessage, setInfoMessage ] = useState<string | null>(null);
     const [ createUser ] = useMutation(
@@ -34,8 +37,7 @@ const RegisterUserPage = () => {
         {
             onCompleted: (data) => {
                 if (data.user.createUser.result.succeeded) {
-                    setErrorMessage(null);
-                    setInfoMessage("You have been registered. You can now login with your new account.");
+                    history.push("/account/register-user/complete");
                 } else {
                     let error = data.user.createUser.result.errors.map((e: any) => e.description).join(", ");
                     setInfoMessage(null);
@@ -63,25 +65,34 @@ const RegisterUserPage = () => {
         validationSchema: Yup.object({
             firstName: Yup.string(),
             lastName: Yup.string(),
-            email: Yup.string().required("You must fill in your e-mail address")
-                               .email("You must fill in a valid email address"),
-            confirmEmail: Yup.string().required("You must fill in the confirmation e-mail address")
-                                      .when("email", {
-                is: val => val?.length > 0,
-                then: Yup.string()
-                         .oneOf([Yup.ref("email")], "Both e-mails must be the same")
+            email: Yup
+                .string()
+                .required("Please enter your e-mail address")
+                .email("Please enter a valid e-mail address"),
+            confirmEmail: Yup
+                .string()
+                .required("Please confirm your e-mail address")
+                .when("email", {
+                    is: val => val?.length > 0,
+                    then: Yup
+                        .string()
+                        .oneOf([Yup.ref("email")], "Please confirm your e-mail address by entering the same one")
             }),
-            password: Yup.string().min(6, "Password must be at least six characters long")
-                                  .required("Must fill in a password at least six characters long"),
-            confirmPassword: Yup.string().required("Must fill in a confirmation password")
-                                         .when("password", {
-                is: val => val?.length > 0,
-                then: Yup.string()
-                         .oneOf([Yup.ref("password")], "Both passwords need to be the same")
-                         .required("Must fill in a confirmation password")
+            password: Yup
+                .string()
+                .required("Please specify a password")
+                .min(6, "Choose a safe password; make it at least 6 characters long"),
+            confirmPassword: Yup
+                .string()
+                .required("Please confirm the password")
+                .when("password", {
+                    is: val => val?.length > 0,
+                    then: Yup
+                        .string()
+                        .oneOf([Yup.ref("password")], "Please confirm the password by entering the same one")
             }),
             isSubscribedNewsletter: Yup.bool(),
-            privacyPolicy: Yup.bool().oneOf([true], "You must agree to our privacy policy")
+            privacyPolicy: Yup.bool().oneOf([true], "Please agree to our privacy policy")
         }),
         onSubmit: (values) => {
             createUser({
@@ -110,32 +121,87 @@ const RegisterUserPage = () => {
         <Alert type="info" text={infoMessage} />
         <Section color="grey">
             <Grid container justify="center">
-                <Grid item sm={6}>
+                <Grid item xs={12} sm={8} md={6}>
                     <FormikProvider value={formik}>
                         <Form onSubmit={formik.handleSubmit}>
-                            <FormGroup>
-                                <TextField name="firstName" label="First Name" type="text" { ... formik.getFieldProps('firstName') } />
-                                <TextField name="lastName" label="Last Name" type="text" { ...formik.getFieldProps('lastName') } />
-                                <TextField name="email" label="E-Mail" type="text" error={formik.touched.email && formik.errors.email !== undefined} { ...formik.getFieldProps('email') } />
-                                { formik.submitCount > 0 ? <Alert type="error" text={formik.errors.email} /> : null }
-                                <TextField name="confirmEmail" label="Confirm E-Mail" type="text" error={formik.touched.confirmEmail && formik.errors.confirmEmail !== undefined} { ...formik.getFieldProps('confirmEmail') } />
-                                { formik.submitCount > 0 ? <Alert type="error" text={formik.errors.confirmEmail} /> : null }
-                                <TextField name="password" label="Password" type="password" error={formik.touched.password && formik.errors.password !== undefined} { ...formik.getFieldProps('password') } />
-                                { formik.submitCount > 0 ? <Alert type="error" text={formik.errors.password} /> : null }
-                                <TextField name="confirmPassword" label="Confirm Password" type="password" error={formik.touched.confirmPassword && formik.errors.confirmPassword !== undefined} { ...formik.getFieldProps('confirmPassword') } />
-                                { formik.submitCount > 0 ? <Alert type="error" text={formik.errors.confirmPassword} /> : null }
+                            <Field
+                                name="firstName"
+                                label="First name"
+                                component={TextField}
+                                className={styles.formRow}
+                                fullWidth
+                            ></Field>
+                            <Field
+                                name="lastName"
+                                label="Last name"
+                                component={TextField}
+                                className={styles.formRow}
+                                fullWidth
+                            ></Field>
+                            <Field
+                                name="email"
+                                label="E-mail address"
+                                component={TextField}
+                                className={styles.formRow}
+                                fullWidth
+                            ></Field>
+                            <Field
+                                name="confirmEmail"
+                                label="Confirm e-mail address"
+                                component={TextField}
+                                className={styles.formRow}
+                                fullWidth
+                            ></Field>
+                            <Field
+                                name="password"
+                                label="Password"
+                                component={TextField}
+                                type="password"
+                                className={styles.formRow}
+                                fullWidth
+                            ></Field>
+                            <Field
+                                name="confirmPassword"
+                                label="Confirm your password"
+                                component={TextField}
+                                type="password"
+                                className={styles.formRow}
+                                fullWidth
+                            ></Field>
+
+                            <FormControlLabel
+                                control={
+                                    <Field 
+                                        name="isSubscribedNewsletter" 
+                                        type="checkbox" 
+                                        component={Checkbox}
+                                    ></Field>}
+                                label={<span>I would like to receive an update from CollAction every once in a while - don't worry, we like spam as little as you do! <span role="img" aria-label="smiley">🙂</span></span>}
+                                className={styles.formRow}
+                            ></FormControlLabel>
+
+                            <FormGroup className={styles.formRow}>
                                 <FormControlLabel
-                                    control={<Checkbox name="isSubscribedNewsletter" { ...formik.getFieldProps('isSubscribedNewsletter')} />}
-                                    label={<React.Fragment>I would like to receive an update from CollAction every once in a while - don't worry, we like spam as little as you do! <span role="img" aria-label="smiley">🙂</span></React.Fragment>} />
-                                <FormControl>
-                                    <FormControlLabel
-                                        control={<Checkbox name="privacyPolicy" { ...formik.getFieldProps('privacyPolicy') } />}
-                                        label={<React.Fragment>I've read and agreed to our <Link to="/privacy-policy">privacy policy</Link></React.Fragment>}
-                                        />
-                                    { formik.submitCount > 0 ? <Alert type="error" text={formik.errors.privacyPolicy} /> : null }
-                                </FormControl>
-                                <Button type="submit">Register</Button>
+                                    control={
+                                        <Field 
+                                            name="privacyPolicy" 
+                                            type="checkbox" 
+                                            component={Checkbox}
+                                        ></Field>}
+                                    label={<span>I've read and agreed to our <Link to="/privacy-policy">privacy policy</Link></span>}
+                                >
+                                </FormControlLabel>
+                                <FormHelperText error={true}>{formik.touched.privacyPolicy && formik.errors.privacyPolicy}</FormHelperText>
                             </FormGroup>
+                        
+                            <div className={styles.formRow}>
+                                <div className={styles.submit}>
+                                    { formik.isSubmitting
+                                        ? <Loader></Loader>
+                                        : <Button type="submit">Register</Button>
+                                    }
+                                </div>
+                            </div>
                         </Form>
                     </FormikProvider>
                 </Grid>

@@ -33,6 +33,7 @@ import ThankYouCommitPage from './pages/projects/ThankYouCommit/ThankYouCommit';
 import ProjectDetailsPage from './pages/projects/Detail/ProjectDetails';
 import PrivacyPolicyPage from './pages/PrivacyPolicy/PrivacyPolicy';
 import UnsubscribeProjectPage from './pages/projects/UnsubscribeProject/UnsubscribeProject';
+import RegistrationCompletePage from './pages/account/RegisterUser/RegistrationComplete';
 
 const routing = (
     <Router>
@@ -46,6 +47,7 @@ const routing = (
                     <Route exact path="/account/forgot-password" component={ForgotPasswordPage} />
                     <Route exact path="/account/reset-password" component={ResetPasswordPage} />
                     <Route exact path="/account/register-user" component={RegisterUserPage} />
+                    <Route exact path="/account/register-user/complete" component={RegistrationCompletePage} />
                     <Route exact path="/account/finish-registration" component={FinishRegistrationPage} />
                     <Route exact path="/account/profile" component={ProfilePage} />
                     <Route exact path="/donate" component={DonationPage} />
