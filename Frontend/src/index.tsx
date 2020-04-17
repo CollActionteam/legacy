@@ -34,11 +34,13 @@ import ProjectDetailsPage from './pages/projects/Detail/ProjectDetails';
 import PrivacyPolicyPage from './pages/PrivacyPolicy/PrivacyPolicy';
 import UnsubscribeProjectPage from './pages/projects/UnsubscribeProject/UnsubscribeProject';
 import RegistrationCompletePage from './pages/account/RegisterUser/RegistrationComplete';
+import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 
 const routing = (
     <Router>
         <AllProviders>
             <Layout>
+                <ScrollToTop />
                 <Switch>
                     <Route exact path="/" component={HomePage} />
                     <Route exact path="/about" component={AboutPage} />
