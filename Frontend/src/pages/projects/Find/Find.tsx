@@ -10,7 +10,6 @@ import ProjectsList from '../../../components/ProjectsList/ProjectsList';
 import styles from "./Find.module.scss";
 import Utils from '../../../utils';
 import { useSettings } from '../../../providers/SettingsProvider';
-import { Grid } from '@material-ui/core';
 
 const FindPage = () => {
   const [category, setCategory] = useState("");

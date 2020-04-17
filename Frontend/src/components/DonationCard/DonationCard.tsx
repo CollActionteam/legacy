@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, CardContent, CardActions, FormGroup, FormControl, TextField, Grid, Dialog, DialogTitle, DialogContent, DialogActions, makeStyles } from "@material-ui/core";
+import { FormGroup, FormControl, TextField, Grid, Dialog, DialogTitle, DialogContent, DialogActions, makeStyles } from "@material-ui/core";
 import { useFormik, Form, FormikContext } from "formik";
 import { useUser } from "../../providers/UserProvider";
 import * as Yup from "yup";
@@ -254,77 +254,73 @@ const InnerDonationCard = () => {
 
     return <div className={styles.card}>
         <Alert type="error" text={error} />
-        <CardContent>
-            <h2>Help us reach our mission by donating!</h2>
-            CollAction aims to move millions of people to act for good. We're a small team of passionate volunteers and we keep cost super low - but some costs are involved in maintaining and growing the platform. With your support we can grow this crowdacting movement and safeguard our independence. Many thanks for your help!
-        </CardContent>
-        <CardActions>
-            <FormikContext.Provider value={formik}>
-                <Form onSubmit={formik.handleSubmit} className={styles.donationForm}>
-                    <FormGroup>
-                        { user?.fullName ?
-                            null :
-                            <FormControl fullWidth>
-                                <TextField
-                                    name="name"
-                                    label="Name"
-                                    type="text"
-                                    fullWidth
-                                    { ...formik.getFieldProps('name') }
-                                />
-                                { formik.touched.name ? <Alert type="error" text={formik.errors.name} /> : null }
-                            </FormControl>
-                        }
-                        { user?.email ?
-                            null :
-                            <FormControl fullWidth>
-                                <TextField
-                                    name="email"
-                                    label="E-Mail"
-                                    type="text"
-                                    fullWidth
-                                    { ...formik.getFieldProps('email') }
-                                />
-                                { formik.touched.email ? <Alert type="error" text={formik.errors.email} /> : null }
-                            </FormControl>
-                        }
-                        <br />
-                        <Grid container className={styles.paymentSelectionOptions}>
-                            <Grid item key="one-off" xs={12} sm={6} className={styles.paymentToggle}>
-                                <input id="one-off-donation-button" type="radio" name="period" value="one-off" checked={formik.values.recurring === false} onChange={() => formik.setFieldValue("recurring", false)} />
-                                <label htmlFor="one-off-donation-button">One-off</label>
-                            </Grid>
-                            <Grid item key="periodic" xs={12} sm={6} className={styles.paymentToggle}>
-                                <input id="periodic-donation-button" type="radio" name="period" value="periodic" checked={formik.values.recurring} onChange={() => formik.setFieldValue("recurring", true)} />
-                                <label htmlFor="periodic-donation-button">Periodic</label>
-                            </Grid>
+        <h2>Help us reach our mission by donating!</h2>
+        CollAction aims to move millions of people to act for good. We're a small team of passionate volunteers and we keep cost super low - but some costs are involved in maintaining and growing the platform. With your support we can grow this crowdacting movement and safeguard our independence. Many thanks for your help!
+        <FormikContext.Provider value={formik}>
+            <Form onSubmit={formik.handleSubmit} className={styles.donationForm}>
+                <FormGroup>
+                    { user?.fullName ?
+                        null :
+                        <FormControl fullWidth>
+                            <TextField
+                                name="name"
+                                label="Name"
+                                type="text"
+                                fullWidth
+                                { ...formik.getFieldProps('name') }
+                            />
+                            { formik.touched.name ? <Alert type="error" text={formik.errors.name} /> : null }
+                        </FormControl>
+                    }
+                    { user?.email ?
+                        null :
+                        <FormControl fullWidth>
+                            <TextField
+                                name="email"
+                                label="E-Mail"
+                                type="text"
+                                fullWidth
+                                { ...formik.getFieldProps('email') }
+                            />
+                            { formik.touched.email ? <Alert type="error" text={formik.errors.email} /> : null }
+                        </FormControl>
+                    }
+                    <br />
+                    <Grid container className={styles.paymentSelectionOptions}>
+                        <Grid item key="one-off" xs={12} sm={6} className={styles.paymentToggle}>
+                            <input id="one-off-donation-button" type="radio" name="period" value="one-off" checked={formik.values.recurring === false} onChange={() => formik.setFieldValue("recurring", false)} />
+                            <label htmlFor="one-off-donation-button">One-off</label>
                         </Grid>
-                        <Grid container spacing={4} className={styles.paymentSelectionOptions}>
-                            { amounts.map((amount: number) => amountCheckbox(amount)) }
-                            <Grid item key="custom" xs={6} sm={3} className={styles.paymentToggle}>
-                                <input name="customAmount" type="text" onChange={(e) => formik.setFieldValue('amount', parseInt(e.target.value))} placeholder="Other" />
-                            </Grid>
-                            <Alert type="error" text={formik.errors.amount} />
+                        <Grid item key="periodic" xs={12} sm={6} className={styles.paymentToggle}>
+                            <input id="periodic-donation-button" type="radio" name="period" value="periodic" checked={formik.values.recurring} onChange={() => formik.setFieldValue("recurring", true)} />
+                            <label htmlFor="periodic-donation-button">Periodic</label>
                         </Grid>
-                        <Grid container className={styles.paymentOptions}>
-                            <Grid item xs={12}>
-                                <Button type="button" className={styles.paymentButton} onClick={async () => { formik.setFieldValue('type', 'popup'); formik.submitForm(); }}>
-                                    <img src={iDealLogo} alt="iDeal" />
-                                    &nbsp;Debit (iDeal / SEPA Direct)
-                                </Button>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Button type="button" className={styles.paymentButton} onClick={() => { formik.setFieldValue('type', 'credit'); formik.submitForm(); }}>
-                                    <img src={bankCard} alt="Creditcard" />
-                                    &nbsp;Creditcard
-                                </Button>
-                            </Grid>
+                    </Grid>
+                    <Grid container spacing={4} className={styles.paymentSelectionOptions}>
+                        { amounts.map((amount: number) => amountCheckbox(amount)) }
+                        <Grid item key="custom" xs={6} sm={3} className={styles.paymentToggle}>
+                            <input name="customAmount" type="text" onChange={(e) => formik.setFieldValue('amount', parseInt(e.target.value))} placeholder="Other" />
                         </Grid>
-                    </FormGroup>
-                    { bankingDialog() }
-                </Form>
-            </FormikContext.Provider>
-        </CardActions>
+                        <Alert type="error" text={formik.errors.amount} />
+                    </Grid>
+                    <Grid container className={styles.paymentOptions}>
+                        <Grid item xs={12}>
+                            <Button type="button" className={styles.paymentButton} onClick={async () => { formik.setFieldValue('type', 'popup'); formik.submitForm(); }}>
+                                <img src={iDealLogo} alt="iDeal" />
+                                &nbsp;Debit (iDeal / SEPA Direct)
+                            </Button>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Button type="button" className={styles.paymentButton} onClick={() => { formik.setFieldValue('type', 'credit'); formik.submitForm(); }}>
+                                <img src={bankCard} alt="Creditcard" />
+                                &nbsp;Creditcard
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </FormGroup>
+                { bankingDialog() }
+            </Form>
+        </FormikContext.Provider>
     </div>;
 }
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, GhostButton } from "../../components/Button/Button";
+import { GhostButton } from "../../components/Button/Button";
 import Share from "../../components/Share/Share";
 import { Section } from "../../components/Section/Section";
 import Carousel from "../../components/Carousel/Carousel";
@@ -8,6 +8,7 @@ import Stats from "../../components/Stats/Stats";
 
 import { useTranslation } from 'react-i18next';
 import Helmet from "react-helmet";
+import TimeToAct from "../../components/TimeToAct/TimeToAct";
 
 const HomePage = () => {
   const { t } = useTranslation();
@@ -23,7 +24,7 @@ const HomePage = () => {
         <GhostButton to="/about">Learn more</GhostButton>
       </Section>
       <Section center title={t('home.timeToAct.title')}>
-        <p>{t('home.timeToAct.text')}</p>
+        <TimeToAct />
       </Section>
       <Section center color="grey" title={t('home.stats.title')}>
         <Stats />

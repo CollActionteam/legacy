@@ -1,12 +1,11 @@
 import React from "react";
-import {Banner} from "../../components/Banner/Banner";
-import {Box, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Grid} from "@material-ui/core";
+import { Banner } from "../../components/Banner/Banner";
+import { Grid} from "@material-ui/core";
 import styles from "./Donation.module.scss";
 import DonationCard from "../../components/DonationCard/DonationCard";
-import {Section} from "../../components/Section/Section";
+import { Section } from "../../components/Section/Section";
 import Helmet from "react-helmet";
-import {Faq} from "../../components/Faq/Faq";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { Faq } from "../../components/Faq/Faq";
 
 const DonationPage = () => {
     return (
@@ -55,7 +54,7 @@ const DonationPage = () => {
 
                         <Faq title="What will my donation be spent on?" collapsed={true}>
                                 <p>
-                                    You can find an overview of our financials <a href="https://drive.google.com/file/d/1syiUgEq-Or-GOfvBYY8k3fgTu5UZvLey/view" target="_blank">here</a> (apologies, it's in Dutch, since that's where
+                                    You can find an overview of our financials <a href="https://drive.google.com/file/d/1syiUgEq-Or-GOfvBYY8k3fgTu5UZvLey/view" rel="noopener noreferrer" target="_blank">here</a> (apologies, it's in Dutch, since that's where
                                     our headquarter is based). In short, the main part of our budget goes to website and
                                     organizational costs (e.g. hosting, membership at a co-working space, banking costs). There are
                                     also costs related to events, but we generally break even on these events, e.g. by selling
