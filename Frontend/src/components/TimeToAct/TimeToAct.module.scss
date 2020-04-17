@@ -9,4 +9,9 @@
 .timeToActStepBody {
     padding-bottom: 2em;
     padding-block-end: 2em;
+    font-size: var(--font-size-md);
+}
+.timeToActTitle {
+    color: var(--c-green);
+    font-size: var(--font-size-xmd);
 }
