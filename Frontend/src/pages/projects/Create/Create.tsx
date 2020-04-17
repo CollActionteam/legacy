@@ -48,6 +48,10 @@ const CreateProjectPage = () => {
       project {
         createProject(project: $project) {
           succeeded
+          project {
+            nameNormalized
+            id
+          }
           errors {
             errorMessage
             memberNames
@@ -95,7 +99,7 @@ const CreateProjectPage = () => {
       return;      
     }
 
-    history.push("/projects/thank-you-create");
+    history.push(`/projects/create/thankyou/${result.project.id}`);
   }
 
   const pleaseLogin = (
