@@ -21,7 +21,7 @@ namespace CollAction.ValidationAttributes
                 return ValidationResult.Success; // We only check this stuff in a production environment
             }
 
-            string publicAddress = validationContext.GetRequiredService<IOptions<SiteOptions>>().Value.PublicAddress;
+            Uri publicAddressUri = validationContext.GetRequiredService<IOptions<SiteOptions>>().Value.PublicUrl;
             try
             {
                 if (!(value is string givenAddress))
@@ -29,14 +29,13 @@ namespace CollAction.ValidationAttributes
                     return new ValidationResult("Given URL is not a string");
                 }
                 Uri givenAddressUri = new Uri(givenAddress);
-                Uri publicAddressUri = new Uri(publicAddress);
                 return givenAddressUri.Host == publicAddressUri.Host && givenAddressUri.Scheme == publicAddressUri.Scheme && givenAddressUri.Port == publicAddressUri.Port ?
                            ValidationResult.Success : 
                            new ValidationResult($"This URL isn't allowed: '{givenAddressUri}', '{publicAddressUri}");
             }
             catch (UriFormatException e)
             {
-                return new ValidationResult($"{e.Message}: '{value}', '{publicAddress}'");
+                return new ValidationResult($"{e.Message}: '{value}', '{publicAddressUri}'");
             }
         }
     }
