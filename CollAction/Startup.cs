@@ -35,7 +35,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.DataProtection;
 using CollAction.Services.Statistics;
-using System.Linq;
 
 namespace CollAction
 {
