@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Paper, TableContainer, Table, TableHead, TableCell, TableRow, TableBody, Button, TablePagination, Checkbox, Dialog, DialogTitle, DialogContent, DialogActions } from "@material-ui/core";
+import { Paper, TableContainer, Table, TableHead, TableCell, TableRow, TableBody, Button, TablePagination, Dialog, DialogTitle, DialogContent, DialogActions } from "@material-ui/core";
 import { gql, useQuery, useMutation } from "@apollo/client";
 import { IProject } from "../../../api/types";
 import { useHistory } from "react-router-dom";
@@ -90,7 +90,7 @@ export default () => {
                             <TableCell align="right">{ p.status }</TableCell>
                             <TableCell align="right">{ p.start }</TableCell>
                             <TableCell align="right">{ p.end }</TableCell>
-                            <TableCell align="right"><Checkbox readOnly checked={ p.isActive } /></TableCell>
+                            <TableCell align="right">{ p.isActive ? "Yes" : "No" }</TableCell>
                             <TableCell align="right"><Button onClick={() => history.push(`/admin/projects/edit/${p.id}`)}>Edit</Button></TableCell>
                             <TableCell align="right"><Button onClick={() => { setDeleteDialogOpen(true); setToDelete(p); }}>Delete</Button></TableCell>
                         </TableRow>))

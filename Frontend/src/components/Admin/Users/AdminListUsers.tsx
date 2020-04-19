@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Paper, TableContainer, Table, TableHead, TableCell, TableRow, TableBody, Button, TablePagination, Checkbox, Dialog, DialogTitle, DialogContent, DialogActions } from "@material-ui/core";
+import { Paper, TableContainer, Table, TableHead, TableCell, TableRow, TableBody, Button, TablePagination, Dialog, DialogTitle, DialogContent, DialogActions } from "@material-ui/core";
 import { gql, useQuery, useMutation } from "@apollo/client";
 import { IUser } from "../../../api/types";
 import { useHistory } from "react-router-dom";
@@ -95,7 +95,7 @@ export default () => {
                             <TableCell component="th" scope="row">{ u.email }</TableCell>
                             <TableCell align="right">{ u.firstName }</TableCell>
                             <TableCell align="right">{ u.lastName }</TableCell>
-                            <TableCell align="right"><Checkbox readOnly checked={ u.isAdmin } /></TableCell>
+                            <TableCell align="right">{ u.isAdmin ? "Yes" : "No" }</TableCell>
                             <TableCell align="right">{ u.registrationDate }</TableCell>
                             <TableCell align="right"><Button onClick={() => history.push(`/admin/users/edit/${u.id}`)}>Edit</Button></TableCell>
                             <TableCell align="right"><Button onClick={() => { setDeleteDialogOpen(true); setToDelete(u); }}>Delete</Button></TableCell>

@@ -20,7 +20,7 @@ export default ({ items } : INavigationProps) => {
     const logoutUrl = `${process.env.REACT_APP_BACKEND_URL}/account/logout`;
     return <React.Fragment>
         <li className={styles.navigationItem}>
-          <Link className={styles.navigationButton} to="/account/profile">
+          <Link className={styles.navigationButton} to="/account/profile" onClick={() => setCollapsed(true)}>
             Profile
           </Link>
         </li> 
@@ -37,7 +37,7 @@ export default ({ items } : INavigationProps) => {
 
   const renderWithoutUser = () => {
     return <li className={styles.navigationItem}>
-      <Link className={styles.navigationButton} to="/account/login">
+      <Link className={styles.navigationButton} to="/account/login" onClick={() => setCollapsed(true)}>
         Login
       </Link>
     </li>;
@@ -48,7 +48,7 @@ export default ({ items } : INavigationProps) => {
       <ul className={styles.navigationList}>
         {items.map((link) => (
           <li key={link.name} className={styles.navigationItem}>
-            <Link className={styles.navigationLink} to={link.link}>
+            <Link className={styles.navigationLink} to={link.link} onClick={() => setCollapsed(true)}>
               {link.name}
             </Link>
           </li>
@@ -56,7 +56,7 @@ export default ({ items } : INavigationProps) => {
       </ul>
       <ul className={styles.navigationList}>
         <li className={styles.navigationItem}>
-          <Link className={styles.navigationButton} to="/donate">
+          <Link className={styles.navigationButton} to="/donate" onClick={() => setCollapsed(true)}>
             <FontAwesomeIcon icon="heart" />
             Donate
           </Link>
