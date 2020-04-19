@@ -30,7 +30,7 @@ namespace CollAction.ViewModels.Email
             => new Uri($"{PublicAddress}/projects/start");
 
         public Uri FinishRegistrationLink
-            => new Uri($"{PublicAddress}/account/finish-registration-user?email={WebUtility.UrlEncode(Result.ParticipantEmail)}&code={WebUtility.UrlEncode(Result.PasswordResetToken)}");
+            => new Uri($"{PublicAddress}/account/finish-registration?email={WebUtility.UrlEncode(Result.ParticipantEmail)}&code={WebUtility.UrlEncode(Result.PasswordResetToken)}");
 
         public string FacebookLink
             => $"https://www.facebook.com/sharer/sharer.php?u={ProjectUrl}";
