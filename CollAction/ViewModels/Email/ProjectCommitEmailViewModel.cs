@@ -7,12 +7,12 @@ namespace CollAction.ViewModels.Email
 {
     public sealed class ProjectCommitEmailViewModel
     {
-        public ProjectCommitEmailViewModel(Project project, AddParticipantResult result, ApplicationUser? user, Uri publicAddress, Uri projectUrl)
+        public ProjectCommitEmailViewModel(Project project, AddParticipantResult result, ApplicationUser? user, Uri publicUrl, Uri projectUrl)
         {
             Project = project;
             Result = result;
             User = user;
-            PublicAddress = publicAddress;
+            PublicUrl = publicUrl;
             ProjectUrl = projectUrl;
         }
 
@@ -22,27 +22,36 @@ namespace CollAction.ViewModels.Email
 
         public ApplicationUser? User { get; set; }
 
-        public Uri PublicAddress { get; set; }
+        public Uri PublicUrl { get; set; }
 
         public Uri ProjectUrl { get; set; }
 
         public Uri StartLink
-            => new Uri(PublicAddress, "/projects/start");
+            => new Uri(PublicUrl, "/projects/start");
 
         public Uri LoginLink
-            => new Uri(PublicAddress, "/account/login");
+            => new Uri(PublicUrl, "/account/login");
 
         public Uri FinishRegistrationLink
-            => new Uri(PublicAddress, $"/account/finish-registration?email={WebUtility.UrlEncode(Result.ParticipantEmail)}&code={WebUtility.UrlEncode(Result.PasswordResetToken)}");
+            => new Uri(PublicUrl, $"/account/finish-registration?email={WebUtility.UrlEncode(Result.ParticipantEmail)}&code={WebUtility.UrlEncode(Result.PasswordResetToken)}");
 
-        public string FacebookLink
-            => $"https://www.facebook.com/sharer/sharer.php?u={ProjectUrl}";
+        public Uri FacebookLink
+            => new Uri($"https://www.facebook.com/sharer/sharer.php?u={WebUtility.UrlEncode(ProjectUrl.ToString())}");
 
-        public string LinkedinLink
-            => $"http://www.linkedin.com/shareArticle?mini=true&url={ProjectUrl}&title={WebUtility.UrlEncode(Project.Name)}";
+        public Uri FacebookImageLink
+            => new Uri(PublicUrl, "/social/facebook.png");
 
-        public string TwitterLink
-            => $"https://twitter.com/intent/tweet?text={WebUtility.UrlEncode(Project.Name)}&url={ProjectUrl}";
+        public Uri LinkedinLink
+            => new Uri($"http://www.linkedin.com/shareArticle?mini=true&url={WebUtility.UrlEncode(ProjectUrl.ToString())}&title={WebUtility.UrlEncode(Project.Name)}");
+
+        public Uri LinkedinImageLink
+            => new Uri(PublicUrl, "/social/linkedin.png");
+
+        public Uri TwitterLink
+            => new Uri($"https://twitter.com/intent/tweet?text={WebUtility.UrlEncode(Project.Name)}&url={WebUtility.UrlEncode(ProjectUrl.ToString())}");
+
+        public Uri TwitterImageLink
+            => new Uri(PublicUrl, "/social/twitter.png");
 
         public bool ShowAlreadyParticipating
             => Result.Scenario == AddParticipantScenario.AnonymousNotRegisteredPresentAndAlreadyParticipating ||
