@@ -115,7 +115,7 @@ const RegisterUserPage = () => {
           <meta name="description" content="Register User" />
         </Helmet>
         <Section className={styles.intro}>
-            <h1 className={styles.title}>Register User</h1>
+            <h1 className={styles.title}>Create an Account</h1>
         </Section>
         <Alert type="error" text={errorMessage} />
         <Alert type="info" text={infoMessage} />
