@@ -624,7 +624,7 @@ namespace CollAction.Services.Projects
 
         private async Task SendCommitEmail(Project project, AddParticipantResult result, ApplicationUser applicationUser, string email)
         {
-            var commitEmailViewModel = new ProjectCommitEmailViewModel(project: project, result: result, user: applicationUser, publicAddress: new Uri(siteOptions.PublicAddress), projectUrl: new Uri($"{siteOptions.PublicAddress}/{project.Url}"));
+            var commitEmailViewModel = new ProjectCommitEmailViewModel(project: project, result: result, user: applicationUser, publicAddress: new Uri(siteOptions.PublicAddress), projectUrl: new Uri($"{siteOptions.PublicAddress}{project.Url}"));
             await emailSender.SendEmailTemplated(email, $"Thank you for participating in the \"{project.Name}\" project on CollAction", "ProjectCommit", commitEmailViewModel).ConfigureAwait(false);
         }
 
