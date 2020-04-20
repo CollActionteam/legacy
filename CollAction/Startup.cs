@@ -179,7 +179,7 @@ namespace CollAction
             services.AddOptions<ImageProcessingOptions>().Bind(configuration).ValidateDataAnnotations();
             services.AddOptions<NewsletterServiceOptions>().Bind(configuration).ValidateDataAnnotations();
             services.AddOptions<SeedOptions>().Bind(configuration).ValidateDataAnnotations();
-            services.AddOptions<GoogleAnalyticsOptions>().Bind(configuration).ValidateDataAnnotations();
+            services.AddOptions<AnalyticsOptions>().Bind(configuration).ValidateDataAnnotations();
             services.AddOptions<MailChimpOptions>().Configure(options =>
             {
                 options.ApiKey = configuration["MailChimpKey"];
