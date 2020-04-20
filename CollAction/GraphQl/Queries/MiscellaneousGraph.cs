@@ -13,7 +13,7 @@ namespace CollAction.GraphQl.Queries
 {
     public sealed class MiscellaneousGraph : ObjectGraphType
     {
-        public MiscellaneousGraph(IOptions<NewsletterServiceOptions> newsletterServiceOptions, IOptions<DisqusOptions> disqusOptions, IOptions<StripePublicOptions> stripePublicOptions)
+        public MiscellaneousGraph(IOptions<NewsletterServiceOptions> newsletterServiceOptions, IOptions<DisqusOptions> disqusOptions, IOptions<StripePublicOptions> stripePublicOptions, IOptions<AnalyticsOptions> analyticsOptions)
         {
             FieldAsync<NonNullGraphType<ListGraphType<NonNullGraphType<StringGraphType>>>>(
                 "externalLoginProviders",
@@ -39,6 +39,14 @@ namespace CollAction.GraphQl.Queries
             Field<NonNullGraphType<StringGraphType>>(
                 nameof(stripePublicOptions.Value.StripePublicKey),
                 resolve: c => stripePublicOptions.Value.StripePublicKey);
+
+            Field<NonNullGraphType<StringGraphType>>(
+                nameof(analyticsOptions.Value.GoogleAnalyticsID),
+                resolve: c => analyticsOptions.Value.GoogleAnalyticsID);
+
+            Field<NonNullGraphType<StringGraphType>>(
+                nameof(analyticsOptions.Value.FacebookPixelID),
+                resolve: c => analyticsOptions.Value.FacebookPixelID);
 
             FieldAsync<BooleanGraphType>(
                 "hasIDealPaymentSucceeded",
