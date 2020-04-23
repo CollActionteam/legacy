@@ -97,8 +97,8 @@
 .intro {
     display: block;
     height: 100%;
-    margin-left: -24px;
-    margin-right: -24px;
+    margin-left: -16px;
+    margin-right: -16px;
     height: calc(100% - var(--spacing)); // Fix for overflow-y
     padding: var(--spacing-xlg) 2rem;
     text-align: center;
