@@ -36,10 +36,10 @@ export default () => {
     }
 
     return <div className={styles.cookieDialog}>
-        <Alert type="info" text={info} />
         <Container>
             <Grid container>
                 <Grid item xs={12}>
+                    <Alert type="info" text={info} />
                     Thank you for visiting our website!
                     Please note that our website uses cookies to analyze and improve the performance of our website and to make social media integration possible.
                     For more information on the use of cookies and privacy related matters, please see our <Link to="/privacy-policy">Privacy and Cookies Policy</Link>.
@@ -57,6 +57,7 @@ export default () => {
                                                     control={<Checkbox
                                                         name={`consent${c}`}
                                                         checked={formik.values[c]}
+                                                        color="primary"
                                                         { ... c === Consent.Basics ? [] : formik.getFieldProps(c) }
                                                     />}
                                                     label={ConsentDescription(c)}
