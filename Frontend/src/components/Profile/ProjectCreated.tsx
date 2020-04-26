@@ -113,7 +113,7 @@ export default ({ user, project }: IProjectParticipatingProps) => {
             <ProjectCard project={project} />
         </CardContent>
         <CardActions>
-            { project.canSendProjectEmail ? <Button onClick={() => setShowSendProject(true)}>Send Project E-Mail</Button> : <Alert type="warning" text="You can't send project e-mails at the moment. Project e-mails can be send from the moment the project has started up to 180 days after the project has ended. You can send 4 project e-mails in total. Contact collactionteam@gmail.com if you think this is in error or if you want to raise the amount of e-mails you can send." /> }
+            { project.canSendProjectEmail ? <Button onClick={() => setShowSendProject(true)}>Send Project E-Mail</Button> : <Alert type="warning" text="You can't send project e-mails for this project currently. Project e-mails can be send from the moment the project has started up to 180 days after the project has ended. You can send 4 project e-mails in total. Contact collactionteam@gmail.com if you think this is in error or if you want to raise the amount of e-mails you can send." /> }
         </CardActions>
     </Card>;
 }
