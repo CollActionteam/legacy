@@ -260,7 +260,7 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
                     <div id="join" className={styles.joinSection}>
                       <span>
                         { project?.isActive ? "You are already participating in this project" : null }
-                        { project?.isComingSoon ? "This project is coming soon" : null }
+                        { project?.isComingSoon ? `This project starts on ${new Date(project.start).toDateString()}` : null }
                         { project?.isSuccessfull ? "This project is already done and has completed successfully" : null }
                         { project?.isFailed ? "This project is already done and has failed" : null }
                       </span>
