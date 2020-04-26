@@ -9,7 +9,6 @@ import { useSettings } from '../../../providers/SettingsProvider';
 
 const Categories = (formik: any) => {
   const { categories } = useSettings();
-  const categoryNames = categories.map(Utils.formatCategory);
 
   return (
     <FormControl fullWidth className={styles.formRow}>
@@ -19,9 +18,9 @@ const Categories = (formik: any) => {
         component={Select} 
         error={formik.props.touched.category && Boolean(formik.props.errors.category)}
       >
-        {categoryNames.map((category: string) => (
+        {categories.map((category: string) => (
           <MenuItem key={category} value={category}>
-            {category}
+            { Utils.formatCategory(category) }
           </MenuItem>
         ))}
       </Field>
