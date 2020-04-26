@@ -12,7 +12,6 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Serilog.Events;
 using Serilog;
-using GraphQL;
 using Microsoft.Extensions.Configuration;
 
 namespace CollAction.Tests.Integration
