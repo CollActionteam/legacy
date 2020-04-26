@@ -10,6 +10,10 @@ using CollAction.Services;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Serilog.Events;
+using Serilog;
+using GraphQL;
+using Microsoft.Extensions.Configuration;
 
 namespace CollAction.Tests.Integration
 {
@@ -60,6 +64,16 @@ namespace CollAction.Tests.Integration
             => WebHost.CreateDefaultBuilder()
                       .UseEnvironment("Development")
                       .ConfigureTestServices(configureReplacements)
-                      .UseStartup<Startup>();
+                      .UseStartup<Startup>()
+                      .UseSerilog((hostingContext, loggerConfiguration) =>
+                      {
+                          LogEventLevel level = hostingContext.Configuration.GetValue<LogEventLevel>("LogLevel");
+                          loggerConfiguration.MinimumLevel.Is(level)
+                                             .MinimumLevel.Override("Microsoft", level)
+                                             .MinimumLevel.Override("System", level)
+                                             .MinimumLevel.Override("Microsoft.AspNetCore", level)
+                                             .WriteTo.Console(level)
+                                             .Enrich.FromLogContext();
+                      });
     }
 }
