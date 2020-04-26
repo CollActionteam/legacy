@@ -364,8 +364,7 @@ namespace CollAction.Services.Projects
             DateTime now = DateTime.UtcNow;
             return project.NumberProjectEmailsSent < MaxNumberProjectEmails &&
                    project.End + TimeEmailAllowedAfterProjectEnd > now &&
-                   project.Status != ProjectStatus.Deleted &&
-                   project.Status != ProjectStatus.Hidden &&
+                   project.Status == ProjectStatus.Running &&
                    now >= project.Start;
         }
 

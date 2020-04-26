@@ -93,16 +93,14 @@ export default ({ user, project }: IProjectParticipatingProps) => {
                             You have already sent { project.numberProjectEmailsSent } e-mails, and can still send { projectEmailsLeft } emails up until { canSendUpTil.toDateString() } 23:59 in the UTC (London) timezone. 
                             To personalize the message, you can add {'{firstname}'} and {'{lastname}'} to your message (including the brackets) - these will be substituted with the user's first and last name. 
                         </p>
-                        <Form>
-                            <FormGroup>
-                                <TextField fullWidth error={formik.submitCount > 0 && formik.errors.subject !== undefined} name="subject" label="Subject" {...formik.getFieldProps('subject')} />
-                                { formik.submitCount > 0 ? <Alert type="error" text={formik.errors.subject} /> : null }
-                            </FormGroup>
-                            <FormGroup>
-                                <TextField fullWidth error={formik.submitCount > 0 && formik.errors.message !== undefined} multiline={true} name="message" rows={40} label="E-Mail Message" {...formik.getFieldProps('message')} />
-                                { formik.submitCount > 0 ? <Alert type="error" text={formik.errors.message} /> : null }
-                            </FormGroup>
-                        </Form>
+                        <FormGroup>
+                            <TextField fullWidth error={formik.submitCount > 0 && formik.errors.subject !== undefined} name="subject" label="Subject" {...formik.getFieldProps('subject')} />
+                            { formik.submitCount > 0 ? <Alert type="error" text={formik.errors.subject} /> : null }
+                        </FormGroup>
+                        <FormGroup>
+                            <TextField fullWidth error={formik.submitCount > 0 && formik.errors.message !== undefined} multiline={true} name="message" rows={40} label="E-Mail Message" {...formik.getFieldProps('message')} />
+                            { formik.submitCount > 0 ? <Alert type="error" text={formik.errors.message} /> : null }
+                        </FormGroup>
                     </DialogContent>
                     <DialogActions>
                         <Button type="submit" onClick={() => formik.submitForm()}>Send E-Mail</Button>
@@ -115,7 +113,7 @@ export default ({ user, project }: IProjectParticipatingProps) => {
             <ProjectCard project={project} />
         </CardContent>
         <CardActions>
-            <Button disabled={!project.canSendProjectEmail} onClick={() => setShowSendProject(true)}>Send Project E-Mail</Button>
+            { project.canSendProjectEmail ? <Button onClick={() => setShowSendProject(true)}>Send Project E-Mail</Button> : <Alert type="warning" text="You can't send project e-mails at the moment. Project e-mails can be send from the moment the project has started up to 180 days after the project has ended. You can send 4 project e-mails in total. Contact collactionteam@gmail.com if you think this is in error or if you want to raise the amount of e-mails you can send." /> }
         </CardActions>
     </Card>;
 }
