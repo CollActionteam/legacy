@@ -6,6 +6,11 @@
 
   h3 {
     cursor: pointer;
+    margin: var(--spacing) auto;
+  }
+
+  p, ul {
+    margin-bottom: var(--spacing);
   }
 }
 
