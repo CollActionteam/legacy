@@ -281,7 +281,7 @@ namespace CollAction.Services.Projects
                     jobClient.Delete(project.FinishJobId);
                 }
 
-                project.FinishJobId = jobClient.Schedule(() => ProjectSuccess(project.Id, CancellationToken.None), project.End);
+                project.FinishJobId = jobClient.Schedule(() => ProjectEndProcess(project.Id, CancellationToken.None), project.End);
             }
             else if (removeFinishJob)
             {
@@ -294,8 +294,9 @@ namespace CollAction.Services.Projects
             return new ProjectResult(project);
         }
 
-        public async Task ProjectSuccess(int projectId, CancellationToken token)
+        public async Task ProjectEndProcess(int projectId, CancellationToken token)
         {
+            logger.LogInformation("Processing end of project: {0}", projectId);
             Project project = await context.Projects.Include(p => p.ParticipantCounts).FirstAsync(p => p.Id == projectId, token).ConfigureAwait(false);
 
             if (project.IsSuccessfull && project.Owner != null)
@@ -539,6 +540,7 @@ namespace CollAction.Services.Projects
                           .Distinct();
 
             List<string> userIds = await context.Users.Select(u => u.Id).ToListAsync().ConfigureAwait(false);
+            List<Project> projects = new List<Project>(projectNames.Count());
 
             // Generate random projects
             foreach (string projectName in projectNames)
@@ -572,7 +574,7 @@ namespace CollAction.Services.Projects
                         .Select(userId => new ProjectParticipant(userId, 0, r.Next(2) == 1, DateTime.UtcNow, Guid.NewGuid()))
                         .ToList();
 
-                context.Projects.Add(
+                projects.Add(
                     new Project(
                         name: projectName,
                         description: $"<p>{string.Join("</p><p>", Faker.Lorem.Paragraphs(r.Next(3) + 1))}</p>",
@@ -592,9 +594,20 @@ namespace CollAction.Services.Projects
                         anonymousUserParticipants: r.Next(1, 8000),
                         descriptionVideoLink: videoLinks.ElementAt(r.Next(videoLinks.Length))) { Participants = projectParticipants });
             }
-            
+
+            context.Projects.AddRange(projects);
             await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             await RefreshParticipantCount(cancellationToken).ConfigureAwait(false);
+
+            // Initialize finish jobs
+            context.Projects.UpdateRange(
+                projects.Where(p => p.Status == ProjectStatus.Running)
+                        .Select(p =>
+                        {
+                            p.FinishJobId = jobClient.Schedule(() => ProjectEndProcess(p.Id, CancellationToken.None), p.End);
+                            return p;
+                        }));
+            await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         }
 
         public Task RefreshParticipantCount(CancellationToken token)
