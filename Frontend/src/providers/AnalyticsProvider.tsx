@@ -186,7 +186,9 @@ export default ({ children }: any) => {
     }
 
     const sendUserEvent = async (needsConsent: boolean, eventCategory: string, eventAction: string, eventLabel: string, eventValue: string | null) => {
-        await flushAnalytics();
+        if (consent.includes(Consent.Analytics)) {
+            await flushAnalytics();
+        }
         const payload = getEventPayload(eventCategory, eventAction, eventLabel, eventValue, referrer, hitnumber, utm, consent.includes(Consent.Analytics));
         setHitnumber(hitnumber + 1);
         if (!needsConsent || consent.includes(Consent.Analytics)) {
