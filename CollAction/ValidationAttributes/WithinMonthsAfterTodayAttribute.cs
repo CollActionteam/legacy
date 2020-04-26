@@ -15,7 +15,7 @@ namespace CollAction.ValidationAttributes
             this.months = months;
         }
 
-        protected override ValidationResult IsValid(object value, ValidationContext context)
+        protected override ValidationResult IsValid(object? value, ValidationContext context)
         {
             if (value == null)
             {

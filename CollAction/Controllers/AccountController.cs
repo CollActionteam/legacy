@@ -123,7 +123,7 @@ namespace CollAction.Controllers
                 return Redirect($"{model.ErrorUrl}?error={WebUtility.UrlEncode(error)}&returnUrl={model.ReturnUrl}");
             }
 
-            ExternalLoginInfo info = await signInManager.GetExternalLoginInfoAsync().ConfigureAwait(false);
+            ExternalLoginInfo? info = await signInManager.GetExternalLoginInfoAsync().ConfigureAwait(false);
             if (info == null)
             {
                 string error = $"Error from external login: unable to retrieve user data";

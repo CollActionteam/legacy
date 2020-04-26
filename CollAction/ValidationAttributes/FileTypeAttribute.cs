@@ -15,7 +15,7 @@ namespace CollAction.ValidationAttributes
             this.types = types;
         }
 
-        public override bool IsValid(object value)
+        public override bool IsValid(object? value)
         {
             if (value == null)
             {

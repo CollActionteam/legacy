@@ -6,7 +6,7 @@ namespace CollAction.Services.HtmlValidator
 {
     public sealed class HtmlInputValidator : IHtmlInputValidator
     {
-        public bool IsSafe(string inputHtml)
+        public bool IsSafe(string? inputHtml)
         {
             if (inputHtml == null)
             {

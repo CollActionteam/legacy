@@ -76,7 +76,7 @@ namespace CollAction.Services.Projects
                 return new ProjectResult(validationResults);
             }
 
-            ApplicationUser owner = await userManager.GetUserAsync(user).ConfigureAwait(false);
+            ApplicationUser? owner = await userManager.GetUserAsync(user).ConfigureAwait(false);
 
             if (owner == null)
             {
@@ -152,7 +152,7 @@ namespace CollAction.Services.Projects
 
         public async Task<int> DeleteProject(int id, CancellationToken token)
         {
-            var project = await context.Projects.FindAsync(id);
+            Project? project = await context.Projects.FindAsync(id);
 
             if (project == null)
             {
@@ -316,7 +316,7 @@ namespace CollAction.Services.Projects
 
         public async Task<ProjectResult> SendProjectEmail(int projectId, string subject, string message, ClaimsPrincipal performingUser, CancellationToken token)
         {
-            Project project = await context.Projects.FindAsync(new object[] { projectId }, token);
+            Project? project = await context.Projects.FindAsync(new object[] { projectId }, token);
             if (project == null)
             {
                 return new ProjectResult(new ValidationResult("Project could not be found", new[] { nameof(projectId) }));
@@ -398,7 +398,7 @@ namespace CollAction.Services.Projects
 
         public async Task<AddParticipantResult> CommitToProjectAnonymous(string email, int projectId, CancellationToken token)
         {
-            Project project = await context.Projects.FindAsync(new object[] { projectId }, token);
+            Project? project = await context.Projects.FindAsync(new object[] { projectId }, token);
             if (project == null || !project.IsActive)
             {
                 logger.LogError("Project not found or active: {0}", projectId);
@@ -450,14 +450,14 @@ namespace CollAction.Services.Projects
 
         public async Task<AddParticipantResult> CommitToProjectLoggedIn(ClaimsPrincipal user, int projectId, CancellationToken token)
         {
-            Project project = await context.Projects.FindAsync(new object[] { projectId }, token);
+            Project? project = await context.Projects.FindAsync(new object[] { projectId }, token);
             if (project == null || !project.IsActive)
             {
                 logger.LogError("Project not found or active: {0}", projectId);
                 return new AddParticipantResult("Project not found or not active");
             }
 
-            ApplicationUser applicationUser = await userManager.GetUserAsync(user).ConfigureAwait(false);
+            ApplicationUser? applicationUser = await userManager.GetUserAsync(user).ConfigureAwait(false);
             if (applicationUser == null)
             {
                 logger.LogError("User not logged in when committing");

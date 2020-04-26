@@ -97,7 +97,7 @@ namespace CollAction.Services.User
 
         public async Task<(IdentityResult Result, string? ResetCode)> ForgotPassword(string email)
         {
-            ApplicationUser user = await userManager.FindByEmailAsync(email).ConfigureAwait(false);
+            ApplicationUser? user = await userManager.FindByEmailAsync(email).ConfigureAwait(false);
             if (user == null)
             {
                 var result = IdentityResult.Failed(new IdentityError() { Code = "NOUSER", Description = "This user doesn't exist" });
@@ -114,7 +114,7 @@ namespace CollAction.Services.User
 
         public async Task<IdentityResult> ResetPassword(string email, string code, string password)
         {
-            ApplicationUser user = await userManager.FindByEmailAsync(email).ConfigureAwait(false);
+            ApplicationUser? user = await userManager.FindByEmailAsync(email).ConfigureAwait(false);
             if (user == null)
             {
                 var userResult = IdentityResult.Failed(new IdentityError() { Code = "NOUSER", Description = "This user doesn't exist" });
@@ -138,7 +138,7 @@ namespace CollAction.Services.User
 
         public async Task<UserResult> FinishRegistration(NewUser newUser, string code)
         {
-            var user = await userManager.FindByEmailAsync(newUser.Email).ConfigureAwait(false);
+            ApplicationUser? user = await userManager.FindByEmailAsync(newUser.Email).ConfigureAwait(false);
             if (user == null)
             {
                 return new UserResult(IdentityResult.Failed(new IdentityError() { Code = "NOUSER", Description = "This user doesn't exist" }));
@@ -177,7 +177,7 @@ namespace CollAction.Services.User
                 return new UserResult(IdentityResult.Failed(validationResults.ToArray()));
             }
 
-            var user = await userManager.FindByIdAsync(updatedUser.Id).ConfigureAwait(false);
+            ApplicationUser? user = await userManager.FindByIdAsync(updatedUser.Id).ConfigureAwait(false);
             if (user == null)
             {
                 return new UserResult(IdentityResult.Failed(new IdentityError() { Code = "NOUSER", Description = "This user doesn't exist" }));
@@ -232,7 +232,7 @@ namespace CollAction.Services.User
 
         public async Task<IdentityResult> ChangePassword(ClaimsPrincipal claimsUser, string currentPassword, string newPassword)
         {
-            var user = await userManager.GetUserAsync(claimsUser).ConfigureAwait(false);
+            ApplicationUser? user = await userManager.GetUserAsync(claimsUser).ConfigureAwait(false);
             if (user == null)
             {
                 return IdentityResult.Failed(new IdentityError() { Code = "NOUSER", Description = "This user doesn't exist" });
@@ -266,16 +266,16 @@ namespace CollAction.Services.User
         public async Task<IdentityResult> DeleteUser(string userId, ClaimsPrincipal loggedInUser)
         {
             logger.LogInformation("Deleting user permanently");
-            ApplicationUser user = await userManager.FindByIdAsync(userId).ConfigureAwait(false);
+            ApplicationUser? user = await userManager.FindByIdAsync(userId).ConfigureAwait(false);
 
             if (user == null)
             {
                 return IdentityResult.Failed(new IdentityError() { Code = "NOUSER", Description = "This user doesn't exist" });
             }
 
-            ApplicationUser loggedIn = await userManager.GetUserAsync(loggedInUser).ConfigureAwait(false);
+            ApplicationUser? loggedIn = await userManager.GetUserAsync(loggedInUser).ConfigureAwait(false);
 
-            if (!loggedInUser.IsInRole(AuthorizationConstants.AdminRole) && user.Id != loggedIn?.Id)
+            if (!(loggedInUser?.IsInRole(AuthorizationConstants.AdminRole) ?? false) && user.Id != loggedIn?.Id)
             {
                 var permissionResult = IdentityResult.Failed(new IdentityError() { Code = "NOPERM", Description = "You don't have permission to delete this user" });
                 LogErrors("Deleting user", permissionResult);
