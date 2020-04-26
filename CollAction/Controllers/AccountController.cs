@@ -39,7 +39,7 @@ namespace CollAction.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return Redirect($"{model.ErrorUrl}?error=validation&message={WebUtility.UrlEncode(ModelState.GetValidationString())}");
+                return Redirect($"{model.ErrorUrl}?error=validation&message={WebUtility.UrlEncode(ModelState.GetValidationString())}&returnUrl={model.ReturnUrl}");
             }
 
             SignInResult result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: true).ConfigureAwait(false);
@@ -60,7 +60,7 @@ namespace CollAction.Controllers
                 logger.LogInformation("User is locked out");
                 if (model.ErrorUrl != null)
                 {
-                    return Redirect($"{model.ErrorUrl}?error=lockout&message={WebUtility.UrlEncode("User is locked out")}");
+                    return Redirect($"{model.ErrorUrl}?error=lockout&message={WebUtility.UrlEncode("User is locked out")}&returnUrl={model.ReturnUrl}");
                 }
                 else
                 {
@@ -72,7 +72,7 @@ namespace CollAction.Controllers
                 logger.LogInformation("User is unable to log in");
                 if (model.ErrorUrl != null)
                 {
-                    return Redirect($"{model.ErrorUrl}?error=invalid-credentials&message={WebUtility.UrlEncode("Invalid credentials")}");
+                    return Redirect($"{model.ErrorUrl}?error=invalid-credentials&message={WebUtility.UrlEncode("Invalid credentials")}&returnUrl={model.ReturnUrl}");
                 }
                 else
                 {
@@ -120,7 +120,7 @@ namespace CollAction.Controllers
             {
                 string error = $"Error from external login: {model.RemoteError}";
                 logger.LogError(error);
-                return Redirect($"{model.ErrorUrl}?error={WebUtility.UrlEncode(error)}");
+                return Redirect($"{model.ErrorUrl}?error={WebUtility.UrlEncode(error)}&returnUrl={model.ReturnUrl}");
             }
 
             ExternalLoginInfo info = await signInManager.GetExternalLoginInfoAsync().ConfigureAwait(false);
@@ -128,7 +128,7 @@ namespace CollAction.Controllers
             {
                 string error = $"Error from external login: unable to retrieve user data";
                 logger.LogError(error);
-                return Redirect($"{model.ErrorUrl}?error={WebUtility.UrlEncode(error)}");
+                return Redirect($"{model.ErrorUrl}?error={WebUtility.UrlEncode(error)}&returnUrl={model.ReturnUrl}");
             }
 
             // Sign in the user with this external login provider if the user already has a login.
@@ -141,7 +141,7 @@ namespace CollAction.Controllers
             else if (result.IsLockedOut)
             {
                 logger.LogInformation("User is locked out");
-                return Redirect($"{model.ErrorUrl}?error=lockout");
+                return Redirect($"{model.ErrorUrl}?error=lockout&returnUrl={model.ReturnUrl}");
             }
 
             // If the user does not have an account, create one
@@ -155,7 +155,7 @@ namespace CollAction.Controllers
             {
                 string error = string.Join(", ", newUserResult.Result.Errors.Select(e => e.Description));
                 logger.LogError(error);
-                return Redirect($"{model.ErrorUrl}?error={WebUtility.UrlEncode(error)}");
+                return Redirect($"{model.ErrorUrl}?error={WebUtility.UrlEncode(error)}&returnUrl={model.ReturnUrl}");
             }
         }
     }
