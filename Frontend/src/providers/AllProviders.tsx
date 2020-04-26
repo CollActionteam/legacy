@@ -5,6 +5,7 @@ import UserProvider from "./UserProvider";
 import CookieConsentProvider from "./CookieConsentProvider";
 import SettingsProvider from "./SettingsProvider";
 import GraphQLProvider from "./GraphQLProvider";
+import AnalyticsProvider from "./AnalyticsProvider";
 
 export default ({ children }: any) => {
     return <I18nextProvider i18n={i18n}>
@@ -12,7 +13,9 @@ export default ({ children }: any) => {
             <SettingsProvider>
                 <CookieConsentProvider>
                     <UserProvider>
-                        { children }
+                        <AnalyticsProvider>
+                            { children }
+                        </AnalyticsProvider>
                     </UserProvider>
                 </CookieConsentProvider>
             </SettingsProvider>

@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardActions, DialogTitle, Dialog, DialogActions } from "@material-ui/core";
 import { IUser } from "../../api/types";
 import { gql, useMutation } from "@apollo/client";
 import { Alert } from "../Alert/Alert";
 import { GET_USER } from "../../providers/UserProvider";
 import { Button } from "../Button/Button";
+import { useAnalytics } from "../../providers/AnalyticsProvider";
 
 interface IDeleteAccountProps {
     user: IUser;
@@ -13,16 +14,16 @@ interface IDeleteAccountProps {
 export default ({ user }: IDeleteAccountProps) => {
     const [ hasDeletePopup, setHasDeletePopup] = useState(false);
     const [ errorMessage, setErrorMessage] = useState<string | null>(null);
-    const [ done, setDone ] = useState(false);
+    const { sendUserEvent } = useAnalytics();
     const [ deleteUser ] =
             useMutation(
                 DELETE_USER,
                 {
                     variables: { userId: user.id },
-                    onCompleted: (data) =>
-                    {
+                    onCompleted: (data) => {
                         if (data.user.deleteUser.succeeded) {
-                            setDone(true);
+                            // After the account is deleted, navigate to root with hard refresh so that the cache is cleared and the user is logged out
+                            window.location.href = '/';
                         } else {
                             let error = data.user.deleteUser.errors.map((e: any) => e.description).join(", ");
                             console.error(error);
@@ -37,13 +38,6 @@ export default ({ user }: IDeleteAccountProps) => {
                         query: GET_USER
                     }]
                 });
-    
-    useEffect(() => {
-        if (done) {
-            // After the account is deleted, navigate to root with hard refresh so that the cache is cleared and the user is logged out
-            window.location.href = '/';
-        }
-    }, [ done ]);
 
     return <React.Fragment>
         <Alert type="error" text={errorMessage} />
@@ -52,7 +46,7 @@ export default ({ user }: IDeleteAccountProps) => {
                 Are you sure you want to delete your account?
             </DialogTitle>
             <DialogActions>
-                <Button onClick={() => deleteUser()}>Remove my account</Button>
+                <Button onClick={() => { deleteUser(); sendUserEvent(false, 'user', 'delete_account', '', null); }}>Remove my account</Button>
                 <Button onClick={() => setHasDeletePopup(false)}>Don't remove my account</Button>
             </DialogActions>
         </Dialog>

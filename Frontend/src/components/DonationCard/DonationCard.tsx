@@ -21,6 +21,7 @@ import { Button } from "../Button/Button";
 import { useHistory } from "react-router-dom";
 import { useConsent, Consent } from "../../providers/CookieConsentProvider";
 import { useSettings } from "../../providers/SettingsProvider";
+import { useAnalytics } from "../../providers/AnalyticsProvider";
 
 type DonationValues = {
     email: string;
@@ -70,6 +71,7 @@ const InnerDonationCard = () => {
     const elements = useElements();
     const history = useHistory();
     const amounts = [ 3, 5, 10, 20, 30, 50, 100 ];
+    const { sendUserEvent } = useAnalytics();
 
     const [ initializeCreditCardCheckout ] = useMutation(
         INITIALIZE_CREDIT_CARD_CHECKOUT
@@ -224,7 +226,7 @@ const InnerDonationCard = () => {
 
     const amountCheckbox = (amount: number) =>
         <Grid item key={amount} xs={6} sm={3} className={styles.paymentToggle}>
-            <input id={`donation-amount-${amount}`} type="radio" name="amount" value={amount} checked={formik.values.amount === amount} onChange={() => formik.setFieldValue("amount", amount)} />
+            <input id={`donation-amount-${amount}`} type="radio" name="amount" value={amount} checked={formik.values.amount === amount} onChange={() => { formik.setFieldValue("amount", amount); sendUserEvent(true, 'donate', 'select amount', amount.toString(), null); }} />
             <label htmlFor={`donation-amount-${amount}`}>&euro;{ amount }</label>
         </Grid>;
     
@@ -288,11 +290,11 @@ const InnerDonationCard = () => {
                     <br />
                     <Grid container className={styles.paymentSelectionOptions}>
                         <Grid item key="one-off" xs={12} sm={6} className={styles.paymentToggle}>
-                            <input id="one-off-donation-button" type="radio" name="period" value="one-off" checked={formik.values.recurring === false} onChange={() => formik.setFieldValue("recurring", false)} />
+                            <input id="one-off-donation-button" type="radio" name="period" value="one-off" checked={formik.values.recurring === false} onChange={() => { formik.setFieldValue("recurring", false); sendUserEvent(true, 'donate', 'select type', 'one-off', null); }} />
                             <label htmlFor="one-off-donation-button">One-off</label>
                         </Grid>
                         <Grid item key="periodic" xs={12} sm={6} className={styles.paymentToggle}>
-                            <input id="periodic-donation-button" type="radio" name="period" value="periodic" checked={formik.values.recurring} onChange={() => formik.setFieldValue("recurring", true)} />
+                            <input id="periodic-donation-button" type="radio" name="period" value="periodic" checked={formik.values.recurring} onChange={() => { formik.setFieldValue("recurring", true); sendUserEvent(true, 'donate', 'select type', 'monthly', null); }} />
                             <label htmlFor="periodic-donation-button">Periodic</label>
                         </Grid>
                     </Grid>
@@ -305,13 +307,13 @@ const InnerDonationCard = () => {
                     </Grid>
                     <Grid container className={styles.paymentOptions}>
                         <Grid item xs={12}>
-                            <Button type="button" className={styles.paymentButton} onClick={async () => { formik.setFieldValue('type', 'popup'); formik.submitForm(); }}>
+                            <Button type="button" className={styles.paymentButton} onClick={async () => { formik.setFieldValue('type', 'popup'); sendUserEvent(true, 'donate', 'select method', 'ideal', formik.values.amount.toString()); formik.submitForm(); }}>
                                 <img src={iDealLogo} alt="iDeal" />
                                 &nbsp;Debit (iDeal / SEPA Direct)
                             </Button>
                         </Grid>
                         <Grid item xs={12}>
-                            <Button type="button" className={styles.paymentButton} onClick={() => { formik.setFieldValue('type', 'credit'); formik.submitForm(); }}>
+                            <Button type="button" className={styles.paymentButton} onClick={() => { formik.setFieldValue('type', 'credit'); sendUserEvent(true, 'donate', 'select method', 'creditcard', formik.values.amount.toString()); formik.submitForm(); }}>
                                 <img src={bankCard} alt="Creditcard" />
                                 &nbsp;Creditcard
                             </Button>

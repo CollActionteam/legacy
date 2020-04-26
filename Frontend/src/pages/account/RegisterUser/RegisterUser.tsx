@@ -11,6 +11,7 @@ import { Button } from "../../../components/Button/Button";
 import Loader from "../../../components/Loader/Loader";
 import { Section } from "../../../components/Section/Section";
 import styles from "./RegisterUser.module.scss";
+import { useAnalytics } from "../../../providers/AnalyticsProvider";
 
 const REGISTER_USER = gql`
     mutation RegisterUser($user: NewUserInputGraph!) {
@@ -32,6 +33,7 @@ const RegisterUserPage = () => {
     const history = useHistory();
     const [ errorMessage, setErrorMessage ] = useState<string | null>(null);
     const [ infoMessage, setInfoMessage ] = useState<string | null>(null);
+    const { sendUserEvent } = useAnalytics();
     const [ createUser ] = useMutation(
         REGISTER_USER,
         {
@@ -198,7 +200,7 @@ const RegisterUserPage = () => {
                                 <div className={styles.submit}>
                                     { formik.isSubmitting
                                         ? <Loader></Loader>
-                                        : <Button type="submit">Register</Button>
+                                        : <Button type="submit" onClick={() => sendUserEvent(false, 'user', 'register', 'email', null)}>Register</Button>
                                     }
                                 </div>
                             </div>
