@@ -101,8 +101,9 @@ namespace CollAction.Tests.Integration.Service
                        Assert.IsTrue(newProjectResult.Succeeded);
                        int? newProjectId = newProjectResult.Project?.Id;
                        Assert.IsNotNull(newProjectId);
-                       var retrievedProject = await context.Projects.Include(p => p.Tags).ThenInclude(t => t.Tag).FirstOrDefaultAsync(p => p.Id == newProjectId).ConfigureAwait(false);
+                       Project retrievedProject = await context.Projects.Include(p => p.Tags).ThenInclude(t => t.Tag).FirstOrDefaultAsync(p => p.Id == newProjectId).ConfigureAwait(false);
 
+                       Assert.IsNotNull(retrievedProject);
                        Assert.AreEqual(updatedProject.Name, retrievedProject.Name);
                        Assert.IsTrue(Enumerable.SequenceEqual(updatedProject.Tags.OrderBy(t => t), retrievedProject.Tags.Select(t => t.Tag.Name).OrderBy(t => t)));
                    });

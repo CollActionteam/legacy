@@ -391,7 +391,7 @@ namespace CollAction.Services.Donation
                     Type = "service"
                 },
                 cancellationToken: token).ConfigureAwait(false);
-            Product product = products.FirstOrDefault(p => p.Name == RecurringDonationProduct);
+            Product? product = products.FirstOrDefault(p => p.Name == RecurringDonationProduct);
             if (product == null)
             {
                 product = await productService.CreateAsync(
@@ -410,7 +410,7 @@ namespace CollAction.Services.Donation
 
         private async Task<Customer> GetOrCreateCustomer(string name, string email, CancellationToken token)
         {
-            Customer customer = (await customerService.ListAsync(new CustomerListOptions() { Email = email, Limit = 1 }, requestOptions, token).ConfigureAwait(false)).FirstOrDefault();
+            Customer? customer = (await customerService.ListAsync(new CustomerListOptions() { Email = email, Limit = 1 }, requestOptions, token).ConfigureAwait(false)).FirstOrDefault();
             string? metadataName = null;
             customer?.Metadata?.TryGetValue(NameKey, out metadataName);
             var metadata = new Dictionary<string, string>() { { NameKey, name } };

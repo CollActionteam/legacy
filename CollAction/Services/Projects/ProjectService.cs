@@ -180,7 +180,7 @@ namespace CollAction.Services.Projects
                 return new ProjectResult(new ValidationResult("User is not allowed to update project"));
             }
 
-            Project project = await context
+            Project? project = await context
                 .Projects
                 .Include(p => p.Tags).ThenInclude(t => t.Tag)
                 .Include(p => p.Categories)
@@ -297,7 +297,12 @@ namespace CollAction.Services.Projects
         public async Task ProjectEndProcess(int projectId, CancellationToken token)
         {
             logger.LogInformation("Processing end of project: {0}", projectId);
-            Project project = await context.Projects.Include(p => p.ParticipantCounts).FirstAsync(p => p.Id == projectId, token).ConfigureAwait(false);
+            Project? project = await context.Projects.Include(p => p.ParticipantCounts).FirstAsync(p => p.Id == projectId, token).ConfigureAwait(false);
+
+            if (project == null)
+            {
+                throw new InvalidOperationException($"Project {projectId} does not exist");
+            }
 
             if (project.IsSuccessfull && project.Owner != null)
             {
