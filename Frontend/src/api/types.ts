@@ -4,6 +4,8 @@ export interface IDonation {
 }
 
 export interface ISettings {
+  googleAnalyticsID: string;
+  facebookPixelID: string;
   mailChimpNewsletterListId: string;
   disqusSiteId: string;
   stripePublicKey: string;

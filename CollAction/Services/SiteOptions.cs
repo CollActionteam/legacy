@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 
 namespace CollAction.Services
 {
@@ -8,5 +7,8 @@ namespace CollAction.Services
     {
         [Required]
         public string PublicAddress { get; set; } = null!;
+
+        public Uri PublicUrl
+            => new Uri(PublicAddress);
     }
 }

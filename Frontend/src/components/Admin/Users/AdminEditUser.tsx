@@ -85,8 +85,8 @@ export default ({ userId } : IEditUserProps): any => {
     });
     if (data && !formik.values.initialized) {
         formik.setValues({
-            firstName: data.user.firstName,
-            lastName: data.user.lastName,
+            firstName: data.user.firstName ?? "",
+            lastName: data.user.lastName ?? "",
             isAdmin: data.user.isAdmin,
             representsNumberParticipants: data.user.representsNumberParticipants,
             initialized: true

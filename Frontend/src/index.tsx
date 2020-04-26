@@ -35,6 +35,7 @@ import PrivacyPolicyPage from './pages/PrivacyPolicy/PrivacyPolicy';
 import UnsubscribeProjectPage from './pages/projects/UnsubscribeProject/UnsubscribeProject';
 import RegistrationCompletePage from './pages/account/RegisterUser/RegistrationComplete';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';
+import RunAnalytics from './components/Analytics/RunAnalytics';
 
 const routing = (
     <Router>
@@ -65,6 +66,7 @@ const routing = (
                     <Route exact path="/admin/:type/:action/:id?" component={AdminPage} />
                     <Route component={NotFoundPage} />
                 </Switch>
+                <RunAnalytics />
             </Layout>
         </AllProviders>
     </Router>

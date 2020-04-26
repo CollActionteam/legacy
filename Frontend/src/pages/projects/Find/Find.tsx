@@ -10,18 +10,22 @@ import ProjectsList from '../../../components/ProjectsList/ProjectsList';
 import styles from "./Find.module.scss";
 import Utils from '../../../utils';
 import { useSettings } from '../../../providers/SettingsProvider';
+import { useAnalytics } from '../../../providers/AnalyticsProvider';
 
 const FindPage = () => {
   const [category, setCategory] = useState("");
   const [status, setStatus] = useState(ProjectStatusFilter.Open);
   const { categories } = useSettings();
+  const { sendUserEvent } = useAnalytics();
 
   const handleCategoryChange = (e: React.ChangeEvent) => {
     setCategory((e.target as any).value.toString());
+    sendUserEvent(false, 'project', 'apply filter', (e.target as any).value.toString(), null);
   };
 
   const handleStatusChange = (e: React.ChangeEvent) => {
     setStatus((e.target as any).value);
+    sendUserEvent(false, 'project', 'apply filter', (e.target as any).value.toString(), null);
   };
 
   return (

@@ -29,11 +29,10 @@ const DonationPage = () => {
                         <DonationCard/>
                     </Grid>
                     <Grid item sm={12} md={6}>
-
                         <h2>Frequently Asked Questions</h2>
                         <br />
 
-                        <Faq title="Why should I donate?" collapsed={true}>
+                        <Faq title="Why should I donate?" collapsed={true} faqId="why_should_i_donate">
                             <ul>
                                 <li>Our goal is to move millions of people to act for good by launching the crowdacting
                                     movement. Whereas back in the day, people turned to politicians and policy makers to fix the
@@ -52,7 +51,7 @@ const DonationPage = () => {
                             </ul>
                         </Faq>
 
-                        <Faq title="What will my donation be spent on?" collapsed={true}>
+                        <Faq title="What will my donation be spent on?" collapsed={true} faqId="what_will_my_donation_be_spent_on">
                                 <p>
                                     You can find an overview of our financials <a href="https://drive.google.com/file/d/1syiUgEq-Or-GOfvBYY8k3fgTu5UZvLey/view" rel="noopener noreferrer" target="_blank">here</a> (apologies, it's in Dutch, since that's where
                                     our headquarter is based). In short, the main part of our budget goes to website and
@@ -65,7 +64,7 @@ const DonationPage = () => {
                                 </p>
                         </Faq>
 
-                        <Faq title="Who started CollAction?" collapsed={true}>
+                        <Faq title="Who started CollAction?" collapsed={true} faqId="who_started_collaction">
                             <p>
                                 CollAction is started by a <a href="/about#team">team</a> of optimistic and pragmatic people that believe we can make this
                                 world a better place through crowdacting. The concept of CollAction/crowdacting was born in The
@@ -73,14 +72,13 @@ const DonationPage = () => {
                             </p>
                         </Faq>
 
-                        <Faq title="How do I cancel my monthly donations" collapsed={true}>
+                        <Faq title="How do I cancel my monthly donations" collapsed={true} faqId="cancel_monthly_donation">
                             <p>
                                 You can cancel your recurring donations on your account page or by e-mailing
                                 {" "}<a href="mailto:collactionteam@gmail.com">collactionteam@gmail.com</a>. Cancellations sent through e-mail will be processed within five days,
                                 cancellations through your account page will be processed immediately.
                             </p>
                         </Faq>
-
                     </Grid>
                 </Grid>
             </Section>

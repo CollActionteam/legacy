@@ -3,7 +3,6 @@ using CollAction.Helpers;
 using CollAction.Models;
 using CollAction.Services.Donation;
 using CollAction.Services.Newsletter;
-using GraphQL;
 using GraphQL.Authorization;
 using GraphQL.EntityFramework;
 using GraphQL.Types;

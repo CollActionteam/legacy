@@ -28,18 +28,18 @@ export const ConsentDescription = (consent: Consent) => {
 export const useConsent = () => useContext(ConsentContext);
 
 export default ({ children }: any) => {
-  const [ consent, setConsent ] = useState(initialConsentState);
-  useEffect(() => {
-    localStorage.setItem(consentKey, consent.join(";"));
-  }, [ consent ]);
-  const setAllowAllConsent = () => setConsent(AllowedConsents);
-  const contextValue = {
-      consent: consent,
-      setConsent: setConsent,
-      setAllowAllConsent: setAllowAllConsent
-  };
+    const [ consent, setConsent ] = useState(initialConsentState);
+    useEffect(() => {
+        localStorage.setItem(consentKey, consent.join(";"));
+    }, [ consent ]);
+    const setAllowAllConsent = () => setConsent(AllowedConsents);
+    const contextValue = {
+        consent: consent,
+        setConsent: setConsent,
+        setAllowAllConsent: setAllowAllConsent
+    };
 
-  return <ConsentContext.Provider value={contextValue}>
-      { children }
-  </ConsentContext.Provider>
+    return <ConsentContext.Provider value={contextValue}>
+        { children }
+    </ConsentContext.Provider>
 };

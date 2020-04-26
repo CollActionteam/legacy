@@ -4,14 +4,16 @@ import { IUser } from "../../api/types";
 import { useMutation, gql } from "@apollo/client";
 import { Alert } from "../Alert/Alert";
 import { Button } from "../Button/Button";
+import { useAnalytics } from "../../providers/AnalyticsProvider";
 
 interface INewsletterSubscriptionProps {
     user: IUser;
 }
 
 export default ({ user }: INewsletterSubscriptionProps) => {
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    const [toggleSubscription] =
+    const [ errorMessage, setErrorMessage ] = useState<string | null>(null);
+    const { sendUserEvent } = useAnalytics();
+    const [ toggleSubscription ] =
         useMutation(
             UPDATE_USER,
             {
@@ -51,7 +53,7 @@ export default ({ user }: INewsletterSubscriptionProps) => {
                     }
                 </CardContent>
                 <CardActions>
-                    <Button onClick={() => toggleSubscription()}>{ user.isSubscribedNewsletter ? "Unsubscribe" : "Subscribe" }</Button>
+                    <Button onClick={() => { toggleSubscription(); sendUserEvent(false, 'user', user.isSubscribedNewsletter ? 'unsubscribe' : 'subscribe', 'newsletter', null); }}>{ user.isSubscribedNewsletter ? "Unsubscribe" : "Subscribe" }</Button>
                 </CardActions>
             </Card>
         </React.Fragment>;
