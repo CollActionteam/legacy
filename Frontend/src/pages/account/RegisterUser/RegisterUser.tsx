@@ -44,11 +44,13 @@ const RegisterUserPage = () => {
                     let error = data.user.createUser.result.errors.map((e: any) => e.description).join(", ");
                     setInfoMessage(null);
                     setErrorMessage(error);
+                    formik.setSubmitting(false);
                     console.error(error);
                 }
             },
             onError: (data) => {
                 setErrorMessage(data.message);
+                formik.setSubmitting(false);
                 console.error(data.message);
             }
         }

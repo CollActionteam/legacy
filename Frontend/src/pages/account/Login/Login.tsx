@@ -19,11 +19,16 @@ import Helmet from "react-helmet";
 const LoginPage = () => {
   const actionLogin = `${process.env.REACT_APP_BACKEND_URL}/account/login`;
   const actionExternalLogin = `${process.env.REACT_APP_BACKEND_URL}/account/externalLogin`;
-  const returnUrl = window.location.origin;
-  const errorUrl = `${returnUrl}/account/login`;
+  
+  const errorUrl = `${window.location.origin}/account/login`;
   const searchParams = new URLSearchParams(useLocation().search);
+
+  const returnUrlQuery = searchParams.get("returnUrl") ?? "";  
+  const returnUrl = `${!returnUrlQuery.startsWith('http') ? window.location.origin : ""}${returnUrlQuery}`;
+  
   const errorType = searchParams.get("error");
   const errorMessage = searchParams.get("message");
+
   const { externalLoginProviders } = useSettings();
   if (errorType && errorMessage)
   {
