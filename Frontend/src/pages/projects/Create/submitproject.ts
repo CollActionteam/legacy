@@ -1,28 +1,22 @@
 import { ExecutionResult, gql, useMutation } from "@apollo/client";
 import { IProjectResult } from "../../../api/types";
 import { IProjectForm } from "./form";
-
-const uploadImage = async (file: any, description: string) => {
-  const body = new FormData();
-  body.append('Image', file);
-  body.append('ImageDescription', description);
-
-  return await fetch(`${process.env.REACT_APP_BACKEND_URL}/image`, {
-    method: 'POST',
-    body,
-    credentials: 'include'
-  }).then((response) => response.json());
-};
+import Utils from "../../../utils";
 
 async function useSubmitProject(form: IProjectForm): Promise<IProjectResult> {
   let bannerId;
   if (form.banner) {
-    bannerId = await uploadImage(form.banner, form.projectName);
+    bannerId = await Utils.uploadImage(form.banner, form.projectName, 1600);
   }
 
   let imageId;
   if (form.image) {
-    imageId = await uploadImage(form.image, form.imageDescription);
+    imageId = await Utils.uploadImage(form.image, form.imageDescription, 1600);
+  }
+
+  let cardId;
+  if (form.banner) {
+    cardId = await Utils.uploadImage(form.banner, form.projectName, 370);
   }
 
   const [createProject] = useMutation(gql`
@@ -54,6 +48,7 @@ async function useSubmitProject(form: IProjectForm): Promise<IProjectResult> {
         tags: form.tags ? form.tags.split(';') : [],
         creatorComments: form.comments || null,
         descriptiveImageFileId: imageId || null,
+        cardImageFileId: cardId || null,
         descriptionVideoLink: form.youtube || null
       }
     }

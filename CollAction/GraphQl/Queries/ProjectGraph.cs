@@ -20,6 +20,7 @@ namespace CollAction.GraphQl.Queries
             Field(x => x.Description);
             Field(x => x.DescriptionVideoLink, true);
             Field(x => x.DescriptiveImageFileId, true);
+            Field(x => x.CardImageFileId, true);
             Field(x => x.DisplayPriority);
             Field(x => x.End);
             Field(x => x.Goal);
@@ -99,6 +100,7 @@ namespace CollAction.GraphQl.Queries
                 });
             AddNavigationField(nameof(Project.DescriptiveImage), c => c.Source.DescriptiveImage);
             AddNavigationField(nameof(Project.BannerImage), c => c.Source.BannerImage);
+            AddNavigationField(nameof(Project.CardImage), c => c.Source.CardImage);
             AddNavigationField(nameof(Project.ParticipantCounts), c => c.Source.ParticipantCounts);
             AddNavigationField(nameof(Project.Owner), c => c.Source.Owner, typeof(RestrictedApplicationUserGraph));
             AddNavigationListField(nameof(Project.Categories), c => c.Source.Categories);

@@ -157,7 +157,6 @@ namespace CollAction
             services.AddOptions<SiteOptions>().Bind(configuration).ValidateDataAnnotations();
             services.AddOptions<AuthMessageSenderOptions>().Bind(configuration).ValidateDataAnnotations();
             services.AddOptions<ImageServiceOptions>().Bind(configuration).ValidateDataAnnotations();
-            services.AddOptions<ImageProcessingOptions>().Bind(configuration).ValidateDataAnnotations();
             services.AddOptions<NewsletterServiceOptions>().Bind(configuration).ValidateDataAnnotations();
             services.AddOptions<SeedOptions>().Bind(configuration).ValidateDataAnnotations();
             services.AddOptions<AnalyticsOptions>().Bind(configuration).ValidateDataAnnotations();

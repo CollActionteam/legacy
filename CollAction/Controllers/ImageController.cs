@@ -23,7 +23,7 @@ namespace CollAction.Controllers
         [Authorize]
         public async Task<IActionResult> UploadImage([FromForm] UploadImageViewModel uploadImage, CancellationToken token)
         {
-            ImageFile image = await imageService.UploadImage(uploadImage.Image, uploadImage.ImageDescription, token).ConfigureAwait(false);
+            ImageFile image = await imageService.UploadImage(uploadImage.Image, uploadImage.ImageDescription, uploadImage.ImageResizeThreshold, token).ConfigureAwait(false);
             return Ok(image.Id);
         }
     }

@@ -11,11 +11,11 @@ namespace CollAction.Models
 {
     public sealed class Project
     {
-        public Project(string name, ProjectStatus status, string? ownerId, int target, DateTime start, DateTime end, string description, string goal, string proposal, string? creatorComments, string? descriptionVideoLink, ProjectDisplayPriority displayPriority = ProjectDisplayPriority.Medium, int? bannerImageFileId = null, int? descriptiveImageFileId = null, int anonymousUserParticipants = 0): this(name, status, ownerId, target, start, end, description, goal, proposal, creatorComments, descriptionVideoLink, new List<ProjectCategory>(), new List<ProjectTag>(), displayPriority, bannerImageFileId, descriptiveImageFileId, anonymousUserParticipants)
+        public Project(string name, ProjectStatus status, string? ownerId, int target, DateTime start, DateTime end, string description, string goal, string proposal, string? creatorComments, string? descriptionVideoLink, ProjectDisplayPriority displayPriority = ProjectDisplayPriority.Medium, int? bannerImageFileId = null, int? descriptiveImageFileId = null, int? cardImageFileId = null, int anonymousUserParticipants = 0): this(name, status, ownerId, target, start, end, description, goal, proposal, creatorComments, descriptionVideoLink, new List<ProjectCategory>(), new List<ProjectTag>(), displayPriority, bannerImageFileId, descriptiveImageFileId, cardImageFileId, anonymousUserParticipants)
         {
         }
 
-        public Project(string name, ProjectStatus status, string? ownerId, int target, DateTime start, DateTime end, string description, string goal, string proposal, string? creatorComments, string? descriptionVideoLink, ICollection<ProjectCategory> categories, ICollection<ProjectTag> tags, ProjectDisplayPriority displayPriority = ProjectDisplayPriority.Medium, int? bannerImageFileId = null, int? descriptiveImageFileId = null, int anonymousUserParticipants = 0)
+        public Project(string name, ProjectStatus status, string? ownerId, int target, DateTime start, DateTime end, string description, string goal, string proposal, string? creatorComments, string? descriptionVideoLink, ICollection<ProjectCategory> categories, ICollection<ProjectTag> tags, ProjectDisplayPriority displayPriority = ProjectDisplayPriority.Medium, int? bannerImageFileId = null, int? descriptiveImageFileId = null, int? cardImageFileId = null, int anonymousUserParticipants = 0)
         {
             Name = name;
             Status = status;
@@ -30,6 +30,7 @@ namespace CollAction.Models
             DescriptionVideoLink = descriptionVideoLink;
             DisplayPriority = displayPriority;
             BannerImageFileId = bannerImageFileId;
+            CardImageFileId = cardImageFileId;
             DescriptiveImageFileId = descriptiveImageFileId;
             Categories = categories;
             Tags = tags;
@@ -92,6 +93,11 @@ namespace CollAction.Models
 
         [ForeignKey("DescriptiveImageFileId")]
         public ImageFile? DescriptiveImage { get; set; }
+
+        public int? CardImageFileId { get; set; }
+
+        [ForeignKey("CardImageFileId")]
+        public ImageFile? CardImage { get; set; }
 
         public ProjectParticipantCount? ParticipantCounts { get; set; }
 

@@ -15,6 +15,7 @@ import UploadImage from './UploadImage';
 import { Link, useHistory } from 'react-router-dom';
 import { gql, useMutation, ExecutionResult } from '@apollo/client';
 import Loader from '../../../components/Loader/Loader';
+import Utils from '../../../utils';
 
 const CreateProjectPage = () => {
   const user = useUser();
@@ -29,18 +30,6 @@ const CreateProjectPage = () => {
         el.scrollIntoView();
       }
     }
-  };
-
-  const uploadImage = async (file: any, description: string) => {
-    const body = new FormData();
-    body.append('Image', file);
-    body.append('ImageDescription', description);
-  
-    return await fetch(`${process.env.REACT_APP_BACKEND_URL}/image`, {
-      method: 'POST',
-      body,
-      credentials: 'include'
-    }).then((response) => response.json());
   };
   
   const [createProject] = useMutation(gql`
@@ -65,14 +54,16 @@ const CreateProjectPage = () => {
     setSubmitting(true);
     setStatus(null);
 
-    const bannerId = form.banner ? await uploadImage(form.banner, form.projectName) : null;
-    const imageId = form.image ? await uploadImage(form.image, form.imageDescription) : null;
+    const bannerId = form.banner ? await Utils.uploadImage(form.banner, form.projectName, 1600) : null;
+    const imageId = form.image ? await Utils.uploadImage(form.image, form.imageDescription, 1600) : null;
+    const cardId = form.banner ? await Utils.uploadImage(form.banner, form.projectName, 370) : null;
 
     const response = (await createProject({
       variables: {
         project: {
           name: form.projectName,
           bannerImageFileId: bannerId || null,
+          cardImageFileId: cardId || null,
           categories: [form.category],
           target: form.target,
           proposal: form.proposal,

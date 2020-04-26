@@ -17,6 +17,7 @@ using Microsoft.Extensions.Logging;
 using CollAction.Data;
 using Microsoft.EntityFrameworkCore;
 using Hangfire.Server;
+using System.ComponentModel.DataAnnotations;
 
 namespace CollAction.Services.Image
 {
@@ -29,9 +30,8 @@ namespace CollAction.Services.Image
         private readonly IRecurringJobManager recurringJobManager;
         private readonly ILogger<AmazonS3ImageService> logger;
         private readonly ApplicationDbContext context;
-        private readonly int imageResizeThreshold;
 
-        public AmazonS3ImageService(IOptions<ImageServiceOptions> options, IOptions<ImageProcessingOptions> processingOptions, IBackgroundJobClient jobClient, IRecurringJobManager recurringJobManager, ApplicationDbContext context, ILogger<AmazonS3ImageService> logger)
+        public AmazonS3ImageService(IOptions<ImageServiceOptions> options, IBackgroundJobClient jobClient, IRecurringJobManager recurringJobManager, ApplicationDbContext context, ILogger<AmazonS3ImageService> logger)
         {
             this.jobClient = jobClient;
             this.recurringJobManager = recurringJobManager;
@@ -40,13 +40,12 @@ namespace CollAction.Services.Image
             client = new AmazonS3Client(options.Value.S3AwsAccessKeyID, options.Value.S3AwsAccessKey, RegionEndpoint.GetBySystemName(options.Value.S3Region));
             bucket = options.Value.S3Bucket;
             region = options.Value.S3Region;
-            imageResizeThreshold = processingOptions.Value.MaxImageDimensionPixels;
         }
 
-        public async Task<ImageFile> UploadImage(IFormFile fileUploaded, string imageDescription, CancellationToken token)
+        public async Task<ImageFile> UploadImage(IFormFile fileUploaded, string imageDescription, int imageResizeThreshold, CancellationToken token)
         {
             logger.LogInformation("Uploading image");
-            using Image<Rgba32> image = await UploadToImage(fileUploaded, token).ConfigureAwait(false);
+            using Image<Rgba32> image = await UploadToImage(fileUploaded, imageResizeThreshold, token).ConfigureAwait(false);
             var currentImage = new ImageFile(filepath: $"{Guid.NewGuid()}.png", date: DateTime.UtcNow, description: imageDescription, height: image.Height, width: image.Width);
 
             logger.LogInformation("Queuing for s3 upload");
@@ -152,13 +151,35 @@ namespace CollAction.Services.Image
             client.Dispose();
         }
 
-        private async Task<Image<Rgba32>> UploadToImage(IFormFile fileUploaded, CancellationToken token)
+        private static double GetScaleRatioForImage(Image<Rgba32> image, int imageResizeThreshold)
+        {
+            if (imageResizeThreshold < 1)
+            {
+                throw new ValidationException($"Invalid image resize threshold: {imageResizeThreshold}");
+            }
+
+            if (image.Width > imageResizeThreshold || image.Height > imageResizeThreshold)
+            {
+                if (image.Width > image.Height) 
+                {
+                    return (double)imageResizeThreshold / image.Width;
+                }
+                else
+                {
+                    return (double)imageResizeThreshold / image.Height;
+                }
+            }
+
+            return 1.0;
+        }
+
+        private async Task<Image<Rgba32>> UploadToImage(IFormFile fileUploaded, int imageResizeThreshold, CancellationToken token)
         {
             using Stream uploadStream = fileUploaded.OpenReadStream();
             using MemoryStream ms = new MemoryStream();
             await uploadStream.CopyToAsync(ms, token).ConfigureAwait(false);
             var image = SixLabors.ImageSharp.Image.Load(ms.ToArray());
-            var scaleRatio = GetScaleRatioForImage(image);
+            var scaleRatio = GetScaleRatioForImage(image, imageResizeThreshold);
             if (scaleRatio != 1.0)
             {
                 image.Mutate(x => x
@@ -173,23 +194,6 @@ namespace CollAction.Services.Image
             using MemoryStream ms = new MemoryStream();
             image.SaveAsPng(ms);
             return ms.ToArray();
-        }
-
-        private double GetScaleRatioForImage(Image<Rgba32> image)
-        {
-            if (image.Width > imageResizeThreshold || image.Height > imageResizeThreshold)
-            {
-                if (image.Width > image.Height) 
-                {
-                    return (double)imageResizeThreshold / image.Width;
-                }
-                else
-                {
-                    return (double)imageResizeThreshold / image.Height;
-                }
-            }
-
-            return 1.0;
         }
     }
 }

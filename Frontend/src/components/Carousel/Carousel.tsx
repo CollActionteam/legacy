@@ -18,8 +18,8 @@ import styles from "./Carousel.module.scss";
 import { Alert } from "../Alert/Alert";
 
 interface ICarouselProps {
-  title?: string;
-  text?: any;
+  title: string;
+  text: string;
 }
 
 export default ({ title, text }: ICarouselProps) => {
@@ -52,7 +52,7 @@ export default ({ title, text }: ICarouselProps) => {
       <Grid container className={styles.container}>
         <Grid item sm={12} md={3}>
           <div className={styles.intro}>
-            <h2 className={styles.introTitle}>{title}</h2>
+            <h2 className={styles.introTitle}>{ title }</h2>
             <p
               className={styles.introText}
               dangerouslySetInnerHTML={{ __html: text }}

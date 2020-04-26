@@ -43,6 +43,8 @@ namespace CollAction.Services.Projects.Models
         [DataType(DataType.Date)]
         public DateTime End { get; set; }
 
+        public int? CardImageFileId { get; set; }
+
         public int? BannerImageFileId { get; set; }
 
         public int? DescriptiveImageFileId { get; set; }

@@ -9,10 +9,11 @@ export default class Utils {
     );
   }
 
-  static async uploadImage(file: File, description: string): Promise<any> {
+  static async uploadImage(file: File, description: string, resizeThreshold: number): Promise<any> {
     const body = new FormData();
     body.append('Image', file);
     body.append('ImageDescription', description);
+    body.append('ImageResizeThreshold', resizeThreshold.toString());
     const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/image`, {
       method: 'POST',
       body,

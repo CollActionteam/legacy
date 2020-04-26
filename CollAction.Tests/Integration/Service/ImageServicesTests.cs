@@ -46,7 +46,7 @@ namespace CollAction.Tests.Integration.Service
                    async scope =>
                    {
                        imageService = scope.ServiceProvider.GetRequiredService<IImageService>();
-                       Models.ImageFile imageFile = await imageService.UploadImage(upload.Object, "test", CancellationToken.None).ConfigureAwait(false);
+                       Models.ImageFile imageFile = await imageService.UploadImage(upload.Object, "test", 1600, CancellationToken.None).ConfigureAwait(false);
 
                        Assert.IsNotNull(imageFile);
                        Assert.IsNotNull(imageFile.Filepath);
@@ -66,7 +66,7 @@ namespace CollAction.Tests.Integration.Service
                    async scope =>
                    {
                        imageService = scope.ServiceProvider.GetRequiredService<IImageService>();
-                       Models.ImageFile imageFile = await imageService.UploadImage(upload.Object, "test", CancellationToken.None).ConfigureAwait(false);
+                       Models.ImageFile imageFile = await imageService.UploadImage(upload.Object, "test", 1600, CancellationToken.None).ConfigureAwait(false);
                        await imageService.DeleteImage(imageFile, CancellationToken.None).ConfigureAwait(false);
 
                        upload.Verify(f => f.OpenReadStream());

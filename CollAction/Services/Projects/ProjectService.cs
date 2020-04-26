@@ -131,6 +131,7 @@ namespace CollAction.Services.Projects
                 descriptionVideoLink: newProject.DescriptionVideoLink?.Replace("www.youtube.com", "www.youtube-nocookie.com", StringComparison.Ordinal),
                 displayPriority: ProjectDisplayPriority.Medium, 
                 bannerImageFileId: newProject.BannerImageFileId,
+                cardImageFileId: newProject.CardImageFileId,
                 descriptiveImageFileId: newProject.DescriptiveImageFileId,
                 categories: newProject.Categories.Select(c => new ProjectCategory((c))).ToList(), 
                 tags: projectTags);
@@ -212,6 +213,7 @@ namespace CollAction.Services.Projects
             project.Start = updatedProject.Start;
             project.End = updatedProject.End.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
             project.BannerImageFileId = updatedProject.BannerImageFileId;
+            project.CardImageFileId = updatedProject.CardImageFileId;
             project.DescriptiveImageFileId = updatedProject.DescriptiveImageFileId;
             project.DescriptionVideoLink = updatedProject.DescriptionVideoLink?.Replace("www.youtube.com", "www.youtube-nocookie.com", StringComparison.Ordinal);
             project.Status = updatedProject.Status;
@@ -505,6 +507,8 @@ namespace CollAction.Services.Projects
         public async Task SeedRandomProjects(IEnumerable<ApplicationUser> users, CancellationToken cancellationToken)
         {
             Random r = new Random();
+            const int MaxImageBannerDimensionPixels = 1600;
+            const int MaxImageCardDimensionPixels = 370;
 
             string?[] videoLinks = new[]
             {
@@ -567,12 +571,16 @@ namespace CollAction.Services.Projects
                 (Uri descriptiveImageUrl, Task<byte[]> descriptiveImageBytes) = descriptiveImages[r.Next(descriptiveImages.Count)];
                 ImageFile? descriptiveImage = r.Next(3) == 0
                                                   ? null
-                                                  : await imageService.UploadImage(ToFormFile(descriptiveImageBytes.Result, descriptiveImageUrl), Faker.Company.BS(), cancellationToken).ConfigureAwait(false);
+                                                  : await imageService.UploadImage(ToFormFile(descriptiveImageBytes.Result, descriptiveImageUrl), Faker.Company.BS(), MaxImageBannerDimensionPixels, cancellationToken).ConfigureAwait(false);
 
                 (Uri bannerImageUrl, Task<byte[]> bannerImageBytes) = bannerImages[r.Next(bannerImages.Count)];
                 ImageFile? bannerImage = r.Next(3) == 0
                                              ? null
-                                             : await imageService.UploadImage(ToFormFile(bannerImageBytes.Result, bannerImageUrl), Faker.Company.BS(), cancellationToken).ConfigureAwait(false);
+                                             : await imageService.UploadImage(ToFormFile(bannerImageBytes.Result, bannerImageUrl), Faker.Company.BS(), MaxImageBannerDimensionPixels, cancellationToken).ConfigureAwait(false);
+
+                ImageFile? cardImage = bannerImage == null
+                                          ? null
+                                          : await imageService.UploadImage(ToFormFile(bannerImageBytes.Result, bannerImageUrl), Faker.Company.BS(), MaxImageCardDimensionPixels, cancellationToken).ConfigureAwait(false);
 
                 List<ProjectParticipant> projectParticipants = userIds
                         .Where(userId => r.Next(3) == 0)

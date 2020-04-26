@@ -7,6 +7,11 @@ export const Fragments = {
     categories {
       category
     }
+    cardImage {
+      id
+      description
+      url
+    }
     bannerImage {
       id
       description

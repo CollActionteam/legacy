@@ -17,6 +17,7 @@ namespace CollAction.GraphQl.Mutations.Input
             Field(x => x.Start);
             Field(x => x.End);
             Field(x => x.BannerImageFileId, true);
+            Field(x => x.CardImageFileId, true);
             Field(x => x.DescriptiveImageFileId, true);
             Field(x => x.DescriptionVideoLink, true);
             Field(x => x.Tags);

@@ -68,6 +68,8 @@ export interface IProject {
   creatorComments: string;
   description: string;
   descriptionVideoLink: string;
+  cardImage: IImageFile;
+  cardImageFileId: string;
   descriptiveImage: IImageFile;
   descriptiveImageFileId: string;
   displayPriority: ProjectDisplayPriority;
@@ -88,7 +90,7 @@ export interface IProject {
   percentage: number;
   participants: IProjectParticipant[];
   proposal: string;
-  remainingTime: any;
+  remainingTime: number;
   remainingTimeUserFriendly: string;
   status: ProjectStatus;
   tags: IProjectTag[];
@@ -101,7 +103,7 @@ export interface IProjectParticipant {
   id: string;
   project: IProject;
   subscribedToProjectEmails: boolean;
-  unsubscribeToken: any;
+  unsubscribeToken: string;
   user: IUser;
 }
 

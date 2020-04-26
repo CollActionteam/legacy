@@ -110,12 +110,13 @@ export default ({ projectId } : IEditProjectProps): any => {
             initialized: Yup.boolean().oneOf([true], "Data must be loaded")
         }),
         onSubmit: async (values: any) => {
-            const uploads = { banner: null, descriptive: null };
+            const uploads = { banner: null, descriptive: null, card: null };
             if (bannerImage !== null) {
-                uploads.banner = await Utils.uploadImage(bannerImage, values.bannerImageDescription);
+                uploads.banner = await Utils.uploadImage(bannerImage, values.bannerImageDescription, 1600);
+                uploads.card = await Utils.uploadImage(bannerImage, values.bannerImageDescription, 370);
             }
             if (descriptiveImage !== null) {
-                uploads.descriptive = await Utils.uploadImage(descriptiveImage, values.descriptiveImageDescription);
+                uploads.descriptive = await Utils.uploadImage(descriptiveImage, values.descriptiveImageDescription, 1600);
             }
 
             await updateProject({
@@ -138,6 +139,7 @@ export default ({ projectId } : IEditProjectProps): any => {
                         tags: values.tags.split(';').filter((i: string | null) => i),
                         ownerId: values.ownerId === "" ? null : values.ownerId,
                         bannerImageFileId: uploads.banner ?? data.project.bannerImage?.Id,
+                        cardImageFileId: uploads.card ?? data.project.cardImage?.id,
                         descriptiveImageFileId: uploads.descriptive ?? data.project.descriptiveImage?.Id
                     }
                 }

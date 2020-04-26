@@ -8,7 +8,7 @@ namespace CollAction.Services.Image
 {
     public interface IImageService : IDisposable
     {
-        Task<ImageFile> UploadImage(IFormFile fileUploaded, string imageDescription, CancellationToken token);
+        Task<ImageFile> UploadImage(IFormFile fileUploaded, string imageDescription, int imageResizeThreshold, CancellationToken token);
 
         Task DeleteImage(ImageFile imageFile, CancellationToken token);
 

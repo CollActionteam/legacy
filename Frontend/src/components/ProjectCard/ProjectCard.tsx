@@ -15,7 +15,7 @@ export default ({ project }: { project: IProject }) => {
   return (
     <a href={project.url} className={styles.card}>
       <figure className={styles.image}>
-        { project.bannerImage ? <img src={project.bannerImage.url} alt={project.name} /> : <img src={defaultBanner} alt={project.name} /> }
+        { project.cardImage ? <img src={project.cardImage.url} alt={project.cardImage.description} /> : <img src={defaultBanner} alt={project.name} /> }
       </figure>
       <div className={styles.content}>
         <div className={styles.statusLabel}>
