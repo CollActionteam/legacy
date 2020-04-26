@@ -95,7 +95,8 @@ const googleAnalyticsClientId = getCookie('_ga');
 const defaultAnalytics = {
     utm: { source: null, medium: null, campaign: null, term: null, content: null} as UtmTags,
     sendUserEvent: async (_needsConsent: boolean, _eventCategory: string, _eventAction: string, _eventLabel: string, _eventValue: string | null) => { },
-    checkAndUpdateAnalyticsState: () => { }
+    checkAndUpdateAnalyticsState: () => { },
+    externalAnalyticsInitialized: false
 };
 
 export const AnalyticsContext = React.createContext(defaultAnalytics);
@@ -105,6 +106,7 @@ export const useAnalytics = () => useContext(AnalyticsContext);
 export default ({ children }: any) => {
     const { consent } = useConsent();
     const [ bufferedEvents, setBufferedEvents ] = useState<string[]>([]);
+    const [ externalAnalyticsInitialized, setExternalAnalyticsInitialized ] = useState(false);
     const { googleAnalyticsID, facebookPixelID } = useSettings();
     const pixelConsent = consent.includes(Consent.Analytics) && consent.includes(Consent.Social);
 
@@ -124,12 +126,13 @@ export default ({ children }: any) => {
     }, [ referrer ]);
 
     useEffect(() => {
-        if (googleAnalyticsID && facebookPixelID) {
+        if (googleAnalyticsID && facebookPixelID && !externalAnalyticsInitialized) {
             ReactGA.initialize(googleAnalyticsID);
             // Only load pixel when the user originates from facebook/instagram
             if ((utm.source === "facebook" || utm.source === "instagram") && pixelConsent) {
                 ReactPixel.init(facebookPixelID);
             }
+            setExternalAnalyticsInitialized(true);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ googleAnalyticsID, facebookPixelID, pixelConsent ]);
@@ -191,7 +194,7 @@ export default ({ children }: any) => {
         }
     }
 
-    const contextValue = { utm, sendUserEvent, checkAndUpdateAnalyticsState };
+    const contextValue = { utm, sendUserEvent, checkAndUpdateAnalyticsState, externalAnalyticsInitialized };
 
     return <AnalyticsContext.Provider value={contextValue}>
         { children }

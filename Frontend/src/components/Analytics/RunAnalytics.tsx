@@ -9,14 +9,23 @@ export default () => {
     const { consent } = useConsent();
     const { pathname, search } = useLocation();
     const pixelConsent = consent.includes(Consent.Analytics) && consent.includes(Consent.Social);
-    const { sendUserEvent, utm, checkAndUpdateAnalyticsState } = useAnalytics();
+    const { sendUserEvent, utm, checkAndUpdateAnalyticsState, externalAnalyticsInitialized } = useAnalytics();
 
     useEffect(() => {
         checkAndUpdateAnalyticsState();
         sendUserEvent(false, 'pageview', 'navigate', pathname, null);
-        ReactGA.pageview(pathname + search);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [ pathname, search ]);
+
+    useEffect(() => {
+        if (externalAnalyticsInitialized) {
+            ReactGA.pageview(pathname + search);
+        }
+    }, [pathname, search, externalAnalyticsInitialized ]);
+
+    useEffect(() => {
         // Only load pixel when the user originates from facebook/instagram
-        if ((utm.source === "facebook" || utm.source === "instagram") && pixelConsent) { 
+        if (externalAnalyticsInitialized && (utm.source === "facebook" || utm.source === "instagram") && pixelConsent) { 
             ReactPixel.track('PageView', null);
             if (pathname.startsWith("/projects") && pathname.endsWith("/thankyou")) {
                 ReactPixel.track('SubmitApplication', null);
@@ -25,8 +34,7 @@ export default () => {
                 ReactPixel.track('Donate', null);
             }
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [ pathname, search, pixelConsent ]);
+    }, [ pathname, search, pixelConsent, externalAnalyticsInitialized, utm ]);
 
     return null;
 };
