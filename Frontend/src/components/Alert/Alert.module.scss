@@ -1,3 +1,9 @@
+.error, .success, .info, .warning {
+    a {
+        color: var(--c-white);
+    }
+}
+
 .error {
     color: white;
     background-color: rgba(red, 0.6);
