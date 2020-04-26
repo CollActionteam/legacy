@@ -9,7 +9,7 @@ export default () => {
     const { consent } = useConsent();
     const { pathname, search } = useLocation();
     const pixelConsent = consent.includes(Consent.Analytics) && consent.includes(Consent.Social);
-    const { sendUserEvent, utm, checkAndUpdateAnalyticsState, externalAnalyticsInitialized } = useAnalytics();
+    const { sendUserEvent, utm, checkAndUpdateAnalyticsState, gaInitialized, pixelInitialized } = useAnalytics();
 
     useEffect(() => {
         checkAndUpdateAnalyticsState();
@@ -18,14 +18,14 @@ export default () => {
     }, [ pathname, search ]);
 
     useEffect(() => {
-        if (externalAnalyticsInitialized) {
+        if (gaInitialized) {
             ReactGA.pageview(pathname + search);
         }
-    }, [pathname, search, externalAnalyticsInitialized ]);
+    }, [pathname, search, gaInitialized ]);
 
     useEffect(() => {
         // Only load pixel when the user originates from facebook/instagram
-        if (externalAnalyticsInitialized && (utm.source === "facebook" || utm.source === "instagram") && pixelConsent) { 
+        if (pixelInitialized && (utm.source === "facebook" || utm.source === "instagram") && pixelConsent) { 
             ReactPixel.track('PageView', null);
             if (pathname.startsWith("/projects") && pathname.endsWith("/thankyou")) {
                 ReactPixel.track('SubmitApplication', null);
@@ -34,7 +34,7 @@ export default () => {
                 ReactPixel.track('Donate', null);
             }
         }
-    }, [ pathname, search, pixelConsent, externalAnalyticsInitialized, utm ]);
+    }, [ pathname, search, pixelConsent, pixelInitialized, utm ]);
 
     return null;
 };

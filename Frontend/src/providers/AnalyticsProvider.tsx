@@ -96,7 +96,8 @@ const defaultAnalytics = {
     utm: { source: null, medium: null, campaign: null, term: null, content: null} as UtmTags,
     sendUserEvent: async (_needsConsent: boolean, _eventCategory: string, _eventAction: string, _eventLabel: string, _eventValue: string | null) => { },
     checkAndUpdateAnalyticsState: () => { },
-    externalAnalyticsInitialized: false
+    gaInitialized: false,
+    pixelInitialized: false
 };
 
 export const AnalyticsContext = React.createContext(defaultAnalytics);
@@ -106,7 +107,8 @@ export const useAnalytics = () => useContext(AnalyticsContext);
 export default ({ children }: any) => {
     const { consent } = useConsent();
     const [ bufferedEvents, setBufferedEvents ] = useState<string[]>([]);
-    const [ externalAnalyticsInitialized, setExternalAnalyticsInitialized ] = useState(false);
+    const [ gaInitialized, setGaInitialized ] = useState(false);
+    const [ pixelInitialized, setPixelInitialized ] = useState(false);
     const { googleAnalyticsID, facebookPixelID } = useSettings();
     const pixelConsent = consent.includes(Consent.Analytics) && consent.includes(Consent.Social);
 
@@ -126,16 +128,21 @@ export default ({ children }: any) => {
     }, [ referrer ]);
 
     useEffect(() => {
-        if (googleAnalyticsID && facebookPixelID && !externalAnalyticsInitialized) {
+        if (googleAnalyticsID && !gaInitialized) {
             ReactGA.initialize(googleAnalyticsID);
-            // Only load pixel when the user originates from facebook/instagram
-            if ((utm.source === "facebook" || utm.source === "instagram") && pixelConsent) {
-                ReactPixel.init(facebookPixelID);
-            }
-            setExternalAnalyticsInitialized(true);
+            setGaInitialized(true);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [ googleAnalyticsID, facebookPixelID, pixelConsent ]);
+    }, [ googleAnalyticsID ]);
+
+    useEffect(() => {
+        // Only load pixel when the user originates from facebook/instagram
+        if ((utm.source === "facebook" || utm.source === "instagram") && pixelConsent && !pixelInitialized) {
+            ReactPixel.init(facebookPixelID);
+            setPixelInitialized(true);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [ facebookPixelID, pixelConsent ]);
 
     const checkAndUpdateUtm = () => {
         const checked = parseUtm();
@@ -194,7 +201,7 @@ export default ({ children }: any) => {
         }
     }
 
-    const contextValue = { utm, sendUserEvent, checkAndUpdateAnalyticsState, externalAnalyticsInitialized };
+    const contextValue = { utm, sendUserEvent, checkAndUpdateAnalyticsState, gaInitialized, pixelInitialized };
 
     return <AnalyticsContext.Provider value={contextValue}>
         { children }
