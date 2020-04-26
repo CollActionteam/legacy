@@ -49,7 +49,14 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
       } : {
         email: Yup.string() 
       }),
-    onSubmit: _values => { user === null ? commitToProjectAnonymous() : commitToProjectLoggedIn() }
+    onSubmit: async (_values) => { 
+      if (user === null) {
+          await commitToProjectAnonymous();
+       } else {
+          await commitToProjectLoggedIn();
+       }
+       formik.setSubmitting(false);
+    }
   });
   const onCommit = (data: any) => {
     const error = data.project.commit.error;

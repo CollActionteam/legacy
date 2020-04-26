@@ -28,6 +28,7 @@ export default () => {
                       .map(([k, _v]) => parseInt(k) as Consent);
             setConsent(selectedConsents);
             setInfo("You've given consent. This dialog will remain open in case you want to further update your choices.")
+            formik.setSubmitting(false);
         }
     });
 

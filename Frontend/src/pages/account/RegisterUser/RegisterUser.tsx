@@ -96,8 +96,8 @@ const RegisterUserPage = () => {
             isSubscribedNewsletter: Yup.bool(),
             privacyPolicy: Yup.bool().oneOf([true], "Please agree to our privacy policy")
         }),
-        onSubmit: (values) => {
-            createUser({
+        onSubmit: async (values) => {
+            await createUser({
                 variables: {
                     user: {
                         firstName: values.firstName,
@@ -108,6 +108,7 @@ const RegisterUserPage = () => {
                     }
                 }
             });
+            formik.setSubmitting(false);
         }
     });
 

@@ -118,7 +118,7 @@ export default ({ projectId } : IEditProjectProps): any => {
                 uploads.descriptive = await Utils.uploadImage(descriptiveImage, values.descriptiveImageDescription);
             }
 
-            updateProject({
+            await updateProject({
                 variables: {
                     project: {
                         id: data.project.id,
@@ -142,6 +142,7 @@ export default ({ projectId } : IEditProjectProps): any => {
                     }
                 }
             });
+            formik.setSubmitting(false);
         }
     });
     if (data && !formik.values.initialized) {

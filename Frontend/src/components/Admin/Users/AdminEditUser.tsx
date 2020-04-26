@@ -69,8 +69,8 @@ export default ({ userId } : IEditUserProps): any => {
             isAdmin: Yup.boolean(),
             initialized: Yup.boolean().oneOf([true], "Data must be loaded")
         }),
-        onSubmit: values => {
-            updateUser({ variables: {
+        onSubmit: async (values) => {
+            await updateUser({ variables: {
                 user: {
                     id: userId,
                     email: data.user.email,
@@ -81,6 +81,7 @@ export default ({ userId } : IEditUserProps): any => {
                     representsNumberParticipants: values.representsNumberParticipants
                 }
             }});
+            formik.setSubmitting(false);
         }
     });
     if (data && !formik.values.initialized) {
