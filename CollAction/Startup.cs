@@ -19,9 +19,6 @@ using CollAction.Services.Image;
 using Stripe;
 using CollAction.Services.Donation;
 using CollAction.Services;
-using Serilog.Events;
-using Serilog.Sinks.Slack;
-using Microsoft.ApplicationInsights.Extensibility;
 using CollAction.Services.ViewRender;
 using MailChimp.Net;
 using MailChimp.Net.Interfaces;
@@ -104,22 +101,6 @@ namespace CollAction
             }
 
             services.AddApplicationInsightsTelemetry(configuration);
-
-            services.AddLogging(loggingBuilder =>
-            {
-                LoggerConfiguration configuration = new LoggerConfiguration()
-                       .WriteTo.Console(LogEventLevel.Information)
-                       .WriteTo.ApplicationInsights(TelemetryConfiguration.Active, TelemetryConverter.Traces);
-
-                string slackHook = this.configuration["SlackHook"];
-                if (slackHook != null)
-                {
-                    configuration.WriteTo.Slack(slackHook, restrictedToMinimumLevel: LogEventLevel.Error);
-                }
-
-                Log.Logger = configuration.CreateLogger();
-                loggingBuilder.AddSerilog(Log.Logger);
-            });
 
             services.AddMvc()
                     .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
@@ -206,6 +187,7 @@ namespace CollAction
         {
             app.UseRouting();
             app.UseCors();
+            app.UseSerilogRequestLogging();
 
             if (environment.IsProduction())
             {
@@ -231,11 +213,8 @@ namespace CollAction
             }
 
             app.UseAuthentication();
-
             app.UseAuthorization();
-
             app.UseHangfireServer(new BackgroundJobServerOptions() { WorkerCount = 1 });
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHangfireDashboard(new DashboardOptions()

@@ -70,11 +70,9 @@ namespace CollAction.Services.Donation
         private readonly ApplicationDbContext context;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RequestOptions requestOptions;
-        private readonly SiteOptions siteOptions;
 
         public DonationService(
             IOptions<RequestOptions> requestOptions,
-            IOptions<SiteOptions> siteOptions, 
             UserManager<ApplicationUser> userManager,
             ApplicationDbContext context, 
             IBackgroundJobClient backgroundJobClient,
@@ -84,7 +82,6 @@ namespace CollAction.Services.Donation
             ILogger<DonationService> logger)
         {
             this.requestOptions = requestOptions.Value;
-            this.siteOptions = siteOptions.Value;
             this.backgroundJobClient = backgroundJobClient;
             this.stripeSignatures = stripeSignatures.Value;
             this.context = context;

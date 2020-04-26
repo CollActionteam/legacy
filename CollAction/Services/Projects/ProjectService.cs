@@ -40,7 +40,7 @@ namespace CollAction.Services.Projects
         private readonly IImageService imageService;
         private readonly IRecurringJobManager recurringJobManager;
         private const int MaxNumberProjectEmails = 4;
-        private static TimeSpan TimeEmailAllowedAfterProjectEnd = TimeSpan.FromDays(180);
+        private static readonly TimeSpan TimeEmailAllowedAfterProjectEnd = TimeSpan.FromDays(180);
 
         public ProjectService(
             UserManager<ApplicationUser> userManager,
