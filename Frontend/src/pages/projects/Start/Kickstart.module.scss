@@ -4,6 +4,12 @@
   padding: var(--spacing-lg);
 
   display: flex;
+  justify-content: space-between;
+}
+
+.title {
+  color: var(--c-green);
+  margin-bottom: var(--spacing);
 }
 
 .image {
@@ -11,7 +17,3 @@
   margin-left: var(--spacing);
 }
 
-.title {
-  color: var(--c-green);
-  margin-bottom: var(--spacing);
-}

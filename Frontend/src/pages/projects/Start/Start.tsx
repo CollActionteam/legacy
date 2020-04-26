@@ -43,9 +43,11 @@ const StartProjectPage = () => {
       <Grid container>
         <Grid item md={2}></Grid>
         <Grid item md={8} xs={12}>
-          <div className={styles.kickstart}>
-            <Kickstart></Kickstart>
-          </div>
+          <Section>
+            <div className={styles.kickstart}>
+              <Kickstart></Kickstart>
+            </div>
+          </Section>
         </Grid>
       </Grid>
     </React.Fragment>
