@@ -10,7 +10,7 @@ export default ({ project }: { project: IProject }) => {
     ? project.categories[0].category
     : "OTHER";
 
-  const defaultBanner = require(`../../assets/default_banners/${defaultCategoryImage}.jpg`);
+  const defaultBanner = require(`../../assets/default_card_images/${defaultCategoryImage}.jpg`);
 
   return (
     <a href={project.url} className={styles.card}>

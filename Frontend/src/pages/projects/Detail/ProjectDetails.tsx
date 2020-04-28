@@ -140,7 +140,7 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
       __html: project.creatorComments,
     };
 
-    const defaultBanner = require(`../../../assets/default_banners/${project.categories[0] ? project.categories[0].category : "OTHER"}.jpg`);
+    const defaultBanner = require(`../../../assets/default_banner_images/${project.categories[0] ? project.categories[0].category : "OTHER"}.jpg`);
 
     return <React.Fragment>
       <Helmet>
