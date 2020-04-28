@@ -48,7 +48,7 @@ namespace CollAction
 
         public void ConfigureServices(IServiceCollection services)
         {
-            string connectionString = $"Host={configuration["DbHost"]};Username={configuration["DbUser"]};Password={this.configuration["DbPassword"]};Database={configuration["Db"]};Port={configuration["DbPort"]}";
+            string connectionString = $"Host={configuration["DbHost"]};Username={configuration["DbUser"]};Password={configuration["DbPassword"]};Database={configuration["Db"]};Port={configuration["DbPort"]}";
             services.AddGraphQl();
             services.AddGraphQlAuth();
 
