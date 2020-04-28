@@ -597,6 +597,7 @@ namespace CollAction.Services.Projects
                         tags: projectTags,
                         bannerImageFileId: bannerImage?.Id,
                         descriptiveImageFileId: descriptiveImage?.Id,
+                        cardImageFileId: cardImage?.Id,
                         creatorComments: r.Next(4) == 0 ? null : $"<p>{string.Join("</p><p>", Faker.Lorem.Paragraphs(r.Next(3) + 1))}</p>",
                         displayPriority: (ProjectDisplayPriority)r.Next(0, 2),
                         goal: Faker.Company.CatchPhrase(),
