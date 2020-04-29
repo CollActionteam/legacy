@@ -11,7 +11,9 @@ namespace CollAction.ViewModels.Upload
         [Display(Name = "Image description")]
         public string ImageDescription { get; set; } = null!;
 
-        public int ImageResizeThreshold { get; set; } = 1;
+        [Required]
+        [Range(1, 2000)]
+        public int ImageResizeThreshold { get; set; }
 
         [Required]
         [FileSize(1024000)] // 1MB
