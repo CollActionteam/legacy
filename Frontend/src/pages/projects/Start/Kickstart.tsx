@@ -1,8 +1,6 @@
-
 import React from "react";
-
 import Arrow from "../../../assets/step3.png";
-
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import styles from "./Kickstart.module.scss";
 
 const Kickstart = () => {
@@ -14,7 +12,7 @@ const Kickstart = () => {
           Want to discuss your project idea with the CollAction team? Send us an email at <a href="mailto:hello@collaction.org">hello@collaction.org</a>.
         </p>
       </div>
-      <img className={styles.image} src={Arrow} alt=""></img>
+      <LazyLoadImage className={styles.image} src={Arrow} alt="arrow" />
     </div>
   );
 }

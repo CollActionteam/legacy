@@ -4,7 +4,7 @@ import { Grid } from '@material-ui/core';
 import styles from './About.module.scss';
 import { Section } from '../../components/Section/Section';
 import { Faq } from '../../components/Faq/Faq';
-
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { useTranslation } from 'react-i18next';
 import Helmet from 'react-helmet';
 
@@ -20,7 +20,7 @@ const AboutPage = () => {
     const photo = require(`../../assets/${member.photo}`);
     return (
       <li key={member.name} className={styles.teamMember}>
-        <img src={photo} alt={member.name} title={member.name} />
+        <LazyLoadImage src={photo} alt={member.name} title={member.name} />
         <span>{member.name}</span>
       </li>
     );

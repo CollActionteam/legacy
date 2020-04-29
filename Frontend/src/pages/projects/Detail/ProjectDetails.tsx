@@ -22,6 +22,7 @@ import { Section } from "../../../components/Section/Section";
 import styles from "./ProjectDetails.module.scss";
 import DisqusProjectComments from "../../../components/DisqusProjectComments/DisqusProjectComments";
 import { ProjectStarter } from "../../../components/ProjectStarter/ProjectStarter";
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import Helmet from "react-helmet";
 
 type TParams = {
@@ -156,7 +157,7 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
           <Grid item md={7} xs={12}>
             <Container className={styles.bannerImage}>
               <figure className={styles.image}>
-                { project.bannerImage ? <img src={project.bannerImage.url} alt={project.name} /> : <img src={defaultBanner} alt={project.name} /> }
+                { project.bannerImage ? <LazyLoadImage src={project.bannerImage.url} alt={project.name} /> : <LazyLoadImage src={defaultBanner} alt={project.name} /> }
               </figure>
             </Container>
           </Grid>
@@ -193,7 +194,7 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
               {project.descriptiveImage && (
                 <div>
                   <figure className={styles.image}>
-                    <img src={project.descriptiveImage.url} alt={project.descriptiveImage.description} />
+                    <LazyLoadImage src={project.descriptiveImage.url} alt={project.descriptiveImage.description} />
                     <p>{project.descriptiveImage.description}</p>
                   </figure>
                 </div>

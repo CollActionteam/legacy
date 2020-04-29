@@ -4,7 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import ProjectIdea from "../../../assets/project-idea.png";
 import ShareProject from "../../../assets/share-project.png";
 import MakeWaves from "../../../assets/make-waves.png";
-
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 import styles from "./StartProjectSteps.module.scss";
 
@@ -36,12 +36,12 @@ export const StartProjectSteps = () => {
   const Step = (step: StartProjectStep, index: number) => {
     return (
       <Grid key={index} item xs={12} md={4} className={styles.step}>
-          <img
+          <LazyLoadImage
             alt={step.name}
             title={step.name}
             src={step.image}
             className={styles.image}
-          ></img>
+          />
           <h3>{step.name}</h3>
           <p>{step.text}</p>
       </Grid>

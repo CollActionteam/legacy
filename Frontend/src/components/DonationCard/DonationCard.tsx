@@ -10,6 +10,7 @@ import iDealLogo from "../../assets/i-deal-logo.png";
 import { useMutation, gql } from "@apollo/client";
 import { loadStripe } from '@stripe/stripe-js';
 import { GET_USER } from "../../providers/UserProvider";
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import {
   Elements,
   useStripe,
@@ -308,13 +309,13 @@ const InnerDonationCard = () => {
                     <Grid container className={styles.paymentOptions}>
                         <Grid item xs={12}>
                             <Button type="button" className={styles.paymentButton} onClick={async () => { formik.setFieldValue('type', 'popup'); sendUserEvent(true, 'donate', 'select method', 'ideal', formik.values.amount.toString()); formik.submitForm(); }}>
-                                <img src={iDealLogo} alt="iDeal" />
+                                <LazyLoadImage src={iDealLogo} alt="iDeal" />
                                 &nbsp;Debit (iDeal / SEPA Direct)
                             </Button>
                         </Grid>
                         <Grid item xs={12}>
                             <Button type="button" className={styles.paymentButton} onClick={() => { formik.setFieldValue('type', 'credit'); sendUserEvent(true, 'donate', 'select method', 'creditcard', formik.values.amount.toString()); formik.submitForm(); }}>
-                                <img src={bankCard} alt="Creditcard" />
+                                <LazyLoadImage src={bankCard} alt="Creditcard" />
                                 &nbsp;Creditcard
                             </Button>
                         </Grid>
