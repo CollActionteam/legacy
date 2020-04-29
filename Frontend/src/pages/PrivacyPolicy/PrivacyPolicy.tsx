@@ -175,7 +175,7 @@ const PrivacyPolicyPage = () => {
                 or
             </p>
             <p>
-                <a href="mailto:collactionteam@gmail.com">collactionteam@gmail.com</a>
+                <a href="mailto:hello@collaction.org">hello@collaction.org</a>
             </p>
             <p>
                 We will respond to your request in a reasonable timeframe, and in any event within 30 days after receipt.

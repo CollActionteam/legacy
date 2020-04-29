@@ -36,7 +36,7 @@
         },
         "join" : {
             "title" : "Join our team!",
-            "text" : "CollAction is always looking for fun people who want to make a difference by making CollAction the next big thing! Please note that these are all volunteer positions for now (all current team members are volunteers as well :) )<br /><br />We’re looking for:<br /> <br /><ul><li><strong>Communications guru</strong>: As the communications guru you are responsible for developing and implementing our communications strategy and further build the growing CollAction community. For those who need a good excuse to spend all day on Facebook. <a href=\"mailto:collactionteam@gmail.com\">Email</a> us for more info!</li><li><strong>Project Starter</strong>: Do you sometimes think ‘AAAH THE WORLD IS ON FIRE, I NEED TO DO SOMETHING BUT WHAT!?’. Well, maybe chill out first and have some herbal tea :). Then get your hands dirty and <a href=\"/projects/start\">Start a project here</a>."
+            "text" : "CollAction is always looking for fun people who want to make a difference by making CollAction the next big thing! Please note that these are all volunteer positions for now (all current team members are volunteers as well :) )<br /><br />We’re looking for:<br /> <br /><ul><li><strong>Communications guru</strong>: As the communications guru you are responsible for developing and implementing our communications strategy and further build the growing CollAction community. For those who need a good excuse to spend all day on Facebook. <a href=\"mailto:hello@collaction.org\">Email</a> us for more info!</li><li><strong>Project Starter</strong>: Do you sometimes think ‘AAAH THE WORLD IS ON FIRE, I NEED TO DO SOMETHING BUT WHAT!?’. Well, maybe chill out first and have some herbal tea :). Then get your hands dirty and <a href=\"/projects/start\">Start a project here</a>."
         },
         "team" : {
             "title" : "Meet the team",
@@ -109,7 +109,7 @@
         },
         "partners" : {
             "title" : "Our partners",
-            "text" : "We couldn’t do what we’re doing without the support of our great partners, including the ones below. Please [send us an email](mailto:collactionteam@gmail.com) if you want to join this group of early adopters.<br /><br />* [SIDN Fonds](https://www.sidnfonds.nl/)<br />* [Essense](http://essense.eu/)<br />* [Social Coder](http://socialcoder.org/Home/Index)<br />* [De Ceuvel](http://deceuvel.nl/en/)<br />"
+            "text" : "We couldn’t do what we’re doing without the support of our great partners, including the ones below. Please [send us an email](mailto:hello@collaction.org) if you want to join this group of early adopters.<br /><br />* [SIDN Fonds](https://www.sidnfonds.nl/)<br />* [Essense](http://essense.eu/)<br />* [Social Coder](http://socialcoder.org/Home/Index)<br />* [De Ceuvel](http://deceuvel.nl/en/)<br />"
         }
     }
 }

@@ -75,7 +75,7 @@ const DonationPage = () => {
                         <Faq title="How do I cancel my monthly donations" collapsed={true} faqId="cancel_monthly_donation">
                             <p>
                                 You can cancel your recurring donations on your account page or by e-mailing
-                                {" "}<a href="mailto:collactionteam@gmail.com">collactionteam@gmail.com</a>. Cancellations sent through e-mail will be processed within five days,
+                                {" "}<a href="mailto:hello@collaction.org">hello@collaction.org</a>. Cancellations sent through e-mail will be processed within five days,
                                 cancellations through your account page will be processed immediately.
                             </p>
                         </Faq>

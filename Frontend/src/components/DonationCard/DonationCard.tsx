@@ -117,7 +117,7 @@ const InnerDonationCard = () => {
         const ibanElement = elements?.getElement(IbanElement);
         if (!ibanElement) {
             console.error(`Unable to start the SEPA direct transaction: IBAN element not found`);
-            setError("We're unable to start your SEPA direct donation, something is wrong, please contact collactionteam@gmail.com with your issue");
+            setError("We're unable to start your SEPA direct donation, something is wrong, please contact hello@collaction.org with your issue");
             return;
         }
         let response = await stripe!.createSource(ibanElement, {
@@ -133,7 +133,7 @@ const InnerDonationCard = () => {
         });
         if (response.error) {
             console.error(`Unable to start the SEPA direct transaction: ${response.error.message}`);
-            setError("We're unable to start your SEPA direct donation, something is wrong, please contact collactionteam@gmail.com with your issue");
+            setError("We're unable to start your SEPA direct donation, something is wrong, please contact hello@collaction.org with your issue");
             return;
         }
 
@@ -150,7 +150,7 @@ const InnerDonationCard = () => {
         });
         if (initializeResult.errors) {
             console.error(`Unable to start the SEPA direct transaction: ${initializeResult.errors.map(e => e.message).join(", ")}`);
-            setError("We're unable to start your SEPA direct donation, something is wrong, please contact collactionteam@gmail.com with your issue");
+            setError("We're unable to start your SEPA direct donation, something is wrong, please contact hello@collaction.org with your issue");
             return;
         }
         history.push('/donate/thankyou');
@@ -172,7 +172,7 @@ const InnerDonationCard = () => {
         });
         if (response.error) {
             console.error(`Unable to start the iDeal transaction: ${response.error.message}`);
-            setError("We're unable to start your iDeal donation, something is wrong, please contact collactionteam@gmail.com with your issue");
+            setError("We're unable to start your iDeal donation, something is wrong, please contact hello@collaction.org with your issue");
             return;
         }
         const sourceId = response!.source!.id;
@@ -188,7 +188,7 @@ const InnerDonationCard = () => {
         });
         if (initializeResult.errors) {
             console.error(`Unable to start the iDeal transaction: ${initializeResult.errors.map(e => e.message).join(", ")}`);
-            setError("We're unable to start your iDeal donation, something is wrong, please contact collactionteam@gmail.com with your issue");
+            setError("We're unable to start your iDeal donation, something is wrong, please contact hello@collaction.org with your issue");
             return;
         }
         window.location.href = redirectUrl;

@@ -224,7 +224,7 @@ const AboutPage = () => {
                 to do to reach people? How many people can you reach through each channel that you are planning to use
                 (e.g. through your personal network, social media groups, partnering with other organizations/media)?
                 Also, please feel free to browse the projects that have already on the Find Project page, or reach out
-                to <a href="mailto:collactionteam@gmail.com">collactionteam@gmail.com</a> - we're happy to help you
+                to <a href="mailto:hello@collaction.org">hello@collaction.org</a> - we're happy to help you
                 think about this!
             </p>
         </Faq>
