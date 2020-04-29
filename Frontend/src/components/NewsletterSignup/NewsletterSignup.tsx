@@ -63,6 +63,7 @@ export default class NewsletterSignup extends React.Component<
           <input
             type="email"
             placeholder="Fill in your e-mail"
+            aria-label="E-Mail Address"
             name="EMAIL"
             id="mce-EMAIL"
             value={this.state.email}
@@ -81,7 +82,7 @@ export default class NewsletterSignup extends React.Component<
           <button
             name="subscribe"
             id="mc-embedded-subscribe"
-            aria-label="Subscribe Newsletter E-Mail"
+            aria-label="Subscribe Newsletter"
             className={styles.submit}
             disabled={!!this.state.error || !this.state.email}
           >
