@@ -120,6 +120,12 @@ namespace CollAction.Services.Projects
             await context.SaveChangesAsync(token).ConfigureAwait(false);
             await RefreshParticipantCount(token).ConfigureAwait(false);
 
+            if (project.Status == ProjectStatus.Running && project.End <= DateTime.UtcNow)
+            {
+                project.FinishJobId = jobClient.Schedule(() => ProjectEndProcess(project.Id, CancellationToken.None), project.End);
+                await context.SaveChangesAsync().ConfigureAwait(false);
+            }
+
             return project;
         }
 
