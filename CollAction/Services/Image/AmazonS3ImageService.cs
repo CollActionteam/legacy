@@ -130,7 +130,7 @@ namespace CollAction.Services.Image
                   (
                       SELECT NULL
                       FROM public.""Projects"" P
-                      WHERE P.""BannerImageFileId"" = I.""Id"" OR P.""DescriptiveImageFileId"" = I.""Id""
+                      WHERE P.""BannerImageFileId"" = I.""Id"" OR P.""DescriptiveImageFileId"" = I.""Id"" OR P.""CardImageFileId"" = I.""Id""
                   ) AND I.""Date"" < 'now'::timestamp - '1 hour'::interval").ToListAsync().ConfigureAwait(false);
 
             await Task.WhenAll(danglingImages.Select(i => DeleteObject(i.Filepath, token))).ConfigureAwait(false);
