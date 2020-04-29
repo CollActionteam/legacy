@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
-using CollAction.Models;
 using CollAction.Services.User.Models;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json.Linq;
@@ -28,7 +26,5 @@ namespace CollAction.Services.User
         Task<UserResult> FinishRegistration(NewUser newUser, string code);
 
         Task<int> IngestUserEvent(ClaimsPrincipal trackedUser, JObject eventData, bool canTrack, CancellationToken token);
-
-        Task<IEnumerable<ApplicationUser>> SeedTestUsers(CancellationToken cancellationToken);
     }
 }

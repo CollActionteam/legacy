@@ -310,17 +310,6 @@ namespace CollAction.Services.User
             return result;
         }
 
-        public async Task<IEnumerable<ApplicationUser>> SeedTestUsers(CancellationToken cancellationToken)
-        {
-            Random r = new Random();
-            var users = Enumerable.Range(0, r.Next(20, 100))
-                                  .Select(i => new ApplicationUser(Faker.Name.First() + "@example.com", Faker.Name.First(), Faker.Name.Last(), DateTime.UtcNow))
-                                  .ToList();
-            context.Users.AddRange(users);
-            await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-            return users;
-        }
-
         private void LogErrors(string operation, IdentityResult result)
         {
             foreach (IdentityError e in result.Errors)

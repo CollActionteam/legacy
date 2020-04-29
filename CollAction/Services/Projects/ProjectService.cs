@@ -19,10 +19,7 @@ using CollAction.Services.HtmlValidator;
 using CollAction.GraphQl.Mutations.Input;
 using Hangfire;
 using CollAction.Helpers;
-using Microsoft.AspNetCore.Http;
 using CollAction.Services.Image;
-using System.IO;
-using System.Net.Http;
 using System.Net.Mail;
 
 namespace CollAction.Services.Projects
@@ -37,7 +34,6 @@ namespace CollAction.Services.Projects
         private readonly IHtmlInputValidator htmlInputValidator;
         private readonly IServiceProvider serviceProvider;
         private readonly IBackgroundJobClient jobClient;
-        private readonly IImageService imageService;
         private readonly IRecurringJobManager recurringJobManager;
         private const int MaxNumberProjectEmails = 4;
         private static readonly TimeSpan TimeEmailAllowedAfterProjectEnd = TimeSpan.FromDays(180);
@@ -51,7 +47,6 @@ namespace CollAction.Services.Projects
             IHtmlInputValidator htmlInputValidator,
             IServiceProvider serviceProvider,
             IBackgroundJobClient jobClient,
-            IImageService imageService,
             IRecurringJobManager recurringJobManager)
         {
             this.userManager = userManager;
@@ -62,8 +57,70 @@ namespace CollAction.Services.Projects
             this.htmlInputValidator = htmlInputValidator;
             this.serviceProvider = serviceProvider;
             this.jobClient = jobClient;
-            this.imageService = imageService;
             this.recurringJobManager = recurringJobManager;
+        }
+        
+        public async Task<Project> CreateProjectInternal(NewProjectInternal newProject, CancellationToken token)
+        {
+            if (await context.Projects.AnyAsync(p => p.Name == newProject.Name).ConfigureAwait(false))
+            {
+                throw new InvalidOperationException($"A project with this name already exists: {newProject.Name}");
+            }
+
+            logger.LogInformation("Creating project: {0}", newProject.Name);
+            var tagMap = new Dictionary<string, int>();
+            if (newProject.Tags.Any())
+            {
+                var missingTags = newProject
+                    .Tags
+                    .Except(
+                        await context.Tags
+                                     .Where(t => newProject.Tags.Contains(t.Name))
+                                     .Select(t => t.Name)
+                                     .ToListAsync(token).ConfigureAwait(false))
+                    .Select(t => new Tag(t));
+
+                if (missingTags.Any())
+                {
+                    context.Tags.AddRange(missingTags);
+                    await context.SaveChangesAsync(token).ConfigureAwait(false);
+                }
+
+                tagMap = await context.Tags
+                                      .Where(t => newProject.Tags.Contains(t.Name))
+                                      .ToDictionaryAsync(t => t.Name, t => t.Id, token).ConfigureAwait(false);
+            }
+
+            List<ProjectTag> projectTags =
+                newProject.Tags
+                          .Select(t => new ProjectTag(tagId: tagMap[t]))
+                          .ToList();
+
+            var project = new Project(
+                name: newProject.Name,
+                status: newProject.Status,
+                ownerId: newProject.OwnerId,
+                target: newProject.Target,
+                start: newProject.Start,
+                end: newProject.End.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
+                description: newProject.Description,
+                goal: newProject.Goal, 
+                proposal: newProject.Proposal,
+                creatorComments: newProject.CreatorComments,
+                descriptionVideoLink: newProject.DescriptionVideoLink?.Replace("www.youtube.com", "www.youtube-nocookie.com", StringComparison.Ordinal),
+                displayPriority: newProject.DisplayPriority,
+                anonymousUserParticipants: newProject.AnonymousUserParticipants,
+                bannerImageFileId: newProject.BannerImageFileId,
+                cardImageFileId: newProject.CardImageFileId,
+                descriptiveImageFileId: newProject.DescriptiveImageFileId,
+                categories: newProject.Categories.Select(c => new ProjectCategory((c))).ToList(), 
+                tags: projectTags);
+
+            context.Projects.Add(project);
+            await context.SaveChangesAsync(token).ConfigureAwait(false);
+            await RefreshParticipantCount(token).ConfigureAwait(false);
+
+            return project;
         }
 
         public async Task<ProjectResult> CreateProject(NewProject newProject, ClaimsPrincipal user, CancellationToken token)
@@ -129,7 +186,7 @@ namespace CollAction.Services.Projects
                 proposal: newProject.Proposal,
                 creatorComments: newProject.CreatorComments,
                 descriptionVideoLink: newProject.DescriptionVideoLink?.Replace("www.youtube.com", "www.youtube-nocookie.com", StringComparison.Ordinal),
-                displayPriority: ProjectDisplayPriority.Medium, 
+                displayPriority: ProjectDisplayPriority.Medium,
                 bannerImageFileId: newProject.BannerImageFileId,
                 cardImageFileId: newProject.CardImageFileId,
                 descriptiveImageFileId: newProject.DescriptiveImageFileId,
@@ -504,126 +561,6 @@ namespace CollAction.Services.Projects
             return projects;
         }
 
-        public async Task SeedRandomProjects(IEnumerable<ApplicationUser> users, CancellationToken cancellationToken)
-        {
-            Random r = new Random();
-            const int MaxImageBannerDimensionPixels = 1600;
-            const int MaxImageCardDimensionPixels = 370;
-
-            string?[] videoLinks = new[]
-            {
-                "https://www.youtube-nocookie.com/embed/aLzM_L5fjCQ",
-                "https://www.youtube-nocookie.com/embed/Zvugem-tKyI",
-                "https://www.youtube-nocookie.com/embed/xY0XTysJUDY",
-                "https://www.youtube-nocookie.com/embed/2yfPLxQQG-k",
-                null
-            };
-
-            List<(Uri bannerImageUrl, Task<byte[]> bannerImageBytes)> bannerImages = new[]
-            {
-                "https://collaction-production.s3.eu-central-1.amazonaws.com/57136ed4-b7f6-4dd2-a822-9341e2e60d1e.png",
-                "https://collaction-production.s3.eu-central-1.amazonaws.com/765bc57b-748e-4bb8-a27e-08db6b99ea3e.png",
-                "https://collaction-production.s3.eu-central-1.amazonaws.com/e06bbc2d-02f7-4a9b-a744-6923d5b21f51.png",
-            }.Select(b => new Uri(b)).Select(b => (b, DownloadFile(b, cancellationToken))).ToList();
-
-            List<(Uri descriptiveImageUrl, Task<byte[]> descriptiveImageBytes)> descriptiveImages = new[]
-            {
-                "https://collaction-production.s3.eu-central-1.amazonaws.com/107104bc-deeb-4f48-b3a5-f25585bebf89.png",
-                "https://collaction-production.s3.eu-central-1.amazonaws.com/365f2dc9-1784-45ea-9cc7-d5f0ef1a480c.png",
-                "https://collaction-production.s3.eu-central-1.amazonaws.com/6e6c12b1-eaae-4811-aa1c-c169d10f1a59.png",
-            }.Select(b => new Uri(b)).Select(b => (b, DownloadFile(b, cancellationToken))).ToList();
-
-            await Task.WhenAll(descriptiveImages.Select(d => d.descriptiveImageBytes).Concat(bannerImages.Select(b => b.bannerImageBytes))).ConfigureAwait(false);
-
-            List<Tag> tags = Enumerable.Range(10, r.Next(60))
-                                       .Select(r => Faker.Internet.DomainWord())
-                                       .Distinct()
-                                       .Select(r => new Tag(r))
-                                       .ToList();
-            context.Tags.AddRange(tags);
-            await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-
-            var projectNames =
-                Enumerable.Range(0, r.Next(40, 80))
-                          .Select(i => Faker.Company.Name())
-                          .Distinct();
-
-            List<string> userIds = await context.Users.Select(u => u.Id).ToListAsync().ConfigureAwait(false);
-            List<Project> projects = new List<Project>(projectNames.Count());
-
-            // Generate random projects
-            foreach (string projectName in projectNames)
-            {
-                DateTime start = DateTime.Now.Date.AddDays(r.Next(-20, 20));
-
-                List<ProjectTag> projectTags =
-                    Enumerable.Range(0, r.Next(5))
-                              .Select(i => r.Next(tags.Count))
-                              .Distinct()
-                              .Select(i => new ProjectTag(tags.ElementAt(i).Id))
-                              .ToList();
-
-                List<ProjectCategory> categories =
-                    new[] { r.Next(7), r.Next(7) }.Distinct()
-                                                  .Select(i => new ProjectCategory((Category)i))
-                                                  .ToList();
-
-                (Uri descriptiveImageUrl, Task<byte[]> descriptiveImageBytes) = descriptiveImages[r.Next(descriptiveImages.Count)];
-                ImageFile? descriptiveImage = r.Next(3) == 0
-                                                  ? null
-                                                  : await imageService.UploadImage(ToFormFile(descriptiveImageBytes.Result, descriptiveImageUrl), Faker.Company.BS(), MaxImageBannerDimensionPixels, cancellationToken).ConfigureAwait(false);
-
-                (Uri bannerImageUrl, Task<byte[]> bannerImageBytes) = bannerImages[r.Next(bannerImages.Count)];
-                ImageFile? bannerImage = r.Next(3) == 0
-                                             ? null
-                                             : await imageService.UploadImage(ToFormFile(bannerImageBytes.Result, bannerImageUrl), Faker.Company.BS(), MaxImageBannerDimensionPixels, cancellationToken).ConfigureAwait(false);
-
-                ImageFile? cardImage = bannerImage == null
-                                          ? null
-                                          : await imageService.UploadImage(ToFormFile(bannerImageBytes.Result, bannerImageUrl), Faker.Company.BS(), MaxImageCardDimensionPixels, cancellationToken).ConfigureAwait(false);
-
-                List<ProjectParticipant> projectParticipants = userIds
-                        .Where(userId => r.Next(3) == 0)
-                        .Select(userId => new ProjectParticipant(userId, 0, r.Next(2) == 1, DateTime.UtcNow, Guid.NewGuid()))
-                        .ToList();
-
-                projects.Add(
-                    new Project(
-                        name: projectName,
-                        description: $"<p>{string.Join("</p><p>", Faker.Lorem.Paragraphs(r.Next(3) + 1))}</p>",
-                        start: start,
-                        end: start.AddDays(r.Next(10, 40)).AddHours(23).AddMinutes(59).AddSeconds(59),
-                        categories: categories,
-                        tags: projectTags,
-                        bannerImageFileId: bannerImage?.Id,
-                        descriptiveImageFileId: descriptiveImage?.Id,
-                        cardImageFileId: cardImage?.Id,
-                        creatorComments: r.Next(4) == 0 ? null : $"<p>{string.Join("</p><p>", Faker.Lorem.Paragraphs(r.Next(3) + 1))}</p>",
-                        displayPriority: (ProjectDisplayPriority)r.Next(0, 2),
-                        goal: Faker.Company.CatchPhrase(),
-                        ownerId: r.Next(10) == 0 ? null : users.ElementAt(r.Next(users.Count())).Id,
-                        proposal: Faker.Company.BS(),
-                        status: (ProjectStatus)r.Next(0, 3),
-                        target: r.Next(1, 10000),
-                        anonymousUserParticipants: r.Next(1, 8000),
-                        descriptionVideoLink: videoLinks.ElementAt(r.Next(videoLinks.Length))) { Participants = projectParticipants });
-            }
-
-            context.Projects.AddRange(projects);
-            await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-            await RefreshParticipantCount(cancellationToken).ConfigureAwait(false);
-
-            // Initialize finish jobs
-            context.Projects.UpdateRange(
-                projects.Where(p => p.Status == ProjectStatus.Running)
-                        .Select(p =>
-                        {
-                            p.FinishJobId = jobClient.Schedule(() => ProjectEndProcess(p.Id, CancellationToken.None), p.End);
-                            return p;
-                        }));
-            await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-        }
-
         public Task RefreshParticipantCount(CancellationToken token)
             => context.Database.ExecuteSqlRawAsync("REFRESH MATERIALIZED VIEW CONCURRENTLY \"ProjectParticipantCounts\";", token);
 
@@ -634,18 +571,6 @@ namespace CollAction.Services.Projects
                 () => RefreshParticipantCount(CancellationToken.None), 
                 "*/5 * * * *" // Every 5 minutes
                 );
-        }
-
-        private IFormFile ToFormFile(byte[] imageBytes, Uri url)
-        {
-            return new FormFile(new MemoryStream(imageBytes), 0, imageBytes.Length, url.LocalPath, url.LocalPath);
-        }
-
-        private async Task<byte[]> DownloadFile(Uri url, CancellationToken cancellationToken)
-        {
-            using var client = new HttpClient();
-            using var response = await client.GetAsync(url, cancellationToken).ConfigureAwait(false);
-            return await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
         }
 
         private async Task SendCommitEmail(Project project, AddParticipantResult result, ApplicationUser applicationUser, string email)

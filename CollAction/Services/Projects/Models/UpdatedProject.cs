@@ -60,9 +60,9 @@ namespace CollAction.Services.Projects.Models
         public int NumberProjectEmailsSent { get; set; }
 
         [Tags]
-        public ICollection<string> Tags { get; set; } = new List<string>();
+        public IEnumerable<string> Tags { get; set; } = new List<string>();
 
         [Categories]
-        public ICollection<Category> Categories { get; set; } = new List<Category>();
+        public IEnumerable<Category> Categories { get; set; } = new List<Category>();
     }
 }

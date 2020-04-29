@@ -32,6 +32,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.DataProtection;
 using CollAction.Services.Statistics;
+using CollAction.Services.Initialization;
 
 namespace CollAction
 {
@@ -150,6 +151,7 @@ namespace CollAction
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IProjectService, ProjectService>();
             services.AddScoped<IStatisticsService, StatisticsService>();
+            services.AddScoped<IInitializationService, InitializationService>();
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<INewsletterService, NewsletterService>();
             services.AddTransient<IDonationService, DonationService>();

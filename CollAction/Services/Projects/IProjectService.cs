@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;
@@ -13,6 +12,8 @@ namespace CollAction.Services.Projects
     public interface IProjectService
     {
         Task<ProjectResult> CreateProject(NewProject newProject, ClaimsPrincipal user, CancellationToken token);
+
+        Task<Project> CreateProjectInternal(NewProjectInternal newProject, CancellationToken token);
 
         Task<ProjectResult> UpdateProject(UpdatedProject updatedProject, ClaimsPrincipal user, CancellationToken token);
 
@@ -29,8 +30,6 @@ namespace CollAction.Services.Projects
         bool CanSendProjectEmail(Project project);
 
         IQueryable<Project> SearchProjects(Category? category, SearchProjectStatus? status);
-
-        Task SeedRandomProjects(IEnumerable<ApplicationUser> users, CancellationToken cancellationToken);
 
         Task RefreshParticipantCount(CancellationToken token);
 

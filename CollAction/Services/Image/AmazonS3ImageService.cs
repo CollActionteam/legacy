@@ -18,6 +18,7 @@ using CollAction.Data;
 using Microsoft.EntityFrameworkCore;
 using Hangfire.Server;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace CollAction.Services.Image
 {
@@ -26,14 +27,12 @@ namespace CollAction.Services.Image
         private readonly AmazonS3Client client;
         private readonly string bucket;
         private readonly string region;
-        private readonly IBackgroundJobClient jobClient;
         private readonly IRecurringJobManager recurringJobManager;
         private readonly ILogger<AmazonS3ImageService> logger;
         private readonly ApplicationDbContext context;
 
-        public AmazonS3ImageService(IOptions<ImageServiceOptions> options, IBackgroundJobClient jobClient, IRecurringJobManager recurringJobManager, ApplicationDbContext context, ILogger<AmazonS3ImageService> logger)
+        public AmazonS3ImageService(IOptions<ImageServiceOptions> options, IRecurringJobManager recurringJobManager, ApplicationDbContext context, ILogger<AmazonS3ImageService> logger)
         {
-            this.jobClient = jobClient;
             this.recurringJobManager = recurringJobManager;
             this.logger = logger;
             this.context = context;
@@ -46,11 +45,11 @@ namespace CollAction.Services.Image
         {
             logger.LogInformation("Uploading image");
             using Image<Rgba32> image = await UploadToImage(fileUploaded, imageResizeThreshold, token).ConfigureAwait(false);
-            var currentImage = new ImageFile(filepath: $"{Guid.NewGuid()}.png", date: DateTime.UtcNow, description: imageDescription, height: image.Height, width: image.Width);
+            var currentImage = new ImageFile(filepath: $"{Guid.NewGuid()}.jpg", date: DateTime.UtcNow, description: imageDescription, height: image.Height, width: image.Width);
 
             logger.LogInformation("Queuing for s3 upload");
-            byte[] imageBytes = ConvertImageToPng(image);
-            jobClient.Enqueue(() => UploadToS3(imageBytes, currentImage.Filepath, CancellationToken.None));
+            using MemoryStream imageBytes = ConvertImageToJpg(image);
+            await UploadToS3(imageBytes, currentImage.Filepath, token).ConfigureAwait(false);
 
             logger.LogInformation("Saving image information to database");
             context.ImageFiles.Add(currentImage);
@@ -69,8 +68,8 @@ namespace CollAction.Services.Image
                 context.ImageFiles.Remove(imageFile);
                 await context.SaveChangesAsync(token).ConfigureAwait(false);
                 
-                logger.LogInformation("Queueing image removal from s3");
-                jobClient.Enqueue(() => DeleteObject(imageFile.Filepath, token));
+                logger.LogInformation("Removing image from S3");
+                await DeleteObject(imageFile.Filepath, token).ConfigureAwait(false);
             }
         }
 
@@ -96,16 +95,15 @@ namespace CollAction.Services.Image
             logger.LogInformation("Successfully removed image from s3");
         }
 
-        public async Task UploadToS3(byte[] image, string path, CancellationToken cancellationToken)
+        public async Task UploadToS3(MemoryStream image, string path, CancellationToken cancellationToken)
         {
             logger.LogInformation("Adding image to s3");
-            using MemoryStream ms = new MemoryStream(image);
             var putRequest = new PutObjectRequest()
             {
                 BucketName = bucket,
-                ContentType = "image/png",
+                ContentType = "image/jpg",
                 Key = path,
-                InputStream = ms,
+                InputStream = image,
                 CannedACL = S3CannedACL.PublicRead,
                 AutoCloseStream = false
             };
@@ -135,7 +133,7 @@ namespace CollAction.Services.Image
                       WHERE P.""BannerImageFileId"" = I.""Id"" OR P.""DescriptiveImageFileId"" = I.""Id""
                   ) AND I.""Date"" < 'now'::timestamp - '1 hour'::interval").ToListAsync().ConfigureAwait(false);
 
-            danglingImages.ForEach(i => jobClient.ContinueJobWith(performContext.BackgroundJob.Id, () => DeleteObject(i.Filepath, token)));
+            await Task.WhenAll(danglingImages.Select(i => DeleteObject(i.Filepath, token))).ConfigureAwait(false);
 
             context.ImageFiles.RemoveRange(danglingImages);
             await context.SaveChangesAsync().ConfigureAwait(false);
@@ -189,11 +187,11 @@ namespace CollAction.Services.Image
             return image;
         }
 
-        private byte[] ConvertImageToPng(Image<Rgba32> image)
+        private MemoryStream ConvertImageToJpg(Image<Rgba32> image)
         {
-            using MemoryStream ms = new MemoryStream();
-            image.SaveAsPng(ms);
-            return ms.ToArray();
+            MemoryStream ms = new MemoryStream();
+            image.SaveAsJpeg(ms);
+            return ms;
         }
     }
 }

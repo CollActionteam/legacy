@@ -1,5 +1,5 @@
-﻿using CollAction.Data;
-using CollAction.Services.Image;
+﻿using CollAction.Services.Image;
+using CollAction.Services.Initialization;
 using CollAction.Services.Projects;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore;
@@ -21,7 +21,7 @@ namespace CollAction
 
             using (IServiceScope scope = host.Services.CreateScope())
             {
-                await ApplicationDbContext.InitializeDatabase(scope).ConfigureAwait(false);
+                await scope.ServiceProvider.GetRequiredService<IInitializationService>().InitializeDatabase().ConfigureAwait(false);
                 scope.ServiceProvider.GetRequiredService<IImageService>().InitializeDanglingImageJob();
                 scope.ServiceProvider.GetRequiredService<IProjectService>().InitializeRefreshParticipantCountJob();
             }

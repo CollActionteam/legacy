@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.TestHost;
-using CollAction.Data;
 using System.Net.Http;
 using CollAction.Services;
 using System.Collections.Generic;
@@ -13,6 +12,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Serilog.Events;
 using Serilog;
 using Microsoft.Extensions.Configuration;
+using CollAction.Services.Initialization;
 
 namespace CollAction.Tests.Integration
 {
@@ -22,7 +22,7 @@ namespace CollAction.Tests.Integration
         {
             using IWebHost host = GetHost(ConfigureReplacementServicesProvider).Build();
             using IServiceScope scope = host.Services.CreateScope();
-            await ApplicationDbContext.InitializeDatabase(scope).ConfigureAwait(false);
+            await scope.ServiceProvider.GetRequiredService<IInitializationService>().InitializeDatabase().ConfigureAwait(false);
             await executeTests(scope).ConfigureAwait(false);
         }
 
