@@ -25,8 +25,8 @@ export default () => {
           <div className={styles.description}>
             Any questions, comments, or would you like to work together?
             Awesome! Email us at{" "}
-            <a href="mailto:collactionteam@gmail.com">
-              collactionteam@gmail.com
+            <a href="mailto:hello@collaction.org">
+              hello@collaction.org
             </a>
             .<br />
             Would you like to get an occasional update on CollAction and
