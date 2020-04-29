@@ -81,6 +81,7 @@ export default class NewsletterSignup extends React.Component<
           <button
             name="subscribe"
             id="mc-embedded-subscribe"
+            aria-label="Subscribe Newsletter E-Mail"
             className={styles.submit}
             disabled={!!this.state.error || !this.state.email}
           >
