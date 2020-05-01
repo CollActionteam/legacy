@@ -218,18 +218,15 @@ namespace CollAction.Services.Initialization
                         displayPriority: (ProjectDisplayPriority)r.Next(3),
                         status: (ProjectStatus)r.Next(3),
                         ownerId: owner.Id,
-                        anonymousUserParticipants: status == ProjectStatus.Running && start >= now ? r.Next(1, 8000) : 0);
+                        anonymousUserParticipants: r.Next(1, 8000));
 
                 Project project = await projectService.CreateProjectInternal(newProject, cancellationToken).ConfigureAwait(false);
 
-                if (status == ProjectStatus.Running && start >= now)
-                {
-                    context.ProjectParticipants.AddRange(
-                        userIds.Where(userId => r.Next(2) == 0)
-                               .Select(userId => new ProjectParticipant(userId, project.Id, r.Next(2) == 1, now, Guid.NewGuid())));
+                context.ProjectParticipants.AddRange(
+                    userIds.Where(userId => r.Next(2) == 0)
+                           .Select(userId => new ProjectParticipant(userId, project.Id, r.Next(2) == 1, now, Guid.NewGuid())));
 
-                    await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-                }
+                await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             }
         }
     }
