@@ -15,8 +15,8 @@ type TParams = {
 }
 
 const ThankYouCommitPage = ({ match } : RouteComponentProps<TParams>): any => {
-  const { slug, projectId } = match.params;
-  const { data, loading } = useQuery(GET_PROJECT, { variables: { id: projectId } });
+  const { projectId } = match.params;
+  const { data } = useQuery(GET_PROJECT, { variables: { id: projectId } });
   const project = (data?.project ?? null) as IProject | null;
   return <>
     <div className={styles.header}>
