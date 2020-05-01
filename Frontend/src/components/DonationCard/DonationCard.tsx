@@ -10,7 +10,6 @@ import iDealLogo from "../../assets/i-deal-logo.png";
 import { useMutation, gql } from "@apollo/client";
 import { loadStripe } from '@stripe/stripe-js';
 import { GET_USER } from "../../providers/UserProvider";
-import { LazyLoadImage } from 'react-lazy-load-image-component';
 import {
   Elements,
   useStripe,
@@ -23,6 +22,7 @@ import {Link, useHistory} from "react-router-dom";
 import { useConsent, Consent } from "../../providers/CookieConsentProvider";
 import { useSettings } from "../../providers/SettingsProvider";
 import { useAnalytics } from "../../providers/AnalyticsProvider";
+import LazyImage from "../LazyImage/LazyImage";
 
 type DonationValues = {
     email: string;
@@ -309,13 +309,13 @@ const InnerDonationCard = () => {
                     <Grid container className={styles.paymentOptions}>
                         <Grid item xs={12}>
                             <Button type="button" className={styles.paymentButton} onClick={async () => { formik.setFieldValue('type', 'popup'); sendUserEvent(true, 'donate', 'select method', 'ideal', formik.values.amount.toString()); formik.submitForm(); }}>
-                                <LazyLoadImage src={iDealLogo} alt="iDeal" />
+                                <LazyImage src={iDealLogo} alt="iDeal" />
                                 &nbsp;Debit (iDeal / SEPA Direct)
                             </Button>
                         </Grid>
                         <Grid item xs={12}>
                             <Button type="button" className={styles.paymentButton} onClick={() => { formik.setFieldValue('type', 'credit'); sendUserEvent(true, 'donate', 'select method', 'creditcard', formik.values.amount.toString()); formik.submitForm(); }}>
-                                <LazyLoadImage src={bankCard} alt="Creditcard" />
+                                <LazyImage src={bankCard} alt="Creditcard" />
                                 &nbsp;Creditcard
                             </Button>
                         </Grid>

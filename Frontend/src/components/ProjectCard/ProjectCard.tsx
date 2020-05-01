@@ -4,8 +4,8 @@ import { IProject } from "../../api/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ProgressRing from "../ProgressRing/ProgressRing";
 import CategoryTags from "../CategoryTags/CategoryTags";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 import Formatter from "../../formatter";
+import LazyImage from "../LazyImage/LazyImage";
 
 export default ({ project }: { project: IProject }) => {
   const defaultCategoryImage = project.categories[0]
@@ -17,7 +17,7 @@ export default ({ project }: { project: IProject }) => {
   return (
     <a href={project.url} className={styles.card}>
       <figure className={styles.image}>
-        { project.cardImage ? <LazyLoadImage src={project.cardImage.url} alt={project.cardImage.description} /> : <LazyLoadImage src={defaultCardImage} alt={project.name} /> }
+        { project.cardImage ? <LazyImage src={project.cardImage.url} alt={project.cardImage.description} /> : <LazyImage src={defaultCardImage} alt={project.name} /> }
       </figure>
       <div className={styles.content}>
         <div className={styles.statusLabel}>

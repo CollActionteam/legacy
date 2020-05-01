@@ -22,9 +22,9 @@ import { Section } from "../../../components/Section/Section";
 import styles from "./ProjectDetails.module.scss";
 import DisqusProjectComments from "../../../components/DisqusProjectComments/DisqusProjectComments";
 import { ProjectStarter } from "../../../components/ProjectStarter/ProjectStarter";
-import { LazyLoadImage } from 'react-lazy-load-image-component';
 import Helmet from "react-helmet";
 import Formatter from "../../../formatter";
+import LazyImage from "../../../components/LazyImage/LazyImage";
 
 type TParams = {
   slug: string,
@@ -158,7 +158,7 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
           <Grid item md={7} xs={12}>
             <Container className={styles.bannerImage}>
               <figure className={styles.image}>
-                { project.bannerImage ? <LazyLoadImage src={project.bannerImage.url} alt={project.name} /> : <LazyLoadImage src={defaultBanner} alt={project.name} /> }
+                { project.bannerImage ? <LazyImage src={project.bannerImage.url} alt={project.name} /> : <LazyImage src={defaultBanner} alt={project.name} /> }
               </figure>
             </Container>
           </Grid>
@@ -195,7 +195,7 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
               {project.descriptiveImage && (
                 <div>
                   <figure className={styles.image}>
-                    <LazyLoadImage src={project.descriptiveImage.url} alt={project.descriptiveImage.description} />
+                    <LazyImage src={project.descriptiveImage.url} alt={project.descriptiveImage.description} />
                     <p>{project.descriptiveImage.description}</p>
                   </figure>
                 </div>
