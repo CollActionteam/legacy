@@ -119,7 +119,7 @@ const FinishRegistrationPage = () => {
                                 <FormControl>
                                     <FormControlLabel
                                         control={<Checkbox name="privacyPolicy" { ...formik.getFieldProps('privacyPolicy') } />}
-                                        label={<React.Fragment>I've read and agreed to our <Link to="/privacy-policy">privacy policy</Link></React.Fragment>}
+                                        label={<React.Fragment>I've read and agreed to the <Link to="/privacy-policy">privacy policy</Link></React.Fragment>}
                                         />
                                     { formik.submitCount > 0 ? <Alert type="error" text={formik.errors.privacyPolicy} /> : null }
                                 </FormControl>
