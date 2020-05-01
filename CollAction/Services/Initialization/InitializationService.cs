@@ -7,13 +7,13 @@ using Hangfire;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -25,31 +25,38 @@ namespace CollAction.Services.Initialization
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly SeedOptions seedOptions;
         private readonly IProjectService projectService;
-        private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IImageService imageService;
         private readonly IBackgroundJobClient jobClient;
         private readonly ApplicationDbContext context;
+        private readonly ILogger<InitializationService> logger;
+        private const int MaxImageBannerDimensionPixels = 1600;
+        private const int MaxImageCardDimensionPixels = 370;
 
-        public InitializationService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, SignInManager<ApplicationUser> signInManager, IOptions<SeedOptions> seedOptions, IProjectService projectService, IImageService imageService, IBackgroundJobClient jobClient, ApplicationDbContext context)
+        public InitializationService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IOptions<SeedOptions> seedOptions, IProjectService projectService, IImageService imageService, IBackgroundJobClient jobClient, ApplicationDbContext context, ILogger<InitializationService> logger)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.seedOptions = seedOptions.Value;
             this.projectService = projectService;
-            this.signInManager = signInManager;
             this.imageService = imageService;
             this.jobClient = jobClient;
             this.context = context;
+            this.logger = logger;
         }
 
         public async Task InitializeDatabase()
         {
+            logger.LogInformation("Migrating database");
             await context.Database.MigrateAsync().ConfigureAwait(false);
+            logger.LogInformation("Creating admin user if absent");
             ApplicationUser admin = await CreateAdminRoleAndUser().ConfigureAwait(false);
             if (seedOptions.SeedTestData && !(await projectService.SearchProjects(null, null).AnyAsync().ConfigureAwait(false)))
             {
+                logger.LogInformation("Seeding database");
                 jobClient.Enqueue(() => SeedTestData(admin.Id, CancellationToken.None));
             }
+            logger.LogInformation("Migrating card images, setting up jobs");
+            await MigrateCardImages(CancellationToken.None).ConfigureAwait(false);
         }
 
         public async Task SeedTestData(string adminId, CancellationToken cancellationToken)
@@ -57,6 +64,39 @@ namespace CollAction.Services.Initialization
             var admin = await userManager.FindByIdAsync(adminId).ConfigureAwait(false);
             var seededUsers = await SeedTestUsers(cancellationToken).ConfigureAwait(false);
             await SeedRandomProjects(seededUsers.Concat(new[] { admin }), cancellationToken).ConfigureAwait(false);
+        }
+
+        // TODO: Remove once this has run in production
+        public async Task MigrateCardImages(CancellationToken token)
+        {
+            List<int> projectsToMigrate =
+                await context.Projects
+                             .Where(p => p.CardImageFileId == null && p.BannerImageFileId != null)
+                             .Select(p => p.Id)
+                             .ToListAsync(token)
+                             .ConfigureAwait(false);
+            projectsToMigrate.ForEach(projectId => jobClient.Enqueue(() => MigrateCardImage(projectId, CancellationToken.None)));
+        }
+
+        // TODO: Remove once this has run in production
+        public async Task MigrateCardImage(int projectId, CancellationToken token)
+        {
+            Project project = 
+                await context.Projects
+                             .Include(p => p.BannerImage)
+                             .SingleAsync(p => p.Id == projectId, token)
+                             .ConfigureAwait(false);
+
+            if (project.BannerImage == null)
+            {
+                throw new InvalidOperationException($"Banner image not found when migrating for project: {project.Id}");
+            }
+
+            Uri bannerImageUrl = imageService.GetUrl(project.BannerImage);
+            byte[] bannerImage = await DownloadFile(bannerImageUrl, token).ConfigureAwait(false);
+            ImageFile uploadedImage = await imageService.UploadImage(ToFormFile(bannerImage, bannerImageUrl), project.BannerImage.Description, MaxImageCardDimensionPixels, token).ConfigureAwait(false);
+            project.CardImage = uploadedImage;
+            await context.SaveChangesAsync(token).ConfigureAwait(false);
         }
 
         private static IFormFile ToFormFile(byte[] imageBytes, Uri url)
@@ -125,8 +165,6 @@ namespace CollAction.Services.Initialization
         {
             Random r = new Random();
             DateTime now = DateTime.UtcNow;
-            const int MaxImageBannerDimensionPixels = 1600;
-            const int MaxImageCardDimensionPixels = 370;
 
             string?[] videoLinks = new[]
             {

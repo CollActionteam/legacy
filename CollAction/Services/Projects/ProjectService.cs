@@ -19,7 +19,6 @@ using CollAction.Services.HtmlValidator;
 using CollAction.GraphQl.Mutations.Input;
 using Hangfire;
 using CollAction.Helpers;
-using CollAction.Services.Image;
 using System.Net.Mail;
 
 namespace CollAction.Services.Projects

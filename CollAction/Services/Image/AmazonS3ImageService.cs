@@ -120,7 +120,7 @@ namespace CollAction.Services.Image
             logger.LogInformation("Successfully added image to s3");
         }
 
-        public async Task RemoveDanglingImages(PerformContext performContext, CancellationToken token)
+        public async Task RemoveDanglingImages(CancellationToken token)
         {
             // Fetch images without projects older than 1 hour
             var danglingImages = await context.ImageFiles.FromSqlRaw(
@@ -141,7 +141,7 @@ namespace CollAction.Services.Image
 
         public void InitializeDanglingImageJob()
         {
-            recurringJobManager.AddOrUpdate("dangling-image-job", () => RemoveDanglingImages(null!, CancellationToken.None), Cron.Hourly);
+            recurringJobManager.AddOrUpdate("dangling-image-job", () => RemoveDanglingImages(CancellationToken.None), Cron.Hourly);
         }
     
         public void Dispose()

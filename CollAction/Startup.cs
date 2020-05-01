@@ -73,7 +73,6 @@ namespace CollAction
                 o.Cookie.HttpOnly = false;
                 o.Cookie.SameSite = environment.IsProduction() ? SameSiteMode.Lax : SameSiteMode.None;
                 o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                o.Cookie.IsEssential = true;
             });
 
             var authenticationBuilder = services.AddAuthentication();

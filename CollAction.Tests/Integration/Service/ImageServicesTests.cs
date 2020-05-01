@@ -1,14 +1,10 @@
 ﻿using CollAction.Services.Image;
-using Hangfire;
-using Hangfire.Common;
-using Hangfire.States;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
