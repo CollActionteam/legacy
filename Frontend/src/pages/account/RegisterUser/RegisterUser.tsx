@@ -182,8 +182,7 @@ const RegisterUserPage = () => {
                                         component={Checkbox}
                                     ></Field>}
                                 label={<span>I would like to receive an update from CollAction every once in a while - don't worry, we like spam as little as you do! <span role="img" aria-label="smiley">🙂</span></span>}
-                                className={styles.formRow}
-                            ></FormControlLabel>
+                                className={styles.formRow} />
 
                             <FormGroup className={styles.formRow}>
                                 <FormControlLabel
@@ -193,9 +192,7 @@ const RegisterUserPage = () => {
                                             type="checkbox" 
                                             component={Checkbox}
                                         ></Field>}
-                                    label={<span>I've read and agreed to the <Link to="/privacy-policy">privacy policy</Link></span>}
-                                >
-                                </FormControlLabel>
+                                    label={<span>I've read and agreed to the <Link to="/privacy-policy">privacy policy</Link></span>} />
                                 <FormHelperText error={true}>{formik.touched.privacyPolicy && formik.errors.privacyPolicy}</FormHelperText>
                             </FormGroup>
                         
