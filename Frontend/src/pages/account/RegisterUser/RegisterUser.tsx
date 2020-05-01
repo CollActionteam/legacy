@@ -193,7 +193,7 @@ const RegisterUserPage = () => {
                                             type="checkbox" 
                                             component={Checkbox}
                                         ></Field>}
-                                    label={<span>I've read and agreed to our <Link to="/privacy-policy">privacy policy</Link></span>}
+                                    label={<span>I've read and agreed to the <Link to="/privacy-policy">privacy policy</Link></span>}
                                 >
                                 </FormControlLabel>
                                 <FormHelperText error={true}>{formik.touched.privacyPolicy && formik.errors.privacyPolicy}</FormHelperText>

@@ -8,3 +8,28 @@
     }
   }
 }
+
+.banner {
+  position: relative;
+  height: 480px;
+  width: 100%;
+
+  &::after {
+    content: "";
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    z-index: -1;
+    opacity: 0.2;
+    background-image: url(../../../assets/thank-you-create.jpg);
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+  }
+
+  h1, h2, p {
+    color: #000;
+  }
+}
