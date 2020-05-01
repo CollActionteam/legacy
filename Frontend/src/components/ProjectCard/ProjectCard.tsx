@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ProgressRing from "../ProgressRing/ProgressRing";
 import CategoryTags from "../CategoryTags/CategoryTags";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import Formatter from "../../formatter";
 
 export default ({ project }: { project: IProject }) => {
   const defaultCategoryImage = project.categories[0]
@@ -33,7 +34,7 @@ export default ({ project }: { project: IProject }) => {
           <div>
             <div className={styles.count}>
               <span>{project.totalParticipants}</span>
-              <span> of {project.target} participants</span>
+              <span> of {Formatter.largeNumber(project.target)} participants</span>
             </div>
             <div className={styles.remainingTime}>
               <FontAwesomeIcon icon="clock"></FontAwesomeIcon>

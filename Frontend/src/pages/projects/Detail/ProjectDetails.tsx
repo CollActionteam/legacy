@@ -24,6 +24,7 @@ import DisqusProjectComments from "../../../components/DisqusProjectComments/Dis
 import { ProjectStarter } from "../../../components/ProjectStarter/ProjectStarter";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import Helmet from "react-helmet";
+import Formatter from "../../../formatter";
 
 type TParams = {
   slug: string,
@@ -114,7 +115,7 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
             <span>
               This crowdaction will only start if it reaches its goal by
               <br></br>
-              {endDate.toDateString()} {endDate.toTimeString()}.
+              {Formatter.time(endDate)} on {Formatter.date(endDate)} ({Formatter.timezone()} timezone).
             </span>
           </div>
         </div>
@@ -172,7 +173,7 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
               </div>
               <div className={styles.count}>
                 <span>
-                  {project.totalParticipants} of {project.target} signups
+                  {project.totalParticipants} of {Formatter.largeNumber(project.target)} signups
                 </span>
               </div>
               {renderStats(project)}
@@ -261,7 +262,7 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
                     <div id="join" className={styles.joinSection}>
                       <span>
                         { project?.isActive ? "You are already participating in this project" : null }
-                        { project?.isComingSoon ? `This project starts on ${new Date(project.start).toDateString()}` : null }
+                        { project?.isComingSoon ? `This project starts on ${Formatter.date(new Date(project.start))}` : null }
                         { project?.isSuccessfull ? "This project is already done and has completed successfully" : null }
                         { project?.isFailed ? "This project is already done and has failed" : null }
                       </span>
