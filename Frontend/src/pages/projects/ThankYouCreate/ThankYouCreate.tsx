@@ -1,12 +1,10 @@
 import React from "react";
-import { Overlay } from "../../../components/Overlay/Overlay";
 import { Section } from "../../../components/Section/Section";
 
 import styles from "./ThankYouCreate.module.scss";
 import { RouteComponentProps, Redirect } from "react-router-dom";
 import { gql, useQuery } from "@apollo/client";
 import Loader from "../../../components/Loader/Loader";
-import Helmet from "react-helmet";
 import {Banner} from "../../../components/Banner/Banner";
 import {Grid} from "@material-ui/core";
 
