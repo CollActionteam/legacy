@@ -28,11 +28,13 @@ namespace CollAction.Tests.Integration.Endpoint
                        using var memoryStream = new MemoryStream(testImage);
                        using var streamContent = new StreamContent(memoryStream);
                        using var descriptionContent = new StringContent("My Description");
+                       using var sizeContent = new StringContent("400");
                        using var client = testServer.CreateClient();
                        SeedOptions seedOptions = scope.ServiceProvider.GetRequiredService<IOptions<SeedOptions>>().Value;
                        client.DefaultRequestHeaders.Add("Cookie", await GetAuthCookie(client, seedOptions).ConfigureAwait(false));
                        content.Add(streamContent, "Image", "test.png");
                        content.Add(descriptionContent, "ImageDescription");
+                       content.Add(sizeContent, "ImageResizeThreshold");
                        using var response = await client.PostAsync(new Uri("/image", UriKind.Relative), content).ConfigureAwait(false);
                        string body = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                        Assert.IsTrue(response.IsSuccessStatusCode, body);
