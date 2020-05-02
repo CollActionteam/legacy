@@ -6,7 +6,7 @@ import { gql, useMutation } from "@apollo/client";
 import styles from "./ResetPassword.module.scss";
 import { useLocation } from "react-router-dom";
 import { Button } from "../../../components/Button/Button";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet";
 import { useFormik, Form, FormikProvider } from "formik";
 import * as Yup from "yup";
 import Loader from "../../../components/Loader/Loader";

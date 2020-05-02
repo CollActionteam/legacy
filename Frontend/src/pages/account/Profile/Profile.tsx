@@ -9,7 +9,7 @@ import ProjectsParticipating from "../../../components/Profile/ProjectsParticipa
 import NewsletterSubscription from "../../../components/Profile/NewsletterSubscription";
 import DeleteAccount from "../../../components/Profile/DeleteAccount";
 import ProjectsCreated from "../../../components/Profile/ProjectsCreated";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet";
 
 export default () => {
   const user = useUser();

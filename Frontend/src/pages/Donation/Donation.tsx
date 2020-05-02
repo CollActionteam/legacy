@@ -4,7 +4,7 @@ import { Grid} from "@material-ui/core";
 import styles from "./Donation.module.scss";
 import DonationCard from "../../components/DonationCard/DonationCard";
 import { Section } from "../../components/Section/Section";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet";
 import { Faq } from "../../components/Faq/Faq";
 import { RouteComponentProps } from "react-router-dom";
 import {Alert} from "../../components/Alert/Alert";

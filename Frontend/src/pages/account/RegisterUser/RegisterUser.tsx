@@ -3,7 +3,7 @@ import { FormControlLabel, Grid, FormHelperText, FormGroup } from "@material-ui/
 import { Field, Form, FormikProvider, useFormik } from "formik";
 import { Checkbox, TextField } from "formik-material-ui";
 import React, { useState } from "react";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet";
 import { Link, useHistory } from "react-router-dom";
 import * as Yup from "yup";
 import { Alert } from "../../../components/Alert/Alert";

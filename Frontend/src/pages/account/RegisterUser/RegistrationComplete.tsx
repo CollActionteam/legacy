@@ -1,5 +1,5 @@
 import React from "react";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet";
 import { Section } from "../../../components/Section/Section";
 
 import styles from './RegistrationComplete.module.scss';

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Section } from '../../components/Section/Section'
 import styles from "./PrivacyPolicy.module.scss";
-import Helmet from 'react-helmet';
+import { Helmet } from 'react-helmet';
 
 const PrivacyPolicyPage = () => { 
     return <React.Fragment>

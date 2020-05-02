@@ -5,7 +5,7 @@ import styles from './About.module.scss';
 import { Section } from '../../components/Section/Section';
 import { Faq } from '../../components/Faq/Faq';
 import { useTranslation } from 'react-i18next';
-import Helmet from 'react-helmet';
+import { Helmet } from 'react-helmet';
 import LazyImage from '../../components/LazyImage/LazyImage';
 
 const AboutPage = () => {

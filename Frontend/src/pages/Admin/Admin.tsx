@@ -6,7 +6,7 @@ import AdminEditUser from "../../components/Admin/Users/AdminEditUser";
 import AdminEditProject from "../../components/Admin/Projects/AdminEditProject";
 import AdminListUsers from "../../components/Admin/Users/AdminListUsers";
 import AdminListProjects from "../../components/Admin/Projects/AdminListProjects";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet";
 
 type TParams = {
   type: string;

@@ -2,7 +2,7 @@ import { Container, FormHelperText, Grid, InputLabel } from '@material-ui/core';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import { TextField } from 'formik-material-ui';
 import React from 'react';
-import Helmet from 'react-helmet';
+import { Helmet } from 'react-helmet';
 import { Button } from '../../../components/Button/Button';
 import { ProjectStarter } from '../../../components/ProjectStarter/ProjectStarter';
 import { RichTextEditorFormControl } from '../../../components/RichTextEditorFormContol/RichTextEditorFormControl';

@@ -5,7 +5,7 @@ import { Grid, FormGroup, TextField } from "@material-ui/core";
 import { gql, useMutation } from "@apollo/client";
 import styles from "./ForgotPassword.module.scss";
 import { Button } from "../../../components/Button/Button";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet";
 
 const ForgotPasswordPage = () => {
     const [ errorMessage, setErrorMessage ] = useState<string | null>(null);

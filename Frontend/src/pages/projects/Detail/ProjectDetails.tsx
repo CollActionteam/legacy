@@ -22,7 +22,7 @@ import { Section } from "../../../components/Section/Section";
 import styles from "./ProjectDetails.module.scss";
 import DisqusProjectComments from "../../../components/DisqusProjectComments/DisqusProjectComments";
 import { ProjectStarter } from "../../../components/ProjectStarter/ProjectStarter";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet";
 import Formatter from "../../../formatter";
 import LazyImage from "../../../components/LazyImage/LazyImage";
 import Utils from "../../../utils";

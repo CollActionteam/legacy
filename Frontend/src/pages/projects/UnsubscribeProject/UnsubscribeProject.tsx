@@ -4,7 +4,7 @@ import { RouteComponentProps, useLocation } from "react-router-dom";
 import { Alert } from "../../../components/Alert/Alert";
 import { gql, useMutation } from "@apollo/client";
 import Loader from "../../../components/Loader/Loader";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet";
 
 type TManageProjectSubscriptionParams = {
   slug: string,
