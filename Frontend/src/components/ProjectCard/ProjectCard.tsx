@@ -33,7 +33,7 @@ export default ({ project }: { project: IProject }) => {
           </div>
           <div>
             <div className={styles.count}>
-              <span>{project.totalParticipants}</span>
+              <span>{Formatter.largeNumber(project.totalParticipants)}</span>
               <span> of {Formatter.largeNumber(project.target)} participants</span>
             </div>
             <div className={styles.remainingTime}>

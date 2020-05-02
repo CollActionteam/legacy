@@ -173,7 +173,7 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
               </div>
               <div className={styles.count}>
                 <span>
-                  {project.totalParticipants} of {Formatter.largeNumber(project.target)} signups
+                  {Formatter.largeNumber(project.totalParticipants)} of {Formatter.largeNumber(project.target)} signups
                 </span>
               </div>
               {renderStats(project)}
