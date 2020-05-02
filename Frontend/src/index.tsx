@@ -1,76 +1,81 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import Layout from './components/Layout/Layout';
 import AllProviders from './providers/AllProviders';
-
-// General pages
-import HomePage from './pages/Home/Home';
-import LoginPage from './pages/account/Login/Login';
-import AboutPage from './pages/About/About';
-import AdminPage from './pages/Admin/Admin';
-import NotFoundPage from './pages/NotFound/NotFound';
-
-// Account pages
-import ProfilePage from './pages/account/Profile/Profile';
-import ForgotPasswordPage from './pages/account/ForgotPassword/ForgotPassword';
-import RegisterUserPage from './pages/account/RegisterUser/RegisterUser';
-import ResetPasswordPage from './pages/account/ResetPassword/ResetPassword';
-import FinishRegistrationPage from './pages/account/FinishRegistration/FinishRegistration';
-
-// Donation pages
-import DonationReturnPage from './pages/Donation/DonationReturn';
-import DonationPage from './pages/Donation/Donation';
-
-// Project pages
-import FindPage from './pages/projects/Find/Find';
-import StartProjectPage from './pages/projects/Start/Start';
-import CreateProjectPage from './pages/projects/Create/Create';
-import ThankYouCreatePage from './pages/projects/ThankYouCreate/ThankYouCreate';
-import ThankYouCommitPage from './pages/projects/ThankYouCommit/ThankYouCommit';
-import ProjectDetailsPage from './pages/projects/Detail/ProjectDetails';
-import PrivacyPolicyPage from './pages/PrivacyPolicy/PrivacyPolicy';
-import UnsubscribeProjectPage from './pages/projects/UnsubscribeProject/UnsubscribeProject';
-import RegistrationCompletePage from './pages/account/RegisterUser/RegistrationComplete';
-import ProjectWidgetPage from './pages/projects/Widget/ProjectWidget';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 import RunAnalytics from './components/Analytics/RunAnalytics';
-import DonationThankYouPage from "./pages/Donation/DonationThankYou";
+import Loader from './components/Loader/Loader';
+
+// General pages
+const HomePage = React.lazy(() => import(/* webpackChunkName: "home" */'./pages/Home/Home'));
+const AboutPage = React.lazy(() => import(/* webpackChunkName: "secondary" */'./pages/About/About'));
+const AdminPage = React.lazy(() => import(/* webpackChunkName: "admin" */'./pages/Admin/Admin'));
+const NotFoundPage = React.lazy(() => import(/* webpackChunkName: "secondary" */'./pages/NotFound/NotFound'));
+const PrivacyPolicyPage = React.lazy(() => import(/* webpackChunkName: "secondary" */'./pages/PrivacyPolicy/PrivacyPolicy'));
+
+// Account pages
+const LoginPage = React.lazy(() => import(/* webpackChunkName: "account" */'./pages/account/Login/Login'));
+const ProfilePage = React.lazy(() => import(/* webpackChunkName: "account" */'./pages/account/Profile/Profile'));
+const ForgotPasswordPage = React.lazy(() => import(/* webpackChunkName: "account" */'./pages/account/ForgotPassword/ForgotPassword'));
+const RegisterUserPage = React.lazy(() => import(/* webpackChunkName: "account" */'./pages/account/RegisterUser/RegisterUser'));
+const ResetPasswordPage = React.lazy(() => import(/* webpackChunkName: "account" */'./pages/account/ResetPassword/ResetPassword'));
+const FinishRegistrationPage = React.lazy(() => import(/* webpackChunkName: "account" */'./pages/account/FinishRegistration/FinishRegistration'));
+
+// Donation pages
+const DonationReturnPage = React.lazy(() => import(/* webpackChunkName: "donation" */'./pages/Donation/DonationReturn'));
+const DonationPage = React.lazy(() => import(/* webpackChunkName: "donation" */'./pages/Donation/Donation'));
+const DonationThankYouPage = React.lazy(() => import(/* webpackChunkName: "donation" */"./pages/Donation/DonationThankYou"));
+
+// Project pages
+const FindPage = React.lazy(() => import(/* webpackChunkName: "project" */'./pages/projects/Find/Find'));
+const ThankYouCreatePage = React.lazy(() => import(/* webpackChunkName: "project" */'./pages/projects/ThankYouCreate/ThankYouCreate'));
+const ThankYouCommitPage = React.lazy(() => import(/* webpackChunkName: "project" */'./pages/projects/ThankYouCommit/ThankYouCommit'));
+const ProjectDetailsPage = React.lazy(() => import(/* webpackChunkName: "project" */'./pages/projects/Detail/ProjectDetails'));
+const UnsubscribeProjectPage = React.lazy(() => import(/* webpackChunkName: "project" */'./pages/projects/UnsubscribeProject/UnsubscribeProject'));
+const RegistrationCompletePage = React.lazy(() => import(/* webpackChunkName: "project" */'./pages/account/RegisterUser/RegistrationComplete'));
+const ProjectWidgetPage = React.lazy(() => import(/* webpackChunkName: "project" */'./pages/projects/Widget/ProjectWidget'));
+const CreateProjectPage = React.lazy(() => import(/* webpackChunkName: "project-start" */'./pages/projects/Create/Create'));
+const StartProjectPage = React.lazy(() => import(/* webpackChunkName: "project-start" */'./pages/projects/Start/Start'));
 
 const routing = (
     <Router>
-        <AllProviders>
-            <Layout>
-                <ScrollToTop />
-                <Switch>
-                    <Route exact path="/" component={HomePage} />
-                    <Route exact path="/about" component={AboutPage} />
-                    <Route exact path="/privacy-policy" component={PrivacyPolicyPage} />
-                    <Route exact path="/account/login" component={LoginPage} />
-                    <Route exact path="/account/forgot-password" component={ForgotPasswordPage} />
-                    <Route exact path="/account/reset-password" component={ResetPasswordPage} />
-                    <Route exact path="/account/register-user" component={RegisterUserPage} />
-                    <Route exact path="/account/register-user/complete" component={RegistrationCompletePage} />
-                    <Route exact path="/account/finish-registration" component={FinishRegistrationPage} />
-                    <Route exact path="/account/profile" component={ProfilePage} />
-                    <Route exact path="/donate" component={DonationPage} />
-                    <Route exact path="/donate/return" component={DonationReturnPage} />
-                    <Route exact path="/donate/thankyou" component={DonationThankYouPage} />
-                    <Route exact path="/projects/find" component={FindPage} />
-                    <Route exact path="/projects/start" component={StartProjectPage} />
-                    <Route exact path="/projects/create" component={CreateProjectPage} />
-                    <Route exact path="/projects/create/thankyou/:projectId" component={ThankYouCreatePage} />
-                    <Route exact path="/projects/:slug/:projectId" component={ProjectDetailsPage} />
-                    <Route exact path="/projects/:slug/:projectId/thankyou" component={ThankYouCommitPage} />
-                    <Route exact path="/projects/:slug/:projectId/widget" component={ProjectWidgetPage} />
-                    <Route exact path="/projects/:slug/:projectId/unsubscribe-email" component={UnsubscribeProjectPage} />
-                    <Route exact path="/admin/:type/:action/:id?" component={AdminPage} />
-                    <Route component={NotFoundPage} />
-                </Switch>
-                <RunAnalytics />
-            </Layout>
-        </AllProviders>
+        <React.StrictMode>
+            <Suspense fallback={<Loader />}>
+                <AllProviders>
+                    <Layout>
+                        <ScrollToTop />
+                        <Switch>
+                            <Route exact path="/" component={HomePage} />
+                            <Route exact path="/about" component={AboutPage} />
+                            <Route exact path="/privacy-policy" component={PrivacyPolicyPage} />
+                            <Route exact path="/account/login" component={LoginPage} />
+                            <Route exact path="/account/forgot-password" component={ForgotPasswordPage} />
+                            <Route exact path="/account/reset-password" component={ResetPasswordPage} />
+                            <Route exact path="/account/register-user" component={RegisterUserPage} />
+                            <Route exact path="/account/register-user/complete" component={RegistrationCompletePage} />
+                            <Route exact path="/account/finish-registration" component={FinishRegistrationPage} />
+                            <Route exact path="/account/profile" component={ProfilePage} />
+                            <Route exact path="/donate" component={DonationPage} />
+                            <Route exact path="/donate/return" component={DonationReturnPage} />
+                            <Route exact path="/donate/thankyou" component={DonationThankYouPage} />
+                            <Route exact path="/projects/find" component={FindPage} />
+                            <Route exact path="/projects/start" component={StartProjectPage} />
+                            <Route exact path="/projects/create" component={CreateProjectPage} />
+                            <Route exact path="/projects/create/thankyou/:projectId" component={ThankYouCreatePage} />
+                            <Route exact path="/projects/:slug/:projectId" component={ProjectDetailsPage} />
+                            <Route exact path="/projects/:slug/:projectId/thankyou" component={ThankYouCommitPage} />
+                            <Route exact path="/projects/:slug/:projectId/widget" component={ProjectWidgetPage} />
+                            <Route exact path="/projects/:slug/:projectId/unsubscribe-email" component={UnsubscribeProjectPage} />
+                            <Route exact path="/admin/:type/:action/:id?" component={AdminPage} />
+                            <Route component={NotFoundPage} />
+                        </Switch>
+                        <RunAnalytics />
+                    </Layout>
+                </AllProviders>
+            </Suspense>
+        </React.StrictMode>
     </Router>
 );
 
