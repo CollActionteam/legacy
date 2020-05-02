@@ -14,7 +14,7 @@ import Grid from "@material-ui/core/Grid";
 
 // FontAwesome
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { fab } from "@fortawesome/free-brands-svg-icons";
+import { faTwitter, faFacebookF, faInstagram, faYoutube, faLinkedinIn } from "@fortawesome/free-brands-svg-icons";
 import {
     faHeart,
     faTimes,
@@ -35,7 +35,6 @@ import CookieDialog from "../CookieDialog/CookieDialog";
 import { useLocation } from "react-router-dom";
 
 library.add(
-  fab,
   faHeart,
   faEnvelope,
   faTimes,
@@ -50,6 +49,11 @@ library.add(
   faEuroSign,
   faPlus,
   faMinus,
+  faTwitter,
+  faFacebookF,
+  faInstagram,
+  faYoutube,
+  faLinkedinIn
 );
 
 export default ({ children }: any) => {
