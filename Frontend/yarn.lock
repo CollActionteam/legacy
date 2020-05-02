@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@apollo/client@^3.0.0-beta.41":
-  version "3.0.0-beta.41"
-  resolved "https://registry.yarnpkg.com/@apollo/client/-/client-3.0.0-beta.41.tgz#37769f95d4829f2af884e76442401a31ac9d9238"
-  integrity sha512-3FtiBP0gKDjmCIbPUn8GkBshA8vXUB9Zi+BOSEOwo5HDIEF0NXg19ov+m8SqaZEG+jU6p7w+dmHyRGkUxj9b4g==
+"@apollo/client@^3.0.0-beta.44":
+  version "3.0.0-beta.44"
+  resolved "https://registry.yarnpkg.com/@apollo/client/-/client-3.0.0-beta.44.tgz#79c6083dc2fe81725ad64398bc78e641ed1c1d84"
+  integrity sha512-udNiabIYs9WLHWvj2j6tlsaWPNhgMZsHrZyBTKOh+69fLpmZZ4Vv4mepWq/3WCzyHoWa3n3FPi/ajNljkO/Olg==
   dependencies:
     "@types/zen-observable" "^0.8.0"
     "@wry/equality" "^0.1.9"
@@ -1967,16 +1967,16 @@
     "@xtuc/long" "4.2.2"
 
 "@wry/context@^0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@wry/context/-/context-0.5.0.tgz#5ff84d0d5726b62c07045af8465f890eb3823c8c"
-  integrity sha512-yW5XFrWbRvv2/f86+g0YAfko7671SQg7Epn8lYjux4MZmIvtPvK2ts+vG1QAPu2w6GuBioEJknRa7K2LFj2kQw==
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/@wry/context/-/context-0.5.2.tgz#f2a5d5ab9227343aa74c81e06533c1ef84598ec7"
+  integrity sha512-B/JLuRZ/vbEKHRUiGj6xiMojST1kHhu4WcreLfNN7q9DqQFrb97cWgf/kiYsPSUCAMVN0HzfFc8XjJdzgZzfjw==
   dependencies:
     tslib "^1.9.3"
 
 "@wry/equality@^0.1.9":
-  version "0.1.9"
-  resolved "https://registry.yarnpkg.com/@wry/equality/-/equality-0.1.9.tgz#b13e18b7a8053c6858aa6c85b54911fb31e3a909"
-  integrity sha512-mB6ceGjpMGz1ZTza8HYnrPGos2mC6So4NhS1PtZ8s4Qt0K7fBiIGhpSxUbQmhwcSWE3no+bYxmI2OL6KuXYmoQ==
+  version "0.1.11"
+  resolved "https://registry.yarnpkg.com/@wry/equality/-/equality-0.1.11.tgz#35cb156e4a96695aa81a9ecc4d03787bc17f1790"
+  integrity sha512-mwEVBDUVODlsQQ5dfuLUS5/Tf7jqUKyhKYHmVi4fPB6bDMOfWvUPJmKgS1Z7Za/sOI3vzWt4+O7yCiL/70MogA==
   dependencies:
     tslib "^1.9.3"
 

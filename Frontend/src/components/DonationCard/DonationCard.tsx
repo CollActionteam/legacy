@@ -106,7 +106,7 @@ const InnerDonationCard = () => {
             },
         });
         if (creditCardResult.errors) {
-            const err = creditCardResult.errors.map(e => e.message).join(", ");
+            const err = creditCardResult.errors.map((e:any) => e.message).join(", ");
             setError(err);
             console.log(err);
             return;
@@ -150,7 +150,7 @@ const InnerDonationCard = () => {
             }
         });
         if (initializeResult.errors) {
-            console.error(`Unable to start the SEPA direct transaction: ${initializeResult.errors.map(e => e.message).join(", ")}`);
+            console.error(`Unable to start the SEPA direct transaction: ${initializeResult.errors.map((e: any) => e.message).join(", ")}`);
             setError("We're unable to start your SEPA direct donation, something is wrong, please contact hello@collaction.org with your issue");
             return;
         }
@@ -188,7 +188,7 @@ const InnerDonationCard = () => {
             }
         });
         if (initializeResult.errors) {
-            console.error(`Unable to start the iDeal transaction: ${initializeResult.errors.map(e => e.message).join(", ")}`);
+            console.error(`Unable to start the iDeal transaction: ${initializeResult.errors.map((e: any) => e.message).join(", ")}`);
             setError("We're unable to start your iDeal donation, something is wrong, please contact hello@collaction.org with your issue");
             return;
         }
