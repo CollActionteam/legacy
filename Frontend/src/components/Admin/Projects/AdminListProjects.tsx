@@ -6,6 +6,7 @@ import { useHistory } from "react-router-dom";
 import Loader from "../../Loader/Loader";
 import { Alert } from "../../Alert/Alert";
 import { Fragments } from "../../../api/fragments";
+import Formatter from "../../../formatter";
 
 export default () => {
     const history = useHistory();
@@ -88,8 +89,8 @@ export default () => {
                         <TableRow key={p.id}>
                             <TableCell component="th" scope="row">{ p.name }</TableCell>
                             <TableCell align="right">{ p.status }</TableCell>
-                            <TableCell align="right">{ p.start }</TableCell>
-                            <TableCell align="right">{ p.end }</TableCell>
+                            <TableCell align="right">{ Formatter.date(new Date(p.start)) }</TableCell>
+                            <TableCell align="right">{ Formatter.date(new Date(p.end)) } { Formatter.time(new Date(p.end)) }</TableCell>
                             <TableCell align="right">{ p.isActive ? "Yes" : "No" }</TableCell>
                             <TableCell align="right"><Button onClick={() => history.push(`/admin/projects/edit/${p.id}`)}>Edit</Button></TableCell>
                             <TableCell align="right"><Button onClick={() => { setDeleteDialogOpen(true); setToDelete(p); }}>Delete</Button></TableCell>

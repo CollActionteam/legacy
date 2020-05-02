@@ -6,6 +6,7 @@ import { useHistory } from "react-router-dom";
 
 import { Alert } from "../../Alert/Alert";
 import Loader from "../../Loader/Loader";
+import Formatter from "../../../formatter";
 
 export default () => {
     const history = useHistory();
@@ -96,7 +97,7 @@ export default () => {
                             <TableCell align="right">{ u.firstName }</TableCell>
                             <TableCell align="right">{ u.lastName }</TableCell>
                             <TableCell align="right">{ u.isAdmin ? "Yes" : "No" }</TableCell>
-                            <TableCell align="right">{ u.registrationDate }</TableCell>
+                            <TableCell align="right">{ Formatter.date(new Date(u.registrationDate)) } { Formatter.time(new Date(u.registrationDate)) }</TableCell>
                             <TableCell align="right"><Button onClick={() => history.push(`/admin/users/edit/${u.id}`)}>Edit</Button></TableCell>
                             <TableCell align="right"><Button onClick={() => { setDeleteDialogOpen(true); setToDelete(u); }}>Delete</Button></TableCell>
                         </TableRow>))
