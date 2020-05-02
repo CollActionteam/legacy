@@ -7,7 +7,7 @@ import { IProject } from "../../../api/types";
 import Loader from "../../../components/Loader/Loader";
 import { Alert } from "../../../components/Alert/Alert";
 import styles from "./ProjectWidget.module.scss";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet";
 
 const GET_PROJECT = gql`
     query GetProject($id: ID!) {
