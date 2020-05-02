@@ -43,11 +43,11 @@ namespace CollAction.Services.Image
 
         public async Task<ImageFile> UploadImage(IFormFile fileUploaded, string imageDescription, int imageResizeThreshold, CancellationToken token)
         {
-            logger.LogInformation("Uploading image");
-            using Image<Rgba32> image = await UploadToImage(fileUploaded, imageResizeThreshold, token).ConfigureAwait(false);
+            logger.LogInformation("Retrieving image");
+            using Image<Rgba32> image = await LoadImageFromRequest(fileUploaded, imageResizeThreshold, token).ConfigureAwait(false);
             var currentImage = new ImageFile(filepath: $"{Guid.NewGuid()}.jpg", date: DateTime.UtcNow, description: imageDescription, height: image.Height, width: image.Width);
 
-            logger.LogInformation("Queuing for s3 upload");
+            logger.LogInformation("Uploading image to S3");
             using MemoryStream imageBytes = ConvertImageToJpg(image);
             await UploadToS3(imageBytes, currentImage.Filepath, token).ConfigureAwait(false);
 
@@ -55,7 +55,7 @@ namespace CollAction.Services.Image
             context.ImageFiles.Add(currentImage);
             await context.SaveChangesAsync(token).ConfigureAwait(false);
 
-            logger.LogInformation("Done uploading image");
+            logger.LogInformation("Done processing image");
 
             return currentImage;
         }
@@ -171,7 +171,7 @@ namespace CollAction.Services.Image
             return 1.0;
         }
 
-        private async Task<Image<Rgba32>> UploadToImage(IFormFile fileUploaded, int imageResizeThreshold, CancellationToken token)
+        private async Task<Image<Rgba32>> LoadImageFromRequest(IFormFile fileUploaded, int imageResizeThreshold, CancellationToken token)
         {
             using Stream uploadStream = fileUploaded.OpenReadStream();
             using MemoryStream ms = new MemoryStream();
