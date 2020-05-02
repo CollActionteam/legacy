@@ -10,8 +10,8 @@ import Loader from './components/Loader/Loader';
 
 // General pages
 const HomePage = React.lazy(() => import(/* webpackChunkName: "home" */'./pages/Home/Home'));
-const AboutPage = React.lazy(() => import(/* webpackChunkName: "secondary" */'./pages/About/About'));
 const AdminPage = React.lazy(() => import(/* webpackChunkName: "admin" */'./pages/Admin/Admin'));
+const AboutPage = React.lazy(() => import(/* webpackChunkName: "secondary" */'./pages/About/About'));
 const NotFoundPage = React.lazy(() => import(/* webpackChunkName: "secondary" */'./pages/NotFound/NotFound'));
 const PrivacyPolicyPage = React.lazy(() => import(/* webpackChunkName: "secondary" */'./pages/PrivacyPolicy/PrivacyPolicy'));
 
@@ -31,13 +31,15 @@ const DonationThankYouPage = React.lazy(() => import(/* webpackChunkName: "donat
 
 // Project pages
 const FindPage = React.lazy(() => import(/* webpackChunkName: "project" */'./pages/projects/Find/Find'));
-const ThankYouCreatePage = React.lazy(() => import(/* webpackChunkName: "project" */'./pages/projects/ThankYouCreate/ThankYouCreate'));
 const ThankYouCommitPage = React.lazy(() => import(/* webpackChunkName: "project" */'./pages/projects/ThankYouCommit/ThankYouCommit'));
 const ProjectDetailsPage = React.lazy(() => import(/* webpackChunkName: "project" */'./pages/projects/Detail/ProjectDetails'));
 const UnsubscribeProjectPage = React.lazy(() => import(/* webpackChunkName: "project" */'./pages/projects/UnsubscribeProject/UnsubscribeProject'));
 const ProjectWidgetPage = React.lazy(() => import(/* webpackChunkName: "project" */'./pages/projects/Widget/ProjectWidget'));
+
+// Project start pages
 const CreateProjectPage = React.lazy(() => import(/* webpackChunkName: "project-start" */'./pages/projects/Create/Create'));
 const StartProjectPage = React.lazy(() => import(/* webpackChunkName: "project-start" */'./pages/projects/Start/Start'));
+const ThankYouCreatePage = React.lazy(() => import(/* webpackChunkName: "project-start" */'./pages/projects/ThankYouCreate/ThankYouCreate'));
 
 const routing = (
     <Router>
