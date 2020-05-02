@@ -29,9 +29,9 @@ const DonationReturnPage = () => {
 
     if (error) {
         return <Alert type="error" text="Unable to find iDeal information" />;
-    } else if (!loading && data.donation.hasIDealPaymentSucceeded) {
+    } else if (!loading && data.miscellaneous.hasIDealPaymentSucceeded) {
         return <Redirect to="/donate/thankyou" />
-    } else if (!loading && data.donation.hasIDealPaymentSucceeded === false) {
+    } else if (!loading && data.miscellaneous.hasIDealPaymentSucceeded === false) {
         return <Redirect to="/donate" />
     }
     return <Loader />;
