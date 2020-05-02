@@ -8,17 +8,19 @@ import GraphQLProvider from "./GraphQLProvider";
 import AnalyticsProvider from "./AnalyticsProvider";
 
 export default ({ children }: any) => {
-    return <I18nextProvider i18n={i18n}>
-        <GraphQLProvider>
-            <SettingsProvider>
-                <CookieConsentProvider>
-                    <UserProvider>
-                        <AnalyticsProvider>
-                            { children }
-                        </AnalyticsProvider>
-                    </UserProvider>
-                </CookieConsentProvider>
-            </SettingsProvider>
-        </GraphQLProvider>
-    </I18nextProvider>;
+    return <React.StrictMode>
+        <I18nextProvider i18n={i18n}>
+            <GraphQLProvider>
+                <SettingsProvider>
+                    <CookieConsentProvider>
+                        <UserProvider>
+                            <AnalyticsProvider>
+                                { children }
+                            </AnalyticsProvider>
+                        </UserProvider>
+                    </CookieConsentProvider>
+                </SettingsProvider>
+            </GraphQLProvider>
+        </I18nextProvider>
+    </React.StrictMode>;
 };
