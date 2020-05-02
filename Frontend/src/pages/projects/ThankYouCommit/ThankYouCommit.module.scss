@@ -1,8 +1,16 @@
 
 .header {
-    h1 {
+    h2 {
         color: #fff;
     }
     background-color: var(--c-green);
-    padding: var(--spacing-xlg);
+}
+
+.section {
+    h3 {
+        color: var(--c-green);
+    }
+    .projectGridItem {
+        margin-top: -200px !important;
+    }
 }

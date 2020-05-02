@@ -85,7 +85,8 @@ export const siteData = {
     {
       name: 'Twitter',
       url: 'https://twitter.com/CollAction_org',
-      shareUrl: (url: string) => `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}`,
+      shareUrl: (url: string, text?: string) => `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}` +
+          (text ? `&text=${encodeURIComponent(text)}` : ''),
       icon: 'twitter'
     },
     {
