@@ -22,6 +22,7 @@ const ForgotPasswordPage = React.lazy(() => import(/* webpackChunkName: "account
 const RegisterUserPage = React.lazy(() => import(/* webpackChunkName: "account" */'./pages/account/RegisterUser/RegisterUser'));
 const ResetPasswordPage = React.lazy(() => import(/* webpackChunkName: "account" */'./pages/account/ResetPassword/ResetPassword'));
 const FinishRegistrationPage = React.lazy(() => import(/* webpackChunkName: "account" */'./pages/account/FinishRegistration/FinishRegistration'));
+const RegistrationCompletePage = React.lazy(() => import(/* webpackChunkName: "account" */'./pages/account/RegisterUser/RegistrationComplete'));
 
 // Donation pages
 const DonationReturnPage = React.lazy(() => import(/* webpackChunkName: "donation" */'./pages/Donation/DonationReturn'));
@@ -34,7 +35,6 @@ const ThankYouCreatePage = React.lazy(() => import(/* webpackChunkName: "project
 const ThankYouCommitPage = React.lazy(() => import(/* webpackChunkName: "project" */'./pages/projects/ThankYouCommit/ThankYouCommit'));
 const ProjectDetailsPage = React.lazy(() => import(/* webpackChunkName: "project" */'./pages/projects/Detail/ProjectDetails'));
 const UnsubscribeProjectPage = React.lazy(() => import(/* webpackChunkName: "project" */'./pages/projects/UnsubscribeProject/UnsubscribeProject'));
-const RegistrationCompletePage = React.lazy(() => import(/* webpackChunkName: "project" */'./pages/account/RegisterUser/RegistrationComplete'));
 const ProjectWidgetPage = React.lazy(() => import(/* webpackChunkName: "project" */'./pages/projects/Widget/ProjectWidget'));
 const CreateProjectPage = React.lazy(() => import(/* webpackChunkName: "project-start" */'./pages/projects/Create/Create'));
 const StartProjectPage = React.lazy(() => import(/* webpackChunkName: "project-start" */'./pages/projects/Start/Start'));
