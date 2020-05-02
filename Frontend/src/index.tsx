@@ -33,6 +33,7 @@ import ProjectDetailsPage from './pages/projects/Detail/ProjectDetails';
 import PrivacyPolicyPage from './pages/PrivacyPolicy/PrivacyPolicy';
 import UnsubscribeProjectPage from './pages/projects/UnsubscribeProject/UnsubscribeProject';
 import RegistrationCompletePage from './pages/account/RegisterUser/RegistrationComplete';
+import ProjectWidgetPage from './pages/projects/Widget/ProjectWidget';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 import RunAnalytics from './components/Analytics/RunAnalytics';
 
@@ -61,6 +62,7 @@ const routing = (
                     <Route exact path="/projects/create/thankyou/:projectId" component={ThankYouCreatePage} />
                     <Route exact path="/projects/:slug/:projectId" component={ProjectDetailsPage} />
                     <Route exact path="/projects/:slug/:projectId/thankyou" component={ThankYouCommitPage} />
+                    <Route exact path="/projects/:slug/:projectId/widget" component={ProjectWidgetPage} />
                     <Route exact path="/projects/:slug/:projectId/unsubscribe-email" component={UnsubscribeProjectPage} />
                     <Route exact path="/admin/:type/:action/:id?" component={AdminPage} />
                     <Route component={NotFoundPage} />

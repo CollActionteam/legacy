@@ -7,7 +7,12 @@ import CategoryTags from "../CategoryTags/CategoryTags";
 import Formatter from "../../formatter";
 import LazyImage from "../LazyImage/LazyImage";
 
-export default ({ project }: { project: IProject }) => {
+interface IProjectCardProps {
+  project: IProject;
+  target?: string | undefined;
+}
+
+export default ({ project, target }: IProjectCardProps) => {
   const defaultCategoryImage = project.categories[0]
     ? project.categories[0].category
     : "OTHER";
@@ -15,7 +20,7 @@ export default ({ project }: { project: IProject }) => {
   const defaultCardImage = require(`../../assets/default_card_images/${defaultCategoryImage}.jpg`);
 
   return (
-    <a href={project.url} className={styles.card}>
+    <a href={project.url} className={styles.card} target={target ?? "_self"}>
       <figure className={styles.image}>
         { project.cardImage ? <LazyImage src={project.cardImage.url} alt={project.cardImage.description} /> : <LazyImage src={defaultCardImage} alt={project.name} /> }
       </figure>

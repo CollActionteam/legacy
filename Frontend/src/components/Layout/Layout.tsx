@@ -32,6 +32,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 import CookieDialog from "../CookieDialog/CookieDialog";
+import { useLocation } from "react-router-dom";
 
 library.add(
   fab,
@@ -51,24 +52,32 @@ library.add(
   faMinus,
 );
 
-export default ({ children }: any) => (
-  <React.Fragment>
-    <Helmet
-      title="CollAction"
-      meta={[
-        { name: "description", content: "CollAction" },
-        { name: "keywords", content: "collaction" },
-      ]}
-    ></Helmet>
-    <Header />
-    <Grid container className="site-content">
-      <Grid item xs={12}>
-        <CookieDialog />
+export default ({ children }: any) => {
+  const { pathname } = useLocation();
+  const needsLayout = !pathname.endsWith("/widget");
+  if (needsLayout) {
+    return <React.Fragment>
+      <Helmet
+        title="CollAction"
+        meta={[
+          { name: "description", content: "CollAction" },
+          { name: "keywords", content: "collaction" },
+        ]}
+      ></Helmet>
+      <Header />
+      <Grid container className="site-content">
+        <Grid item xs={12}>
+          <CookieDialog />
+        </Grid>
+        <Grid item xs={12}>
+          {children}
+        </Grid>
       </Grid>
-      <Grid item xs={12}>
-        {children}
-      </Grid>
-    </Grid>
-    <Footer></Footer>
-  </React.Fragment>);
-
+      <Footer></Footer>
+    </React.Fragment>;
+  } else {
+    return <React.Fragment>
+      { children}
+    </React.Fragment>;
+  }
+}; 
