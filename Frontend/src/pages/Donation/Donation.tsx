@@ -13,7 +13,7 @@ type TParams = {
 }
 
 const DonationPage = ({ match } : TParams) => {
-    const { thankyou } = match && match.params;
+    const thankyou = match && match.params && match.params.thankyou;
 
     return (
         <React.Fragment>
