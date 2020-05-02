@@ -58,7 +58,8 @@ export default ({ children }: any) => {
   if (needsLayout) {
     return <React.Fragment>
       <Helmet
-        title="CollAction"
+        defaultTitle="CollAction"
+        titleTemplate="%s — CollAction"
         meta={[
           { name: "description", content: "CollAction" },
           { name: "keywords", content: "collaction" },

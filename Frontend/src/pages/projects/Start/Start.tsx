@@ -10,10 +10,15 @@ import Kickstart from "./Kickstart";
 
 import styles from "./Start.module.scss";
 import { StartProjectSteps } from "./StartProjectSteps";
+import {Helmet} from "react-helmet";
 
 const StartProjectPage = () => {
   return (
     <React.Fragment>
+        <Helmet>
+            <title>Start Project</title>
+            <meta name="description" content="Start Project"/>
+        </Helmet>
       <Banner>
         <Grid container className={styles.banner}></Grid>
       </Banner>
