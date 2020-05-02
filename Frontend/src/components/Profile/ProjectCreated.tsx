@@ -7,6 +7,7 @@ import * as Yup from "yup";
 import { Alert } from "../Alert/Alert";
 import { useMutation, gql } from "@apollo/client";
 import { Button } from "../Button/Button";
+import Formatter from "../../formatter";
 
 interface IProjectParticipatingProps {
     user: IUser;
@@ -77,8 +78,7 @@ export default ({ user, project }: IProjectParticipatingProps) => {
         }
     });
     const projectEmailsLeft = 4 - project.numberProjectEmailsSent;
-    const canSendUpTil = new Date(project.end);
-    canSendUpTil.setDate(canSendUpTil.getDate() + 180);
+    const canSendUpTil = new Date(new Date(project.end).getTime() + 180 * 24 * 60 * 60 * 1000); // end date + 180 days
     return <Card>
         <Alert type="error" text={error} />
         <Alert type="info" text={info} />
@@ -90,7 +90,7 @@ export default ({ user, project }: IProjectParticipatingProps) => {
                         <p>Hi {user.fullName ?? "project starter"}!</p>
                         <p>
                             You can send 4 e-mails in total (during and up to 180 days after the project ends). 
-                            You have already sent { project.numberProjectEmailsSent } e-mails, and can still send { projectEmailsLeft } emails up until { canSendUpTil.toDateString() } 23:59 in the UTC (London) timezone. 
+                            You have already sent { project.numberProjectEmailsSent } e-mails, and can still send { projectEmailsLeft } emails up until { Formatter.date(canSendUpTil) } { Formatter.time(canSendUpTil) } ({ Formatter.timezone()} timezone). 
                             To personalize the message, you can add {'{firstname}'} and {'{lastname}'} to your message (including the brackets) - these will be substituted with the user's first and last name. 
                         </p>
                         <FormGroup>
