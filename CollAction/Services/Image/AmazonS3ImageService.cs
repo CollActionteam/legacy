@@ -16,9 +16,9 @@ using System.Threading;
 using Microsoft.Extensions.Logging;
 using CollAction.Data;
 using Microsoft.EntityFrameworkCore;
-using Hangfire.Server;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using SixLabors.ImageSharp.Formats.Jpeg;
 
 namespace CollAction.Services.Image
 {
@@ -27,6 +27,7 @@ namespace CollAction.Services.Image
         private readonly AmazonS3Client client;
         private readonly string bucket;
         private readonly string region;
+        private readonly JpegEncoder encoder;
         private readonly IRecurringJobManager recurringJobManager;
         private readonly ILogger<AmazonS3ImageService> logger;
         private readonly ApplicationDbContext context;
@@ -39,6 +40,7 @@ namespace CollAction.Services.Image
             client = new AmazonS3Client(options.Value.S3AwsAccessKeyID, options.Value.S3AwsAccessKey, RegionEndpoint.GetBySystemName(options.Value.S3Region));
             bucket = options.Value.S3Bucket;
             region = options.Value.S3Region;
+            encoder = new JpegEncoder() { Quality = 90 };
         }
 
         public async Task<ImageFile> UploadImage(IFormFile fileUploaded, string imageDescription, int imageResizeThreshold, CancellationToken token)
@@ -190,7 +192,7 @@ namespace CollAction.Services.Image
         private MemoryStream ConvertImageToJpg(Image<Rgba32> image)
         {
             MemoryStream ms = new MemoryStream();
-            image.SaveAsJpeg(ms);
+            image.SaveAsJpeg(ms, encoder);
             return ms;
         }
     }
