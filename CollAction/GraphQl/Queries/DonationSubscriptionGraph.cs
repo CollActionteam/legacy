@@ -8,8 +8,8 @@ namespace CollAction.GraphQl.Queries
         public DonationSubscriptionGraph()
         {
             Field<NonNullGraphType<IdGraphType>>(nameof(Subscription.Id), resolve: x => x.Source.Id);
-            Field(x => x.CanceledAt, true);
-            Field(x => x.StartDate, true);
+            Field<DateTimeOffsetGraphType>(nameof(Subscription.CanceledAt), resolve: x => x.Source.CanceledAt);
+            Field<DateTimeOffsetGraphType>(nameof(Subscription.StartDate), resolve: x => x.Source.StartDate);
         }
     }
 }

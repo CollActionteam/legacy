@@ -22,7 +22,7 @@ namespace CollAction.GraphQl.Queries
             Field(x => x.DescriptiveImageFileId, true);
             Field(x => x.CardImageFileId, true);
             Field(x => x.DisplayPriority);
-            Field(x => x.End);
+            Field<NonNullGraphType<DateTimeOffsetGraphType>>(nameof(Project.End), resolve: x => x.Source.End);
             Field(x => x.Goal);
             Field(x => x.IsActive);
             Field(x => x.IsClosed);
@@ -32,7 +32,7 @@ namespace CollAction.GraphQl.Queries
             Field<IdGraphType>(nameof(Project.OwnerId), resolve: x => x.Source.OwnerId);
             Field(x => x.Proposal);
             Field(x => x.RemainingTime);
-            Field(x => x.Start);
+            Field<NonNullGraphType<DateTimeOffsetGraphType>>(nameof(Project.Start), resolve: x => x.Source.Start);
             Field(x => x.Status);
             Field(x => x.Target);
             Field(x => x.NameNormalized);

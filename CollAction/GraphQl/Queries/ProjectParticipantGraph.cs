@@ -12,7 +12,7 @@ namespace CollAction.GraphQl.Queries
             Field<IdGraphType>("id", resolve: c => $"{c.Source.ProjectId}_{c.Source.UserId}");
             Field(x => x.SubscribedToProjectEmails);
             Field(x => x.UnsubscribeToken);
-            Field(x => x.ParticipationDate);
+            Field<NonNullGraphType<DateTimeOffsetGraphType>>(nameof(ProjectParticipant.ParticipationDate), resolve: x => x.Source.ParticipationDate);
             Field<NonNullGraphType<IdGraphType>>(nameof(ProjectParticipant.UserId), resolve: x => x.Source.UserId);
             Field<NonNullGraphType<IdGraphType>>(nameof(ProjectParticipant.ProjectId), resolve: x => x.Source.ProjectId);
             AddNavigationField(nameof(ProjectParticipant.Project), c => c.Source.Project);

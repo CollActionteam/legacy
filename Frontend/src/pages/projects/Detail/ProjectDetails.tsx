@@ -25,7 +25,6 @@ import { ProjectStarter } from "../../../components/ProjectStarter/ProjectStarte
 import { Helmet } from "react-helmet";
 import Formatter from "../../../formatter";
 import LazyImage from "../../../components/LazyImage/LazyImage";
-import Utils from "../../../utils";
 
 type TParams = {
   slug: string,
@@ -93,7 +92,7 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
 
   const renderStats = (project: IProject) => {
     if (project && project.remainingTime) {
-      const endDate = Utils.parseProjectEndDate(project.end);
+      const endDate = new Date(project.end);
       return (
         <div>
           <div className={styles.remainingTime}>

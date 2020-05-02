@@ -25,7 +25,7 @@ namespace CollAction.GraphQl.Queries
             Field(x => x.RepresentsNumberParticipants);
             Field(x => x.UserName);
             Field(x => x.Activated);
-            Field(x => x.RegistrationDate);
+            Field<NonNullGraphType<DateTimeOffsetGraphType>>(nameof(ApplicationUser.RegistrationDate), resolve: x => x.Source.RegistrationDate);
             FieldAsync<BooleanGraphType>(
                 "isAdmin",
                 resolve: async c =>

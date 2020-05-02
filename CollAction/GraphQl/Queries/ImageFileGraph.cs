@@ -13,7 +13,7 @@ namespace CollAction.GraphQl.Queries
         public ImageFileGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService) : base(entityFrameworkGraphQlService)
         {
             Field<NonNullGraphType<IdGraphType>>(nameof(ImageFile.Id), resolve: x => x.Source.Id);
-            Field(x => x.Date);
+            Field<NonNullGraphType<DateTimeOffsetGraphType>>(nameof(ImageFile.Date), resolve: x => x.Source.Date);
             Field(x => x.Description);
             Field(x => x.Filepath);
             Field(x => x.Height);

@@ -21,18 +21,4 @@ export default class Utils {
     });
     return response.json();
   };
-
-  static parseProjectEndDate(date: string) {
-    let dateParts = date.split("-");
-
-    return new Date(
-        Number(dateParts[0]),
-        Number(dateParts[1]),
-        Number(dateParts[2]),
-        23 - new Date().getTimezoneOffset() / 60,
-        59,
-        59,
-    );
-  }
-
 }

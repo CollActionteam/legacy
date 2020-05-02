@@ -6,8 +6,6 @@ import DonationCard from "../../components/DonationCard/DonationCard";
 import { Section } from "../../components/Section/Section";
 import { Helmet } from "react-helmet";
 import { Faq } from "../../components/Faq/Faq";
-import { RouteComponentProps } from "react-router-dom";
-import {Alert} from "../../components/Alert/Alert";
 import DonationThankYouCard from "../../components/DonationCard/DonationThankYouCard";
 
 type TParams = {

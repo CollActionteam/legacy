@@ -2,6 +2,7 @@
 using CollAction.Models;
 using GraphQL.Authorization;
 using GraphQL.EntityFramework;
+using GraphQL.Types;
 
 namespace CollAction.GraphQl.Queries
 {
@@ -12,7 +13,7 @@ namespace CollAction.GraphQl.Queries
         {
             Field(x => x.Id);
             Field(x => x.EventData);
-            Field(x => x.EventLoggedAt);
+            Field<NonNullGraphType<DateTimeOffsetGraphType>>(nameof(UserEvent.EventLoggedAt), resolve: x => x.Source.EventLoggedAt);
             Field(x => x.UserId, true);
             AddNavigationField(nameof(UserEvent.User), c => c.Source.User, typeof(ApplicationUserGraph));
         }

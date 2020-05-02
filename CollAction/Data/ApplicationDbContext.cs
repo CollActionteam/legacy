@@ -2,6 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using CollAction.Models;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace CollAction.Data
 {
@@ -69,6 +72,22 @@ namespace CollAction.Data
                    .HasOne(e => e.User)
                    .WithMany(u => u!.UserEvents)
                    .HasForeignKey(e => e.UserId);
+
+            // All stored dates are UTC
+            ValueConverter<DateTime, DateTime> dateTimeConverter = 
+                new ValueConverter<DateTime, DateTime>(
+                    v => v, v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
+
+            foreach (IMutableEntityType entityType in builder.Model.GetEntityTypes())
+            {
+                foreach (IMutableProperty property in entityType.GetProperties())
+                {
+                    if (property.ClrType == typeof(DateTime) || property.ClrType == typeof(DateTime?))
+                    {
+                        property.SetValueConverter(dateTimeConverter);
+                    }
+                }
+            }
         }
     }
 }
