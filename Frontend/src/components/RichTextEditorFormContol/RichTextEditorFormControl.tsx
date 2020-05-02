@@ -25,7 +25,7 @@ export interface IRichTextEditorProps {
 
 export class RichTextEditorFormControl extends React.Component<
   IRichTextEditorProps
-> {
+  > {
   private defaultTheme: Theme;
   private richTextControls = [
     "bold",
@@ -43,15 +43,11 @@ export class RichTextEditorFormControl extends React.Component<
     Object.assign(this.defaultTheme, {
       overrides: {
         MUIRichTextEditor: {
-          root: {
-            borderBottom: "1px solid var(--c-grey-d20)",
-          },
-          editorContainer: {
-            padding: "var(--spacing-sm)",
-            width: "unset",
+          editor: {
             height: this.props.height || "calc(var(--spacing) * 20)",
             overflow: "scroll",
-          },
+            borderBottom: "1px solid var(--c-grey-d20)"
+          }
         },
       },
     });
@@ -80,7 +76,7 @@ export class RichTextEditorFormControl extends React.Component<
             error={this.hasError()}
             label={this.props.hint}
             controls={this.richTextControls}
-            onChange={(state: any)=> {
+            onChange={(state: any) => {
               const content = state.getCurrentContent();
               this.props.formik.setFieldValue(
                 this.props.name,
