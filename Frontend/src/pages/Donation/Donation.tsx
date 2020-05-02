@@ -6,8 +6,17 @@ import DonationCard from "../../components/DonationCard/DonationCard";
 import { Section } from "../../components/Section/Section";
 import Helmet from "react-helmet";
 import { Faq } from "../../components/Faq/Faq";
+import { RouteComponentProps } from "react-router-dom";
+import {Alert} from "../../components/Alert/Alert";
+import DonationThankYouCard from "../../components/DonationCard/DonationThankYouCard";
 
-const DonationPage = () => {
+type TParams = {
+    match?: any,
+}
+
+const DonationPage = ({ match } : TParams) => {
+    const { thankyou } = match && match.params;
+
     return (
         <React.Fragment>
             <Helmet>
@@ -26,7 +35,10 @@ const DonationPage = () => {
             <Section>
                 <Grid container spacing={10}>
                     <Grid item sm={12} md={6}>
-                        <DonationCard/>
+                        {thankyou ?
+                            <DonationThankYouCard/> :
+                            <DonationCard/>
+                        }
                     </Grid>
                     <Grid item sm={12} md={6}>
                         <h2>Frequently Asked Questions</h2>

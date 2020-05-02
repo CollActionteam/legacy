@@ -81,3 +81,12 @@
         }
     }
 }
+
+.donationSmiley {
+    font-size: var(--font-size-xl);
+    font-weight: bold;
+    font-family: 'Lucida Grande', sans-serif;
+    text-align: center;
+    margin-top: var(--spacing-md);
+    color: var(--c-grey-d30);
+}
