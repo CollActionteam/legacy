@@ -36,6 +36,7 @@ import RegistrationCompletePage from './pages/account/RegisterUser/RegistrationC
 import ProjectWidgetPage from './pages/projects/Widget/ProjectWidget';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 import RunAnalytics from './components/Analytics/RunAnalytics';
+import DonationThankYouPage from "./pages/Donation/DonationThankYou";
 
 const routing = (
     <Router>
@@ -55,7 +56,7 @@ const routing = (
                     <Route exact path="/account/profile" component={ProfilePage} />
                     <Route exact path="/donate" component={DonationPage} />
                     <Route exact path="/donate/return" component={DonationReturnPage} />
-                    <Route exact path="/donate/:thankyou" component={DonationPage} />
+                    <Route exact path="/donate/thankyou" component={DonationThankYouPage} />
                     <Route exact path="/projects/find" component={FindPage} />
                     <Route exact path="/projects/start" component={StartProjectPage} />
                     <Route exact path="/projects/create" component={CreateProjectPage} />

@@ -7,8 +7,8 @@ import {gql, useQuery} from "@apollo/client";
 import {IProject} from "../../../api/types";
 import {Fragments} from "../../../api/fragments";
 import styles from "./ThankYouCommit.module.scss";
-import DonationPage from "../../Donation/Donation";
 import ProjectShare from "../../../components/ProjectShare/ProjectShare";
+import DonationLayout from "../../../components/DonationLayout/DonationLayout";
 
 type TParams = {
     slug: string,
@@ -46,7 +46,7 @@ const ThankYouCommitPage = ({match}: RouteComponentProps<TParams>): any => {
             </Grid>
         </Section>
 
-        <DonationPage/>
+        <DonationLayout />
 
     </>
 }
