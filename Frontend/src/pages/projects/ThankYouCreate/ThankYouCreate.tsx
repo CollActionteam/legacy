@@ -7,6 +7,7 @@ import { gql, useQuery } from "@apollo/client";
 import Loader from "../../../components/Loader/Loader";
 import {Banner} from "../../../components/Banner/Banner";
 import {Grid} from "@material-ui/core";
+import {Helmet} from "react-helmet";
 
 type TParams = {
   projectId: string
@@ -22,7 +23,12 @@ const GET_PROJECT = gql`
 
 const renderThankYou = (name: string) => {
 
-  return <Banner>
+  return <>
+      <Helmet>
+          <title>Create a project</title>
+          <meta name="description" content="Create a project" />
+      </Helmet>
+      <Banner>
           <Grid container className={styles.banner}>
               <Section>
                   <h1 className={styles.thankYouOverlayTitle}>Awesome!</h1>
@@ -42,7 +48,8 @@ const renderThankYou = (name: string) => {
                   </p>
               </Section>
           </Grid>
-      </Banner>;
+      </Banner>
+      </>;
 }
 
 const ThankYouCreatePage = ({ match } : RouteComponentProps<TParams>) => {
