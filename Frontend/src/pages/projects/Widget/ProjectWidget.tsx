@@ -7,6 +7,7 @@ import { IProject } from "../../../api/types";
 import Loader from "../../../components/Loader/Loader";
 import { Alert } from "../../../components/Alert/Alert";
 import styles from "./ProjectWidget.module.scss";
+import Helmet from "react-helmet";
 
 const GET_PROJECT = gql`
     query GetProject($id: ID!) {
@@ -32,6 +33,10 @@ const ProjectWidgetPage = ({ match } : RouteComponentProps<TParams>): any => {
     );
     const project: IProject | undefined = data?.project;
     return <div className={styles.projectWidget}>
+        <Helmet>
+            <title>Project { project?.name ?? "Loading" } widget</title>
+            <meta name="description" content={`Project ${project?.name ?? "Loading"} widget`} />
+        </Helmet>
         <Alert type="error" text={error?.message} />
         { loading ? <Loader /> : null }
         { project ? <ProjectCard target="_blank" project={project} /> : null }
