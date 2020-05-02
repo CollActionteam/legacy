@@ -14,7 +14,13 @@ import Grid from "@material-ui/core/Grid";
 
 // FontAwesome
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faTwitter, faFacebookF, faInstagram, faYoutube, faLinkedinIn } from "@fortawesome/free-brands-svg-icons";
+import { 
+  faTwitter, 
+  faFacebookF,
+   faInstagram, 
+   faYoutube, 
+   faLinkedinIn 
+} from "@fortawesome/free-brands-svg-icons";
 import {
     faHeart,
     faTimes,
