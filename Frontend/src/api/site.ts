@@ -8,11 +8,11 @@ export const siteData = {
       link: '/'
     },
     {
-      name: 'Find Project',
+      name: 'Find Crowdaction',
       link: '/projects/find'
     },
     {
-      name: 'Start Project',
+      name: 'Start Crowdaction',
       link: '/projects/start'
     },
     {
@@ -22,53 +22,71 @@ export const siteData = {
   ],
   footerLinks: [
     {
-      link: "/",
-      name: "Home",
+      title: 'Explore',
+      links: [
+        {
+          link: "/",
+          name: "Home",
+        },
+        {
+          link: "/projects/find",
+          name: "Find Crowdaction",
+        },
+        {
+          link: "/projects/start",
+          name: "Start Crowdaction",
+        },
+        {
+          link: "/about",
+          name: "About",
+        },
+        {
+          link: "/account/login"
+        },
+        {
+          link: "/account/register-user",
+          name: "Register",
+        },
+      ]
     },
     {
-      link: "/projects/find",
-      name: "Find Project",
+      title: 'About us',
+      links: [
+        {
+          link: "/about#mission",
+          name: "Mission",
+        },
+        {
+          link: "/about#team",
+          name: "Team",
+        },
+        {
+          link: "/about#partners",
+          name: "Partners",
+        },
+        {
+          link: "/about#press",
+          name: "Press",
+        },
+        {
+          link: "/donate",
+          name: "Donate",
+        }
+      ],
     },
     {
-      link: "/projects/start",
-      name: "Start Project",
-    },
-    {
-      link: "/about",
-      name: "About Us",
-    },
-    {
-      link: "/account/login",
-      name: "Login",
-    },
-    {
-      link: "/account/register-user",
-      name: "Sign Up",
-    },
-    {
-      link: "/about#mission",
-      name: "Mission",
-    },
-    {
-      link: "/about#team",
-      name: "Team",
-    },
-    {
-      link: "/donate",
-      name: "Donate",
-    },
-    {
-      link: "/about#partners",
-      name: "Partners",
-    },
-    {
-      link: "/about#press",
-      name: "Press",
-    },
-    {
-      link: "/about#faq",
-      name: "FAQs",
-    },
+      title: 'Support',
+      links: [
+        {
+          link: "/about#faq",
+          name: "FAQs",
+        },
+        {
+          link: "/privacy-policy",
+          name: "Privacy policy",
+        },
+      ]
+    }
   ],
   socialMedia: [
     {

@@ -19,13 +19,11 @@ import {
     faFacebookF,
     faInstagram, 
     faYoutube, 
-    faLinkedinIn 
+    faLinkedinIn
 } from "@fortawesome/free-brands-svg-icons";
 import {
-    faHeart,
     faTimes,
     faBars,
-    faUser,
     faAngleDown,
     faSpinner,
     faClock,
@@ -36,7 +34,7 @@ import {
     faPlus,
     faMinus
 } from "@fortawesome/free-solid-svg-icons";
-import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
+import { faEnvelope, faHeart, faUser } from "@fortawesome/free-regular-svg-icons";
 import CookieDialog from "../CookieDialog/CookieDialog";
 import { useLocation } from "react-router-dom";
 

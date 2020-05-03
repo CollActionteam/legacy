@@ -1,5 +1,10 @@
 @import '../Styles/responsive.scss';
 
+.wrapper {
+    display: flex;
+    width: 100%;
+}
+
 .navigation {
     display: flex;
     flex: 1;
@@ -41,11 +46,16 @@
 
 .navigationItem {
     display: inline-block;
-    padding-left: var(--spacing-lg);
+    padding-left: calc(var(--spacing) * 2);
+    font-size: var(--font-size);
 
     @include breakpoint-down(md) {
-        padding-left: var(--spacing-lg);
+        padding-left: 24px;
         padding-bottom: var(--spacing);
+    }
+
+    @include breakpoint-down(sm) {
+        padding-left: 12px;
     }
 }
 
@@ -73,10 +83,11 @@
     appearance: none;
     background: none;
     border: 0;
-    font-size: var(--font-size-lg);
+    font-size: calc(var(--font-size) * 1.5);
     color: var(--c-black);
     opacity: .8;
     cursor: pointer;
+    margin-left: auto;
 }
 
 .navigationSubmit {
@@ -102,11 +113,11 @@
 }
 
 .navigationButton {
-    color: var(--c-green);
+    color: var(--c-grey-d30);
     text-decoration: none;
     
     svg {
-        padding-right: var(--spacing-xs);
+        margin-right: var(--spacing-sm);
         transition: transform var(--transition-duration);
     }
 

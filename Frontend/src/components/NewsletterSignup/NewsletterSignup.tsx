@@ -86,7 +86,9 @@ export default class NewsletterSignup extends React.Component<
             className={styles.submit}
             disabled={!!this.state.error || !this.state.email}
           >
-            <FontAwesomeIcon icon={["far", "envelope"]} size="sm" />
+            <div className={styles.submitIcon}>
+              <FontAwesomeIcon icon={["far", "envelope"]} size="sm" />
+            </div>
             {this.state.email ? (
               <span className={styles.submitLabel}>Sign up</span>
             ) : null}
