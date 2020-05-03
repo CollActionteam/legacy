@@ -4,7 +4,7 @@ import styles from "./PrivacyPolicy.module.scss";
 import { Helmet } from 'react-helmet';
 
 const PrivacyPolicyPage = () => { 
-    return <React.Fragment>
+    return <>
         <Helmet>
             <title>Privacy Policy</title>
             <meta name="description" content="Privacy Policy" />
@@ -191,7 +191,7 @@ const PrivacyPolicyPage = () => {
                 Updated: 14-06-2019
             </p>
         </Section>
-    </React.Fragment>;
+    </>;
 }
 
 export default PrivacyPolicyPage;

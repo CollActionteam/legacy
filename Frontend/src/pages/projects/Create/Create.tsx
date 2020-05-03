@@ -94,7 +94,7 @@ const CreateProjectPage = () => {
   }
 
   const pleaseLogin = (
-    <React.Fragment>
+    <>
       <Helmet>
         <title>Create a project</title>
         <meta name="description" content="Create a project" />
@@ -104,11 +104,11 @@ const CreateProjectPage = () => {
           <p>Please <Link to="/account/login?returnUrl=/projects/create">login</Link> first!</p>
         </Container>
       </Section>
-    </React.Fragment>
+    </>
   )
 
   const createProjectForm = (
-    <React.Fragment>
+    <>
       <Helmet>
         <title>Create a project</title>
         <meta name="description" content="Create a project" />
@@ -323,7 +323,7 @@ const CreateProjectPage = () => {
           </Form>
           )}
       </Formik>
-    </React.Fragment>
+    </>
   );
 
   return user ? createProjectForm : pleaseLogin;

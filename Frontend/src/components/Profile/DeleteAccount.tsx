@@ -39,7 +39,7 @@ export default ({ user }: IDeleteAccountProps) => {
                     }]
                 });
 
-    return <React.Fragment>
+    return <>
         <Alert type="error" text={errorMessage} />
         <Dialog onClose={() => setHasDeletePopup(false)} open={hasDeletePopup}>
             <DialogTitle>
@@ -59,7 +59,7 @@ export default ({ user }: IDeleteAccountProps) => {
                 <Button onClick={() => setHasDeletePopup(true)}>Remove my account</Button>
             </CardActions>
         </Card>
-    </React.Fragment>;
+    </>;
 };
 
 const DELETE_USER = gql`

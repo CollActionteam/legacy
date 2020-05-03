@@ -32,7 +32,7 @@ const ForgotPasswordPage = () => {
             }
         }
     );
-    return <React.Fragment>
+    return <>
         <Helmet>
             <title>Forgot Password CollAction</title>
             <meta name="description" content="Forgot Password" />
@@ -52,7 +52,7 @@ const ForgotPasswordPage = () => {
                 </Grid>
             </Grid>
         </Section>
-    </React.Fragment>;
+    </>;
 };
 
 export default ForgotPasswordPage;

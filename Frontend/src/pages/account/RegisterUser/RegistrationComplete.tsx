@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 const RegistrationCompletePage = () => {
   return (
-    <React.Fragment>
+    <>
       <Helmet>
         <title>Create a project</title>
         <meta name="description" content="Create a project" />
@@ -19,7 +19,7 @@ const RegistrationCompletePage = () => {
           <p>You can now <Link to="/account/login">login</Link> to start a new Crowdaction, or join others.</p>
         </Container>
       </Section>
-    </React.Fragment>
+    </>
   )
 }
 

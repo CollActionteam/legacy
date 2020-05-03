@@ -41,7 +41,7 @@ export default ({ user }: INewsletterSubscriptionProps) => {
                 }
             });
 
-    return <React.Fragment>
+    return <>
             <Alert type="error" text={errorMessage} />
             <Card>
                 <CardContent>
@@ -56,7 +56,7 @@ export default ({ user }: INewsletterSubscriptionProps) => {
                     <Button onClick={() => { toggleSubscription(); sendUserEvent(false, 'user', user.isSubscribedNewsletter ? 'unsubscribe' : 'subscribe', 'newsletter', null); }}>{ user.isSubscribedNewsletter ? "Unsubscribe" : "Subscribe" }</Button>
                 </CardActions>
             </Card>
-        </React.Fragment>;
+        </>;
 };
 
 const UPDATE_USER = gql`

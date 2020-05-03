@@ -114,7 +114,7 @@ const RegisterUserPage = () => {
         }
     });
 
-    return <React.Fragment>
+    return <>
         <Helmet>
           <title>Register User</title>
           <meta name="description" content="Register User" />
@@ -209,7 +209,7 @@ const RegisterUserPage = () => {
                 </Grid>
             </Grid>
         </Section>
-    </React.Fragment>;
+    </>;
 };
 
 export default RegisterUserPage;

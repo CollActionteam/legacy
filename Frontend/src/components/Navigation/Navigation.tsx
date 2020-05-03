@@ -18,7 +18,7 @@ export default ({ items } : INavigationProps) => {
   const renderWithUser = () => {
     const returnUrl = window.location.href;
     const logoutUrl = `${process.env.REACT_APP_BACKEND_URL}/account/logout`;
-    return <React.Fragment>
+    return <>
         <li className={styles.navigationItem}>
           <Link className={styles.navigationButton} to="/account/profile" onClick={() => setCollapsed(true)}>
             Profile
@@ -32,7 +32,7 @@ export default ({ items } : INavigationProps) => {
             </Button>
           </form>
         </li> 
-      </React.Fragment>;
+      </>;
   }
 
   const renderWithoutUser = () => {

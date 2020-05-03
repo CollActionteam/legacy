@@ -67,7 +67,7 @@ const ResetPasswordPage = () => {
         }
     });
 
-    return <React.Fragment>
+    return <>
         <Helmet>
           <title>Reset Password</title>
           <meta name="description" content="Reset Password" />
@@ -97,7 +97,7 @@ const ResetPasswordPage = () => {
                 </Grid>
             </Grid>
         </Section>
-    </React.Fragment>;
+    </>;
 };
 
 export default ResetPasswordPage;

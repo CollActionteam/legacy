@@ -66,7 +66,7 @@ export default ({ children }: any) => {
   const { pathname } = useLocation();
   const needsLayout = !pathname.endsWith("/widget");
   if (needsLayout) {
-    return <React.Fragment>
+    return <>
       <Helmet
         defaultTitle="CollAction"
         titleTemplate="%s — CollAction"
@@ -85,10 +85,10 @@ export default ({ children }: any) => {
         </Grid>
       </Grid>
       <Footer></Footer>
-    </React.Fragment>;
+    </>;
   } else {
-    return <React.Fragment>
+    return <>
       { children}
-    </React.Fragment>;
+    </>;
   }
 }; 

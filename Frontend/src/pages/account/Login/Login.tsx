@@ -36,7 +36,7 @@ const LoginPage = () => {
   }
 
   return (
-    <React.Fragment>
+    <>
       <Helmet>
         <title>Login</title>
         <meta name="description" content="Login" />
@@ -108,7 +108,7 @@ const LoginPage = () => {
           </Grid>
         </Grid>
       </Section>
-  </React.Fragment>
+  </>
   );
 }
 

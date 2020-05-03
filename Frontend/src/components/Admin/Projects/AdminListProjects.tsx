@@ -56,7 +56,7 @@ export default () => {
     );
     const projectCount = data?.projectCount ?? 0;
 
-    return <React.Fragment>
+    return <>
         { loading ? <Loader /> : null }
         <Alert type="info" text={info} />
         <Alert type="error" text={error} />
@@ -102,7 +102,7 @@ export default () => {
                 </TableBody>
             </Table>
         </TableContainer>
-    </React.Fragment>;
+    </>;
 };
 
 const GET_PROJECTS = gql`

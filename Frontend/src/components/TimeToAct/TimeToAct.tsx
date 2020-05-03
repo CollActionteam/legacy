@@ -6,7 +6,7 @@ import { useHistory } from "react-router-dom";
 export default () => {
     const history = useHistory();
 
-    return <React.Fragment>
+    return <>
         <section className={styles.timeToActStep}>
             <h4 className={styles.timeToActTitle}>Idea</h4>
             <div className={styles.timeToActStepBody}>
@@ -28,5 +28,5 @@ export default () => {
             </div>
             <GhostButton onClick={() => history.push("/about#faq")}>Read more</GhostButton>
         </section>
-    </React.Fragment>;
+    </>;
 };

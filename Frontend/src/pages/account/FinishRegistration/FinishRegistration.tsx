@@ -91,7 +91,7 @@ const FinishRegistrationPage = () => {
         }
     });
 
-    return <React.Fragment>
+    return <>
         <Helmet>
             <title>Finish Registration</title>
             <meta name="description" content="Finish Registration" />
@@ -115,11 +115,11 @@ const FinishRegistrationPage = () => {
                                 { formik.submitCount > 0 ? <Alert type="error" text={formik.errors.confirmPassword} /> : null }
                                 <FormControlLabel
                                     control={<Checkbox name="isSubscribedNewsletter" { ...formik.getFieldProps('isSubscribedNewsletter')} />}
-                                    label={<React.Fragment>I would like to receive an update from CollAction every once in a while - don't worry, we like spam as little as you do! <span role="img" aria-label="smiley">🙂</span></React.Fragment>} />
+                                    label={<>I would like to receive an update from CollAction every once in a while - don't worry, we like spam as little as you do! <span role="img" aria-label="smiley">🙂</span></>} />
                                 <FormControl>
                                     <FormControlLabel
                                         control={<Checkbox name="privacyPolicy" { ...formik.getFieldProps('privacyPolicy') } />}
-                                        label={<React.Fragment>I've read and agreed to the <Link to="/privacy-policy">privacy policy</Link></React.Fragment>}
+                                        label={<>I've read and agreed to the <Link to="/privacy-policy">privacy policy</Link></>}
                                         />
                                     { formik.submitCount > 0 ? <Alert type="error" text={formik.errors.privacyPolicy} /> : null }
                                 </FormControl>
@@ -130,7 +130,7 @@ const FinishRegistrationPage = () => {
                 </Grid>
             </Grid>
         </Section>
-    </React.Fragment>;
+    </>;
 };
 
 export default FinishRegistrationPage;

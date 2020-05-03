@@ -27,7 +27,7 @@ const AboutPage = () => {
   };
 
   return (
-    <React.Fragment>
+    <>
       <Helmet>
         <title>About CollAction</title>
         <meta name="description" content="About Collaction" />
@@ -272,7 +272,7 @@ const AboutPage = () => {
             </p>
         </Faq>
       </Section>
-    </React.Fragment>
+    </>
   );
 };
 

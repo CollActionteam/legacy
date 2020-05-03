@@ -144,7 +144,7 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
 
     const defaultBanner = require(`../../../assets/default_banner_images/${project.categories[0] ? project.categories[0].category : "OTHER"}.jpg`);
 
-    return <React.Fragment>
+    return <>
       <Helmet>
           <title>Project { project.name }</title>
           <meta name="description" content={`Project ${project.name}`} />
@@ -232,7 +232,7 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
                     <FormikContext.Provider value={formik}>
                       <Form className={styles.form} onSubmit={formik.handleSubmit}>
                         { user === null ?
-                            <React.Fragment>
+                            <>
                               <span>
                                 Want to participate? Enter your e-mail address and join
                                 this crowdaction!
@@ -247,7 +247,7 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
                                 />
                                 { (formik.touched.email && formik.errors.email) ? <Alert type="error" text={formik.errors.email} /> : null }
                               </FormControl>
-                            </React.Fragment> :
+                            </> :
                             <span>
                               <input type="hidden" name="email" { ...formik.getFieldProps('email') } />
                               Want to participate? Join this crowdaction!
@@ -277,16 +277,16 @@ const ProjectDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
           </Grid>
         </Grid>
       </Section>
-    </React.Fragment>;
+    </>;
   }
 
   return (
-    <React.Fragment>
+    <>
       <Alert type="error" text={errorMessage} />
       { !loading && !data ? <Redirect to="/404" /> : null }
       { loading ? <Loader /> : null }
       { project ? renderProject(project) : null }
-    </React.Fragment>
+    </>
   );
 };
 

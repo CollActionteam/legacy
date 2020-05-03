@@ -7,7 +7,7 @@ import styles from "./ProjectStarter.module.scss";
 export const ProjectStarter = ({user}: any) => {
   
   return (
-    <React.Fragment>
+    <>
       { user &&
         <div className={styles.projectStarter}>
           <div className={styles.avatarContainer}>
@@ -20,6 +20,6 @@ export const ProjectStarter = ({user}: any) => {
           <p className={styles.projectStarterTitle}>Project starter</p>
         </div>      
       }
-    </React.Fragment>
+    </>
   );
 }

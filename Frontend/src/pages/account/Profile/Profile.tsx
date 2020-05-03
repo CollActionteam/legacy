@@ -22,7 +22,7 @@ export default () => {
         <Grid container spacing={5}>
         {
           user.isAdmin ?
-            <React.Fragment>
+            <>
               <Grid item xs={12} md={6}>
                 <Card>
                   <CardActions>
@@ -41,7 +41,7 @@ export default () => {
                   </CardActions>
                 </Card>
               </Grid>
-            </React.Fragment> :
+            </> :
             null
         }
         <Grid item xs={12} md={6}>

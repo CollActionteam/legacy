@@ -37,7 +37,7 @@ export default ({ subscription }: IRecurringDonationItemProps) => {
     const [ errorMessage, setErrorMessage ] = useState<string | null>(null);
     const [ hasStopPopup, setHasStopPopup ] = useState(false);
 
-    return <React.Fragment>
+    return <>
         <Alert type="error" text={errorMessage} />
         <Dialog onClose={() => setHasStopPopup(false)} open={hasStopPopup}>
             <DialogTitle>
@@ -61,5 +61,5 @@ export default ({ subscription }: IRecurringDonationItemProps) => {
             </IconButton>
             </ListItemSecondaryAction>
         </ListItem>
-    </React.Fragment>;
+    </>;
 };

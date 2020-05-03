@@ -13,7 +13,7 @@ import TimeToAct from "../../components/TimeToAct/TimeToAct";
 const HomePage = () => {
   const { t } = useTranslation();
   return (
-    <React.Fragment>
+    <>
       <Helmet>
         <title>CollAction</title>
         <meta name="description" content="CollAction" />
@@ -36,7 +36,7 @@ const HomePage = () => {
           <GhostButton to="/projects/find">{t('home.projects.button')}</GhostButton>
         </div>
       </Section>
-    </React.Fragment>
+    </>
   )
 }
 

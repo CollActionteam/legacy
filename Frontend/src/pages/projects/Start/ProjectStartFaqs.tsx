@@ -2,7 +2,7 @@ import React from "react";
 import { Faq } from "../../../components/Faq/Faq";
 
 const ProjectStartFaqs = () => {
-    return <React.Fragment>
+    return <>
       <Faq title="Who can start a project?" collapsed={true} faqId="who_can_start">
           <p>
               Everyone that adheres to the start project criteria (see below) can start a
@@ -67,7 +67,7 @@ const ProjectStartFaqs = () => {
               Check out our <a href="https://docs.google.com/document/d/1JK058S_tZXntn3GzFYgiH3LWV5e9qQ0vXmEyV-89Tmw" target="_blank" rel="noopener noreferrer">Project Starter Handbook</a>
           </p>
       </Faq>
-    </React.Fragment>;
+    </>;
 }
 
 export default ProjectStartFaqs;

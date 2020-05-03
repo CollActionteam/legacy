@@ -58,11 +58,11 @@ const ThankYouCreatePage = ({ match } : RouteComponentProps<TParams>) => {
   const projectName = (data?.project.name ?? null) as string;
 
   return (
-    <React.Fragment>
+    <>
       { !loading && !data ? <Redirect to="/404" /> : null }
       { loading ? <Loader /> : null }
       { renderThankYou(projectName) }
-    </React.Fragment>
+    </>
   )
 };
 

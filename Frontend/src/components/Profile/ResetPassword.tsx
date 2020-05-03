@@ -36,7 +36,7 @@ export default () => {
 
     const isValid = confirmNewPassword === newPassword && currentPassword.length > 0 && newPassword.length > 0;
 
-    return <React.Fragment>
+    return <>
         <Alert type="error" text={errorMessage} />
         <Alert type="success" text={successMessage} />
         <Card>
@@ -53,7 +53,7 @@ export default () => {
                 </FormGroup>
             </CardActions>
         </Card>
-    </React.Fragment>;
+    </>;
 };
 
 const CHANGE_PASSWORD = gql`

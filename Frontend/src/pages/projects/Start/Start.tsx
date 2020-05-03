@@ -14,7 +14,7 @@ import {Helmet} from "react-helmet";
 
 const StartProjectPage = () => {
   return (
-    <React.Fragment>
+    <>
         <Helmet>
             <title>Start Project</title>
             <meta name="description" content="Start Project"/>
@@ -55,7 +55,7 @@ const StartProjectPage = () => {
           </Section>
         </Grid>
       </Grid>
-    </React.Fragment>
+    </>
   );
 };
 

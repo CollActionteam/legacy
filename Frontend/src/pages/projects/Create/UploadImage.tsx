@@ -43,7 +43,7 @@ const UploadImage = ({ name, formik }: any) => {
     <div className={styles.box} { ...getRootProps() }>
       <input { ...getInputProps() }></input>
       {
-        <React.Fragment>
+        <>
           <p className={styles.instruction}>
             { isDragActive 
               ? (<span className={styles.highlight}>Drop it here!</span>) 
@@ -53,13 +53,13 @@ const UploadImage = ({ name, formik }: any) => {
           <small className={`${styles.subInstruction} ${invalid ? styles.invalid : ''}`}>
             It must be a JPG or PNG, no larger than 1 MB.
           </small>
-        </React.Fragment>
+        </>
       }
     </div>
   );
 
   const preview = () => (
-      <React.Fragment>
+      <>
         <figure className={styles.preview}>
           <img src={previewImage} alt="Preview"></img>
         </figure>
@@ -69,7 +69,7 @@ const UploadImage = ({ name, formik }: any) => {
           </small>
           <Button variant="ghost" onClick={removeImage}>Clear</Button>      
         </div>
-      </React.Fragment>
+      </>
   );
 
   return previewImage == null

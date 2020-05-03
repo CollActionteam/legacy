@@ -241,10 +241,10 @@ const InnerDonationCard = () => {
             </DialogTitle>
             <DialogContent dividers>
                 { formik.values.recurring ?
-                    <React.Fragment>
+                    <>
                         <Alert type="warning" icon="exclamation-circle" text="By providing your IBAN and confirming this payment, you are authorizing Stichting CollAction and Stripe, our payment service provider, to send instructions to your bank to debit your account and your bank to debit your account in accordance with those instructions. You are entitled to a refund from your bank under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks starting from the date on which your account was debited." />
                         <IbanElement options={IBAN_OPTIONS} />
-                    </React.Fragment> :
+                    </> :
                     <IdealBankElement />
                 }
             </DialogContent>
