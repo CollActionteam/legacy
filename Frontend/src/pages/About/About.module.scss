@@ -1,5 +1,13 @@
 @import '../../components/Styles/responsive';
 
+.container {
+  @include breakpoint-up(sm) {
+    display: block;
+    max-width: 60%;
+    margin: 0 auto;
+  }
+}
+
 .video {
   position: relative;
   display: block;
@@ -25,6 +33,7 @@
   flex-wrap: wrap;
   margin-left: 0;
   margin-top: var(--spacing-lg);
+  justify-content: center;
 }
 
 $image-size: 6rem;

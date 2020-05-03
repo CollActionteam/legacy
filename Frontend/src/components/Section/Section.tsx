@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Grid, Hidden } from "@material-ui/core";
+import { Container } from "@material-ui/core";
 
 import styles from "./Section.module.scss";
 
@@ -10,7 +10,6 @@ interface ISectionProps {
   title?: string;
   className?: string;
   anchor?: string;
-  withOffset?: boolean;
 }
 
 export const Section = ({
@@ -19,29 +18,10 @@ export const Section = ({
   color,
   title,
   anchor,
-  className,
-  withOffset
+  className
 }: ISectionProps) => {
   // tslint:disable-next-line: prettier
   const classes = `${color ? styles[color] : ""} ${center ? styles.center : ""} ${className ? className : ""}`.trim();
-  
-  if(withOffset) {
-    return (
-      <section className={classes}>
-        <Container>
-          <Grid container>
-              <Hidden smDown>
-                  <Grid item md={3}></Grid>
-              </Hidden>
-              <Grid item md={9}>
-                { title ? <h2 id={anchor}>{ title }</h2> : null }
-                { children }
-              </Grid>
-          </Grid>
-        </Container>
-      </section>
-    );
-  }
 
   return (
     <section className={classes}>
