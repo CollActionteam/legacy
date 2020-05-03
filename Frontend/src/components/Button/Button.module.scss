@@ -1,7 +1,7 @@
 @mixin button {
     display: inline-block;
     background-color: var(--c-green);
-    padding: var(--spacing-sm) calc(var(--spacing-lg) * .7);
+    padding: var(--spacing-xs) calc(var(--spacing-lg) * .7);
     border-radius: var(--spacing-lg);
     border: none;
     color: var(--c-white);
@@ -89,7 +89,7 @@
     width: 9.3em;
     height: 9.3em;
     border-radius: 50%;
-    margin: var(--spacing-sm);
+    margin: var(--spacing-xs);
     padding: 0;
 }
 

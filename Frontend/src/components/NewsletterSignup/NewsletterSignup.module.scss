@@ -9,7 +9,7 @@ input {
   border-radius: 2rem;
   height: 2.3rem;
   padding: 0 var(--spacing);
-  margin-right: var(--spacing-sm);
+  margin-right: var(--spacing-xs);
   border: 1px solid var(--c-grey-d10);
   transition: background-color var(--transition-duration),
     color var(--transition-duration);
@@ -56,14 +56,14 @@ input {
 
 .submitIcon {
   display: inline;
-  padding-left: var(--spacing-sm);
-  padding-right: var(--spacing-xs);
+  padding-left: var(--spacing-xs);
+  padding-right: var(--spacing-xxs);
 
   .submit:disabled & {
-    padding-right: var(--spacing-sm);
+    padding-right: var(--spacing-xs);
   }
 }
 
 .submitLabel {
-  padding-right: var(--spacing-sm);
+  padding-right: var(--spacing-xs);
 }

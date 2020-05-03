@@ -7,31 +7,31 @@
 .error {
     color: white;
     background-color: rgba(red, 0.6);
-    padding: var(--spacing-xs) var(--spacing-sm);
-    margin-bottom: var(--spacing-xs);
+    padding: var(--spacing-xxs) var(--spacing-xs);
+    margin-bottom: var(--spacing-xxs);
     border-radius: 0.3rem;
 }
 
 .success {
     color: white;
     background-color: green;
-    padding: var(--spacing-xs) var(--spacing-sm);
-    margin-bottom: var(--spacing-xs);
+    padding: var(--spacing-xxs) var(--spacing-xs);
+    margin-bottom: var(--spacing-xxs);
     border-radius: 0.3rem;
 }
 
 .info {
     color: white;
     background-color: rgba(rgb(50, 89, 218), 0.6);
-    padding: var(--spacing-xs) var(--spacing-sm);
-    margin-bottom: var(--spacing-xs);
+    padding: var(--spacing-xxs) var(--spacing-xs);
+    margin-bottom: var(--spacing-xxs);
     border-radius: 0.3rem;
 }
 
 .warning {
     color: black;
     background-color: #EED202;
-    padding: var(--spacing-xs) var(--spacing-sm);
-    margin-bottom: var(--spacing-xs);
+    padding: var(--spacing-xxs) var(--spacing-xs);
+    margin-bottom: var(--spacing-xxs);
     border-radius: 0.3rem;
 }

@@ -1,32 +1,46 @@
 import React from "react";
-import { GhostButton } from "../Button/Button";
-import styles from './TimeToAct.module.scss';
+import { useTranslation } from 'react-i18next';
 import { useHistory } from "react-router-dom";
+import { GhostButton } from "../Button/Button";
+import styles from "./TimeToAct.module.scss";
 
 export default () => {
-    const history = useHistory();
-
-    return <>
-        <section className={styles.timeToActStep}>
-            <h4 className={styles.timeToActTitle}>Idea</h4>
-            <div className={styles.timeToActStepBody}>
-                Propose a collective action and set a target number of participants.
-            </div>
-            <GhostButton onClick={() => history.push("/projects/start")}>Start crowdaction</GhostButton>
-        </section>
-        <section className={styles.timeToActStep}>
-            <h4 className={styles.timeToActTitle}>Crowd</h4>
-            <div className={styles.timeToActStepBody}>
-                People pledge to take action if the target is met before the deadline.
-            </div>
-            <GhostButton onClick={() => history.push("/projects/find")}>Find crowdaction</GhostButton>
-        </section>
-        <section className={styles.timeToActStep}>
-            <h4 className={styles.timeToActTitle}>Action</h4>
-            <div className={styles.timeToActStepBody}>
-                If enough people commit, we all act!
-            </div>
-            <GhostButton onClick={() => history.push("/about#faq")}>Read more</GhostButton>
-        </section>
-    </>;
+  const { t } = useTranslation();
+  const history = useHistory();
+  
+  const step1Class = `${styles.step} ${styles.step1}`;
+  const step2Class = `${styles.step} ${styles.step2}`;
+  const step3Class = `${styles.step} ${styles.step3}`;
+  
+  return (
+    <div className={styles.container}>
+      <section className={step1Class}>
+        <h4 className={styles.stepTitle}>{t("home.timeToAct.steps.step1.title")}</h4>
+        <div className={styles.stepBody}>
+          {t("home.timeToAct.steps.step1.text")}
+        </div>
+        <GhostButton onClick={() => history.push("/projects/start")}>
+          {t("home.timeToAct.steps.step1.button")}
+        </GhostButton>
+      </section>
+      <section className={step2Class}>
+        <h4 className={styles.stepTitle}>{t("home.timeToAct.steps.step2.title")}</h4>
+        <div className={styles.stepBody}>
+          {t("home.timeToAct.steps.step2.text")}
+        </div>
+        <GhostButton onClick={() => history.push("/projects/find")}>
+          {t("home.timeToAct.steps.step2.button")}
+        </GhostButton>
+      </section>
+      <section className={step3Class}>
+        <h4 className={styles.stepTitle}>{t("home.timeToAct.steps.step3.title")}</h4>
+        <div className={styles.stepBody}>
+          {t("home.timeToAct.steps.step3.text")}
+        </div>
+        <GhostButton onClick={() => history.push("/about#faq")}>
+          {t("home.timeToAct.steps.step3.button")}
+        </GhostButton>
+      </section>
+    </div>
+  );
 };
