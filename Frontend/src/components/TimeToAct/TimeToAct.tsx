@@ -19,7 +19,7 @@ export default () => {
         <div className={styles.stepBody}>
           {t("home.timeToAct.steps.step1.text")}
         </div>
-        <GhostButton onClick={() => history.push("/projects/start")}>
+        <GhostButton to="/projects/start">
           {t("home.timeToAct.steps.step1.button")}
         </GhostButton>
       </section>
@@ -28,7 +28,7 @@ export default () => {
         <div className={styles.stepBody}>
           {t("home.timeToAct.steps.step2.text")}
         </div>
-        <GhostButton onClick={() => history.push("/projects/find")}>
+        <GhostButton to="/projects/find">
           {t("home.timeToAct.steps.step2.button")}
         </GhostButton>
       </section>
@@ -37,7 +37,7 @@ export default () => {
         <div className={styles.stepBody}>
           {t("home.timeToAct.steps.step3.text")}
         </div>
-        <GhostButton onClick={() => history.push("/about#faq")}>
+        <GhostButton to="/about#faq">
           {t("home.timeToAct.steps.step3.button")}
         </GhostButton>
       </section>
