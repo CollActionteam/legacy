@@ -40,7 +40,7 @@ export default ({ children }: any) => {
             <ListItemText primary="Projects" />
           </ListItem>
           <ListItem button key="Users" onClick={() => history.push("/admin/users/list")}>
-            <ListItemIcon><FontAwesomeIcon icon="user" /></ListItemIcon>
+            <ListItemIcon><FontAwesomeIcon icon={["far", "user"]} /></ListItemIcon>
             <ListItemText primary="Users" />
           </ListItem>
         </List>
