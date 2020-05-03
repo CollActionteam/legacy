@@ -32,7 +32,7 @@
         },
         "about" : {
             "title" : "About CollAction",
-            "text" : "Do you sometimes have the feeling that your actions are only a drop in the ocean? Well, not anymore, because we are introducing crowdacting: taking action knowing that you are one of many. We revamp the neighbourhood with a hundred people or switch to renewable energy with hundreds or thousands of people at the same time. Find out more about what crowdacting is in the video or the FAQs, take action collectively with one of the [existing projects](/projects/find), or [start your own crowdacting  project](/projects/start)._Power to the Crowd_"
+            "text" : "Do you sometimes have the feeling that your actions are only a drop in the ocean? Well, not anymore, because we are introducing crowdacting: taking action knowing that you are one of many. We revamp the neighbourhood with a hundred people or switch to renewable energy with hundreds or thousands of people at the same time. Find out more about what crowdacting is in the video or the FAQs, take action collectively with one of the <a href=\"/projects/find\">existing projects</a>, or <a href=\"/projects/start\">start your own crowdacting  project</a>.<br /><strong>Power to the Crowd.</strong>"
         },
         "join" : {
             "title" : "Join our team!",
@@ -43,6 +43,10 @@
             "team" : [
                 {
                     "name": "Abhinay Kondamreddy",
+                    "photo": "nophoto.png"
+                },
+                {
+                    "name": "Arnout Jansen",
                     "photo": "nophoto.png"
                 },
                 {
@@ -60,6 +64,10 @@
                 {
                     "name": "Edoardo Felici",
                     "photo": "edoardo-felici.png"
+                },
+                {
+                    "name": "Jeppe Bijker",
+                    "photo": "nophoto.png"
                 },
                 {
                     "name": "Luuk Boschker",
@@ -109,7 +117,7 @@
         },
         "partners" : {
             "title" : "Our partners",
-            "text" : "We couldn’t do what we’re doing without the support of our great partners, including the ones below. Please [send us an email](mailto:hello@collaction.org) if you want to join this group of early adopters.<br /><br />* [SIDN Fonds](https://www.sidnfonds.nl/)<br />* [Essense](http://essense.eu/)<br />* [Social Coder](http://socialcoder.org/Home/Index)<br />* [De Ceuvel](http://deceuvel.nl/en/)<br />"
+            "text" : "We couldn’t do what we’re doing without the support of our great partners, including the ones below. Please <a href=\"mailto:hello@collaction.org\">send us an email</a> if you want to join this group of early adopters.<br /><br /><ul><li><a href=\"https://www.sidnfonds.nl\">SIDN Fonds</a></li><li><a href=\"https://www.essense.eu\">Essense</a></li><li><a href=\"https://www.socialcoder.org/Home/Index\">Social Coder</a></li><li><a href=\"https://www.deceuvel.nl/en/\">De Ceuvel</a></li></ul>"
         }
     }
 }

@@ -40,24 +40,24 @@ const AboutPage = () => {
           allowFullScreen
         ></iframe>
       </Grid>
-      <Section color="green" title={(t('about.mission.title'))} anchor="mission">
+      <Section color="green" title={(t('about.mission.title'))} anchor="mission" withOffset>
         <span dangerouslySetInnerHTML={{ __html: t('about.mission.text') }}></span>
       </Section>
-      <Section title={t('about.about.title')}>
+      <Section title={t('about.about.title')} withOffset>
         <span dangerouslySetInnerHTML={{ __html: t('about.about.text') }}></span>
       </Section>
-      <Section color="grey" title={t('about.team.title')} anchor="team">
+      <Section color="grey" title={t('about.team.title')} anchor="team" withOffset>
         <ul className={styles.team}>
           {team.map(generateMemberPhoto)}
         </ul>
       </Section>
-      <Section title={t('about.join.title')}>
+      <Section title={t('about.join.title')} withOffset>
         <span dangerouslySetInnerHTML={{ __html: t('about.join.text') }}></span>
       </Section>
-      <Section color="grey" title={t('about.partners.title')} anchor="partners">
+      <Section color="grey" title={t('about.partners.title')} anchor="partners" withOffset>
         <span dangerouslySetInnerHTML={{ __html: t('about.partners.text') }}></span>
       </Section>
-      <Section title="Frequently Asked Questions" anchor="faq">
+      <Section title="Frequently Asked Questions" anchor="faq" withOffset>
         <Faq title="What is CollAction?" collapsed={false} faqId="what_is_collaction">
             <p>
                 CollAction is a not-for-profit organization based in the Netherlands that
@@ -95,10 +95,12 @@ const AboutPage = () => {
                 Although the term crowdacting in its current meaning is new, the underlying concept is not.
                 There are plenty of other examples of collective actions that contain elements of crowdacting.
                 Think for instance of boycotts, demonstrations, collective bargaining initiatives, or petition websites.
-                The difference is the fact that crowdacting combines three elements: 1) It’s (explicitly)
-                conditional (it only happens if a set target is met); 2) it’s for social and/or ecological good; and
-                3) the action goes beyond signing a petition. More information on how crowdacting resembles and differs
-                from other initiatives can be found on <a href="http://www.crowdacting.org/" target="_blank" rel="noopener noreferrer">www.crowdacting.org</a>.
+                The difference is the fact that crowdacting combines three elements: <br />
+                <ol>
+                    <li>It’s (explicitly) conditional (it only happens if a set target is met);</li>
+                    <li>it’s for social and/or ecological good; and</li>
+                    <li>the action goes beyond signing a petition. More information on how crowdacting resembles and differs from other initiatives can be found on <a href="http://www.crowdacting.org/" target="_blank" rel="noopener noreferrer">www.crowdacting.org</a>.</li>
+                </ol>
             </p>
         </Faq>
 
