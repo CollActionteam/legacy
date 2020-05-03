@@ -21,14 +21,14 @@ export default ({ items } : INavigationProps) => {
     return <>
         <li className={styles.navigationItem}>
           <Link className={styles.navigationButton} to="/account/profile" onClick={() => setCollapsed(true)}>
-            Profile
+            <span>Account</span>
           </Link>
         </li> 
         <li className={styles.navigationItem}>
           <form method="post" action={logoutUrl}>
             <input type="hidden" name="returnUrl" value={returnUrl} />
             <Button type="submit" className={styles.navigationSubmit}>
-              Logout
+              <span>Logout</span>
             </Button>
           </form>
         </li> 
@@ -38,18 +38,19 @@ export default ({ items } : INavigationProps) => {
   const renderWithoutUser = () => {
     return <li className={styles.navigationItem}>
       <Link className={styles.navigationButton} to="/account/login" onClick={() => setCollapsed(true)}>
-        Login
+        <FontAwesomeIcon icon={["far", "user"]}/> 
+        <span>Login</span>
       </Link>
     </li>;
   };
 
-  return <div className={collapsed ? styles.collapsed : ""}>
+  return <div className={[styles.wrapper, collapsed ? styles.collapsed : ""].join(" ")}>
     <nav className={styles.navigation}>
       <ul className={styles.navigationList}>
         {items.map((link) => (
           <li key={link.name} className={styles.navigationItem}>
             <Link className={styles.navigationLink} to={link.link} onClick={() => setCollapsed(true)}>
-              {link.name}
+              <span>{link.name}</span>
             </Link>
           </li>
         ))}
@@ -57,8 +58,8 @@ export default ({ items } : INavigationProps) => {
       <ul className={styles.navigationList}>
         <li className={styles.navigationItem}>
           <Link className={styles.navigationButton} to="/donate" onClick={() => setCollapsed(true)}>
-            <FontAwesomeIcon icon="heart" />
-            Donate
+            <FontAwesomeIcon icon={["far", "heart"]} />
+            <span>Donate</span>
           </Link>
         </li>
         { user ? renderWithUser() : renderWithoutUser() }
