@@ -62,7 +62,7 @@ namespace CollAction.Services.Image
             return currentImage;
         }
 
-        public async Task DeleteImage(ImageFile imageFile, CancellationToken token)
+        public async Task DeleteImage(ImageFile? imageFile, CancellationToken token)
         {
             if (imageFile != null)
             {

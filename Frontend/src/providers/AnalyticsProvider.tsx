@@ -137,7 +137,7 @@ export default ({ children }: any) => {
 
     useEffect(() => {
         // Only load pixel when the user originates from facebook/instagram
-        if ((utm.source === "facebook" || utm.source === "instagram") && pixelConsent && !pixelInitialized) {
+        if ((utm.source === "facebook" || utm.source === "instagram") && facebookPixelID && pixelConsent && !pixelInitialized) {
             ReactPixel.init(facebookPixelID);
             setPixelInitialized(true);
         }

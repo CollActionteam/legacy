@@ -23,6 +23,7 @@ import { useConsent, Consent } from "../../providers/CookieConsentProvider";
 import { useSettings } from "../../providers/SettingsProvider";
 import { useAnalytics } from "../../providers/AnalyticsProvider";
 import LazyImage from "../LazyImage/LazyImage";
+import Loader from "../Loader/Loader";
 
 type DonationValues = {
     email: string;
@@ -336,6 +337,8 @@ export default () => {
             You can't donate because you haven't given consent for loading the Stripe donation integration.
             Visit the <Link to="/privacy-policy">privacy policy</Link> to manage your consent.
         </Alert>;
+    } else if (!stripePublicKey) {
+        return <Loader />;
     } else {
         const stripePromise = loadStripe(stripePublicKey);
         return <Elements stripe={stripePromise}>

@@ -10,7 +10,7 @@ namespace CollAction.Services.Image
     {
         Task<ImageFile> UploadImage(IFormFile fileUploaded, string imageDescription, int imageResizeThreshold, CancellationToken token);
 
-        Task DeleteImage(ImageFile imageFile, CancellationToken token);
+        Task DeleteImage(ImageFile? imageFile, CancellationToken token);
 
         Uri GetUrl(ImageFile imageFile);
 

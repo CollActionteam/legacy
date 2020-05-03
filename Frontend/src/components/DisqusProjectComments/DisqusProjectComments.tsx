@@ -8,7 +8,7 @@ export default ({ project }: { project: IProject }) => {
     const disqusId = `${project.name}/${project.id}`;
     const { disqusSiteId } = useSettings();
     const { consent } = useConsent();
-    if (!consent.includes(Consent.Disqus)) {
+    if (!consent.includes(Consent.Disqus) || !disqusSiteId) {
         return null;
     } else {
         return <DiscussionEmbed shortname={disqusSiteId} config={
