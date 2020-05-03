@@ -56,10 +56,10 @@ export default () => {
                                             <FormGroup key={c}>
                                                 <FormControlLabel
                                                     control={<Checkbox
+                                                        { ... c === Consent.Basics ? [] : formik.getFieldProps(c) }
                                                         name={`consent${c}`}
                                                         checked={formik.values[c]}
                                                         color="primary"
-                                                        { ... c === Consent.Basics ? [] : formik.getFieldProps(c) }
                                                     />}
                                                     label={ConsentDescription(c)}
                                                 />
