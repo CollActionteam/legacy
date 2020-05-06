@@ -1,7 +1,7 @@
 @import '../Styles/responsive';
 
 .footer {
-    padding-top: calc(var(--spacing) * 4);
+    padding-top: var(--spacing-xl);
     padding-bottom: var(--spacing-lg);
     font-size: var(--font-size-sm);
     line-height: calc(var(--line-height) * 1.5);
@@ -22,7 +22,7 @@
 }
 
 .navigationItem {
-    padding-bottom: var(--spacing-sm);
+    padding-bottom: var(--spacing-xs);
 }
 
 .navigationLink {
@@ -34,7 +34,7 @@
 .title {
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-bold);
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-xs);
 }
 
 .copyright {

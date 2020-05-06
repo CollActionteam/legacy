@@ -9,7 +9,24 @@
             "text" : "Do you want to make the world a better place, but do you sometimes feel that your actions are only a drop in the ocean? Well, not anymore, because we are introducing crowdacting: taking action knowing that you are one of many. We revamp the neighbourhood with a hundred people or switch to renewable energy with hundreds or thousands of people at the same time. <a href=\"/about\">Find out more about what crowdacting</a>, take action collectively with one of the existing projects, or <a href=\"/projects/start\">start your own crowdacting  project</a>."
         },
         "timeToAct" : {
-            "title" : "Time to act"
+            "title" : "Time to act",
+            "steps" : {
+                "step1": {
+                    "title" : "Idea",
+                    "text" : "Propose a collective action and set a target number of participants.",
+                    "button" : "Start crowdaction"
+                },
+                "step2": {
+                    "title" : "Crowd",
+                    "text" : "People pledge to take action if the target is met before the deadline.",
+                    "button" : "Find crowdaction"
+                },
+                "step3": {
+                    "title" : "Action",
+                    "text" : "If enough people commit, we all act!",
+                    "button" : "Read more"
+                }
+            }
         },
         "stats" : {
             "title" : "Our collective impact",

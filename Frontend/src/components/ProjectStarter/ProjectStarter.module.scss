@@ -8,7 +8,7 @@
   margin-bottom: var(--spacing);
 
   @include breakpoint-down(sm) {
-    margin-top: var(--spacing-xlg);
+    margin-top: var(--spacing-xxl-2);
   }
 }
 
@@ -18,9 +18,9 @@
 }
 
 .avatar {
-  margin-top: calc(var(--spacing-xlg) / 2 * -1.5);
-  width: var(--spacing-xlg) !important;
-  height: var(--spacing-xlg) !important;
+  margin-top: calc(var(--spacing-xxl-2) / 2 * -1.5);
+  width: var(--spacing-xxl-2) !important;
+  height: var(--spacing-xxl-2) !important;
 }
 
 .projectStarterTitle {

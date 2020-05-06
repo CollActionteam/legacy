@@ -2,8 +2,8 @@
 
 section {
   position: relative;
-  padding-top: var(--spacing-xlg);
-  padding-bottom: var(--spacing-xlg);
+  padding-top: var(--spacing-xxl-2);
+  padding-bottom: var(--spacing-xxl-2);
   width: 100%;
 
   &::after {
@@ -41,7 +41,7 @@ section {
       line-height: var(--line-height);
 
       &:not(:last-child) {
-        padding-bottom: var(--spacing-sm);      
+        padding-bottom: var(--spacing-xs);      
       }
     }
   }

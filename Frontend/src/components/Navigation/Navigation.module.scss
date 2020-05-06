@@ -50,7 +50,7 @@
     font-size: var(--font-size);
 
     @include breakpoint-down(md) {
-        padding-left: 24px;
+        padding-left: var(--spacing-m);
         padding-bottom: var(--spacing);
     }
 
@@ -83,7 +83,7 @@
     appearance: none;
     background: none;
     border: 0;
-    font-size: calc(var(--font-size) * 1.5);
+    font-size: var(--font-size-md-3);
     color: var(--c-black);
     opacity: .8;
     cursor: pointer;
@@ -99,7 +99,7 @@
     font-weight: var(--font-weight-bold);
     
     svg {
-        padding-right: var(--spacing-xs);
+        padding-right: var(--spacing-xxs);
         transition: transform var(--transition-duration);
     }
 
@@ -117,7 +117,7 @@
     text-decoration: none;
     
     svg {
-        margin-right: var(--spacing-sm);
+        margin-right: var(--spacing-xs);
         transition: transform var(--transition-duration);
     }
 

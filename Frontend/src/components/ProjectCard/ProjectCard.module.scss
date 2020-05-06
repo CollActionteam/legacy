@@ -42,14 +42,14 @@
     }
 
     span {
-        padding-left: var(--spacing-xs);
+        padding-left: var(--spacing-xxs);
         font-size: var(--font-size-sm);
     }
 }
 
 .title {
-    margin-top: var(--spacing-sm);
-    margin-bottom: var(--spacing-sm);
+    margin-top: var(--spacing-xs);
+    margin-bottom: var(--spacing-xs);
 }
 
 .content {
@@ -62,7 +62,7 @@
     max-height: 3.5rem;
     letter-spacing: var(--letter-spacing-md);
     overflow: hidden;
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-xs);
 
     &::after {
         position: absolute;
@@ -96,7 +96,7 @@
     display: flex;
 
     svg {
-        padding-right: var(--spacing-xs);
+        padding-right: var(--spacing-xxs);
     }
 }
 

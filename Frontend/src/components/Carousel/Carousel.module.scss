@@ -81,7 +81,7 @@
 }
 
 .container {
-    margin-bottom: var(--spacing-xlg);
+    margin-bottom: var(--spacing-xxl-2);
 
     @include breakpoint-up(md) {
         margin-top: var(--spacing-lg);
@@ -100,13 +100,13 @@
     margin-left: -24px;
     margin-right: -24px;
     height: calc(100% - var(--spacing)); // Fix for overflow-y
-    padding: var(--spacing-xlg) 2rem;
+    padding: var(--spacing-xxl-2) 2rem;
     text-align: center;
     color: var(--c-white);
     background-color: var(--c-green);
 
     a {
-        margin: var(--spacing-sm);
+        margin: var(--spacing-xs);
         margin-top: var(--spacing);
     }
 
@@ -143,7 +143,7 @@
     }
 
     @include breakpoint-up(sm) {
-        padding: var(--spacing-xlg) 3rem;
+        padding: var(--spacing-xxl-2) 3rem;
     }
 
     @include breakpoint-up(md) {

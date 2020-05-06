@@ -5,10 +5,10 @@ import { Section } from "../../components/Section/Section";
 import Carousel from "../../components/Carousel/Carousel";
 import ProjectsList from "../../components/ProjectsList/ProjectsList";
 import Stats from "../../components/Stats/Stats";
+import TimeToAct from "../../components/TimeToAct/TimeToAct";
 
 import { useTranslation } from 'react-i18next';
 import { Helmet } from "react-helmet";
-import TimeToAct from "../../components/TimeToAct/TimeToAct";
 
 const HomePage = () => {
   const { t } = useTranslation();
