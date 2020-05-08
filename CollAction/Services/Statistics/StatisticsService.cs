@@ -31,7 +31,7 @@ namespace CollAction.Services.Statistics
                    {
                        entry.SlidingExpiration = CacheExpiration;
 
-                       // Actions are taken by users (normal and anonymous) only for successfull projects
+                       // Actions are taken by users (normal and anonymous) who have joined successfull crowdactions
 
                        int actionsNormalUsers =
                            await context.CrowdactionParticipants
@@ -53,7 +53,7 @@ namespace CollAction.Services.Statistics
                    NumberCrowdactionsKey,
                    (ICacheEntry entry) =>
                    {
-                       // Only projects that have been approved count
+                       // Only crowdactions that have been approved count
 
                        entry.SlidingExpiration = CacheExpiration;
                        return context.Crowdactions
