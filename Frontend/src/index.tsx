@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
-import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Switch, Redirect } from 'react-router-dom';
 import Layout from './components/Layout/Layout';
 import AllProviders from './providers/AllProviders';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';
@@ -71,6 +71,16 @@ const routing = (
                             <Route exact path="/crowdactions/:slug/:crowdactionId/widget" component={CrowdactionWidgetPage} />
                             <Route exact path="/crowdactions/:slug/:crowdactionId/unsubscribe-email" component={UnsubscribeCrowdactionPage} />
                             <Route exact path="/admin/:type/:action/:id?" component={AdminPage} />
+
+                            {/* Redirects from old site to new site */}
+                            <Redirect exact from="/projects/:slug/:crowdactionId/details" to="/crowdactions/:slug/:crowdactionId" />
+                            <Redirect exact from="/projects/embed/:crowdactionId" to="/crowdactions/_/:crowdactionId/widget" />
+                            <Redirect exact from="/Donation/Donate" to="/donate" />
+                            <Redirect exact from="/account/FinishRegistration" to={{
+                                pathname: "/account/finish-registration",
+                                search: `?email=${new URLSearchParams(window.location.search).get("email")}&code=${new URLSearchParams(window.location.search).get("code")}`
+                            }} />
+
                             <Route component={NotFoundPage} />
                         </Switch>
                         <RunAnalytics />
