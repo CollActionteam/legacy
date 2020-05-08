@@ -13,10 +13,10 @@ namespace CollAction.Services.Statistics
     {
         private readonly ApplicationDbContext context;
         private readonly IMemoryCache cache;
+        private static readonly TimeSpan CacheExpiration = TimeSpan.FromMinutes(10);
         private static readonly string NumberActionsTakenKey = $"{typeof(StatisticsService).FullName}_{nameof(NumberActionsTaken)}";
         private static readonly string NumberCrowdactionsKey = $"{typeof(StatisticsService).FullName}_{nameof(NumberCrowdactions)}";
         private static readonly string NumberUsersKey = $"{typeof(StatisticsService).FullName}_{nameof(NumberUsers)}";
-        private static readonly TimeSpan Expiration = TimeSpan.FromMinutes(10);
 
         public StatisticsService(ApplicationDbContext context, IMemoryCache cache)
         {
@@ -27,10 +27,10 @@ namespace CollAction.Services.Statistics
         public Task<int> NumberActionsTaken(CancellationToken token)
         {
             return cache.GetOrCreateAsync(
-                NumberActionsTakenKey, 
+                NumberActionsTakenKey,
                 (ICacheEntry entry) =>
                 {
-                    entry.SlidingExpiration = Expiration;
+                    entry.SlidingExpiration = CacheExpiration;
                     return context.CrowdactionParticipants
                                   .CountAsync(p =>
                                       p.Crowdaction!.End <= DateTime.UtcNow &&
@@ -42,10 +42,10 @@ namespace CollAction.Services.Statistics
         public Task<int> NumberCrowdactions(CancellationToken token)
         {
             return cache.GetOrCreateAsync(
-                NumberCrowdactionsKey, 
+                NumberCrowdactionsKey,
                 (ICacheEntry entry) =>
                 {
-                    entry.SlidingExpiration = Expiration;
+                    entry.SlidingExpiration = CacheExpiration;
                     return context.Crowdactions
                                   .CountAsync(p => p.Status == CrowdactionStatus.Running, token);
                 });
@@ -54,10 +54,10 @@ namespace CollAction.Services.Statistics
         public Task<int> NumberUsers(CancellationToken token)
         {
             return cache.GetOrCreateAsync(
-                NumberUsersKey, 
+                NumberUsersKey,
                 (ICacheEntry entry) =>
                 {
-                    entry.SlidingExpiration = Expiration;
+                    entry.SlidingExpiration = CacheExpiration;
                     return context.Users
                                   .CountAsync(u => u.Crowdactions.Any(), token);
                 });
