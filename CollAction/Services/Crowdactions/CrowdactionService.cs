@@ -61,7 +61,7 @@ namespace CollAction.Services.Crowdactions
         
         public async Task<Crowdaction> CreateCrowdactionInternal(NewCrowdactionInternal newCrowdaction, CancellationToken token)
         {
-            if (await context.Crowdactions.AnyAsync(p => p.Name == newCrowdaction.Name).ConfigureAwait(false))
+            if (await context.Crowdactions.AnyAsync(c => c.Name == newCrowdaction.Name).ConfigureAwait(false))
             {
                 throw new InvalidOperationException($"A crowdaction with this name already exists: {newCrowdaction.Name}");
             }
@@ -145,7 +145,7 @@ namespace CollAction.Services.Crowdactions
                 return new CrowdactionResult(new ValidationResult("Crowdaction owner could not be found"));
             }
 
-            if (await context.Crowdactions.AnyAsync(p => p.Name == newCrowdaction.Name).ConfigureAwait(false))
+            if (await context.Crowdactions.AnyAsync(c => c.Name == newCrowdaction.Name).ConfigureAwait(false))
             {
                 return new CrowdactionResult(new ValidationResult("A crowdaction with this name already exists", new[] { nameof(Crowdaction.Name) }));
             }
@@ -245,16 +245,16 @@ namespace CollAction.Services.Crowdactions
 
             Crowdaction? crowdaction = await context
                 .Crowdactions
-                .Include(p => p.Tags).ThenInclude(t => t.Tag)
-                .Include(p => p.Categories)
-                .FirstOrDefaultAsync(p => p.Id == updatedCrowdaction.Id, token).ConfigureAwait(false);
+                .Include(c => c.Tags).ThenInclude(t => t.Tag)
+                .Include(c => c.Categories)
+                .FirstOrDefaultAsync(c => c.Id == updatedCrowdaction.Id, token).ConfigureAwait(false);
 
             if (crowdaction == null)
             {
                 return new CrowdactionResult(new ValidationResult("Crowdaction not found", new[] { nameof(Crowdaction.Id) }));
             }
 
-            if (crowdaction.Name != updatedCrowdaction.Name && await context.Crowdactions.AnyAsync(p => p.Name == updatedCrowdaction.Name).ConfigureAwait(false))
+            if (crowdaction.Name != updatedCrowdaction.Name && await context.Crowdactions.AnyAsync(c => c.Name == updatedCrowdaction.Name).ConfigureAwait(false))
             {
                 return new CrowdactionResult(new ValidationResult("A crowdaction with this name already exists", new[] { nameof(Crowdaction.Name) }));
             }
@@ -361,7 +361,7 @@ namespace CollAction.Services.Crowdactions
         public async Task CrowdactionEndProcess(int crowdactionId, CancellationToken token)
         {
             logger.LogInformation("Processing end of crowdaction: {0}", crowdactionId);
-            Crowdaction? crowdaction = await context.Crowdactions.Include(p => p.ParticipantCounts).FirstAsync(p => p.Id == crowdactionId, token).ConfigureAwait(false);
+            Crowdaction? crowdaction = await context.Crowdactions.Include(c => c.ParticipantCounts).FirstAsync(c => c.Id == crowdactionId, token).ConfigureAwait(false);
 
             if (crowdaction == null)
             {
@@ -442,8 +442,8 @@ namespace CollAction.Services.Crowdactions
         {
             CrowdactionParticipant participant = await context
                  .CrowdactionParticipants
-                 .Include(p => p.Crowdaction)
-                 .FirstAsync(p => p.CrowdactionId == crowdactionId && p.UserId == userId).ConfigureAwait(false);
+                 .Include(c => c.Crowdaction)
+                 .FirstAsync(c => c.CrowdactionId == crowdactionId && c.UserId == userId).ConfigureAwait(false);
 
             if (participant != null && participant.UnsubscribeToken == token)
             {
@@ -545,22 +545,22 @@ namespace CollAction.Services.Crowdactions
         {
             IQueryable<Crowdaction> crowdactions = context
                 .Crowdactions
-                .Include(p => p.ParticipantCounts)
-                .OrderBy(p => p.DisplayPriority)
+                .Include(c => c.ParticipantCounts)
+                .OrderBy(c => c.DisplayPriority)
                 .AsQueryable();
 
             crowdactions = searchCrowdactionStatus switch
             {
-                SearchCrowdactionStatus.Closed => crowdactions.Where(p => p.End < DateTime.UtcNow && p.Status == CrowdactionStatus.Running),
-                SearchCrowdactionStatus.ComingSoon => crowdactions.Where(p => p.Start > DateTime.UtcNow && p.Status == CrowdactionStatus.Running),
-                SearchCrowdactionStatus.Open => crowdactions.Where(p => p.Start <= DateTime.UtcNow && p.End >= DateTime.UtcNow && p.Status == CrowdactionStatus.Running),
-                SearchCrowdactionStatus.Active => crowdactions.Where(p => p.Status == CrowdactionStatus.Running),
-                _ => crowdactions.Where(p => p.Status != CrowdactionStatus.Deleted)
+                SearchCrowdactionStatus.Closed => crowdactions.Where(c => c.End < DateTime.UtcNow && c.Status == CrowdactionStatus.Running),
+                SearchCrowdactionStatus.ComingSoon => crowdactions.Where(c => c.Start > DateTime.UtcNow && c.Status == CrowdactionStatus.Running),
+                SearchCrowdactionStatus.Open => crowdactions.Where(c => c.Start <= DateTime.UtcNow && c.End >= DateTime.UtcNow && c.Status == CrowdactionStatus.Running),
+                SearchCrowdactionStatus.Active => crowdactions.Where(c => c.Status == CrowdactionStatus.Running),
+                _ => crowdactions.Where(c => c.Status != CrowdactionStatus.Deleted)
             };
 
             if (category != null)
             {
-                crowdactions = crowdactions.Include(p => p.Categories).Where(p => p.Categories.Any(crowdactionCategory => crowdactionCategory.Category == category));
+                crowdactions = crowdactions.Include(c => c.Categories).Where(c => c.Categories.Any(crowdactionCategory => crowdactionCategory.Category == category));
             }
 
             return crowdactions;

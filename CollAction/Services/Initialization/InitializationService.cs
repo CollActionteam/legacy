@@ -71,8 +71,8 @@ namespace CollAction.Services.Initialization
         {
             List<int> crowdactionsToMigrate =
                 await context.Crowdactions
-                             .Where(p => p.CardImageFileId == null && p.BannerImageFileId != null)
-                             .Select(p => p.Id)
+                             .Where(c => c.CardImageFileId == null && c.BannerImageFileId != null)
+                             .Select(c => c.Id)
                              .ToListAsync(token)
                              .ConfigureAwait(false);
             crowdactionsToMigrate.ForEach(crowdactionId => jobClient.Enqueue(() => MigrateCardImage(crowdactionId, CancellationToken.None)));
@@ -83,8 +83,8 @@ namespace CollAction.Services.Initialization
         {
             Crowdaction crowdaction = 
                 await context.Crowdactions
-                             .Include(p => p.BannerImage)
-                             .SingleAsync(p => p.Id == crowdactionId, token)
+                             .Include(c => c.BannerImage)
+                             .SingleAsync(c => c.Id == crowdactionId, token)
                              .ConfigureAwait(false);
 
             if (crowdaction.BannerImage == null)

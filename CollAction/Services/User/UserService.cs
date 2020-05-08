@@ -284,9 +284,9 @@ namespace CollAction.Services.User
 
             List<Crowdaction> crowdactions =
                 await context.CrowdactionParticipants
-                             .Include(p => p.Crowdaction)
-                             .Where(p => p.UserId == userId && p.Crowdaction!.End < DateTime.UtcNow)
-                             .Select(p => p.Crowdaction!)
+                             .Include(c => c.Crowdaction)
+                             .Where(c => c.UserId == userId && c.Crowdaction!.End < DateTime.UtcNow)
+                             .Select(c => c.Crowdaction!)
                              .ToListAsync().ConfigureAwait(false);
 
             foreach (Crowdaction p in crowdactions)

@@ -391,7 +391,7 @@ namespace CollAction.Services.Donation
                     Type = "service"
                 },
                 cancellationToken: token).ConfigureAwait(false);
-            Product? product = products.FirstOrDefault(p => p.Name == RecurringDonationProduct);
+            Product? product = products.FirstOrDefault(c => c.Name == RecurringDonationProduct);
             if (product == null)
             {
                 product = await productService.CreateAsync(

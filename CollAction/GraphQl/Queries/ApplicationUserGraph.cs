@@ -51,7 +51,7 @@ namespace CollAction.GraphQl.Queries
                 {
                     var userManager = c.GetUserContext().ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
                     var providers = await userManager.GetLoginsAsync(c.Source).ConfigureAwait(false);
-                    return providers.Select(p => p.LoginProvider);
+                    return providers.Select(c => c.LoginProvider);
                 });
             AddNavigationListField(nameof(ApplicationUser.Crowdactions), c => c.Source.Crowdactions);
             AddNavigationListField(nameof(ApplicationUser.Participates), c => c.Source.Participates);

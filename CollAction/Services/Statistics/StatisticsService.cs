@@ -28,14 +28,23 @@ namespace CollAction.Services.Statistics
         {
             return cache.GetOrCreateAsync(
                 NumberActionsTakenKey,
-                (ICacheEntry entry) =>
+                async (ICacheEntry entry) =>
                 {
                     entry.SlidingExpiration = CacheExpiration;
-                    return context.CrowdactionParticipants
-                                  .CountAsync(p =>
-                                      p.Crowdaction!.End <= DateTime.UtcNow &&
-                                      p.Crowdaction!.Status == CrowdactionStatus.Running &&
-                                      p.Crowdaction!.ParticipantCounts!.Count + p.Crowdaction!.AnonymousUserParticipants >= p.Crowdaction!.Target, token);
+
+                    int normalParticipantCount =
+                        await context.CrowdactionParticipants
+                                     .CountAsync(c =>
+                                         c.Crowdaction!.End <= DateTime.UtcNow &&
+                                         c.Crowdaction!.Status == CrowdactionStatus.Running &&
+                                         c.Crowdaction!.ParticipantCounts!.Count + c.Crowdaction!.AnonymousUserParticipants >= c.Crowdaction!.Target, token).ConfigureAwait(false);
+                    int anonymousParticipantCount =
+                                 await context.Crowdactions
+                                              .Where(c => c.ParticipantCounts!.Count + c.AnonymousUserParticipants >= c.Target)
+                                              .SumAsync(c => c.AnonymousUserParticipants, token)
+                                              .ConfigureAwait(false);
+
+                    return normalParticipantCount + anonymousParticipantCount;
                 });
         }
 
@@ -47,7 +56,7 @@ namespace CollAction.Services.Statistics
                 {
                     entry.SlidingExpiration = CacheExpiration;
                     return context.Crowdactions
-                                  .CountAsync(p => p.Status == CrowdactionStatus.Running, token);
+                                  .CountAsync(c => c.Status == CrowdactionStatus.Running, token);
                 });
         }
 
@@ -55,11 +64,20 @@ namespace CollAction.Services.Statistics
         {
             return cache.GetOrCreateAsync(
                 NumberUsersKey,
-                (ICacheEntry entry) =>
+                async (ICacheEntry entry) =>
                 {
                     entry.SlidingExpiration = CacheExpiration;
-                    return context.Users
-                                  .CountAsync(u => u.Crowdactions.Any(), token);
+
+                    int normalUsers = 
+                        await context.Users
+                                     .CountAsync(u => u.Crowdactions.Any(), token)
+                                     .ConfigureAwait(false);
+                    int anonymousUsers =
+                        await context.Crowdactions
+                                     .SumAsync(c => c.AnonymousUserParticipants)
+                                     .ConfigureAwait(false);
+
+                    return normalUsers + anonymousUsers;
                 });
         }
     }

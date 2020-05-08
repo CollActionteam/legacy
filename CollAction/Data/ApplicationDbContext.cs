@@ -42,18 +42,18 @@ namespace CollAction.Data
             builder.Entity<Tag>()
                    .HasAlternateKey(t => t.Name);
             builder.Entity<Crowdaction>()
-                   .HasIndex(p => p.Name)
+                   .HasIndex(c => c.Name)
                    .HasName("IX_Crowdactions_Name").IsUnique();
             builder.Entity<Crowdaction>()
-                   .Property(p => p.DisplayPriority)
+                   .Property(c => c.DisplayPriority)
                    .HasDefaultValue(CrowdactionDisplayPriority.Medium);
             builder.Entity<ApplicationUser>()
-                   .HasMany(p => p.Crowdactions)
+                   .HasMany(c => c.Crowdactions)
                    .WithOne(proj => proj.Owner!)
                    .HasForeignKey(proj => proj.OwnerId)
                    .OnDelete(DeleteBehavior.SetNull);
             builder.Entity<Crowdaction>()
-                   .HasMany(p => p.Categories)
+                   .HasMany(c => c.Categories)
                    .WithOne(pc => pc.Crowdaction!)
                    .HasForeignKey(pc => pc.CrowdactionId)
                    .OnDelete(DeleteBehavior.Cascade);
@@ -64,9 +64,9 @@ namespace CollAction.Data
             builder.Entity<CrowdactionTag>()
                    .HasKey("TagId", "CrowdactionId");
             builder.Entity<Crowdaction>()
-                   .HasOne(p => p.ParticipantCounts)
-                   .WithOne(p => p!.Crowdaction!)
-                   .HasForeignKey<CrowdactionParticipantCount>(p => p.CrowdactionId);
+                   .HasOne(c => c.ParticipantCounts)
+                   .WithOne(c => c!.Crowdaction!)
+                   .HasForeignKey<CrowdactionParticipantCount>(c => c.CrowdactionId);
             builder.Entity<ApplicationUser>().Property(u => u.RepresentsNumberParticipants).HasDefaultValue(1);
             builder.Entity<UserEvent>()
                    .HasOne(e => e.User)

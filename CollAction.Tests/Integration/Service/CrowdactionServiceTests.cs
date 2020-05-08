@@ -51,7 +51,7 @@ namespace CollAction.Tests.Integration.Service
                        CrowdactionResult crowdactionResult = await crowdactionService.CreateCrowdaction(newCrowdaction, claimsPrincipal, CancellationToken.None).ConfigureAwait(false);
                        int? crowdactionId = crowdactionResult.Crowdaction?.Id;
                        Assert.IsNotNull(crowdactionId);
-                       Crowdaction retrievedCrowdaction = await context.Crowdactions.Include(p => p.Tags).ThenInclude(t => t.Tag).FirstOrDefaultAsync(p => p.Id == crowdactionId).ConfigureAwait(false);
+                       Crowdaction retrievedCrowdaction = await context.Crowdactions.Include(c => c.Tags).ThenInclude(t => t.Tag).FirstOrDefaultAsync(c => c.Id == crowdactionId).ConfigureAwait(false);
                        Assert.IsNotNull(retrievedCrowdaction);
 
                        Assert.IsTrue(crowdactionResult.Succeeded);
@@ -70,7 +70,7 @@ namespace CollAction.Tests.Integration.Service
                        SignInManager<ApplicationUser> signInManager = scope.ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>();
                        UserManager<ApplicationUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-                       Crowdaction currentCrowdaction = await context.Crowdactions.Include(p => p.Owner).FirstAsync(p => p.OwnerId != null).ConfigureAwait(false);
+                       Crowdaction currentCrowdaction = await context.Crowdactions.Include(c => c.Owner).FirstAsync(c => c.OwnerId != null).ConfigureAwait(false);
                        var admin = (await userManager.GetUsersInRoleAsync(AuthorizationConstants.AdminRole).ConfigureAwait(false)).First();
                        var adminClaims = await signInManager.CreateUserPrincipalAsync(admin).ConfigureAwait(false);
                        var owner = await signInManager.CreateUserPrincipalAsync(currentCrowdaction.Owner ?? throw new InvalidOperationException("Owner is null")).ConfigureAwait(false);
@@ -101,7 +101,7 @@ namespace CollAction.Tests.Integration.Service
                        Assert.IsTrue(newCrowdactionResult.Succeeded);
                        int? newCrowdactionId = newCrowdactionResult.Crowdaction?.Id;
                        Assert.IsNotNull(newCrowdactionId);
-                       Crowdaction retrievedCrowdaction = await context.Crowdactions.Include(p => p.Tags).ThenInclude(t => t.Tag).FirstOrDefaultAsync(p => p.Id == newCrowdactionId).ConfigureAwait(false);
+                       Crowdaction retrievedCrowdaction = await context.Crowdactions.Include(c => c.Tags).ThenInclude(t => t.Tag).FirstOrDefaultAsync(c => c.Id == newCrowdactionId).ConfigureAwait(false);
 
                        Assert.IsNotNull(retrievedCrowdaction);
                        Assert.AreEqual(updatedCrowdaction.Name, retrievedCrowdaction.Name);
@@ -209,13 +209,13 @@ namespace CollAction.Tests.Integration.Service
                        Assert.IsTrue(await crowdactionService.SearchCrowdactions(null, null).AnyAsync().ConfigureAwait(false));
 
                        Category searchCategory = (Category)r.Next(7);
-                       Assert.IsTrue(await crowdactionService.SearchCrowdactions(searchCategory, null).Include(p => p.Categories).AllAsync(p => p.Categories.Any(pc => pc.Category == searchCategory)).ConfigureAwait(false));
-                       Assert.IsTrue(await crowdactionService.SearchCrowdactions(null, SearchCrowdactionStatus.Closed).AllAsync(p => p.End < DateTime.UtcNow).ConfigureAwait(false));
-                       Assert.IsTrue(await crowdactionService.SearchCrowdactions(searchCategory, SearchCrowdactionStatus.Closed).AllAsync(p => p.End < DateTime.UtcNow).ConfigureAwait(false));
-                       Assert.IsTrue(await crowdactionService.SearchCrowdactions(null, SearchCrowdactionStatus.ComingSoon).AllAsync(p => p.Start > DateTime.UtcNow && p.Status == CrowdactionStatus.Running).ConfigureAwait(false));
-                       Assert.IsTrue(await crowdactionService.SearchCrowdactions(searchCategory, SearchCrowdactionStatus.ComingSoon).AllAsync(p => p.Start > DateTime.UtcNow && p.Status == CrowdactionStatus.Running).ConfigureAwait(false));
-                       Assert.IsTrue(await crowdactionService.SearchCrowdactions(null, SearchCrowdactionStatus.Open).AllAsync(p => p.Start <= DateTime.UtcNow && p.End >= DateTime.UtcNow && p.Status == CrowdactionStatus.Running).ConfigureAwait(false));
-                       Assert.IsTrue(await crowdactionService.SearchCrowdactions(searchCategory, SearchCrowdactionStatus.Open).AllAsync(p => p.Start <= DateTime.UtcNow && p.End >= DateTime.UtcNow && p.Status == CrowdactionStatus.Running).ConfigureAwait(false));
+                       Assert.IsTrue(await crowdactionService.SearchCrowdactions(searchCategory, null).Include(c => c.Categories).AllAsync(c => c.Categories.Any(pc => pc.Category == searchCategory)).ConfigureAwait(false));
+                       Assert.IsTrue(await crowdactionService.SearchCrowdactions(null, SearchCrowdactionStatus.Closed).AllAsync(c => c.End < DateTime.UtcNow).ConfigureAwait(false));
+                       Assert.IsTrue(await crowdactionService.SearchCrowdactions(searchCategory, SearchCrowdactionStatus.Closed).AllAsync(c => c.End < DateTime.UtcNow).ConfigureAwait(false));
+                       Assert.IsTrue(await crowdactionService.SearchCrowdactions(null, SearchCrowdactionStatus.ComingSoon).AllAsync(c => c.Start > DateTime.UtcNow && c.Status == CrowdactionStatus.Running).ConfigureAwait(false));
+                       Assert.IsTrue(await crowdactionService.SearchCrowdactions(searchCategory, SearchCrowdactionStatus.ComingSoon).AllAsync(c => c.Start > DateTime.UtcNow && c.Status == CrowdactionStatus.Running).ConfigureAwait(false));
+                       Assert.IsTrue(await crowdactionService.SearchCrowdactions(null, SearchCrowdactionStatus.Open).AllAsync(c => c.Start <= DateTime.UtcNow && c.End >= DateTime.UtcNow && c.Status == CrowdactionStatus.Running).ConfigureAwait(false));
+                       Assert.IsTrue(await crowdactionService.SearchCrowdactions(searchCategory, SearchCrowdactionStatus.Open).AllAsync(c => c.Start <= DateTime.UtcNow && c.End >= DateTime.UtcNow && c.Status == CrowdactionStatus.Running).ConfigureAwait(false));
                    });
 
         protected override void ConfigureReplacementServicesProvider(IServiceCollection collection)
