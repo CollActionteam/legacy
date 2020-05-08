@@ -25,60 +25,54 @@ namespace CollAction.Services.Statistics
         }
 
         public Task<int> NumberActionsTaken(CancellationToken token)
-        {
-            return cache.GetOrCreateAsync(
-                NumberActionsTakenKey,
-                async (ICacheEntry entry) =>
-                {
-                    entry.SlidingExpiration = CacheExpiration;
+            => cache.GetOrCreateAsync(
+                   NumberActionsTakenKey,
+                   async (ICacheEntry entry) =>
+                   {
+                       entry.SlidingExpiration = CacheExpiration;
 
-                    int normalParticipantCount =
-                        await context.CrowdactionParticipants
-                                     .CountAsync(c =>
-                                         c.Crowdaction!.End <= DateTime.UtcNow &&
-                                         c.Crowdaction!.Status == CrowdactionStatus.Running &&
-                                         c.Crowdaction!.ParticipantCounts!.Count + c.Crowdaction!.AnonymousUserParticipants >= c.Crowdaction!.Target, token).ConfigureAwait(false);
-                    int anonymousParticipantCount =
-                                 await context.Crowdactions
-                                              .Where(c => c.ParticipantCounts!.Count + c.AnonymousUserParticipants >= c.Target)
-                                              .SumAsync(c => c.AnonymousUserParticipants, token)
-                                              .ConfigureAwait(false);
+                       int normalParticipantCount =
+                           await context.CrowdactionParticipants
+                                        .CountAsync(c =>
+                                            c.Crowdaction!.End <= DateTime.UtcNow &&
+                                            c.Crowdaction!.Status == CrowdactionStatus.Running &&
+                                            c.Crowdaction!.ParticipantCounts!.Count + c.Crowdaction!.AnonymousUserParticipants >= c.Crowdaction!.Target, token).ConfigureAwait(false);
+                       int anonymousParticipantCount =
+                                    await context.Crowdactions
+                                                 .Where(c => c.ParticipantCounts!.Count + c.AnonymousUserParticipants >= c.Target)
+                                                 .SumAsync(c => c.AnonymousUserParticipants, token)
+                                                 .ConfigureAwait(false);
 
-                    return normalParticipantCount + anonymousParticipantCount;
-                });
-        }
+                       return normalParticipantCount + anonymousParticipantCount;
+                   });
 
         public Task<int> NumberCrowdactions(CancellationToken token)
-        {
-            return cache.GetOrCreateAsync(
-                NumberCrowdactionsKey,
-                (ICacheEntry entry) =>
-                {
-                    entry.SlidingExpiration = CacheExpiration;
-                    return context.Crowdactions
-                                  .CountAsync(c => c.Status == CrowdactionStatus.Running, token);
-                });
-        }
+            => cache.GetOrCreateAsync(
+                   NumberCrowdactionsKey,
+                   (ICacheEntry entry) =>
+                   {
+                       entry.SlidingExpiration = CacheExpiration;
+                       return context.Crowdactions
+                                     .CountAsync(c => c.Status == CrowdactionStatus.Running, token);
+                   });
 
         public Task<int> NumberUsers(CancellationToken token)
-        {
-            return cache.GetOrCreateAsync(
-                NumberUsersKey,
-                async (ICacheEntry entry) =>
-                {
-                    entry.SlidingExpiration = CacheExpiration;
+            => cache.GetOrCreateAsync(
+                   NumberUsersKey,
+                   async (ICacheEntry entry) =>
+                   {
+                       entry.SlidingExpiration = CacheExpiration;
 
-                    int normalUsers = 
-                        await context.Users
-                                     .CountAsync(u => u.Crowdactions.Any(), token)
-                                     .ConfigureAwait(false);
-                    int anonymousUsers =
-                        await context.Crowdactions
-                                     .SumAsync(c => c.AnonymousUserParticipants)
-                                     .ConfigureAwait(false);
+                       int normalUsers = 
+                           await context.Users
+                                        .CountAsync(u => u.Crowdactions.Any(), token)
+                                        .ConfigureAwait(false);
+                       int anonymousUsers =
+                           await context.Crowdactions
+                                        .SumAsync(c => c.AnonymousUserParticipants)
+                                        .ConfigureAwait(false);
 
-                    return normalUsers + anonymousUsers;
-                });
-        }
+                       return normalUsers + anonymousUsers;
+                   });
     }
 }
