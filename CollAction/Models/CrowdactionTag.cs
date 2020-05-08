@@ -19,23 +19,13 @@ namespace CollAction.Models
         [Required]
         public int TagId { get; set; }
 
-        private Tag? tag;
         [ForeignKey("TagId")]
-        public Tag Tag
-        {
-            get => tag ?? throw new InvalidOperationException($"Uninitialized navigation property: {nameof(Tag)}");
-            set => tag = value;
-        }
+        public Tag? Tag { get; set; }
 
         [Required]
         public int CrowdactionId { get; set; }
 
-        private Crowdaction? crowdaction;
         [ForeignKey("CrowdactionId")]
-        public Crowdaction Crowdaction
-        {
-            get => crowdaction ?? throw new InvalidOperationException($"Uninitialized navigation property: {nameof(Crowdaction)}");
-            set => crowdaction = value;
-        }
+        public Crowdaction? Crowdaction { get; set; }
     }
 }

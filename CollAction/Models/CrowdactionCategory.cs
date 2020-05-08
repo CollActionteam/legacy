@@ -18,11 +18,6 @@ namespace CollAction.Models
 
         public Category Category { get; set; }
 
-        private Crowdaction? crowdaction;
-        public Crowdaction Crowdaction
-        {
-            get => crowdaction ?? throw new InvalidOperationException($"Uninitialized navigation property: {nameof(Crowdaction)}");
-            set => crowdaction = value;
-        }
+        public Crowdaction? Crowdaction { get; set; }
     }
 }

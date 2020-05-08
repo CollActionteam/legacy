@@ -284,7 +284,7 @@ namespace CollAction.Services.Crowdactions
             crowdaction.OwnerId = updatedCrowdaction.OwnerId;
             context.Crowdactions.Update(crowdaction);
 
-            var crowdactionTags = crowdaction.Tags.Select(t => t.Tag.Name);
+            var crowdactionTags = crowdaction.Tags.Select(t => t.Tag!.Name);
             if (!Enumerable.SequenceEqual(updatedCrowdaction.Tags.OrderBy(t => t), crowdactionTags.OrderBy(t => t)))
             {
                 IEnumerable<string> missingTags =
@@ -312,7 +312,7 @@ namespace CollAction.Services.Crowdactions
                                   .Select(t => new CrowdactionTag(crowdactionId: crowdaction.Id, tagId: tagMap[t]));
                 IEnumerable<CrowdactionTag> removedTags =
                     crowdaction.Tags
-                           .Where(t => crowdactionTags.Except(updatedCrowdaction.Tags).Contains(t.Tag.Name));
+                           .Where(t => crowdactionTags.Except(updatedCrowdaction.Tags).Contains(t.Tag!.Name));
                 context.CrowdactionTags.AddRange(newTags);
                 context.CrowdactionTags.RemoveRange(removedTags);
             }
@@ -408,7 +408,7 @@ namespace CollAction.Services.Crowdactions
             foreach (CrowdactionParticipant participant in participants)
             {
                 Uri unsubscribeLink = new Uri(siteOptions.PublicUrl, $"{crowdaction.Url}/unsubscribe-email?userId={WebUtility.UrlEncode(participant.UserId)}&token={WebUtility.UrlEncode(participant.UnsubscribeToken.ToString())}");
-                emailSender.SendEmail(participant.User.Email, subject, FormatEmailMessage(message, participant.User, unsubscribeLink));
+                emailSender.SendEmail(participant.User!.Email, subject, FormatEmailMessage(message, participant.User, unsubscribeLink));
             }
 
             IList<ApplicationUser> adminUsers = await userManager.GetUsersInRoleAsync(AuthorizationConstants.AdminRole).ConfigureAwait(false);

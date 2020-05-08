@@ -19,13 +19,8 @@ namespace CollAction.Models
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int CrowdactionId { get; set; }
 
-        private Crowdaction? crowdaction;
         [ForeignKey("CrowdactionId")]
-        public Crowdaction Crowdaction
-        {
-            get => crowdaction ?? throw new InvalidOperationException($"Uninitialized navigation property: {nameof(Crowdaction)}");
-            set => crowdaction = value;
-        }
+        public Crowdaction? Crowdaction { get; set; }
 
         public int Count { get; set; }
     }

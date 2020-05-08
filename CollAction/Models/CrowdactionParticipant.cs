@@ -18,24 +18,14 @@ namespace CollAction.Models
         [Required]
         public string UserId { get; set; }
 
-        private ApplicationUser? user;
         [ForeignKey("UserId")]
-        public ApplicationUser User
-        {
-            get => user ?? throw new InvalidOperationException($"Uninitialized navigation property: {nameof(User)}");
-            set => user = value;
-        }
+        public ApplicationUser? User { get; set; }
 
         [Required]
         public int CrowdactionId { get; set; }
 
-        private Crowdaction? crowdaction;
         [ForeignKey("CrowdactionId")]
-        public Crowdaction Crowdaction
-        {
-            get => crowdaction ?? throw new InvalidOperationException($"Uninitialized navigation property: {nameof(Crowdaction)}");
-            set => crowdaction = value;
-        }
+        public Crowdaction? Crowdaction { get; set; }
 
         public bool SubscribedToCrowdactionEmails { get; set; }
 

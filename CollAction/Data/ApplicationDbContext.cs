@@ -54,7 +54,7 @@ namespace CollAction.Data
                    .OnDelete(DeleteBehavior.SetNull);
             builder.Entity<Crowdaction>()
                    .HasMany(p => p.Categories)
-                   .WithOne(pc => pc.Crowdaction)
+                   .WithOne(pc => pc.Crowdaction!)
                    .HasForeignKey(pc => pc.CrowdactionId)
                    .OnDelete(DeleteBehavior.Cascade);
             builder.Entity<CrowdactionCategory>()
@@ -65,7 +65,7 @@ namespace CollAction.Data
                    .HasKey("TagId", "CrowdactionId");
             builder.Entity<Crowdaction>()
                    .HasOne(p => p.ParticipantCounts)
-                   .WithOne(p => p!.Crowdaction)
+                   .WithOne(p => p!.Crowdaction!)
                    .HasForeignKey<CrowdactionParticipantCount>(p => p.CrowdactionId);
             builder.Entity<ApplicationUser>().Property(u => u.RepresentsNumberParticipants).HasDefaultValue(1);
             builder.Entity<UserEvent>()

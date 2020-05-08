@@ -20,9 +20,9 @@ namespace CollAction.Services.Statistics
         public Task<int> NumberActionsTaken(CancellationToken token)
             => context.CrowdactionParticipants
                       .CountAsync(p => 
-                          p.Crowdaction.End <= DateTime.UtcNow && 
-                          p.Crowdaction.Status == CrowdactionStatus.Running && 
-                          p.Crowdaction.ParticipantCounts!.Count + p.Crowdaction.AnonymousUserParticipants >= p.Crowdaction.Target, token);
+                          p.Crowdaction!.End <= DateTime.UtcNow && 
+                          p.Crowdaction!.Status == CrowdactionStatus.Running && 
+                          p.Crowdaction!.ParticipantCounts!.Count + p.Crowdaction!.AnonymousUserParticipants >= p.Crowdaction!.Target, token);
 
         public Task<int> NumberCrowdactions(CancellationToken token)
             => context.Crowdactions
