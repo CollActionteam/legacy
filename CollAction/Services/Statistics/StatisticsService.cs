@@ -31,19 +31,21 @@ namespace CollAction.Services.Statistics
                    {
                        entry.SlidingExpiration = CacheExpiration;
 
-                       int normalParticipantCount =
+                       // Actions are taken by users (normal and anonymous) only for successfull projects
+
+                       int actionsNormalUsers =
                            await context.CrowdactionParticipants
                                         .CountAsync(c =>
                                             c.Crowdaction!.End <= DateTime.UtcNow &&
                                             c.Crowdaction!.Status == CrowdactionStatus.Running &&
                                             c.Crowdaction!.ParticipantCounts!.Count + c.Crowdaction!.AnonymousUserParticipants >= c.Crowdaction!.Target, token).ConfigureAwait(false);
-                       int anonymousParticipantCount =
+                       int actionsAnonymousUsers =
                                     await context.Crowdactions
                                                  .Where(c => c.ParticipantCounts!.Count + c.AnonymousUserParticipants >= c.Target)
                                                  .SumAsync(c => c.AnonymousUserParticipants, token)
                                                  .ConfigureAwait(false);
 
-                       return normalParticipantCount + anonymousParticipantCount;
+                       return actionsNormalUsers + actionsAnonymousUsers;
                    });
 
         public Task<int> NumberCrowdactions(CancellationToken token)
@@ -51,6 +53,8 @@ namespace CollAction.Services.Statistics
                    NumberCrowdactionsKey,
                    (ICacheEntry entry) =>
                    {
+                       // Only projects that have been approved count
+
                        entry.SlidingExpiration = CacheExpiration;
                        return context.Crowdactions
                                      .CountAsync(c => c.Status == CrowdactionStatus.Running, token);
@@ -62,6 +66,8 @@ namespace CollAction.Services.Statistics
                    async (ICacheEntry entry) =>
                    {
                        entry.SlidingExpiration = CacheExpiration;
+
+                       // Only count users that have joined at least one crowdaction
 
                        int normalUsers = 
                            await context.Users
