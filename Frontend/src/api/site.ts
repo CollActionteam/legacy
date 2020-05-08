@@ -9,11 +9,11 @@ export const siteData = {
     },
     {
       name: 'Find Crowdaction',
-      link: '/projects/find'
+      link: '/crowdactions/find'
     },
     {
       name: 'Start Crowdaction',
-      link: '/projects/start'
+      link: '/crowdactions/start'
     },
     {
       name: 'About',
@@ -29,11 +29,11 @@ export const siteData = {
           name: "Home",
         },
         {
-          link: "/projects/find",
+          link: "/crowdactions/find",
           name: "Find Crowdaction",
         },
         {
-          link: "/projects/start",
+          link: "/crowdactions/start",
           name: "Start Crowdaction",
         },
         {

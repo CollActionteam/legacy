@@ -159,7 +159,7 @@ namespace CollAction.Services.User
             if (result.Succeeded)
             {
                 newsletterService.SetSubscriptionBackground(newUser.Email, newUser.IsSubscribedNewsletter);
-                logger.LogInformation("User created from anonymous project participant.");
+                logger.LogInformation("User created from anonymous crowdaction participant.");
             }
             else
             {
@@ -282,14 +282,14 @@ namespace CollAction.Services.User
                 return permissionResult;
             }
 
-            List<Project> projects =
-                await context.ProjectParticipants
-                             .Include(p => p.Project)
-                             .Where(p => p.UserId == userId && p.Project.End < DateTime.UtcNow)
-                             .Select(p => p.Project)
+            List<Crowdaction> crowdactions =
+                await context.CrowdactionParticipants
+                             .Include(p => p.Crowdaction)
+                             .Where(p => p.UserId == userId && p.Crowdaction.End < DateTime.UtcNow)
+                             .Select(p => p.Crowdaction)
                              .ToListAsync().ConfigureAwait(false);
 
-            foreach (Project p in projects)
+            foreach (Crowdaction p in crowdactions)
             {
                 p.AnonymousUserParticipants += 1;
             }

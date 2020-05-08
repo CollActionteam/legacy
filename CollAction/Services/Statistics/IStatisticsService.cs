@@ -7,7 +7,7 @@ namespace CollAction.Services.Statistics
     {
         Task<int> NumberUsers(CancellationToken token);
 
-        Task<int> NumberProjects(CancellationToken token);
+        Task<int> NumberCrowdactions(CancellationToken token);
 
         Task<int> NumberActionsTaken(CancellationToken token);
     }

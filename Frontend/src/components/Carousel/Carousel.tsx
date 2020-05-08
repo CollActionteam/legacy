@@ -5,10 +5,10 @@ import { Grid, Container } from "@material-ui/core";
 
 
 import { Fragments } from "../../api/fragments";
-import { IProject } from "../../api/types";
+import { ICrowdaction } from "../../api/types";
 
 import Loader from "../Loader/Loader";
-import ProjectCard from "../ProjectCard/ProjectCard";
+import CrowdactionCard from "../CrowdactionCard/CrowdactionCard";
 import { SecondaryButton, SecondaryGhostButton } from "../Button/Button";
 
 import "slick-carousel/slick/slick.css";
@@ -40,7 +40,7 @@ export default ({ title, text }: ICarouselProps) => {
     ],
   };
 
-  const { data, loading, error } = useQuery(GET_CAROUSEL_PROJECTS);
+  const { data, loading, error } = useQuery(GET_CAROUSEL_CROWDACTIONS);
 
   if (error) {
     console.error(error.message);
@@ -57,20 +57,20 @@ export default ({ title, text }: ICarouselProps) => {
               className={styles.introText}
               dangerouslySetInnerHTML={{ __html: text }}
             ></p>
-            <SecondaryButton to="projects/find">
+            <SecondaryButton to="crowdactions/find">
               Find Crowdaction
             </SecondaryButton>
-            <SecondaryGhostButton to="projects/start">
+            <SecondaryGhostButton to="crowdactions/start">
               Start Crowdaction
             </SecondaryGhostButton>
           </div>
         </Grid>
         <Grid item sm={12} md={9} className={styles.sliderContainer}>
           {loading && <Loader />}
-          {data?.projects && (
+          {data?.crowdactions && (
             <Slider {...settings}>
-              {data.projects.map((project: IProject, index: number) => (
-                <ProjectCard project={project} key={index} />
+              {data.crowdactions.map((crowdaction: ICrowdaction, index: number) => (
+                <CrowdactionCard crowdaction={crowdaction} key={index} />
               ))}
             </Slider>
           )}
@@ -80,10 +80,10 @@ export default ({ title, text }: ICarouselProps) => {
   );
 };
 
-const GET_CAROUSEL_PROJECTS = gql`
-  query GetCarouselProjects {
-    projects(take: 6, status: ACTIVE) {
-      ${Fragments.projectDetail}
+const GET_CAROUSEL_CROWDACTIONS = gql`
+  query GetCarouselCrowdactions {
+    crowdactions(take: 6, status: ACTIVE) {
+      ${Fragments.crowdactionDetail}
     }
   }
 `;

@@ -13,7 +13,7 @@ namespace CollAction.ValidationAttributes
 
             if (!categories.Any())
             {
-                return new ValidationResult("You need to specify up to two categories for the project");
+                return new ValidationResult("You need to specify up to two categories for the crowdaction");
             }
 
             if (categories.Count > 2)
@@ -23,7 +23,7 @@ namespace CollAction.ValidationAttributes
 
             if (categories.Distinct().Count() != categories.Count)
             {
-                return new ValidationResult("The project has duplicate categories");
+                return new ValidationResult("The crowdaction has duplicate categories");
             }
 
             return ValidationResult.Success;

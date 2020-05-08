@@ -27,7 +27,7 @@ export default () => {
         // Only load pixel when the user originates from facebook/instagram
         if (pixelInitialized && pixelConsent && (utm.source === "facebook" || utm.source === "instagram")) { 
             ReactPixel.track('PageView', null);
-            if (pathname.startsWith("/projects") && pathname.endsWith("/thankyou")) {
+            if (pathname.startsWith("/crowdactions") && pathname.endsWith("/thankyou")) {
                 ReactPixel.track('SubmitApplication', null);
             }
             if (pathname.startsWith("/donate/thankyou")) {

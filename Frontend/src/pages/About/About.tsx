@@ -74,18 +74,18 @@ const AboutPage = () => {
                     Basically, it means: ‘taking action collectively and conditionally with the purpose of achieving
                     positive impact on the world and its inhabitants’. Simply put, with crowdacting we ask:
                     ‘Would you take action if you knew that a hundred/a thousand/a million/a billion others would do so too?’
-                    An example of a crowdacting project: ‘If we can find 10,000 people that commit to switch to renewable
+                    An example of a crowdacting crowdaction: ‘If we can find 10,000 people that commit to switch to renewable
                     energy if 9,999 others would do the same, we will all switch together’. As a result, we form a
                     critical mass of people that has a huge impact on making this world a better place. The concept is very
                     similar to crowdfunding, but people commit to actions, instead of money.
                 </p>
                 <p>
-                    In practice, a crowdacting project follows three steps:
+                    In practice, a crowdacting crowdaction follows three steps:
                 </p>
                 <ol>
-                    <li>The ProjectStarter launches a project on collaction.org. He/she proposes a certain action
+                    <li>The CrowdactionStarter launches a crowdaction on collaction.org. He/she proposes a certain action
                         (for example switching to renewable energy), a target (minimum number of participants), and a deadline.</li>
-                    <li>ProjectSupporters commit to taking action, if the target is met within the deadline.</li>
+                    <li>CrowdactionSupporters commit to taking action, if the target is met within the deadline.</li>
                     <li>If and when the target is met, everybody acts collectively.</li>
                 </ol>
                 <p>
@@ -153,18 +153,18 @@ const AboutPage = () => {
                 <a href="http://www.crowdacting.org/" target="_blank" rel="noopener noreferrer">www.crowdacting.org</a>.
             </Faq>
 
-            <Faq title="Can I start a project myself?" collapsed={false} faqId="start_project_myself">
+            <Faq title="Can I start a crowdaction myself?" collapsed={false} faqId="start_crowdaction_myself">
                 <p>
-                    Yes! You can create a project <a href="/Projects/StartInfo" target="_blank" rel="noopener noreferrer">here</a>. Make sure to check if your idea
+                    Yes! You can create a crowdaction <a href="/Crowdactions/StartInfo" target="_blank" rel="noopener noreferrer">here</a>. Make sure to check if your idea
                     meets the CollAction criteria below.
                 </p>
             </Faq>
 
-            <Faq title="How long does a project run for?" collapsed={false} faqId="duration_project">
+            <Faq title="How long does a crowdaction run for?" collapsed={false} faqId="duration_crowdaction">
                 <p>
-                    Some actions are a one-off – think of the switch to a fair bank or green energy. Other projects can have a longer
+                    Some actions are a one-off – think of the switch to a fair bank or green energy. Other crowdactions can have a longer
                     duration, such as eating less meat, periodically visiting lonely elderly people or helping refugees with language
-                    lessons and their integration. In other words, the duration of an action differs from one project to the other.
+                    lessons and their integration. In other words, the duration of an action differs from one crowdaction to the other.
                 </p>
             </Faq>
 
@@ -183,20 +183,20 @@ const AboutPage = () => {
                     try to create a culture in which agreement=agreement.
                 </p>
                 <p>
-                    That being said, we will incorporate certain processes and tools to ensure that as many project supporters
-                    proceed to taking action. What these processes are depends on the type of project. For some projects
-                    (such as switching projects, for example to a fair bank or green energy) the action can already be started
-                    conditionally at the time of commitment. When the target is reached, supporters of the project will automatically
-                    be transferred to the fair bank or renewable energy provider. When it comes to local projects, social control will
-                    play a bigger role. Other projects might be purely based on trust. We will be testing different tools and approaches
-                    in the upcoming projects. We ask ProjectStarters to seriously consider this question  – the team of CollAction can
+                    That being said, we will incorporate certain processes and tools to ensure that as many crowdaction supporters
+                    proceed to taking action. What these processes are depends on the type of crowdaction. For some crowdactions
+                    (such as switching crowdactions, for example to a fair bank or green energy) the action can already be started
+                    conditionally at the time of commitment. When the target is reached, supporters of the crowdaction will automatically
+                    be transferred to the fair bank or renewable energy provider. When it comes to local crowdactions, social control will
+                    play a bigger role. Other crowdactions might be purely based on trust. We will be testing different tools and approaches
+                    in the upcoming crowdactions. We ask CrowdactionStarters to seriously consider this question  – the team of CollAction can
                     help you think this through!
                 </p>
             </Faq>
 
-            <Faq title="When will the projects end exactly?" collapsed={false} faqId="when_project_end">
+            <Faq title="When will the crowdactions end exactly?" collapsed={false} faqId="when_crowdaction_end">
                 <p>
-                    The project ends at the end (23:59:59) of the day that is listed as "Sign up closes" in the UTC (London) timezone.
+                    The crowdaction ends at the end (23:59:59) of the day that is listed as "Sign up closes" in the UTC (London) timezone.
                 </p>
             </Faq>
 
@@ -209,71 +209,71 @@ const AboutPage = () => {
                 </p>
             </Faq>
 
-            <Faq title="Who can start a project?" collapsed={false} faqId="who_can_start">
+            <Faq title="Who can start a crowdaction?" collapsed={false} faqId="who_can_start">
                 <p>
-                    Everyone that adheres to the start project criteria (see below) can start a
-                    project: whether they are individuals, groups of friends or like minded people, or organizations.
+                    Everyone that adheres to the start crowdaction criteria (see below) can start a
+                    crowdaction: whether they are individuals, groups of friends or like minded people, or organizations.
                 </p>
             </Faq>
 
             <Faq title="What would be a reasonable target number of participants?" collapsed={false} faqId="number_participants">
                 <p>
-                    Setting the right target for your project is not easy. It depends on a number of different factors,
-                    for instance: what type of project is it? What is the action that is proposed (is it hard or difficult)?
-                    How much time do you have to promote the project? Do you have an existing network that you can mobilize?
+                    Setting the right target for your crowdaction is not easy. It depends on a number of different factors,
+                    for instance: what type of crowdaction is it? What is the action that is proposed (is it hard or difficult)?
+                    How much time do you have to promote the crowdaction? Do you have an existing network that you can mobilize?
                 </p>
                 <p>
                     In general, we say: it's better to set a more conservative target and far exceed it, than setting a
                     very ambitious target and not reach it by a few percent. If you want to know what a good target would
-                    be for your project, a good start would be to think about your communication plan: what are you planning
+                    be for your crowdaction, a good start would be to think about your communication plan: what are you planning
                     to do to reach people? How many people can you reach through each channel that you are planning to use
                     (e.g. through your personal network, social media groups, partnering with other organizations/media)?
-                    Also, please feel free to browse the projects that have already on the Find Project page, or reach out
+                    Also, please feel free to browse the crowdactions that have already on the Find Crowdaction page, or reach out
                     to <a href="mailto:hello@collaction.org">hello@collaction.org</a> - we're happy to help you
                     think about this!
                 </p>
             </Faq>
 
-            <Faq title="What are the criteria your project needs to meet?" collapsed={false} faqId="project_criteria">
+            <Faq title="What are the criteria your crowdaction needs to meet?" collapsed={false} faqId="crowdaction_criteria">
                 <p>
-                    A project can only be listed when it meets the following criteria:
+                    A crowdaction can only be listed when it meets the following criteria:
                 </p>
                 <ul>
                     <li>
-                        The goal of the project is to make a positive societal or ecological contribution to your neighbourhood,
+                        The goal of the crowdaction is to make a positive societal or ecological contribution to your neighbourhood,
                         country or the world.
                     </li>
                     <li>
-                        The project is not geared towards personal gain.
+                        The crowdaction is not geared towards personal gain.
                     </li>
                     <li>
-                        The project does not include activities that are focussed on conversion or activism (religious or political).
+                        The crowdaction does not include activities that are focussed on conversion or activism (religious or political).
                     </li>
                     <li>
-                        The project does not include activities that are illegal or do not abide by the official legislation of the Netherlands or
+                        The crowdaction does not include activities that are illegal or do not abide by the official legislation of the Netherlands or
                         the country of implementation.
                     </li>
                     <li>
-                        The online project registration form is completed fully and truthfully and has a clear and easily readable project
+                        The online crowdaction registration form is completed fully and truthfully and has a clear and easily readable crowdaction
                         description and goal. The CollAction team can ask for clarification and/or edit your text if necessary.
                     </li>
                     <li>
-                        The ProjectStarter has thought through how people can be moved from commitment to action. We can help you with this!
+                        The CrowdactionStarter has thought through how people can be moved from commitment to action. We can help you with this!
                     </li>
                     <li>
-                        The project is ambitious but realistic - The CollAction evaluation commission judges if this is the case.
-                        The ProjectStarter can activate his/her own network, and/or has a good plan to achieve the target.
+                        The crowdaction is ambitious but realistic - The CollAction evaluation commission judges if this is the case.
+                        The CrowdactionStarter can activate his/her own network, and/or has a good plan to achieve the target.
                     </li>
                     <li>
-                        The ProjectStarter commits to measuring the impact of the action (e.g. the number of people that have acted as
-                        a result of the project) and to sharing this information with CollAction.
+                        The CrowdactionStarter commits to measuring the impact of the action (e.g. the number of people that have acted as
+                        a result of the crowdaction) and to sharing this information with CollAction.
                     </li>
                 </ul>
             </Faq>
 
-            <Faq title="Where can I find more tips and tricks on how to start, run and finish a project?" collapsed={false} faqId="project_tips_tricks">
+            <Faq title="Where can I find more tips and tricks on how to start, run and finish a crowdaction?" collapsed={false} faqId="crowdaction_tips_tricks">
                 <p>
-                    Check out our <a href="https://docs.google.com/document/d/1JK058S_tZXntn3GzFYgiH3LWV5e9qQ0vXmEyV-89Tmw" target="_blank" rel="noopener noreferrer">Project Starter Handbook</a>
+                    Check out our <a href="https://docs.google.com/document/d/1JK058S_tZXntn3GzFYgiH3LWV5e9qQ0vXmEyV-89Tmw" target="_blank" rel="noopener noreferrer">Crowdaction Starter Handbook</a>
                 </p>
             </Faq>
         </span>

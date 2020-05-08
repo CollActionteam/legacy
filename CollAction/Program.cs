@@ -1,6 +1,6 @@
 ﻿using CollAction.Services.Image;
 using CollAction.Services.Initialization;
-using CollAction.Services.Projects;
+using CollAction.Services.Crowdactions;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
@@ -23,7 +23,7 @@ namespace CollAction
             {
                 await scope.ServiceProvider.GetRequiredService<IInitializationService>().InitializeDatabase().ConfigureAwait(false);
                 scope.ServiceProvider.GetRequiredService<IImageService>().InitializeDanglingImageJob();
-                scope.ServiceProvider.GetRequiredService<IProjectService>().InitializeRefreshParticipantCountJob();
+                scope.ServiceProvider.GetRequiredService<ICrowdactionService>().InitializeRefreshParticipantCountJob();
             }
 
             await host.RunAsync().ConfigureAwait(false);

@@ -14,8 +14,8 @@ namespace CollAction.GraphQl.Mutations
                 "donation",
                 resolve: c => new object());
 
-            Field<ProjectMutationGraph>(
-                "project",
+            Field<CrowdactionMutationGraph>(
+                "crowdaction",
                 resolve: c => new object());
         }
     }

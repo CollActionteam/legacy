@@ -11,7 +11,7 @@ namespace CollAction.GraphQl.Queries
         {
             Field<NonNullGraphType<IdGraphType>>(nameof(Tag.Id), resolve: x => x.Source.Id);
             Field(x => x.Name);
-            AddNavigationListField(nameof(Tag.ProjectTags), c => c.Source.ProjectTags);
+            AddNavigationListField(nameof(Tag.CrowdactionTags), c => c.Source.CrowdactionTags);
         }
     }
 }

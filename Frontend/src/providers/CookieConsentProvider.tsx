@@ -19,7 +19,7 @@ export const ConsentDescription = (consent: Consent) => {
         case Consent.Stripe:
             return "Integration with stripe payments for handling our donations";
         case Consent.Disqus:
-            return "Integration with disqus comments for handling our project comments";
+            return "Integration with disqus comments for handling our crowdaction comments";
         case Consent.Social:
             return "Integration with social media (facebook, twitter, ...)";
     }

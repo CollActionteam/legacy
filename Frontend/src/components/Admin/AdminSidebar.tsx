@@ -35,9 +35,9 @@ export default ({ children }: any) => {
         <div className={classes.toolbar} />
         <Divider />
         <List>
-          <ListItem button key="Projects" onClick={() => history.push("/admin/projects/list")}>
+          <ListItem button key="Crowdactions" onClick={() => history.push("/admin/crowdactions/list")}>
             <ListItemIcon><FontAwesomeIcon icon="tools" /></ListItemIcon>
-            <ListItemText primary="Projects" />
+            <ListItemText primary="Crowdactions" />
           </ListItem>
           <ListItem button key="Users" onClick={() => history.push("/admin/users/list")}>
             <ListItemIcon><FontAwesomeIcon icon={["far", "user"]} /></ListItemIcon>

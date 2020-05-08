@@ -1,8 +1,8 @@
 ﻿using CollAction.Data;
 using CollAction.Models;
 using CollAction.Services.Image;
-using CollAction.Services.Projects;
-using CollAction.Services.Projects.Models;
+using CollAction.Services.Crowdactions;
+using CollAction.Services.Crowdactions.Models;
 using Hangfire;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -24,7 +24,7 @@ namespace CollAction.Services.Initialization
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly SeedOptions seedOptions;
-        private readonly IProjectService projectService;
+        private readonly ICrowdactionService crowdactionService;
         private readonly IImageService imageService;
         private readonly IBackgroundJobClient jobClient;
         private readonly ApplicationDbContext context;
@@ -32,12 +32,12 @@ namespace CollAction.Services.Initialization
         private const int MaxImageBannerDimensionPixels = 1600;
         private const int MaxImageCardDimensionPixels = 370;
 
-        public InitializationService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IOptions<SeedOptions> seedOptions, IProjectService projectService, IImageService imageService, IBackgroundJobClient jobClient, ApplicationDbContext context, ILogger<InitializationService> logger)
+        public InitializationService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IOptions<SeedOptions> seedOptions, ICrowdactionService crowdactionService, IImageService imageService, IBackgroundJobClient jobClient, ApplicationDbContext context, ILogger<InitializationService> logger)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.seedOptions = seedOptions.Value;
-            this.projectService = projectService;
+            this.crowdactionService = crowdactionService;
             this.imageService = imageService;
             this.jobClient = jobClient;
             this.context = context;
@@ -50,7 +50,7 @@ namespace CollAction.Services.Initialization
             await context.Database.MigrateAsync().ConfigureAwait(false);
             logger.LogInformation("Creating admin user if absent");
             ApplicationUser admin = await CreateAdminRoleAndUser().ConfigureAwait(false);
-            if (seedOptions.SeedTestData && !(await projectService.SearchProjects(null, null).AnyAsync().ConfigureAwait(false)))
+            if (seedOptions.SeedTestData && !(await crowdactionService.SearchCrowdactions(null, null).AnyAsync().ConfigureAwait(false)))
             {
                 logger.LogInformation("Seeding database");
                 jobClient.Enqueue(() => SeedTestData(admin.Id, CancellationToken.None));
@@ -63,39 +63,39 @@ namespace CollAction.Services.Initialization
         {
             var admin = await userManager.FindByIdAsync(adminId).ConfigureAwait(false);
             var seededUsers = await SeedTestUsers(cancellationToken).ConfigureAwait(false);
-            await SeedRandomProjects(seededUsers.Concat(new[] { admin }), cancellationToken).ConfigureAwait(false);
+            await SeedRandomCrowdactions(seededUsers.Concat(new[] { admin }), cancellationToken).ConfigureAwait(false);
         }
 
         // TODO: Remove once this has run in production
         public async Task MigrateCardImages(CancellationToken token)
         {
-            List<int> projectsToMigrate =
-                await context.Projects
+            List<int> crowdactionsToMigrate =
+                await context.Crowdactions
                              .Where(p => p.CardImageFileId == null && p.BannerImageFileId != null)
                              .Select(p => p.Id)
                              .ToListAsync(token)
                              .ConfigureAwait(false);
-            projectsToMigrate.ForEach(projectId => jobClient.Enqueue(() => MigrateCardImage(projectId, CancellationToken.None)));
+            crowdactionsToMigrate.ForEach(crowdactionId => jobClient.Enqueue(() => MigrateCardImage(crowdactionId, CancellationToken.None)));
         }
 
         // TODO: Remove once this has run in production
-        public async Task MigrateCardImage(int projectId, CancellationToken token)
+        public async Task MigrateCardImage(int crowdactionId, CancellationToken token)
         {
-            Project project = 
-                await context.Projects
+            Crowdaction crowdaction = 
+                await context.Crowdactions
                              .Include(p => p.BannerImage)
-                             .SingleAsync(p => p.Id == projectId, token)
+                             .SingleAsync(p => p.Id == crowdactionId, token)
                              .ConfigureAwait(false);
 
-            if (project.BannerImage == null)
+            if (crowdaction.BannerImage == null)
             {
-                throw new InvalidOperationException($"Banner image not found when migrating for project: {project.Id}");
+                throw new InvalidOperationException($"Banner image not found when migrating for crowdaction: {crowdaction.Id}");
             }
 
-            Uri bannerImageUrl = imageService.GetUrl(project.BannerImage);
+            Uri bannerImageUrl = imageService.GetUrl(crowdaction.BannerImage);
             byte[] bannerImage = await DownloadFile(bannerImageUrl, token).ConfigureAwait(false);
-            ImageFile uploadedImage = await imageService.UploadImage(ToFormFile(bannerImage, bannerImageUrl), project.BannerImage.Description, MaxImageCardDimensionPixels, token).ConfigureAwait(false);
-            project.CardImage = uploadedImage;
+            ImageFile uploadedImage = await imageService.UploadImage(ToFormFile(bannerImage, bannerImageUrl), crowdaction.BannerImage.Description, MaxImageCardDimensionPixels, token).ConfigureAwait(false);
+            crowdaction.CardImage = uploadedImage;
             await context.SaveChangesAsync(token).ConfigureAwait(false);
         }
 
@@ -161,7 +161,7 @@ namespace CollAction.Services.Initialization
             return users;
         }
 
-        private async Task SeedRandomProjects(IEnumerable<ApplicationUser> users, CancellationToken cancellationToken)
+        private async Task SeedRandomCrowdactions(IEnumerable<ApplicationUser> users, CancellationToken cancellationToken)
         {
             Random r = new Random();
             DateTime now = DateTime.UtcNow;
@@ -196,21 +196,21 @@ namespace CollAction.Services.Initialization
                                           .Distinct()
                                           .ToList();
 
-            var projectNames =
+            var crowdactionNames =
                 Enumerable.Range(0, r.Next(40, 120))
                           .Select(i => Faker.Company.Name())
                           .Distinct()
                           .ToList();
 
             List<string> userIds = await context.Users.Select(u => u.Id).ToListAsync().ConfigureAwait(false);
-            List<Project> projects = new List<Project>(projectNames.Count);
+            List<Crowdaction> crowdactions = new List<Crowdaction>(crowdactionNames.Count);
 
-            // Generate random projects
-            foreach (string projectName in projectNames)
+            // Generate random crowdactions
+            foreach (string crowdactionName in crowdactionNames)
             {
                 DateTime start = now.Date.AddDays(r.Next(-10, 20));
 
-                IEnumerable<string> projectTags =
+                IEnumerable<string> crowdactionTags =
                     Enumerable.Range(0, r.Next(5))
                               .Select(i => r.Next(tags.Count))
                               .Distinct()
@@ -236,15 +236,15 @@ namespace CollAction.Services.Initialization
                                           : await imageService.UploadImage(ToFormFile(bannerImageBytes.Result, bannerImageUrl), Faker.Company.BS(), MaxImageCardDimensionPixels, cancellationToken).ConfigureAwait(false);
 
                 ApplicationUser owner = users.ElementAt(users.Count() - 1);
-                ProjectStatus status = (ProjectStatus)r.Next(3);
-                NewProjectInternal newProject =
-                    new NewProjectInternal(
-                        name: projectName,
+                CrowdactionStatus status = (CrowdactionStatus)r.Next(3);
+                NewCrowdactionInternal newCrowdaction =
+                    new NewCrowdactionInternal(
+                        name: crowdactionName,
                         description: $"<p>{string.Join("</p><p>", Faker.Lorem.Paragraphs(r.Next(3) + 1))}</p>",
                         start: start,
                         end: start.AddDays(r.Next(10, 40)).AddHours(23).AddMinutes(59).AddSeconds(59),
                         categories: categories,
-                        tags: projectTags,
+                        tags: crowdactionTags,
                         bannerImageFileId: bannerImage?.Id,
                         descriptiveImageFileId: descriptiveImage?.Id,
                         cardImageFileId: cardImage?.Id,
@@ -253,16 +253,16 @@ namespace CollAction.Services.Initialization
                         proposal: Faker.Company.BS(),
                         target: r.Next(1, 10000),
                         descriptionVideoLink: videoLinks.ElementAt(r.Next(videoLinks.Length)),
-                        displayPriority: (ProjectDisplayPriority)r.Next(3),
-                        status: (ProjectStatus)r.Next(3),
+                        displayPriority: (CrowdactionDisplayPriority)r.Next(3),
+                        status: (CrowdactionStatus)r.Next(3),
                         ownerId: owner.Id,
                         anonymousUserParticipants: r.Next(1, 8000));
 
-                Project project = await projectService.CreateProjectInternal(newProject, cancellationToken).ConfigureAwait(false);
+                Crowdaction crowdaction = await crowdactionService.CreateCrowdactionInternal(newCrowdaction, cancellationToken).ConfigureAwait(false);
 
-                context.ProjectParticipants.AddRange(
+                context.CrowdactionParticipants.AddRange(
                     userIds.Where(userId => r.Next(2) == 0)
-                           .Select(userId => new ProjectParticipant(userId, project.Id, r.Next(2) == 1, now, Guid.NewGuid())));
+                           .Select(userId => new CrowdactionParticipant(userId, crowdaction.Id, r.Next(2) == 1, now, Guid.NewGuid())));
 
                 await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             }

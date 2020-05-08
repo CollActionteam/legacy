@@ -53,7 +53,7 @@ namespace CollAction.GraphQl.Queries
                     var providers = await userManager.GetLoginsAsync(c.Source).ConfigureAwait(false);
                     return providers.Select(p => p.LoginProvider);
                 });
-            AddNavigationListField(nameof(ApplicationUser.Projects), c => c.Source.Projects);
+            AddNavigationListField(nameof(ApplicationUser.Crowdactions), c => c.Source.Crowdactions);
             AddNavigationListField(nameof(ApplicationUser.Participates), c => c.Source.Participates);
             AddNavigationListField(nameof(ApplicationUser.UserEvents), c => c.Source.UserEvents).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
             AddNavigationListField(nameof(ApplicationUser.DonationEvents), c => c.Source.DonationEvents).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);

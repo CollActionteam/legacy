@@ -36,10 +36,10 @@ export default () => {
       </Grid>
       <Grid item xs={12} md={3} className={styles.stat}>
         <div className={styles.circle}>
-          <LazyImage src={Waves} alt={t('home.stats.numberProjects')} />
+          <LazyImage src={Waves} alt={t('home.stats.numberCrowdactions')} />
         </div>
-        <h2 className={styles.title}>{data.statistics.numberProjects}</h2>
-        <span>{t('home.stats.numberProjects')}</span>
+        <h2 className={styles.title}>{data.statistics.numberCrowdactions}</h2>
+        <span>{t('home.stats.numberCrowdactions')}</span>
       </Grid>
       <Grid item xs={12} md={3} className={styles.stat}>
         <div className={styles.circle}>
@@ -56,7 +56,7 @@ const GET_STATISTICS = gql`
   query {
     statistics {
       numberActionsTaken
-      numberProjects
+      numberCrowdactions
       numberUsers
     }
   }

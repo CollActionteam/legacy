@@ -15,19 +15,19 @@ namespace CollAction.Data
         {
         }
 
-        public DbSet<Project> Projects { get; set; } = null!;
+        public DbSet<Crowdaction> Crowdactions { get; set; } = null!;
 
-        public DbSet<ProjectCategory> ProjectCategories { get; set; } = null!;
+        public DbSet<CrowdactionCategory> CrowdactionCategories { get; set; } = null!;
 
-        public DbSet<ProjectParticipant> ProjectParticipants { get; set; } = null!;
+        public DbSet<CrowdactionParticipant> CrowdactionParticipants { get; set; } = null!;
 
-        public DbSet<ProjectTag> ProjectTags { get; set; } = null!;
+        public DbSet<CrowdactionTag> CrowdactionTags { get; set; } = null!;
 
         public DbSet<Tag> Tags { get; set; } = null!;
 
         public DbSet<ImageFile> ImageFiles { get; set; } = null!;
 
-        public DbSet<ProjectParticipantCount> ProjectParticipantCounts { get; set; } = null!;
+        public DbSet<CrowdactionParticipantCount> CrowdactionParticipantCounts { get; set; } = null!;
 
         public DbSet<UserEvent> UserEvents { get; set; } = null!;
 
@@ -41,32 +41,32 @@ namespace CollAction.Data
 
             builder.Entity<Tag>()
                    .HasAlternateKey(t => t.Name);
-            builder.Entity<Project>()
+            builder.Entity<Crowdaction>()
                    .HasIndex(p => p.Name)
-                   .HasName("IX_Projects_Name").IsUnique();
-            builder.Entity<Project>()
+                   .HasName("IX_Crowdactions_Name").IsUnique();
+            builder.Entity<Crowdaction>()
                    .Property(p => p.DisplayPriority)
-                   .HasDefaultValue(ProjectDisplayPriority.Medium);
+                   .HasDefaultValue(CrowdactionDisplayPriority.Medium);
             builder.Entity<ApplicationUser>()
-                   .HasMany(p => p.Projects)
+                   .HasMany(p => p.Crowdactions)
                    .WithOne(proj => proj.Owner!)
                    .HasForeignKey(proj => proj.OwnerId)
                    .OnDelete(DeleteBehavior.SetNull);
-            builder.Entity<Project>()
+            builder.Entity<Crowdaction>()
                    .HasMany(p => p.Categories)
-                   .WithOne(pc => pc.Project)
-                   .HasForeignKey(pc => pc.ProjectId)
+                   .WithOne(pc => pc.Crowdaction)
+                   .HasForeignKey(pc => pc.CrowdactionId)
                    .OnDelete(DeleteBehavior.Cascade);
-            builder.Entity<ProjectCategory>()
-                   .HasKey("Category", "ProjectId");
-            builder.Entity<ProjectParticipant>()
-                   .HasKey("UserId", "ProjectId");
-            builder.Entity<ProjectTag>()
-                   .HasKey("TagId", "ProjectId");
-            builder.Entity<Project>()
+            builder.Entity<CrowdactionCategory>()
+                   .HasKey("Category", "CrowdactionId");
+            builder.Entity<CrowdactionParticipant>()
+                   .HasKey("UserId", "CrowdactionId");
+            builder.Entity<CrowdactionTag>()
+                   .HasKey("TagId", "CrowdactionId");
+            builder.Entity<Crowdaction>()
                    .HasOne(p => p.ParticipantCounts)
-                   .WithOne(p => p!.Project)
-                   .HasForeignKey<ProjectParticipantCount>(p => p.ProjectId);
+                   .WithOne(p => p!.Crowdaction)
+                   .HasForeignKey<CrowdactionParticipantCount>(p => p.CrowdactionId);
             builder.Entity<ApplicationUser>().Property(u => u.RepresentsNumberParticipants).HasDefaultValue(1);
             builder.Entity<UserEvent>()
                    .HasOne(e => e.User)

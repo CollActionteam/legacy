@@ -10,8 +10,8 @@ const RegistrationCompletePage = () => {
   return (
     <>
       <Helmet>
-        <title>Create a project</title>
-        <meta name="description" content="Create a project" />
+        <title>Create a crowdaction</title>
+        <meta name="description" content="Create a crowdaction" />
       </Helmet>
 
       <Section title="Thank you for registering!" className={styles.title}>

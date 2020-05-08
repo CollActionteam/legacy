@@ -1,8 +1,8 @@
 ﻿using CollAction.Data;
 using CollAction.Models;
 using CollAction.Services.Email;
-using CollAction.Services.Projects;
-using CollAction.Services.Projects.Models;
+using CollAction.Services.Crowdactions;
+using CollAction.Services.Crowdactions.Models;
 using CollAction.Services.User;
 using CollAction.Services.User.Models;
 using Microsoft.AspNetCore.Identity;
@@ -125,17 +125,17 @@ namespace CollAction.Tests.Integration.Service
                 {
                     // Setup
                     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                    var project = new Project($"test-{Guid.NewGuid()}", ProjectStatus.Running, await context.Users.Select(u => u.Id).FirstAsync().ConfigureAwait(false), 10, DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1), "t", "t", "t", null, null);
-                    context.Projects.Add(project);
+                    var crowdaction = new Crowdaction($"test-{Guid.NewGuid()}", CrowdactionStatus.Running, await context.Users.Select(u => u.Id).FirstAsync().ConfigureAwait(false), 10, DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1), "t", "t", "t", null, null);
+                    context.Crowdactions.Add(crowdaction);
                     await context.SaveChangesAsync().ConfigureAwait(false);
 
                     // Test
                     var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
                     var signInManager = scope.ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>();
-                    var projectService = scope.ServiceProvider.GetRequiredService<IProjectService>();
+                    var crowdactionService = scope.ServiceProvider.GetRequiredService<ICrowdactionService>();
 
                     string testEmail = GetTestEmail();
-                    AddParticipantResult commitResult = await projectService.CommitToProjectAnonymous(testEmail, project.Id, CancellationToken.None).ConfigureAwait(false);
+                    AddParticipantResult commitResult = await crowdactionService.CommitToCrowdactionAnonymous(testEmail, crowdaction.Id, CancellationToken.None).ConfigureAwait(false);
                     Assert.AreEqual(AddParticipantScenario.AnonymousCreatedAndAdded, commitResult.Scenario);
 
                     var finishRegistrationResult = await userService.FinishRegistration(

@@ -1,4 +1,4 @@
-﻿using CollAction.Services.Projects.Models;
+﻿using CollAction.Services.Crowdactions.Models;
 using GraphQL.Types;
 
 namespace CollAction.GraphQl.Mutations

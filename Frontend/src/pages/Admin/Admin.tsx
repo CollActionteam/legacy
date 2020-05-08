@@ -3,9 +3,9 @@ import { RouteComponentProps, Redirect } from "react-router-dom";
 import { useUser } from "../../providers/UserProvider";
 import AdminSidebar from "../../components/Admin/AdminSidebar";
 import AdminEditUser from "../../components/Admin/Users/AdminEditUser";
-import AdminEditProject from "../../components/Admin/Projects/AdminEditProject";
+import AdminEditCrowdaction from "../../components/Admin/Crowdactions/AdminEditCrowdaction";
 import AdminListUsers from "../../components/Admin/Users/AdminListUsers";
-import AdminListProjects from "../../components/Admin/Projects/AdminListProjects";
+import AdminListCrowdactions from "../../components/Admin/Crowdactions/AdminListCrowdactions";
 import { Helmet } from "react-helmet";
 
 type TParams = {
@@ -19,14 +19,14 @@ const AdminPage = ({ match } : RouteComponentProps<TParams>): any => {
 
   const adminInner = () => {
     if (match.params.action === "list") {
-      if (match.params.type === "projects") {
-        return <AdminListProjects />;
+      if (match.params.type === "crowdactions") {
+        return <AdminListCrowdactions />;
       } else if (match.params.type === "users") {
         return <AdminListUsers />;
       }
     } else if (match.params.action === "edit" && match.params.id !== undefined) {
-      if (match.params.type === "projects") {
-        return <AdminEditProject projectId={match.params.id} />;
+      if (match.params.type === "crowdactions") {
+        return <AdminEditCrowdaction crowdactionId={match.params.id} />;
       } else if (match.params.type === "users") {
         return <AdminEditUser userId={match.params.id} />;
       }

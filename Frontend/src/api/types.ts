@@ -12,7 +12,7 @@ export interface ISettings {
   externalLoginProviders: string[];
   categories: string[];
   displayPriorities: string[];
-  projectStatusses: string[];
+  crowdactionStatusses: string[];
 }
 
 export interface IDonationEventLog {
@@ -38,7 +38,7 @@ export interface IImageFile {
   width: number;
 }
 
-export interface IProjectCategory {
+export interface ICrowdactionCategory {
   category: string;
 }
 
@@ -53,18 +53,18 @@ export interface IOrderBy {
   descending: boolean;
 }
 
-export enum ProjectDisplayPriority {
+export enum CrowdactionDisplayPriority {
   TOP,
   MEDIUM,
   BOTTOM,
 }
 
-export interface IProject {
+export interface ICrowdaction {
   anonymousUserParticipants: number;
   bannerImage: IImageFile;
   bannerImageFileId: string;
-  canSendProjectEmail: boolean;
-  categories: IProjectCategory[];
+  canSendCrowdactionEmail: boolean;
+  categories: ICrowdactionCategory[];
   creatorComments: string;
   description: string;
   descriptionVideoLink: string;
@@ -72,7 +72,7 @@ export interface IProject {
   cardImageFileId: string;
   descriptiveImage: IImageFile;
   descriptiveImageFileId: string;
-  displayPriority: ProjectDisplayPriority;
+  displayPriority: CrowdactionDisplayPriority;
   start: string;
   end: string;
   goal: string;
@@ -84,30 +84,30 @@ export interface IProject {
   isFailed: boolean;
   name: string;
   nameNormalized: string;
-  numberProjectEmailsSent: number;
+  numberCrowdactionEmailsSent: number;
   owner: IUser;
   ownerId: string;
   percentage: number;
-  participants: IProjectParticipant[];
+  participants: ICrowdactionParticipant[];
   proposal: string;
   remainingTime: number;
   remainingTimeUserFriendly: string;
-  status: ProjectStatus;
-  tags: IProjectTag[];
+  status: CrowdactionStatus;
+  tags: ICrowdactionTag[];
   target: number;
   totalParticipants: number;
   url: string;
 }
 
-export interface IProjectParticipant {
+export interface ICrowdactionParticipant {
   id: string;
-  project: IProject;
-  subscribedToProjectEmails: boolean;
+  crowdaction: ICrowdaction;
+  subscribedToCrowdactionEmails: boolean;
   unsubscribeToken: string;
   user: IUser;
 }
 
-export enum ProjectStatus {
+export enum CrowdactionStatus {
   HIDDEN,
   RUNNING,
   SUCCESFULL,
@@ -115,16 +115,16 @@ export enum ProjectStatus {
   DELETED,
 }
 
-export enum ProjectStatusFilter {
+export enum CrowdactionStatusFilter {
   Open = "OPEN",
   Closed = "CLOSED",
   ComingSoon = "COMING_SOON",
   Active = "ACTIVE"
 }
 
-export interface IProjectTag {
-  project: IProject;
-  projectId: string;
+export interface ICrowdactionTag {
+  crowdaction: ICrowdaction;
+  crowdactionId: string;
   tag: ITag;
   tagId: string;
 }
@@ -132,7 +132,7 @@ export interface IProjectTag {
 export interface ITag {
   id: string;
   name: string;
-  projectTags: IProjectTag[];
+  crowdactionTags: ICrowdactionTag[];
 }
 
 export interface IUser {
@@ -146,8 +146,8 @@ export interface IUser {
   isAdmin: boolean;
   isSubscribedNewsletter: boolean;
   loginProviders: string[];
-  participates: IProjectParticipant[];
-  projects: IProject[];
+  participates: ICrowdactionParticipant[];
+  crowdactions: ICrowdaction[];
   representsNumberParticipants: number;
   userEvents: IUserEvent[];
   registrationDate: string;
@@ -168,9 +168,9 @@ export interface IWhereExpression {
   value: string[];
 }
 
-export interface IProjectResult {
+export interface ICrowdactionResult {
   succeeded: boolean;
-  project: IProject;
+  crowdaction: ICrowdaction;
   errors: ValidationResult[];
 }
 

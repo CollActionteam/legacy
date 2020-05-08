@@ -38,15 +38,15 @@ export const GET_USER = gql`
                 startDate
                 canceledAt
             }
-            projects {
-                ${Fragments.projectDetail}
+            crowdactions {
+                ${Fragments.crowdactionDetail}
             }
             participates {
                 id
-                subscribedToProjectEmails
+                subscribedToCrowdactionEmails
                 unsubscribeToken
-                project {
-                    ${Fragments.projectDetail}
+                crowdaction {
+                    ${Fragments.crowdactionDetail}
                 }
             }
         }

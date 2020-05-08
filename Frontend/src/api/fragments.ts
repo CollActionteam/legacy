@@ -1,5 +1,5 @@
 export const Fragments = {
-  projectDetail: `
+  crowdactionDetail: `
     id
     name
     description
@@ -40,7 +40,7 @@ export const Fragments = {
     proposal
     remainingTime
     remainingTimeUserFriendly
-    canSendProjectEmail
+    canSendCrowdactionEmail
     displayPriority
     isActive
     isComingSoon
@@ -49,6 +49,6 @@ export const Fragments = {
     isFailed
     totalParticipants
     percentage
-    numberProjectEmailsSent
+    numberCrowdactionEmailsSent
   `,
 };

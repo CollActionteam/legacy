@@ -20,13 +20,13 @@ namespace CollAction.Tests.Integration.Endpoint
     public sealed class GraphQlTests : IntegrationTestBase
     {
         [TestMethod]
-        public Task TestProjectList()
+        public Task TestCrowdactionList()
             => WithTestServer(
                    async (scope, testServer) =>
                    {
-                       const string QueryProjects = @"
+                       const string QueryCrowdactions = @"
                            query {
-                               projects {
+                               crowdactions {
                                    id
                                    name
                                    categories {
@@ -38,18 +38,18 @@ namespace CollAction.Tests.Integration.Endpoint
                                }
                            }";
 
-                       HttpResponseMessage response = await PerformGraphQlQuery(testServer, QueryProjects, null).ConfigureAwait(false);
+                       HttpResponseMessage response = await PerformGraphQlQuery(testServer, QueryCrowdactions, null).ConfigureAwait(false);
                        string content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                        Assert.IsTrue(response.IsSuccessStatusCode, content);
                        JsonDocument result = JsonDocument.Parse(content);
                        Assert.ThrowsException<KeyNotFoundException>(() => result.RootElement.GetProperty("errors"), content);
-                       JsonElement.ArrayEnumerator projects = result.RootElement.GetProperty("data").GetProperty("projects").EnumerateArray();
-                       Assert.IsTrue(projects.Any(), content);
+                       JsonElement.ArrayEnumerator crowdactions = result.RootElement.GetProperty("data").GetProperty("crowdactions").EnumerateArray();
+                       Assert.IsTrue(crowdactions.Any(), content);
 
-                       string projectId = projects.First().GetProperty("id").GetString();
-                       const string QueryProject = @"
-                           query($projectId : ID!) {
-                               project(id: $projectId) {
+                       string crowdactionId = crowdactions.First().GetProperty("id").GetString();
+                       const string QueryCrowdaction = @"
+                           query($crowdactionId : ID!) {
+                               crowdaction(id: $crowdactionId) {
                                    id
                                    name
                                    descriptiveImage {
@@ -57,14 +57,14 @@ namespace CollAction.Tests.Integration.Endpoint
                                    }
                                }
                            }";
-                       dynamic variables = new { projectId };
-                       response = await PerformGraphQlQuery(testServer, QueryProject, variables);
+                       dynamic variables = new { crowdactionId };
+                       response = await PerformGraphQlQuery(testServer, QueryCrowdaction, variables);
                        content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                        Assert.IsTrue(response.IsSuccessStatusCode, content);
                        result = JsonDocument.Parse(content);
                        Assert.ThrowsException<KeyNotFoundException>(() => result.RootElement.GetProperty("errors"), content);
-                       JsonElement project = result.RootElement.GetProperty("data").GetProperty("project");
-                       Assert.AreEqual(projectId.ToString(CultureInfo.InvariantCulture), project.GetProperty("id").GetString());
+                       JsonElement crowdaction = result.RootElement.GetProperty("data").GetProperty("crowdaction");
+                       Assert.AreEqual(crowdactionId.ToString(CultureInfo.InvariantCulture), crowdaction.GetProperty("id").GetString());
                    });
 
         [TestMethod]
@@ -72,9 +72,9 @@ namespace CollAction.Tests.Integration.Endpoint
             => WithTestServer(
                    async (scope, testServer) =>
                    {
-                       const string QueryProjects = @"
+                       const string QueryCrowdactions = @"
                            query {
-                               projects {
+                               crowdactions {
                                    id
                                    name
                                    participants {
@@ -84,11 +84,11 @@ namespace CollAction.Tests.Integration.Endpoint
                                    }
                                    isSuccessfull
                                    isFailed
-                                   canSendProjectEmail
+                                   canSendCrowdactionEmail
                              }
                            }";
 
-                       HttpResponseMessage response = await PerformGraphQlQuery(testServer, QueryProjects, null).ConfigureAwait(false);
+                       HttpResponseMessage response = await PerformGraphQlQuery(testServer, QueryCrowdactions, null).ConfigureAwait(false);
                        string content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                        Assert.IsTrue(response.IsSuccessStatusCode, content);
                        JsonDocument result = JsonDocument.Parse(content);
@@ -98,7 +98,7 @@ namespace CollAction.Tests.Integration.Endpoint
                        using var httpClient = testServer.CreateClient();
                        // Retry call as admin
                        httpClient.DefaultRequestHeaders.Add("Cookie", await GetAuthCookie(httpClient, seedOptions).ConfigureAwait(false));
-                       response = await PerformGraphQlQuery(httpClient, QueryProjects, null).ConfigureAwait(false);
+                       response = await PerformGraphQlQuery(httpClient, QueryCrowdactions, null).ConfigureAwait(false);
                        content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                        Assert.IsTrue(response.IsSuccessStatusCode, content);
                        result = JsonDocument.Parse(content);
@@ -106,14 +106,14 @@ namespace CollAction.Tests.Integration.Endpoint
                    });
 
         [TestMethod]
-        public Task TestCreateProject()
+        public Task TestCreateCrowdaction()
             => WithTestServer(
                    async (scope, testServer) =>
                    {
-                       string createProject = $@"
+                       string createCrowdaction = $@"
                            mutation {{
-                               project {{
-                                   createProject(project:
+                               crowdaction {{
+                                   createCrowdaction(crowdaction:
                                        {{
                                            name:""{Guid.NewGuid()}"",
                                            categories: [COMMUNITY, ENVIRONMENT],
@@ -128,7 +128,7 @@ namespace CollAction.Tests.Integration.Endpoint
                                            tags:[""b"", ""a""]
                                        }}) {{
                                            succeeded
-                                           project {{
+                                           crowdaction {{
                                                id
                                            }}
                                            errors {{
@@ -142,7 +142,7 @@ namespace CollAction.Tests.Integration.Endpoint
                        SeedOptions seedOptions = scope.ServiceProvider.GetRequiredService<IOptions<SeedOptions>>().Value;
                        using var httpClient = testServer.CreateClient();
                        httpClient.DefaultRequestHeaders.Add("Cookie", await GetAuthCookie(httpClient, seedOptions).ConfigureAwait(false));
-                       HttpResponseMessage response = await PerformGraphQlQuery(httpClient, createProject, null).ConfigureAwait(false);
+                       HttpResponseMessage response = await PerformGraphQlQuery(httpClient, createCrowdaction, null).ConfigureAwait(false);
                        string content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                        JsonDocument result = JsonDocument.Parse(content);
                        Assert.IsTrue(response.IsSuccessStatusCode, content);

@@ -99,60 +99,7 @@ namespace CollAction.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("CollAction.Models.DonationEventLog", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("EventData")
-                        .IsRequired()
-                        .HasColumnType("json");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("DonationEventLog");
-                });
-
-            modelBuilder.Entity("CollAction.Models.ImageFile", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Filepath")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("Height")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Width")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ImageFiles");
-                });
-
-            modelBuilder.Entity("CollAction.Models.Project", b =>
+            modelBuilder.Entity("CollAction.Models.Crowdaction", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -205,7 +152,7 @@ namespace CollAction.Migrations
                         .HasColumnType("character varying(50)")
                         .HasMaxLength(50);
 
-                    b.Property<int>("NumberProjectEmailsSent")
+                    b.Property<int>("NumberCrowdactionEmailsSent")
                         .HasColumnType("integer");
 
                     b.Property<string>("OwnerId")
@@ -235,78 +182,131 @@ namespace CollAction.Migrations
 
                     b.HasIndex("Name")
                         .IsUnique()
-                        .HasName("IX_Projects_Name");
+                        .HasName("IX_Crowdactions_Name");
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Projects");
+                    b.ToTable("Crowdactions");
                 });
 
-            modelBuilder.Entity("CollAction.Models.ProjectCategory", b =>
+            modelBuilder.Entity("CollAction.Models.CrowdactionCategory", b =>
                 {
                     b.Property<int>("Category")
                         .HasColumnType("integer");
 
-                    b.Property<int>("ProjectId")
+                    b.Property<int>("CrowdactionId")
                         .HasColumnType("integer");
 
-                    b.HasKey("Category", "ProjectId");
+                    b.HasKey("Category", "CrowdactionId");
 
-                    b.HasIndex("ProjectId");
+                    b.HasIndex("CrowdactionId");
 
-                    b.ToTable("ProjectCategories");
+                    b.ToTable("CrowdactionCategories");
                 });
 
-            modelBuilder.Entity("CollAction.Models.ProjectParticipant", b =>
+            modelBuilder.Entity("CollAction.Models.CrowdactionParticipant", b =>
                 {
                     b.Property<string>("UserId")
                         .HasColumnType("text");
 
-                    b.Property<int>("ProjectId")
+                    b.Property<int>("CrowdactionId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("ParticipationDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<bool>("SubscribedToProjectEmails")
+                    b.Property<bool>("SubscribedToCrowdactionEmails")
                         .HasColumnType("boolean");
 
                     b.Property<Guid>("UnsubscribeToken")
                         .HasColumnType("uuid");
 
-                    b.HasKey("UserId", "ProjectId");
+                    b.HasKey("UserId", "CrowdactionId");
 
-                    b.HasIndex("ProjectId");
+                    b.HasIndex("CrowdactionId");
 
-                    b.ToTable("ProjectParticipants");
+                    b.ToTable("CrowdactionParticipants");
                 });
 
-            modelBuilder.Entity("CollAction.Models.ProjectParticipantCount", b =>
+            modelBuilder.Entity("CollAction.Models.CrowdactionParticipantCount", b =>
                 {
-                    b.Property<int>("ProjectId")
+                    b.Property<int>("CrowdactionId")
                         .HasColumnType("integer");
 
                     b.Property<int>("Count")
                         .HasColumnType("integer");
 
-                    b.HasKey("ProjectId");
+                    b.HasKey("CrowdactionId");
 
-                    b.ToTable("ProjectParticipantCounts");
+                    b.ToTable("CrowdactionParticipantCounts");
                 });
 
-            modelBuilder.Entity("CollAction.Models.ProjectTag", b =>
+            modelBuilder.Entity("CollAction.Models.CrowdactionTag", b =>
                 {
                     b.Property<int>("TagId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("ProjectId")
+                    b.Property<int>("CrowdactionId")
                         .HasColumnType("integer");
 
-                    b.HasKey("TagId", "ProjectId");
+                    b.HasKey("TagId", "CrowdactionId");
 
-                    b.HasIndex("ProjectId");
+                    b.HasIndex("CrowdactionId");
 
-                    b.ToTable("ProjectTags");
+                    b.ToTable("CrowdactionTags");
+                });
+
+            modelBuilder.Entity("CollAction.Models.DonationEventLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("EventData")
+                        .IsRequired()
+                        .HasColumnType("json");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("DonationEventLog");
+                });
+
+            modelBuilder.Entity("CollAction.Models.ImageFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Filepath")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Height")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Width")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ImageFiles");
                 });
 
             modelBuilder.Entity("CollAction.Models.Tag", b =>
@@ -500,14 +500,7 @@ namespace CollAction.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("CollAction.Models.DonationEventLog", b =>
-                {
-                    b.HasOne("CollAction.Models.ApplicationUser", "User")
-                        .WithMany("DonationEvents")
-                        .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("CollAction.Models.Project", b =>
+            modelBuilder.Entity("CollAction.Models.Crowdaction", b =>
                 {
                     b.HasOne("CollAction.Models.ImageFile", "BannerImage")
                         .WithMany()
@@ -522,25 +515,25 @@ namespace CollAction.Migrations
                         .HasForeignKey("DescriptiveImageFileId");
 
                     b.HasOne("CollAction.Models.ApplicationUser", "Owner")
-                        .WithMany("Projects")
+                        .WithMany("Crowdactions")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.SetNull);
                 });
 
-            modelBuilder.Entity("CollAction.Models.ProjectCategory", b =>
+            modelBuilder.Entity("CollAction.Models.CrowdactionCategory", b =>
                 {
-                    b.HasOne("CollAction.Models.Project", "Project")
+                    b.HasOne("CollAction.Models.Crowdaction", "Crowdaction")
                         .WithMany("Categories")
-                        .HasForeignKey("ProjectId")
+                        .HasForeignKey("CrowdactionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CollAction.Models.ProjectParticipant", b =>
+            modelBuilder.Entity("CollAction.Models.CrowdactionParticipant", b =>
                 {
-                    b.HasOne("CollAction.Models.Project", "Project")
+                    b.HasOne("CollAction.Models.Crowdaction", "Crowdaction")
                         .WithMany("Participants")
-                        .HasForeignKey("ProjectId")
+                        .HasForeignKey("CrowdactionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -551,28 +544,35 @@ namespace CollAction.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CollAction.Models.ProjectParticipantCount", b =>
+            modelBuilder.Entity("CollAction.Models.CrowdactionParticipantCount", b =>
                 {
-                    b.HasOne("CollAction.Models.Project", "Project")
+                    b.HasOne("CollAction.Models.Crowdaction", "Crowdaction")
                         .WithOne("ParticipantCounts")
-                        .HasForeignKey("CollAction.Models.ProjectParticipantCount", "ProjectId")
+                        .HasForeignKey("CollAction.Models.CrowdactionParticipantCount", "CrowdactionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CollAction.Models.ProjectTag", b =>
+            modelBuilder.Entity("CollAction.Models.CrowdactionTag", b =>
                 {
-                    b.HasOne("CollAction.Models.Project", "Project")
+                    b.HasOne("CollAction.Models.Crowdaction", "Crowdaction")
                         .WithMany("Tags")
-                        .HasForeignKey("ProjectId")
+                        .HasForeignKey("CrowdactionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("CollAction.Models.Tag", "Tag")
-                        .WithMany("ProjectTags")
+                        .WithMany("CrowdactionTags")
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CollAction.Models.DonationEventLog", b =>
+                {
+                    b.HasOne("CollAction.Models.ApplicationUser", "User")
+                        .WithMany("DonationEvents")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("CollAction.Models.UserEvent", b =>

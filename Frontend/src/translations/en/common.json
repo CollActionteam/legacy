@@ -6,7 +6,7 @@
         },
         "intro" : {
             "title" : "Together we make waves",
-            "text" : "Do you want to make the world a better place, but do you sometimes feel that your actions are only a drop in the ocean? Well, not anymore, because we are introducing crowdacting: taking action knowing that you are one of many. We revamp the neighbourhood with a hundred people or switch to renewable energy with hundreds or thousands of people at the same time. <a href=\"/about\">Find out more about what crowdacting</a>, take action collectively with one of the existing projects, or <a href=\"/projects/start\">start your own crowdacting  project</a>."
+            "text" : "Do you want to make the world a better place, but do you sometimes feel that your actions are only a drop in the ocean? Well, not anymore, because we are introducing crowdacting: taking action knowing that you are one of many. We revamp the neighbourhood with a hundred people or switch to renewable energy with hundreds or thousands of people at the same time. <a href=\"/about\">Find out more about what crowdacting</a>, take action collectively with one of the existing crowdactions, or <a href=\"/crowdactions/start\">start your own crowdaction</a>."
         },
         "timeToAct" : {
             "title" : "Time to act",
@@ -31,12 +31,12 @@
         "stats" : {
             "title" : "Our collective impact",
             "numberActionsTaken" : "Actions taken",
-            "numberProjects" : "Crowdactions started",
+            "numberCrowdactions" : "Crowdactions started",
             "numberUsers" : "CollActivists"
         },
-        "projects" : {
+        "crowdactions" : {
             "title" : "Join a crowdaction",
-            "button" : "Find more projects"
+            "button" : "Find more crowdactions"
         },
         "share" : {
             "title" : "Share now"
@@ -49,11 +49,11 @@
         },
         "about" : {
             "title" : "About CollAction",
-            "text" : "Do you sometimes have the feeling that your actions are only a drop in the ocean? Well, not anymore, because we are introducing crowdacting: taking action knowing that you are one of many. We revamp the neighbourhood with a hundred people or switch to renewable energy with hundreds or thousands of people at the same time. Find out more about what crowdacting is in the video or the FAQs, take action collectively with one of the <a href=\"/projects/find\">existing projects</a>, or <a href=\"/projects/start\">start your own crowdacting  project</a>.<br /><strong>Power to the Crowd.</strong>"
+            "text" : "Do you sometimes have the feeling that your actions are only a drop in the ocean? Well, not anymore, because we are introducing crowdacting: taking action knowing that you are one of many. We revamp the neighbourhood with a hundred people or switch to renewable energy with hundreds or thousands of people at the same time. Find out more about what crowdacting is in the video or the FAQs, take action collectively with one of the <a href=\"/crowdactions/find\">existing crowdactions</a>, or <a href=\"/crowdactions/start\">start your own crowdaction</a>.<br /><strong>Power to the Crowd.</strong>"
         },
         "join" : {
             "title" : "Join our team!",
-            "text" : "CollAction is always looking for fun people who want to make a difference by making CollAction the next big thing! Please note that these are all volunteer positions for now (all current team members are volunteers as well :) )<br /><br />We’re looking for:<br /> <br /><ul><li><strong>Communications guru</strong>: As the communications guru you are responsible for developing and implementing our communications strategy and further build the growing CollAction community. For those who need a good excuse to spend all day on Facebook. <a href=\"mailto:hello@collaction.org\">Email</a> us for more info!</li><li><strong>Project Starter</strong>: Do you sometimes think ‘AAAH THE WORLD IS ON FIRE, I NEED TO DO SOMETHING BUT WHAT!?’. Well, maybe chill out first and have some herbal tea :). Then get your hands dirty and <a href=\"/projects/start\">Start a project here</a>."
+            "text" : "CollAction is always looking for fun people who want to make a difference by making CollAction the next big thing! Please note that these are all volunteer positions for now (all current team members are volunteers as well :) )<br /><br />We’re looking for:<br /> <br /><ul><li><strong>Communications guru</strong>: As the communications guru you are responsible for developing and implementing our communications strategy and further build the growing CollAction community. For those who need a good excuse to spend all day on Facebook. <a href=\"mailto:hello@collaction.org\">Email</a> us for more info!</li><li><strong>Crowdaction Starter</strong>: Do you sometimes think ‘AAAH THE WORLD IS ON FIRE, I NEED TO DO SOMETHING BUT WHAT!?’. Well, maybe chill out first and have some herbal tea :). Then get your hands dirty and <a href=\"/crowdactions/start\">Start a crowdaction here</a>."
         },
         "team" : {
             "title" : "Meet the team",

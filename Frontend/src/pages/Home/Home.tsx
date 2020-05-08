@@ -3,7 +3,7 @@ import { GhostButton } from "../../components/Button/Button";
 import Share from "../../components/Share/Share";
 import { Section } from "../../components/Section/Section";
 import Carousel from "../../components/Carousel/Carousel";
-import ProjectsList from "../../components/ProjectsList/ProjectsList";
+import CrowdactionsList from "../../components/CrowdactionsList/CrowdactionsList";
 import Stats from "../../components/Stats/Stats";
 import TimeToAct from "../../components/TimeToAct/TimeToAct";
 
@@ -30,10 +30,10 @@ const HomePage = () => {
         <Stats />
         <Share />
       </Section>
-      <Section center title={t('home.projects.title')}>
-        <ProjectsList />
+      <Section center title={t('home.crowdactions.title')}>
+        <CrowdactionsList />
         <div style={{marginTop: 20 }}>
-          <GhostButton to="/projects/find">{t('home.projects.button')}</GhostButton>
+          <GhostButton to="/crowdactions/find">{t('home.crowdactions.button')}</GhostButton>
         </div>
       </Section>
     </>

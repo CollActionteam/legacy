@@ -23,7 +23,7 @@ const PrivacyPolicyPage = () => {
             </p>
             <p>
                 This Policy applies to our website only.
-                It does not apply to other companies or organizations that for example advertise our website, projects or services, or to other (social) websites, networks and platforms that you can connect to through our website.
+                It does not apply to other companies or organizations that for example advertise our website, crowdactions or services, or to other (social) websites, networks and platforms that you can connect to through our website.
                 We are not responsible or liable for any processing of your personal information via these (social) websites, networks and platforms. We also advise you to read their privacy and cookie policies carefully before using their websites.
             </p>
             <h3>
@@ -34,9 +34,9 @@ const PrivacyPolicyPage = () => {
             </p>
             <ol>
                 <li>create a CollAction account for you at your request; </li>
-                <li>sign you up for projects or enable you to start your own project at your request;</li>
-                <li>keep in contact with you and update you on the progress of certain projects;</li>
-                <li>advertise and promote projects, our website, activities and other services to you, for example by sending you newsletters if you opted in to receive our newsletters;</li>
+                <li>sign you up for crowdactions or enable you to start your own crowdaction at your request;</li>
+                <li>keep in contact with you and update you on the progress of certain crowdactions;</li>
+                <li>advertise and promote crowdactions, our website, activities and other services to you, for example by sending you newsletters if you opted in to receive our newsletters;</li>
                 <li>comply with legal obligations; and </li>
                 <li>further develop and improve our website and services.</li>
             </ol>

@@ -2,7 +2,7 @@
 using CollAction.GraphQl.Mutations.Input;
 using CollAction.Helpers;
 using CollAction.Models;
-using CollAction.Services.Projects;
+using CollAction.Services.Crowdactions;
 using GraphQL.Authorization;
 using GraphQL.EntityFramework;
 using GraphQL.Types;
@@ -18,41 +18,41 @@ namespace CollAction.GraphQl.Queries
         public QueryGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService) : base(entityFrameworkGraphQlService)
         {
             AddQueryField(
-                name: nameof(ApplicationDbContext.Projects),
+                name: nameof(ApplicationDbContext.Crowdactions),
                 arguments: new QueryArgument[]
                 {
-                    new QueryArgument<SearchProjectStatusInputGraph>() { Name = "status" },
+                    new QueryArgument<SearchCrowdactionStatusInputGraph>() { Name = "status" },
                     new QueryArgument<CategoryGraph>() { Name = "category" }
                 },
                 resolve: c => 
                 {
                     Category? category = c.GetArgument<Category?>("category");
-                    SearchProjectStatus? status = c.GetArgument<SearchProjectStatus?>("status");
+                    SearchCrowdactionStatus? status = c.GetArgument<SearchCrowdactionStatus?>("status");
 
                     var context = c.GetUserContext();
                     return context.ServiceProvider
-                                  .GetRequiredService<IProjectService>()
-                                  .SearchProjects(category, status);
+                                  .GetRequiredService<ICrowdactionService>()
+                                  .SearchCrowdactions(category, status);
                 });
 
             AddSingleField(
-                name: nameof(Project),
-                resolve: c => c.GetUserContext().ServiceProvider.GetRequiredService<IProjectService>().SearchProjects(null, null));
+                name: nameof(Crowdaction),
+                resolve: c => c.GetUserContext().ServiceProvider.GetRequiredService<ICrowdactionService>().SearchCrowdactions(null, null));
 
             FieldAsync<IntGraphType>(
-                "projectCount",
+                "crowdactionCount",
                 arguments: new QueryArguments(
-                    new QueryArgument<SearchProjectStatusInputGraph>() { Name = "status" },
+                    new QueryArgument<SearchCrowdactionStatusInputGraph>() { Name = "status" },
                     new QueryArgument<CategoryGraph>() { Name = "category" }),
                 resolve: async c => 
                 {
                     Category? category = c.GetArgument<Category?>("category");
-                    SearchProjectStatus? status = c.GetArgument<SearchProjectStatus?>("status");
+                    SearchCrowdactionStatus? status = c.GetArgument<SearchCrowdactionStatus?>("status");
 
                     var context = c.GetUserContext();
                     return await context.ServiceProvider
-                                        .GetRequiredService<IProjectService>()
-                                        .SearchProjects(category, status)
+                                        .GetRequiredService<ICrowdactionService>()
+                                        .SearchCrowdactions(category, status)
                                         .CountAsync()
                                         .ConfigureAwait(false);
                 });

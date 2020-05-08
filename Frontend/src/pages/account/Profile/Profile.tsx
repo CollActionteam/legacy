@@ -5,10 +5,10 @@ import { Link } from "react-router-dom";
 import { useUser } from "../../../providers/UserProvider";
 import ResetPassword from "../../../components/Profile/ResetPassword";
 import RecurringDonations from "../../../components/Profile/RecurringDonations";
-import ProjectsParticipating from "../../../components/Profile/ProjectsParticipating";
+import CrowdactionsParticipating from "../../../components/Profile/CrowdactionsParticipating";
 import NewsletterSubscription from "../../../components/Profile/NewsletterSubscription";
 import DeleteAccount from "../../../components/Profile/DeleteAccount";
-import ProjectsCreated from "../../../components/Profile/ProjectsCreated";
+import CrowdactionsCreated from "../../../components/Profile/CrowdactionsCreated";
 import { Helmet } from "react-helmet";
 
 export default () => {
@@ -26,7 +26,7 @@ export default () => {
               <Grid item xs={12} md={6}>
                 <Card>
                   <CardActions>
-                    <Link to="/admin/projects/list">
+                    <Link to="/admin/crowdactions/list">
                       <FontAwesomeIcon icon="tools" />&nbsp; Manage Site
                     </Link>
                   </CardActions>
@@ -57,10 +57,10 @@ export default () => {
           <RecurringDonations user={user} />
         </Grid>
         <Grid item xs={12} md={6}>
-          <ProjectsParticipating user={user} />
+          <CrowdactionsParticipating user={user} />
         </Grid>
         <Grid item xs={12} md={6}>
-          <ProjectsCreated user={user} />
+          <CrowdactionsCreated user={user} />
         </Grid>
       </Grid>
     </div>;

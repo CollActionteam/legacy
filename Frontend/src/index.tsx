@@ -29,17 +29,17 @@ const DonationReturnPage = React.lazy(() => import(/* webpackChunkName: "donatio
 const DonationPage = React.lazy(() => import(/* webpackChunkName: "donation" */'./pages/Donation/Donation'));
 const DonationThankYouPage = React.lazy(() => import(/* webpackChunkName: "donation" */"./pages/Donation/DonationThankYou"));
 
-// Project pages
-const FindPage = React.lazy(() => import(/* webpackChunkName: "project" */'./pages/projects/Find/Find'));
-const ThankYouCommitPage = React.lazy(() => import(/* webpackChunkName: "project" */'./pages/projects/ThankYouCommit/ThankYouCommit'));
-const ProjectDetailsPage = React.lazy(() => import(/* webpackChunkName: "project" */'./pages/projects/Detail/ProjectDetails'));
-const UnsubscribeProjectPage = React.lazy(() => import(/* webpackChunkName: "project" */'./pages/projects/UnsubscribeProject/UnsubscribeProject'));
-const ProjectWidgetPage = React.lazy(() => import(/* webpackChunkName: "project" */'./pages/projects/Widget/ProjectWidget'));
+// Crowdaction pages
+const FindPage = React.lazy(() => import(/* webpackChunkName: "crowdaction" */'./pages/crowdactions/Find/Find'));
+const ThankYouCommitPage = React.lazy(() => import(/* webpackChunkName: "crowdaction" */'./pages/crowdactions/ThankYouCommit/ThankYouCommit'));
+const CrowdactionDetailsPage = React.lazy(() => import(/* webpackChunkName: "crowdaction" */'./pages/crowdactions/Detail/CrowdactionDetails'));
+const UnsubscribeCrowdactionPage = React.lazy(() => import(/* webpackChunkName: "crowdaction" */'./pages/crowdactions/UnsubscribeCrowdaction/UnsubscribeCrowdaction'));
+const CrowdactionWidgetPage = React.lazy(() => import(/* webpackChunkName: "crowdaction" */'./pages/crowdactions/Widget/CrowdactionWidget'));
 
-// Project start pages
-const CreateProjectPage = React.lazy(() => import(/* webpackChunkName: "project-start" */'./pages/projects/Create/Create'));
-const StartProjectPage = React.lazy(() => import(/* webpackChunkName: "project-start" */'./pages/projects/Start/Start'));
-const ThankYouCreatePage = React.lazy(() => import(/* webpackChunkName: "project-start" */'./pages/projects/ThankYouCreate/ThankYouCreate'));
+// Crowdaction start pages
+const CreateCrowdactionPage = React.lazy(() => import(/* webpackChunkName: "crowdaction-start" */'./pages/crowdactions/Create/Create'));
+const StartCrowdactionPage = React.lazy(() => import(/* webpackChunkName: "crowdaction-start" */'./pages/crowdactions/Start/Start'));
+const ThankYouCreatePage = React.lazy(() => import(/* webpackChunkName: "crowdaction-start" */'./pages/crowdactions/ThankYouCreate/ThankYouCreate'));
 
 const routing = (
     <Router>
@@ -62,14 +62,14 @@ const routing = (
                             <Route exact path="/donate" component={DonationPage} />
                             <Route exact path="/donate/return" component={DonationReturnPage} />
                             <Route exact path="/donate/thankyou" component={DonationThankYouPage} />
-                            <Route exact path="/projects/find" component={FindPage} />
-                            <Route exact path="/projects/start" component={StartProjectPage} />
-                            <Route exact path="/projects/create" component={CreateProjectPage} />
-                            <Route exact path="/projects/create/thankyou/:projectId" component={ThankYouCreatePage} />
-                            <Route exact path="/projects/:slug/:projectId" component={ProjectDetailsPage} />
-                            <Route exact path="/projects/:slug/:projectId/thankyou" component={ThankYouCommitPage} />
-                            <Route exact path="/projects/:slug/:projectId/widget" component={ProjectWidgetPage} />
-                            <Route exact path="/projects/:slug/:projectId/unsubscribe-email" component={UnsubscribeProjectPage} />
+                            <Route exact path="/crowdactions/find" component={FindPage} />
+                            <Route exact path="/crowdactions/start" component={StartCrowdactionPage} />
+                            <Route exact path="/crowdactions/create" component={CreateCrowdactionPage} />
+                            <Route exact path="/crowdactions/create/thankyou/:crowdactionId" component={ThankYouCreatePage} />
+                            <Route exact path="/crowdactions/:slug/:crowdactionId" component={CrowdactionDetailsPage} />
+                            <Route exact path="/crowdactions/:slug/:crowdactionId/thankyou" component={ThankYouCommitPage} />
+                            <Route exact path="/crowdactions/:slug/:crowdactionId/widget" component={CrowdactionWidgetPage} />
+                            <Route exact path="/crowdactions/:slug/:crowdactionId/unsubscribe-email" component={UnsubscribeCrowdactionPage} />
                             <Route exact path="/admin/:type/:action/:id?" component={AdminPage} />
                             <Route component={NotFoundPage} />
                         </Switch>

@@ -60,9 +60,9 @@ namespace CollAction.Models
 
         public int RepresentsNumberParticipants { get; set; } = 1; // Users might represent a business or a school. In that case, one user might represent multiple participants. Only settable by an admin user. Defaults to 1.
 
-        public ICollection<Project> Projects { get; set; } = new List<Project>();
+        public ICollection<Crowdaction> Crowdactions { get; set; } = new List<Crowdaction>();
 
-        public ICollection<ProjectParticipant> Participates { get; set; } = new List<ProjectParticipant>();
+        public ICollection<CrowdactionParticipant> Participates { get; set; } = new List<CrowdactionParticipant>();
 
         public ICollection<DonationEventLog> DonationEvents { get; set; } = new List<DonationEventLog>();
 

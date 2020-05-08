@@ -18,18 +18,18 @@ namespace CollAction.Services.Statistics
         }
 
         public Task<int> NumberActionsTaken(CancellationToken token)
-            => context.ProjectParticipants
+            => context.CrowdactionParticipants
                       .CountAsync(p => 
-                          p.Project.End <= DateTime.UtcNow && 
-                          p.Project.Status == ProjectStatus.Running && 
-                          p.Project.ParticipantCounts!.Count + p.Project.AnonymousUserParticipants >= p.Project.Target, token);
+                          p.Crowdaction.End <= DateTime.UtcNow && 
+                          p.Crowdaction.Status == CrowdactionStatus.Running && 
+                          p.Crowdaction.ParticipantCounts!.Count + p.Crowdaction.AnonymousUserParticipants >= p.Crowdaction.Target, token);
 
-        public Task<int> NumberProjects(CancellationToken token)
-            => context.Projects
-                      .CountAsync(p => p.Status == ProjectStatus.Running, token);
+        public Task<int> NumberCrowdactions(CancellationToken token)
+            => context.Crowdactions
+                      .CountAsync(p => p.Status == CrowdactionStatus.Running, token);
 
         public Task<int> NumberUsers(CancellationToken token)
             => context.Users
-                      .CountAsync(u => u.Projects.Any(), token);
+                      .CountAsync(u => u.Crowdactions.Any(), token);
     }
 }

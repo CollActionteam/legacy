@@ -21,13 +21,13 @@ namespace CollAction.GraphQl.Queries
                 });
 
             FieldAsync<NonNullGraphType<IntGraphType>>(
-                "numberProjects",
+                "numberCrowdactions",
                 resolve: async c =>
                 {
                     return await c.GetUserContext()
                                   .ServiceProvider
                                   .GetRequiredService<IStatisticsService>()
-                                  .NumberProjects(c.CancellationToken)
+                                  .NumberCrowdactions(c.CancellationToken)
                                   .ConfigureAwait(false);
                 });
 

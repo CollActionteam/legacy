@@ -1,12 +1,10 @@
 import React from "react";
 import { useTranslation } from 'react-i18next';
-import { useHistory } from "react-router-dom";
 import { GhostButton } from "../Button/Button";
 import styles from "./TimeToAct.module.scss";
 
 export default () => {
   const { t } = useTranslation();
-  const history = useHistory();
   
   const step1Class = `${styles.step} ${styles.step1}`;
   const step2Class = `${styles.step} ${styles.step2}`;
@@ -19,7 +17,7 @@ export default () => {
         <div className={styles.stepBody}>
           {t("home.timeToAct.steps.step1.text")}
         </div>
-        <GhostButton to="/projects/start">
+        <GhostButton to="/crowdactions/start">
           {t("home.timeToAct.steps.step1.button")}
         </GhostButton>
       </section>
@@ -28,7 +26,7 @@ export default () => {
         <div className={styles.stepBody}>
           {t("home.timeToAct.steps.step2.text")}
         </div>
-        <GhostButton to="/projects/find">
+        <GhostButton to="/crowdactions/find">
           {t("home.timeToAct.steps.step2.button")}
         </GhostButton>
       </section>

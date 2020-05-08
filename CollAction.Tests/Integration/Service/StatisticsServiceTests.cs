@@ -20,8 +20,8 @@ namespace CollAction.Tests.Integration.Service
                        Assert.IsTrue(numberActions >= 0);
                        int numberUsers = await statisticsService.NumberUsers(CancellationToken.None).ConfigureAwait(false);
                        Assert.IsTrue(numberUsers >= 0);
-                       int numberProjects = await statisticsService.NumberProjects(CancellationToken.None).ConfigureAwait(false);
-                       Assert.IsTrue(numberProjects >= 0);
+                       int numberCrowdactions = await statisticsService.NumberCrowdactions(CancellationToken.None).ConfigureAwait(false);
+                       Assert.IsTrue(numberCrowdactions >= 0);
                    });
     }
 }

@@ -124,14 +124,14 @@ namespace CollAction.Services.Image
 
         public async Task RemoveDanglingImages(CancellationToken token)
         {
-            // Fetch images without projects older than 1 hour
+            // Fetch images without crowdactions older than 1 hour
             var danglingImages = await context.ImageFiles.FromSqlRaw(
                 @"SELECT *
                   FROM public.""ImageFiles"" I
                   WHERE NOT EXISTS
                   (
                       SELECT NULL
-                      FROM public.""Projects"" P
+                      FROM public.""Crowdactions"" P
                       WHERE P.""BannerImageFileId"" = I.""Id"" OR P.""DescriptiveImageFileId"" = I.""Id"" OR P.""CardImageFileId"" = I.""Id""
                   ) AND I.""Date"" < 'now'::timestamp - '1 hour'::interval").ToListAsync().ConfigureAwait(false);
 

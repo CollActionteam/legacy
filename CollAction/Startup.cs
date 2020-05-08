@@ -13,7 +13,7 @@ using Hangfire;
 using Hangfire.PostgreSql;
 using CollAction.Helpers;
 using CollAction.Services.Email;
-using CollAction.Services.Projects;
+using CollAction.Services.Crowdactions;
 using CollAction.Services.Newsletter;
 using CollAction.Services.Image;
 using Stripe;
@@ -148,7 +148,7 @@ namespace CollAction
             // Add application services.
             services.AddScoped<IImageService, AmazonS3ImageService>();
             services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IProjectService, ProjectService>();
+            services.AddScoped<ICrowdactionService, CrowdactionService>();
             services.AddScoped<IStatisticsService, StatisticsService>();
             services.AddScoped<IInitializationService, InitializationService>();
             services.AddTransient<IEmailSender, EmailSender>();

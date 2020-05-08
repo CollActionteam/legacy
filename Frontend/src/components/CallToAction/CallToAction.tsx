@@ -20,8 +20,8 @@ export const CallToAction = ({ title }: any) => {
         <Hidden smDown>
           <Grid item xs={12}>
             <CircleButtonContainer>
-              <CircleButton to="/projects/find">Find Project</CircleButton>
-              <CircleButton to="/projects/start">Start Project</CircleButton>
+              <CircleButton to="/crowdactions/find">Find Crowdaction</CircleButton>
+              <CircleButton to="/crowdactions/start">Start Crowdaction</CircleButton>
             </CircleButtonContainer>
           </Grid>
         </Hidden>
@@ -29,8 +29,8 @@ export const CallToAction = ({ title }: any) => {
           <Grid item xs={2}></Grid>
           <Grid item xs={8}>
             <div className={styles.buttonContainer}>
-              <Button to="projects/find">Find Project</Button>
-              <Button to="projects/start">Start Project</Button>
+              <Button to="crowdactions/find">Find Crowdaction</Button>
+              <Button to="crowdactions/start">Start Crowdaction</Button>
             </div>
           </Grid>
         </Hidden>
