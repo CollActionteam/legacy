@@ -5,7 +5,7 @@ import { ISettings } from "../api/types";
 
 export const GET_SETTINGS = gql`
     query GetSettings {
-        miscellaneous {  
+        misc {  
             mailChimpNewsletterListId
             disqusSiteId
             stripePublicKey
@@ -50,7 +50,7 @@ const mapSettings = (settingsData: any): ISettings => {
         return defaultSettings;
     }
 
-    const misc = settingsData.miscellaneous;
+    const misc = settingsData.misc;
     return {
         mailChimpNewsletterListId: misc.mailChimpNewsletterListId,
         stripePublicKey: misc.stripePublicKey,

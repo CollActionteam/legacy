@@ -90,11 +90,11 @@ namespace CollAction.GraphQl.Queries
                 nullable: true);
 
             Field<MiscellaneousGraph>(
-                "miscellaneous",
+                "misc",
                 resolve: c => new object());
 
             Field<StatisticsGraph>(
-                "statistics",
+                "stats",
                 resolve: c => new object());
         }
     }

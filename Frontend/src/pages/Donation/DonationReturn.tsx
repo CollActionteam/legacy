@@ -6,7 +6,7 @@ import Loader from "../../components/Loader/Loader";
 
 const IDEAL_PAYMENT_SUCCEEDED = gql`
     query IDealPaymentSucceeded($source: String!, $clientSecret: String!) {
-        miscellaneous {
+        misc {
             hasIDealPaymentSucceeded(source: $source, clientSecret: $clientSecret)
         }
     }
@@ -29,9 +29,9 @@ const DonationReturnPage = () => {
 
     if (error) {
         return <Alert type="error" text="Unable to find iDeal information" />;
-    } else if (!loading && data.miscellaneous.hasIDealPaymentSucceeded) {
+    } else if (!loading && data.misc.hasIDealPaymentSucceeded) {
         return <Redirect to="/donate/thankyou" />
-    } else if (!loading && data.miscellaneous.hasIDealPaymentSucceeded === false) {
+    } else if (!loading && data.misc.hasIDealPaymentSucceeded === false) {
         return <Redirect to="/donate" />
     }
     return <Loader />;
