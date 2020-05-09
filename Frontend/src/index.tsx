@@ -6,7 +6,7 @@ import Layout from './components/Layout/Layout';
 import AllProviders from './providers/AllProviders';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 import RunAnalytics from './components/Analytics/RunAnalytics';
-import Loader from './components/Loader/Loader';
+import PageLoader from './components/PageLoader/PageLoader';
 
 // General pages
 const HomePage = React.lazy(() => import(/* webpackChunkName: "home" */'./pages/Home/Home'));
@@ -44,7 +44,7 @@ const ThankYouCreatePage = React.lazy(() => import(/* webpackChunkName: "crowdac
 const routing = (
     <Router>
         <React.StrictMode>
-            <Suspense fallback={<Loader />}>
+            <Suspense fallback={<PageLoader />}>
                 <AllProviders>
                     <Layout>
                         <ScrollToTop />
