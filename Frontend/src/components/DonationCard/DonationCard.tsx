@@ -8,7 +8,7 @@ import styles from "./DonationCard.module.scss";
 import bankCard from "../../assets/bank-card.png";
 import iDealLogo from "../../assets/i-deal-logo.png";
 import { useMutation, gql } from "@apollo/client";
-import { loadStripe } from '@stripe/stripe-js';
+import { loadStripe } from '@stripe/stripe-js/pure';
 import { GET_USER } from "../../providers/UserProvider";
 import {
   Elements,
