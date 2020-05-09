@@ -1,17 +1,19 @@
 import React, { useState } from "react";
-import styles from "./CookieDialog.module.scss";
+import styles from "./ConsentDialog.module.scss";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "../Button/Button";
 import { Container, FormControlLabel, Checkbox, FormGroup, Grid } from "@material-ui/core";
-import { AllowedConsents, Consent, ConsentDescription, useConsent } from "../../providers/CookieConsentProvider";
+import { AllowedConsents, Consent, ConsentDescription, useConsent } from "../../providers/ConsentProvider";
 import { useFormik, Form, FormikProvider } from "formik";
 import { Alert } from "../Alert/Alert";
 
-const initialConsentState = AllowedConsents.map(c => c === Consent.Basics ? { key: c, value: true } : { key: c, value: false })
-                                           .reduce((map: { [id: string] : boolean }, { key, value }) => {
-                                               map[key] = value;
-                                               return map;
-                                           }, {});
+const initialConsentState: Record<Consent, boolean> = {
+    [Consent.Basics]: true,
+    [Consent.Analytics]: false,
+    [Consent.Disqus]: false,
+    [Consent.Social]: false,
+    [Consent.Stripe]: false,
+};
 
 export default () => {
     const { consent, setConsent, setAllowAllConsent } = useConsent();
@@ -25,7 +27,7 @@ export default () => {
             const selectedConsents = 
                 Object.entries(values)
                       .filter(([_k, v]) => v)
-                      .map(([k, _v]) => parseInt(k) as Consent);
+                      .map(([k, _v]) => k as Consent);
             setConsent(selectedConsents);
             setInfo("You've given consent. This dialog will remain open in case you want to further update your choices.")
             formik.setSubmitting(false);
@@ -36,7 +38,7 @@ export default () => {
         return null;
     }
 
-    return <div className={styles.cookieDialog}>
+    return <div className={styles.consentDialog}>
         <Container>
             <Grid container>
                 <Grid item xs={12}>
@@ -56,10 +58,9 @@ export default () => {
                                             <FormGroup key={c}>
                                                 <FormControlLabel
                                                     control={<Checkbox
-                                                        { ... c === Consent.Basics ? [] : formik.getFieldProps(c) }
-                                                        name={`consent${c}`}
                                                         checked={formik.values[c]}
                                                         color="primary"
+                                                        { ... c === Consent.Basics ? [] : formik.getFieldProps(c) }
                                                     />}
                                                     label={ConsentDescription(c)}
                                                 />

@@ -1,7 +1,7 @@
 import { DiscussionEmbed } from 'disqus-react';
 import { ICrowdaction } from '../../api/types';
 import React from 'react';
-import { useConsent, Consent } from '../../providers/CookieConsentProvider';
+import { useConsent, Consent } from '../../providers/ConsentProvider';
 import { useSettings } from '../../providers/SettingsProvider';
 
 export default ({ crowdaction }: { crowdaction: ICrowdaction }) => {

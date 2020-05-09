@@ -35,7 +35,7 @@ import {
     faMinus
 } from "@fortawesome/free-solid-svg-icons";
 import { faEnvelope, faHeart, faUser } from "@fortawesome/free-regular-svg-icons";
-import CookieDialog from "../CookieDialog/CookieDialog";
+import ConsentDialog from "../ConsentDialog/ConsentDialog";
 import { useLocation } from "react-router-dom";
 
 library.add(
@@ -75,14 +75,14 @@ export default ({ children }: any) => {
       ></Helmet>
       <Header />
       <Grid container className="site-content">
-        <Grid item xs={12}>
-          <CookieDialog />
+        <Grid key="cookie" item xs={12}>
+          <ConsentDialog />
         </Grid>
         <Grid item xs={12}>
           {children}
         </Grid>
       </Grid>
-      <Footer></Footer>
+      <Footer />
     </>;
   } else {
     return <>

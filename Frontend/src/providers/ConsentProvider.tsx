@@ -1,14 +1,20 @@
 import React, { useEffect, useState, useContext } from "react";
 
-export enum Consent { Basics, Analytics, Stripe, Disqus, Social };
+export enum Consent { 
+    Basics = "Basics",
+    Analytics = "Analytics",
+    Stripe = "Stripe",
+    Disqus = "Disqus",
+    Social = "Social"
+};
 
 const consentKey = 'collaction-gdpr-consent';
 
-const initialConsentState = window.localStorage.getItem(consentKey)?.split(";")?.filter(c => c.length !== 0)?.map(c => parseInt(c) as Consent) ?? [];
+const initialConsentState = window.localStorage.getItem(consentKey)?.split(";")?.filter(c => c.length !== 0)?.map(c => c as Consent) ?? [];
 
 export const ConsentContext = React.createContext({ consent: initialConsentState, setConsent: (_: Consent[]) => { }, setAllowAllConsent: () => {} });
 
-export const AllowedConsents: Consent[] = [ Consent.Basics, Consent.Analytics, Consent.Stripe, Consent.Disqus, Consent.Social ];
+export const AllowedConsents: Consent[] = Object.keys(Consent).map(c => c as Consent);
 
 export const ConsentDescription = (consent: Consent) => {
     switch (consent) {

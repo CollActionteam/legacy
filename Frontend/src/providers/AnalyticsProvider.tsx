@@ -1,6 +1,6 @@
 import { gql, useMutation } from "@apollo/client";
 import React, { useState, useEffect, useContext } from "react";
-import { useConsent, Consent } from "./CookieConsentProvider";
+import { useConsent, Consent } from "./ConsentProvider";
 import { useSettings } from "./SettingsProvider";
 import ReactGA from 'react-ga';
 import ReactPixel from 'react-facebook-pixel';

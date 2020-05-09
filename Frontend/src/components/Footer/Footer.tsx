@@ -19,7 +19,7 @@ export default () => {
     <Container>
       <Grid container>
         {siteData.footerLinks.map((column: { title: string, links: any[] }) => (
-          <Grid item xs={4} sm={3}>
+          <Grid key={column.title} item xs={4} sm={3}>
             <h5 className={styles.title}>{column.title}</h5>
             <nav className={styles.navigation}>
               <ul className={styles.navigationList}>

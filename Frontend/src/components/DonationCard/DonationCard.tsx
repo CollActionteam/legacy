@@ -19,7 +19,7 @@ import {
 } from '@stripe/react-stripe-js';
 import { Button } from "../Button/Button";
 import {Link, useHistory} from "react-router-dom";
-import { useConsent, Consent } from "../../providers/CookieConsentProvider";
+import { useConsent, Consent } from "../../providers/ConsentProvider";
 import { useSettings } from "../../providers/SettingsProvider";
 import { useAnalytics } from "../../providers/AnalyticsProvider";
 import LazyImage from "../LazyImage/LazyImage";

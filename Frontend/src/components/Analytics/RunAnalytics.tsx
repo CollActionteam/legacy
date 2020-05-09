@@ -1,6 +1,6 @@
 import ReactGA from 'react-ga';
 import ReactPixel from 'react-facebook-pixel';
-import { useConsent, Consent } from '../../providers/CookieConsentProvider';
+import { useConsent, Consent } from '../../providers/ConsentProvider';
 import { useLocation } from 'react-router-dom';
 import { useAnalytics } from '../../providers/AnalyticsProvider';
 import { useEffect } from 'react';
