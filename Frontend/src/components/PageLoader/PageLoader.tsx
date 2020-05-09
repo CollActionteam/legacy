@@ -1,9 +1,9 @@
 import React from "react";
-import Loader from "../Loader/Loader";
 import styles from "./PageLoader.module.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default () => {
     return <div className={styles.pageLoader}>
-        <Loader />
+        <FontAwesomeIcon icon="spinner" spin />
     </div>;
 };
