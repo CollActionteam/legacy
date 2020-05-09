@@ -1,5 +1,6 @@
 FROM ubuntu:bionic AS build
 ARG REACT_APP_BACKEND_URL
+ARG INLINE_RUNTIME_CHUNK=false
 
 # Add apt keys
 RUN apt-get update && apt-get install -y curl gnupg
