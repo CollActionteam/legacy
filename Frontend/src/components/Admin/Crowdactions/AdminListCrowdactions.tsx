@@ -1,15 +1,14 @@
 import React, { useState } from "react";
-import { Paper, TableContainer, Table, TableHead, TableCell, TableRow, TableBody, Button, TablePagination, Dialog, DialogTitle, DialogContent, DialogActions } from "@material-ui/core";
+import { Paper, TableContainer, Table, TableHead, TableCell, TableRow, TableBody, TablePagination, Dialog, DialogTitle, DialogContent, DialogActions } from "@material-ui/core";
 import { gql, useQuery, useMutation } from "@apollo/client";
 import { ICrowdaction } from "../../../api/types";
-import { useHistory } from "react-router-dom";
 import Loader from "../../Loader/Loader";
 import { Alert } from "../../Alert/Alert";
 import { Fragments } from "../../../api/fragments";
 import Formatter from "../../../formatter";
+import { Button } from "../../Button/Button";
 
 export default () => {
-    const history = useHistory();
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -92,7 +91,7 @@ export default () => {
                             <TableCell align="right">{ Formatter.date(new Date(p.start)) }</TableCell>
                             <TableCell align="right">{ Formatter.date(new Date(p.end)) } { Formatter.time(new Date(p.end)) }</TableCell>
                             <TableCell align="right">{ p.isActive ? "Yes" : "No" }</TableCell>
-                            <TableCell align="right"><Button onClick={() => history.push(`/admin/crowdactions/edit/${p.id}`)}>Edit</Button></TableCell>
+                            <TableCell align="right"><Button to={`/admin/crowdactions/edit/${p.id}`}>Edit</Button></TableCell>
                             <TableCell align="right"><Button onClick={() => { setDeleteDialogOpen(true); setToDelete(p); }}>Delete</Button></TableCell>
                         </TableRow>))
                     }

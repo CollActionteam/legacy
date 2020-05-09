@@ -1,11 +1,12 @@
 import { IDonationSubscription } from "../../api/types";
 import React, { useState } from "react";
-import { ListItemAvatar, Avatar, ListItemText, ListItemSecondaryAction, IconButton, ListItem, Button, Dialog, DialogTitle, DialogActions } from "@material-ui/core";
+import { ListItemAvatar, Avatar, ListItemText, ListItemSecondaryAction, IconButton, ListItem, Dialog, DialogTitle, DialogActions } from "@material-ui/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMutation } from "@apollo/client/react/hooks/useMutation";
 import { gql } from "@apollo/client";
 import { Alert } from "../Alert/Alert";
 import { GET_USER } from "../../providers/UserProvider";
+import { Button } from "../Button/Button";
 
 interface IRecurringDonationItemProps {
     subscription: IDonationSubscription;
