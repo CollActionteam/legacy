@@ -49,7 +49,7 @@ namespace CollAction.GraphQl.Queries
                 {
                     if (c.Source.ParticipantCounts == null)
                     {
-                        c.Source.ParticipantCounts = await c.GetUserContext().Context.CrowdactionParticipantCounts.FindAsync(c.Source.Id);
+                        c.Source.ParticipantCounts = await c.GetUserContext().Context.CrowdactionParticipantCounts.FindAsync(c.Source.Id).ConfigureAwait(false);
                     }
 
                     return c.Source.RemainingTimeUserFriendly;   
@@ -60,7 +60,7 @@ namespace CollAction.GraphQl.Queries
                 {
                     if (c.Source.ParticipantCounts == null)
                     {
-                        c.Source.ParticipantCounts = await c.GetUserContext().Context.CrowdactionParticipantCounts.FindAsync(c.Source.Id);
+                        c.Source.ParticipantCounts = await c.GetUserContext().Context.CrowdactionParticipantCounts.FindAsync(c.Source.Id).ConfigureAwait(false);
                     }
 
                     return c.Source.IsSuccessfull;   
@@ -71,7 +71,7 @@ namespace CollAction.GraphQl.Queries
                 {
                     if (c.Source.ParticipantCounts == null)
                     {
-                        c.Source.ParticipantCounts = await c.GetUserContext().Context.CrowdactionParticipantCounts.FindAsync(c.Source.Id);
+                        c.Source.ParticipantCounts = await c.GetUserContext().Context.CrowdactionParticipantCounts.FindAsync(c.Source.Id).ConfigureAwait(false);
                     }
 
                     return c.Source.IsFailed;   
@@ -82,7 +82,7 @@ namespace CollAction.GraphQl.Queries
                 {
                     if (c.Source.ParticipantCounts == null)
                     {
-                        c.Source.ParticipantCounts = await c.GetUserContext().Context.CrowdactionParticipantCounts.FindAsync(c.Source.Id);
+                        c.Source.ParticipantCounts = await c.GetUserContext().Context.CrowdactionParticipantCounts.FindAsync(c.Source.Id).ConfigureAwait(false);
                     }
 
                     return c.Source.TotalParticipants;
@@ -93,7 +93,7 @@ namespace CollAction.GraphQl.Queries
                 {
                     if (c.Source.ParticipantCounts == null)
                     {
-                        c.Source.ParticipantCounts = await c.GetUserContext().Context.CrowdactionParticipantCounts.FindAsync(c.Source.Id);
+                        c.Source.ParticipantCounts = await c.GetUserContext().Context.CrowdactionParticipantCounts.FindAsync(c.Source.Id).ConfigureAwait(false);
                     }
 
                     return c.Source.Percentage;

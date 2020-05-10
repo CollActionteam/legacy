@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   backend:
-    image: collaction-backend
+    image: backend
     build:
       context: .
       dockerfile: CollAction/Dockerfile
@@ -17,31 +17,32 @@ services:
     ports:
       - "44301:44301"
     environment:
-      - PublicAddress=http://localhost:3000
-      - DbHost=db
-      - DbUser=postgres
-      - DbPassword=test
-      - Db=CollActionDb
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://*:44301
-      - Kestrel__Certificates__Default__Path=/app/collaction.pfx
-      - Kestrel__Certificates__Default__Password=test
+      PublicAddress: https://localhost:3000
+      DbHost: db
+      DbUser: postgres
+      DbPassword: test
+      Db: CollActionDb
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: https://*:44301
+      Kestrel__Certificates__Default__Path: /app/collaction.pfx
+      Kestrel__Certificates__Default__Password: test
 
   frontend:
-    image: collaction-frontend
+    image: frontend
     build:
       context: Frontend
       dockerfile: Dockerfile
       args:
-        - REACT_APP_BACKEND_URL=https://localhost:44301
+        REACT_APP_BACKEND_URL: https://localhost:44301
+        BUILD_CONFIG: Debug
     ports:
       - "3000:3000"
 
   db:
     image: postgres
     environment: 
-      - POSTGRES_PASSWORD=test
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=CollActionDb
+      POSTGRES_PASSWORD: test
+      POSTGRES_USER: postgres
+      POSTGRES_DB: CollActionDb
     ports:
       - "5432:5432"

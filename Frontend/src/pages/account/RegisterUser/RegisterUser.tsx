@@ -178,7 +178,8 @@ const RegisterUserPage = () => {
                                 control={
                                     <Field 
                                         name="isSubscribedNewsletter" 
-                                        type="checkbox" 
+                                        type="checkbox"
+                                        color="primary"
                                         component={Checkbox}
                                     ></Field>}
                                 label={<span>I would like to receive an update from CollAction every once in a while - don't worry, we like spam as little as you do! <span role="img" aria-label="smiley">🙂</span></span>}
@@ -189,10 +190,11 @@ const RegisterUserPage = () => {
                                     control={
                                         <Field 
                                             name="privacyPolicy" 
-                                            type="checkbox" 
+                                            type="checkbox"
+                                            color="primary"
                                             component={Checkbox}
                                         ></Field>}
-                                    label={<span>I've read and agreed to the <Link to="/privacy-policy">privacy policy</Link></span>} />
+                                    label={<span>I've read and agreed to the <Link to="/privacy-policy" target="_blank">privacy policy</Link></span>} />
                                 <FormHelperText error={true}>{formik.touched.privacyPolicy && formik.errors.privacyPolicy}</FormHelperText>
                             </FormGroup>
                         

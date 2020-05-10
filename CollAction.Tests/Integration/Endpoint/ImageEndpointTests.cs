@@ -43,7 +43,7 @@ namespace CollAction.Tests.Integration.Endpoint
                        // Cleanup
                        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                        var imageService = scope.ServiceProvider.GetRequiredService<IImageService>();
-                       var image = await context.ImageFiles.FindAsync(imageId);
+                       var image = await context.ImageFiles.FindAsync(imageId).ConfigureAwait(false);
                        await imageService.DeleteImage(image, CancellationToken.None).ConfigureAwait(false);
                    });
     }

@@ -173,7 +173,7 @@ namespace CollAction.Services.Image
             return 1.0;
         }
 
-        private async Task<Image<Rgba32>> LoadImageFromRequest(IFormFile fileUploaded, int imageResizeThreshold, CancellationToken token)
+        private static async Task<Image<Rgba32>> LoadImageFromRequest(IFormFile fileUploaded, int imageResizeThreshold, CancellationToken token)
         {
             using Stream uploadStream = fileUploaded.OpenReadStream();
             using MemoryStream ms = new MemoryStream();

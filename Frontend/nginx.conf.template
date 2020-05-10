@@ -1,0 +1,23 @@
+server {
+    listen 3000 ssl;
+    server_name localhost;
+    absolute_redirect off;
+    ssl_certificate /etc/nginx/certs/collaction.crt;
+    ssl_certificate_key /etc/nginx/certs/collaction.key;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload";
+    add_header X-Content-Type-Options: "nosniff";
+    add_header Referrer-Policy "strict-origin-when-cross-origin";
+    add_header Feature-Policy "geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none';";
+
+    location / {
+        add_header Content-Security-Policy "block-all-mixed-content; upgrade-insecure-requests; object-src 'self'; form-action 'self' https://*.list-manage.com/ $REACT_APP_BACKEND_URL; connect-src 'self' $REACT_APP_BACKEND_URL https://www.linkedin.com/ https://linkedin.com/ https://www.twitter.com/ https://twitter.com/ https://www.facebook.com/ https://facebook.com/ https://graph.facebook.com/ https://api.stripe.com *.disqus.com https://www.google-analytics.com; img-src 'self' data: https://www.google-analytics.com https://*.s3.eu-central-1.amazonaws.com *.disquscdn.com *.disqus.com; style-src 'self' https://fonts.googleapis.com/ *.disquscdn.com 'unsafe-inline'; font-src 'self' https://fonts.googleapis.com/ https://fonts.gstatic.com; media-src 'self'; frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://www.youtube.com/ https://disqus.com https://*.disqus.com; script-src 'self' https://www.google-analytics.com https://js.stripe.com disqus.com *.disqus.com *.disquscdn.com; frame-ancestors 'none'";
+        root   /usr/share/nginx/html;
+        try_files $uri $uri/ /index.html =404;
+    }
+
+    location ~* ^.*/widget$ {
+        add_header Content-Security-Policy "block-all-mixed-content; upgrade-insecure-requests; object-src 'self'; form-action 'self' https://*.list-manage.com/ $REACT_APP_BACKEND_URL; connect-src 'self' $REACT_APP_BACKEND_URL https://www.linkedin.com/ https://linkedin.com/ https://www.twitter.com/ https://twitter.com/ https://www.facebook.com/ https://facebook.com/ https://graph.facebook.com/ https://api.stripe.com *.disqus.com https://www.google-analytics.com; img-src 'self' data: https://www.google-analytics.com https://*.s3.eu-central-1.amazonaws.com *.disquscdn.com *.disqus.com; style-src 'self' https://fonts.googleapis.com/ *.disquscdn.com 'unsafe-inline'; font-src 'self' https://fonts.googleapis.com/ https://fonts.gstatic.com; media-src 'self'; frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://www.youtube.com/ https://disqus.com https://*.disqus.com; script-src 'self' https://www.google-analytics.com https://js.stripe.com disqus.com *.disqus.com *.disquscdn.com";
+        root   /usr/share/nginx/html;
+        try_files $uri $uri/ /index.html =404;
+    }
+}

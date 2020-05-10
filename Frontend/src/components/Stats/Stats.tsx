@@ -11,6 +11,7 @@ import LazyImage from '../LazyImage/LazyImage';
 import Loader from '../Loader/Loader';
 
 import styles from './Stats.module.scss';
+import Formatter from "../../formatter";
 
 export default () => {
   const { t } = useTranslation();
@@ -31,21 +32,21 @@ export default () => {
         <div className={styles.circle}>
           <LazyImage src={Person} alt={t('home.stats.numberUsers')} />
         </div>
-        <h2 className={styles.title}>{data.stats.numberUsers}</h2>
+        <h2 className={styles.title}>{Formatter.largeNumber(data.stats.numberUsers)}</h2>
         <span>{t('home.stats.numberUsers')}</span>
       </Grid>
       <Grid item xs={12} md={3} className={styles.stat}>
         <div className={styles.circle}>
           <LazyImage src={Waves} alt={t('home.stats.numberCrowdactions')} />
         </div>
-        <h2 className={styles.title}>{data.stats.numberCrowdactions}</h2>
+        <h2 className={styles.title}>{Formatter.largeNumber(data.stats.numberCrowdactions)}</h2>
         <span>{t('home.stats.numberCrowdactions')}</span>
       </Grid>
       <Grid item xs={12} md={3} className={styles.stat}>
         <div className={styles.circle}>
           <LazyImage src={Drop} alt={t('home.stats.numberActionsTaken')} />
         </div>
-        <h2 className={styles.title}>{data.stats.numberActionsTaken}</h2>
+        <h2 className={styles.title}>{Formatter.largeNumber(data.stats.numberActionsTaken)}</h2>
         <span>{t('home.stats.numberActionsTaken')}</span>
       </Grid>
     </Grid>
