@@ -1,21 +1,25 @@
-FROM ubuntu:bionic AS build
+FROM ubuntu:focal AS build
 ARG REACT_APP_BACKEND_URL
 ARG INLINE_RUNTIME_CHUNK=false
+ARG BUILD_CONFIG=Release
 
-# Add apt keys
-RUN apt-get update && apt-get install -y curl gnupg
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-RUN curl -sS https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
+# Initial dependencies
+RUN apt-get update && apt-get install -y curl gnupg openssl gettext-base
 
-# Add apt sources
-RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list
-RUN echo 'deb https://deb.nodesource.com/node_12.x bionic main' > /etc/apt/sources.list.d/nodesource.list
+# Generate developer certificate
+WORKDIR /app
+RUN if [ "$BUILD_CONFIG" = "Debug" ] ; then openssl req -x509 -nodes -days 99999 -newkey rsa:2048 -subj "/C=NL/ST=Noord Holland/L=Amsterdam/O=CollAction/OU=dev/CN=localhost" -keyout /app/collaction.key -out /app/collaction.crt ; fi
+
+# Generate nginx conf
+COPY nginx.conf.template .
+RUN envsubst '$REACT_APP_BACKEND_URL' < ./nginx.conf.template > ./nginx.conf
 
 # Install yarn
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list
 RUN apt-get update && apt-get install -y yarn
 
 # Build
-WORKDIR /app
 COPY . .
 RUN yarn install
 RUN yarn run build
@@ -23,3 +27,5 @@ RUN yarn run build
 FROM nginx
 COPY --from=build /app/build /usr/share/nginx/html
 COPY --from=build /app/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/collaction.key /etc/nginx/certs/collaction.key
+COPY --from=build /app/collaction.crt /etc/nginx/certs/collaction.crt
