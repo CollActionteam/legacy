@@ -54,7 +54,7 @@ namespace CollAction.Tests.Integration.Service
                        Assert.AreEqual(HttpStatusCode.Forbidden, await CheckUrl(imageService.GetUrl(imageFile)).ConfigureAwait(false));
                    });
 
-        private async Task<HttpStatusCode> CheckUrl(Uri url)
+        private static async Task<HttpStatusCode> CheckUrl(Uri url)
         {
             using HttpClient client = new HttpClient();
             using HttpResponseMessage response = await client.GetAsync(url).ConfigureAwait(false);

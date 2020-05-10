@@ -223,7 +223,7 @@ namespace CollAction.Tests.Integration.Service
             collection.AddTransient(s => new Mock<IEmailSender>().Object);
         }
 
-        private string GetTestEmail()
+        private static string GetTestEmail()
             => $"collaction-test-email-{Guid.NewGuid()}@collaction.org";
     }
 }

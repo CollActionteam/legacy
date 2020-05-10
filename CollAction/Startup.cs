@@ -49,14 +49,13 @@ namespace CollAction
 
         public void ConfigureServices(IServiceCollection services)
         {
-            string connectionString = $"Host={configuration["DbHost"]};Username={configuration["DbUser"]};Password={configuration["DbPassword"]};Database={configuration["Db"]};Port={configuration["DbPort"]}";
             services.AddGraphQl();
             services.AddGraphQlAuth();
 
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseNpgsql(connectionString);
+                options.UseNpgsql(configuration.Get<DbOptions>().ConnectionString);
                 if (environment.IsDevelopment())
                 {
                     options.EnableSensitiveDataLogging();
@@ -75,36 +74,22 @@ namespace CollAction
                 o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             });
 
-            var authenticationBuilder = services.AddAuthentication();
-
-            if (configuration["Authentication:Facebook:AppId"] != null)
-            {
-                authenticationBuilder = authenticationBuilder.AddFacebook(options =>
-                {
-                    options.AppId = configuration["Authentication:Facebook:AppId"];
-                    options.AppSecret = configuration["Authentication:Facebook:AppSecret"];
-                    options.Scope.Add("email");
-                });
-            }
-
-            if (configuration["Authentication:Google:ClientId"] != null)
-            {
-                authenticationBuilder = authenticationBuilder.AddGoogle(options =>
-                {
-                    options.ClientId = configuration["Authentication:Google:ClientId"];
-                    options.ClientSecret = configuration["Authentication:Google:ClientSecret"];
-                    options.Scope.Add("email");
-                });
-            }
-
-            if (configuration["Authentication:Twitter:ConsumerKey"] != null)
-            {
-                authenticationBuilder = authenticationBuilder.AddTwitter(options =>
-                {
-                    options.ConsumerKey = configuration["Authentication:Twitter:ConsumerKey"];
-                    options.ConsumerSecret = configuration["Authentication:Twitter:ConsumerSecret"];
-                });
-            }
+            IConfigurationSection authSection = configuration.GetSection("Authentication");
+            services.AddAuthentication()
+                    .AddFacebook(options =>
+                    {
+                        authSection.GetSection("Facebook").Bind(options);
+                        options.Scope.Add("email");
+                    })
+                    .AddTwitter(options =>
+                    {
+                        authSection.GetSection("Twitter").Bind(options);
+                    })
+                    .AddGoogle(options =>
+                    {
+                        authSection.GetSection("Google").Bind(options);
+                        options.Scope.Add("email");
+                    });
 
             services.AddApplicationInsightsTelemetry(configuration);
 
@@ -114,7 +99,7 @@ namespace CollAction
 
             services.AddHangfire(
                 config => config.UseSerilogLogProvider()
-                                .UsePostgreSqlStorage(connectionString));
+                                .UsePostgreSqlStorage(configuration.Get<DbOptions>().ConnectionString));
 
             services.AddDataProtection()
                     .PersistKeysToDbContext<ApplicationDbContext>();
@@ -167,9 +152,10 @@ namespace CollAction
             services.AddOptions<NewsletterServiceOptions>().Bind(configuration).ValidateDataAnnotations();
             services.AddOptions<SeedOptions>().Bind(configuration).ValidateDataAnnotations();
             services.AddOptions<AnalyticsOptions>().Bind(configuration).ValidateDataAnnotations();
+            services.AddOptions<DbOptions>().Bind(configuration).ValidateDataAnnotations();
             services.AddOptions<MailChimpOptions>().Configure(options =>
             {
-                options.ApiKey = configuration["MailChimpKey"];
+                options.ApiKey = configuration.Get<NewsletterServiceOptions>().MailChimpKey;
             }).ValidateDataAnnotations();
             services.AddOptions<RequestOptions>().Configure(options =>
             {

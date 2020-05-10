@@ -215,7 +215,7 @@ namespace CollAction.Services.Crowdactions
 
         public async Task<int> DeleteCrowdaction(int id, CancellationToken token)
         {
-            Crowdaction? crowdaction = await context.Crowdactions.FindAsync(id);
+            Crowdaction? crowdaction = await context.Crowdactions.FindAsync(id).ConfigureAwait(false);
 
             if (crowdaction == null)
             {
@@ -380,7 +380,7 @@ namespace CollAction.Services.Crowdactions
 
         public async Task<CrowdactionResult> SendCrowdactionEmail(int crowdactionId, string subject, string message, ClaimsPrincipal performingUser, CancellationToken token)
         {
-            Crowdaction? crowdaction = await context.Crowdactions.FindAsync(new object[] { crowdactionId }, token);
+            Crowdaction? crowdaction = await context.Crowdactions.FindAsync(new object[] { crowdactionId }, token).ConfigureAwait(false);
             if (crowdaction == null)
             {
                 return new CrowdactionResult(new ValidationResult("Crowdaction could not be found", new[] { nameof(crowdactionId) }));
@@ -462,7 +462,7 @@ namespace CollAction.Services.Crowdactions
 
         public async Task<AddParticipantResult> CommitToCrowdactionAnonymous(string email, int crowdactionId, CancellationToken token)
         {
-            Crowdaction? crowdaction = await context.Crowdactions.FindAsync(new object[] { crowdactionId }, token);
+            Crowdaction? crowdaction = await context.Crowdactions.FindAsync(new object[] { crowdactionId }, token).ConfigureAwait(false);
             if (crowdaction == null || !crowdaction.IsActive)
             {
                 logger.LogError("Crowdaction not found or active: {0}", crowdactionId);
@@ -514,7 +514,7 @@ namespace CollAction.Services.Crowdactions
 
         public async Task<AddParticipantResult> CommitToCrowdactionLoggedIn(ClaimsPrincipal user, int crowdactionId, CancellationToken token)
         {
-            Crowdaction? crowdaction = await context.Crowdactions.FindAsync(new object[] { crowdactionId }, token);
+            Crowdaction? crowdaction = await context.Crowdactions.FindAsync(new object[] { crowdactionId }, token).ConfigureAwait(false);
             if (crowdaction == null || !crowdaction.IsActive)
             {
                 logger.LogError("Crowdaction not found or active: {0}", crowdactionId);
@@ -578,13 +578,7 @@ namespace CollAction.Services.Crowdactions
                 );
         }
 
-        private async Task SendCommitEmail(Crowdaction crowdaction, AddParticipantResult result, ApplicationUser applicationUser, string email)
-        {
-            var commitEmailViewModel = new CrowdactionCommitEmailViewModel(crowdaction: crowdaction, result: result, user: applicationUser, publicUrl: siteOptions.PublicUrl, crowdactionUrl: new Uri(siteOptions.PublicUrl, crowdaction.Url));
-            await emailSender.SendEmailTemplated(email, $"Thank you for participating in the \"{crowdaction.Name}\" crowdaction on CollAction", "CrowdactionCommit", commitEmailViewModel).ConfigureAwait(false);
-        }
-
-        private string FormatEmailMessage(string message, ApplicationUser user, Uri? unsubscribeLink)
+        private static string FormatEmailMessage(string message, ApplicationUser user, Uri? unsubscribeLink)
         {
             if (unsubscribeLink != null)
             {
@@ -612,6 +606,12 @@ namespace CollAction.Services.Crowdactions
             }
 
             return message;
+        }
+
+        private async Task SendCommitEmail(Crowdaction crowdaction, AddParticipantResult result, ApplicationUser applicationUser, string email)
+        {
+            var commitEmailViewModel = new CrowdactionCommitEmailViewModel(crowdaction: crowdaction, result: result, user: applicationUser, publicUrl: siteOptions.PublicUrl, crowdactionUrl: new Uri(siteOptions.PublicUrl, crowdaction.Url));
+            await emailSender.SendEmailTemplated(email, $"Thank you for participating in the \"{crowdaction.Name}\" crowdaction on CollAction", "CrowdactionCommit", commitEmailViewModel).ConfigureAwait(false);
         }
 
         private async Task<bool> InsertParticipant(int crowdactionId, string userId, CancellationToken token)

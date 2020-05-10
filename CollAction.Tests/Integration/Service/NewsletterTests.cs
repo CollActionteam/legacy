@@ -135,7 +135,7 @@ namespace CollAction.Tests.Integration.Service
             collection.AddScoped(s => jobClient.Object);
         }
 
-        private string GetTestEmail()
+        private static string GetTestEmail()
             => $"collaction-test-email-{Guid.NewGuid()}@collaction.org";
     }
 }

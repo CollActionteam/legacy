@@ -15,5 +15,8 @@ namespace CollAction.Services.Newsletter
 
         [Required]
         public string MailChimpAccount { get; set; } = null!;
+
+        [Required]
+        public string MailChimpKey { get; set; } = null!;
     }
 }
