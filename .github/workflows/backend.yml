@@ -12,6 +12,15 @@ jobs:
       DbPassword: test
       DbHost: localhost
       FromAddress: hello@collaction.org
+      MailChimpTestListId: 1a035c45ca
+      S3Region: eu-central-1
+      S3Bucket: collaction-test
+      SesRegion: eu-west-1
+      MailChimpKey: ${{ secrets.MailChimpKey }}
+      S3AwsAccessKeyId: ${{ secrets.S3AwsAccessKeyId }}
+      S3AwsAccessKey: ${{ secrets.S3AwsAccessKey }}
+      SesAwsAccessKeyId: ${{ secrets.SesAwsAccessKeyId }}
+      SesAwsAccessKey: ${{ secrets.SesAwsAccessKey }}
 
     services:
       postgres:
@@ -20,6 +29,8 @@ jobs:
           POSTGRES_PASSWORD: test
           POSTGRES_USER: postgres
           POSTGRES_DB: CollActionDb
+        ports:
+          - "5432:5432"
 
     steps:
     - uses: actions/checkout@v2
@@ -27,7 +38,7 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.101
-    - name: Install dependencies
+    - name: Install Dependencies
       run: dotnet restore
     - name: Test
       run: dotnet test --no-restore --verbosity normal
