@@ -4,7 +4,7 @@ ARG INLINE_RUNTIME_CHUNK=false
 ARG BUILD_CONFIG=Release
 
 # Initial dependencies
-RUN apt-get update && apt-get install -y curl gnupg openssl gettext-base
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y curl gnupg openssl gettext-base
 
 # Generate developer certificate
 WORKDIR /app
