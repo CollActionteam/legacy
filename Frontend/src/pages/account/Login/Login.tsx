@@ -47,10 +47,10 @@ const LoginPage = () => {
           (Use a local account to log in )
         </h2>
       </Section>
-      <Alert type="error" text={errorMessage} />
       <Section color="grey">
         <Grid container justify="center">
           <Grid item sm={6}>
+            <Alert type="error" text={errorMessage} />
             <form method="post" action={actionExternalLogin}>
               <FormGroup>
                 <input
@@ -101,6 +101,9 @@ const LoginPage = () => {
                 />
                 <input type="hidden" name="errorUrl" value={errorUrl} />
                 <Button type="submit">Login</Button>
+
+                <br />
+
                 <Link to="/account/register-user">Register as new user</Link>
                 <Link to="/account/forgot-password">I forgot my password</Link>
               </FormGroup>

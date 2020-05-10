@@ -122,11 +122,11 @@ const RegisterUserPage = () => {
         <Section className={styles.intro}>
             <h1 className={styles.title}>Create an Account</h1>
         </Section>
-        <Alert type="error" text={errorMessage} />
-        <Alert type="info" text={infoMessage} />
         <Section color="grey">
             <Grid container justify="center">
                 <Grid item xs={12} sm={8} md={6}>
+                    <Alert type="error" text={errorMessage} />
+                    <Alert type="info" text={infoMessage} />
                     <FormikProvider value={formik}>
                         <Form onSubmit={formik.handleSubmit}>
                             <Field

@@ -40,11 +40,11 @@ const ForgotPasswordPage = () => {
         <Section className={styles.intro}>
             <h1 className={styles.title}>Forgot Password</h1>
         </Section>
-        <Alert type="error" text={errorMessage} />
-        <Alert type="info" text={infoMessage} />
         <Section color="grey">
             <Grid container justify="center">
                 <Grid item sm={6}>
+                    <Alert type="error" text={errorMessage} />
+                    <Alert type="info" text={infoMessage} />
                     <FormGroup>
                         <TextField margin="normal" onChange={(action) => setEmail(action.target.value)} value={email} required label="E-Mail Address" type="email" />
                         <Button onClick={() => forgotPassword()}>Reset my password</Button>
