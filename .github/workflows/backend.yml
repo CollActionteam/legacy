@@ -10,12 +10,13 @@ jobs:
       Db: CollActionDb
       DbUser: postgres
       DbPassword: test
-      DbHost: localhost
+      DbHost: postgres
       FromAddress: hello@collaction.org
       MailChimpTestListId: 1a035c45ca
       S3Region: eu-central-1
       S3Bucket: collaction-test
       SesRegion: eu-west-1
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
       MailChimpKey: ${{ secrets.MailChimpKey }}
       S3AwsAccessKeyId: ${{ secrets.S3AwsAccessKeyId }}
       S3AwsAccessKey: ${{ secrets.S3AwsAccessKey }}
