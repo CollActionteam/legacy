@@ -12,7 +12,7 @@ import styles from "./Footer.module.scss";
 import { useSettings } from "../../providers/SettingsProvider";
 
 export default () => {
-  const { mailChimpNewsletterListId } = useSettings();
+  const { mailChimpNewsletterListId, mailChimpAccount, mailChimpServer, mailChimpUserId } = useSettings();
   const currentYear = new Date().getFullYear();
 
   return <div className={styles.footer}>
@@ -44,7 +44,7 @@ export default () => {
             </a>
           </div>
           <h5 className={styles.title}>Newsletter</h5>
-          <NewsletterSignup mailchimpListId={mailChimpNewsletterListId} />
+          <NewsletterSignup mailchimpListId={mailChimpNewsletterListId} mailchimpAccount={mailChimpAccount} mailchimpServer={mailChimpServer} mailchimpUserId={mailChimpUserId} />
         </Grid>
       </Grid>
       <Grid container>

@@ -6,5 +6,14 @@ namespace CollAction.Services.Newsletter
     {
         [Required]
         public string MailChimpNewsletterListId { get; set; } = null!;
+
+        [Required]
+        public string MailChimpUserId { get; set; } = null!;
+
+        [Required]
+        public string MailChimpServer { get; set; } = null!;
+
+        [Required]
+        public string MailChimpAccount { get; set; } = null!;
     }
 }

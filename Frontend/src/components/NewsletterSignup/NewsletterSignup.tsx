@@ -11,6 +11,9 @@ interface INewsletterSignupState {
 
 interface INewsletterSignupProps {
   mailchimpListId: string;
+  mailchimpUserId: string;
+  mailchimpServer: string;
+  mailchimpAccount: string;
 }
 
 export default class NewsletterSignup extends React.Component<
@@ -49,16 +52,14 @@ export default class NewsletterSignup extends React.Component<
 
   render() {
     return (
-      <form
-        action={`//collaction.us14.list-manage.com/subscribe/post?u=48e9b2f8f522cf59b9d5ffa8d&amp;id=${this.props.mailchimpListId}`}
+        <form
+        action={`//${this.props.mailchimpAccount}.${this.props.mailchimpServer}.list-manage.com/subscribe/post?u=${this.props.mailchimpUserId}&id=${this.props.mailchimpListId}`}
         id="mc-embedded-subscribe-form"
         name="mc-embedded-subscribe-form"
         onSubmit={this.handleSubmit}
         onKeyUp={this.handleKeyUp}
       >
-        {this.state.error ? (
-          <Alert type="error" text={this.state.error} />
-        ) : null}
+        <Alert type="error" text={this.state.error} />
         <div className={styles.wrapper}>
           <input
             type="email"
@@ -74,8 +75,9 @@ export default class NewsletterSignup extends React.Component<
             <input
               type="text"
               place-holder="e-Mail"
-              name="b_48e9b2f8f522cf59b9d5ffa8d_@NewsletterSubscriptionServiceOptions.Value.MailChimpNewsletterListId"
+              name={`b_${this.props.mailchimpUserId}_${this.props.mailchimpListId}`}
               value=""
+              tabIndex={-1}
               readOnly={true}
             ></input>
           </div>

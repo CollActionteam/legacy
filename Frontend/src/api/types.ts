@@ -7,6 +7,9 @@ export interface ISettings {
   googleAnalyticsID: string;
   facebookPixelID: string;
   mailChimpNewsletterListId: string;
+  mailChimpUserId: string,
+  mailChimpAccount: string,
+  mailChimpServer: string,
   disqusSiteId: string;
   stripePublicKey: string;
   externalLoginProviders: string[];

@@ -33,6 +33,14 @@ namespace CollAction.GraphQl.Queries
                 resolve: c => newsletterServiceOptions.Value.MailChimpNewsletterListId);
 
             Field<NonNullGraphType<StringGraphType>>(
+                nameof(newsletterServiceOptions.Value.MailChimpServer),
+                resolve: c => newsletterServiceOptions.Value.MailChimpServer);
+
+            Field<NonNullGraphType<StringGraphType>>(
+                nameof(newsletterServiceOptions.Value.MailChimpUserId),
+                resolve: c => newsletterServiceOptions.Value.MailChimpUserId);
+
+            Field<NonNullGraphType<StringGraphType>>(
                 nameof(disqusOptions.Value.DisqusSiteId),
                 resolve: c => disqusOptions.Value.DisqusSiteId);
 
