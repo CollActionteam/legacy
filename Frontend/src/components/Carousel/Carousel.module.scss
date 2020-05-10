@@ -97,8 +97,8 @@
 .intro {
     display: block;
     height: 100%;
-    margin-left: -24px;
-    margin-right: -24px;
+    margin-left: -16px;
+    margin-right: -16px;
     height: calc(100% - var(--spacing)); // Fix for overflow-y
     padding: var(--spacing-xxl-2) 2rem;
     text-align: center;
@@ -108,6 +108,11 @@
     a {
         margin: var(--spacing-xs);
         margin-top: var(--spacing);
+    }
+
+    @include breakpoint-up(sm) {
+        margin-left: -24px;
+        margin-right: -24px;
     }
 
     @include breakpoint-up(md) {
