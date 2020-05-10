@@ -99,4 +99,4 @@ Our test configuration files contain configuration enough to get a minimum versi
 
 ## Contribute
 
-If you want to contribute to this project, e-mail collactionteam@gmail.com.
+If you want to contribute to this project, e-mail hello@collaction.org.
