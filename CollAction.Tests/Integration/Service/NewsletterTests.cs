@@ -11,7 +11,6 @@ namespace CollAction.Tests.Integration.Service
 {
     [TestClass]
     [TestCategory("Integration")]
-    [TestCategory("CantRunInTravis")]
     public sealed class NewsletterServiceTests : IntegrationTestBase
     {
         [TestMethod]

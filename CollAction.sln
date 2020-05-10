@@ -6,19 +6,30 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollAction", "CollAction\Co
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4AD6D0E9-47B4-4714-BF39-6743118BE31C}"
 	ProjectSection(SolutionItems) = preProject
-		.dockerignore = .dockerignore
 		.gitignore = .gitignore
-		.travis.yml = .travis.yml
-		docker-compose.yml = docker-compose.yml
-		scripts\docker-push.sh = scripts\docker-push.sh
 		docker-push.sh = docker-push.sh
-		env_collaction = env_collaction
-		env_collaction.template = env_collaction.template
-		LICENSE = LICENSE
-		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollAction.Tests", "CollAction.Tests\CollAction.Tests.csproj", "{1898F9B1-7EEE-4152-A0D2-2FAE91BEDCDC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{72EA00C6-36F3-4CB7-81FF-496492FFA09B}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\on_push.yml = .github\workflows\on_push.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker", "docker", "{BECC17AF-2D3D-4942-8391-F297062D4752}"
+	ProjectSection(SolutionItems) = preProject
+		.dockerignore = .dockerignore
+		docker-compose.yml = docker-compose.yml
+		env_collaction = env_collaction
+		env_collaction.template = env_collaction.template
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{F21123A8-7994-4CD6-823E-5FB8C5201AFD}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +68,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{72EA00C6-36F3-4CB7-81FF-496492FFA09B} = {4AD6D0E9-47B4-4714-BF39-6743118BE31C}
+		{BECC17AF-2D3D-4942-8391-F297062D4752} = {4AD6D0E9-47B4-4714-BF39-6743118BE31C}
+		{F21123A8-7994-4CD6-823E-5FB8C5201AFD} = {4AD6D0E9-47B4-4714-BF39-6743118BE31C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DB330D39-D1A2-4E5A-A0EC-5CB96176B3B2}

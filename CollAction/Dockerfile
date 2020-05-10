@@ -1,5 +1,6 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 ARG BUILD_CONFIG=Release
+ARG DOTNET_CLI_TELEMETRY_OPTOUT=1
 WORKDIR /src
 COPY CollAction/CollAction.csproj CollAction/
 RUN dotnet restore CollAction/CollAction.csproj
