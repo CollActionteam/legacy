@@ -51,3 +51,30 @@ jobs:
       run: dotnet restore
     - name: Test
       run: dotnet test --no-restore
+
+  build_frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: docker/build-push-action@v1
+      with:
+        username: ${{ secrets.DockerUsername }}
+        password: ${{ secrets.DockerPassword }}
+        repository: collaction/frontend
+        tag_with_ref: true
+        dockerfile: Frontend/Dockerfile
+        path: Frontend 
+
+  build_backend:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: docker/build-push-action@v1
+      with:
+        username: ${{ secrets.DockerUsername }}
+        password: ${{ secrets.DockerPassword }}
+        repository: collaction/backend
+        tag_with_ref: true
+        dockerfile: CollAction/Dockerfile
