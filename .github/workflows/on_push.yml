@@ -3,7 +3,7 @@ name: On Push
 on: [push]
 
 jobs:
-  test:
+  test_backend:
     runs-on: ubuntu-latest
     container: mcr.microsoft.com/dotnet/core/sdk:3.1-buster
 
