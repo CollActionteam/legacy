@@ -30,6 +30,11 @@ jobs:
           POSTGRES_PASSWORD: test
           POSTGRES_USER: postgres
           POSTGRES_DB: CollActionDb
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
         ports:
           - "5432:5432"
 
@@ -42,4 +47,4 @@ jobs:
     - name: Install Dependencies
       run: dotnet restore
     - name: Test
-      run: dotnet test --no-restore --verbosity normal
+      run: dotnet test --no-restore
