@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Alert } from "../Alert/Alert";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import styles from "./NewsletterSignup.module.scss";
