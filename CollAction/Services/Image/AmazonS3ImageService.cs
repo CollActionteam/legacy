@@ -1,24 +1,24 @@
-﻿using CollAction.Models;
-using SixLabors.ImageSharp;
-using Microsoft.AspNetCore.Http;
-using System;
-using System.IO;
-using System.Threading.Tasks;
-using SixLabors.ImageSharp.PixelFormats;
-using Microsoft.Extensions.Options;
+﻿using Amazon;
 using Amazon.S3;
 using Amazon.S3.Model;
-using Amazon;
-using Hangfire;
-using CollAction.Helpers;
-using SixLabors.ImageSharp.Processing;
-using System.Threading;
-using Microsoft.Extensions.Logging;
 using CollAction.Data;
+using CollAction.Helpers;
+using CollAction.Models;
+using Hangfire;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace CollAction.Services.Image
 {
@@ -69,7 +69,7 @@ namespace CollAction.Services.Image
                 logger.LogInformation("Deleting image");
                 context.ImageFiles.Remove(imageFile);
                 await context.SaveChangesAsync(token).ConfigureAwait(false);
-                
+
                 logger.LogInformation("Removing image from S3");
                 await DeleteObject(imageFile.Filepath, token).ConfigureAwait(false);
             }
@@ -145,7 +145,7 @@ namespace CollAction.Services.Image
         {
             recurringJobManager.AddOrUpdate("dangling-image-job", () => RemoveDanglingImages(CancellationToken.None), Cron.Hourly);
         }
-    
+
         public void Dispose()
         {
             client.Dispose();
@@ -160,7 +160,7 @@ namespace CollAction.Services.Image
 
             if (image.Width > imageResizeThreshold || image.Height > imageResizeThreshold)
             {
-                if (image.Width > image.Height) 
+                if (image.Width > image.Height)
                 {
                     return (double)imageResizeThreshold / image.Width;
                 }

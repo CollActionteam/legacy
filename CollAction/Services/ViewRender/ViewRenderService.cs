@@ -53,4 +53,4 @@ namespace CollAction.Services.ViewRender
             return output.ToString();
         }
     }
-} 
+}

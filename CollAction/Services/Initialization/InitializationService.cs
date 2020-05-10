@@ -1,8 +1,8 @@
 ﻿using CollAction.Data;
 using CollAction.Models;
-using CollAction.Services.Image;
 using CollAction.Services.Crowdactions;
 using CollAction.Services.Crowdactions.Models;
+using CollAction.Services.Image;
 using Hangfire;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -81,7 +81,7 @@ namespace CollAction.Services.Initialization
         // TODO: Remove once this has run in production
         public async Task MigrateCardImage(int crowdactionId, CancellationToken token)
         {
-            Crowdaction crowdaction = 
+            Crowdaction crowdaction =
                 await context.Crowdactions
                              .Include(c => c.BannerImage)
                              .SingleAsync(c => c.Id == crowdactionId, token)

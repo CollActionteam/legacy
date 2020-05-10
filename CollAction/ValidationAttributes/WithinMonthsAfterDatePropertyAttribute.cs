@@ -14,7 +14,7 @@ namespace CollAction.ValidationAttributes
 
         public WithinMonthsAfterDatePropertyAttribute(int months, string dateProperty)
         {
-            this.months = months; 
+            this.months = months;
             this.dateProperty = dateProperty;
         }
 

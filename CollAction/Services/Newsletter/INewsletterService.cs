@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using MailChimp.Net.Models;
+﻿using MailChimp.Net.Models;
+using System.Threading.Tasks;
 
 namespace CollAction.Services.Newsletter
 {

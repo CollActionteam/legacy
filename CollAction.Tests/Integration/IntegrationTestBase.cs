@@ -1,18 +1,18 @@
-﻿using Microsoft.AspNetCore;
+﻿using CollAction.Services;
+using CollAction.Services.Initialization;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.TestHost;
-using System.Net.Http;
-using CollAction.Services;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Serilog;
+using Serilog.Events;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Serilog.Events;
-using Serilog;
-using Microsoft.Extensions.Configuration;
-using CollAction.Services.Initialization;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace CollAction.Tests.Integration
 {

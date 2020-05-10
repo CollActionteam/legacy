@@ -31,7 +31,7 @@ namespace CollAction.Services.User
 
         public UserService(
             IServiceProvider serviceProvider,
-            INewsletterService newsletterService, 
+            INewsletterService newsletterService,
             UserManager<ApplicationUser> userManager,
             IEmailSender emailSender,
             ILogger<UserService> logger,
@@ -155,7 +155,7 @@ namespace CollAction.Services.User
             user.FirstName = newUser.FirstName;
             user.LastName = newUser.LastName;
             result = await userManager.UpdateAsync(user).ConfigureAwait(false);
-            
+
             if (result.Succeeded)
             {
                 newsletterService.SetSubscriptionBackground(newUser.Email, newUser.IsSubscribedNewsletter);
@@ -186,8 +186,8 @@ namespace CollAction.Services.User
             var loggedInUser = await userManager.GetUserAsync(loggedIn).ConfigureAwait(false);
 
             // need to be logged in as either admin, or the user being updated, only admins can update representsNumberParticipants or change a user to admin
-            if (!(loggedIn.IsInRole(AuthorizationConstants.AdminRole) || loggedInUser.Id == user.Id) || 
-                (!loggedIn.IsInRole(AuthorizationConstants.AdminRole) && (updatedUser.representsNumberParticipants != user.RepresentsNumberParticipants || updatedUser.IsAdmin))) 
+            if (!(loggedIn.IsInRole(AuthorizationConstants.AdminRole) || loggedInUser.Id == user.Id) ||
+                (!loggedIn.IsInRole(AuthorizationConstants.AdminRole) && (updatedUser.representsNumberParticipants != user.RepresentsNumberParticipants || updatedUser.IsAdmin)))
             {
                 return new UserResult(IdentityResult.Failed(new IdentityError() { Code = "NOPERM", Description = "You don't have permission to update this user" }));
             }

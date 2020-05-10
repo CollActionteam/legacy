@@ -27,7 +27,7 @@ namespace CollAction.GraphQl.Mutations
 
                     return userService.CreateUser(newUser);
                 });
-            
+
             FieldAsync<UserResultGraph, UserResult>(
                 "updateUser",
                 arguments: new QueryArguments(
@@ -39,7 +39,7 @@ namespace CollAction.GraphQl.Mutations
                     var userService = context.ServiceProvider.GetRequiredService<IUserService>();
                     return userService.UpdateUser(updatedUser, context.User);
                 });
-            
+
             FieldAsync<IdentityResultGraph, IdentityResult>(
                 "deleteUser",
                 arguments: new QueryArguments(

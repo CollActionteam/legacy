@@ -74,7 +74,7 @@ namespace CollAction.Services.Donation
         public DonationService(
             IOptions<RequestOptions> requestOptions,
             UserManager<ApplicationUser> userManager,
-            ApplicationDbContext context, 
+            ApplicationDbContext context,
             IBackgroundJobClient backgroundJobClient,
             IOptions<StripeSignatures> stripeSignatures,
             IEmailSender emailSender,
@@ -101,7 +101,7 @@ namespace CollAction.Services.Donation
         public async Task<bool> HasIDealPaymentSucceeded(string sourceId, string clientSecret, CancellationToken token)
         {
             Source source = await sourceService.GetAsync(sourceId, cancellationToken: token).ConfigureAwait(false);
-            return (source.Status == StatusChargeable || source.Status == StatusConsumed) && 
+            return (source.Status == StatusChargeable || source.Status == StatusConsumed) &&
                    clientSecret == source.ClientSecret;
         }
 
@@ -231,7 +231,7 @@ namespace CollAction.Services.Donation
             ApplicationUser user = await userManager.FindByEmailAsync(checkout.Email).ConfigureAwait(false);
             Customer customer = await GetOrCreateCustomer(checkout.Name, checkout.Email, token).ConfigureAwait(false);
             Source source = await sourceService.AttachAsync(
-                customer.Id, 
+                customer.Id,
                 new SourceAttachOptions()
                 {
                     Source = checkout.SourceId
@@ -332,7 +332,7 @@ namespace CollAction.Services.Donation
                 new CustomerListOptions()
                 {
                     Email = userFor.Email
-                }, 
+                },
                 cancellationToken: token).ConfigureAwait(false);
 
             var subscriptions = await Task.WhenAll(
@@ -427,7 +427,7 @@ namespace CollAction.Services.Donation
             else if (!name.Equals(metadataName, StringComparison.Ordinal))
             {
                 customer = await customerService.UpdateAsync(
-                    customer.Id, 
+                    customer.Id,
                     new CustomerUpdateOptions()
                     {
                         Metadata = metadata

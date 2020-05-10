@@ -1,17 +1,17 @@
-﻿using Microsoft.AspNetCore.TestHost;
+﻿using CollAction.Services;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
-using System.Linq;
 using System.Threading.Tasks;
-using CollAction.Services;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.DependencyInjection;
-using System.Globalization;
 
 namespace CollAction.Tests.Integration.Endpoint
 {

@@ -1,20 +1,20 @@
-﻿using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using CollAction.Helpers;
+using CollAction.Models;
+using CollAction.Services.User;
+using CollAction.Services.User.Models;
+using CollAction.ViewModels.Account;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using CollAction.Models;
-using CollAction.ViewModels.Account;
-using System.Net;
-using CollAction.Services.User;
-using System.Linq;
-using Microsoft.AspNetCore.Authentication;
-using CollAction.Services.User.Models;
-using System.ComponentModel.DataAnnotations;
-using CollAction.Helpers;
-using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 using System;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Net;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace CollAction.Controllers
 {

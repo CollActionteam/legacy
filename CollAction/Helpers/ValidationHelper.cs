@@ -24,10 +24,10 @@ namespace CollAction.Helpers
             => string.Join(", ", modelState.Values.SelectMany(state => state.Errors).Select(error => error.ErrorMessage));
 
         private static IdentityError ValidationResultToIdentityError(ValidationResult result)
-            => new IdentityError() 
-               {
-                   Code = string.Join("_", result.MemberNames), 
-                   Description = result.ErrorMessage 
-               };
+            => new IdentityError()
+            {
+                Code = string.Join("_", result.MemberNames),
+                Description = result.ErrorMessage
+            };
     }
 }

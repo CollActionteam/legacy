@@ -1,8 +1,8 @@
 ﻿using CollAction.Data;
 using CollAction.Models;
+using GraphQL.Authorization;
 using GraphQL.EntityFramework;
 using GraphQL.Types;
-using GraphQL.Authorization;
 
 namespace CollAction.GraphQl.Queries
 {

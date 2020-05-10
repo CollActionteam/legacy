@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CollAction.Models
@@ -12,7 +11,7 @@ namespace CollAction.Models
             CrowdactionId = crowdactionId;
         }
 
-        public CrowdactionTag(int tagId): this(tagId, 0)
+        public CrowdactionTag(int tagId) : this(tagId, 0)
         {
         }
 

@@ -34,7 +34,7 @@ namespace CollAction.GraphQl.Queries
                     return principal.IsInRole(AuthorizationConstants.AdminRole);
                 });
             FieldAsync<BooleanGraphType>(
-                "isSubscribedNewsletter", 
+                "isSubscribedNewsletter",
                 resolve: async c =>
                 {
                     return await c.GetUserContext().ServiceProvider.GetRequiredService<INewsletterService>().IsSubscribedAsync(c.Source.Email).ConfigureAwait(false);

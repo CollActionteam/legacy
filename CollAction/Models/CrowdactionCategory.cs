@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace CollAction.Models
+﻿namespace CollAction.Models
 {
     public sealed class CrowdactionCategory
     {
-        public CrowdactionCategory(Category category): this(0, category)
+        public CrowdactionCategory(Category category) : this(0, category)
         {
         }
 

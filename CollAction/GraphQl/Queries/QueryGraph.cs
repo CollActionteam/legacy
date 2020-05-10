@@ -24,7 +24,7 @@ namespace CollAction.GraphQl.Queries
                     new QueryArgument<SearchCrowdactionStatusInputGraph>() { Name = "status" },
                     new QueryArgument<CategoryGraph>() { Name = "category" }
                 },
-                resolve: c => 
+                resolve: c =>
                 {
                     Category? category = c.GetArgument<Category?>("category");
                     SearchCrowdactionStatus? status = c.GetArgument<SearchCrowdactionStatus?>("status");
@@ -44,7 +44,7 @@ namespace CollAction.GraphQl.Queries
                 arguments: new QueryArguments(
                     new QueryArgument<SearchCrowdactionStatusInputGraph>() { Name = "status" },
                     new QueryArgument<CategoryGraph>() { Name = "category" }),
-                resolve: async c => 
+                resolve: async c =>
                 {
                     Category? category = c.GetArgument<Category?>("category");
                     SearchCrowdactionStatus? status = c.GetArgument<SearchCrowdactionStatus?>("status");
@@ -98,4 +98,4 @@ namespace CollAction.GraphQl.Queries
                 resolve: c => new object());
         }
     }
-} 
+}

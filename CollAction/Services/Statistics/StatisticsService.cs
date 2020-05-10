@@ -69,7 +69,7 @@ namespace CollAction.Services.Statistics
 
                        // Only count users that have joined at least one crowdaction
 
-                       int normalUsers = 
+                       int normalUsers =
                            await context.Users
                                         .CountAsync(u => u.Crowdactions.Any(), token)
                                         .ConfigureAwait(false);

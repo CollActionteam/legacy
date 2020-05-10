@@ -1,8 +1,8 @@
 ﻿using CollAction.Data;
 using CollAction.Models;
-using CollAction.Services.Email;
 using CollAction.Services.Crowdactions;
 using CollAction.Services.Crowdactions.Models;
+using CollAction.Services.Email;
 using CollAction.Services.User;
 using CollAction.Services.User.Models;
 using Microsoft.AspNetCore.Identity;
@@ -36,13 +36,13 @@ namespace CollAction.Tests.Integration.Service
 
                     string testEmail = GetTestEmail();
                     UserResult testUserCreation = await userService.CreateUser(
-                        new NewUser() 
-                        { 
-                            Email = testEmail, 
-                            FirstName = testEmail, 
-                            LastName = testEmail, 
-                            IsSubscribedNewsletter = false, 
-                            Password = Guid.NewGuid().ToString() 
+                        new NewUser()
+                        {
+                            Email = testEmail,
+                            FirstName = testEmail,
+                            LastName = testEmail,
+                            IsSubscribedNewsletter = false,
+                            Password = Guid.NewGuid().ToString()
                         }).ConfigureAwait(false);
                     ApplicationUser user = testUserCreation.User;
                     (result, code) = await userService.ForgotPassword(user.Email).ConfigureAwait(false);

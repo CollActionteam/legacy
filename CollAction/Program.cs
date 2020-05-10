@@ -1,6 +1,6 @@
-﻿using CollAction.Services.Image;
+﻿using CollAction.Services.Crowdactions;
+using CollAction.Services.Image;
 using CollAction.Services.Initialization;
-using CollAction.Services.Crowdactions;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;

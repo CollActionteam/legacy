@@ -52,7 +52,7 @@ namespace CollAction.GraphQl.Queries
                         c.Source.ParticipantCounts = await c.GetUserContext().Context.CrowdactionParticipantCounts.FindAsync(c.Source.Id).ConfigureAwait(false);
                     }
 
-                    return c.Source.RemainingTimeUserFriendly;   
+                    return c.Source.RemainingTimeUserFriendly;
                 });
             FieldAsync<NonNullGraphType<BooleanGraphType>>(
                 nameof(Crowdaction.IsSuccessfull),
@@ -63,7 +63,7 @@ namespace CollAction.GraphQl.Queries
                         c.Source.ParticipantCounts = await c.GetUserContext().Context.CrowdactionParticipantCounts.FindAsync(c.Source.Id).ConfigureAwait(false);
                     }
 
-                    return c.Source.IsSuccessfull;   
+                    return c.Source.IsSuccessfull;
                 });
             FieldAsync<NonNullGraphType<BooleanGraphType>>(
                 nameof(Crowdaction.IsFailed),
@@ -74,7 +74,7 @@ namespace CollAction.GraphQl.Queries
                         c.Source.ParticipantCounts = await c.GetUserContext().Context.CrowdactionParticipantCounts.FindAsync(c.Source.Id).ConfigureAwait(false);
                     }
 
-                    return c.Source.IsFailed;   
+                    return c.Source.IsFailed;
                 });
             FieldAsync<NonNullGraphType<IntGraphType>>(
                 nameof(Crowdaction.TotalParticipants),

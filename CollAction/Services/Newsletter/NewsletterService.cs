@@ -1,11 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
-using Hangfire;
+﻿using Hangfire;
 using MailChimp.Net.Core;
 using MailChimp.Net.Interfaces;
 using MailChimp.Net.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
+using System.Threading.Tasks;
 
 namespace CollAction.Services.Newsletter
 {
@@ -49,7 +49,7 @@ namespace CollAction.Services.Newsletter
             }
             else
             {
-                 return UnsubscribeMember(email);
+                return UnsubscribeMember(email);
             }
         }
 

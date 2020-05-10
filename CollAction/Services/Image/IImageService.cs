@@ -1,8 +1,8 @@
-﻿using System;
+﻿using CollAction.Models;
+using Microsoft.AspNetCore.Http;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using CollAction.Models;
-using Microsoft.AspNetCore.Http;
 
 namespace CollAction.Services.Image
 {

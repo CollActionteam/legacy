@@ -6,7 +6,7 @@ namespace CollAction.Services
     {
         [Required]
         public string AdminEmail { get; set; } = null!;
-        
+
         [Required]
         public string AdminPassword { get; set; } = null!;
 

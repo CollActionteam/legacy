@@ -1,11 +1,11 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Threading.Tasks;
 using CollAction.Services.Newsletter;
-using System;
-using Moq;
 using Hangfire;
 using MailChimp.Net.Models;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using System;
+using System.Threading.Tasks;
 
 namespace CollAction.Tests.Integration.Service
 {
@@ -78,7 +78,7 @@ namespace CollAction.Tests.Integration.Service
                            await newsletterService.SetSubscription(email, true, true).ConfigureAwait(false);
                            Status status = await newsletterService.GetListMemberStatus(email).ConfigureAwait(false);
                            Assert.AreEqual(Status.Pending, status);
-   
+
                            await newsletterService.SetSubscription(email, false, false).ConfigureAwait(false);
                            Assert.IsFalse(await newsletterService.IsSubscribedAsync(email).ConfigureAwait(false));
                        }

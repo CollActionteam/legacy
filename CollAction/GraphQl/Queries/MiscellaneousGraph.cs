@@ -1,13 +1,13 @@
-﻿using CollAction.Models;
+﻿using CollAction.Helpers;
+using CollAction.Models;
+using CollAction.Services;
+using CollAction.Services.Donation;
+using CollAction.Services.Newsletter;
 using GraphQL.Types;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
 using Microsoft.Extensions.Options;
-using CollAction.Services.Newsletter;
-using CollAction.Helpers;
-using CollAction.Services;
-using CollAction.Services.Donation;
+using System.Linq;
 
 namespace CollAction.GraphQl.Queries
 {

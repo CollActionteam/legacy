@@ -1,25 +1,25 @@
 ﻿using CollAction.Data;
-using CollAction.Services.Email;
+using CollAction.GraphQl.Mutations.Input;
+using CollAction.Helpers;
+using CollAction.Models;
 using CollAction.Services.Crowdactions.Models;
+using CollAction.Services.Email;
+using CollAction.Services.HtmlValidator;
 using CollAction.ViewModels.Email;
+using Hangfire;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using CollAction.Models;
-using System.ComponentModel.DataAnnotations;
-using System.Threading;
-using CollAction.Services.HtmlValidator;
-using CollAction.GraphQl.Mutations.Input;
-using Hangfire;
-using CollAction.Helpers;
 using System.Net.Mail;
+using System.Security.Claims;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace CollAction.Services.Crowdactions
 {
@@ -58,7 +58,7 @@ namespace CollAction.Services.Crowdactions
             this.jobClient = jobClient;
             this.recurringJobManager = recurringJobManager;
         }
-        
+
         public async Task<Crowdaction> CreateCrowdactionInternal(NewCrowdactionInternal newCrowdaction, CancellationToken token)
         {
             if (await context.Crowdactions.AnyAsync(c => c.Name == newCrowdaction.Name).ConfigureAwait(false))
@@ -103,7 +103,7 @@ namespace CollAction.Services.Crowdactions
                 start: newCrowdaction.Start,
                 end: newCrowdaction.End.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
                 description: newCrowdaction.Description,
-                goal: newCrowdaction.Goal, 
+                goal: newCrowdaction.Goal,
                 proposal: newCrowdaction.Proposal,
                 creatorComments: newCrowdaction.CreatorComments,
                 descriptionVideoLink: newCrowdaction.DescriptionVideoLink?.Replace("www.youtube.com", "www.youtube-nocookie.com", StringComparison.Ordinal),
@@ -112,7 +112,7 @@ namespace CollAction.Services.Crowdactions
                 bannerImageFileId: newCrowdaction.BannerImageFileId,
                 cardImageFileId: newCrowdaction.CardImageFileId,
                 descriptiveImageFileId: newCrowdaction.DescriptiveImageFileId,
-                categories: newCrowdaction.Categories.Select(c => new CrowdactionCategory((c))).ToList(), 
+                categories: newCrowdaction.Categories.Select(c => new CrowdactionCategory((c))).ToList(),
                 tags: crowdactionTags);
 
             context.Crowdactions.Add(crowdaction);
@@ -187,7 +187,7 @@ namespace CollAction.Services.Crowdactions
                 start: newCrowdaction.Start,
                 end: newCrowdaction.End.Date.AddHours(23).AddMinutes(59).AddSeconds(59),
                 description: newCrowdaction.Description,
-                goal: newCrowdaction.Goal, 
+                goal: newCrowdaction.Goal,
                 proposal: newCrowdaction.Proposal,
                 creatorComments: newCrowdaction.CreatorComments,
                 descriptionVideoLink: newCrowdaction.DescriptionVideoLink?.Replace("www.youtube.com", "www.youtube-nocookie.com", StringComparison.Ordinal),
@@ -195,7 +195,7 @@ namespace CollAction.Services.Crowdactions
                 bannerImageFileId: newCrowdaction.BannerImageFileId,
                 cardImageFileId: newCrowdaction.CardImageFileId,
                 descriptiveImageFileId: newCrowdaction.DescriptiveImageFileId,
-                categories: newCrowdaction.Categories.Select(c => new CrowdactionCategory((c))).ToList(), 
+                categories: newCrowdaction.Categories.Select(c => new CrowdactionCategory((c))).ToList(),
                 tags: crowdactionTags);
 
             context.Crowdactions.Add(crowdaction);
@@ -301,7 +301,7 @@ namespace CollAction.Services.Crowdactions
                     await context.SaveChangesAsync(token).ConfigureAwait(false);
                 }
 
-                var tagMap = 
+                var tagMap =
                     await context.Tags
                                  .Where(t => updatedCrowdaction.Tags.Contains(t.Name) || crowdactionTags.Contains(t.Name))
                                  .ToDictionaryAsync(t => t.Name, t => t.Id, token).ConfigureAwait(false);
@@ -572,8 +572,8 @@ namespace CollAction.Services.Crowdactions
         public void InitializeRefreshParticipantCountJob()
         {
             recurringJobManager.AddOrUpdate(
-                "refresh-participant-count-job", 
-                () => RefreshParticipantCount(CancellationToken.None), 
+                "refresh-participant-count-job",
+                () => RefreshParticipantCount(CancellationToken.None),
                 "*/5 * * * *" // Every 5 minutes
                 );
         }

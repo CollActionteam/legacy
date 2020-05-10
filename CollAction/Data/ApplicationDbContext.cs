@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-using CollAction.Models;
+﻿using CollAction.Models;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace CollAction.Data
 {
@@ -74,7 +74,7 @@ namespace CollAction.Data
                    .HasForeignKey(e => e.UserId);
 
             // All stored dates are UTC
-            ValueConverter<DateTime, DateTime> dateTimeConverter = 
+            ValueConverter<DateTime, DateTime> dateTimeConverter =
                 new ValueConverter<DateTime, DateTime>(
                     v => v, v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
 

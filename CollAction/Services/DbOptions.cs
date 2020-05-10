@@ -9,7 +9,7 @@ namespace CollAction.Services
 
         [Required]
         public string DbHost { get; set; } = null!;
-        
+
         [Required]
         public string DbUser { get; set; } = null!;
 

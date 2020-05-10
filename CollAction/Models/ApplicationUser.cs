@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.AspNetCore.Identity;
 
 namespace CollAction.Models
 {
@@ -18,11 +18,11 @@ namespace CollAction.Models
             RegistrationDate = registrationDate;
         }
 
-        public ApplicationUser(string email, DateTime registrationDate): this(email, email, false, null, null, registrationDate)
+        public ApplicationUser(string email, DateTime registrationDate) : this(email, email, false, null, null, registrationDate)
         {
         }
 
-        public ApplicationUser(string email, string? firstName, string? lastName, DateTime registrationDate): this(email, email, false, firstName, lastName, registrationDate)
+        public ApplicationUser(string email, string? firstName, string? lastName, DateTime registrationDate) : this(email, email, false, firstName, lastName, registrationDate)
         {
         }
 

@@ -29,15 +29,15 @@ namespace CollAction.Services.Crowdactions.Models
             OwnerId = ownerId;
         }
 
-        public string Name { get; set; } 
+        public string Name { get; set; }
 
         public int Target { get; set; }
 
-        public string Proposal { get; set; } 
+        public string Proposal { get; set; }
 
-        public string Description { get; set; } 
+        public string Description { get; set; }
 
-        public string Goal { get; set; } 
+        public string Goal { get; set; }
 
         public string? CreatorComments { get; set; }
 

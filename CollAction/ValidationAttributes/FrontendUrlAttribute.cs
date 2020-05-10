@@ -1,10 +1,10 @@
 ﻿using CollAction.Services;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using System;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
 
 namespace CollAction.ValidationAttributes
 {
@@ -30,7 +30,7 @@ namespace CollAction.ValidationAttributes
                 }
                 Uri givenAddressUri = new Uri(givenAddress);
                 return givenAddressUri.Host == publicAddressUri.Host && givenAddressUri.Scheme == publicAddressUri.Scheme && givenAddressUri.Port == publicAddressUri.Port ?
-                           ValidationResult.Success : 
+                           ValidationResult.Success :
                            new ValidationResult($"This URL isn't allowed: '{givenAddressUri}', '{publicAddressUri}");
             }
             catch (UriFormatException e)

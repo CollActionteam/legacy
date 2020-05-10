@@ -1,17 +1,17 @@
-﻿using System;
+﻿using CollAction.Helpers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
-using CollAction.Helpers;
 
 namespace CollAction.Models
 {
     public sealed class Crowdaction
     {
-        public Crowdaction(string name, CrowdactionStatus status, string? ownerId, int target, DateTime start, DateTime end, string description, string goal, string proposal, string? creatorComments, string? descriptionVideoLink, CrowdactionDisplayPriority displayPriority = CrowdactionDisplayPriority.Medium, int? bannerImageFileId = null, int? descriptiveImageFileId = null, int? cardImageFileId = null, int anonymousUserParticipants = 0): this(name, status, ownerId, target, start, end, description, goal, proposal, creatorComments, descriptionVideoLink, new List<CrowdactionCategory>(), new List<CrowdactionTag>(), displayPriority, bannerImageFileId, descriptiveImageFileId, cardImageFileId, anonymousUserParticipants)
+        public Crowdaction(string name, CrowdactionStatus status, string? ownerId, int target, DateTime start, DateTime end, string description, string goal, string proposal, string? creatorComments, string? descriptionVideoLink, CrowdactionDisplayPriority displayPriority = CrowdactionDisplayPriority.Medium, int? bannerImageFileId = null, int? descriptiveImageFileId = null, int? cardImageFileId = null, int anonymousUserParticipants = 0) : this(name, status, ownerId, target, start, end, description, goal, proposal, creatorComments, descriptionVideoLink, new List<CrowdactionCategory>(), new List<CrowdactionTag>(), displayPriority, bannerImageFileId, descriptiveImageFileId, cardImageFileId, anonymousUserParticipants)
         {
         }
 
@@ -57,7 +57,7 @@ namespace CollAction.Models
         public int NumberCrowdactionEmailsSent { get; set; }
 
         public DateTime Start { get; set; }
-        
+
         public DateTime End { get; set; }
 
         [Required]
@@ -76,7 +76,7 @@ namespace CollAction.Models
         public string? CreatorComments { get; set; }
 
         public string? DescriptionVideoLink { get; set; }
-        
+
         public CrowdactionDisplayPriority DisplayPriority { get; set; }
 
         [MaxLength(100)]

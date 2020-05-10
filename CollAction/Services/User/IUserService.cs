@@ -1,9 +1,9 @@
-﻿using System.Security.Claims;
-using System.Threading;
-using System.Threading.Tasks;
-using CollAction.Services.User.Models;
+﻿using CollAction.Services.User.Models;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json.Linq;
+using System.Security.Claims;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace CollAction.Services.User
 {
