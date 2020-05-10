@@ -1,0 +1,17 @@
+name: .NET Core
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: docker/build-push-action@v1
+      with:
+        username: ${{ secrets.DockerUsername }}
+        password: ${{ secrets.DockerPassword }}
+        repository: collaction/frontend
+        tag_with_ref: true
+        dockerfile: Frontend/Dockerfile
+        path: Frontend 
