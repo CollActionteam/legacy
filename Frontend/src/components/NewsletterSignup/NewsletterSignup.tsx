@@ -9,8 +9,6 @@ export default () => {
   const { mailChimpAccount, mailChimpNewsletterListId, mailChimpServer, mailChimpUserId } = useSettings();
 
   return <form action={`//${mailChimpAccount}.${mailChimpServer}.list-manage.com/subscribe/post?u=${mailChimpUserId}&id=${mailChimpNewsletterListId}`}
-               id="mc-embedded-subscribe-form"
-               name="mc-embedded-subscribe-form"
                method="post"
                target="_blank">
     <div className={styles.wrapper}>
@@ -19,7 +17,6 @@ export default () => {
         placeholder="Fill in your e-mail"
         aria-label="E-Mail Address"
         name="EMAIL"
-        id="mce-EMAIL"
         value={email}
         onChange={(ev) => setEmail(ev.target.value)} />
       <div className={styles.hidden} aria-hidden="true">
@@ -33,7 +30,6 @@ export default () => {
       </div>
       <button
         name="subscribe"
-        id="mc-embedded-subscribe"
         aria-label="Subscribe Newsletter"
         className={styles.submit}
         disabled={!email}>
