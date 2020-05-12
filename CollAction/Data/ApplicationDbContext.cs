@@ -23,6 +23,8 @@ namespace CollAction.Data
 
         public DbSet<CrowdactionTag> CrowdactionTags { get; set; } = null!;
 
+        public DbSet<CrowdactionComment> CrowdactionComments { get; set; } = null!;
+
         public DbSet<Tag> Tags { get; set; } = null!;
 
         public DbSet<ImageFile> ImageFiles { get; set; } = null!;
@@ -45,12 +47,22 @@ namespace CollAction.Data
                    .HasIndex(c => c.Name)
                    .HasName("IX_Crowdactions_Name").IsUnique();
             builder.Entity<Crowdaction>()
+                   .HasMany(c => c.Comments)
+                   .WithOne(c => c.Crowdaction!)
+                   .HasForeignKey(c => c.CrowdactionId)
+                   .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Crowdaction>()
                    .Property(c => c.DisplayPriority)
                    .HasDefaultValue(CrowdactionDisplayPriority.Medium);
             builder.Entity<ApplicationUser>()
                    .HasMany(c => c.Crowdactions)
                    .WithOne(proj => proj.Owner!)
                    .HasForeignKey(proj => proj.OwnerId)
+                   .OnDelete(DeleteBehavior.SetNull);
+            builder.Entity<ApplicationUser>()
+                   .HasMany(a => a.CrowdactionComments)
+                   .WithOne(c => c.User!)
+                   .HasForeignKey(c => c.UserId)
                    .OnDelete(DeleteBehavior.SetNull);
             builder.Entity<Crowdaction>()
                    .HasMany(c => c.Categories)

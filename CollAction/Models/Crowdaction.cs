@@ -107,6 +107,8 @@ namespace CollAction.Models
 
         public ICollection<CrowdactionTag> Tags { get; set; }
 
+        public ICollection<CrowdactionComment> Comments { get; set; } = new List<CrowdactionComment>();
+
         [NotMapped]
         public bool IsActive
             => Status == CrowdactionStatus.Running && Start <= DateTime.UtcNow && End >= DateTime.UtcNow;

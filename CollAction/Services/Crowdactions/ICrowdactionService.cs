@@ -27,6 +27,10 @@ namespace CollAction.Services.Crowdactions
 
         Task<CrowdactionParticipant> SetEmailCrowdactionSubscription(int crowdactionId, string userId, Guid token, bool isSubscribed, CancellationToken cancellationToken);
 
+        Task<CrowdactionComment> CreateComment(string comment, int crowdactionId, ClaimsPrincipal user, CancellationToken token);
+
+        Task DeleteComment(int commentId, ClaimsPrincipal user, CancellationToken token);
+
         bool CanSendCrowdactionEmail(Crowdaction crowdaction);
 
         IQueryable<Crowdaction> SearchCrowdactions(Category? category, SearchCrowdactionStatus? status);

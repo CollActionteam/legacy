@@ -243,6 +243,12 @@ namespace CollAction.Services.Crowdactions
                 return new CrowdactionResult(new ValidationResult("User is not allowed to update crowdaction"));
             }
 
+            ApplicationUser? owner = await userManager.FindByIdAsync(updatedCrowdaction.OwnerId).ConfigureAwait(false);
+            if (owner == null && updatedCrowdaction.OwnerId != null)
+            {
+                return new CrowdactionResult(new ValidationResult("New user owner does not exist"));
+            }
+
             Crowdaction? crowdaction = await context
                 .Crowdactions
                 .Include(c => c.Tags).ThenInclude(t => t.Tag)
@@ -327,13 +333,11 @@ namespace CollAction.Services.Crowdactions
                 context.CrowdactionCategories.AddRange(newCategories.Select(c => new CrowdactionCategory(crowdactionId: crowdaction.Id, category: c)));
             }
 
-            ApplicationUser owner = await userManager.FindByIdAsync(crowdaction.OwnerId).ConfigureAwait(false);
-
-            if (approved)
+            if (approved && owner != null)
             {
                 await emailSender.SendEmailTemplated(owner.Email, $"Approval - {crowdaction.Name}", "CrowdactionApproval").ConfigureAwait(false);
             }
-            else if (deleted)
+            else if (deleted && owner != null)
             {
                 await emailSender.SendEmailTemplated(owner.Email, $"Deleted - {crowdaction.Name}", "CrowdactionDeleted").ConfigureAwait(false);
             }
@@ -391,7 +395,7 @@ namespace CollAction.Services.Crowdactions
                 return new CrowdactionResult(new ValidationResult("Unsafe HTML in e-mail message", new[] { nameof(message) }));
             }
 
-            ApplicationUser user = await userManager.GetUserAsync(performingUser).ConfigureAwait(false);
+            ApplicationUser? user = await userManager.GetUserAsync(performingUser).ConfigureAwait(false);
             if (crowdaction.OwnerId != user.Id)
             {
                 return new CrowdactionResult(new ValidationResult("Unauthorized"));
@@ -458,6 +462,50 @@ namespace CollAction.Services.Crowdactions
             }
 
             return participant;
+        }
+
+        public async Task<CrowdactionComment> CreateComment(string comment, int crowdactionId, ClaimsPrincipal user, CancellationToken token)
+        {
+            ApplicationUser? applicationUser = await userManager.GetUserAsync(user).ConfigureAwait(false);
+
+            if (applicationUser == null)
+            {
+                throw new InvalidOperationException($"User does not exist when adding comment");
+            }
+
+            Crowdaction? crowdaction = await context.Crowdactions.SingleAsync(c => c.Id == crowdactionId, token).ConfigureAwait(false);
+
+            if (crowdaction == null)
+            {
+                throw new InvalidOperationException($"Crowdaction does not exist when adding comment");
+            }
+            else if (crowdaction.Status != CrowdactionStatus.Running)
+            {
+                throw new InvalidOperationException($"Crowdaction is not active when adding comment");
+            }
+
+            if (!htmlInputValidator.IsSafe(comment))
+            {
+                throw new InvalidOperationException($"Comment does not contain safe html");
+            }
+
+            var crowdactionComment = new CrowdactionComment(comment, applicationUser.Id, crowdactionId, DateTime.UtcNow);
+            context.CrowdactionComments.Add(crowdactionComment);
+            await context.SaveChangesAsync(token).ConfigureAwait(false);
+
+            return crowdactionComment;
+        }
+
+        public async Task DeleteComment(int commentId, ClaimsPrincipal user, CancellationToken token)
+        {
+            if (!user.IsInRole(AuthorizationConstants.AdminRole))
+            {
+                throw new InvalidOperationException("User is not allowed to delete crowdaction comment");
+            }
+
+            CrowdactionComment comment = await context.CrowdactionComments.SingleAsync(c => c.Id == commentId, token).ConfigureAwait(false);
+            context.CrowdactionComments.Remove(comment);
+            await context.SaveChangesAsync(token).ConfigureAwait(false);
         }
 
         public async Task<AddParticipantResult> CommitToCrowdactionAnonymous(string email, int crowdactionId, CancellationToken token)

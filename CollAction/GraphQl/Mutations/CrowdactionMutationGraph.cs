@@ -85,6 +85,36 @@ namespace CollAction.GraphQl.Mutations
                                         .ConfigureAwait(false);
                 });
 
+            FieldAsync<CrowdactionCommentGraph, CrowdactionComment>(
+                "createComment",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<IdGraphType>>() { Name = "crowdactionId" },
+                    new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "comment" }),
+                resolve: async c =>
+                {
+                    int crowdactionId = c.GetArgument<int>("crowdactionId");
+                    string comment = c.GetArgument<string>("comment");
+                    var context = c.GetUserContext();
+                    return await context.ServiceProvider
+                                        .GetRequiredService<ICrowdactionService>()
+                                        .CreateComment(comment, crowdactionId, context.User, c.CancellationToken)
+                                        .ConfigureAwait(false);
+                });
+
+            FieldAsync<BooleanGraphType, bool>(
+                "deleteComment",
+                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<IdGraphType>>() { Name = "commentId" }),
+                resolve: async c =>
+                {
+                    int commentId = c.GetArgument<int>("commentId");
+                    var context = c.GetUserContext();
+                    await context.ServiceProvider
+                                 .GetRequiredService<ICrowdactionService>()
+                                 .DeleteComment(commentId, context.User, c.CancellationToken)
+                                 .ConfigureAwait(false);
+                    return true;
+                });
+
             FieldAsync<CrowdactionResultGraph, CrowdactionResult>(
                 "sendCrowdactionEmail",
                 arguments: new QueryArguments(

@@ -33,6 +33,9 @@ namespace CollAction.GraphQl
                 services,
                 model: GetDbModel());
 
+            // Ensure we can use graphql connections
+            EfGraphQLConventions.RegisterConnectionTypesInContainer(services);
+
             Type[] baseClasses = new[]
             {
                 typeof(ComplexGraphType<>),

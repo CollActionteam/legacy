@@ -106,6 +106,7 @@ namespace CollAction.GraphQl.Queries
             AddNavigationListField(nameof(Crowdaction.Categories), c => c.Source.Categories);
             AddNavigationListField(nameof(Crowdaction.Participants), c => c.Source.Participants).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
             AddNavigationListField(nameof(Crowdaction.Tags), c => c.Source.Tags);
+            AddNavigationConnectionField(nameof(Crowdaction.Comments), c => c.Source.Comments);
         }
     }
 }

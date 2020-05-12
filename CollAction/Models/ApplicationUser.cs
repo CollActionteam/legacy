@@ -67,5 +67,7 @@ namespace CollAction.Models
         public ICollection<DonationEventLog> DonationEvents { get; set; } = new List<DonationEventLog>();
 
         public ICollection<UserEvent> UserEvents { get; set; } = new List<UserEvent>();
+
+        public ICollection<CrowdactionComment> CrowdactionComments { get; set; } = new List<CrowdactionComment>();
     }
 }

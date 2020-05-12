@@ -264,6 +264,10 @@ namespace CollAction.Services.Initialization
                     userIds.Where(userId => r.Next(2) == 0)
                            .Select(userId => new CrowdactionParticipant(userId, crowdaction.Id, r.Next(2) == 1, now, Guid.NewGuid())));
 
+                context.CrowdactionComments.AddRange(
+                    Enumerable.Range(0, r.Next(100))
+                              .Select(i => new CrowdactionComment($"<p>{string.Join("</p><p>", Faker.Lorem.Paragraphs(r.Next(2) + 1))}</p>", userIds[r.Next(userIds.Count)], crowdaction.Id, now.AddHours(-1 * r.Next(24 * 7)))));
+
                 await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             }
         }
