@@ -23,7 +23,7 @@ namespace CollAction.Tests.Integration
     {
         protected IntegrationTestBase(bool needsServer = true)
         {
-            lock (constructorMutex)
+            lock (constructorMutex) // GraphQL.net has several static classes that are not threadsafe
             {
                 Host = CreateTestHost().Build();
                 Scope = Host.Services.CreateScope();
@@ -55,7 +55,7 @@ namespace CollAction.Tests.Integration
 
         public async Task InitializeAsync()
         {
-            await databaseInitLock.WaitAsync().ConfigureAwait(false);
+            await databaseInitLock.WaitAsync().ConfigureAwait(false); // Don't run migrations in parallel
             try
             {
                 await Scope.ServiceProvider.GetRequiredService<IInitializationService>().InitializeDatabase().ConfigureAwait(false);
