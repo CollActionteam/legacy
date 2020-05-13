@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Serilog;
 using Serilog.Events;
 using System;
@@ -13,26 +12,45 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace CollAction.Tests.Integration
 {
-    public abstract class IntegrationTestBase
+    public abstract class IntegrationTestBase : IAsyncLifetime, IDisposable
     {
-        public async Task WithServiceProvider(Func<IServiceScope, Task> executeTests)
+        protected IntegrationTestBase(bool needsServer = true)
         {
-            using IWebHost host = GetHost(ConfigureReplacementServicesProvider).Build();
-            using IServiceScope scope = host.Services.CreateScope();
-            await scope.ServiceProvider.GetRequiredService<IInitializationService>().InitializeDatabase().ConfigureAwait(false);
-            await executeTests(scope).ConfigureAwait(false);
+            lock (constructorMutex)
+            {
+                Host = CreateTestHost().Build();
+                Scope = Host.Services.CreateScope();
+                if (needsServer)
+                {
+                    TestServer = new TestServer(CreateTestHost());
+                }
+            }
         }
 
-        public Task WithTestServer(Func<IServiceScope, TestServer, Task> executeTests)
-            => WithServiceProvider(
-                async scope =>
-                {
-                    using var testServer = new TestServer(GetHost(ConfigureReplacementServicesTestServer));
-                    await executeTests(scope, testServer).ConfigureAwait(false);
-                });
+        private static readonly object constructorMutex = new object();
+        protected IWebHost Host { get; }
+        protected TestServer TestServer { get; }
+        protected IServiceScope Scope { get; }
+
+        public void Dispose()
+        {
+            Host.Dispose();
+            Scope.Dispose();
+            if (TestServer != null)
+            {
+                TestServer.Dispose();
+            }
+        }
+
+        public Task DisposeAsync()
+            => Task.CompletedTask;
+
+        public Task InitializeAsync()
+            => Scope.ServiceProvider.GetRequiredService<IInitializationService>().InitializeDatabase();
 
         protected static async Task<string> GetAuthCookie(HttpClient httpClient, SeedOptions seedOptions)
         {
@@ -45,9 +63,9 @@ namespace CollAction.Tests.Integration
             using var formContent = new FormUrlEncodedContent(loginContent);
             HttpResponseMessage authResult = await httpClient.PostAsync(new Uri("/account/login", UriKind.Relative), formContent).ConfigureAwait(false);
             string authResultContent = await authResult.Content.ReadAsStringAsync().ConfigureAwait(false);
-            Assert.IsTrue(authResult.IsSuccessStatusCode, authResultContent);
+            Assert.True(authResult.IsSuccessStatusCode, authResultContent);
             string cookie = authResult.Headers.Single(h => h.Key == "Set-Cookie").Value.Single().Split(";").First();
-            Assert.IsTrue(authResult.IsSuccessStatusCode, authResultContent);
+            Assert.True(authResult.IsSuccessStatusCode, authResultContent);
             return cookie;
         }
 
@@ -55,14 +73,10 @@ namespace CollAction.Tests.Integration
         {
         }
 
-        protected virtual void ConfigureReplacementServicesTestServer(IServiceCollection collection)
-        {
-        }
-
-        private static IWebHostBuilder GetHost(Action<IServiceCollection> configureReplacements)
+        protected IWebHostBuilder CreateTestHost()
             => WebHost.CreateDefaultBuilder()
                       .UseEnvironment("Development")
-                      .ConfigureTestServices(configureReplacements)
+                      .ConfigureTestServices(ConfigureReplacementServicesProvider)
                       .UseStartup<Startup>()
                       .UseSerilog((hostingContext, loggerConfiguration) =>
                       {

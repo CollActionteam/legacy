@@ -2,27 +2,27 @@
 using CollAction.Helpers;
 using CollAction.Models;
 using GraphQL.Types;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
+using Xunit;
 
 namespace CollAction.Tests.Unit
 {
-    [TestClass]
+    [Trait("Category", "Unit")]
     public sealed class TypeExtensionsTests
     {
-        [TestMethod]
+        [Fact]
         public void TestGetGenericBaseClass()
         {
-            Assert.AreEqual(typeof(EnumerationGraphType<Category>), typeof(CategoryGraph).GetGenericBaseClass(typeof(EnumerationGraphType<>)));
+            Assert.Equal(typeof(EnumerationGraphType<Category>), typeof(CategoryGraph).GetGenericBaseClass(typeof(EnumerationGraphType<>)));
         }
 
-        [TestMethod]
+        [Fact]
         public void TestIsAssignableToGenericType()
         {
-            Assert.IsTrue(typeof(CategoryGraph).IsAssignableToGenericType(typeof(EnumerationGraphType<>)));
-            Assert.IsTrue(typeof(List<int>).IsAssignableToGenericType(typeof(List<>)));
-            Assert.IsFalse(typeof(IEnumerable<int>).IsAssignableToGenericType(typeof(List<>)));
-            Assert.IsTrue(typeof(List<int>).IsAssignableToGenericType(typeof(IEnumerable<>)));
+            Assert.True(typeof(CategoryGraph).IsAssignableToGenericType(typeof(EnumerationGraphType<>)));
+            Assert.True(typeof(List<int>).IsAssignableToGenericType(typeof(List<>)));
+            Assert.False(typeof(IEnumerable<int>).IsAssignableToGenericType(typeof(List<>)));
+            Assert.True(typeof(List<int>).IsAssignableToGenericType(typeof(IEnumerable<>)));
         }
     }
 }

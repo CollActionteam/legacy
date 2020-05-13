@@ -2,131 +2,121 @@ using CollAction.Services.Newsletter;
 using Hangfire;
 using MailChimp.Net.Models;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace CollAction.Tests.Integration.Service
 {
-    [TestClass]
-    [TestCategory("Integration")]
+    [Trait("Category", "Integration")]
     public sealed class NewsletterServiceTests : IntegrationTestBase
     {
-        [TestMethod]
-        public Task TestGetListMemberStatusOnNonExistentMember()
-            => WithServiceProvider(
-                async scope =>
+        public NewsletterServiceTests(): base(false)
+        { }
+
+        [Fact]
+        public async Task TestGetListMemberStatusOnNonExistentMember()
+        {
+            var newsletterService = Scope.ServiceProvider.GetRequiredService<INewsletterService>();
+            string email = GetTestEmail();
+            Assert.False(await newsletterService.IsSubscribedAsync(email).ConfigureAwait(false));
+        }
+
+        [Fact]
+        public async Task TestSubscribeListMemberAsPending()
+        {
+            var newsletterService = Scope.ServiceProvider.GetRequiredService<INewsletterService>();
+            string email = GetTestEmail();
+
+            try
+            {
+                await newsletterService.SetSubscription(email, true, true).ConfigureAwait(false);
+                Status status = await newsletterService.GetListMemberStatus(email).ConfigureAwait(false);
+                Assert.Equal(Status.Pending, status);
+                Assert.True(await newsletterService.IsSubscribedAsync(email).ConfigureAwait(false));
+            }
+            finally
+            {
+                await newsletterService.UnsubscribeMember(email).ConfigureAwait(false);
+            }
+        }
+
+        [Fact]
+        public async Task TestSubscribeListMemberAsSubscribed()
+        {
+            var newsletterService = Scope.ServiceProvider.GetRequiredService<INewsletterService>();
+            string email = GetTestEmail();
+
+            try
+            {
+                await newsletterService.SetSubscription(email, true, false).ConfigureAwait(false);
+                Status status = await newsletterService.GetListMemberStatus(email).ConfigureAwait(false);
+                Assert.Equal(Status.Subscribed, status);
+                Assert.True(await newsletterService.IsSubscribedAsync(email).ConfigureAwait(false));
+            }
+            finally
+            {
+                await newsletterService.UnsubscribeMember(email).ConfigureAwait(false);
+            }
+        }
+
+        [Fact]
+        public async Task TestUnsubscribeExistingListMember()
+        {
+            var newsletterService = Scope.ServiceProvider.GetRequiredService<INewsletterService>();
+            string email = GetTestEmail();
+
+            try
+            {
+                await newsletterService.SetSubscription(email, true, true).ConfigureAwait(false);
+                Status status = await newsletterService.GetListMemberStatus(email).ConfigureAwait(false);
+                Assert.Equal(Status.Pending, status);
+
+                await newsletterService.SetSubscription(email, false, false).ConfigureAwait(false);
+                Assert.False(await newsletterService.IsSubscribedAsync(email).ConfigureAwait(false));
+            }
+            finally
+            {
+                await newsletterService.SetSubscription(email, false, false).ConfigureAwait(false);
+            }
+        }
+
+        [Fact]
+        public async Task TestUnsubscribeSubscribeMultiple()
+        {
+            var newsletterService = Scope.ServiceProvider.GetRequiredService<INewsletterService>();
+            string email = GetTestEmail();
+
+            try
+            {
+                for (int attempt = 0; attempt < 4; attempt++)
                 {
-                    var newsletterService = scope.ServiceProvider.GetRequiredService<INewsletterService>();
-                    string email = GetTestEmail();
-                    Assert.IsFalse(await newsletterService.IsSubscribedAsync(email).ConfigureAwait(false));
-                });
+                    for (bool requireEmail = true; requireEmail; requireEmail = !requireEmail)
+                    {
+                        await newsletterService.SetSubscription(email, true, requireEmail).ConfigureAwait(false);
+                        Assert.True(await newsletterService.IsSubscribedAsync(email).ConfigureAwait(false));
 
-        [TestMethod]
-        public Task TestSubscribeListMemberAsPending()
-            => WithServiceProvider(
-                   async scope =>
-                   {
-                       var newsletterService = scope.ServiceProvider.GetRequiredService<INewsletterService>();
-                       string email = GetTestEmail();
+                        await newsletterService.SetSubscription(email, false, requireEmail).ConfigureAwait(false);
+                        Assert.False(await newsletterService.IsSubscribedAsync(email).ConfigureAwait(false));
+                    }
+                }
+            }
+            finally
+            {
+                await newsletterService.SetSubscription(email, false, true).ConfigureAwait(false);
+            }
+        }
 
-                       try
-                       {
-                           await newsletterService.SetSubscription(email, true, true).ConfigureAwait(false);
-                           Status status = await newsletterService.GetListMemberStatus(email).ConfigureAwait(false);
-                           Assert.AreEqual(Status.Pending, status);
-                           Assert.IsTrue(await newsletterService.IsSubscribedAsync(email).ConfigureAwait(false));
-                       }
-                       finally
-                       {
-                           await newsletterService.UnsubscribeMember(email).ConfigureAwait(false);
-                       }
-                   });
+        [Fact]
+        public async Task TestUnsubscribeNonExistingListMember()
+        {
+            var newsletterService = Scope.ServiceProvider.GetRequiredService<INewsletterService>();
+            string email = GetTestEmail();
 
-        [TestMethod]
-        public Task TestSubscribeListMemberAsSubscribed()
-            => WithServiceProvider(
-                   async scope =>
-                   {
-                       var newsletterService = scope.ServiceProvider.GetRequiredService<INewsletterService>();
-                       string email = GetTestEmail();
-
-                       try
-                       {
-                           await newsletterService.SetSubscription(email, true, false).ConfigureAwait(false);
-                           Status status = await newsletterService.GetListMemberStatus(email).ConfigureAwait(false);
-                           Assert.AreEqual(Status.Subscribed, status);
-                           Assert.IsTrue(await newsletterService.IsSubscribedAsync(email).ConfigureAwait(false));
-                       }
-                       finally
-                       {
-                           await newsletterService.UnsubscribeMember(email).ConfigureAwait(false);
-                       }
-                   });
-
-        [TestMethod]
-        public Task TestUnsubscribeExistingListMember()
-            => WithServiceProvider(
-                   async scope =>
-                   {
-                       var newsletterService = scope.ServiceProvider.GetRequiredService<INewsletterService>();
-                       string email = GetTestEmail();
-
-                       try
-                       {
-                           await newsletterService.SetSubscription(email, true, true).ConfigureAwait(false);
-                           Status status = await newsletterService.GetListMemberStatus(email).ConfigureAwait(false);
-                           Assert.AreEqual(Status.Pending, status);
-
-                           await newsletterService.SetSubscription(email, false, false).ConfigureAwait(false);
-                           Assert.IsFalse(await newsletterService.IsSubscribedAsync(email).ConfigureAwait(false));
-                       }
-                       finally
-                       {
-                           await newsletterService.SetSubscription(email, false, false).ConfigureAwait(false);
-                       }
-                   });
-
-        [TestMethod]
-        public Task TestUnsubscribeSubscribeMultiple()
-            => WithServiceProvider(
-                   async scope =>
-                   {
-                       var newsletterService = scope.ServiceProvider.GetRequiredService<INewsletterService>();
-                       string email = GetTestEmail();
-
-                       try
-                       {
-                           for (int attempt = 0; attempt < 4; attempt++)
-                           {
-                               for (bool requireEmail = true; requireEmail; requireEmail = !requireEmail)
-                               {
-                                   await newsletterService.SetSubscription(email, true, requireEmail).ConfigureAwait(false);
-                                   Assert.IsTrue(await newsletterService.IsSubscribedAsync(email).ConfigureAwait(false));
-
-                                   await newsletterService.SetSubscription(email, false, requireEmail).ConfigureAwait(false);
-                                   Assert.IsFalse(await newsletterService.IsSubscribedAsync(email).ConfigureAwait(false));
-                               }
-                           }
-                       }
-                       finally
-                       {
-                           await newsletterService.SetSubscription(email, false, true).ConfigureAwait(false);
-                       }
-                   });
-
-        [TestMethod]
-        public Task TestUnsubscribeNonExistingListMember()
-            => WithServiceProvider(
-                   async scope =>
-                   {
-                       var newsletterService = scope.ServiceProvider.GetRequiredService<INewsletterService>();
-                       string email = GetTestEmail();
-
-                       await newsletterService.SetSubscription(email, false, false).ConfigureAwait(false);
-                       Assert.IsFalse(await newsletterService.IsSubscribedAsync(email).ConfigureAwait(false));
-                   });
+            await newsletterService.SetSubscription(email, false, false).ConfigureAwait(false);
+            Assert.False(await newsletterService.IsSubscribedAsync(email).ConfigureAwait(false));
+        }
 
         protected override void ConfigureReplacementServicesProvider(IServiceCollection collection)
         {
