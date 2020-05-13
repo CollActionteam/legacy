@@ -1,13 +1,17 @@
-﻿using CollAction.Services;
+﻿using CollAction.Models;
+using CollAction.Services;
+using CollAction.Services.Crowdactions;
+using CollAction.Services.Crowdactions.Models;
+using CollAction.Services.Email;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,6 +25,11 @@ namespace CollAction.Tests.Integration.Endpoint
         [Fact]
         public async Task TestCrowdactionList()
         {
+            ICrowdactionService crowdactionService = Scope.ServiceProvider.GetRequiredService<ICrowdactionService>();
+            var newCrowdaction = new NewCrowdactionInternal("test" + Guid.NewGuid(), 100, "test", "test", "test", null, DateTime.UtcNow, DateTime.UtcNow.AddDays(1), null, null, null, null, new[] { Category.Community }, Array.Empty<string>(), CrowdactionDisplayPriority.Bottom, CrowdactionStatus.Running, 0, null);
+            Crowdaction createdCrowdaction = await crowdactionService.CreateCrowdactionInternal(newCrowdaction, CancellationToken.None).ConfigureAwait(false);
+            Assert.NotNull(createdCrowdaction);
+            
             const string QueryCrowdactions = @"
                 query {
                     crowdactions {
@@ -35,7 +44,7 @@ namespace CollAction.Tests.Integration.Endpoint
                     }
                 }";
 
-            HttpResponseMessage response = await PerformGraphQlQuery(TestServer, QueryCrowdactions, null).ConfigureAwait(false);
+            HttpResponseMessage response = await PerformGraphQlQuery(QueryCrowdactions, null).ConfigureAwait(false);
             string content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             Assert.True(response.IsSuccessStatusCode, content);
             JsonDocument result = JsonDocument.Parse(content);
@@ -55,7 +64,7 @@ namespace CollAction.Tests.Integration.Endpoint
                     }
                 }";
             dynamic variables = new { crowdactionId };
-            response = await PerformGraphQlQuery(TestServer, QueryCrowdaction, variables);
+            response = await PerformGraphQlQuery(QueryCrowdaction, variables);
             content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             Assert.True(response.IsSuccessStatusCode, content);
             result = JsonDocument.Parse(content);
@@ -83,7 +92,7 @@ namespace CollAction.Tests.Integration.Endpoint
                   }
                 }";
 
-            HttpResponseMessage response = await PerformGraphQlQuery(TestServer, QueryCrowdactions, null).ConfigureAwait(false);
+            HttpResponseMessage response = await PerformGraphQlQuery(QueryCrowdactions, null).ConfigureAwait(false);
             string content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             Assert.True(response.IsSuccessStatusCode, content);
             JsonDocument result = JsonDocument.Parse(content);
@@ -142,28 +151,9 @@ namespace CollAction.Tests.Integration.Endpoint
             Assert.Throws<KeyNotFoundException>(() => result.RootElement.GetProperty("errors"));
         }
 
-        private static async Task<HttpResponseMessage> PerformGraphQlQuery(TestServer TestServer, string query, dynamic variables)
+        protected override void ConfigureReplacementServicesProvider(IServiceCollection collection)
         {
-            using var httpClient = TestServer.CreateClient();
-            return await PerformGraphQlQuery(httpClient, query, variables);
-        }
-
-        private static async Task<HttpResponseMessage> PerformGraphQlQuery(HttpClient httpClient, string query, dynamic variables)
-        {
-            // Test with columns provided
-            string jsonBody =
-                JsonSerializer.Serialize(
-                    new
-                    {
-                        query,
-                        variables
-                    });
-            var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
-
-            using (content)
-            {
-                return await httpClient.PostAsync(new Uri("/graphql", UriKind.Relative), content, CancellationToken.None).ConfigureAwait(false);
-            }
+            collection.AddTransient(s => new Mock<IEmailSender>().Object);
         }
     }
 }
