@@ -228,7 +228,7 @@ namespace CollAction.Services.Crowdactions
             return id;
         }
 
-        public async Task<CrowdactionResult> UpdateCrowdaction(UpdatedCrowdaction updatedCrowdaction, ClaimsPrincipal user, CancellationToken token)
+        public async Task<CrowdactionResult> UpdateCrowdaction(UpdatedCrowdaction updatedCrowdaction, CancellationToken token)
         {
             logger.LogInformation("Validating updated crowdaction");
 
@@ -236,11 +236,6 @@ namespace CollAction.Services.Crowdactions
             if (validationResults.Any())
             {
                 return new CrowdactionResult(validationResults);
-            }
-
-            if (!user.IsInRole(AuthorizationConstants.AdminRole))
-            {
-                return new CrowdactionResult(new ValidationResult("User is not allowed to update crowdaction"));
             }
 
             ApplicationUser? owner = await userManager.FindByIdAsync(updatedCrowdaction.OwnerId).ConfigureAwait(false);
@@ -496,13 +491,8 @@ namespace CollAction.Services.Crowdactions
             return crowdactionComment;
         }
 
-        public async Task DeleteComment(int commentId, ClaimsPrincipal user, CancellationToken token)
+        public async Task DeleteComment(int commentId, CancellationToken token)
         {
-            if (!user.IsInRole(AuthorizationConstants.AdminRole))
-            {
-                throw new InvalidOperationException("User is not allowed to delete crowdaction comment");
-            }
-
             CrowdactionComment comment = await context.CrowdactionComments.SingleAsync(c => c.Id == commentId, token).ConfigureAwait(false);
             context.CrowdactionComments.Remove(comment);
             await context.SaveChangesAsync(token).ConfigureAwait(false);

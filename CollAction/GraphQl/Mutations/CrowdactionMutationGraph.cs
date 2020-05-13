@@ -40,7 +40,7 @@ namespace CollAction.GraphQl.Mutations
                     var context = c.GetUserContext();
                     return await context.ServiceProvider
                                         .GetRequiredService<ICrowdactionService>()
-                                        .UpdateCrowdaction(crowdaction, context.User, c.CancellationToken)
+                                        .UpdateCrowdaction(crowdaction, c.CancellationToken)
                                         .ConfigureAwait(false);
                 }).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
 
@@ -110,10 +110,10 @@ namespace CollAction.GraphQl.Mutations
                     var context = c.GetUserContext();
                     await context.ServiceProvider
                                  .GetRequiredService<ICrowdactionService>()
-                                 .DeleteComment(commentId, context.User, c.CancellationToken)
+                                 .DeleteComment(commentId, c.CancellationToken)
                                  .ConfigureAwait(false);
                     return true;
-                });
+                }).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
 
             FieldAsync<CrowdactionResultGraph, CrowdactionResult>(
                 "sendCrowdactionEmail",

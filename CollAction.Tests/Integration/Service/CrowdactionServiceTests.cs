@@ -12,6 +12,7 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -68,11 +69,8 @@ namespace CollAction.Tests.Integration.Service
                        ICrowdactionService crowdactionService = scope.ServiceProvider.GetRequiredService<ICrowdactionService>();
                        ApplicationDbContext context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                        SignInManager<ApplicationUser> signInManager = scope.ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>();
-                       UserManager<ApplicationUser> userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
                        Crowdaction currentCrowdaction = await context.Crowdactions.Include(c => c.Owner).FirstAsync(c => c.OwnerId != null).ConfigureAwait(false);
-                       var admin = (await userManager.GetUsersInRoleAsync(AuthorizationConstants.AdminRole).ConfigureAwait(false)).First();
-                       var adminClaims = await signInManager.CreateUserPrincipalAsync(admin).ConfigureAwait(false);
                        var owner = await signInManager.CreateUserPrincipalAsync(currentCrowdaction.Owner ?? throw new InvalidOperationException("Owner is null")).ConfigureAwait(false);
                        var r = new Random();
                        var updatedCrowdaction =
@@ -97,7 +95,7 @@ namespace CollAction.Tests.Integration.Service
                                Status = CrowdactionStatus.Running,
                                Target = 33
                            };
-                       var newCrowdactionResult = await crowdactionService.UpdateCrowdaction(updatedCrowdaction, adminClaims, CancellationToken.None).ConfigureAwait(false);
+                       var newCrowdactionResult = await crowdactionService.UpdateCrowdaction(updatedCrowdaction, CancellationToken.None).ConfigureAwait(false);
                        Assert.IsTrue(newCrowdactionResult.Succeeded);
                        int? newCrowdactionId = newCrowdactionResult.Crowdaction?.Id;
                        Assert.IsNotNull(newCrowdactionId);
@@ -106,7 +104,34 @@ namespace CollAction.Tests.Integration.Service
                        Assert.IsNotNull(retrievedCrowdaction);
                        Assert.AreEqual(updatedCrowdaction.Name, retrievedCrowdaction.Name);
                        Assert.IsTrue(Enumerable.SequenceEqual(updatedCrowdaction.Tags.OrderBy(t => t), retrievedCrowdaction.Tags.Select(t => t.Tag.Name).OrderBy(t => t)));
+
+                       await crowdactionService.DeleteCrowdaction(newCrowdactionId ?? -1, CancellationToken.None).ConfigureAwait(false);
+                       retrievedCrowdaction = await context.Crowdactions.Include(c => c.Tags).ThenInclude(t => t.Tag).FirstOrDefaultAsync(c => c.Id == newCrowdactionId).ConfigureAwait(false);
+                       Assert.AreEqual(CrowdactionStatus.Deleted, retrievedCrowdaction.Status);
                    });
+
+        [TestMethod]
+        public Task TestCommentCreate()
+            => WithServiceProvider(
+                async scope =>
+                {
+                    ICrowdactionService crowdactionService = scope.ServiceProvider.GetRequiredService<ICrowdactionService>();
+                    ApplicationDbContext context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                    var signInManager = scope.ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>();
+
+                    ApplicationUser user = await context.Users.FirstAsync().ConfigureAwait(false);
+                    ClaimsPrincipal userPrincipal = await signInManager.CreateUserPrincipalAsync(user).ConfigureAwait(false);
+                    Crowdaction currentCrowdaction = await context.Crowdactions.Include(c => c.Owner).FirstAsync().ConfigureAwait(false);
+
+                    CrowdactionComment firstComment = await crowdactionService.CreateComment("test test", currentCrowdaction.Id, userPrincipal, CancellationToken.None).ConfigureAwait(false);
+                    Assert.IsNotNull(firstComment);
+
+                    await Assert.ThrowsExceptionAsync<InvalidOperationException>(() => crowdactionService.CreateComment("test test<script />", currentCrowdaction.Id, userPrincipal, CancellationToken.None)).ConfigureAwait(false);
+
+                    await crowdactionService.DeleteComment(firstComment.Id, CancellationToken.None).ConfigureAwait(false);
+                    CrowdactionComment retrievedComment = await context.CrowdactionComments.FirstOrDefaultAsync(c => c.Id == firstComment.Id).ConfigureAwait(false);
+                    Assert.IsNull(retrievedComment);
+                });
 
         [TestMethod]
         public Task TestCrowdactionCommitAnonymous()

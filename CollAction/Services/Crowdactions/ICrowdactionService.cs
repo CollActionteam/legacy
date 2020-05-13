@@ -15,7 +15,7 @@ namespace CollAction.Services.Crowdactions
 
         Task<Crowdaction> CreateCrowdactionInternal(NewCrowdactionInternal newCrowdaction, CancellationToken token);
 
-        Task<CrowdactionResult> UpdateCrowdaction(UpdatedCrowdaction updatedCrowdaction, ClaimsPrincipal user, CancellationToken token);
+        Task<CrowdactionResult> UpdateCrowdaction(UpdatedCrowdaction updatedCrowdaction, CancellationToken token);
 
         Task<int> DeleteCrowdaction(int id, CancellationToken token);
 
@@ -29,7 +29,7 @@ namespace CollAction.Services.Crowdactions
 
         Task<CrowdactionComment> CreateComment(string comment, int crowdactionId, ClaimsPrincipal user, CancellationToken token);
 
-        Task DeleteComment(int commentId, ClaimsPrincipal user, CancellationToken token);
+        Task DeleteComment(int commentId, CancellationToken token);
 
         bool CanSendCrowdactionEmail(Crowdaction crowdaction);
 
