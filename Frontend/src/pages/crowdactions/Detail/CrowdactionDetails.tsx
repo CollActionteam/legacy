@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import gql from "graphql-tag";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Container, Grid, FormControl, TextField } from "@material-ui/core";
-import { Form, useFormik, FormikContext } from "formik";
+import { Container, Grid } from "@material-ui/core";
+import { Form, useFormik, FormikContext, Field } from "formik";
 import * as Yup from "yup";
 
 import { ICrowdaction } from "../../../api/types";
@@ -25,6 +25,7 @@ import { CrowdactionStarter } from "../../../components/CrowdactionStarter/Crowd
 import { Helmet } from "react-helmet";
 import Formatter from "../../../formatter";
 import LazyImage from "../../../components/LazyImage/LazyImage";
+import { TextField } from "formik-material-ui";
 
 type TParams = {
   slug: string,
@@ -232,22 +233,21 @@ const CrowdactionDetailsPage = ({ match } : RouteComponentProps<TParams>): any =
                     <FormikContext.Provider value={formik}>
                       <Form className={styles.form} onSubmit={formik.handleSubmit}>
                         { user === null ?
-                            <>
+                            <React.Fragment>
                               <span>
                                 Want to participate? Enter your e-mail address and join
                                 this crowdaction!
                               </span>
-                              <FormControl>
-                                <TextField
+                              <div className={styles.signupInput}>
+                                <Field
                                   name="email"
-                                  className={styles.formControl}
                                   label="Your e-mail address"
-                                  type="e-mail"
-                                  { ...formik.getFieldProps('email') }
-                                />
-                                { (formik.touched.email && formik.errors.email) ? <Alert type="error" text={formik.errors.email} /> : null }
-                              </FormControl>
-                            </> :
+                                  component={TextField}
+                                  fullWidth
+                                >                                  
+                                </Field>
+                              </div>
+                            </React.Fragment> :
                             <span>
                               <input type="hidden" name="email" { ...formik.getFieldProps('email') } />
                               Want to participate? Join this crowdaction!
