@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FormGroup, FormControl, TextField, Grid, Dialog, DialogTitle, DialogContent, DialogActions, makeStyles } from "@material-ui/core";
-import { useFormik, Form, FormikContext } from "formik";
+import { useFormik, Form, FormikContext, Field } from "formik";
+import { TextField as FormikTextField } from 'formik-material-ui';
 import { useUser } from "../../providers/UserProvider";
 import * as Yup from "yup";
 import { Alert } from "../Alert/Alert";
@@ -205,12 +206,15 @@ const InnerDonationCard = () => {
             type: ""
         },
         validationSchema: Yup.object({
-            email: Yup.string().required("Please enter your E-Mail address").email("Please enter a valid E-Mail address"),
-            name: Yup.string().required("Please provide your name"),
+            name: Yup.string().required("Please enter your name"),
+            email: Yup.string().required("Please enter your e-mail address").email("Please enter a valid e-mail address"),
             recurring: Yup.boolean(),
             amount: Yup.number().min(1, "Your donation amount must be positive").typeError("You must specify a number as donation amount"),
             type: Yup.string()
         }),
+        validateOnChange: false,
+        validateOnMount: false,
+        validateOnBlur: true,
         onSubmit: async (values) => {
             if (values.type === "popup") {
                 setBankingPopupOpen(true);
@@ -258,36 +262,40 @@ const InnerDonationCard = () => {
 
     return <div className={styles.card}>
         <Alert type="error" text={error} />
+
         <h2>Help us reach our mission by donating!</h2>
-        CollAction aims to move millions of people to act for good. We're a small team of passionate volunteers and we keep cost super low - but some costs are involved in maintaining and growing the platform. With your support we can grow this crowdacting movement and safeguard our independence. Many thanks for your help!
+        <p>
+            CollAction aims to move millions of people to act for good. We're a small team of passionate volunteers and we keep cost super low - 
+            but some costs are involved in maintaining and growing the platform.
+            With your support we can grow this crowdacting movement and safeguard our independence. Many thanks for your help!
+        </p>
         <FormikContext.Provider value={formik}>
             <Form onSubmit={formik.handleSubmit} className={styles.donationForm}>
                 <FormGroup>
                     { user?.fullName ?
                         null :
-                        <FormControl fullWidth>
-                            <TextField
+                        <div className={styles.formRow}>                            
+                            <Field
                                 name="name"
                                 label="Name"
-                                type="text"
+                                component={FormikTextField}
                                 fullWidth
-                                { ...formik.getFieldProps('name') }
-                            />
-                            { formik.touched.name ? <Alert type="error" text={formik.errors.name} /> : null }
-                        </FormControl>
+                            >                            
+                            </Field>
+                        </div>
                     }
                     { user?.email ?
                         null :
-                        <FormControl fullWidth>
-                            <TextField
+                        <div className={styles.formRow}>
+                            <Field
                                 name="email"
-                                label="E-Mail"
-                                type="text"
+                                label="E-mail"
+                                type="email"
+                                component={FormikTextField}
                                 fullWidth
-                                { ...formik.getFieldProps('email') }
-                            />
-                            { formik.touched.email ? <Alert type="error" text={formik.errors.email} /> : null }
-                        </FormControl>
+                            >
+                            </Field>
+                        </div>
                     }
                     <br />
                     <Grid container className={styles.paymentSelectionOptions}>
