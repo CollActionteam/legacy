@@ -4,9 +4,15 @@
     display: flex;
     align-items: center;
     height: 380px;
-    background-image: url(../../../assets/find-crowdactions.jpg);
+    background-image: 
+        linear-gradient(
+            rgba(0, 0, 0, 0.2),
+            rgba(0, 0, 0, 0.2)
+        ), 
+        url(../../../assets/find-crowdactions.jpg);
     background-size: cover;
     background-position: center;
+        
 }
 
 .filter {
@@ -19,7 +25,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        font-size: var(--font-size-md);
+        font-size: var(--font-size-md-2);
     }
 
     @include breakpoint-down(sm) {
@@ -65,8 +71,6 @@
         pointer-events: none;
     }
 
-    @include breakpoint-down(lg) {
-        padding-top: var(--spacing);
-        padding-bottom: var(--spacing);
-    }
+    padding-top: var(--spacing);
+    padding-bottom: var(--spacing);
 }

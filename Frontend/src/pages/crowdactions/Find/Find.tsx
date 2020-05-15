@@ -38,7 +38,6 @@ const FindPage = () => {
         <Section className={styles.banner}>
           <div className={styles.filter}>
             <span>Show me</span>
-
             <div className={styles.selectWrapper}>
               <select value={category} onChange={handleCategoryChange}>
                 <option value="">All</option>
@@ -51,9 +50,9 @@ const FindPage = () => {
               </select>
               <FontAwesomeIcon icon="angle-down"></FontAwesomeIcon>
             </div>
-
-            <span>crowdactions which are</span>
-
+            <span>crowdactions</span>
+            <br/>
+            <span>which are</span>
             <div className={styles.selectWrapper}>
               <select value={status} onChange={handleStatusChange}>
                 <option value={CrowdactionStatusFilter.Open}>Open</option>
