@@ -129,75 +129,82 @@ const RegisterUserPage = () => {
                     <Alert type="info" text={infoMessage} />
                     <FormikProvider value={formik}>
                         <Form onSubmit={formik.handleSubmit}>
-                            <Field
-                                name="firstName"
-                                label="First name"
-                                component={TextField}
-                                className={styles.formRow}
-                                fullWidth
-                            ></Field>
-                            <Field
-                                name="lastName"
-                                label="Last name"
-                                component={TextField}
-                                className={styles.formRow}
-                                fullWidth
-                            ></Field>
-                            <Field
-                                name="email"
-                                label="E-mail address"
-                                component={TextField}
-                                className={styles.formRow}
-                                fullWidth
-                            ></Field>
-                            <Field
-                                name="confirmEmail"
-                                label="Confirm e-mail address"
-                                component={TextField}
-                                className={styles.formRow}
-                                fullWidth
-                            ></Field>
-                            <Field
-                                name="password"
-                                label="Password"
-                                component={TextField}
-                                type="password"
-                                className={styles.formRow}
-                                fullWidth
-                            ></Field>
-                            <Field
-                                name="confirmPassword"
-                                label="Confirm your password"
-                                component={TextField}
-                                type="password"
-                                className={styles.formRow}
-                                fullWidth
-                            ></Field>
-
-                            <FormControlLabel
-                                control={
-                                    <Field 
-                                        name="isSubscribedNewsletter" 
-                                        type="checkbox"
-                                        color="primary"
-                                        component={Checkbox}
-                                    ></Field>}
-                                label={<span>I would like to receive an update from CollAction every once in a while - don't worry, we like spam as little as you do! <span role="img" aria-label="smiley">🙂</span></span>}
-                                className={styles.formRow} />
-
-                            <FormGroup className={styles.formRow}>
+                            <div className={styles.formRow}>
+                                <Field
+                                    name="firstName"
+                                    label="First name"
+                                    component={TextField}
+                                    fullWidth
+                                ></Field>
+                            </div>
+                            <div className={styles.formRow}>
+                                <Field
+                                    name="lastName"
+                                    label="Last name"
+                                    component={TextField}
+                                    fullWidth
+                                ></Field>
+                            </div>
+                            <div className={styles.formRow}>
+                                <Field
+                                    name="email"
+                                    label="E-mail address"
+                                    component={TextField}
+                                    fullWidth
+                                ></Field>
+                            </div>
+                            <div className={styles.formRow}>
+                                <Field
+                                    name="confirmEmail"
+                                    label="Confirm e-mail address"
+                                    component={TextField}
+                                    fullWidth
+                                ></Field>
+                            </div>
+                            <div className={styles.formRow}>
+                                <Field
+                                    name="password"
+                                    label="Password"
+                                    component={TextField}
+                                    type="password"
+                                    fullWidth
+                                ></Field>
+                            </div>
+                            <div className={styles.formRow}>
+                                <Field
+                                    name="confirmPassword"
+                                    label="Confirm your password"
+                                    component={TextField}
+                                    type="password"
+                                    fullWidth
+                                ></Field>
+                            </div>
+                            <div className={styles.formRow}>
                                 <FormControlLabel
                                     control={
                                         <Field 
-                                            name="privacyPolicy" 
+                                            name="isSubscribedNewsletter" 
                                             type="checkbox"
                                             color="primary"
                                             component={Checkbox}
                                         ></Field>}
-                                    label={<span>I've read and agreed to the <Link to="/privacy-policy" target="_blank">privacy policy</Link></span>} />
-                                <FormHelperText error={true}>{formik.touched.privacyPolicy && formik.errors.privacyPolicy}</FormHelperText>
-                            </FormGroup>
-                        
+                                    label={<span>I would like to receive an update from CollAction every once in a while - don't worry, we like spam as little as you do! <span role="img" aria-label="smiley">🙂</span></span>}
+                                />
+                            </div>
+                            <div className={styles.formRow}>
+                                <FormGroup>
+                                    <FormControlLabel
+                                        control={
+                                            <Field 
+                                                name="privacyPolicy" 
+                                                type="checkbox"
+                                                color="primary"
+                                                component={Checkbox}
+                                            ></Field>}
+                                        label={<span>I've read and agreed to the <Link to="/privacy-policy" target="_blank">privacy policy</Link></span>} />
+                                    <FormHelperText error={true}>{formik.touched.privacyPolicy && formik.errors.privacyPolicy}</FormHelperText>
+                                </FormGroup>
+                            </div>
                             <div className={styles.formRow}>
                                 <div className={styles.submit}>
                                     { formik.isSubmitting

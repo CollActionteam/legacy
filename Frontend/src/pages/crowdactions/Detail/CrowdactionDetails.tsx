@@ -238,7 +238,7 @@ const CrowdactionDetailsPage = ({ match } : RouteComponentProps<TParams>): any =
                                 Want to participate? Enter your e-mail address and join
                                 this crowdaction!
                               </span>
-                              <div className={styles.signupInput}>
+                              <div className={styles.formRow}>
                                 <Field
                                   name="email"
                                   label="Your e-mail address"

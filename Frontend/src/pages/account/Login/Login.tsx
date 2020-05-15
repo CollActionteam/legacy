@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Button } from "../../../components/Button/Button";
 import { Section } from "../../../components/Section/Section";
 import { Alert } from "../../../components/Alert/Alert";
@@ -7,7 +7,6 @@ import styles from "./Login.module.scss";
 
 import {
   Grid,
-  TextField,
   FormControl,
   FormControlLabel,
   Checkbox,
@@ -15,6 +14,9 @@ import {
 } from "@material-ui/core";
 import { useSettings } from "../../../providers/SettingsProvider";
 import { Helmet } from "react-helmet";
+import { useFormik, Field, FormikContext, Form } from "formik";
+import * as Yup from "yup";
+import { TextField } from "formik-material-ui";
 
 const LoginPage = () => {
   const actionLogin = `${process.env.REACT_APP_BACKEND_URL}/account/login`;
@@ -26,14 +28,32 @@ const LoginPage = () => {
   const returnUrlQuery = searchParams.get("returnUrl") ?? "";  
   const returnUrl = `${!returnUrlQuery.startsWith('http') ? window.location.origin : ""}${returnUrlQuery}`;
   
-  const errorType = searchParams.get("error");
   const errorMessage = searchParams.get("message");
 
   const { externalLoginProviders } = useSettings();
-  if (errorType && errorMessage)
-  {
-    console.error({ errorType, errorMessage });
-  }
+
+  const form = useRef(null) as any;
+  const formik = useFormik({
+    initialValues: {
+      Email: '',
+      Password: ''
+    },
+    validationSchema: Yup.object({
+      Email: Yup.string()
+        .required("Please enter your e-mail address")
+        .email("Please enter a valid e-mail address"),
+      Password: Yup.string()
+        .required("Please enter your password")
+    }),
+    validateOnChange: false,
+    validateOnMount: false,
+    validateOnBlur: true,
+    onSubmit: (values, actions) => {
+      // Use a normal form post here
+      actions.setSubmitting(false);
+      form.current.submit();
+    }
+  });
 
   return (
     <>
@@ -73,24 +93,42 @@ const LoginPage = () => {
             <div className={styles.divider}>
               <span>or</span>
             </div>
-            <form method="post" action={actionLogin}>
+            <FormikContext.Provider value={formik}>
               <FormGroup>
-                <FormControl margin="normal">
-                  <TextField
-                    name="Email"
-                    className={styles.formControl}
-                    label="E-mail"
-                  />
-                </FormControl>
-                <FormControl margin="normal">
-                  <TextField
-                    name="Password"
-                    className={styles.formControl}
-                    label="Password"
-                    type="password"
-                  />
-                </FormControl>
-                <FormControlLabel
+                <Form className={styles.form} method="POST" action={actionLogin} ref={form}>
+                  <input type="hidden" name="returnUrl" value={returnUrl} />
+                  <input type="hidden" name="errorUrl" value={errorUrl} />
+                  <div className={styles.formRow}>
+                    <Field
+                      name="Email"
+                      label="E-mail"
+                      component={TextField}
+                      fullWidth
+                    >                      
+                    </Field>
+                  </div>
+                  <div className={styles.formRow}>
+                    <Field
+                      name="Password"
+                      label="Password"
+                      component={TextField}
+                      type="password"
+                      fullWidth
+                    >                      
+                    </Field>
+                  </div>
+                  <div className={styles.formRow}>
+                    <div className={styles.login}>
+                      <Button type="submit">Login</Button>
+                    </div>
+                  </div>
+                </Form>
+                <Link to="/account/register-user">Register as new user</Link>
+                <Link to="/account/forgot-password">I forgot my password</Link>
+              </FormGroup>
+            </FormikContext.Provider>
+
+                {/* <FormControlLabel
                   control={<Checkbox color="default" />}
                   label="Remember me"
                 />
@@ -107,7 +145,7 @@ const LoginPage = () => {
                 <Link to="/account/register-user">Register as new user</Link>
                 <Link to="/account/forgot-password">I forgot my password</Link>
               </FormGroup>
-            </form>
+            </form> */}
           </Grid>
         </Grid>
       </Section>
