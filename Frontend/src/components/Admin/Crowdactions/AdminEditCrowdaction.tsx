@@ -138,9 +138,9 @@ export default ({ crowdactionId } : IEditCrowdactionProps): any => {
                         status: values.status,
                         tags: values.tags.split(';').filter((i: string | null) => i),
                         ownerId: values.ownerId === "" ? null : values.ownerId,
-                        bannerImageFileId: uploads.banner ?? data.crowdaction.bannerImage?.Id,
+                        bannerImageFileId: uploads.banner ?? data.crowdaction.bannerImage?.id,
                         cardImageFileId: uploads.card ?? data.crowdaction.cardImage?.id,
-                        descriptiveImageFileId: uploads.descriptive ?? data.crowdaction.descriptiveImage?.Id
+                        descriptiveImageFileId: uploads.descriptive ?? data.crowdaction.descriptiveImage?.id
                     }
                 }
             });
