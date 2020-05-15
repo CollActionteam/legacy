@@ -1,21 +1,43 @@
 import React, { useState } from "react";
 import { Section } from "../../../components/Section/Section";
 import { Alert } from "../../../components/Alert/Alert";
-import { Grid, FormGroup, TextField } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import { gql, useMutation } from "@apollo/client";
 import styles from "./ForgotPassword.module.scss";
 import { Button } from "../../../components/Button/Button";
 import { Helmet } from "react-helmet";
+import { useFormik, FormikContext, Form, Field } from "formik";
+import * as Yup from "yup";
+import { TextField } from "formik-material-ui";
 
 const ForgotPasswordPage = () => {
+
     const [ errorMessage, setErrorMessage ] = useState<string | null>(null);
     const [ infoMessage, setInfoMessage ] = useState<string | null>(null);
-    const [ email, setEmail ] = useState("");
+
+    const formik = useFormik({
+        initialValues: {
+            email: ''
+        },
+        validationSchema: Yup.object({
+            email: Yup.string()
+                .required("Please enter your e-mail address")
+                .email("Please enter a valid e-mail address")
+        }),
+        validateOnChange: false,
+        validateOnMount: false,
+        validateOnBlur: true,
+        onSubmit: (values, actions) => {
+            forgotPassword();
+            actions.setSubmitting(false);
+        }
+    });
+
     const [ forgotPassword ] = useMutation(
         FORGOT_PASSWORD,
         {
             variables: {
-                email: email
+                email: formik.values.email
             },
             onCompleted: (data) => {
                 if (data.user.forgotPassword.succeeded) {
@@ -32,6 +54,7 @@ const ForgotPasswordPage = () => {
             }
         }
     );
+
     return <>
         <Helmet>
             <title>Forgot Password CollAction</title>
@@ -43,12 +66,28 @@ const ForgotPasswordPage = () => {
         <Section color="grey">
             <Grid container justify="center">
                 <Grid item sm={6}>
-                    <Alert type="error" text={errorMessage} />
-                    <Alert type="info" text={infoMessage} />
-                    <FormGroup>
-                        <TextField margin="normal" onChange={(action) => setEmail(action.target.value)} value={email} required label="E-Mail Address" type="email" />
-                        <Button onClick={() => forgotPassword()}>Reset my password</Button>
-                    </FormGroup>
+                    <FormikContext.Provider value={formik}>
+                        <Alert type="error" text={errorMessage} />
+                        <Alert type="info" text={infoMessage} />
+
+                        <Form>
+                            <div className={styles.formRow}>
+                                <Field
+                                    name="email"                      
+                                    label="E-mail"
+                                    component={TextField}
+                                    type="email"
+                                    fullWidth
+                                    >                      
+                                </Field>
+                            </div>
+                            <div className={styles.formRow}>
+                                <div className={styles.submit}>
+                                    <Button type="submit">Reset my password</Button>
+                                </div>
+                            </div>
+                        </Form>
+                    </FormikContext.Provider>
                 </Grid>
             </Grid>
         </Section>

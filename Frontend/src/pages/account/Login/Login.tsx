@@ -35,14 +35,14 @@ const LoginPage = () => {
   const form = useRef(null) as any;
   const formik = useFormik({
     initialValues: {
-      Email: '',
-      Password: ''
+      email: '',
+      password: ''
     },
     validationSchema: Yup.object({
-      Email: Yup.string()
+      email: Yup.string()
         .required("Please enter your e-mail address")
         .email("Please enter a valid e-mail address"),
-      Password: Yup.string()
+      password: Yup.string()
         .required("Please enter your password")
     }),
     validateOnChange: false,
@@ -100,16 +100,17 @@ const LoginPage = () => {
                   <input type="hidden" name="errorUrl" value={errorUrl} />
                   <div className={styles.formRow}>
                     <Field
-                      name="Email"
+                      name="email"                      
                       label="E-mail"
                       component={TextField}
+                      type="email"
                       fullWidth
                     >                      
                     </Field>
                   </div>
                   <div className={styles.formRow}>
                     <Field
-                      name="Password"
+                      name="password"
                       label="Password"
                       component={TextField}
                       type="password"
@@ -118,7 +119,7 @@ const LoginPage = () => {
                     </Field>
                   </div>
                   <div className={styles.formRow}>
-                    <div className={styles.login}>
+                    <div className={styles.submit}>
                       <Button type="submit">Login</Button>
                     </div>
                   </div>
