@@ -1,22 +1,16 @@
+import { FormControl, FormGroup, Grid } from "@material-ui/core";
+import { Field, Form, FormikContext, useFormik } from "formik";
+import { TextField } from "formik-material-ui";
 import React, { useRef } from "react";
+import { Helmet } from "react-helmet";
+import { Link, useLocation } from "react-router-dom";
+import * as Yup from "yup";
+import { Alert } from "../../../components/Alert/Alert";
 import { Button } from "../../../components/Button/Button";
 import { Section } from "../../../components/Section/Section";
-import { Alert } from "../../../components/Alert/Alert";
-import { Link, useLocation } from "react-router-dom";
+import { useSettings } from "../../../providers/SettingsProvider";
 import styles from "./Login.module.scss";
 
-import {
-  Grid,
-  FormControl,
-  FormControlLabel,
-  Checkbox,
-  FormGroup,
-} from "@material-ui/core";
-import { useSettings } from "../../../providers/SettingsProvider";
-import { Helmet } from "react-helmet";
-import { useFormik, Field, FormikContext, Form } from "formik";
-import * as Yup from "yup";
-import { TextField } from "formik-material-ui";
 
 const LoginPage = () => {
   const actionLogin = `${process.env.REACT_APP_BACKEND_URL}/account/login`;

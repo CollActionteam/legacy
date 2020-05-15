@@ -1,30 +1,23 @@
-import React, { useState } from "react";
-import { FormGroup, FormControl, TextField, Grid, Dialog, DialogTitle, DialogContent, DialogActions, makeStyles } from "@material-ui/core";
-import { useFormik, Form, FormikContext, Field } from "formik";
+import { gql, useMutation } from "@apollo/client";
+import { Dialog, DialogActions, DialogContent, DialogTitle, FormGroup, Grid, makeStyles } from "@material-ui/core";
+import { Elements, IbanElement, IdealBankElement, useElements, useStripe } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js/pure';
+import { Field, Form, FormikContext, useFormik } from "formik";
 import { TextField as FormikTextField } from 'formik-material-ui';
-import { useUser } from "../../providers/UserProvider";
+import React, { useState } from "react";
+import { Link, useHistory } from "react-router-dom";
 import * as Yup from "yup";
-import { Alert } from "../Alert/Alert";
-import styles from "./DonationCard.module.scss";
 import bankCard from "../../assets/bank-card.png";
 import iDealLogo from "../../assets/i-deal-logo.png";
-import { useMutation, gql } from "@apollo/client";
-import { loadStripe } from '@stripe/stripe-js/pure';
-import { GET_USER } from "../../providers/UserProvider";
-import {
-  Elements,
-  useStripe,
-  IdealBankElement,
-  IbanElement,
-  useElements,
-} from '@stripe/react-stripe-js';
-import { Button } from "../Button/Button";
-import {Link, useHistory} from "react-router-dom";
-import { useConsent, Consent } from "../../providers/ConsentProvider";
-import { useSettings } from "../../providers/SettingsProvider";
 import { useAnalytics } from "../../providers/AnalyticsProvider";
+import { Consent, useConsent } from "../../providers/ConsentProvider";
+import { useSettings } from "../../providers/SettingsProvider";
+import { GET_USER, useUser } from "../../providers/UserProvider";
+import { Alert } from "../Alert/Alert";
+import { Button } from "../Button/Button";
 import LazyImage from "../LazyImage/LazyImage";
 import Loader from "../Loader/Loader";
+import styles from "./DonationCard.module.scss";
 
 type DonationValues = {
     email: string;
