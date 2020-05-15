@@ -4,8 +4,8 @@ import DonationLayout from "../../components/DonationLayout/DonationLayout";
 
 const DonationThankYouPage = () => <>
     <Helmet>
-        <title>Donate To CollAction</title>
-        <meta name="description" content="Donate To CollAction"/>
+        <title>Thank you for supporting CollAction!</title>
+        <meta name="description" content="Thank you for supporting CollAction!"/>
     </Helmet>
     <DonationLayout thankYouPage />
 </>;
