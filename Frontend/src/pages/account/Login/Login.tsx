@@ -10,6 +10,7 @@ import { Button } from "../../../components/Button/Button";
 import { Section } from "../../../components/Section/Section";
 import { useSettings } from "../../../providers/SettingsProvider";
 import styles from "./Login.module.scss";
+import { useConsent, Consent } from "../../../providers/ConsentProvider";
 
 
 const LoginPage = () => {
@@ -25,6 +26,7 @@ const LoginPage = () => {
   const errorMessage = searchParams.get("message");
 
   const { externalLoginProviders } = useSettings();
+  const { consent } = useConsent();
 
   const form = useRef(null) as any;
   const formik = useFormik({
@@ -73,7 +75,7 @@ const LoginPage = () => {
                   value={returnUrl}
                 />
                 <input type="hidden" name="errorUrl" value={errorUrl} />
-                { externalLoginProviders.map(
+                { consent.includes(Consent.Social) && externalLoginProviders.map(
                   (provider: string) => (
                     <FormControl key={provider} margin="normal">
                       <Button name="provider" value={provider}>
