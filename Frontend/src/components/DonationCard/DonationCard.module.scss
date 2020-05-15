@@ -5,6 +5,10 @@
     background-color: white;
     border-radius: 5px;
     box-shadow: 10px 10px 40px -9px rgba(0, 0, 0, 0.55);
+
+    h2 {
+        color: var(--c-green);
+    }
 }
 
 .formRow {
