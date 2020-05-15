@@ -5,6 +5,7 @@ using CollAction.Services.Crowdactions;
 using GraphQL.Authorization;
 using GraphQL.EntityFramework;
 using GraphQL.Types;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CollAction.GraphQl.Queries
@@ -98,6 +99,16 @@ namespace CollAction.GraphQl.Queries
 
                     return c.Source.Percentage;
                 });
+            FieldAsync<NonNullGraphType<IntGraphType>>(
+                "CommentsCount",
+                resolve: async c =>
+                {
+                    return await c.GetUserContext()
+                                  .Context
+                                  .CrowdactionComments
+                                  .CountAsync(cr => cr.Id == c.Source.Id, c.CancellationToken)
+                                  .ConfigureAwait(false);
+                });
             AddNavigationField(nameof(Crowdaction.DescriptiveImage), c => c.Source.DescriptiveImage);
             AddNavigationField(nameof(Crowdaction.BannerImage), c => c.Source.BannerImage);
             AddNavigationField(nameof(Crowdaction.CardImage), c => c.Source.CardImage);
@@ -106,7 +117,7 @@ namespace CollAction.GraphQl.Queries
             AddNavigationListField(nameof(Crowdaction.Categories), c => c.Source.Categories);
             AddNavigationListField(nameof(Crowdaction.Participants), c => c.Source.Participants).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
             AddNavigationListField(nameof(Crowdaction.Tags), c => c.Source.Tags);
-            AddNavigationConnectionField(nameof(Crowdaction.Comments), c => c.Source.Comments);
+            AddNavigationListField(nameof(Crowdaction.Comments), c => c.Source.Comments);
         }
     }
 }
