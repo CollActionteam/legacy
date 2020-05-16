@@ -61,6 +61,7 @@ namespace CollAction.Services.User
                 }
                 else
                 {
+                    await emailSender.SendEmailTemplated(user.Email, "Account Creation", "UserCreated").ConfigureAwait(false);
                     logger.LogInformation("Created user from external login");
                 }
 
