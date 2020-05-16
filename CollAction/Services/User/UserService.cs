@@ -86,6 +86,7 @@ namespace CollAction.Services.User
             if (result.Succeeded)
             {
                 newsletterService.SetSubscriptionBackground(newUser.Email, newUser.IsSubscribedNewsletter);
+                await emailSender.SendEmailTemplated(user.Email, "Account Creation", "UserCreated").ConfigureAwait(false);
                 return new UserResult(user, result);
             }
             else
