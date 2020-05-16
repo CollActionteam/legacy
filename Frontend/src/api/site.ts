@@ -37,11 +37,8 @@ export const siteData = {
           name: "Start Crowdaction",
         },
         {
-          link: "/about",
-          name: "About",
-        },
-        {
-          link: "/account/login"
+          link: "/account/login",
+          name: "Login"
         },
         {
           link: "/account/register-user",
