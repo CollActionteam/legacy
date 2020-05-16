@@ -20,12 +20,12 @@ import ProgressRing from "../../../components/ProgressRing/ProgressRing";
 import { Section } from "../../../components/Section/Section";
 
 import styles from "./CrowdactionDetails.module.scss";
-import DisqusCrowdactionComments from "../../../components/DisqusCrowdactionComments/DisqusCrowdactionComments";
 import { CrowdactionStarter } from "../../../components/CrowdactionStarter/CrowdactionStarter";
 import { Helmet } from "react-helmet";
 import Formatter from "../../../formatter";
 import LazyImage from "../../../components/LazyImage/LazyImage";
 import { TextField } from "formik-material-ui";
+import CrowdactionComments from "../../../components/CrowdactionComments/CrowdactionComments";
 
 type TParams = {
   slug: string,
@@ -272,7 +272,7 @@ const CrowdactionDetailsPage = ({ match } : RouteComponentProps<TParams>): any =
           </Grid>
           <Grid item xs={12}>
             <Container>
-              <DisqusCrowdactionComments crowdaction={crowdaction} />
+              <CrowdactionComments id={crowdactionId} />
             </Container>
           </Grid>
         </Grid>

@@ -13,7 +13,7 @@ namespace CollAction.GraphQl.Queries
 {
     public sealed class MiscellaneousGraph : ObjectGraphType
     {
-        public MiscellaneousGraph(IOptions<NewsletterServiceOptions> newsletterServiceOptions, IOptions<DisqusOptions> disqusOptions, IOptions<StripePublicOptions> stripePublicOptions, IOptions<AnalyticsOptions> analyticsOptions)
+        public MiscellaneousGraph(IOptions<NewsletterServiceOptions> newsletterServiceOptions, IOptions<StripePublicOptions> stripePublicOptions, IOptions<AnalyticsOptions> analyticsOptions)
         {
             FieldAsync<NonNullGraphType<ListGraphType<NonNullGraphType<StringGraphType>>>>(
                 "externalLoginProviders",
@@ -43,10 +43,6 @@ namespace CollAction.GraphQl.Queries
             Field<NonNullGraphType<StringGraphType>>(
                 nameof(newsletterServiceOptions.Value.MailChimpAccount),
                 resolve: c => newsletterServiceOptions.Value.MailChimpAccount);
-
-            Field<NonNullGraphType<StringGraphType>>(
-                nameof(disqusOptions.Value.DisqusSiteId),
-                resolve: c => disqusOptions.Value.DisqusSiteId);
 
             Field<NonNullGraphType<StringGraphType>>(
                 nameof(stripePublicOptions.Value.StripePublicKey),

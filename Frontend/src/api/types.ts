@@ -10,7 +10,6 @@ export interface ISettings {
   mailChimpUserId: string,
   mailChimpAccount: string,
   mailChimpServer: string,
-  disqusSiteId: string;
   stripePublicKey: string;
   externalLoginProviders: string[];
   categories: string[];
@@ -46,7 +45,6 @@ export interface ICrowdactionCategory {
 }
 
 export interface IMiscellaneous {
-  disqusSite: string;
   externalLoginProviders: string[];
   festivalCallToActionVisible: boolean;
 }
