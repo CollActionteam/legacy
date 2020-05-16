@@ -32,7 +32,8 @@ import {
     faTrash,
     faEuroSign,
     faPlus,
-    faMinus
+    faMinus,
+    faShareAlt
 } from "@fortawesome/free-solid-svg-icons";
 import { faEnvelope, faHeart, faUser } from "@fortawesome/free-regular-svg-icons";
 import ConsentDialog from "../ConsentDialog/ConsentDialog";
@@ -57,7 +58,8 @@ library.add(
   faFacebookF,
   faInstagram,
   faYoutube,
-  faLinkedinIn
+  faLinkedinIn,
+  faShareAlt
 );
 
 export default ({ children }: any) => {
