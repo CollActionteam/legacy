@@ -53,7 +53,7 @@ const AboutPage = () => {
             </ul>
         </span>
       </Section>
-      <Section title={t('about.join.title')}>
+      <Section title={t('about.join.title')} anchor="jobs">
         <span className={styles.container} dangerouslySetInnerHTML={{ __html: t('about.join.text') }}></span>
       </Section>
       <Section color="grey" title={t('about.partners.title')} anchor="partners">
