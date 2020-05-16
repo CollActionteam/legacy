@@ -47,9 +47,13 @@ namespace CollAction.Models
                 {
                     return FirstName;
                 }
+                else if (FirstName == null && LastName == null)
+                {
+                    return Email.Substring(0, Email.IndexOf('@', StringComparison.Ordinal));
+                }
                 else
                 {
-                    return $"{FirstName} {LastName}".Trim();
+                    return $"{FirstName} {LastName}";
                 }
             }
         }
