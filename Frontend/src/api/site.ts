@@ -62,10 +62,6 @@ export const siteData = {
           name: "Partners",
         },
         {
-          link: "/about#press",
-          name: "Press",
-        },
-        {
           link: "/donate",
           name: "Donate",
         }
