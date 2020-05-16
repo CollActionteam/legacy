@@ -114,7 +114,7 @@ export const siteData = {
     },
     {
       name: 'LinkedIn',
-      url: 'https://www.linkedin.com/company-beta/15079855',
+      url: 'https://www.linkedin.com/company/stichting-collaction/',
       shareUrl: (url: string) => `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(url)}&source=https%3A%2F%2Fcollaction.org`,
       icon: 'linkedin-in'
     }
