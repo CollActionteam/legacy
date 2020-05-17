@@ -201,10 +201,12 @@ const CrowdactionDetailsPage = ({ match } : RouteComponentProps<TParams>): any =
                   </figure>
                 </div>
               )}
-              <div>
-                <h3 className={styles.header}>Other comments</h3>
-                <p dangerouslySetInnerHTML={comments}></p>
-              </div>
+              { comments && (
+                <div>
+                  <h3 className={styles.header}>Other comments</h3>
+                  <p dangerouslySetInnerHTML={comments}></p>
+                </div>
+              )}
 
               {crowdaction.descriptionVideoLink && (
                 <div className={styles.video}>
@@ -272,6 +274,7 @@ const CrowdactionDetailsPage = ({ match } : RouteComponentProps<TParams>): any =
           </Grid>
           <Grid item xs={12}>
             <Container>
+              <h3 className={styles.header}>User Comments</h3>
               <CrowdactionComments id={crowdactionId} />
             </Container>
           </Grid>

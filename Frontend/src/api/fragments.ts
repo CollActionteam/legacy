@@ -38,6 +38,7 @@ export const Fragments = {
     status
     target
     proposal
+    creatorComments
     remainingTime
     remainingTimeUserFriendly
     canSendCrowdactionEmail
