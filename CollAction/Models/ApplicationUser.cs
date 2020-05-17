@@ -39,11 +39,11 @@ namespace CollAction.Models
         {
             get
             {
-                if (FirstName == null)
+                if (FirstName == null && LastName != null)
                 {
                     return LastName;
                 }
-                else if (LastName == null)
+                else if (LastName == null && FirstName != null)
                 {
                     return FirstName;
                 }
