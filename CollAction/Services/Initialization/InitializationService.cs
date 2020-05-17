@@ -266,7 +266,7 @@ namespace CollAction.Services.Initialization
 
                 context.CrowdactionComments.AddRange(
                     Enumerable.Range(0, r.Next(100))
-                              .Select(i => new CrowdactionComment($"<p>{string.Join("</p><p>", Faker.Lorem.Paragraphs(r.Next(2) + 1))}</p>", userIds[r.Next(userIds.Count)], crowdaction.Id, now.AddHours(-1 * r.Next(24 * 7)))));
+                              .Select(i => new CrowdactionComment(string.Join(Environment.NewLine, Faker.Lorem.Paragraphs(r.Next(2) + 1)), userIds[r.Next(userIds.Count)], crowdaction.Id, now.AddHours(-1 * r.Next(24 * 7)))));
 
                 await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             }
