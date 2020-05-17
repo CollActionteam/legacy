@@ -479,11 +479,6 @@ namespace CollAction.Services.Crowdactions
                 throw new InvalidOperationException($"Crowdaction is not active when adding comment");
             }
 
-            if (!htmlInputValidator.IsSafe(comment))
-            {
-                throw new InvalidOperationException($"Comment does not contain safe html");
-            }
-
             var crowdactionComment = new CrowdactionComment(comment, applicationUser.Id, crowdactionId, DateTime.UtcNow);
             context.CrowdactionComments.Add(crowdactionComment);
             await context.SaveChangesAsync(token).ConfigureAwait(false);
