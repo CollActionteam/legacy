@@ -67,28 +67,33 @@ const LoginPage = () => {
         <Grid container justify="center">
           <Grid item sm={6}>
             <Alert type="error" text={errorMessage} />
-            <form method="post" action={actionExternalLogin}>
-              <FormGroup>
-                <input
-                  type="hidden"
-                  name="returnUrl"
-                  value={returnUrl}
-                />
-                <input type="hidden" name="errorUrl" value={errorUrl} />
-                { consent.includes(Consent.Social) && externalLoginProviders.map(
-                  (provider: string) => (
-                    <FormControl key={provider} margin="normal">
-                      <Button name="provider" value={provider}>
-                        Login with {provider}
-                      </Button>
-                    </FormControl>
-                  )
-                ) }
-              </FormGroup>
-            </form>
-            <div className={styles.divider}>
-              <span>or</span>
-            </div>
+            { consent.includes(Consent.Social) ?
+              <>
+                <form method="post" action={actionExternalLogin}>
+                  <FormGroup>
+                    <input
+                      type="hidden"
+                      name="returnUrl"
+                      value={returnUrl}
+                    />
+                    <input type="hidden" name="errorUrl" value={errorUrl} />
+                    { externalLoginProviders.map(
+                      (provider: string) => (
+                        <FormControl key={provider} margin="normal">
+                          <Button name="provider" value={provider}>
+                            Login with {provider}
+                          </Button>
+                        </FormControl>
+                      )
+                    ) }
+                  </FormGroup>
+                </form>
+                <div className={styles.divider}>
+                  <span>or</span>
+                </div>
+              </> : 
+              null 
+            }
             <FormikContext.Provider value={formik}>
               <FormGroup>
                 <Form className={styles.form} method="POST" action={actionLogin} ref={form}>
