@@ -10,6 +10,7 @@ import NewsletterSubscription from "../../../components/Profile/NewsletterSubscr
 import DeleteAccount from "../../../components/Profile/DeleteAccount";
 import CrowdactionsCreated from "../../../components/Profile/CrowdactionsCreated";
 import { Helmet } from "react-helmet";
+import {Section} from "../../../components/Section/Section";
 
 export default () => {
   const user = useUser();
@@ -65,6 +66,10 @@ export default () => {
       </Grid>
     </div>;
   } else {
-    return <h1>Please log in before viewing your profile</h1>;
+    return <Grid container>
+          <Section>
+              <h1>Please log in before viewing your profile</h1>
+          </Section>
+      </Grid>;
   }
 };
