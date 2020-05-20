@@ -68,13 +68,12 @@ namespace CollAction.Services.Crowdactions
 
             logger.LogInformation("Creating crowdaction: {0}", newCrowdaction.Name);
             var tagMap = new Dictionary<string, int>();
-            if (newCrowdaction.Tags.Any())
+            List<string> tags = newCrowdaction.Tags.Distinct().ToList();
+            if (tags.Any())
             {
-                var missingTags = newCrowdaction
-                    .Tags
-                    .Except(
+                var missingTags = tags.Except(
                         await context.Tags
-                                     .Where(t => newCrowdaction.Tags.Contains(t.Name))
+                                     .Where(t => tags.Contains(t.Name))
                                      .Select(t => t.Name)
                                      .ToListAsync(token).ConfigureAwait(false))
                     .Select(t => new Tag(t));
@@ -86,14 +85,13 @@ namespace CollAction.Services.Crowdactions
                 }
 
                 tagMap = await context.Tags
-                                      .Where(t => newCrowdaction.Tags.Contains(t.Name))
+                                      .Where(t => tags.Contains(t.Name))
                                       .ToDictionaryAsync(t => t.Name, t => t.Id, token).ConfigureAwait(false);
             }
 
             List<CrowdactionTag> crowdactionTags =
-                newCrowdaction.Tags
-                          .Select(t => new CrowdactionTag(tagId: tagMap[t]))
-                          .ToList();
+                tags.Select(t => new CrowdactionTag(tagId: tagMap[t]))
+                    .ToList();
 
             var crowdaction = new Crowdaction(
                 name: newCrowdaction.Name,
@@ -152,13 +150,12 @@ namespace CollAction.Services.Crowdactions
 
             logger.LogInformation("Creating crowdaction: {0}", newCrowdaction.Name);
             var tagMap = new Dictionary<string, int>();
-            if (newCrowdaction.Tags.Any())
+            List<string> tags = newCrowdaction.Tags.Distinct().ToList();
+            if (tags.Any())
             {
-                var missingTags = newCrowdaction
-                    .Tags
-                    .Except(
+                var missingTags = tags.Except(
                         await context.Tags
-                                     .Where(t => newCrowdaction.Tags.Contains(t.Name))
+                                     .Where(t => tags.Contains(t.Name))
                                      .Select(t => t.Name)
                                      .ToListAsync(token).ConfigureAwait(false))
                     .Select(t => new Tag(t));
@@ -170,14 +167,13 @@ namespace CollAction.Services.Crowdactions
                 }
 
                 tagMap = await context.Tags
-                                      .Where(t => newCrowdaction.Tags.Contains(t.Name))
+                                      .Where(t => tags.Contains(t.Name))
                                       .ToDictionaryAsync(t => t.Name, t => t.Id, token).ConfigureAwait(false);
             }
 
             List<CrowdactionTag> crowdactionTags =
-                newCrowdaction.Tags
-                          .Select(t => new CrowdactionTag(tagId: tagMap[t]))
-                          .ToList();
+                tags.Select(t => new CrowdactionTag(tagId: tagMap[t]))
+                    .ToList();
 
             var crowdaction = new Crowdaction(
                 name: newCrowdaction.Name,
