@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { gql, useQuery, useMutation, DataProxy, FetchResult } from "@apollo/client";
 import Loader from "../Loader/Loader";
 import { Card, CardContent, Grid, CardActions, TextField } from "@material-ui/core";
 import Formatter from "../../formatter";
 import { Button } from "../Button/Button";
 import { useUser } from '../../providers/UserProvider';
+import { Alert } from "../Alert/Alert";
 
 interface ICrowdactionCommentsProps {
     id: string;
@@ -62,7 +63,7 @@ export default ({ id }: ICrowdactionCommentsProps) => {
     const user = useUser();
     const [ cursors, setCursors ] = useState<string[]>([]);
     const [ comment, setComment ] = useState("");
-    const { data, loading, fetchMore } = useQuery<any>(
+    const { data, loading, fetchMore, error } = useQuery<any>(
       GET_COMMENTS,
       {
         variables: {
@@ -117,8 +118,16 @@ export default ({ id }: ICrowdactionCommentsProps) => {
         }
       })        
     }
+
+    useEffect(() => {
+      if (error) {
+        console.error(error?.message);
+      }
+    }, [ error ]);
+
     return <>
         <Grid container spacing={4} xs={12}>
+          <Alert type="error" text={error?.message} />
           { loading ? <Grid item xs={12}><Loader /></Grid> : null }
           {
             user ?
