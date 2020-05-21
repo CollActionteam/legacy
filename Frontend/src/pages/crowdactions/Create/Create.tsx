@@ -54,16 +54,26 @@ const CreateCrowdactionPage = () => {
     setSubmitting(true);
     setStatus(null);
 
-    const bannerId = form.banner ? await Utils.uploadImage(form.banner, form.crowdactionName, 1600) : null;
-    const imageId = form.image ? await Utils.uploadImage(form.image, form.imageDescription, 1600) : null;
-    const cardId = form.banner ? await Utils.uploadImage(form.banner, form.crowdactionName, 370) : null;
+    var bannerId: number | null = null;
+    var imageId: number | null = null;
+    var cardId: number | null = null;
+    try {
+      bannerId = form.banner ? await Utils.uploadImage(form.banner, form.crowdactionName, 1600) : null;
+      imageId = form.image ? await Utils.uploadImage(form.image, form.imageDescription, 1600) : null;
+      cardId = form.banner ? await Utils.uploadImage(form.banner, form.crowdactionName, 370) : null;
+    }
+    catch (error) {
+      console.error(error.toString());
+      setStatus([ error ]);
+      return;
+    }
 
     const response = (await createCrowdaction({
       variables: {
         crowdaction: {
           name: form.crowdactionName,
-          bannerImageFileId: bannerId || null,
-          cardImageFileId: cardId || null,
+          bannerImageFileId: bannerId,
+          cardImageFileId: cardId,
           categories: [form.category],
           target: form.target,
           proposal: form.proposal,

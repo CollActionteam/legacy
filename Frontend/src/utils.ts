@@ -9,7 +9,7 @@ export default class Utils {
     );
   }
 
-  static async uploadImage(file: File, description: string, resizeThreshold: number): Promise<any> {
+  static async uploadImage(file: File, description: string, resizeThreshold: number): Promise<number> {
     const body = new FormData();
     body.append('Image', file);
     body.append('ImageDescription', description);
@@ -19,6 +19,11 @@ export default class Utils {
       body,
       credentials: 'include'
     });
-    return response.json();
+    const responseMessage = await response.json();
+    if (response.ok) {
+      return responseMessage.id as number;
+    } else {
+      throw responseMessage;
+    }
   };
 }

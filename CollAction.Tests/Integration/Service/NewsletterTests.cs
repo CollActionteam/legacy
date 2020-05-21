@@ -12,13 +12,16 @@ namespace CollAction.Tests.Integration.Service
     [Trait("Category", "Integration")]
     public sealed class NewsletterServiceTests : IntegrationTestBase
     {
+        private readonly INewsletterService newsletterService;
+
         public NewsletterServiceTests(): base(false)
-        { }
+        {
+            newsletterService = Scope.ServiceProvider.GetRequiredService<INewsletterService>();
+        }
 
         [Fact]
         public async Task TestGetListMemberStatusOnNonExistentMember()
         {
-            var newsletterService = Scope.ServiceProvider.GetRequiredService<INewsletterService>();
             string email = GetTestEmail();
             Assert.False(await newsletterService.IsSubscribedAsync(email).ConfigureAwait(false));
         }
@@ -26,7 +29,6 @@ namespace CollAction.Tests.Integration.Service
         [Fact]
         public async Task TestSubscribeListMemberAsPending()
         {
-            var newsletterService = Scope.ServiceProvider.GetRequiredService<INewsletterService>();
             string email = GetTestEmail();
 
             try
@@ -45,7 +47,6 @@ namespace CollAction.Tests.Integration.Service
         [Fact]
         public async Task TestSubscribeListMemberAsSubscribed()
         {
-            var newsletterService = Scope.ServiceProvider.GetRequiredService<INewsletterService>();
             string email = GetTestEmail();
 
             try
@@ -64,7 +65,6 @@ namespace CollAction.Tests.Integration.Service
         [Fact]
         public async Task TestUnsubscribeExistingListMember()
         {
-            var newsletterService = Scope.ServiceProvider.GetRequiredService<INewsletterService>();
             string email = GetTestEmail();
 
             try
@@ -85,7 +85,6 @@ namespace CollAction.Tests.Integration.Service
         [Fact]
         public async Task TestUnsubscribeSubscribeMultiple()
         {
-            var newsletterService = Scope.ServiceProvider.GetRequiredService<INewsletterService>();
             string email = GetTestEmail();
 
             try
@@ -111,7 +110,6 @@ namespace CollAction.Tests.Integration.Service
         [Fact]
         public async Task TestUnsubscribeNonExistingListMember()
         {
-            var newsletterService = Scope.ServiceProvider.GetRequiredService<INewsletterService>();
             string email = GetTestEmail();
 
             await newsletterService.SetSubscription(email, false, false).ConfigureAwait(false);

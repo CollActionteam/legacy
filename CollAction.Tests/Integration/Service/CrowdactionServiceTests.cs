@@ -21,15 +21,20 @@ namespace CollAction.Tests.Integration.Service
     [Trait("Category", "Integration")]
     public sealed class CrowdactionServiceTests : IntegrationTestBase
     {
+        private readonly ICrowdactionService crowdactionService;
+        private readonly ApplicationDbContext context;
+        private readonly SignInManager<ApplicationUser> signInManager;
+
         public CrowdactionServiceTests() : base(false)
-        { }
+        {
+            crowdactionService = Scope.ServiceProvider.GetRequiredService<ICrowdactionService>();
+            context = Scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            signInManager = Scope.ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>();
+        }
 
         [Fact]
         public async Task TestCrowdactionCreate()
         {
-            ICrowdactionService crowdactionService = Scope.ServiceProvider.GetRequiredService<ICrowdactionService>();
-            ApplicationDbContext context = Scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            SignInManager<ApplicationUser> signInManager = Scope.ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>();
             var user = await context.Users.FirstAsync().ConfigureAwait(false);
             var claimsPrincipal = await signInManager.CreateUserPrincipalAsync(user).ConfigureAwait(false);
             var r = new Random();
@@ -64,9 +69,6 @@ namespace CollAction.Tests.Integration.Service
         [Fact]
         public async Task TestCrowdactionUpdate()
         {
-            ICrowdactionService crowdactionService = Scope.ServiceProvider.GetRequiredService<ICrowdactionService>();
-            SignInManager<ApplicationUser> signInManager = Scope.ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>();
-            ApplicationDbContext context = Scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             var user = await context.Users.FirstAsync().ConfigureAwait(false);
             var newCrowdaction = new NewCrowdactionInternal("test" + Guid.NewGuid(), 100, "test", "test", "test", null, DateTime.UtcNow, DateTime.UtcNow.AddDays(1), null, null, null, null, new[] { Category.Community }, Array.Empty<string>(), CrowdactionDisplayPriority.Bottom, CrowdactionStatus.Running, 0, user.Id);
             Crowdaction crowdaction = await crowdactionService.CreateCrowdactionInternal(newCrowdaction, CancellationToken.None).ConfigureAwait(false);
@@ -115,19 +117,14 @@ namespace CollAction.Tests.Integration.Service
         [Fact]
         public async Task TestCommentCreate()
         {
-            ICrowdactionService crowdactionService = Scope.ServiceProvider.GetRequiredService<ICrowdactionService>();
             var newCrowdaction = new NewCrowdactionInternal("test" + Guid.NewGuid(), 100, "test", "test", "test", null, DateTime.UtcNow, DateTime.UtcNow.AddDays(1), null, null, null, null, new[] { Category.Community }, Array.Empty<string>(), CrowdactionDisplayPriority.Bottom, CrowdactionStatus.Running, 0, null);
             Crowdaction crowdaction = await crowdactionService.CreateCrowdactionInternal(newCrowdaction, CancellationToken.None).ConfigureAwait(false);
             Assert.NotNull(crowdaction);
 
-            SignInManager<ApplicationUser> signInManager = Scope.ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>();
-            ApplicationDbContext context = Scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             ApplicationUser user = await context.Users.FirstAsync().ConfigureAwait(false);
             ClaimsPrincipal userPrincipal = await signInManager.CreateUserPrincipalAsync(user).ConfigureAwait(false);
             CrowdactionComment firstComment = await crowdactionService.CreateComment("test test", crowdaction.Id, userPrincipal, CancellationToken.None).ConfigureAwait(false);
             Assert.NotNull(firstComment);
-
-            await Assert.ThrowsAsync<InvalidOperationException>(() => crowdactionService.CreateComment("test test<script />", crowdaction.Id, userPrincipal, CancellationToken.None)).ConfigureAwait(false);
 
             await crowdactionService.DeleteComment(firstComment.Id, CancellationToken.None).ConfigureAwait(false);
             CrowdactionComment retrievedComment = await context.CrowdactionComments.FirstOrDefaultAsync(c => c.Id == firstComment.Id).ConfigureAwait(false);
@@ -138,8 +135,6 @@ namespace CollAction.Tests.Integration.Service
         public async Task TestCrowdactionCommitAnonymous()
         { 
             // Setup
-            ApplicationDbContext context = Scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            ICrowdactionService crowdactionService = Scope.ServiceProvider.GetRequiredService<ICrowdactionService>();
             var user = await context.Users.FirstAsync().ConfigureAwait(false);
             Crowdaction crowdaction = new Crowdaction($"test-{Guid.NewGuid()}", CrowdactionStatus.Running, user.Id, 10, DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1), "t", "t", "t", null, null);
             context.Crowdactions.Add(crowdaction);
@@ -157,9 +152,6 @@ namespace CollAction.Tests.Integration.Service
         public async Task TestCrowdactionCommitLoggedIn()
         {
             // Setup
-            ApplicationDbContext context = Scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            ICrowdactionService crowdactionService = Scope.ServiceProvider.GetRequiredService<ICrowdactionService>();
-            SignInManager<ApplicationUser> signInManager = Scope.ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>();
             var user = await context.Users.FirstAsync().ConfigureAwait(false);
             var userClaim = await signInManager.CreateUserPrincipalAsync(user).ConfigureAwait(false);
             var crowdaction = new Crowdaction($"test-{Guid.NewGuid()}", CrowdactionStatus.Running, user.Id, 10, DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1), "t", "t", "t", null, null);
@@ -176,9 +168,6 @@ namespace CollAction.Tests.Integration.Service
         [Fact]
         public async Task TestCrowdactionEmail()
         {
-            ICrowdactionService crowdactionService = Scope.ServiceProvider.GetRequiredService<ICrowdactionService>();
-            ApplicationDbContext context = Scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            SignInManager<ApplicationUser> signInManager = Scope.ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>();
             var user = await context.Users.FirstAsync().ConfigureAwait(false);
             var claimsUser = await signInManager.CreateUserPrincipalAsync(user).ConfigureAwait(false);
             var newCrowdaction =
@@ -217,7 +206,6 @@ namespace CollAction.Tests.Integration.Service
         [Fact]
         public async Task TestCrowdactionSearch()
         {
-            ICrowdactionService crowdactionService = Scope.ServiceProvider.GetRequiredService<ICrowdactionService>();
             Random r = new Random();
             Category searchCategory = (Category)r.Next(7);
             for (int i = 0; i < r.Next(10, 30); i++)
