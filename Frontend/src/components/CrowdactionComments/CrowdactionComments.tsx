@@ -137,12 +137,13 @@ export default ({ id }: ICrowdactionCommentsProps) => {
           {
             data?.crowdaction?.comments?.edges?.map((edge: any) => {
                 const comment = edge.node;
+                const commentDate = new Date(comment.commentedAt);
                 return <Grid key={comment.id} item xs={12}>
                   <Card>
                     <CardContent>
                       <h4>{ comment.user.fullName }</h4>
                       {comment.comment.split('\n').map((ic: string) => <p key={ic}>{ ic }</p>) }
-                      <p><em>{ Formatter.date(new Date(comment.commentedAt)) }</em></p>
+                      <p><em>{ Formatter.date(commentDate) } { Formatter.time(commentDate) }</em></p>
                     </CardContent>
                     {
                      user?.isAdmin ?
