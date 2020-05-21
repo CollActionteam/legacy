@@ -21,15 +21,22 @@ namespace CollAction.Tests.Integration.Service
     [Trait("Category", "Integration")]
     public sealed class UserServiceTests : IntegrationTestBase
     {
+        private readonly IUserService userService;
+        private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly ApplicationDbContext context;
+        private readonly ICrowdactionService crowdactionService;
+
         public UserServiceTests() : base(false)
-        { }
+        {
+            userService = Scope.ServiceProvider.GetRequiredService<IUserService>();
+            signInManager = Scope.ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>();
+            context = Scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            crowdactionService = Scope.ServiceProvider.GetRequiredService<ICrowdactionService>();
+        }
 
         [Fact]
         public async Task TestPasswordReset()
         {
-            var userService = Scope.ServiceProvider.GetRequiredService<IUserService>();
-            var signInManager = Scope.ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>();
-
             var (result, code) = await userService.ForgotPassword("nonexistent@collaction.org").ConfigureAwait(false);
             Assert.False(result.Succeeded);
             Assert.Null(code);
@@ -68,9 +75,6 @@ namespace CollAction.Tests.Integration.Service
         [Fact]
         public async Task TestUserManagement()
         {
-            var userService = Scope.ServiceProvider.GetRequiredService<IUserService>();
-            var signInManager = Scope.ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>();
-
             var result = await userService.CreateUser(
                 new NewUser()
                 {
@@ -120,16 +124,11 @@ namespace CollAction.Tests.Integration.Service
         public async Task TestFinishRegistration()
         {
             // Setup
-            var context = Scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             var crowdaction = new Crowdaction($"test-{Guid.NewGuid()}", CrowdactionStatus.Running, await context.Users.Select(u => u.Id).FirstAsync().ConfigureAwait(false), 10, DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1), "t", "t", "t", null, null);
             context.Crowdactions.Add(crowdaction);
             await context.SaveChangesAsync().ConfigureAwait(false);
 
             // Test
-            var userService = Scope.ServiceProvider.GetRequiredService<IUserService>();
-            var signInManager = Scope.ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>();
-            var crowdactionService = Scope.ServiceProvider.GetRequiredService<ICrowdactionService>();
-
             string testEmail = GetTestEmail();
             AddParticipantResult commitResult = await crowdactionService.CommitToCrowdactionAnonymous(testEmail, crowdaction.Id, CancellationToken.None).ConfigureAwait(false);
             Assert.Equal(AddParticipantScenario.AnonymousCreatedAndAdded, commitResult.Scenario);

@@ -22,10 +22,18 @@ namespace CollAction.Tests.Integration.Endpoint
     [Trait("Category", "Integration")]
     public sealed class GraphQlTests : IntegrationTestBase
     {
+        private readonly ICrowdactionService crowdactionService;
+        private readonly SeedOptions seedOptions;
+
+        public GraphQlTests()
+        {
+            crowdactionService = Scope.ServiceProvider.GetRequiredService<ICrowdactionService>();
+            seedOptions = Scope.ServiceProvider.GetRequiredService<IOptions<SeedOptions>>().Value;
+        }
+
         [Fact]
         public async Task TestCrowdactionList()
         {
-            ICrowdactionService crowdactionService = Scope.ServiceProvider.GetRequiredService<ICrowdactionService>();
             var newCrowdaction = new NewCrowdactionInternal("test" + Guid.NewGuid(), 100, "test", "test", "test", null, DateTime.UtcNow, DateTime.UtcNow.AddDays(1), null, null, null, null, new[] { Category.Community }, Array.Empty<string>(), CrowdactionDisplayPriority.Bottom, CrowdactionStatus.Running, 0, null);
             Crowdaction createdCrowdaction = await crowdactionService.CreateCrowdactionInternal(newCrowdaction, CancellationToken.None).ConfigureAwait(false);
             Assert.NotNull(createdCrowdaction);
@@ -98,7 +106,6 @@ namespace CollAction.Tests.Integration.Endpoint
             JsonDocument result = JsonDocument.Parse(content);
             Assert.Equal(1, result.RootElement.GetProperty("errors").GetArrayLength());
 
-            SeedOptions seedOptions = Scope.ServiceProvider.GetRequiredService<IOptions<SeedOptions>>().Value;
             using var httpClient = TestServer.CreateClient();
             // Retry call as admin
             httpClient.DefaultRequestHeaders.Add("Cookie", await GetAuthCookie(httpClient, seedOptions).ConfigureAwait(false));
@@ -141,7 +148,6 @@ namespace CollAction.Tests.Integration.Endpoint
                         }}
                     }}";
 
-            SeedOptions seedOptions = Scope.ServiceProvider.GetRequiredService<IOptions<SeedOptions>>().Value;
             using var httpClient = TestServer.CreateClient();
             httpClient.DefaultRequestHeaders.Add("Cookie", await GetAuthCookie(httpClient, seedOptions).ConfigureAwait(false));
             HttpResponseMessage response = await PerformGraphQlQuery(httpClient, createCrowdaction, null).ConfigureAwait(false);

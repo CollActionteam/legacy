@@ -17,6 +17,16 @@ namespace CollAction.Tests.Integration.Endpoint
     public sealed class ImageEndpointTests : IntegrationTestBase
     {
         private readonly byte[] testImage = new byte[] { 0x42, 0x4D, 0x1E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1A, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x00, 0xFF, 0x00 };
+        private readonly SeedOptions seedOptions;
+        private readonly ApplicationDbContext context;
+        private readonly IImageService imageService;
+
+        public ImageEndpointTests()
+        {
+            seedOptions = Scope.ServiceProvider.GetRequiredService<IOptions<SeedOptions>>().Value;
+            context = Scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            imageService = Scope.ServiceProvider.GetRequiredService<IImageService>();
+        }
 
         [Fact]
         public async Task TestImageUpload()
@@ -27,7 +37,6 @@ namespace CollAction.Tests.Integration.Endpoint
             using var descriptionContent = new StringContent("My Description");
             using var sizeContent = new StringContent("400");
             using var client = TestServer.CreateClient();
-            SeedOptions seedOptions = Scope.ServiceProvider.GetRequiredService<IOptions<SeedOptions>>().Value;
             client.DefaultRequestHeaders.Add("Cookie", await GetAuthCookie(client, seedOptions).ConfigureAwait(false));
             content.Add(streamContent, "Image", "test.png");
             content.Add(descriptionContent, "ImageDescription");
@@ -38,8 +47,6 @@ namespace CollAction.Tests.Integration.Endpoint
             int imageId = int.Parse(body, CultureInfo.InvariantCulture);
 
             // Cleanup
-            var context = Scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            var imageService = Scope.ServiceProvider.GetRequiredService<IImageService>();
             var image = await context.ImageFiles.FindAsync(imageId).ConfigureAwait(false);
             await imageService.DeleteImage(image, CancellationToken.None).ConfigureAwait(false);
        }
