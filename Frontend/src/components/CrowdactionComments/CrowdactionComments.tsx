@@ -89,20 +89,22 @@ export default ({ id }: ICrowdactionCommentsProps) => {
             query: GET_COMMENTS,
             variables: { crowdactionId: id }
           });
-          const newCommentEdge = { node: mutationResult.data?.crowdaction.createComment };
-          cache.writeQuery({
-            query: GET_COMMENTS,
-            variables: { crowdactionId: id },
-            data: {
-              crowdaction: {
-                id: id,
-                comments: {
-                  edges: [ newCommentEdge, ...currentComments.crowdaction.comments.edges ],
-                  pageInfo: currentComments.crowdaction.comments.pageInfo
+          if (mutationResult.data) {
+            const newCommentEdge = { node: mutationResult.data.crowdaction.createComment };
+            cache.writeQuery({
+              query: GET_COMMENTS,
+              variables: { crowdactionId: id },
+              data: {
+                crowdaction: {
+                  id: id,
+                  comments: {
+                    edges: [ newCommentEdge, ...currentComments.crowdaction.comments.edges ],
+                    pageInfo: currentComments.crowdaction.comments.pageInfo
+                  }
                 }
               }
-            }
-          })
+            });
+          }
         }
       });
     const loadMore = () => {
