@@ -18,15 +18,15 @@ export default () => {
   const { t } = useTranslation();
   const { data, loading, error } = useQuery(GET_STATISTICS);
 
-  if (loading) {
-    return <Loader />;
-  }
-
   useEffect(() => {
     if (error) {
       console.error(error);
     }
   }, [ error ]);
+
+  if (loading) {
+    return <Loader />;
+  }
 
   if (error) {
     return <Alert type="error" text={error.message} />

@@ -31,15 +31,15 @@ export default ({ category, status = CrowdactionStatusFilter.Open }: ICrowdactio
         }
   );
 
-  if (loading) {
-    return <Loader />;
-  }
-
   useEffect(() => {
     if (error) {
       console.error(error?.message);
     }
   }, [ error ]);
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <>
