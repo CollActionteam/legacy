@@ -123,6 +123,7 @@ export default ({ crowdactionId } : IEditCrowdactionProps): any => {
             catch (error) {
                 console.log(error.errorMessage);
                 setError(error.errorMessage as string);
+                formik.setSubmitting(false);
                 return;
             }
 
