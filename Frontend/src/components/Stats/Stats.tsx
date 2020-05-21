@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import Grid from '@material-ui/core/Grid';
@@ -12,6 +12,7 @@ import Loader from '../Loader/Loader';
 
 import styles from './Stats.module.scss';
 import Formatter from "../../formatter";
+import { Alert } from '../Alert/Alert';
 
 export default () => {
   const { t } = useTranslation();
@@ -21,9 +22,14 @@ export default () => {
     return <Loader />;
   }
 
-  if(error) {
-    console.error(error);
-    return null;
+  useEffect(() => {
+    if (error) {
+      console.error(error);
+    }
+  }, [ error ]);
+
+  if (error) {
+    return <Alert type="error" text={error.message} />
   }
 
   return (

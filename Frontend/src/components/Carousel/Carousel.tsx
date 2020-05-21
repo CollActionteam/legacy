@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { gql, useQuery } from "@apollo/client";
 import Slider from "react-slick";
 import { Grid, Container } from "@material-ui/core";
@@ -42,8 +42,13 @@ export default ({ title, text }: ICarouselProps) => {
 
   const { data, loading, error } = useQuery(GET_CAROUSEL_CROWDACTIONS);
 
+  useEffect(() => {
+    if (error) {
+      console.error(error.message);
+    }
+  }, [ error ]);
+
   if (error) {
-    console.error(error.message);
     return <Alert type="error" text={error.message} />;
   }
 

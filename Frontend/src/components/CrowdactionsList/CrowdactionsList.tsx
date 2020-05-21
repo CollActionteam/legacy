@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { useEffect } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { Fragments } from "../../api/fragments";
 import { Grid } from "@material-ui/core";
@@ -7,6 +7,7 @@ import CrowdactionCard from "../CrowdactionCard/CrowdactionCard";
 import { CrowdactionStatusFilter, ICrowdaction } from "../../api/types";
 
 import Loader from "../Loader/Loader";
+import { Alert } from "../Alert/Alert";
 
 interface ICrowdactionListProps {
   category?: string;
@@ -34,13 +35,15 @@ export default ({ category, status = CrowdactionStatusFilter.Open }: ICrowdactio
     return <Loader />;
   }
 
-  if (error) {
-    console.error(error);
-    return null;
-  }
+  useEffect(() => {
+    if (error) {
+      console.error(error?.message);
+    }
+  }, [ error ]);
 
   return (
-    <Fragment>
+    <>
+      <Alert type="error" text={error?.message} />
       <Grid container spacing={3}>
         {data.crowdactions && data.crowdactions.length ? (
           data.crowdactions.map((crowdaction: ICrowdaction, index: number) => (
@@ -52,7 +55,7 @@ export default ({ category, status = CrowdactionStatusFilter.Open }: ICrowdactio
           <div>No crowdactions here yet.</div>
         )}
       </Grid>
-    </Fragment>
+    </>
   );
 };
 
