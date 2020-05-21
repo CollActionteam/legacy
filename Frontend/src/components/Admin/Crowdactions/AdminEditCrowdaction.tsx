@@ -110,13 +110,20 @@ export default ({ crowdactionId } : IEditCrowdactionProps): any => {
             initialized: Yup.boolean().oneOf([true], "Data must be loaded")
         }),
         onSubmit: async (values: any) => {
-            const uploads = { banner: null, descriptive: null, card: null };
-            if (bannerImage !== null) {
-                uploads.banner = await Utils.uploadImage(bannerImage, values.bannerImageDescription, 1600);
-                uploads.card = await Utils.uploadImage(bannerImage, values.bannerImageDescription, 370);
+            const uploads = { banner: null as number | null, descriptive: null as number | null, card: null as number | null };
+            try {
+                if (bannerImage !== null) {
+                    uploads.banner = await Utils.uploadImage(bannerImage, values.bannerImageDescription, 1600);
+                    uploads.card = await Utils.uploadImage(bannerImage, values.bannerImageDescription, 370);
+                }
+                if (descriptiveImage !== null) {
+                    uploads.descriptive = await Utils.uploadImage(descriptiveImage, values.descriptiveImageDescription, 1600);
+                }
             }
-            if (descriptiveImage !== null) {
-                uploads.descriptive = await Utils.uploadImage(descriptiveImage, values.descriptiveImageDescription, 1600);
+            catch (error) {
+                console.log(error.errorMessage);
+                setError(error.errorMessage as string);
+                return;
             }
 
             await updateCrowdaction({

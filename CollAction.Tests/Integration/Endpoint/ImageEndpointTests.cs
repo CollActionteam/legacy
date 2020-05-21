@@ -4,9 +4,11 @@ using CollAction.Services.Image;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -44,7 +46,10 @@ namespace CollAction.Tests.Integration.Endpoint
             using var response = await client.PostAsync(new Uri("/image", UriKind.Relative), content).ConfigureAwait(false);
             string body = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             Assert.True(response.IsSuccessStatusCode, body);
-            int imageId = int.Parse(body, CultureInfo.InvariantCulture);
+            var imageMessage = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(body);
+            Assert.True(imageMessage.ContainsKey("id"));
+            int imageId = imageMessage["id"].GetInt32();
+            Assert.True(imageId > 0);
 
             // Cleanup
             var image = await context.ImageFiles.FindAsync(imageId).ConfigureAwait(false);

@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -31,12 +33,12 @@ namespace CollAction.Controllers
             try
             {
                 ImageFile image = await imageService.UploadImage(uploadImage.Image, uploadImage.ImageDescription, uploadImage.ImageResizeThreshold, token).ConfigureAwait(false);
-                return Ok(image.Id);
+                return Ok(new Dictionary<string, int>() { { "id", image.Id } });
             }
             catch (Exception e)
             {
                 logger.LogError(e, "Error uploading image");
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new Dictionary<string, string>() { { "errorMessage", e.Message } });
             }
         }
     }
