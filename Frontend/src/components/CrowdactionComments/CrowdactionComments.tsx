@@ -85,7 +85,24 @@ export default ({ id }: ICrowdactionCommentsProps) => {
           comment: comment
         },
         update: (cache: DataProxy, mutationResult: FetchResult) => {
-          console.log('need to update cache');
+          const currentComments: any = cache.readQuery({
+            query: GET_COMMENTS,
+            variables: { crowdactionId: id }
+          });
+          const newCommentEdge = { node: mutationResult.data?.crowdaction.createComment };
+          cache.writeQuery({
+            query: GET_COMMENTS,
+            variables: { crowdactionId: id },
+            data: {
+              crowdaction: {
+                id: id,
+                comments: {
+                  edges: [ newCommentEdge, ...currentComments.crowdaction.comments.edges ],
+                  pageInfo: currentComments.crowdaction.comments.pageInfo
+                }
+              }
+            }
+          })
         }
       });
     const loadMore = () => {
@@ -126,7 +143,7 @@ export default ({ id }: ICrowdactionCommentsProps) => {
     }, [ error ]);
 
     return <>
-        <Grid container spacing={4} xs={12}>
+        <Grid container spacing={4}>
           <Alert type="error" text={error?.message} />
           { loading ? <Grid item xs={12}><Loader /></Grid> : null }
           {

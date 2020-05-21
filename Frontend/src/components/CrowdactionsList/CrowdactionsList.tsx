@@ -33,7 +33,7 @@ export default ({ category, status = CrowdactionStatusFilter.Open }: ICrowdactio
 
   useEffect(() => {
     if (error) {
-      console.error(error?.message);
+      console.error(error.message);
     }
   }, [ error ]);
 
