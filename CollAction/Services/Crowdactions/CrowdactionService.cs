@@ -282,15 +282,14 @@ namespace CollAction.Services.Crowdactions
             context.Crowdactions.Update(crowdaction);
 
             var crowdactionTags = crowdaction.Tags.Select(t => t.Tag!.Name);
-            if (!Enumerable.SequenceEqual(updatedCrowdaction.Tags.OrderBy(t => t), crowdactionTags.OrderBy(t => t)))
+            var tags = updatedCrowdaction.Tags.Distinct().ToList();
+            if (!Enumerable.SequenceEqual(tags.OrderBy(t => t), crowdactionTags.OrderBy(t => t)))
             {
                 IEnumerable<string> missingTags =
-                    updatedCrowdaction.Tags
-                                  .Except(
-                                      await context.Tags
-                                                   .Where(t => updatedCrowdaction.Tags.Contains(t.Name))
-                                                   .Select(t => t.Name)
-                                                   .ToListAsync(token).ConfigureAwait(false));
+                    tags.Except(await context.Tags
+                                             .Where(t => tags.Contains(t.Name))
+                                             .Select(t => t.Name)
+                                             .ToListAsync(token).ConfigureAwait(false));
 
                 if (missingTags.Any())
                 {
@@ -300,16 +299,16 @@ namespace CollAction.Services.Crowdactions
 
                 var tagMap =
                     await context.Tags
-                                 .Where(t => updatedCrowdaction.Tags.Contains(t.Name) || crowdactionTags.Contains(t.Name))
+                                 .Where(t => tags.Contains(t.Name) || crowdactionTags.Contains(t.Name))
                                  .ToDictionaryAsync(t => t.Name, t => t.Id, token).ConfigureAwait(false);
 
                 IEnumerable<CrowdactionTag> newTags =
-                    updatedCrowdaction.Tags
-                                  .Except(crowdactionTags)
-                                  .Select(t => new CrowdactionTag(crowdactionId: crowdaction.Id, tagId: tagMap[t]));
+                    tags.Except(crowdactionTags)
+                        .Select(t => new CrowdactionTag(crowdactionId: crowdaction.Id, tagId: tagMap[t]));
+
                 IEnumerable<CrowdactionTag> removedTags =
                     crowdaction.Tags
-                           .Where(t => crowdactionTags.Except(updatedCrowdaction.Tags).Contains(t.Tag!.Name));
+                               .Where(t => crowdactionTags.Except(tags).Contains(t.Tag!.Name));
                 context.CrowdactionTags.AddRange(newTags);
                 context.CrowdactionTags.RemoveRange(removedTags);
             }
