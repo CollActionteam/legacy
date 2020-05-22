@@ -461,7 +461,7 @@ namespace CollAction.Services.Crowdactions
                 throw new InvalidOperationException("Comment contains unsafe html");
             }
 
-            // Add nofollow ugc to all links so
+            // Add nofollow ugc to all links so search engines don't follow the links
             comment = comment.Replace("<a ", "<a rel=\"nofollow ugc\" ", StringComparison.OrdinalIgnoreCase);
 
             ApplicationUser? applicationUser = await userManager.GetUserAsync(user).ConfigureAwait(false);
