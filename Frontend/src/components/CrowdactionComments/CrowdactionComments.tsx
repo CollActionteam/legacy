@@ -188,7 +188,7 @@ export default ({ id }: ICrowdactionCommentsProps) => {
                         height="130px"
                         name="comment"
                         label=""
-                        hint="Comment about this crowdaction"
+                        hint="Start a conversation!"
                         fullWidth />
                       <Button type="submit">Comment</Button>
                     </Form>
