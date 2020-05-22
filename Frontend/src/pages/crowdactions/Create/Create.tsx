@@ -20,7 +20,7 @@ import Utils from '../../../utils';
 const CreateCrowdactionPage = () => {
   const user = useUser();
   const history = useHistory();
-  
+
   const validate = async (props: FormikProps<any>) => {
     const errors = Object.keys(await props.validateForm());
 
@@ -31,7 +31,7 @@ const CreateCrowdactionPage = () => {
       }
     }
   };
-  
+
   const [createCrowdaction] = useMutation(gql`
     mutation Create($crowdaction: NewCrowdactionInputGraph) {
       crowdaction {
@@ -96,8 +96,8 @@ const CreateCrowdactionPage = () => {
     const result = response.data.crowdaction.createCrowdaction;
 
     if (!result.succeeded) {
-      setStatus(result.errors);	
-      return;      
+      setStatus(result.errors);
+      return;
     }
 
     history.push(`/crowdactions/create/thankyou/${result.crowdaction.id}`);
@@ -129,7 +129,7 @@ const CreateCrowdactionPage = () => {
         validationSchema={validations}
         validateOnChange={false}
         validateOnMount={false}
-        validateOnBlur={true}        
+        validateOnBlur={true}
         onSubmit={async (values, actions) => handleSubmit(values, actions)}
       >
         {(props: FormikProps<ICrowdactionForm>) => (
@@ -142,15 +142,15 @@ const CreateCrowdactionPage = () => {
                 <Grid item md={3}></Grid>
                 <Grid item md={6} xs={12} >
                   <Container>
-                    <Field 
-                        name="crowdactionName" 
+                    <Field
+                        name="crowdactionName"
                         label="Title"
-                        helperText="Write a clear, brief title that helps people quicky understand the idea behind the crowdaction"
+                        helperText="Write a clear, brief title that helps people quickly understand the idea behind the crowdaction"
                         component={TextField}
                         className={styles.formRow}
                         fullWidth
                     >
-                    </Field>                  
+                    </Field>
                     <Field
                       name="proposal"
                       label="Objective"
@@ -179,7 +179,7 @@ const CreateCrowdactionPage = () => {
                     <Field
                       name="target"
                       label="Goal amount"
-                      helperText="Set an archievable number of people to join your crowdaction" 
+                      helperText="Set an achievable number of people to join your crowdaction"
                       type="number"
                       component={TextField}
                       className={styles.formRow}
@@ -215,7 +215,7 @@ const CreateCrowdactionPage = () => {
                     <Field
                       name="tags"
                       label="Hashtags"
-                      helperText="No #, seperate tags with ; e.g. tag1;tag2"
+                      helperText="No #, separate tags with ; e.g. tag1;tag2"
                       component={TextField}
                       className={styles.formRow}
                       fullWidth
@@ -239,12 +239,12 @@ const CreateCrowdactionPage = () => {
                       fullWidth
                     >
                     </RichTextEditorFormControl>
-                    
+
                     <RichTextEditorFormControl
                       formik={props}
                       name="goal"
                       label="Goal"
-                      hint="Describe in more detail what you want to achive with your crowdaction. What is the problem you are trying to solve?"
+                      hint="Describe in more detail what you want to achieve with your crowdaction. What is the problem you are trying to solve?"
                       className={styles.formRow}
                       fullWidth
                     >
@@ -254,7 +254,7 @@ const CreateCrowdactionPage = () => {
                       <InputLabel className={styles.label} shrink>
                         Infograph or image
                       </InputLabel>
-                      <UploadImage name="image" formik={props}></UploadImage>                      
+                      <UploadImage name="image" formik={props}></UploadImage>
                       {!props.values.image &&
                         <FormHelperText>Add an infograph or another descriptive image to support your description and your goal.</FormHelperText>
                       }
@@ -282,7 +282,7 @@ const CreateCrowdactionPage = () => {
                       fullWidth
                     >
                     </RichTextEditorFormControl>
-                    
+
                     <Field
                       name="youtube"
                       label="YouTube video link"
@@ -290,7 +290,7 @@ const CreateCrowdactionPage = () => {
                       component={TextField}
                       className={styles.formRow}
                       fullWidth
-                    >                    
+                    >
                     </Field>
                   </Container>
                 </Grid>
@@ -300,31 +300,31 @@ const CreateCrowdactionPage = () => {
                     <CrowdactionStarter user={user}></CrowdactionStarter>
                   </Container>
                 </Grid>
-              </Grid>              
+              </Grid>
             </Section>
 
             <Section>
               <Grid container>
                 <Grid item xs={12}>
                   <div className={styles.submit}>
-                    { props.isSubmitting 
-                      ? <Loader></Loader> 
-                      : <Button 
-                          type="submit" 
+                    { props.isSubmitting
+                      ? <Loader></Loader>
+                      : <Button
+                          type="submit"
                           disabled={props.isSubmitting}
                           onClick={() => validate(props)}
                         >
                           Submit crowdaction
                         </Button>
                     }
-                    { props.status && 
+                    { props.status &&
                       <div className={styles.submitErrors}>
-                        <ul>                            
+                        <ul>
                           { props.status.filter((e: any) => e !== undefined).map((error: any, idx: number) => (
                             <li key={idx}>{ error.errorMessage }</li>
                           ))}
                         </ul>
-                      </div>                      
+                      </div>
                     }
                   </div>
                 </Grid>
