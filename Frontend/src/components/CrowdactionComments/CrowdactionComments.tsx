@@ -38,7 +38,7 @@ const CREATE_COMMENT = gql`
 
 const GET_COMMENTS = gql`
   query($crowdactionId: ID!, $take: Int!, $before: String!) {
-    comments: crowdactionComments(crowdactionId: $crowdactionId, take: $take, where: [{ path: "id", comparison: lessThan, value: [$before]}], orderBy: [{ path: "id", descending: true}]) {
+    comments: crowdactionComments(crowdactionId: $crowdactionId, take: $take, where: [{ path: "id", comparison: lessThanOrEqual, value: [$before]}], orderBy: [{ path: "id", descending: true}]) {
       id
       comment
       commentedAt
@@ -127,8 +127,8 @@ export default ({ id }: ICrowdactionCommentsProps) => {
   );
   const comments = data?.comments;
   const lastId = 
-    comments ? comments[comments.length - 1].id.toString() :
-                maxCursor;
+    comments ? (comments[comments.length - 1].id - 1).toString() :
+               maxCursor;
   const [ deleteComment ] = useMutation(
     DELETE_COMMENT,
     {
