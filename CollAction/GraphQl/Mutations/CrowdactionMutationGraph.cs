@@ -101,7 +101,7 @@ namespace CollAction.GraphQl.Mutations
                                         .ConfigureAwait(false);
                 });
 
-            FieldAsync<BooleanGraphType, bool>(
+            FieldAsync<IntGraphType, int>(
                 "deleteComment",
                 arguments: new QueryArguments(new QueryArgument<NonNullGraphType<IdGraphType>>() { Name = "commentId" }),
                 resolve: async c =>
@@ -112,7 +112,7 @@ namespace CollAction.GraphQl.Mutations
                                  .GetRequiredService<ICrowdactionService>()
                                  .DeleteComment(commentId, c.CancellationToken)
                                  .ConfigureAwait(false);
-                    return true;
+                    return commentId;
                 }).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
 
             FieldAsync<CrowdactionResultGraph, CrowdactionResult>(
