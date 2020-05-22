@@ -1,7 +1,3 @@
-resource "aws_ecs_cluster" "collaction" {
-  name = "collaction-v2"
-}
-
 resource "aws_ecs_task_definition" "staging-api" {
   family                   = "ca-staging-api-task"
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
