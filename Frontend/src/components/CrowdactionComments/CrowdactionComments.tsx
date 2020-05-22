@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { gql, useQuery, useMutation, DataProxy, FetchResult } from "@apollo/client";
 import Loader from "../Loader/Loader";
-import { Card, CardContent, Grid, CardActions, TextField } from "@material-ui/core";
+import { Card, CardContent, Grid, CardActions } from "@material-ui/core";
 import Formatter from "../../formatter";
 import { Button } from "../Button/Button";
 import { useUser } from '../../providers/UserProvider';
 import { Alert } from "../Alert/Alert";
+import { Form, Formik } from "formik";
+import * as Yup from "yup";
+import { RichTextEditorFormControl } from "../RichTextEditorFormContol/RichTextEditorFormControl";
 
 interface ICrowdactionCommentsProps {
     id: string;
@@ -55,7 +58,6 @@ export default ({ id }: ICrowdactionCommentsProps) => {
     const numCommentsPerFetch = 10;
     const user = useUser();
     const [ page, setPage ] = useState(0);
-    const [ comment, setComment ] = useState("");
     const { data, loading, fetchMore, error } = useQuery<any>(
       GET_COMMENTS,
       {
@@ -110,10 +112,6 @@ export default ({ id }: ICrowdactionCommentsProps) => {
       });
     const [ createComment ] = useMutation(CREATE_COMMENT,
       {
-        variables: {
-          crowdactionId: id,
-          comment: comment
-        },
         update: (cache: DataProxy, mutationResult: FetchResult) => {
           // Add the comment to the top of the comment list by putting it in the cache
           if (mutationResult.data) {
@@ -158,7 +156,7 @@ export default ({ id }: ICrowdactionCommentsProps) => {
           };
         }
       })        
-    }
+    };
 
     useEffect(() => {
       if (error) {
@@ -166,20 +164,43 @@ export default ({ id }: ICrowdactionCommentsProps) => {
       }
     }, [ error ]);
 
+    const validationSchema = Yup.object({
+      comment: Yup.string()
+    });
+    
+    const onSubmit = async (values: any, { setSubmitting, resetForm }: any) => { 
+      await createComment({
+        variables: { comment: values.comment, crowdactionId: id }
+      });
+      resetForm({});
+      setSubmitting(false);
+    };
+
     return <>
         <Grid container spacing={4}>
           <Alert type="error" text={error?.message} />
           {
             user ?
                 <Grid item xs={12}>
-                  <Card>
-                    <CardContent>
-                      <TextField value={comment} onChange={(ev) => setComment(ev.target.value)} label="Comment about the crowdaction" multiline rows={5} fullWidth />
-                    </CardContent>
-                    <CardActions>
-                      <Button onClick={() => { createComment(); setComment("") }}>Comment</Button>
-                    </CardActions>
-                  </Card>
+                  <Formik initialValues={{ comment: '' }} validationSchema={validationSchema} onSubmit={onSubmit}>
+                    {(formik) =>
+                      <Form>
+                        <Card>
+                          <CardContent>
+                            <RichTextEditorFormControl
+                              formik={formik}
+                              name="comment"
+                              label="Comment"
+                              hint="Comment about this crowdaction"
+                              fullWidth />
+                          </CardContent>
+                          <CardActions>
+                            <Button type="submit">Comment</Button>
+                          </CardActions>
+                        </Card>
+                      </Form>
+                    }
+                  </Formik>
                 </Grid>
                 : null
           }
@@ -190,7 +211,7 @@ export default ({ id }: ICrowdactionCommentsProps) => {
                   <Card>
                     <CardContent>
                       <h4>{ comment.user.fullName }</h4>
-                      {comment.comment.split('\n').map((ic: string) => <p key={ic}>{ ic }</p>) }
+                      <span dangerouslySetInnerHTML={{ __html: comment.comment}} />
                       <p><em>{ Formatter.date(commentDate) } { Formatter.time(commentDate) }</em></p>
                     </CardContent>
                     {
