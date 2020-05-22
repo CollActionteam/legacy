@@ -14,6 +14,8 @@ resource "aws_alb_listener" "collaction-api" {
   load_balancer_arn = aws_alb.collaction-api.id
   port              = 443
   protocol          = "HTTPS"
+  certificate_arn   = data.aws_acm_certificate.collaction.arn
+  ssl_policy        = "ELBSecurityPolicy-FS-2018-06"
 
   # By default, this load balancer will return a 404. 
   # Additional actions are added in the ecs-service resources.
