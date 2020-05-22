@@ -355,6 +355,7 @@ namespace CollAction.Services.Crowdactions
         public async Task CrowdactionEndProcess(int crowdactionId, CancellationToken token)
         {
             logger.LogInformation("Processing end of crowdaction: {0}", crowdactionId);
+            await RefreshParticipantCount(token).ConfigureAwait(false); // Ensure the participant count is up-to-date
             Crowdaction? crowdaction = await context.Crowdactions.Include(c => c.ParticipantCounts).FirstAsync(c => c.Id == crowdactionId, token).ConfigureAwait(false);
 
             if (crowdaction == null)
