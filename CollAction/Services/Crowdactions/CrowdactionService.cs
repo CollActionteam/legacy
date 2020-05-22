@@ -456,6 +456,11 @@ namespace CollAction.Services.Crowdactions
 
         public async Task<CrowdactionComment> CreateComment(string comment, int crowdactionId, ClaimsPrincipal user, CancellationToken token)
         {
+            if (!htmlInputValidator.IsSafe(comment))
+            {
+                throw new InvalidOperationException("Comment contains unsafe html");
+            }
+
             ApplicationUser? applicationUser = await userManager.GetUserAsync(user).ConfigureAwait(false);
 
             if (applicationUser == null)
