@@ -212,15 +212,14 @@ export default ({ id }: ICrowdactionCommentsProps) => {
                     <CardContent>
                       <h4>{ comment.user.fullName }</h4>
                       <span dangerouslySetInnerHTML={{ __html: comment.comment}} />
-                      <p><em>{ Formatter.date(commentDate) } { Formatter.time(commentDate) }</em></p>
                     </CardContent>
-                    {
-                     user?.isAdmin ?
-                      <CardActions>
-                        <Button onClick={() => deleteComment({ variables: { commentId: comment.id }})}>Delete Comment</Button>
-                      </CardActions> :
-                      null
-                    }
+                    <CardActions>
+                      <em>{ Formatter.date(commentDate) } { Formatter.time(commentDate) }</em>
+                      {
+                        user?.isAdmin ? <Button onClick={() => deleteComment({ variables: { commentId: comment.id }})}>Delete Comment</Button>
+                                      : null
+                      }
+                    </CardActions>
                   </Card>
                 </Grid>;
               })
