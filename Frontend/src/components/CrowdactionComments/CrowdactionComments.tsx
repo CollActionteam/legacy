@@ -36,38 +36,33 @@ const CREATE_COMMENT = gql`
 `;
 
 const GET_COMMENTS = gql`
-  query($crowdactionId: ID!, $cursor: String) {
+  query($crowdactionId: ID!, $take: Int!, $skip: Int!) {
     crowdaction(id: $crowdactionId) {
       id
-      comments(after: $cursor, first: 10, orderBy: { path: "commentedAt", descending: true }) @connection(key: "comment", filter: ["crowdactionId"]) {
-        edges {
-          node {
-            id
-            comment
-            commentedAt
-            user {
-              id
-              fullName
-            }
-          }
-        }
-        pageInfo {
-          endCursor 
-          hasNextPage
+      comments(take: $take, skip: $skip, orderBy: { path: "commentedAt", descending: true }) @connection(key: "comment", filter: ["crowdactionId"]) {
+        id
+        comment
+        commentedAt
+        user {
+          id
+          fullName
         }
       }
     }
   }`;
 
 export default ({ id }: ICrowdactionCommentsProps) => {
+    const numCommentsPerFetch = 10;
     const user = useUser();
-    const [ cursors, setCursors ] = useState<string[]>([]);
+    const [ page, setPage ] = useState(0);
     const [ comment, setComment ] = useState("");
     const { data, loading, fetchMore, error } = useQuery<any>(
       GET_COMMENTS,
       {
         variables: {
-          crowdactionId: id
+          crowdactionId: id,
+          take: numCommentsPerFetch,
+          skip: 0
         }
       }
     );
@@ -75,7 +70,42 @@ export default ({ id }: ICrowdactionCommentsProps) => {
       DELETE_COMMENT,
       {
         update: (cache: DataProxy, mutationResult: FetchResult) => {
-          console.log('need to update cache');
+          // Remove the comment from the cache
+          if (mutationResult.data) {
+            const removedId: number = mutationResult.data.crowdaction.deleteComment;
+            for (var p = 0; p <= page; p++) {
+              const vars = {
+                crowdactionId: id,
+                take: numCommentsPerFetch,
+                skip: p * numCommentsPerFetch
+              };
+              const comments: any = cache.readQuery({
+                query: GET_COMMENTS,
+                variables: vars
+              });
+              const toRemove = 
+                comments.crowdaction
+                        .comments
+                        .findIndex((c: any) => c.id === removedId);
+              if (toRemove >= 0) {
+                const currentComments = comments.crowdaction.comments;
+                const filteredComments = currentComments.slice(0, toRemove)
+                                                        .concat(currentComments.slice(toRemove + 1));
+                cache.writeQuery({
+                  query: GET_COMMENTS,
+                  variables: vars,
+                  data: {
+                    crowdaction: {
+                      __typename: comments.crowdaction.__typename,
+                      id: id,
+                      comments: filteredComments
+                    }
+                  }
+                });
+                return;
+              }
+            }
+          }
         }
       });
     const [ createComment ] = useMutation(CREATE_COMMENT,
@@ -85,22 +115,22 @@ export default ({ id }: ICrowdactionCommentsProps) => {
           comment: comment
         },
         update: (cache: DataProxy, mutationResult: FetchResult) => {
-          const currentComments: any = cache.readQuery({
-            query: GET_COMMENTS,
-            variables: { crowdactionId: id }
-          });
+          // Add the comment to the top of the comment list by putting it in the cache
           if (mutationResult.data) {
-            const newCommentEdge = { node: mutationResult.data.crowdaction.createComment };
+            const newComment = mutationResult.data.crowdaction.createComment;
+            const vars = { crowdactionId: id, take: numCommentsPerFetch, skip: 0 };
+            const currentComments: any = cache.readQuery({
+              query: GET_COMMENTS,
+              variables: vars
+            });
             cache.writeQuery({
               query: GET_COMMENTS,
-              variables: { crowdactionId: id },
+              variables: vars,
               data: {
                 crowdaction: {
+                  __typename: currentComments.crowdaction.__typename,
                   id: id,
-                  comments: {
-                    edges: [ newCommentEdge, ...currentComments.crowdaction.comments.edges ],
-                    pageInfo: currentComments.crowdaction.comments.pageInfo
-                  }
+                  comments: [ newComment, ...currentComments.crowdaction.comments ],
                 }
               }
             });
@@ -108,32 +138,24 @@ export default ({ id }: ICrowdactionCommentsProps) => {
         }
       });
     const loadMore = () => {
-      const newCursor = data.crowdaction.comments.pageInfo.endCursor;
-      setCursors([...cursors, newCursor]);
+      setPage(page + 1);
       fetchMore({
         variables: {
-          cursor: newCursor
+          skip: numCommentsPerFetch * (page + 1)
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
           const newCrowdaction = fetchMoreResult.crowdaction;
           const previousCrowdaction = previousResult.crowdaction;
-          const newEdges = newCrowdaction.comments.edges;
-          const pageInfo = newCrowdaction.comments.pageInfo;
 
-          return newEdges.length
-            ? {
-              // Put the new comments at the end of the list and update `pageInfo`
-              // so we have the new `endCursor` and `hasNextPage` values
-              crowdaction: {
-                id: previousCrowdaction.id,
-                comments: {
-                  __typename: previousCrowdaction.comments.__typename,
-                  edges: [...previousCrowdaction.comments.edges, ...newEdges],
-                  pageInfo
-                }
-              }
+          return {
+            // Put the new comments at the end of the list and update `pageInfo`
+            // so we have the new `endCursor` and `hasNextPage` values
+            crowdaction: {
+              __typename: previousCrowdaction.__typename,
+              id: previousCrowdaction.id,
+              comments: [...previousCrowdaction.comments, ...newCrowdaction.comments],
             }
-          : previousResult;
+          };
         }
       })        
     }
@@ -147,7 +169,6 @@ export default ({ id }: ICrowdactionCommentsProps) => {
     return <>
         <Grid container spacing={4}>
           <Alert type="error" text={error?.message} />
-          { loading ? <Grid item xs={12}><Loader /></Grid> : null }
           {
             user ?
                 <Grid item xs={12}>
@@ -163,8 +184,7 @@ export default ({ id }: ICrowdactionCommentsProps) => {
                 : null
           }
           {
-            data?.crowdaction?.comments?.edges?.map((edge: any) => {
-                const comment = edge.node;
+            data?.crowdaction?.comments?.map((comment: any) => {
                 const commentDate = new Date(comment.commentedAt);
                 return <Grid key={comment.id} item xs={12}>
                   <Card>
@@ -184,7 +204,8 @@ export default ({ id }: ICrowdactionCommentsProps) => {
                 </Grid>;
               })
           }
-          { data?.crowdaction?.comments?.pageInfo?.hasNextPage ? 
+          { loading ? <Grid item xs={12}><Loader /></Grid> : null }
+          { data?.crowdaction?.comments.length % numCommentsPerFetch === 0 ? 
               <Grid item xs={12}><Button onClick={() => loadMore()}>Load More</Button></Grid> : 
               null
           }
