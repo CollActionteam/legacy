@@ -14,7 +14,7 @@ namespace CollAction.GraphQl.Mutations
     {
         public UserMutationGraph()
         {
-            FieldAsync<UserResultGraph, UserResult>(
+            FieldAsync<NonNullGraphType<UserResultGraph>, UserResult>(
                 "createUser",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<NewUserInputGraph>>() { Name = "user" }),
@@ -28,7 +28,7 @@ namespace CollAction.GraphQl.Mutations
                     return userService.CreateUser(newUser);
                 });
 
-            FieldAsync<UserResultGraph, UserResult>(
+            FieldAsync<NonNullGraphType<UserResultGraph>, UserResult>(
                 "updateUser",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<UpdatedUserInputGraph>>() { Name = "user" }),
@@ -40,7 +40,7 @@ namespace CollAction.GraphQl.Mutations
                     return userService.UpdateUser(updatedUser, context.User);
                 });
 
-            FieldAsync<IdentityResultGraph, IdentityResult>(
+            FieldAsync<NonNullGraphType<IdentityResultGraph>, IdentityResult>(
                 "deleteUser",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IdGraphType>>() { Name = "id" }),
@@ -52,7 +52,7 @@ namespace CollAction.GraphQl.Mutations
                     return userService.DeleteUser(userId, context.User);
                 });
 
-            FieldAsync<IdentityResultGraph, IdentityResult>(
+            FieldAsync<NonNullGraphType<IdentityResultGraph>, IdentityResult>(
                 "changePassword",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "currentPassword" },
@@ -66,7 +66,7 @@ namespace CollAction.GraphQl.Mutations
                     return userService.ChangePassword(context.User, currentPassword, newPassword);
                 });
 
-            FieldAsync<UserResultGraph, UserResult>(
+            FieldAsync<NonNullGraphType<UserResultGraph>, UserResult>(
                 "finishRegistration",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<NewUserInputGraph>>() { Name = "user" },
@@ -80,7 +80,7 @@ namespace CollAction.GraphQl.Mutations
                     return userService.FinishRegistration(newUser, code);
                 });
 
-            FieldAsync<IdentityResultGraph, IdentityResult>(
+            FieldAsync<NonNullGraphType<IdentityResultGraph>, IdentityResult>(
                 "forgotPassword",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "email" }),
@@ -92,7 +92,7 @@ namespace CollAction.GraphQl.Mutations
                     return (await userService.ForgotPassword(email).ConfigureAwait(false)).Result;
                 });
 
-            FieldAsync<IdentityResultGraph, IdentityResult>(
+            FieldAsync<NonNullGraphType<IdentityResultGraph>, IdentityResult>(
                 "resetPassword",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "email" },
@@ -108,7 +108,7 @@ namespace CollAction.GraphQl.Mutations
                     return userService.ResetPassword(email, code, password);
                 });
 
-            FieldAsync<IntGraphType, int>(
+            FieldAsync<NonNullGraphType<IntGraphType>, int>(
                 "ingestUserEvent",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "eventData" },

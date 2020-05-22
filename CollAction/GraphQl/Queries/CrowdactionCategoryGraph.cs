@@ -10,7 +10,7 @@ namespace CollAction.GraphQl.Queries
         public CrowdactionCategoryGraph(IEfGraphQLService<ApplicationDbContext> graphService) : base(graphService)
         {
             Field(x => x.Category);
-            Field<NonNullGraphType<IdGraphType>>(nameof(CrowdactionCategory.CrowdactionId), resolve: x => x.Source.CrowdactionId);
+            Field<NonNullGraphType<IdGraphType>, int>(nameof(CrowdactionCategory.CrowdactionId)).Resolve(x => x.Source.CrowdactionId);
             AddNavigationField(nameof(CrowdactionCategory.Crowdaction), x => x.Source.Crowdaction);
         }
     }

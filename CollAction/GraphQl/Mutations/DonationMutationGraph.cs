@@ -11,19 +11,18 @@ namespace CollAction.GraphQl.Mutations
     {
         public DonationMutationGraph()
         {
-            FieldAsync<StringGraphType, string>(
+            FieldAsync<NonNullGraphType<StringGraphType>, string>(
                 "initializeCreditCardCheckout",
                 arguments: new QueryArguments(new QueryArgument<NonNullGraphType<CreditCardCheckoutInputGraph>>() { Name = "checkout" }),
-                resolve: async c =>
+                resolve: c =>
                 {
                     CreditCardCheckout checkout = c.GetArgument<CreditCardCheckout>("checkout");
                     var provider = c.GetUserContext().ServiceProvider;
-                    return await provider.GetRequiredService<IDonationService>()
-                                         .InitializeCreditCardCheckout(checkout, c.CancellationToken)
-                                         .ConfigureAwait(false);
+                    return provider.GetRequiredService<IDonationService>()
+                                   .InitializeCreditCardCheckout(checkout, c.CancellationToken);
                 });
 
-            FieldAsync<StringGraphType, string>(
+            FieldAsync<NonNullGraphType<StringGraphType>, string>(
                 "initializeSepaDirect",
                 arguments: new QueryArguments(new QueryArgument<NonNullGraphType<SepaDirectCheckoutInputGraph>>() { Name = "checkout" }),
                 resolve: async c =>
@@ -36,7 +35,7 @@ namespace CollAction.GraphQl.Mutations
                     return checkout.SourceId;
                 });
 
-            FieldAsync<StringGraphType, string>(
+            FieldAsync<NonNullGraphType<StringGraphType>, string>(
                 "initializeIDealCheckout",
                 arguments: new QueryArguments(new QueryArgument<NonNullGraphType<IDealCheckoutInputGraph>>() { Name = "checkout" }),
                 resolve: async c =>
@@ -49,7 +48,7 @@ namespace CollAction.GraphQl.Mutations
                     return checkout.SourceId;
                 });
 
-            FieldAsync<StringGraphType, string>(
+            FieldAsync<NonNullGraphType<StringGraphType>, string>(
                 "cancelSubscription",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IdGraphType>>() { Name = "subscriptionId" }),
