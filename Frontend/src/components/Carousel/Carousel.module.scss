@@ -19,15 +19,12 @@
     }
 
     .slick-slide {
+        width: 270px;
         margin-right: var(--spacing);
         height: auto;
     
         > div {
           height: 100%;
-        }
-
-        @include breakpoint-up(md) {
-            width: 270px;
         }
     }
 
