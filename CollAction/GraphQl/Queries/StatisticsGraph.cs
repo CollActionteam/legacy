@@ -16,7 +16,7 @@ namespace CollAction.GraphQl.Queries
                     return c.GetUserContext()
                             .ServiceProvider
                             .GetRequiredService<IStatisticsService>()
-                            .NumberActionsTaken(c.CancellationToken)
+                            .NumberActionsTaken(c.CancellationToken);
                 });
 
             FieldAsync<NonNullGraphType<IntGraphType>, int>(
