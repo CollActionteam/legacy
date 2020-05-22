@@ -60,7 +60,7 @@ data "aws_route53_zone" "collaction" {
 resource "aws_route53_record" "api" {
   zone_id = data.aws_route53_zone.collaction.zone_id
   name    = "api.collaction.org"
-  type    = "A"
+  type    = "CNAME"
   ttl     = "300"
   records = [aws_alb.collaction-api.dns_name]
 }
