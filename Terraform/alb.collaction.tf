@@ -55,7 +55,6 @@ resource "aws_security_group" "collaction-api" {
 
 data "aws_route53_zone" "collaction" {
   name         = "collaction.org."
-  private_zone = true
 }
 
 resource "aws_route53_record" "api" {
