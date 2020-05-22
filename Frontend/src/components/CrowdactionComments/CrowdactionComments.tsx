@@ -208,19 +208,14 @@ export default ({ id }: ICrowdactionCommentsProps) => {
                 <Formik initialValues={{ comment: '' }} validationSchema={validationSchema} onSubmit={onSubmit}>
                   {(formik) =>
                     <Form>
-                      <Card>
-                        <CardContent>
-                          <RichTextEditorFormControl
-                            formik={formik}
-                            name="comment"
-                            label="Comment"
-                            hint="Comment about this crowdaction"
-                            fullWidth />
-                        </CardContent>
-                        <CardActions>
-                          <Button type="submit">Comment</Button>
-                        </CardActions>
-                      </Card>
+                      <RichTextEditorFormControl
+                        formik={formik}
+                        height="130px"
+                        name="comment"
+                        label=""
+                        hint="Comment about this crowdaction"
+                        fullWidth />
+                      <Button type="submit">Comment</Button>
                     </Form>
                   }
                 </Formik>
