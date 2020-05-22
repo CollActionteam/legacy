@@ -38,16 +38,13 @@ const CREATE_COMMENT = gql`
 
 const GET_COMMENTS = gql`
   query($crowdactionId: ID!, $take: Int!, $before: String!) {
-    crowdaction(id: $crowdactionId) {
+    comments: crowdactionComments(crowdactionId: $crowdactionId, take: $take, where: [{ path: "id", comparison: lessThan, value: [$before]}], orderBy: [{ path: "id", descending: true}]) {
       id
-      comments(take: $take, where: [{ path: "id", comparison: lessThan, value: [$before]}], orderBy: [{ path: "id", descending: true}]) {
+      comment
+      commentedAt
+      user {
         id
-        comment
-        commentedAt
-        user {
-          id
-          fullName
-        }
+        fullName
       }
     }
   }`;
@@ -56,42 +53,32 @@ const numCommentsPerFetch = 20;
 const maxCursor = "2147483647";
 
 // Remove the comment from the cache
-const updateCacheAfterDelete = (cache: DataProxy, mutationResult: FetchResult, cursors: string[], id: string) => {
+const updateCacheAfterDelete = (cache: DataProxy, mutationResult: FetchResult, id: string) => {
   if (mutationResult.data) {
     const removedId: number = mutationResult.data.crowdaction.deleteComment;
-
-    // Find the cache segment to remove this from
-    const cursor = cursors.find((c, i) => 
-      removedId < parseInt(c) && 
-      (i + 1 === cursors.length || removedId >= parseInt(cursors[i + 1])));
 
     const vars = {
       crowdactionId: id,
       take: numCommentsPerFetch,
-      before: cursor
+      before: maxCursor
     };
     const comments: any = cache.readQuery({
       query: GET_COMMENTS,
       variables: vars
     });
     const toRemove = 
-      comments.crowdaction
-              .comments
+      comments.comments
               .findIndex((c: any) => c.id === removedId);
 
     if (toRemove >= 0) {
-      const currentComments = comments.crowdaction.comments;
+      const currentComments = comments.comments;
       const filteredComments = currentComments.slice(0, toRemove)
                                               .concat(currentComments.slice(toRemove + 1));
       cache.writeQuery({
         query: GET_COMMENTS,
         variables: vars,
         data: {
-          crowdaction: {
-            __typename: comments.crowdaction.__typename,
-            id: id,
-            comments: filteredComments
-          }
+          comments: filteredComments
         }
       });
       return;
@@ -112,11 +99,7 @@ const updateCacheAfterCreate = (cache: DataProxy, mutationResult: FetchResult, i
       query: GET_COMMENTS,
       variables: vars,
       data: {
-        crowdaction: {
-          __typename: currentComments.crowdaction.__typename,
-          id: id,
-          comments: [ newComment, ...currentComments.crowdaction.comments ],
-        }
+        comments: [ newComment, ...currentComments.comments ],
       }
     });
   }
@@ -124,22 +107,14 @@ const updateCacheAfterCreate = (cache: DataProxy, mutationResult: FetchResult, i
 
 // Put the new comments at the end of the list
 const updateCacheAfterFetch = (previousResult: any, { fetchMoreResult }: any) => {
-  const newCrowdaction = fetchMoreResult.crowdaction;
-  const previousCrowdaction = previousResult.crowdaction;
-
   return {
-    crowdaction: {
-      __typename: previousCrowdaction.__typename,
-      id: previousCrowdaction.id,
-      comments: [...previousCrowdaction.comments, ...newCrowdaction.comments],
-    }
+    comments: [...previousResult.comments, ...fetchMoreResult.comments],
   };
 }
 
 export default ({ id }: ICrowdactionCommentsProps) => {
   const user = useUser();
   const [ commentChangeNum, setCommentChangeNum ] = useState(0); // The net count difference in comments, counting deletions and new comments
-  const [ cursors, setCursors ] = useState([maxCursor]);
   const { data, loading, fetchMore, error } = useQuery<any>(
     GET_COMMENTS,
     {
@@ -150,7 +125,7 @@ export default ({ id }: ICrowdactionCommentsProps) => {
       }
     }
   );
-  const comments = data?.crowdaction.comments;
+  const comments = data?.comments;
   const lastId = 
     comments ? comments[comments.length - 1].id.toString() :
                 maxCursor;
@@ -158,7 +133,7 @@ export default ({ id }: ICrowdactionCommentsProps) => {
     DELETE_COMMENT,
     {
       update: (cache: DataProxy, mutationResult: FetchResult) => {
-        updateCacheAfterDelete(cache, mutationResult, cursors, id);
+        updateCacheAfterDelete(cache, mutationResult, id);
         setCommentChangeNum(commentChangeNum - 1);
       }
     });
@@ -175,7 +150,6 @@ export default ({ id }: ICrowdactionCommentsProps) => {
         before: lastId
       },
       updateQuery: (previousResult, options) => {
-        setCursors(cursors.concat([lastId]));
         return updateCacheAfterFetch(previousResult, options);
       }
     })        
@@ -224,7 +198,7 @@ export default ({ id }: ICrowdactionCommentsProps) => {
               : null
         }
         {
-          data?.crowdaction.comments?.map((comment: any) => {
+          comments?.map((comment: any) => {
               const commentDate = new Date(comment.commentedAt);
               return <Grid key={comment.id} item xs={12}>
                 <Card>
@@ -244,7 +218,7 @@ export default ({ id }: ICrowdactionCommentsProps) => {
             })
         }
         { loading ? <Grid item xs={12}><Loader /></Grid> : null }
-        { (data?.crowdaction?.comments.length - commentChangeNum) % numCommentsPerFetch === 0 ? 
+        { comments && (comments.length - commentChangeNum) % numCommentsPerFetch === 0 ? 
             <Grid item xs={12}><Button onClick={() => loadMore()}>Load More</Button></Grid> : 
             null
         }
