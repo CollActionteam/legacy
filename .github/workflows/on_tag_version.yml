@@ -3,7 +3,7 @@ name: On Push
 on:
   push:
     tags:
-      - 'v*' # Push events matching v*, e.g. v2.0.0.
+      - v* # Push events matching v*, e.g. v2.0.0.
 
 jobs:
   build_frontend:

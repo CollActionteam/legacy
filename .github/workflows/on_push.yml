@@ -2,8 +2,10 @@ name: On Push
 
 on: 
   push:
+    branches:
+      - '**'
     tags-ignore:
-      - 'v*'  # Not on version tags
+      - v*  # Not on version tags
 
 jobs:
   test_backend:
