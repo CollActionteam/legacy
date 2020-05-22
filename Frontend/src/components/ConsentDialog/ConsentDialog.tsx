@@ -10,7 +10,6 @@ import { Alert } from "../Alert/Alert";
 const initialConsentState: Record<Consent, boolean> = {
     [Consent.Basics]: true,
     [Consent.Analytics]: false,
-    [Consent.Disqus]: false,
     [Consent.Social]: false,
     [Consent.Stripe]: false,
 };

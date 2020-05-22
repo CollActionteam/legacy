@@ -10,7 +10,6 @@ export const GET_SETTINGS = gql`
             mailChimpUserId
             mailChimpAccount
             mailChimpServer
-            disqusSiteId
             stripePublicKey
             externalLoginProviders
             googleAnalyticsID
@@ -40,7 +39,6 @@ const defaultSettings: ISettings = {
     mailChimpAccount: "",
     mailChimpServer: "",
     stripePublicKey: "",
-    disqusSiteId: "",
     googleAnalyticsID: "",
     facebookPixelID: "",
     externalLoginProviders: [],
@@ -63,7 +61,6 @@ const mapSettings = (settingsData: any): ISettings => {
         mailChimpServer: misc.mailChimpServer,
         mailChimpUserId: misc.mailChimpUserId,
         stripePublicKey: misc.stripePublicKey,
-        disqusSiteId: misc.disqusSiteId,
         externalLoginProviders: misc.externalLoginProviders,
         googleAnalyticsID: misc.googleAnalyticsID,
         facebookPixelID: misc.facebookPixelID,

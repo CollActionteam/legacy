@@ -144,7 +144,6 @@ namespace CollAction
             services.AddTransient<IHtmlInputValidator, HtmlInputValidator>();
 
             // Configure application options
-            services.AddOptions<DisqusOptions>().Bind(configuration).ValidateDataAnnotations();
             services.AddOptions<StripeSignatures>().Bind(configuration).ValidateDataAnnotations();
             services.AddOptions<SiteOptions>().Bind(configuration).ValidateDataAnnotations();
             services.AddOptions<AuthMessageSenderOptions>().Bind(configuration).ValidateDataAnnotations();

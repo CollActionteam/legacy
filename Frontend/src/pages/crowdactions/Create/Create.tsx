@@ -13,7 +13,7 @@ import styles from './Create.module.scss';
 import { initialValues, ICrowdactionForm, validations } from './form';
 import UploadImage from './UploadImage';
 import { Link, useHistory } from 'react-router-dom';
-import { gql, useMutation, ExecutionResult } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
 import Loader from '../../../components/Loader/Loader';
 import Utils from '../../../utils';
 
@@ -68,7 +68,7 @@ const CreateCrowdactionPage = () => {
       return;
     }
 
-    const response = (await createCrowdaction({
+    const response = await createCrowdaction({
       variables: {
         crowdaction: {
           name: form.crowdactionName,
@@ -87,7 +87,7 @@ const CreateCrowdactionPage = () => {
           descriptionVideoLink: form.youtube || null
         }
       }
-    })) as ExecutionResult;
+    });
 
     if (!response || !response.data) {
       throw new Error('No response from graphql endpoint');
