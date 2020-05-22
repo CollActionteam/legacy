@@ -1,23 +1,30 @@
 @import '../Styles/responsive.scss';
 
 :global {
+    .slick-slider {
+        touch-action: auto;
+    }
+      
     .slick-list {
         padding-bottom: var(--spacing); // Fix for overflow-y
 
         @include breakpoint-down(sm) {
             margin-top: var(--spacing-lg);
-            overflow-x: auto; // Horizontal scroll on mobile
+            margin-bottom: var(--spacing-lg);
         }
     }
 
-    .slick-slide {
-        width: 100%;
-        min-width: 240px;
-        max-width: 370px;
-        margin-right: var(--spacing);
+    .slick-track {
+        display: flex;
+    }
 
-        @include breakpoint-up(sm) {
-            width: 28vw;
+    .slick-slide {
+        width: 270px;
+        margin-right: var(--spacing);
+        height: auto;
+    
+        > div {
+          height: 100%;
         }
     }
 
@@ -81,16 +88,21 @@
 }
 
 .container {
-    margin-bottom: var(--spacing-xxl-2);
+    margin-bottom: var(--spacing-xxl);
 
     @include breakpoint-up(md) {
         margin-top: var(--spacing-lg);
+        margin-bottom: var(--spacing-lg);
         padding-left: 3rem;
         padding-right: 3rem;
     }
 
     @include breakpoint-up(xl) {
         padding: 0;
+    }
+
+    @include breakpoint-down(md) {
+        display: block;
     }
 }
 
@@ -142,11 +154,6 @@
 }
 
 .sliderContainer {
-    // Horizontal scroll on mobile
-    @include breakpoint-down(sm) {
-        overflow: hidden;
-    }
-
     @include breakpoint-up(sm) {
         padding: var(--spacing-xxl-2) 3rem;
     }

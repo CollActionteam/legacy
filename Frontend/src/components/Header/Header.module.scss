@@ -1,8 +1,9 @@
 @import '../Styles/responsive.scss';
-:root {
-    --header-height: 5.5rem;
 
+:root {
+    --header-height: 5rem;
 }
+
 .header {
     width: 100%;
     background-color: var(--c-white);
@@ -16,13 +17,107 @@
 }
 
 .wrapper {
-    display: flex;
-    align-items: center;
     height: var(--header-height);
+    @include breakpoint-up(md) {
+        align-items: center;
+        display: flex;
+    }
+}
+
+.logoWrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+
+    @include breakpoint-down(md) {
+        height: calc(var(--header-height) / 2);
+
+        &::after {
+            position: absolute;
+            content: "";
+            bottom: 0;
+            left: 50%;
+            transform: translate3d(-50%, 0, 0);
+            width: 100vw;
+            height: 1px;
+            background-color: var(--c-grey-d10);
+        }
+    }
 }
 
 .logo {
     display: block;
-    max-width: 250px;
+    max-width: 9rem;
+    padding: var(--spacing-xs);
     z-index: 1;
+
+    @include breakpoint-up(md) {
+        max-width: 10rem;
+    }
+}
+
+.navigationWrapper {
+    display: flex;
+    justify-content: space-between;
+    flex-grow: 1;
+    align-items: center;
+
+    @include breakpoint-down(md) {
+        height: calc(var(--header-height) / 2);
+    }
+}
+
+.subnavigationList {
+    display: flex;
+}
+
+.subnavigationListItem {
+    &:not(:first-of-type) {
+        margin-left: var(--spacing);
+    }
+}
+
+.subnavigationLink {
+    color: var(--c-grey-d30);
+    text-decoration: none;
+    
+    svg {
+        margin-right: var(--spacing-xs);
+        transition: transform var(--transition-duration);
+    }
+
+    &:hover,
+    &:focus {
+        svg {
+            transform: scale(1.1);
+        }
+    }
+
+    @include breakpoint-down(lg) {
+        span {
+            display: none;
+        }
+    }
+}
+
+.subnavigationSubmit {
+    background: none!important;
+    border: none;
+    padding: 0!important;
+    color: var(--c-green);
+    text-decoration: none;
+    font-weight: var(--font-weight-bold);
+    
+    svg {
+        padding-right: var(--spacing-xxs);
+        transition: transform var(--transition-duration);
+    }
+
+    &:hover,
+    &:focus {
+        text-decoration: underline;
+        svg {
+            transform: scale(1.1);
+        }
+    }
 }

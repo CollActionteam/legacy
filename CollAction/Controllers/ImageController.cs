@@ -35,6 +35,11 @@ namespace CollAction.Controllers
                 ImageFile image = await imageService.UploadImage(uploadImage.Image, uploadImage.ImageDescription, uploadImage.ImageResizeThreshold, token).ConfigureAwait(false);
                 return Ok(new Dictionary<string, int>() { { "id", image.Id } });
             }
+            catch (SixLabors.ImageSharp.UnknownImageFormatException e) 
+            {
+                logger.LogError(e, "Error uploading image");
+                return StatusCode(StatusCodes.Status400BadRequest, new Dictionary<string, string>() { { "errorMessage", "Invalid image format. Use GIF, PNG, JPEG or BMP" } });
+            }
             catch (Exception e)
             {
                 logger.LogError(e, "Error uploading image");

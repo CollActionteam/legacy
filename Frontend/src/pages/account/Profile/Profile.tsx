@@ -13,7 +13,7 @@ import { Helmet } from "react-helmet";
 import {Section} from "../../../components/Section/Section";
 
 export default () => {
-  const user = useUser();
+  const user = useUser() ?? null;
   if (user !== null) {
     return <div style={{ padding: 20 }}>
         <Helmet>

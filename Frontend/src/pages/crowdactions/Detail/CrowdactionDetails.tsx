@@ -33,13 +33,20 @@ type TParams = {
 }
 
 const CrowdactionDetailsPage = ({ match } : RouteComponentProps<TParams>): any => {
-  const user = useUser();
   const { slug, crowdactionId } = match.params;
+
+  const user = useUser();
   const { data, loading } = useQuery(GET_CROWDACTION, { variables: { id: crowdactionId } });
   const crowdaction = (data?.crowdaction ?? null) as ICrowdaction | null;
+  
+  const isParticipating = user === undefined 
+    ? undefined 
+    : (user?.participates?.some(part => part.crowdaction.id === crowdactionId) ?? false);
+
   const [ errorMessage, setErrorMessage ] = useState<string | null>(null);
-  const isParticipating = Boolean(user?.participates?.find((part) => part.crowdaction.id === crowdactionId));
+
   const history = useHistory();
+
   const formik = useFormik({
     initialValues: {
       email: ''
@@ -229,46 +236,52 @@ const CrowdactionDetailsPage = ({ match } : RouteComponentProps<TParams>): any =
               { crowdaction.owner && 
                 <CrowdactionStarter user={crowdaction.owner}></CrowdactionStarter>
               }
-              
-              { !isParticipating && crowdaction?.isActive ?
-                  <div id="join" className={styles.joinSection}>
-                    <FormikContext.Provider value={formik}>
-                      <Form className={styles.form} onSubmit={formik.handleSubmit}>
-                        { user === null ?
-                            <React.Fragment>
-                              <span>
-                                Want to participate? Enter your e-mail address and join
-                                this crowdaction!
-                              </span>
-                              <div className={styles.formRow}>
-                                <Field
-                                  name="email"
-                                  label="Your e-mail address"
-                                  component={TextField}
-                                  fullWidth
-                                >                                  
-                                </Field>
-                              </div>
-                            </React.Fragment> :
-                            <span>
-                              <input type="hidden" name="email" { ...formik.getFieldProps('email') } />
-                              Want to participate? Join this crowdaction!
-                            </span> 
-                        }
-                        <Button type="submit" disabled={formik.isSubmitting}>
-                          Join CrowdAction
-                        </Button>
-                      </Form>
-                    </FormikContext.Provider>
-                  </div> : 
-                    <div id="join" className={styles.joinSection}>
-                      <span>
-                        { crowdaction?.isActive ? "You are already participating in this crowdaction" : null }
-                        { crowdaction?.isComingSoon ? `This crowdaction starts on ${Formatter.date(new Date(crowdaction.start))}` : null }
-                        { crowdaction?.isSuccessfull ? "This crowdaction is already done and has completed successfully" : null }
-                        { crowdaction?.isFailed ? "This crowdaction is already done and has failed" : null }
-                      </span>
-                    </div>
+              { user !== undefined && isParticipating !== undefined &&
+                <div id="join" className={styles.joinSection}>
+                  { crowdaction.isComingSoon && <span>This crowdaction starts on { Formatter.date(new Date(crowdaction.start)) }.</span> }
+                  { crowdaction.isSuccessfull && <span>This crowdaction is already done and has completed successfully.</span>}
+                  { crowdaction.isFailed && <span>This crowdaction is already done and has failed.</span>}
+                  { crowdaction.isActive &&
+                    <React.Fragment>
+                      { isParticipating && <span>You are already participating in this crowdaction.</span> }
+                      { !isParticipating && 
+                        <React.Fragment>
+                          <FormikContext.Provider value={formik}>
+                            <Form className={styles.form} onSubmit={formik.handleSubmit}>
+                              { user !== null && 
+                                <React.Fragment>
+                                  <span className={styles.formRow}>
+                                    Want to participate? Join this crowdaction!
+                                  </span>                         
+                                  <input type="hidden" name="email" { ...formik.getFieldProps('email') } />
+                                </React.Fragment>                              
+                              }
+                              { user === null &&
+                                <React.Fragment>
+                                  <span>
+                                    Want to participate? Enter your e-mail address and join this crowdaction!
+                                  </span>
+                                  <div className={styles.formRow}>
+                                    <Field
+                                      name="email"
+                                      label="Your e-mail address"
+                                      component={TextField}
+                                      fullWidth
+                                    >                                  
+                                    </Field>
+                                  </div>
+                                </React.Fragment>                              
+                              }
+                              <Button type="submit" disabled={formik.isSubmitting}>
+                                Join CrowdAction
+                              </Button>
+                            </Form>
+                          </FormikContext.Provider>
+                        </React.Fragment>
+                      }
+                    </React.Fragment>
+                  }
+                </div>
               }
             </Container>
           </Grid>
