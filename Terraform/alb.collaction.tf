@@ -52,3 +52,16 @@ resource "aws_security_group" "collaction-api" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+data "aws_route53_zone" "collaction" {
+  name         = "collaction.org."
+  private_zone = true
+}
+
+resource "aws_route53_record" "api" {
+  zone_id = data.aws_route53_zone.collaction.zone_id
+  name    = "api.collaction.org"
+  type    = "A"
+  ttl     = "300"
+  records = [aws_alb.collaction-api.dns_name]
+}
