@@ -2,7 +2,7 @@
 
 .wrapper {
     display: flex;
-    width: 100%;
+    // width: 100%;
 }
 
 .navigation {
@@ -41,6 +41,7 @@
     @include breakpoint-down(md) {
         flex-direction: column;
         align-items: flex-start;
+        padding-top: var(--spacing);
     }
 }
 
@@ -50,8 +51,8 @@
     font-size: var(--font-size);
 
     @include breakpoint-down(md) {
-        padding-left: var(--spacing-m);
-        padding-bottom: var(--spacing);
+        padding-left: var(--spacing);
+        padding-bottom: calc(var(--spacing) * 2);
     }
 
     @include breakpoint-down(sm) {
@@ -72,10 +73,6 @@
     &:focus {
         text-decoration: underline;
     }
-
-    @include breakpoint-down(md) {
-        color: var(--c-green);
-    }
 }
 
 .navigationToggle {
@@ -88,43 +85,4 @@
     opacity: .8;
     cursor: pointer;
     margin-left: auto;
-}
-
-.navigationSubmit {
-    background: none!important;
-    border: none;
-    padding: 0!important;
-    color: var(--c-green);
-    text-decoration: none;
-    font-weight: var(--font-weight-bold);
-    
-    svg {
-        padding-right: var(--spacing-xxs);
-        transition: transform var(--transition-duration);
-    }
-
-    &:hover,
-    &:focus {
-        text-decoration: underline;
-        svg {
-            transform: scale(1.1);
-        }
-    }
-}
-
-.navigationButton {
-    color: var(--c-grey-d30);
-    text-decoration: none;
-    
-    svg {
-        margin-right: var(--spacing-xs);
-        transition: transform var(--transition-duration);
-    }
-
-    &:hover,
-    &:focus {
-        svg {
-            transform: scale(1.1);
-        }
-    }
 }
