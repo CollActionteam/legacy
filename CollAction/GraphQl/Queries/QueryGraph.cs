@@ -8,6 +8,7 @@ using GraphQL.EntityFramework;
 using GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 
@@ -39,22 +40,78 @@ namespace CollAction.GraphQl.Queries
                 name: nameof(Crowdaction),
                 resolve: c => c.GetUserContext().ServiceProvider.GetRequiredService<ICrowdactionService>().SearchCrowdactions(null, null));
 
-            FieldAsync<IntGraphType>(
+            FieldAsync<NonNullGraphType<IntGraphType>, int>(
                 "crowdactionCount",
                 arguments: new QueryArguments(
                     new QueryArgument<SearchCrowdactionStatusInputGraph>() { Name = "status" },
                     new QueryArgument<CategoryGraph>() { Name = "category" }),
-                resolve: async c =>
+                resolve: c =>
                 {
                     Category? category = c.GetArgument<Category?>("category");
                     SearchCrowdactionStatus? status = c.GetArgument<SearchCrowdactionStatus?>("status");
 
                     var context = c.GetUserContext();
-                    return await context.ServiceProvider
-                                        .GetRequiredService<ICrowdactionService>()
-                                        .SearchCrowdactions(category, status)
-                                        .CountAsync()
-                                        .ConfigureAwait(false);
+                    return context.ServiceProvider
+                                  .GetRequiredService<ICrowdactionService>()
+                                  .SearchCrowdactions(category, status)
+                                  .CountAsync();
+                });
+
+            AddQueryField(
+                name: nameof(ApplicationDbContext.CrowdactionComments),
+                arguments: new QueryArgument[]
+                {
+                    new QueryArgument<IdGraphType>() { Name = "crowdactionId" },
+                },
+                resolve: c =>
+                {
+                    string? crowdactionId = c.GetArgument<string?>("crowdactionId");
+
+                    if (crowdactionId != null)
+                    {
+                        int id = int.Parse(crowdactionId, CultureInfo.InvariantCulture);
+                        return c.DbContext
+                                .CrowdactionComments
+                                .Where(c => c.CrowdactionId == id);
+                    }
+                    else
+                    {
+                        return c.DbContext
+                                .CrowdactionComments;
+                    }
+                });
+
+            AddSingleField(
+                name: nameof(CrowdactionComment),
+                resolve: c => c.DbContext.CrowdactionComments,
+                graphType: typeof(CrowdactionCommentGraph));
+
+            FieldAsync<NonNullGraphType<IntGraphType>, int>(
+                "crowdactionCommentCount",
+                arguments: new QueryArguments(
+                    new QueryArgument[]
+                    {
+                        new QueryArgument<IdGraphType>() { Name = "crowdactionId" },
+                    }),
+                resolve: c =>
+                {
+                    string? crowdactionId = c.GetArgument<string?>("crowdactionId");
+
+                    if (crowdactionId != null)
+                    {
+                        int id = int.Parse(crowdactionId, CultureInfo.InvariantCulture);
+                        return c.GetUserContext()
+                                .Context
+                                .CrowdactionComments
+                                .CountAsync(c => c.CrowdactionId == id, c.CancellationToken);
+                    }
+                    else
+                    {
+                        return c.GetUserContext()
+                                .Context
+                                .CrowdactionComments
+                                .CountAsync(c.CancellationToken);
+                    }
                 });
 
             AddQueryField(
@@ -67,9 +124,9 @@ namespace CollAction.GraphQl.Queries
                 resolve: c => c.DbContext.Users,
                 graphType: typeof(ApplicationUserGraph)).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
 
-            FieldAsync<IntGraphType>(
+            FieldAsync<NonNullGraphType<IntGraphType>, int>(
                 "userCount",
-                resolve: async c => await c.GetUserContext().Context.Users.CountAsync().ConfigureAwait(false)).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
+                resolve: c => c.GetUserContext().Context.Users.CountAsync()).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
 
             AddSingleField(
                 name: "currentUser",
@@ -89,11 +146,11 @@ namespace CollAction.GraphQl.Queries
                 graphType: typeof(ApplicationUserGraph),
                 nullable: true);
 
-            Field<MiscellaneousGraph>(
+            Field<NonNullGraphType<MiscellaneousGraph>>(
                 "misc",
                 resolve: c => new object());
 
-            Field<StatisticsGraph>(
+            Field<NonNullGraphType<StatisticsGraph>>(
                 "stats",
                 resolve: c => new object());
         }

@@ -7,7 +7,7 @@ namespace CollAction.GraphQl.Mutations.Input
     {
         public UpdatedUserInputGraph()
         {
-            Field<NonNullGraphType<IdGraphType>>(nameof(UpdatedUser.Id), resolve: x => x.Source.Id);
+            Field<NonNullGraphType<IdGraphType>, string>(nameof(UpdatedUser.Id)).Resolve(x => x.Source.Id);
             Field(x => x.Email);
             Field(x => x.FirstName, true);
             Field(x => x.LastName, true);

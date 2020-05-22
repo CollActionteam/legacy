@@ -1,5 +1,6 @@
 ﻿using GraphQL.Types;
 using Stripe;
+using System;
 
 namespace CollAction.GraphQl.Queries
 {
@@ -7,9 +8,9 @@ namespace CollAction.GraphQl.Queries
     {
         public DonationSubscriptionGraph()
         {
-            Field<NonNullGraphType<IdGraphType>>(nameof(Subscription.Id), resolve: x => x.Source.Id);
-            Field<DateTimeOffsetGraphType>(nameof(Subscription.CanceledAt), resolve: x => x.Source.CanceledAt);
-            Field<DateTimeOffsetGraphType>(nameof(Subscription.StartDate), resolve: x => x.Source.StartDate);
+            Field<NonNullGraphType<IdGraphType>, string>(nameof(Subscription.Id)).Resolve(x => x.Source.Id);
+            Field<DateTimeOffsetGraphType, DateTime?>(nameof(Subscription.CanceledAt)).Resolve(x => x.Source.CanceledAt);
+            Field<DateTimeOffsetGraphType, DateTime?>(nameof(Subscription.StartDate)).Resolve(x => x.Source.StartDate);
         }
     }
 }

@@ -9,37 +9,34 @@ namespace CollAction.GraphQl.Queries
     {
         public StatisticsGraph()
         {
-            FieldAsync<NonNullGraphType<IntGraphType>>(
+            FieldAsync<NonNullGraphType<IntGraphType>, int>(
                 "numberActionsTaken",
-                resolve: async c =>
+                resolve: c =>
                 {
-                    return await c.GetUserContext()
-                                  .ServiceProvider
-                                  .GetRequiredService<IStatisticsService>()
-                                  .NumberActionsTaken(c.CancellationToken)
-                                  .ConfigureAwait(false);
+                    return c.GetUserContext()
+                            .ServiceProvider
+                            .GetRequiredService<IStatisticsService>()
+                            .NumberActionsTaken(c.CancellationToken);
                 });
 
-            FieldAsync<NonNullGraphType<IntGraphType>>(
+            FieldAsync<NonNullGraphType<IntGraphType>, int>(
                 "numberCrowdactions",
-                resolve: async c =>
+                resolve: c =>
                 {
-                    return await c.GetUserContext()
-                                  .ServiceProvider
-                                  .GetRequiredService<IStatisticsService>()
-                                  .NumberCrowdactions(c.CancellationToken)
-                                  .ConfigureAwait(false);
+                    return c.GetUserContext()
+                            .ServiceProvider
+                            .GetRequiredService<IStatisticsService>()
+                            .NumberCrowdactions(c.CancellationToken);
                 });
 
-            FieldAsync<NonNullGraphType<IntGraphType>>(
+            FieldAsync<NonNullGraphType<IntGraphType>, int>(
                 "numberUsers",
-                resolve: async c =>
+                resolve: c =>
                 {
-                    return await c.GetUserContext()
-                                  .ServiceProvider
-                                  .GetRequiredService<IStatisticsService>()
-                                  .NumberUsers(c.CancellationToken)
-                                  .ConfigureAwait(false);
+                    return c.GetUserContext()
+                            .ServiceProvider
+                            .GetRequiredService<IStatisticsService>()
+                            .NumberUsers(c.CancellationToken);
                 });
         }
     }

@@ -5,6 +5,7 @@ using CollAction.Services.Image;
 using GraphQL.EntityFramework;
 using GraphQL.Types;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace CollAction.GraphQl.Queries
 {
@@ -12,15 +13,14 @@ namespace CollAction.GraphQl.Queries
     {
         public ImageFileGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService) : base(entityFrameworkGraphQlService)
         {
-            Field<NonNullGraphType<IdGraphType>>(nameof(ImageFile.Id), resolve: x => x.Source.Id);
-            Field<NonNullGraphType<DateTimeOffsetGraphType>>(nameof(ImageFile.Date), resolve: x => x.Source.Date);
+            Field<NonNullGraphType<IdGraphType>, int>(nameof(ImageFile.Id)).Resolve(x => x.Source.Id);
+            Field<NonNullGraphType<DateTimeOffsetGraphType>, DateTime>(nameof(ImageFile.Date)).Resolve(x => x.Source.Date);
             Field(x => x.Description);
             Field(x => x.Filepath);
             Field(x => x.Height);
             Field(x => x.Width);
-            Field<NonNullGraphType<StringGraphType>>(
-                "url",
-                resolve: c =>
+            Field<NonNullGraphType<StringGraphType>, string>("url")
+                .Resolve(c =>
                 {
                     return c.GetUserContext()
                             .ServiceProvider
