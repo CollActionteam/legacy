@@ -1,6 +1,9 @@
 name: On Push
 
-on: [push]
+on: 
+  push:
+    tags-ignore:
+      - 'v*'  # Not on version tags
 
 jobs:
   test_backend:
