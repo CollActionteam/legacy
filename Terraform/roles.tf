@@ -4,7 +4,13 @@ data "aws_iam_policy_document" "ecs_task_execution_role" {
   statement {
     sid     = ""
     effect  = "Allow"
-    actions = ["sts:AssumeRole"]
+    actions = [
+      "sts:AssumeRole",
+      "ssm:GetParameters"
+    ]
+    resources = [
+      "arn:aws:ssm:${var.aws_region}:${data.aws_caller_identity.current.account_id}:parameter/collaction/*"
+    ]
 
     principals {
       type        = "Service"
