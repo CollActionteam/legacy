@@ -84,6 +84,7 @@ namespace CollAction
                     .AddTwitter(options =>
                     {
                         authSection.GetSection("Twitter").Bind(options);
+                        options.RetrieveUserDetails = true;
                     })
                     .AddGoogle(options =>
                     {
