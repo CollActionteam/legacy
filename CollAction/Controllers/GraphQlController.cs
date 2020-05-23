@@ -70,11 +70,7 @@ namespace CollAction.Controllers
         [HttpPost]
         public Task<ExecutionResult> Post([BindRequired, FromBody] GraphQlPostBody body, CancellationToken cancellation)
         {
-            if (User.Identity.IsAuthenticated || body.Query.StartsWith("mutation", StringComparison.OrdinalIgnoreCase))
-            {
-                return Execute(body.Query, body.OperationName, body.Variables, cancellation);
-            }
-            else
+            if (!User.Identity.IsAuthenticated && body.Query.StartsWith("query", StringComparison.OrdinalIgnoreCase))
             {
                 return cache.GetOrCreateAsync(
                     new CacheKey(body.Query, body.Variables),
@@ -84,17 +80,17 @@ namespace CollAction.Controllers
                         return Execute(body.Query, body.OperationName, body.Variables, cancellation);
                     });
             }
+            else
+            {
+                return Execute(body.Query, body.OperationName, body.Variables, cancellation);
+            }
         }
 
         [HttpGet]
         public Task<ExecutionResult> Get([FromQuery] GraphQlGetQuery getQuery, CancellationToken cancellation)
         {
             JObject? jsonVariables = ParseVariables(getQuery.Variables);
-            if (User.Identity.IsAuthenticated || getQuery.Query.StartsWith("mutation", StringComparison.OrdinalIgnoreCase))
-            {
-                return Execute(getQuery.Query, getQuery.OperationName, jsonVariables, cancellation);
-            }
-            else
+            if (!User.Identity.IsAuthenticated && getQuery.Query.StartsWith("query", StringComparison.OrdinalIgnoreCase))
             {
                 return cache.GetOrCreateAsync(
                     new CacheKey(getQuery.Query, jsonVariables),
@@ -103,6 +99,10 @@ namespace CollAction.Controllers
                         entry.SlidingExpiration = CacheExpiration;
                         return Execute(getQuery.Query, getQuery.OperationName, jsonVariables, cancellation);
                     });
+            }
+            else
+            {
+                return Execute(getQuery.Query, getQuery.OperationName, jsonVariables, cancellation);
             }
         }
 
