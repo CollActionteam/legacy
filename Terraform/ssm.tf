@@ -57,7 +57,7 @@ resource "aws_ssm_parameter" "securestring_parameters" {
 
   name = "/collaction/${var.environment}/${each.key}"
   type = "SecureString"
-  value = ""
+  value = "todo"
 }
 
 resource "aws_ssm_parameter" "string_parameters" {
@@ -65,5 +65,5 @@ resource "aws_ssm_parameter" "string_parameters" {
 
   name = "/collaction/${var.environment}/${each.key}"
   type = "String"
-  value = ""
+  value = "todo"
 }
