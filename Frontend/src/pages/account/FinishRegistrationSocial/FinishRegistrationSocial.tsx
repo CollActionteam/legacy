@@ -93,6 +93,7 @@ const FinishRegistrationSocialPage = () => {
                 <Grid item sm={6}>
                     <Alert type="error" text={errorMessage} />
                     <Alert type="info" text={infoMessage} />
+                    { !user ? <Alert type="warning" text="Please wait a few seconds while we finish logging you in" /> : null }
                     <FormikProvider value={formik}>
                         <Form onSubmit={formik.handleSubmit}>
                             <FormGroup>
@@ -108,7 +109,7 @@ const FinishRegistrationSocialPage = () => {
                                         />
                                     { formik.submitCount > 0 ? <Alert type="error" text={formik.errors.privacyPolicy} /> : null }
                                 </FormControl>
-                                <Button type="submit">Register</Button>
+                                <Button type="submit" disabled={formik.isSubmitting || !user}>Register</Button>
                             </FormGroup>
                         </Form>
                     </FormikProvider>
