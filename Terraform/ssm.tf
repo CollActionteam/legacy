@@ -58,6 +58,10 @@ resource "aws_ssm_parameter" "securestring_parameters" {
   name = "/collaction/${var.environment}/${each.key}"
   type = "SecureString"
   value = "todo"
+
+  lifecycle {
+    ignore_changes = [value]
+  }
 }
 
 resource "aws_ssm_parameter" "string_parameters" {
@@ -66,4 +70,8 @@ resource "aws_ssm_parameter" "string_parameters" {
   name = "/collaction/${var.environment}/${each.key}"
   type = "String"
   value = "todo"
+
+  lifecycle {
+    ignore_changes = [value]
+  }
 }
