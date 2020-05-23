@@ -40,7 +40,7 @@ resource "aws_ecs_task_definition" "api" {
 
 # Container output is logged to CloudWatch
 resource "aws_cloudwatch_log_group" "collaction-api" {
-  name              = "/ecs/${var.environment/collaction-api"
+  name              = "/ecs/${var.environment}/collaction-api"
   retention_in_days = 7
 }
 
