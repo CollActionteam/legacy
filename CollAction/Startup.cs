@@ -176,11 +176,12 @@ namespace CollAction
 
         public void Configure(IApplicationBuilder app, IHostApplicationLifetime applicationLifetime)
         {
+            applicationLifetime.ApplicationStopping.Register(() => Log.CloseAndFlush());
             app.UseRouting();
             app.UseCors();
             app.UseSerilogRequestLogging();
 
-            if (environment.IsProduction())
+            if (environment.IsProduction() || environment.IsStaging())
             {
                 // Ensure our middleware handles proxied https, see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-Proto
                 var forwardedHeaderOptions = new ForwardedHeadersOptions()
@@ -191,13 +192,16 @@ namespace CollAction
                 forwardedHeaderOptions.KnownProxies.Clear();
                 forwardedHeaderOptions.KnownNetworks.Clear();
                 app.UseForwardedHeaders(forwardedHeaderOptions);
+            }
+
+            if (environment.IsProduction())
+            {
                 app.UseRewriter(new RewriteOptions().AddRedirectToHttpsPermanent());
                 app.UseHsts();
                 app.UseExceptionHandler("/error");
-
-                applicationLifetime.ApplicationStopping.Register(() => Log.CloseAndFlush());
             }
-            else if (environment.IsDevelopment())
+
+            if (environment.IsDevelopment() || environment.IsStaging())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseGraphiQl("/graphiql", "/graphql");
