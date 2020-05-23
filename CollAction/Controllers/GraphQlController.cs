@@ -72,16 +72,19 @@ namespace CollAction.Controllers
         {
             if (!User.Identity.IsAuthenticated && body.Query.StartsWith("query", StringComparison.OrdinalIgnoreCase))
             {
+                logger.LogInformation("Executing graphql query with caching");
                 return cache.GetOrCreateAsync(
                     new CacheKey(body.Query, body.Variables),
                     entry =>
                     {
+                        logger.LogInformation("Query not found in cache, calculating resultset");
                         entry.SlidingExpiration = CacheExpiration;
                         return Execute(body.Query, body.OperationName, body.Variables, cancellation);
                     });
             }
             else
             {
+                logger.LogInformation("Executing graphql query without caching");
                 return Execute(body.Query, body.OperationName, body.Variables, cancellation);
             }
         }
@@ -92,16 +95,19 @@ namespace CollAction.Controllers
             JObject? jsonVariables = ParseVariables(getQuery.Variables);
             if (!User.Identity.IsAuthenticated && getQuery.Query.StartsWith("query", StringComparison.OrdinalIgnoreCase))
             {
+                logger.LogInformation("Executing graphql query with caching");
                 return cache.GetOrCreateAsync(
                     new CacheKey(getQuery.Query, jsonVariables),
                     entry =>
                     {
+                        logger.LogInformation("Query not found in cache, calculating resultset");
                         entry.SlidingExpiration = CacheExpiration;
                         return Execute(getQuery.Query, getQuery.OperationName, jsonVariables, cancellation);
                     });
             }
             else
             {
+                logger.LogInformation("Executing graphql query without caching");
                 return Execute(getQuery.Query, getQuery.OperationName, jsonVariables, cancellation);
             }
         }
