@@ -176,7 +176,7 @@ namespace CollAction
 
         public void Configure(IApplicationBuilder app, IHostApplicationLifetime applicationLifetime)
         {
-            applicationLifetime.ApplicationStopping.Register(() => Log.CloseAndFlush());
+            applicationLifetime.ApplicationStopping.Register(Log.CloseAndFlush);
             app.UseRouting();
             app.UseCors();
             app.UseSerilogRequestLogging();
