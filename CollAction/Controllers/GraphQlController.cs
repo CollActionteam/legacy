@@ -42,18 +42,18 @@ namespace CollAction.Controllers
 
             public string Query { get; }
             public JObject? Variables { get; }
+            private static readonly JTokenEqualityComparer jtokenComparer = new JTokenEqualityComparer();
 
             public bool Equals([AllowNull] CacheKey? other)
                 => other != null &&
                    Query == other.Query &&
-                   ((Variables == null && other.Variables == null) || 
-                    (Variables != null && other.Variables != null && JObject.DeepEquals(Variables, other.Variables)));
+                   jtokenComparer.Equals(Variables, other.Variables);
 
             public override bool Equals(object? obj)
                 => Equals(obj as CacheKey);
 
             public override int GetHashCode()
-                => HashCode.Combine(Query, Variables);
+                => HashCode.Combine(Query, jtokenComparer.GetHashCode(Variables));
         }
 
         public GraphQlController(ISchema schema, IDocumentExecuter executer, IEnumerable<IValidationRule> validationRules, ApplicationDbContext context, ILogger<GraphQlController> logger, IServiceProvider serviceProvider, IMemoryCache cache)
