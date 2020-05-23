@@ -3,7 +3,7 @@ variable "aws_region" {
   default     = "eu-central-1"
 }
 
-variable "Environment" {
+variable "environment" {
   description = "Name of the environment to manage"
   default     = "dev"
 }

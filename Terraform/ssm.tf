@@ -55,7 +55,7 @@ variable "string_parameters" {
 resource "aws_ssm_parameter" "securestring_parameters" {
   for_each = var.securestring_parameters
 
-  name = "/collaction/${var.Environment}/${each.key}"
+  name = "/collaction/${var.environment}/${each.key}"
   type = "SecureString"
   value = ""
 }
@@ -63,7 +63,7 @@ resource "aws_ssm_parameter" "securestring_parameters" {
 resource "aws_ssm_parameter" "string_parameters" {
   for_each = var.string_parameters
 
-  name = "/collaction/${var.Environment}/${each.key}"
+  name = "/collaction/${var.environment}/${each.key}"
   type = "String"
   value = ""
 }
