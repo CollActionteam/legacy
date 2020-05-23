@@ -70,7 +70,7 @@ namespace CollAction.Controllers
         [HttpPost]
         public Task<ExecutionResult> Post([BindRequired, FromBody] GraphQlPostBody body, CancellationToken cancellation)
         {
-            if (User.Identity.IsAuthenticated)
+            if (User.Identity.IsAuthenticated || body.Query.StartsWith("mutation", StringComparison.OrdinalIgnoreCase))
             {
                 return Execute(body.Query, body.OperationName, body.Variables, cancellation);
             }
@@ -90,7 +90,7 @@ namespace CollAction.Controllers
         public Task<ExecutionResult> Get([FromQuery] GraphQlGetQuery getQuery, CancellationToken cancellation)
         {
             JObject? jsonVariables = ParseVariables(getQuery.Variables);
-            if (User.Identity.IsAuthenticated)
+            if (User.Identity.IsAuthenticated || getQuery.Query.StartsWith("mutation", StringComparison.OrdinalIgnoreCase))
             {
                 return Execute(getQuery.Query, getQuery.OperationName, jsonVariables, cancellation);
             }
