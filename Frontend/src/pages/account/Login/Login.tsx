@@ -22,6 +22,7 @@ const LoginPage = () => {
 
   const returnUrlQuery = searchParams.get("returnUrl") ?? "";  
   const returnUrl = `${!returnUrlQuery.startsWith('http') ? window.location.origin : ""}${returnUrlQuery}`;
+  const finishRegistrationSocialUrl = `${window.location.origin}/account/finish-registration-social`;
   
   const errorMessage = searchParams.get("message");
 
@@ -71,11 +72,8 @@ const LoginPage = () => {
               <>
                 <form method="post" action={actionExternalLogin}>
                   <FormGroup>
-                    <input
-                      type="hidden"
-                      name="returnUrl"
-                      value={returnUrl}
-                    />
+                    <input type="hidden" name="returnUrl" value={returnUrl} />
+                    <input type="hidden" name="finishRegistrationUrl" value={finishRegistrationSocialUrl} />
                     <input type="hidden" name="errorUrl" value={errorUrl} />
                     { externalLoginProviders.map(
                       (provider: string) => (
@@ -100,14 +98,12 @@ const LoginPage = () => {
                   <input type="hidden" name="returnUrl" value={returnUrl} />
                   <input type="hidden" name="errorUrl" value={errorUrl} />
                   <div className={styles.formRow}>
-                    <Field
-                      name="email"                      
+                    <Field name="email"                      
                       label="E-mail"
                       component={TextField}
                       type="email"
                       fullWidth
-                    >                      
-                    </Field>
+                    / >                      
                   </div>
                   <div className={styles.formRow}>
                     <Field
@@ -116,8 +112,7 @@ const LoginPage = () => {
                       component={TextField}
                       type="password"
                       fullWidth
-                    >                      
-                    </Field>
+                    / >                      
                   </div>
                   <div className={styles.formRow}>
                     <div className={styles.submit}>

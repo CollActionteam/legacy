@@ -14,6 +14,10 @@ namespace CollAction.ViewModels.Account
         [FrontendUrl]
         public string ErrorUrl { get; set; } = null!;
 
+        [Required]
+        [FrontendUrl]
+        public string FinishRegistrationUrl { get; set; } = null!;
+
         public string? RemoteError { get; set; }
     }
 }

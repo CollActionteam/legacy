@@ -18,5 +18,9 @@ namespace CollAction.ViewModels.Account
         [Required]
         [FrontendUrl]
         public string ErrorUrl { get; set; } = null!;
+
+        [Required]
+        [FrontendUrl]
+        public string FinishRegistrationUrl { get; set; } = null!;
     }
 }

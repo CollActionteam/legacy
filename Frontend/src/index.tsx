@@ -22,6 +22,7 @@ const ForgotPasswordPage = React.lazy(() => import(/* webpackChunkName: "account
 const RegisterUserPage = React.lazy(() => import(/* webpackChunkName: "account" */'./pages/account/RegisterUser/RegisterUser'));
 const ResetPasswordPage = React.lazy(() => import(/* webpackChunkName: "account" */'./pages/account/ResetPassword/ResetPassword'));
 const FinishRegistrationPage = React.lazy(() => import(/* webpackChunkName: "account" */'./pages/account/FinishRegistration/FinishRegistration'));
+const FinishRegistrationSocialPage = React.lazy(() => import(/* webpackChunkName: "account" */'./pages/account/FinishRegistrationSocial/FinishRegistrationSocial'));
 const RegistrationCompletePage = React.lazy(() => import(/* webpackChunkName: "account" */'./pages/account/RegisterUser/RegistrationComplete'));
 
 // Donation pages
@@ -58,6 +59,7 @@ const routing = (
                             <Route exact path="/account/register-user" component={RegisterUserPage} />
                             <Route exact path="/account/register-user/complete" component={RegistrationCompletePage} />
                             <Route exact path="/account/finish-registration" component={FinishRegistrationPage} />
+                            <Route exact path="/account/finish-registration-social" component={FinishRegistrationSocialPage} />
                             <Route exact path="/account/profile" component={ProfilePage} />
                             <Route exact path="/donate" component={DonationPage} />
                             <Route exact path="/donate/return" component={DonationReturnPage} />
