@@ -75,3 +75,14 @@ resource "aws_ssm_parameter" "string_parameters" {
     ignore_changes = [value]
   }
 }
+
+resource "aws_ssm_parameter" "dummy_final" {
+  name = "dummy_final"
+  description = "Used by terraform ecs-service task definition, otherwise we'll get invalid JSON..."
+  type = "String"
+  value = "todo"
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+}

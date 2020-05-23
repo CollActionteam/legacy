@@ -5,7 +5,7 @@ resource "aws_ecs_task_definition" "api" {
   requires_compatibilities = ["FARGATE"]
   cpu                      = 256
   memory                   = 512
-  container_definitions    = <<EOF
+  container_definitions    = <<DEFINITION
     [
       {
         "name": "ca-${var.environment}-api",
@@ -24,10 +24,28 @@ resource "aws_ecs_task_definition" "api" {
               "awslogs-region": "${var.aws_region}",
               "awslogs-stream-prefix": "ecs"
             }
-        }
+        },
+        "secrets": [
+          %{ for param in var.securestring_parameters }
+          {
+            "name": "${param}",
+            "valueFrom": "arn:aws:ssm:${var.aws_region}:${data.aws_caller_identity.current.account_id}:parameter/collaction/${var.environment}/${param}"
+          },
+          %{ endfor }
+          %{ for param in var.string_parameters }
+          {
+            "name": "${param}",
+            "valueFrom": "arn:aws:ssm:${var.aws_region}:${data.aws_caller_identity.current.account_id}:parameter/collaction/${var.environment}/${param}"
+          },
+          %{ endfor }
+          {
+            "name": "${aws_ssm_parameter.dummy_final.name}",
+            "valueFrom": "${aws_ssm_parameter.dummy_final.arn}"
+          }
+        ]
       }
     ]
-    EOF
+    DEFINITION
   depends_on = [
     aws_cloudwatch_log_group.collaction-api
   ]
