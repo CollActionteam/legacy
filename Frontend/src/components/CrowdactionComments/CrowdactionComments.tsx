@@ -162,7 +162,7 @@ export default ({ id }: ICrowdactionCommentsProps) => {
   }, [ error ]);
 
   const validationSchema = Yup.object({
-    comment: Yup.string().required()
+    comment: Yup.string().required("You must add a comment in the comment field")
   });
   
   const onSubmit = async (values: any, { setSubmitting, resetForm }: any) => { 
