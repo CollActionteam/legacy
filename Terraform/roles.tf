@@ -13,16 +13,6 @@ data "aws_iam_policy_document" "ecs_task_execution_role" {
       identifiers = ["ecs-tasks.amazonaws.com"]
     }
   }
-
-  statement {
-    effect = "Allow"
-    actions = [
-      "ssm:GetParameters"
-    ]
-    resources = [
-      "arn:aws:ssm:${var.aws_region}:${data.aws_caller_identity.current.account_id}:parameter/collaction/*"
-    ]
-  }
 }
 
 # ECS task execution role
