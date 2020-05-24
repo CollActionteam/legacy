@@ -84,7 +84,10 @@ const CrowdactionDetailsPage = ({ match } : RouteComponentProps<TParams>): any =
         crowdactionId: crowdactionId,
         email: formik.values.email
       },
-      onError: (data: any) => setErrorMessage(data.message),
+      onError: (data) => {
+        console.error(data.message);
+        setErrorMessage(data.message);
+      },
       onCompleted: onCommit
     });
   const [ commitToCrowdactionLoggedIn ] = useMutation(
@@ -92,7 +95,10 @@ const CrowdactionDetailsPage = ({ match } : RouteComponentProps<TParams>): any =
     {
       variables: { crowdactionId: crowdactionId },
       onCompleted: onCommit,
-      onError: (data: any) => setErrorMessage(data.message),
+      onError: (data) => {
+        console.error(data.message);
+        setErrorMessage(data.message);
+      },
       refetchQueries: [{
         query: GET_USER
       }]

@@ -163,7 +163,13 @@ export default ({ children }: any) => {
         checkAndUpdateUtm();
     }
 
-    const [ sendEvent ] = useMutation(SEND_EVENT);
+    const [ sendEvent ] = useMutation(
+        SEND_EVENT,
+        {
+            onError: (data) => {
+                console.error(data.message);
+            }
+        });
 
     const bufferEvent = (ev: string) => {
         setBufferedEvents(bufferedEvents.concat(ev));

@@ -45,7 +45,7 @@ export default ({ category, status = CrowdactionStatusFilter.Open }: ICrowdactio
     <>
       <Alert type="error" text={error?.message} />
       <Grid container spacing={3}>
-        {data.crowdactions && data.crowdactions.length ? (
+        {data?.crowdactions && data.crowdactions.length ? (
           data.crowdactions.map((crowdaction: ICrowdaction, index: number) => (
             <Grid item xs={12} sm={6} md={4} key={index}>
               <CrowdactionCard crowdaction={crowdaction} />

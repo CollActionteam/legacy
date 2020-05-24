@@ -114,6 +114,7 @@ const updateCacheAfterFetch = (previousResult: any, { fetchMoreResult }: any) =>
 
 export default ({ id }: ICrowdactionCommentsProps) => {
   const user = useUser();
+  const [ mutationError, setMutationError ] = useState("");
   const [ commentChangeNum, setCommentChangeNum ] = useState(0); // The net count difference in comments, counting deletions and new comments
   const { data, loading, fetchMore, error } = useQuery<any>(
     GET_COMMENTS,
@@ -135,6 +136,10 @@ export default ({ id }: ICrowdactionCommentsProps) => {
       update: (cache: DataProxy, mutationResult: FetchResult) => {
         updateCacheAfterDelete(cache, mutationResult, id);
         setCommentChangeNum(commentChangeNum - 1);
+      },
+      onError: (errorData) => {
+        console.error(errorData.message);
+        setMutationError(errorData.message);
       }
     });
   const [ createComment ] = useMutation(CREATE_COMMENT,
@@ -142,6 +147,10 @@ export default ({ id }: ICrowdactionCommentsProps) => {
       update: (cache: DataProxy, mutationResult: FetchResult) => {
         updateCacheAfterCreate(cache, mutationResult, id);
         setCommentChangeNum(commentChangeNum + 1);
+      },
+      onError: (errorData) => {
+        console.error(errorData.message);
+        setMutationError(errorData.message);
       }
     });
   const loadMore = () => {
@@ -179,6 +188,7 @@ export default ({ id }: ICrowdactionCommentsProps) => {
   return <>
       <Grid container spacing={4}>
         <Alert type="error" text={error?.message} />
+        <Alert type="error" text={mutationError} />
         {
           user ?
               <Grid item xs={12}>
