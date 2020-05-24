@@ -192,7 +192,7 @@ namespace CollAction
                 forwardedHeaderOptions.KnownProxies.Clear();
                 forwardedHeaderOptions.KnownNetworks.Clear();
                 app.UseForwardedHeaders(forwardedHeaderOptions);
-                app.UseRewriter(new RewriteOptions().AddRedirectToHttpsPermanent());
+                // app.UseRewriter(new RewriteOptions().AddRedirectToHttpsPermanent());
                 app.UseHsts();
                 app.UseExceptionHandler("/error");
 
