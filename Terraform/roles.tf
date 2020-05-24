@@ -5,17 +5,23 @@ data "aws_iam_policy_document" "ecs_task_execution_role" {
     sid     = ""
     effect  = "Allow"
     actions = [
-      "sts:AssumeRole",
-      "ssm:GetParameters"
-    ]
-    resources = [
-      "arn:aws:ssm:${var.aws_region}:${data.aws_caller_identity.current.account_id}:parameter/collaction/*"
+      "sts:AssumeRole"
     ]
 
     principals {
       type        = "Service"
       identifiers = ["ecs-tasks.amazonaws.com"]
     }
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "ssm:GetParameters"
+    ]
+    resources = [
+      "arn:aws:ssm:${var.aws_region}:${data.aws_caller_identity.current.account_id}:parameter/collaction/*"
+    ]
   }
 }
 
