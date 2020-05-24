@@ -704,9 +704,10 @@ namespace CollAction.Services.Crowdactions
                 {
                     throw new InvalidOperationException("Links without href are not allowed");
                 }
+                // Other schemas than http/https have already been excluded before this check
                 else if (!href.StartsWith("http://", StringComparison.OrdinalIgnoreCase) && !href.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
                 {
-                    // Add schema if it doesn't exist
+                    // Add https schema if no schema specified
                     link.SetAttributeValue("href", $"https://{href}");
                 }
             }
