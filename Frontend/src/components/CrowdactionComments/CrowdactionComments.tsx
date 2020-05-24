@@ -173,6 +173,9 @@ export default ({ id }: ICrowdactionCommentsProps) => {
     setSubmitting(false);
   };
 
+  const probablyHasMoreComments =
+    lastId !== maxCursor && (comments.length - commentChangeNum) % numCommentsPerFetch === 0;
+
   return <>
       <Grid container spacing={4}>
         <Alert type="error" text={error?.message} />
@@ -218,7 +221,7 @@ export default ({ id }: ICrowdactionCommentsProps) => {
             })
         }
         { loading ? <Grid item xs={12}><Loader /></Grid> : null }
-        { lastId !== maxCursor && (comments.length - commentChangeNum) % numCommentsPerFetch === 0 ? 
+        { probablyHasMoreComments ? 
             <Grid item xs={12}><Button onClick={() => loadMore()}>Load More</Button></Grid> : 
             null
         }
