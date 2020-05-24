@@ -55,9 +55,9 @@ export interface IOrderBy {
 }
 
 export enum CrowdactionDisplayPriority {
-  TOP,
-  MEDIUM,
-  BOTTOM,
+  TOP = "TOP",
+  MEDIUM = "MEDIUM",
+  BOTTOM = "BOTTOM",
 }
 
 export interface ICrowdaction {
@@ -109,11 +109,9 @@ export interface ICrowdactionParticipant {
 }
 
 export enum CrowdactionStatus {
-  HIDDEN,
-  RUNNING,
-  SUCCESFULL,
-  FAILED,
-  DELETED,
+  HIDDEN = "HIDDEN",
+  RUNNING = "RUNNING",
+  DELETED = "DELETED",
 }
 
 export enum CrowdactionStatusFilter {
