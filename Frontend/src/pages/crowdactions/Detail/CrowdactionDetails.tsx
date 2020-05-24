@@ -6,7 +6,7 @@ import { Container, Grid } from "@material-ui/core";
 import { Form, useFormik, FormikContext, Field } from "formik";
 import * as Yup from "yup";
 
-import { ICrowdaction } from "../../../api/types";
+import { ICrowdaction, CrowdactionStatus } from "../../../api/types";
 import { useUser, GET_USER } from "../../../providers/UserProvider";
 
 import { RouteComponentProps, Redirect, useHistory} from "react-router-dom";
@@ -241,6 +241,7 @@ const CrowdactionDetailsPage = ({ match } : RouteComponentProps<TParams>): any =
                   { crowdaction.isComingSoon && <span>This crowdaction starts on { Formatter.date(new Date(crowdaction.start)) }.</span> }
                   { crowdaction.isSuccessfull && <span>This crowdaction is already done and has completed successfully.</span>}
                   { crowdaction.isFailed && <span>This crowdaction is already done and has failed.</span>}
+                  { crowdaction.status !== CrowdactionStatus.RUNNING && <span>This crowdaction has not been approved yet and should not be reachable through the website</span> }
                   { crowdaction.isActive &&
                     <React.Fragment>
                       { isParticipating && <span>You are already participating in this crowdaction.</span> }
