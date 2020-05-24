@@ -7,6 +7,7 @@ using CollAction.Services.Email;
 using CollAction.Services.HtmlValidator;
 using CollAction.ViewModels.Email;
 using Hangfire;
+using HtmlAgilityPack;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -14,10 +15,12 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -471,8 +474,7 @@ namespace CollAction.Services.Crowdactions
                 throw new InvalidOperationException("Comment contains unsafe html");
             }
 
-            // Add nofollow ugc to all links so search engines don't follow the links
-            comment = comment.Replace("<a ", "<a rel=\"nofollow ugc\" ", StringComparison.OrdinalIgnoreCase);
+            comment = SanitizeComment(comment);
 
             ApplicationUser? applicationUser = await userManager.GetUserAsync(user).ConfigureAwait(false);
 
@@ -687,6 +689,30 @@ namespace CollAction.Services.Crowdactions
                 // User is already participating
                 return false;
             }
+        }
+
+        private static string SanitizeComment(string comment)
+        {
+            var doc = new HtmlDocument();
+            doc.LoadHtml(comment);
+            foreach (HtmlNode link in doc.DocumentNode.Descendants("a"))
+            {
+                // Add nofollow ugc to all links so search engines don't follow the links
+                link.SetAttributeValue("rel", "nofollow ugc");
+                string? href = link.GetAttributeValue<string?>("href", null);
+                if (href == null)
+                {
+                    throw new InvalidOperationException("Links without href are not allowed");
+                }
+                else if (!href.StartsWith("http://", StringComparison.OrdinalIgnoreCase) && !href.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+                {
+                    // Add schema if it doesn't exist
+                    link.SetAttributeValue("href", $"https://{href}");
+                }
+            }
+            using var writer = new StringWriter();
+            doc.Save(writer);
+            return writer.ToString();
         }
 
         private static bool IsValidEmail(string email)

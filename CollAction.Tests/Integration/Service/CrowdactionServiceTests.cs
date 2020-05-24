@@ -128,6 +128,9 @@ namespace CollAction.Tests.Integration.Service
 
             await Assert.ThrowsAnyAsync<Exception>(() => crowdactionService.CreateComment("test test <script />", crowdaction.Id, userPrincipal, CancellationToken.None)).ConfigureAwait(false);
 
+            CrowdactionComment sanatizedComment = await crowdactionService.CreateComment("test test <p><a href=\"www.google.com\" /></p>", crowdaction.Id, userPrincipal, CancellationToken.None).ConfigureAwait(false);
+            Assert.Equal("test test <p><a href=\"https://www.google.com\" rel=\"nofollow ugc\"></a></p>", sanatizedComment.Comment);
+
             await crowdactionService.DeleteComment(firstComment.Id, CancellationToken.None).ConfigureAwait(false);
             CrowdactionComment retrievedComment = await context.CrowdactionComments.FirstOrDefaultAsync(c => c.Id == firstComment.Id).ConfigureAwait(false);
             Assert.Null(retrievedComment);
