@@ -127,8 +127,8 @@ export default ({ id }: ICrowdactionCommentsProps) => {
   );
   const comments = data?.comments;
   const lastId = 
-    comments ? (comments[comments.length - 1].id - 1).toString() :
-               maxCursor;
+    comments && comments.length > 0 ? (comments[comments.length - 1].id - 1).toString() :
+                                      maxCursor;
   const [ deleteComment ] = useMutation(
     DELETE_COMMENT,
     {
@@ -218,7 +218,7 @@ export default ({ id }: ICrowdactionCommentsProps) => {
             })
         }
         { loading ? <Grid item xs={12}><Loader /></Grid> : null }
-        { comments && (comments.length - commentChangeNum) % numCommentsPerFetch === 0 ? 
+        { lastId !== maxCursor && (comments.length - commentChangeNum) % numCommentsPerFetch === 0 ? 
             <Grid item xs={12}><Button onClick={() => loadMore()}>Load More</Button></Grid> : 
             null
         }
