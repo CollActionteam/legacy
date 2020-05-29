@@ -10,7 +10,6 @@ variable "securestring_parameters" {
     "Authentication/Google/ClientSecret",
     "Authentication/Twitter/ConsumerKey",
     "Authentication/Twitter/ConsumerSecret",
-    "DisqusSite",
     "DisqusSiteId",
     "MailChimpAccount",
     "MailChimpUserId",
@@ -35,7 +34,6 @@ variable "string_parameters" {
   default = [
     "APPINSIGHTS_JAVASCRIPT_ENABLED",
     "FromAddress",
-    "ImportLocationData",
     "MailChimpServer",
     "PublicAddress",
     "S3Bucket",
