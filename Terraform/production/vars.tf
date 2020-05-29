@@ -23,6 +23,14 @@ variable "api_memory" {
   default = 1024
 }
 
+variable "rds_instance_class" {
+  default = "db.t2.medium"
+}
+
+variable "rds_allocated_storage" {
+  default = 20
+}
+
 variable "hostname" {
   description = "The hostname under which to register the environment"
   default = "api.collaction.org"
