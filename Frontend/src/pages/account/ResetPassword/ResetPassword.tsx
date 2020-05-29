@@ -24,8 +24,10 @@ const ResetPasswordPage = () => {
                 if (data.user.resetPassword.succeeded) {
                     setErrorMessage(null);
                     setInfoMessage("Your password has been reset. You can log in with your new password now.");
+                    formik.resetForm({});
                 } else {
                     let error = data.user.resetPassword.errors.map((e: any) => e.description).join(", ");
+                    setInfoMessage(null);
                     setErrorMessage(error);
                     console.error(error);
                 }
