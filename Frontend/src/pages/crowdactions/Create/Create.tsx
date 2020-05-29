@@ -286,7 +286,7 @@ const CreateCrowdactionPage = () => {
                     <Field
                       name="youtube"
                       label="YouTube video link"
-                      helperText="A video to go with your crowdaction. Use the format http://www.youtube.com/embed/-wtIMTCHWuI"
+                      helperText="A video to go with your crowdaction. Use the format https://www.youtube.com/embed/-wtIMTCHWuI"
                       component={TextField}
                       className={styles.formRow}
                       fullWidth
