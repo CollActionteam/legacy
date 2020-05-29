@@ -27,25 +27,15 @@ namespace CollAction.Services.Statistics
         public Task<int> NumberActionsTaken(CancellationToken token)
             => cache.GetOrCreateAsync(
                    NumberActionsTakenKey,
-                   async (ICacheEntry entry) =>
+                   (ICacheEntry entry) =>
                    {
                        entry.SlidingExpiration = CacheExpiration;
 
                        // Actions are taken by users (normal and anonymous) who have joined successfull crowdactions
 
-                       int actionsNormalUsers =
-                           await context.CrowdactionParticipants
-                                        .CountAsync(c =>
-                                            c.Crowdaction!.End <= DateTime.UtcNow &&
-                                            c.Crowdaction!.Status == CrowdactionStatus.Running &&
-                                            c.Crowdaction!.ParticipantCounts!.Count + c.Crowdaction!.AnonymousUserParticipants >= c.Crowdaction!.Target, token).ConfigureAwait(false);
-                       int actionsAnonymousUsers =
-                                    await context.Crowdactions
-                                                 .Where(c => c.ParticipantCounts!.Count + c.AnonymousUserParticipants >= c.Target)
-                                                 .SumAsync(c => c.AnonymousUserParticipants, token)
-                                                 .ConfigureAwait(false);
-
-                       return actionsNormalUsers + actionsAnonymousUsers;
+                       return context.Crowdactions
+                                     .Where(c => c.ParticipantCounts!.Count + c.AnonymousUserParticipants >= c.Target && c.End <= DateTime.UtcNow && c.Status == CrowdactionStatus.Running)
+                                     .SumAsync(c => c.AnonymousUserParticipants + c.ParticipantCounts!.Count, token);
                    });
 
         public Task<int> NumberCrowdactions(CancellationToken token)
