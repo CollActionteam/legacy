@@ -38,13 +38,13 @@ resource "aws_ecs_task_definition" "api-collaction" {
         "secrets": [
           %{for param in var.ssm_securestrings}
           {
-            "name": "${replace(param.name, "/", ":")}", 
+            "name": "${param.description}", 
             "valueFrom": "${param.arn}"
           },
           %{endfor}
           %{for param in var.ssm_strings}
           {
-            "name": "${replace(param.name, "/", ":")}", 
+            "name": "${param.description}", 
             "valueFrom": "${param.arn}"
           },
           %{endfor}

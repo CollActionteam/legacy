@@ -3,9 +3,10 @@
 resource "aws_ssm_parameter" "securestring_parameters" {
   for_each = var.securestring_parameters
 
-  name  = "/collaction/${var.environment}/${each.key}"
-  type  = "SecureString"
-  value = "todo"
+  name        = "/collaction/${var.environment}/${each.key}"
+  description = replace(each.key, "/", ":")
+  type        = "SecureString"
+  value       = "todo"
 
   lifecycle {
     ignore_changes = [value]
@@ -15,9 +16,10 @@ resource "aws_ssm_parameter" "securestring_parameters" {
 resource "aws_ssm_parameter" "string_parameters" {
   for_each = var.string_parameters
 
-  name  = "/collaction/${var.environment}/${each.key}"
-  type  = "String"
-  value = "todo"
+  name        = "/collaction/${var.environment}/${each.key}"
+  description = replace(each.key, "/", ":")
+  type        = "String"
+  value       = "todo"
 
   lifecycle {
     ignore_changes = [value]
