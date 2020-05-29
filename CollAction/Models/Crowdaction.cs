@@ -37,6 +37,9 @@ namespace CollAction.Models
             AnonymousUserParticipants = anonymousUserParticipants;
         }
 
+        [NotMapped]
+        private readonly DateTime now = DateTime.UtcNow;
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
@@ -111,15 +114,15 @@ namespace CollAction.Models
 
         [NotMapped]
         public bool IsActive
-            => Status == CrowdactionStatus.Running && Start <= DateTime.UtcNow && End >= DateTime.UtcNow;
+            => Status == CrowdactionStatus.Running && Start <= now && End > now;
 
         [NotMapped]
         public bool IsComingSoon
-            => Status == CrowdactionStatus.Running && Start > DateTime.UtcNow;
+            => Status == CrowdactionStatus.Running && Start > now;
 
         [NotMapped]
         public bool IsClosed
-            => Status == CrowdactionStatus.Running && End < DateTime.UtcNow;
+            => Status == CrowdactionStatus.Running && End <= now;
 
         [NotMapped]
         public int TotalParticipants
@@ -197,7 +200,6 @@ namespace CollAction.Models
         {
             get
             {
-                DateTime now = DateTime.UtcNow;
                 if (now >= End)
                 {
                     return TimeSpan.Zero;
@@ -207,6 +209,14 @@ namespace CollAction.Models
                     return End - (now > Start ? now : Start);
                 }
             }
+        }
+
+        public bool CanSendCrowdactionEmail(int maxNumberCrowdactionEmails, TimeSpan timeEmailAllowedAfterCrowdactionEnd)
+        {
+            return NumberCrowdactionEmailsSent < maxNumberCrowdactionEmails &&
+                   End + timeEmailAllowedAfterCrowdactionEnd > now &&
+                   Status == CrowdactionStatus.Running &&
+                   now >= Start;
         }
 
         private static string ToUrlSlug(string value)

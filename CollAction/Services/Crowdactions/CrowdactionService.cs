@@ -120,7 +120,7 @@ namespace CollAction.Services.Crowdactions
             await context.SaveChangesAsync(token).ConfigureAwait(false);
             await RefreshParticipantCount(token).ConfigureAwait(false);
 
-            if (crowdaction.Status == CrowdactionStatus.Running && crowdaction.End <= DateTime.UtcNow)
+            if (crowdaction.IsClosed)
             {
                 crowdaction.FinishJobId = jobClient.Schedule(() => CrowdactionEndProcess(crowdaction.Id, CancellationToken.None), crowdaction.End);
                 await context.SaveChangesAsync().ConfigureAwait(false);
@@ -428,13 +428,7 @@ namespace CollAction.Services.Crowdactions
         }
 
         public bool CanSendCrowdactionEmail(Crowdaction crowdaction)
-        {
-            DateTime now = DateTime.UtcNow;
-            return crowdaction.NumberCrowdactionEmailsSent < MaxNumberCrowdactionEmails &&
-                   crowdaction.End + TimeEmailAllowedAfterCrowdactionEnd > now &&
-                   crowdaction.Status == CrowdactionStatus.Running &&
-                   now >= crowdaction.Start;
-        }
+            => crowdaction.CanSendCrowdactionEmail(MaxNumberCrowdactionEmails, TimeEmailAllowedAfterCrowdactionEnd);
 
         public async Task<CrowdactionParticipant> SetEmailCrowdactionSubscription(int crowdactionId, string userId, Guid token, bool isSubscribed, CancellationToken cancellationToken)
         {
