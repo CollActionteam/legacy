@@ -9,7 +9,7 @@ resource "aws_db_instance" "collaction" {
   engine                    = "postgres"
   engine_version            = "12.2"
   storage_type              = "gp2"
-  allocated_storage         = 20
+  allocated_storage         = var.rds_allocated_storage
   instance_class            = var.rds_instance_class
   name                      = "collaction${var.environment}"
   username                  = "collaction"

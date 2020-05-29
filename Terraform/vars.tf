@@ -22,3 +22,18 @@ variable "rds_instance_class" {
   description = "The instance class of the RDS database"
   default     = "db.t2.micro"
 }
+
+variable "rds_allocated_storage" {
+  description = "Storage allocation (GB) for the database"
+  default     = "20"
+}
+
+variable "ecs_api_cpu" {
+  description = "vCPUs for the API container"
+  default     = 256
+}
+
+variable "ecs_api_memory" {
+  description = "Memory (GB) for the API container"
+  default     = 512
+}
