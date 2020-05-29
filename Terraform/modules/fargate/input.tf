@@ -14,15 +14,21 @@ variable "environment" {
   description = "Name of the environment this fargate environment hosts"
 }
 
-variable "ecs_api_cpu" {
+variable "api_cpu" {
   description = "Nr of vCPUs to assign to the API task"
   default     = 256
 }
 
-variable "ecs_api_memory" {
+variable "api_memory" {
   description = "Memory (GB) to assign to the API task"
   default     = 512
 }
+
+variable "api_desired_count" {
+  description = "Nr of containers that should run"
+  default     = 1
+}
+
 variable "ssm_securestrings" {
   description = "The SSM parameters to add to the task's environment as secure parameters"
 }
@@ -45,12 +51,6 @@ variable "ssm_dbuser" {
 
 variable "ssm_dbpassword" {
   description = "ARN to the SSM parameter holding the dbpassword value"
-}
-
-
-variable "api_desired_count" {
-  description = "The desired number of API containers to run"
-  default     = 1
 }
 
 variable "sg_rds_access" {

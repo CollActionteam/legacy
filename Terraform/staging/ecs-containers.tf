@@ -14,9 +14,10 @@ module "fargate" {
   cluster     = "collaction-${var.environment}"
   environment = var.environment
 
-  imageversion   = var.imageversion
-  ecs_api_cpu    = 256
-  ecs_api_memory = 512
+  imageversion      = var.imageversion
+  api_cpu           = var.api_cpu
+  api_memory        = var.api_memory
+  api_desired_count = var.api_desired_count
 
   ssm_securestrings = module.ssm.securestrings
   ssm_strings       = module.ssm.strings
