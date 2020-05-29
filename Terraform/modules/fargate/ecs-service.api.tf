@@ -16,14 +16,14 @@ resource "aws_ecs_service" "api-collaction" {
     assign_public_ip = true
   }
 
-  # load_balancer {
-  #   target_group_arn = aws_alb_target_group.api-collaction.id
-  #   container_name   = "api"
-  #   container_port   = 5000
-  # }
+  load_balancer {
+    target_group_arn = aws_alb_target_group.api-collaction.id
+    container_name   = "api"
+    container_port   = 5000
+  }
 
   depends_on = [
-    # var.alb_listener,
+    var.alb_listener,
     aws_iam_role_policy_attachment.ecs_task_execution_role
   ]
 }
