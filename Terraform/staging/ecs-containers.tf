@@ -16,4 +16,7 @@ module "fargate" {
   ssm_db         = aws_ssm_parameter.Db
   ssm_dbuser     = aws_ssm_parameter.DbUser
   ssm_dbpassword = aws_ssm_parameter.DbPassword
+
+  sg_rds_access  = module.rds.inbound_security_group
+  subnet_ids     = module.vpc.subnet_ids
 }
