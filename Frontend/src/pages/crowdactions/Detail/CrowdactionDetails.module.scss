@@ -105,6 +105,25 @@
   }
 }
 
+.tabContainer {
+  @include breakpoint-down(sm) {
+    padding: 0;
+  }
+}
+
+.tabs {
+  margin-bottom: calc(var(--spacing) * 1.5);
+
+  span[class^="PrivateTabIndicator"] {
+    background-color: var(--c-green);
+  }
+}
+
+.tab {
+  font-size: var(--font-size);
+  text-transform: none;
+}
+
 .joinSection {
   border: 1px solid var(--c-grey-d10);
   border-radius: var(--border-radius-sm);
@@ -126,6 +145,11 @@
       margin: var(--spacing) 0 var(--spacing) 0;
     }
   }
+}
+
+.infoSection {
+  padding-top: var(--spacing-lg);
+  padding-bottom: var(--spacing-lg);
 }
 
 .formRow {
