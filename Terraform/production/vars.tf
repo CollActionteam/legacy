@@ -1,6 +1,6 @@
 variable "environment" {
   description = "The name of this environment"
-  default = "production"
+  default = "prod"
 }
 
 variable "imageversion" {
