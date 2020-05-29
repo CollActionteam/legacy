@@ -3,7 +3,7 @@
 # defined with the ecs-services definitions.
 resource "aws_alb" "api-collaction" {
   name            = "api-collaction"
-  subnets         = module.vpc.subnet_ids.default.ids
+  subnets         = module.vpc.subnet_ids.ids
   security_groups = [
     aws_security_group.inbound-alb.id,
     aws_security_group.outbound-alb.id
