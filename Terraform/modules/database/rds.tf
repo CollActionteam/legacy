@@ -12,7 +12,7 @@ resource "aws_db_instance" "collaction" {
   allocated_storage         = var.allocated_storage
   instance_class            = var.instance_class
   name                      = "collactiondb"
-  username                  = "collaction"
+  username                  = "postgres"
   password                  = random_password.db_password.result
   vpc_security_group_ids = [
     aws_security_group.rds.id
