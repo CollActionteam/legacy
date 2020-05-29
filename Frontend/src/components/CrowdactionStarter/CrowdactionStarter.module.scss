@@ -7,7 +7,7 @@
   
   margin-bottom: var(--spacing);
 
-  @include breakpoint-down(sm) {
+  @include breakpoint-down(md) {
     margin-top: var(--spacing-xxl-2);
   }
 }

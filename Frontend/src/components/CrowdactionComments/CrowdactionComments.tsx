@@ -220,25 +220,27 @@ export default ({ id }: ICrowdactionCommentsProps) => {
         <Alert type="error" text={error?.message} />
         <Alert type="error" text={mutationError} />
         {user ? (
-          <Grid item xs={12}>
+          <Grid item xs={12} className={styles.commentContainer}>
             <Formik
               initialValues={{ comment: '' }}
               validationSchema={validationSchema}
               onSubmit={onSubmit}
             >
               {(formik) => (
-                <Form>
-                  <RichTextEditorFormControl
-                    key={formik.submitCount} // Hack to ensure the component resets after submitting..
-                    formik={formik}
-                    height="130px"
-                    name="comment"
-                    label=""
-                    hint="Start a conversation!"
-                    fullWidth
-                  />
-                  <Button type="submit">Comment</Button>
-                </Form>
+                <div className={styles.comment}>
+                  <Form className={styles.form}>
+                    <RichTextEditorFormControl
+                      key={formik.submitCount} // Hack to ensure the component resets after submitting..
+                      formik={formik}
+                      height="130px"
+                      name="comment"
+                      label=""
+                      hint="Write a comment"
+                      fullWidth
+                    />
+                    <Button type="submit">Comment</Button>
+                  </Form>
+                </div>
               )}
             </Formik>
           </Grid>
