@@ -17,6 +17,7 @@ const ResetPasswordPage = () => {
     const email = searchParams.get("email");
     const [ errorMessage, setErrorMessage ] = useState<string | null>(null);
     const [ infoMessage, setInfoMessage ] = useState<string | null>(null);
+    const [ isSuccessfull, setIsSuccessfull ] = useState(false);
     const [ resetPassword ] = useMutation(
         FORGOT_PASSWORD,
         {
@@ -25,6 +26,7 @@ const ResetPasswordPage = () => {
                     setErrorMessage(null);
                     setInfoMessage("Your password has been reset. You can log in with your new password now.");
                     formik.resetForm({});
+                    setIsSuccessfull(true);
                 } else {
                     let error = data.user.resetPassword.errors.map((e: any) => e.description).join(", ");
                     setInfoMessage(null);
@@ -92,7 +94,7 @@ const ResetPasswordPage = () => {
                             </FormGroup>
 
                             <div className={styles.submit}>
-                                { formik.isSubmitting ? <Loader /> : <Button type="submit">Reset my password</Button> }
+                                { formik.isSubmitting ? <Loader /> : <Button type="submit" disabled={isSuccessfull}>Reset my password</Button> }
                             </div>
                         </Form>
                     </FormikProvider>

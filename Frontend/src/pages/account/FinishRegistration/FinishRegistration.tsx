@@ -29,6 +29,7 @@ const FINISH_REGISTRATION = gql`
 const FinishRegistrationPage = () => {
     const [ errorMessage, setErrorMessage ] = useState<string | null>(null);
     const [ infoMessage, setInfoMessage ] = useState<string | null>(null);
+    const [ isSuccessfull, setIsSuccessfull ] = useState(false);
     const searchParams = new URLSearchParams(useLocation().search);
     const email = searchParams.get("email");
     const code = searchParams.get("code");
@@ -39,6 +40,8 @@ const FinishRegistrationPage = () => {
                 if (data.user.finishRegistration.result.succeeded) {
                     setErrorMessage(null);
                     setInfoMessage("You have been registered. You can now login with your new account.");
+                    formik.resetForm({});
+                    setIsSuccessfull(true);
                 } else {
                     let error = data.user.finishRegistration.result.errors.map((e: any) => e.description).join(", ");
                     setInfoMessage(null);
@@ -123,7 +126,7 @@ const FinishRegistrationPage = () => {
                                         />
                                     { formik.submitCount > 0 ? <Alert type="error" text={formik.errors.privacyPolicy} /> : null }
                                 </FormControl>
-                                <Button type="submit">Register</Button>
+                                <Button type="submit" disabled={isSuccessfull}>Register</Button>
                             </FormGroup>
                         </Form>
                     </FormikProvider>

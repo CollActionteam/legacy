@@ -33,6 +33,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Stripe;
+using System;
 
 namespace CollAction
 {
@@ -153,6 +154,11 @@ namespace CollAction
             services.AddOptions<SeedOptions>().Bind(configuration).ValidateDataAnnotations();
             services.AddOptions<AnalyticsOptions>().Bind(configuration).ValidateDataAnnotations();
             services.AddOptions<DbOptions>().Bind(configuration).ValidateDataAnnotations();
+            services.AddOptions<DataProtectionTokenProviderOptions>()
+                    .Configure(o =>
+                    {
+                        o.TokenLifespan = TimeSpan.FromDays(7); // 7 Days to finish setting up your account
+                    });
             services.AddOptions<MailChimpOptions>().Configure(options =>
             {
                 options.ApiKey = configuration.Get<NewsletterServiceOptions>().MailChimpKey;
