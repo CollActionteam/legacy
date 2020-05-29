@@ -48,8 +48,8 @@ resource "aws_security_group" "inbound-alb" {
   egress {
     # Outgoing traffic 
     protocol    = "tcp"
-    from_port   = 0
-    to_port     = 0
+    from_port   = 0-65535
+    to_port     = 0-65535
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
