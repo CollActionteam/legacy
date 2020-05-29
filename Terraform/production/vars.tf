@@ -15,12 +15,12 @@ variable "api_desired_count" {
 
 variable "api_cpu" {
   description = "Assigned number of vCPUs for the API container"
-  default = 1024
+  default = 512
 }
 
 variable "api_memory" {
   description = "Assigned memory (GB) for the API container"
-  default = 2048
+  default = 1024
 }
 
 variable "hostname" {

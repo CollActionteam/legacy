@@ -11,11 +11,11 @@ variable "api_desired_count" {
 }
 
 variable "api_cpu" {
-  default = 512
+  default = 256
 }
 
 variable "api_memory" {
-  default = 1024
+  default = 512
 }
 
 variable "hostname" {
