@@ -60,3 +60,23 @@ variable "sg_rds_access" {
 variable "subnet_ids" {
   description = "The subnet IDs where these tasks can run"
 }
+
+variable "vpc" {
+  description = "The VPC to install the target group for the containers in"
+}
+
+variable "route53_zone_name" {
+  description = "The zone in which to create a hostname to this environment"
+}
+
+variable "hostname" {
+  description = "The hostname to register for this environment"
+}
+
+variable "alb" {
+  description = "The ALB for this environment"
+}
+
+variable "alb_listener" {
+  description = "The ALB listener in which to create a rule for directing traffic to these containers"
+}

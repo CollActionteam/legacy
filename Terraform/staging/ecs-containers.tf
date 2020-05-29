@@ -1,3 +1,12 @@
+data "aws_alb" "api-collaction" {
+  name = "api-collaction"
+}
+
+data "aws_alb_listener" "api-collaction" {
+  load_balancer_arn = data.aws_alb.api-collaction.id
+  port              = 443
+}
+
 module "fargate" {
   source = "../modules/fargate"
 
@@ -17,6 +26,12 @@ module "fargate" {
   ssm_dbuser     = aws_ssm_parameter.DbUser
   ssm_dbpassword = aws_ssm_parameter.DbPassword
 
-  sg_rds_access  = module.rds.inbound_security_group
-  subnet_ids     = module.vpc.subnet_ids
+  sg_rds_access = module.rds.inbound_security_group
+  subnet_ids    = module.vpc.subnet_ids
+
+  vpc               = module.vpc.default
+  route53_zone_name = "collaction.org."
+  hostname          = var.hostname
+  alb               = data.aws_alb.api-collaction
+  alb_listener      = data.aws_alb_listener.api-collaction
 }
