@@ -28,7 +28,7 @@ variable "rds_instance_class" {
 }
 
 variable "rds_allocated_storage" {
-  default = 20
+  default = 100
 }
 
 variable "hostname" {
