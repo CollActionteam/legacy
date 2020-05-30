@@ -29,3 +29,7 @@ variable "rds_allocated_storage" {
 variable "hostname" {
   default = "api-staging.collaction.org"
 }
+
+variable "route53_zone_name" {
+  default = "collaction.org."
+}

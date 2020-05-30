@@ -31,7 +31,7 @@ module "fargate" {
   subnet_ids    = module.vpc.subnet_ids
 
   vpc               = module.vpc.default
-  route53_zone_name = "collaction.org."
+  route53_zone_name = var.route53_zone_name
   hostname          = var.hostname
   alb               = data.aws_alb.api-collaction
   alb_listener      = data.aws_alb_listener.api-collaction
