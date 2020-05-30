@@ -120,7 +120,7 @@ namespace CollAction.Controllers
             {
                 string error = $"Error from external login: {model.RemoteError}";
                 logger.LogError(error);
-                return Redirect($"{model.ErrorUrl}?error={WebUtility.UrlEncode(error)}&returnUrl={model.ReturnUrl}");
+                return Redirect($"{model.ErrorUrl}?error=external-login&message={WebUtility.UrlEncode(error)}&returnUrl={model.ReturnUrl}");
             }
 
             ExternalLoginInfo? info = await signInManager.GetExternalLoginInfoAsync().ConfigureAwait(false);
@@ -128,7 +128,7 @@ namespace CollAction.Controllers
             {
                 string error = $"Error from external login: unable to retrieve user data";
                 logger.LogError(error);
-                return Redirect($"{model.ErrorUrl}?error={WebUtility.UrlEncode(error)}&returnUrl={model.ReturnUrl}");
+                return Redirect($"{model.ErrorUrl}?error=external-userdata&message={WebUtility.UrlEncode(error)}&returnUrl={model.ReturnUrl}");
             }
 
             // Sign in the user with this external login provider if the user already has a login.
@@ -141,7 +141,7 @@ namespace CollAction.Controllers
             else if (result.IsLockedOut)
             {
                 logger.LogInformation("User is locked out");
-                return Redirect($"{model.ErrorUrl}?error=lockout&returnUrl={model.ReturnUrl}");
+                return Redirect($"{model.ErrorUrl}?error=lockout&message={WebUtility.UrlEncode("User is locked out")}&returnUrl={model.ReturnUrl}");
             }
 
             // If the user does not have an account, create one
@@ -155,7 +155,7 @@ namespace CollAction.Controllers
             {
                 string error = string.Join(", ", newUserResult.Result.Errors.Select(e => e.Description));
                 logger.LogError(error);
-                return Redirect($"{model.ErrorUrl}?error={WebUtility.UrlEncode(error)}&returnUrl={model.ReturnUrl}");
+                return Redirect($"{model.ErrorUrl}?error=user-create&message={WebUtility.UrlEncode(error)}&returnUrl={model.ReturnUrl}");
             }
         }
     }
