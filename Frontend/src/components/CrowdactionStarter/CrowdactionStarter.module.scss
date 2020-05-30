@@ -4,10 +4,10 @@
   border: 1px solid var(--c-grey-d10);
   border-radius: var(--border-radius-sm);
   padding: var(--spacing);
-  
+  margin-top: var(--spacing-lg);
   margin-bottom: var(--spacing);
 
-  @include breakpoint-down(md) {
+  @include breakpoint-down(sm) {
     margin-top: var(--spacing-xxl-2);
   }
 }

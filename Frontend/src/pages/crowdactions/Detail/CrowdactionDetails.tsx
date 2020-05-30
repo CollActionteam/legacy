@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import gql from 'graphql-tag';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Container, Grid, Tabs, Tab } from '@material-ui/core';
+import { Container, Grid } from '@material-ui/core';
 import { Form, useFormik, FormikContext, Field } from 'formik';
 import * as Yup from 'yup';
 
@@ -42,11 +42,6 @@ const CrowdactionDetailsPage = ({
     variables: { id: crowdactionId },
   });
   const crowdaction = (data?.crowdaction ?? null) as ICrowdaction | null;
-  const [activeTab, setActiveTab] = useState(0);
-
-  const handleTabChange = (event: React.ChangeEvent<{}>, newTab: number) => {
-    setActiveTab(newTab);
-  };
 
   const isParticipating =
     user === undefined
@@ -227,90 +222,53 @@ const CrowdactionDetailsPage = ({
         </Section>
         <Section className={styles.infoSection}>
           <Grid container>
-            <Grid item xs={12}>
-              <Container className={styles.tabContainer}>
-                <Tabs
-                  className={styles.tabs}
-                  value={activeTab}
-                  onChange={handleTabChange}
-                  aria-label="crowdaction-tabs"
-                >
-                  <Tab
-                    className={styles.tab}
-                    label="Project information"
-                    disableRipple
-                  />
-                  <Tab className={styles.tab} label="Community" disableRipple />
-                </Tabs>
-              </Container>
-            </Grid>
-          </Grid>
-          <Grid container>
             <Grid item md={7} xs={12}>
-              <div
-                role="tabpanel"
-                hidden={activeTab !== 0}
-                id="crowdaction-tabpanel-0"
-                aria-labelledby="crowdaction-tabpanel-0"
-              >
-                {activeTab === 0 && (
-                  <Container>
-                    <div>
-                      <h3 className={styles.header}>Description</h3>
-                      <p dangerouslySetInnerHTML={description}></p>
+              <Container>
+                <div>
+                  <h3 className={styles.header}>Description</h3>
+                  <p dangerouslySetInnerHTML={description}></p>
 
-                      <h3 className={styles.header}>Goal</h3>
-                      <p dangerouslySetInnerHTML={goal}></p>
-                    </div>
-                    {crowdaction.descriptiveImage && (
-                      <div>
-                        <figure className={styles.image}>
-                          <LazyImage
-                            src={crowdaction.descriptiveImage.url}
-                            alt={crowdaction.descriptiveImage.description}
-                          />
-                          <p>{crowdaction.descriptiveImage.description}</p>
-                        </figure>
-                      </div>
-                    )}
-                    {comments && (
-                      <div>
-                        <h3 className={styles.header}>Other comments</h3>
-                        <p dangerouslySetInnerHTML={comments}></p>
-                      </div>
-                    )}
+                  <h3 className={styles.header}>Goal</h3>
+                  <p dangerouslySetInnerHTML={goal}></p>
+                </div>
+                {crowdaction.descriptiveImage && (
+                  <div>
+                    <figure className={styles.image}>
+                      <LazyImage
+                        src={crowdaction.descriptiveImage.url}
+                        alt={crowdaction.descriptiveImage.description}
+                      />
+                      <p>{crowdaction.descriptiveImage.description}</p>
+                    </figure>
+                  </div>
+                )}
+                {comments && (
+                  <div>
+                    <h3 className={styles.header}>Other comments</h3>
+                    <p dangerouslySetInnerHTML={comments}></p>
+                  </div>
+                )}
 
-                    {crowdaction.descriptionVideoLink && (
-                      <div className={styles.video}>
-                        <iframe
-                          width="560"
-                          height="315"
-                          src={crowdaction.descriptionVideoLink}
-                          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                          frameBorder="0"
-                          allowFullScreen
-                          title="video"
-                        ></iframe>
-                      </div>
-                    )}
-                  </Container>
+                {crowdaction.descriptionVideoLink && (
+                  <div className={styles.video}>
+                    <iframe
+                      width="560"
+                      height="315"
+                      src={crowdaction.descriptionVideoLink}
+                      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                      frameBorder="0"
+                      allowFullScreen
+                      title="video"
+                    ></iframe>
+                  </div>
                 )}
-              </div>
-              <div
-                role="tabpanel"
-                hidden={activeTab !== 1}
-                id="crowdaction-tabpanel-1"
-                aria-labelledby="crowdaction-tabpanel-1"
-              >
-                {activeTab === 1 && (
-                  <Grid item xs={12}>
-                    <Container>
-                      {/* <h3 className={styles.header}>User Comments</h3> */}
-                      <CrowdactionComments id={crowdactionId} />
-                    </Container>
-                  </Grid>
-                )}
-              </div>
+              </Container>
+              <Grid item xs={12}>
+                <Container>
+                  <h3 className={styles.header}>User Comments</h3>
+                  <CrowdactionComments id={crowdactionId} />
+                </Container>
+              </Grid>
             </Grid>
             <Grid item md={5} xs={12}>
               <Container>
