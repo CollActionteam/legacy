@@ -588,7 +588,7 @@ namespace CollAction.Services.Crowdactions
             IQueryable<Crowdaction> crowdactions = context
                 .Crowdactions
                 .Include(c => c.ParticipantCounts)
-                .OrderBy(c => c.DisplayPriority)
+                .OrderBy(c => c.DisplayPriority).ThenBy(c => c.Id)
                 .AsQueryable();
 
             crowdactions = searchCrowdactionStatus switch
