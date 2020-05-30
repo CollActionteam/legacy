@@ -203,7 +203,6 @@ namespace CollAction
 
             if (environment.IsProduction())
             {
-                app.UseRewriter(new RewriteOptions().AddRedirectToHttpsPermanent());
                 app.UseHsts();
                 app.UseExceptionHandler("/error");
             }
