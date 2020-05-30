@@ -29,4 +29,8 @@ resource "aws_ssm_parameter" "DbPassword" {
   type  = "SecureString"
   value = "todo"
   # value = module.rds.password
+  
+  lifecycle {
+    ignore_changes = [value]
+  }
 }
