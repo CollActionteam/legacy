@@ -35,3 +35,7 @@ variable "hostname" {
   description = "The hostname under which to register the environment"
   default = "api.collaction.org"
 }
+
+variable "route53_zone_name" {
+  default = "collaction.org."
+}
