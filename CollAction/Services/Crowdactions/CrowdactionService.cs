@@ -7,6 +7,7 @@ using CollAction.Services.Email;
 using CollAction.Services.HtmlValidator;
 using CollAction.ViewModels.Email;
 using Hangfire;
+using HtmlAgilityPack;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -14,10 +15,12 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -117,7 +120,7 @@ namespace CollAction.Services.Crowdactions
             await context.SaveChangesAsync(token).ConfigureAwait(false);
             await RefreshParticipantCount(token).ConfigureAwait(false);
 
-            if (crowdaction.Status == CrowdactionStatus.Running && crowdaction.End <= DateTime.UtcNow)
+            if (crowdaction.IsClosed)
             {
                 crowdaction.FinishJobId = jobClient.Schedule(() => CrowdactionEndProcess(crowdaction.Id, CancellationToken.None), crowdaction.End);
                 await context.SaveChangesAsync().ConfigureAwait(false);
@@ -355,6 +358,7 @@ namespace CollAction.Services.Crowdactions
         public async Task CrowdactionEndProcess(int crowdactionId, CancellationToken token)
         {
             logger.LogInformation("Processing end of crowdaction: {0}", crowdactionId);
+            await RefreshParticipantCount(token).ConfigureAwait(false); // Ensure the participant count is up-to-date
             Crowdaction? crowdaction = await context.Crowdactions.Include(c => c.ParticipantCounts).FirstAsync(c => c.Id == crowdactionId, token).ConfigureAwait(false);
 
             if (crowdaction == null)
@@ -424,13 +428,7 @@ namespace CollAction.Services.Crowdactions
         }
 
         public bool CanSendCrowdactionEmail(Crowdaction crowdaction)
-        {
-            DateTime now = DateTime.UtcNow;
-            return crowdaction.NumberCrowdactionEmailsSent < MaxNumberCrowdactionEmails &&
-                   crowdaction.End + TimeEmailAllowedAfterCrowdactionEnd > now &&
-                   crowdaction.Status == CrowdactionStatus.Running &&
-                   now >= crowdaction.Start;
-        }
+            => crowdaction.CanSendCrowdactionEmail(MaxNumberCrowdactionEmails, TimeEmailAllowedAfterCrowdactionEnd);
 
         public async Task<CrowdactionParticipant> SetEmailCrowdactionSubscription(int crowdactionId, string userId, Guid token, bool isSubscribed, CancellationToken cancellationToken)
         {
@@ -454,6 +452,15 @@ namespace CollAction.Services.Crowdactions
             return participant;
         }
 
+        public async Task<CrowdactionComment> CreateCommentInternal(string comment, int crowdactionId, string userId, DateTime commentedAt, CancellationToken token)
+        {
+            var crowdactionComment = new CrowdactionComment(comment, userId, crowdactionId, commentedAt);
+            context.CrowdactionComments.Add(crowdactionComment);
+            await context.SaveChangesAsync(token).ConfigureAwait(false);
+
+            return crowdactionComment;
+        }
+
         public async Task<CrowdactionComment> CreateComment(string comment, int crowdactionId, ClaimsPrincipal user, CancellationToken token)
         {
             if (!htmlInputValidator.IsSafe(comment))
@@ -461,8 +468,7 @@ namespace CollAction.Services.Crowdactions
                 throw new InvalidOperationException("Comment contains unsafe html");
             }
 
-            // Add nofollow ugc to all links so search engines don't follow the links
-            comment = comment.Replace("<a ", "<a rel=\"nofollow ugc\" ", StringComparison.OrdinalIgnoreCase);
+            comment = SanitizeComment(comment);
 
             ApplicationUser? applicationUser = await userManager.GetUserAsync(user).ConfigureAwait(false);
 
@@ -677,6 +683,31 @@ namespace CollAction.Services.Crowdactions
                 // User is already participating
                 return false;
             }
+        }
+
+        private static string SanitizeComment(string comment)
+        {
+            var doc = new HtmlDocument();
+            doc.LoadHtml(comment);
+            foreach (HtmlNode link in doc.DocumentNode.Descendants("a"))
+            {
+                // Add nofollow ugc to all links so search engines don't follow the links
+                link.SetAttributeValue("rel", "nofollow ugc");
+                string? href = link.GetAttributeValue<string?>("href", null);
+                if (href == null)
+                {
+                    throw new InvalidOperationException("Links without href are not allowed");
+                }
+                // Other schemas than http/https have already been excluded before this check
+                else if (!href.StartsWith("http://", StringComparison.OrdinalIgnoreCase) && !href.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+                {
+                    // Add https schema if no schema specified
+                    link.SetAttributeValue("href", $"https://{href}");
+                }
+            }
+            using var writer = new StringWriter();
+            doc.Save(writer);
+            return writer.ToString();
         }
 
         private static bool IsValidEmail(string email)

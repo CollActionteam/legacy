@@ -9,7 +9,7 @@ namespace CollAction.GraphQl.Queries
     {
         public TagGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService) : base(entityFrameworkGraphQlService)
         {
-            Field<NonNullGraphType<IdGraphType>>(nameof(Tag.Id), resolve: x => x.Source.Id);
+            Field<NonNullGraphType<IdGraphType>, int>(nameof(Tag.Id)).Resolve(x => x.Source.Id);
             Field(x => x.Name);
             AddNavigationListField(nameof(Tag.CrowdactionTags), c => c.Source.CrowdactionTags);
         }

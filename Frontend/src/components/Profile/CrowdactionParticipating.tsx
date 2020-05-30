@@ -1,9 +1,10 @@
 import { ICrowdactionParticipant, IUser } from "../../api/types";
-import React from "react";
+import React, { useState } from "react";
 import CrowdactionCard from "../CrowdactionCard/CrowdactionCard";
 import { Card, CardActions, CardContent } from "@material-ui/core";
 import { useMutation, gql } from "@apollo/client";
 import { Button } from "../Button/Button";
+import { Alert } from "../Alert/Alert";
 
 interface ICrowdactionParticipatingProps {
     user: IUser;
@@ -11,6 +12,7 @@ interface ICrowdactionParticipatingProps {
 }
 
 export default ({ user, participant }: ICrowdactionParticipatingProps) => {
+    const [ error, setError ] = useState("");
     const [ toggleSubscription ] = useMutation(
         SET_CROWDACTION_SUBSCRIPTION,
         {
@@ -19,12 +21,17 @@ export default ({ user, participant }: ICrowdactionParticipatingProps) => {
                 userId: user.id,
                 token: participant.unsubscribeToken,
                 isSubscribed: !participant.subscribedToCrowdactionEmails
+            },
+            onError: (err) => {
+                console.error(err.message);
+                setError(err.message);
             }
         }
     );
 
     return <Card>
         <CardContent>
+            <Alert type="error" text={error} />
             <CrowdactionCard crowdaction={participant.crowdaction} />
         </CardContent>
         <CardActions>

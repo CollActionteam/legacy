@@ -7,7 +7,7 @@ namespace CollAction.GraphQl.Mutations.Input
     {
         public UpdatedCrowdactionInputGraph()
         {
-            Field<NonNullGraphType<IdGraphType>>(nameof(UpdatedCrowdaction.Id), resolve: x => x.Source.Id);
+            Field<NonNullGraphType<IdGraphType>, int>(nameof(UpdatedCrowdaction.Id)).Resolve(x => x.Source.Id);
             Field(x => x.Name);
             Field(x => x.Categories);
             Field(x => x.Target);

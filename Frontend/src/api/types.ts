@@ -10,7 +10,6 @@ export interface ISettings {
   mailChimpUserId: string,
   mailChimpAccount: string,
   mailChimpServer: string,
-  disqusSiteId: string;
   stripePublicKey: string;
   externalLoginProviders: string[];
   categories: string[];
@@ -46,7 +45,6 @@ export interface ICrowdactionCategory {
 }
 
 export interface IMiscellaneous {
-  disqusSite: string;
   externalLoginProviders: string[];
   festivalCallToActionVisible: boolean;
 }
@@ -57,9 +55,9 @@ export interface IOrderBy {
 }
 
 export enum CrowdactionDisplayPriority {
-  TOP,
-  MEDIUM,
-  BOTTOM,
+  TOP = "TOP",
+  MEDIUM = "MEDIUM",
+  BOTTOM = "BOTTOM",
 }
 
 export interface ICrowdaction {
@@ -111,11 +109,9 @@ export interface ICrowdactionParticipant {
 }
 
 export enum CrowdactionStatus {
-  HIDDEN,
-  RUNNING,
-  SUCCESFULL,
-  FAILED,
-  DELETED,
+  HIDDEN = "HIDDEN",
+  RUNNING = "RUNNING",
+  DELETED = "DELETED",
 }
 
 export enum CrowdactionStatusFilter {

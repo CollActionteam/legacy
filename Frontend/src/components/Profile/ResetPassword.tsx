@@ -20,6 +20,9 @@ export default () => {
             onCompleted: (data) => {
                 if (data.user.changePassword.succeeded) {
                     setSuccessMessage("Your password has been changed");
+                    setCurrentPassword("");
+                    setNewPassword("");
+                    setConfirmNewPassword("");
                 } else {
                     let error = data.user.changePassword.errors.map((e: any) => e.description).join(", ");
                     setSuccessMessage(null);

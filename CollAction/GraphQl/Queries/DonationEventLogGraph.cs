@@ -11,7 +11,7 @@ namespace CollAction.GraphQl.Queries
     {
         public DonationEventLogGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService) : base(entityFrameworkGraphQlService)
         {
-            Field<NonNullGraphType<IdGraphType>>(nameof(DonationEventLog.Id), resolve: x => x.Source.Id);
+            Field<NonNullGraphType<IdGraphType>, int>(nameof(DonationEventLog.Id)).Resolve(x => x.Source.Id);
             Field(x => x.UserId, true);
             Field(x => x.EventData);
 

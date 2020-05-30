@@ -9,8 +9,8 @@ namespace CollAction.GraphQl.Queries
     {
         public CrowdactionTagGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService) : base(entityFrameworkGraphQlService)
         {
-            Field<NonNullGraphType<IdGraphType>>(nameof(CrowdactionTag.CrowdactionId), resolve: x => x.Source.CrowdactionId);
-            Field<NonNullGraphType<IdGraphType>>(nameof(CrowdactionTag.TagId), resolve: x => x.Source.TagId);
+            Field<NonNullGraphType<IdGraphType>, int>(nameof(CrowdactionTag.CrowdactionId)).Resolve(x => x.Source.CrowdactionId);
+            Field<NonNullGraphType<IdGraphType>, int>(nameof(CrowdactionTag.TagId)).Resolve(x => x.Source.TagId);
             AddNavigationField(nameof(CrowdactionTag.Crowdaction), c => c.Source.Crowdaction);
             AddNavigationField(nameof(CrowdactionTag.Tag), c => c.Source.Tag);
         }

@@ -32,6 +32,7 @@ export default () => {
       <>
         <li className={styles.subnavigationListItem}>
           <Link className={styles.subnavigationLink} to="/account/profile">
+            <FontAwesomeIcon icon={['far', 'user']} />
             <span>Account</span>
           </Link>
         </li>

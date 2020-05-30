@@ -103,7 +103,7 @@ namespace CollAction.Controllers
                 throw new ValidationException(ModelState.GetValidationString());
             }
 
-            string redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { model.ErrorUrl, model.ReturnUrl, model.RememberMe });
+            string redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { model.ErrorUrl, model.ReturnUrl, model.FinishRegistrationUrl, model.RememberMe });
             AuthenticationProperties properties = signInManager.ConfigureExternalAuthenticationProperties(model.Provider, redirectUrl);
             return Challenge(properties, model.Provider);
         }
@@ -149,7 +149,7 @@ namespace CollAction.Controllers
             UserResult newUserResult = await userService.CreateUser(email, info).ConfigureAwait(false);
             if (newUserResult.Result.Succeeded)
             {
-                return Redirect(model.ReturnUrl);
+                return Redirect(model.FinishRegistrationUrl);
             }
             else
             {

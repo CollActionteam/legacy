@@ -8,6 +8,9 @@ using GraphQL.EntityFramework;
 using GraphQL.Types;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Stripe;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 
@@ -17,7 +20,7 @@ namespace CollAction.GraphQl.Queries
     {
         public ApplicationUserGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService) : base(entityFrameworkGraphQlService)
         {
-            Field<IdGraphType>(nameof(ApplicationUser.Id), resolve: x => x.Source.Id);
+            Field<NonNullGraphType<IdGraphType>, string>(nameof(ApplicationUser.Id)).Resolve(x => x.Source.Id);
             Field(x => x.Email);
             Field(x => x.FirstName, true);
             Field(x => x.FullName, true);
@@ -25,27 +28,33 @@ namespace CollAction.GraphQl.Queries
             Field(x => x.RepresentsNumberParticipants);
             Field(x => x.UserName);
             Field(x => x.Activated);
-            Field<NonNullGraphType<DateTimeOffsetGraphType>>(nameof(ApplicationUser.RegistrationDate), resolve: x => x.Source.RegistrationDate);
-            FieldAsync<BooleanGraphType>(
+            Field<NonNullGraphType<DateTimeOffsetGraphType>, DateTime>(nameof(ApplicationUser.RegistrationDate)).Resolve(x => x.Source.RegistrationDate);
+            FieldAsync<NonNullGraphType<BooleanGraphType>, bool>(
                 "isAdmin",
                 resolve: async c =>
                 {
                     ClaimsPrincipal principal = await c.GetUserContext().ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>().CreateUserPrincipalAsync(c.Source).ConfigureAwait(false);
                     return principal.IsInRole(AuthorizationConstants.AdminRole);
                 });
-            FieldAsync<BooleanGraphType>(
+            FieldAsync<NonNullGraphType<BooleanGraphType>, bool>(
                 "isSubscribedNewsletter",
-                resolve: async c =>
+                resolve: c =>
                 {
-                    return await c.GetUserContext().ServiceProvider.GetRequiredService<INewsletterService>().IsSubscribedAsync(c.Source.Email).ConfigureAwait(false);
+                    return c.GetUserContext()
+                            .ServiceProvider
+                            .GetRequiredService<INewsletterService>()
+                            .IsSubscribedAsync(c.Source.Email);
                 });
-            FieldAsync<ListGraphType<DonationSubscriptionGraph>>(
+            FieldAsync<NonNullGraphType<ListGraphType<NonNullGraphType<DonationSubscriptionGraph>>>, IEnumerable<Subscription>>(
                 "donationSubscriptions",
-                resolve: async c =>
+                resolve: c =>
                 {
-                    return await c.GetUserContext().ServiceProvider.GetRequiredService<IDonationService>().GetSubscriptionsFor(c.Source, c.CancellationToken).ConfigureAwait(false);
+                    return c.GetUserContext()
+                            .ServiceProvider
+                            .GetRequiredService<IDonationService>()
+                            .GetSubscriptionsFor(c.Source, c.CancellationToken);
                 });
-            FieldAsync<ListGraphType<StringGraphType>>(
+            FieldAsync<NonNullGraphType<ListGraphType<NonNullGraphType<StringGraphType>>>, IEnumerable<string>>(
                 "loginProviders",
                 resolve: async c =>
                 {

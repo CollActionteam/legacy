@@ -5,8 +5,8 @@ using CollAction.Services.Crowdactions;
 using GraphQL.Authorization;
 using GraphQL.EntityFramework;
 using GraphQL.Types;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace CollAction.GraphQl.Queries
 {
@@ -14,7 +14,7 @@ namespace CollAction.GraphQl.Queries
     {
         public CrowdactionGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService) : base(entityFrameworkGraphQlService)
         {
-            Field<NonNullGraphType<IdGraphType>>(nameof(Crowdaction.Id), resolve: x => x.Source.Id);
+            Field<NonNullGraphType<IdGraphType>, int>(nameof(Crowdaction.Id)).Resolve(x => x.Source.Id);
             Field(x => x.AnonymousUserParticipants);
             Field(x => x.BannerImageFileId, true);
             Field(x => x.CreatorComments, true);
@@ -23,28 +23,27 @@ namespace CollAction.GraphQl.Queries
             Field(x => x.DescriptiveImageFileId, true);
             Field(x => x.CardImageFileId, true);
             Field(x => x.DisplayPriority);
-            Field<NonNullGraphType<DateTimeOffsetGraphType>>(nameof(Crowdaction.End), resolve: x => x.Source.End);
+            Field<NonNullGraphType<DateTimeOffsetGraphType>, DateTime>(nameof(Crowdaction.End)).Resolve(x => x.Source.End);
             Field(x => x.Goal);
             Field(x => x.IsActive);
             Field(x => x.IsClosed);
             Field(x => x.IsComingSoon);
             Field(x => x.Name);
             Field(x => x.NumberCrowdactionEmailsSent);
-            Field<IdGraphType>(nameof(Crowdaction.OwnerId), resolve: x => x.Source.OwnerId);
+            Field<IdGraphType, string?>(nameof(Crowdaction.OwnerId)).Resolve(x => x.Source.OwnerId);
             Field(x => x.Proposal);
             Field(x => x.RemainingTime);
-            Field<NonNullGraphType<DateTimeOffsetGraphType>>(nameof(Crowdaction.Start), resolve: x => x.Source.Start);
+            Field<NonNullGraphType<DateTimeOffsetGraphType>, DateTime>(nameof(Crowdaction.Start)).Resolve(x => x.Source.Start);
             Field(x => x.Status);
             Field(x => x.Target);
             Field(x => x.NameNormalized);
-            Field<NonNullGraphType<StringGraphType>>(nameof(Crowdaction.Url), resolve: p => p.Source.Url.ToString());
-            Field<NonNullGraphType<BooleanGraphType>>(
-                "canSendCrowdactionEmail",
-                resolve: c =>
+            Field<NonNullGraphType<StringGraphType>, string>(nameof(Crowdaction.Url)).Resolve(p => p.Source.Url.ToString());
+            Field<NonNullGraphType<BooleanGraphType>, bool>("canSendCrowdactionEmail")
+                .Resolve(c =>
                 {
                     return c.GetUserContext().ServiceProvider.GetRequiredService<ICrowdactionService>().CanSendCrowdactionEmail(c.Source);
                 });
-            FieldAsync<NonNullGraphType<StringGraphType>>(
+            FieldAsync<NonNullGraphType<StringGraphType>, string>(
                 nameof(Crowdaction.RemainingTimeUserFriendly),
                 resolve: async c =>
                 {
@@ -55,7 +54,7 @@ namespace CollAction.GraphQl.Queries
 
                     return c.Source.RemainingTimeUserFriendly;
                 });
-            FieldAsync<NonNullGraphType<BooleanGraphType>>(
+            FieldAsync<NonNullGraphType<BooleanGraphType>, bool>(
                 nameof(Crowdaction.IsSuccessfull),
                 resolve: async c =>
                 {
@@ -66,7 +65,7 @@ namespace CollAction.GraphQl.Queries
 
                     return c.Source.IsSuccessfull;
                 });
-            FieldAsync<NonNullGraphType<BooleanGraphType>>(
+            FieldAsync<NonNullGraphType<BooleanGraphType>, bool>(
                 nameof(Crowdaction.IsFailed),
                 resolve: async c =>
                 {
@@ -77,7 +76,7 @@ namespace CollAction.GraphQl.Queries
 
                     return c.Source.IsFailed;
                 });
-            FieldAsync<NonNullGraphType<IntGraphType>>(
+            FieldAsync<NonNullGraphType<IntGraphType>, int>(
                 nameof(Crowdaction.TotalParticipants),
                 resolve: async c =>
                 {
@@ -88,7 +87,7 @@ namespace CollAction.GraphQl.Queries
 
                     return c.Source.TotalParticipants;
                 });
-            FieldAsync<NonNullGraphType<IntGraphType>>(
+            FieldAsync<NonNullGraphType<IntGraphType>, int>(
                 nameof(Crowdaction.Percentage),
                 resolve: async c =>
                 {

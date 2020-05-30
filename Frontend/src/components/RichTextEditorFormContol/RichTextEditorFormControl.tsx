@@ -17,7 +17,6 @@ export interface IRichTextEditorProps {
   label: string;
   hint?: string;
   height?: string;
-
   formik: FormikProps<any>;
   className?: string;
   fullWidth?: boolean;
@@ -36,7 +35,7 @@ export class RichTextEditorFormControl extends React.Component<
     "link",
   ];
 
-  constructor(props: any) {
+  constructor(props: IRichTextEditorProps) {
     super(props);
 
     this.defaultTheme = createMuiTheme();

@@ -11,7 +11,7 @@ namespace CollAction.GraphQl.Queries
     {
         public RestrictedApplicationUserGraph(IEfGraphQLService<ApplicationDbContext> efGraphQlService) : base(efGraphQlService)
         {
-            Field<NonNullGraphType<IdGraphType>>(nameof(ApplicationUser.Id), resolve: x => x.Source.Id);
+            Field<NonNullGraphType<IdGraphType>, string>(nameof(ApplicationUser.Id)).Resolve(x => x.Source.Id);
             Field(x => x.FirstName, true);
             Field(x => x.FullName, true);
             Field(x => x.LastName, true);

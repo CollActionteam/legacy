@@ -89,7 +89,7 @@ namespace CollAction.Tests.Integration.Service
 
             try
             {
-                for (int attempt = 0; attempt < 4; attempt++)
+                for (int attempt = 0; attempt < 2; attempt++)
                 {
                     for (bool requireEmail = true; requireEmail; requireEmail = !requireEmail)
                     {

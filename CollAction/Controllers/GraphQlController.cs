@@ -8,10 +8,12 @@ using GraphQL.Validation;
 using GraphQL.Validation.Complexity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,9 +28,35 @@ namespace CollAction.Controllers
         private readonly ApplicationDbContext context;
         private readonly ILogger<GraphQlController> logger;
         private readonly IServiceProvider serviceProvider;
+        private readonly IMemoryCache cache;
         private readonly ISchema schema;
+        private static readonly TimeSpan CacheExpiration = TimeSpan.FromMinutes(1);
 
-        public GraphQlController(ISchema schema, IDocumentExecuter executer, IEnumerable<IValidationRule> validationRules, ApplicationDbContext context, ILogger<GraphQlController> logger, IServiceProvider serviceProvider)
+        private class CacheKey : IEquatable<CacheKey>
+        {
+            public CacheKey(string query, JObject? variables)
+            {
+                Query = query;
+                Variables = variables;
+            }
+
+            public string Query { get; }
+            public JObject? Variables { get; }
+            private static readonly JTokenEqualityComparer jtokenComparer = new JTokenEqualityComparer();
+
+            public bool Equals([AllowNull] CacheKey? other)
+                => other != null &&
+                   Query == other.Query &&
+                   jtokenComparer.Equals(Variables, other.Variables);
+
+            public override bool Equals(object? obj)
+                => Equals(obj as CacheKey);
+
+            public override int GetHashCode()
+                => HashCode.Combine(Query, jtokenComparer.GetHashCode(Variables));
+        }
+
+        public GraphQlController(ISchema schema, IDocumentExecuter executer, IEnumerable<IValidationRule> validationRules, ApplicationDbContext context, ILogger<GraphQlController> logger, IServiceProvider serviceProvider, IMemoryCache cache)
         {
             this.schema = schema;
             this.executer = executer;
@@ -36,19 +64,52 @@ namespace CollAction.Controllers
             this.context = context;
             this.logger = logger;
             this.serviceProvider = serviceProvider;
+            this.cache = cache;
         }
 
         [HttpPost]
         public Task<ExecutionResult> Post([BindRequired, FromBody] GraphQlPostBody body, CancellationToken cancellation)
         {
-            return Execute(body.Query, body.OperationName, body.Variables, cancellation);
+            if (!User.Identity.IsAuthenticated && body.Query.StartsWith("query", StringComparison.OrdinalIgnoreCase))
+            {
+                logger.LogInformation("Executing graphql query with caching");
+                return cache.GetOrCreateAsync(
+                    new CacheKey(body.Query, body.Variables),
+                    entry =>
+                    {
+                        logger.LogInformation("Query not found in cache, calculating resultset");
+                        entry.SlidingExpiration = CacheExpiration;
+                        return Execute(body.Query, body.OperationName, body.Variables, cancellation);
+                    });
+            }
+            else
+            {
+                logger.LogInformation("Executing graphql query without caching");
+                return Execute(body.Query, body.OperationName, body.Variables, cancellation);
+            }
         }
 
         [HttpGet]
         public Task<ExecutionResult> Get([FromQuery] GraphQlGetQuery getQuery, CancellationToken cancellation)
         {
             JObject? jsonVariables = ParseVariables(getQuery.Variables);
-            return Execute(getQuery.Query, getQuery.OperationName, jsonVariables, cancellation);
+            if (!User.Identity.IsAuthenticated && getQuery.Query.StartsWith("query", StringComparison.OrdinalIgnoreCase))
+            {
+                logger.LogInformation("Executing graphql query with caching");
+                return cache.GetOrCreateAsync(
+                    new CacheKey(getQuery.Query, jsonVariables),
+                    entry =>
+                    {
+                        logger.LogInformation("Query not found in cache, calculating resultset");
+                        entry.SlidingExpiration = CacheExpiration;
+                        return Execute(getQuery.Query, getQuery.OperationName, jsonVariables, cancellation);
+                    });
+            }
+            else
+            {
+                logger.LogInformation("Executing graphql query without caching");
+                return Execute(getQuery.Query, getQuery.OperationName, jsonVariables, cancellation);
+            }
         }
 
         private static JObject? ParseVariables(string? variables)

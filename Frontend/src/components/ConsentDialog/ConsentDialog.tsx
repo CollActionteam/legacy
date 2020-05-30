@@ -10,7 +10,6 @@ import { Alert } from "../Alert/Alert";
 const initialConsentState: Record<Consent, boolean> = {
     [Consent.Basics]: true,
     [Consent.Analytics]: false,
-    [Consent.Disqus]: false,
     [Consent.Social]: false,
     [Consent.Stripe]: false,
 };
@@ -21,6 +20,7 @@ export default () => {
     const [ info, setInfo ] = useState<string | null>(null);
     const location = useLocation();
     const alwaysShow = location.pathname === "/privacy-policy";
+    const alwaysShowInfoMessage = "You've given consent. This dialog will remain open in case you want to further update your choices.";
     const formik = useFormik({
         initialValues: initialConsentState,
         onSubmit: (values) => {
@@ -29,7 +29,7 @@ export default () => {
                       .filter(([_k, v]) => v)
                       .map(([k, _v]) => k as Consent);
             setConsent(selectedConsents);
-            setInfo("You've given consent. This dialog will remain open in case you want to further update your choices.")
+            setInfo(alwaysShowInfoMessage);
             formik.setSubmitting(false);
         }
     });
@@ -72,7 +72,7 @@ export default () => {
                             </FormikProvider>
                         </div> :
                         <div>
-                            <Button key="acceptall" onClick={() => setAllowAllConsent()}>Accept</Button>
+                            <Button key="acceptall" onClick={() => { setInfo(alwaysShowInfoMessage); setAllowAllConsent(); } }>Accept</Button>
                             <Button key="more" onClick={() => setShowMoreOptions(true)}>More options</Button>
                         </div>
                     }

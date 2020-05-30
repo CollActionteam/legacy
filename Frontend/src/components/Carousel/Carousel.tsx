@@ -1,21 +1,20 @@
-import React, { useEffect } from "react";
-import { gql, useQuery } from "@apollo/client";
-import Slider from "react-slick";
-import { Grid, Container } from "@material-ui/core";
+import React, { useEffect } from 'react';
+import { gql, useQuery } from '@apollo/client';
+import Slider from 'react-slick';
+import { Grid, Container } from '@material-ui/core';
 
+import { Fragments } from '../../api/fragments';
+import { ICrowdaction } from '../../api/types';
 
-import { Fragments } from "../../api/fragments";
-import { ICrowdaction } from "../../api/types";
+import Loader from '../Loader/Loader';
+import CrowdactionCard from '../CrowdactionCard/CrowdactionCard';
+import { SecondaryButton, SecondaryGhostButton } from '../Button/Button';
 
-import Loader from "../Loader/Loader";
-import CrowdactionCard from "../CrowdactionCard/CrowdactionCard";
-import { SecondaryButton, SecondaryGhostButton } from "../Button/Button";
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-
-import styles from "./Carousel.module.scss";
-import { Alert } from "../Alert/Alert";
+import styles from './Carousel.module.scss';
+import { Alert } from '../Alert/Alert';
 
 interface ICarouselProps {
   title: string;
@@ -35,6 +34,7 @@ export default ({ title, text }: ICarouselProps) => {
         breakpoint: 600,
         settings: {
           arrows: false,
+          slidesToShow: 1,
         },
       },
     ],
@@ -46,7 +46,7 @@ export default ({ title, text }: ICarouselProps) => {
     if (error) {
       console.error(error.message);
     }
-  }, [ error ]);
+  }, [error]);
 
   if (error) {
     return <Alert type="error" text={error.message} />;
@@ -57,7 +57,7 @@ export default ({ title, text }: ICarouselProps) => {
       <Grid container className={styles.container}>
         <Grid item sm={12} md={3}>
           <div className={styles.intro}>
-            <h2 className={styles.introTitle}>{ title }</h2>
+            <h2 className={styles.introTitle}>{title}</h2>
             <p
               className={styles.introText}
               dangerouslySetInnerHTML={{ __html: text }}
@@ -74,9 +74,11 @@ export default ({ title, text }: ICarouselProps) => {
           {loading && <Loader />}
           {data?.crowdactions && (
             <Slider {...settings}>
-              {data.crowdactions.map((crowdaction: ICrowdaction, index: number) => (
-                <CrowdactionCard crowdaction={crowdaction} key={index} />
-              ))}
+              {data.crowdactions.map(
+                (crowdaction: ICrowdaction, index: number) => (
+                  <CrowdactionCard crowdaction={crowdaction} key={index} />
+                )
+              )}
             </Slider>
           )}
         </Grid>

@@ -6,15 +6,15 @@ namespace CollAction.GraphQl.Mutations
     {
         public MutationGraph()
         {
-            Field<UserMutationGraph>(
+            Field<NonNullGraphType<UserMutationGraph>>(
                 "user",
                 resolve: c => new object());
 
-            Field<DonationMutationGraph>(
+            Field<NonNullGraphType<DonationMutationGraph>>(
                 "donation",
                 resolve: c => new object());
 
-            Field<CrowdactionMutationGraph>(
+            Field<NonNullGraphType<CrowdactionMutationGraph>>(
                 "crowdaction",
                 resolve: c => new object());
         }

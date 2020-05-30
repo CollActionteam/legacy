@@ -4,7 +4,6 @@ export enum Consent {
     Basics = "Basics",
     Analytics = "Analytics",
     Stripe = "Stripe",
-    Disqus = "Disqus",
     Social = "Social"
 };
 
@@ -24,8 +23,6 @@ export const ConsentDescription = (consent: Consent) => {
             return "Detailed personalized analytics";
         case Consent.Stripe:
             return "Integration with stripe payments for handling our donations";
-        case Consent.Disqus:
-            return "Integration with disqus comments for handling our crowdaction comments";
         case Consent.Social:
             return "Integration with social media (facebook, twitter, ...)";
     }

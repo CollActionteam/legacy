@@ -59,16 +59,12 @@
             "title" : "Meet the team",
             "team" : [
                 {
-                    "name": "Abhinay Kondamreddy",
-                    "photo": "nophoto.png"
-                },
-                {
                     "name": "Arnout Jansen",
                     "photo": "nophoto.png"
                 },
                 {
-                    "name": "Christa Brouwer",
-                    "photo": "nophoto.png"
+                    "name": "Clara Doyle",
+                    "photo": "clara-doyle.jpg"
                 },
                 {
                     "name": "Daniela Becker",
@@ -83,36 +79,48 @@
                     "photo": "edoardo-felici.png"
                 },
                 {
+                    "name": "Georgie Kusbiantoro",
+                    "photo": "georgie-kusbiantoro.png"
+                },
+                {
                     "name": "Jeppe Bijker",
-                    "photo": "nophoto.png"
+                    "photo": "jeppe-bijker.jpg"
+                },
+                {
+                    "name": "Jonas Schneider",
+                    "photo": "jonas-s.jpg"
+                },
+                {
+                    "name": "Kisjonah Roos",
+                    "photo": "kisjonah-roos.jpg"
+                },
+                {
+                    "name": "Lena Hartog",
+                    "photo": "lena-hartog.jpg"
                 },
                 {
                     "name": "Luuk Boschker",
                     "photo": "luuk-boschker.png"
                 },
                 {
-                    "name": "Laura Wennekes",
-                    "photo": "nophoto.png"
+                    "name": "Laura Christiaens",
+                    "photo": "laura-c.jpeg"
                 },
                 {
-                    "name": "Martijn de Haan",
-                    "photo": "martijn-de-haan.png"
+                    "name": "Lucie Morauw",
+                    "photo": "lucie-morauw.jpeg"
                 },
                 {
-                    "name": "Melchior Jong",
-                    "photo": "melchior-jong.png"
-                },
-                {
-                    "name": "Mina Yao",
-                    "photo": "nophoto.png"
-                },
-                {
-                    "name": "Nikie van Thiel",
-                    "photo": "nophoto.png"
+                    "name": "Mara de Pater",
+                    "photo": "mara-de-pater.jpg"
                 },
                 {
                     "name": "Ron van den Akker",
                     "photo": "ron-van-den-akker.png"
+                },
+                {
+                    "name": "Shirley Zheng",
+                    "photo": "shirley-zheng.jpeg"
                 },
                 {
                     "name": "Spencer Heijnen",
@@ -123,12 +131,8 @@
                     "photo": "tim-stokman.png"
                 },
                 {
-                    "name": "Vivian Vos",
-                    "photo": "vivian-vos.png"
-                },
-                {
-                    "name": "Brian Russel",
-                    "photo": "nophoto.png"
+                    "name": "Tuanh Lam",
+                    "photo": "tuanh-lam.jpg"
                 }
             ]
         },
