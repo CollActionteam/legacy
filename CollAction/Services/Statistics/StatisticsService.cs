@@ -61,7 +61,7 @@ namespace CollAction.Services.Statistics
 
                        int normalUsers =
                            await context.Users
-                                        .CountAsync(u => u.Crowdactions.Any(), token)
+                                        .CountAsync(token)
                                         .ConfigureAwait(false);
                        int anonymousUsers =
                            await context.Crowdactions
