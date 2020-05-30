@@ -5,3 +5,11 @@ env_collaction
 env_postgres
 node_modules
 log-*
+
+# Compiled files
+*.tfstate
+*.tfstate.backup
+.terraform.tfstate.lock.info
+
+# Module directory
+.terraform/

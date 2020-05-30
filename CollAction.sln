@@ -14,6 +14,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{72EA00C6-36F3-4CB7-81FF-496492FFA09B}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\on_push.yml = .github\workflows\on_push.yml
+		.github\workflows\on_tag_version.yml = .github\workflows\on_tag_version.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker", "docker", "{BECC17AF-2D3D-4942-8391-F297062D4752}"

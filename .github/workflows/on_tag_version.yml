@@ -1,0 +1,40 @@
+name: On version tag
+
+on:
+  push:
+    tags:
+      - v* # Push events matching v*, e.g. v2.0.0.
+
+jobs:
+  build_frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Get the version
+      id: get_version
+      run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}    
+    - uses: actions/checkout@v2
+    - uses: docker/build-push-action@v1
+      with:
+        username: ${{ secrets.DockerUsername }}
+        password: ${{ secrets.DockerPassword }}
+        repository: collaction/frontend
+        tags: ${{ steps.get_version.outputs.VERSION }}
+        dockerfile: Frontend/Dockerfile
+        path: Frontend
+
+  build_backend:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Get the version
+      id: get_version
+      run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}    
+    - uses: actions/checkout@v2
+    - uses: docker/build-push-action@v1
+      with:
+        username: ${{ secrets.DockerUsername }}
+        password: ${{ secrets.DockerPassword }}
+        repository: collaction/backend
+        tags: ${{ steps.get_version.outputs.VERSION }}
+        dockerfile: CollAction/Dockerfile
