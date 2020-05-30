@@ -17,7 +17,12 @@ variable "backup_retention_periode" {
   default     = 7
 }
 
-variable "delete_protection" {
+variable "deletion_protection" {
   description = "If the DB instance should have deletion protection enabled."
   default     = true
+}
+
+variable "publicly_accessible" {
+  description = "Set if the database is publicly available"
+  default     = false
 }

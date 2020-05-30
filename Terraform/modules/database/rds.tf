@@ -14,6 +14,8 @@ resource "aws_db_instance" "collaction" {
   name                      = "collactiondb"
   username                  = "postgres"
   password                  = random_password.db_password.result
+  publicly_accessible       = var.publicly_accessible
+  deletion_protection       = var.deletion_protection
   vpc_security_group_ids = [
     aws_security_group.rds.id
   ]
