@@ -1,0 +1,14 @@
+# Add hostname to the DNS 
+data "aws_route53_zone" "collaction" {
+  name = var.route53_zone_name
+}
+
+resource "aws_route53_record" "netlify" {
+  zone_id = data.aws_route53_zone.collaction.zone_id
+  name    = "staging.collaction.org"
+  type    = "CNAME"
+  ttl     = "300"
+  records = [
+    "staging-collaction.netlify.app"
+  ]
+}
