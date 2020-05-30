@@ -57,8 +57,6 @@ namespace CollAction.Services.Statistics
                    {
                        entry.SlidingExpiration = CacheExpiration;
 
-                       // Only count users that have joined at least one crowdaction
-
                        int normalUsers =
                            await context.Users
                                         .CountAsync(token)
