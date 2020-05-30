@@ -31,8 +31,7 @@ module "fargate" {
   ssm_dbuser     = aws_ssm_parameter.DbUser
   ssm_dbpassword = aws_ssm_parameter.DbPassword
 
-  sg_rds_access = data.aws_security_group.rds_inbound_security_group # For now, allow access to existing production database
-  # sg_rds_access = module.rds.inbound_security_group
+  sg_rds_access = module.rds.inbound_security_group
   subnet_ids = module.vpc.subnet_ids
 
   vpc               = module.vpc.default
