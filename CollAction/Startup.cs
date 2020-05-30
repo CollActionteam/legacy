@@ -203,8 +203,7 @@ namespace CollAction
 
             if (environment.IsProduction())
             {
-                // Note: disabled for now. Production container on Fargate runs on http
-                // app.UseRewriter(new RewriteOptions().AddRedirectToHttpsPermanent());
+                app.UseRewriter(new RewriteOptions().AddRedirectToHttpsPermanent());
                 app.UseHsts();
                 app.UseExceptionHandler("/error");
             }
