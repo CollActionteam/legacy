@@ -144,9 +144,9 @@ namespace CollAction.Controllers
                 return Redirect($"{model.ErrorUrl}?error=lockout&message={WebUtility.UrlEncode("User is locked out")}&returnUrl={model.ReturnUrl}");
             }
 
-            // If the user can't login with the social, add it
+            // If the user can't login with the external login, 
             string email = info.Principal.FindFirstValue(ClaimTypes.Email);
-            SocialUserResult newUserResult = await userService.CreateOrAddSocialToUser(email, info).ConfigureAwait(false);
+            ExternalUserResult newUserResult = await userService.CreateOrAddExternalToUser(email, info).ConfigureAwait(false);
             if (newUserResult.Result.Succeeded)
             {
                 if (newUserResult.AddedUser)
@@ -162,7 +162,7 @@ namespace CollAction.Controllers
             {
                 string error = string.Join(", ", newUserResult.Result.Errors.Select(e => e.Description));
                 logger.LogError(error);
-                return Redirect($"{model.ErrorUrl}?error=user-create&message={WebUtility.UrlEncode(error)}&returnUrl={model.ReturnUrl}");
+                return Redirect($"{model.ErrorUrl}?error=external-login-create&message={WebUtility.UrlEncode(error)}&returnUrl={model.ReturnUrl}");
             }
         }
     }

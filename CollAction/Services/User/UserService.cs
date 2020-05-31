@@ -47,7 +47,7 @@ namespace CollAction.Services.User
             this.siteOptions = siteOptions.Value;
         }
 
-        public async Task<SocialUserResult> CreateOrAddSocialToUser(string email, ExternalLoginInfo info)
+        public async Task<ExternalUserResult> CreateOrAddExternalToUser(string email, ExternalLoginInfo info)
         {
             ApplicationUser? user = await userManager.FindByEmailAsync(email).ConfigureAwait(false);
             if (user != null)
@@ -55,20 +55,20 @@ namespace CollAction.Services.User
                 if (await userManager.IsInRoleAsync(user, AuthorizationConstants.AdminRole).ConfigureAwait(false))
                 {
                     // Don't link accounts for admin users, security issue.. 
-                    logger.LogError("Attempt to log accounts for admin user: {0}, {1}", email, info.LoginProvider);
+                    logger.LogError("Attempt to link accounts for admin user: {0}, {1}", email, info.LoginProvider);
                     throw new InvalidOperationException("Attempted to link account for admin user");
                 }
                 IdentityResult result = await userManager.AddLoginAsync(user, info).ConfigureAwait(false);
                 if (result.Succeeded)
                 {
-                    logger.LogInformation("Added social login to account: {0}, {1}", email, info.LoginProvider);
+                    logger.LogInformation("Added external login to account: {0}, {1}", email, info.LoginProvider);
                 }
                 else
                 {
                     LogErrors("Adding external login", result);
                 }
 
-                return new SocialUserResult(user, result, false);
+                return new ExternalUserResult(user, result, false);
             }
             else
             {
@@ -88,12 +88,12 @@ namespace CollAction.Services.User
                         logger.LogInformation("Created user from external login");
                     }
 
-                    return new SocialUserResult(user, result, true);
+                    return new ExternalUserResult(user, result, true);
                 }
                 else
                 {
                     LogErrors("Creating user", result);
-                    return new SocialUserResult(result);
+                    return new ExternalUserResult(result);
                 }
             }
         }
