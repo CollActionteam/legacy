@@ -73,7 +73,7 @@ const FinishRegistrationSocialPage = () => {
                         lastName: values.lastName,
                         isSubscribedNewsletter: values.isSubscribedNewsletter,
                         representsNumberParticipants: 1,
-                        isAdmin: false
+                        isAdmin: user?.isAdmin
                     },
                 }
             });

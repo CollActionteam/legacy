@@ -47,30 +47,54 @@ namespace CollAction.Services.User
             this.siteOptions = siteOptions.Value;
         }
 
-        public async Task<UserResult> CreateUser(string email, ExternalLoginInfo info)
+        public async Task<SocialUserResult> CreateOrAddSocialToUser(string email, ExternalLoginInfo info)
         {
-            logger.LogInformation("Creating user from external login");
-            ApplicationUser user = new ApplicationUser(email: email, registrationDate: DateTime.UtcNow);
-            IdentityResult result = await userManager.CreateAsync(user).ConfigureAwait(false);
-            if (result.Succeeded)
+            ApplicationUser? user = await userManager.FindByEmailAsync(email).ConfigureAwait(false);
+            if (user != null)
             {
-                result = await userManager.AddLoginAsync(user, info).ConfigureAwait(false);
-                if (!result.Succeeded)
+                if (await userManager.IsInRoleAsync(user, AuthorizationConstants.AdminRole).ConfigureAwait(false))
                 {
-                    LogErrors("Adding external login", result);
+                    // Don't link accounts for admin users, security issue.. 
+                    logger.LogError("Attempt to log accounts for admin user: {0}, {1}", email, info.LoginProvider);
+                    throw new InvalidOperationException("Attempted to link account for admin user");
+                }
+                IdentityResult result = await userManager.AddLoginAsync(user, info).ConfigureAwait(false);
+                if (result.Succeeded)
+                {
+                    logger.LogInformation("Added social login to account: {0}, {1}", email, info.LoginProvider);
                 }
                 else
                 {
-                    await emailSender.SendEmailTemplated(user.Email, "Account Creation", "UserCreated").ConfigureAwait(false);
-                    logger.LogInformation("Created user from external login");
+                    LogErrors("Adding external login", result);
                 }
 
-                return new UserResult(user, result);
+                return new SocialUserResult(user, result, false);
             }
             else
             {
-                LogErrors("Creating user", result);
-                return new UserResult(result);
+                logger.LogInformation("Creating user from external login");
+                user = new ApplicationUser(email: email, registrationDate: DateTime.UtcNow);
+                IdentityResult result = await userManager.CreateAsync(user).ConfigureAwait(false);
+                if (result.Succeeded)
+                {
+                    result = await userManager.AddLoginAsync(user, info).ConfigureAwait(false);
+                    if (!result.Succeeded)
+                    {
+                        LogErrors("Adding external login", result);
+                    }
+                    else
+                    {
+                        await emailSender.SendEmailTemplated(user.Email, "Account Creation", "UserCreated").ConfigureAwait(false);
+                        logger.LogInformation("Created user from external login");
+                    }
+
+                    return new SocialUserResult(user, result, true);
+                }
+                else
+                {
+                    LogErrors("Creating user", result);
+                    return new SocialUserResult(result);
+                }
             }
         }
 

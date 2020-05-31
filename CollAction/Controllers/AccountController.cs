@@ -144,12 +144,19 @@ namespace CollAction.Controllers
                 return Redirect($"{model.ErrorUrl}?error=lockout&message={WebUtility.UrlEncode("User is locked out")}&returnUrl={model.ReturnUrl}");
             }
 
-            // If the user does not have an account, create one
+            // If the user can't login with the social, add it
             string email = info.Principal.FindFirstValue(ClaimTypes.Email);
-            UserResult newUserResult = await userService.CreateUser(email, info).ConfigureAwait(false);
+            SocialUserResult newUserResult = await userService.CreateOrAddSocialToUser(email, info).ConfigureAwait(false);
             if (newUserResult.Result.Succeeded)
             {
-                return Redirect(model.FinishRegistrationUrl);
+                if (newUserResult.AddedUser)
+                {
+                    return Redirect(model.FinishRegistrationUrl);
+                }
+                else
+                {
+                    return Redirect(model.ReturnUrl);
+                }
             }
             else
             {
