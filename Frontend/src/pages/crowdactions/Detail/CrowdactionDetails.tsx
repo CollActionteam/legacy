@@ -324,7 +324,6 @@ const CrowdactionDetailsPage = ({
                                     </span>
                                     <input
                                       type="hidden"
-                                      name="email"
                                       {...formik.getFieldProps('email')}
                                     />
                                   </React.Fragment>

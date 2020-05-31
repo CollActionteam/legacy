@@ -66,6 +66,7 @@ namespace CollAction.Services.Donation
         private readonly IEmailSender emailSender;
         private readonly ILogger<DonationService> logger;
         private readonly IServiceProvider serviceProvider;
+        private readonly StripeClient stripeClient;
         private readonly StripeSignatures stripeSignatures;
         private readonly ApplicationDbContext context;
         private readonly UserManager<ApplicationUser> userManager;
@@ -89,13 +90,14 @@ namespace CollAction.Services.Donation
             this.emailSender = emailSender;
             this.logger = logger;
             this.serviceProvider = serviceProvider;
-            customerService = new CustomerService(this.requestOptions.ApiKey);
-            sourceService = new SourceService(this.requestOptions.ApiKey);
-            chargeService = new ChargeService(this.requestOptions.ApiKey);
-            sessionService = new SessionService(this.requestOptions.ApiKey);
-            subscriptionService = new SubscriptionService(this.requestOptions.ApiKey);
-            planService = new PlanService(this.requestOptions.ApiKey);
-            productService = new ProductService(this.requestOptions.ApiKey);
+            this.stripeClient = new StripeClient(this.requestOptions.ApiKey);
+            customerService = new CustomerService(stripeClient);
+            sourceService = new SourceService(stripeClient);
+            chargeService = new ChargeService(stripeClient);
+            sessionService = new SessionService(stripeClient);
+            subscriptionService = new SubscriptionService(stripeClient);
+            planService = new PlanService(stripeClient);
+            productService = new ProductService(stripeClient);
         }
 
         public async Task<bool> HasIDealPaymentSucceeded(string sourceId, string clientSecret, CancellationToken token)
@@ -117,6 +119,7 @@ namespace CollAction.Services.Donation
             }
 
             ApplicationUser user = await userManager.FindByEmailAsync(checkout.Email).ConfigureAwait(false);
+            Customer customer = await GetOrCreateCustomer(checkout.Name, checkout.Email, token).ConfigureAwait(false);
 
             var sessionOptions = new SessionCreateOptions()
             {
@@ -125,20 +128,20 @@ namespace CollAction.Services.Donation
                 PaymentMethodTypes = new List<string>
                 {
                     "card",
-                }
+                },
+                Customer = customer.Id
             };
 
             if (checkout.Recurring)
             {
                 logger.LogInformation("Initializing recurring credit card checkout session");
-                sessionOptions.CustomerEmail = checkout.Email; // TODO: sessionOptions.CustomerId = customer.Id; // Once supported
                 sessionOptions.SubscriptionData = new SessionSubscriptionDataOptions()
                 {
                     Items = new List<SessionSubscriptionDataItemOptions>()
                     {
                         new SessionSubscriptionDataItemOptions()
                         {
-                            PlanId = (await CreateRecurringPlan(checkout.Amount, checkout.Currency, token).ConfigureAwait(false)).Id,
+                            Plan = (await CreateRecurringPlan(checkout.Amount, checkout.Currency, token).ConfigureAwait(false)).Id,
                             Quantity = 1
                         }
                     }
@@ -147,8 +150,6 @@ namespace CollAction.Services.Donation
             else
             {
                 logger.LogInformation("Initializing credit card checkout session");
-                Customer customer = await GetOrCreateCustomer(checkout.Name, checkout.Email, token).ConfigureAwait(false);
-                sessionOptions.CustomerId = customer.Id;
                 sessionOptions.LineItems = new List<SessionLineItemOptions>()
                 {
                     new SessionLineItemOptions()
@@ -197,13 +198,13 @@ namespace CollAction.Services.Donation
                 new SubscriptionCreateOptions()
                 {
                     DefaultSource = source.Id,
-                    Billing = Billing.ChargeAutomatically,
-                    CustomerId = customer.Id,
-                    Items = new List<SubscriptionItemOption>()
+                    CollectionMethod = "charge_automatically",
+                    Customer = customer.Id,
+                    Items = new List<SubscriptionItemOptions>()
                     {
-                        new SubscriptionItemOption()
+                        new SubscriptionItemOptions()
                         {
-                            PlanId = plan.Id,
+                            Plan = plan.Id,
                             Quantity = 1
                         }
                     }
@@ -279,7 +280,7 @@ namespace CollAction.Services.Donation
                 var subscriptions = await subscriptionService.ListAsync(
                     new SubscriptionListOptions()
                     {
-                        CustomerId = charge.CustomerId
+                        Customer = charge.CustomerId
                     },
                     cancellationToken: token).ConfigureAwait(false);
                 Customer customer = await customerService.GetAsync(charge.CustomerId, cancellationToken: token).ConfigureAwait(false);
@@ -303,8 +304,8 @@ namespace CollAction.Services.Donation
                     {
                         Amount = source.Amount,
                         Currency = source.Currency,
-                        SourceId = sourceId,
-                        CustomerId = source.Customer,
+                        Source = sourceId,
+                        Customer = source.Customer,
                         Description = "A donation to Stichting CollAction"
                     }).ConfigureAwait(false);
                 }
@@ -340,7 +341,7 @@ namespace CollAction.Services.Donation
                     subscriptionService.ListAsync(
                         new SubscriptionListOptions()
                         {
-                            CustomerId = c.Id
+                            Customer = c.Id
                         },
                         cancellationToken: token))).ConfigureAwait(false);
 
@@ -370,7 +371,7 @@ namespace CollAction.Services.Donation
             return await planService.CreateAsync(
                 new PlanCreateOptions()
                 {
-                    ProductId = product.Id,
+                    Product = product.Id,
                     Active = true,
                     Amount = amount * 100,
                     Currency = currency,
@@ -410,7 +411,7 @@ namespace CollAction.Services.Donation
 
         private async Task<Customer> GetOrCreateCustomer(string name, string email, CancellationToken token)
         {
-            Customer? customer = (await customerService.ListAsync(new CustomerListOptions() { Email = email, Limit = 1 }, requestOptions, token).ConfigureAwait(false)).FirstOrDefault();
+            Customer? customer = (await customerService.ListAsync(new CustomerListOptions() { Email = email, Limit = 1 }, cancellationToken: token).ConfigureAwait(false)).FirstOrDefault();
             string? metadataName = null;
             customer?.Metadata?.TryGetValue(NameKey, out metadataName);
             var metadata = new Dictionary<string, string>() { { NameKey, name } };
