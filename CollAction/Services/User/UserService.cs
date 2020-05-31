@@ -59,16 +59,19 @@ namespace CollAction.Services.User
                     throw new InvalidOperationException("Attempted to link account for admin user");
                 }
                 IdentityResult result = await userManager.AddLoginAsync(user, info).ConfigureAwait(false);
+                var externalResult = new ExternalUserResult(user, result, info, false);
+
                 if (result.Succeeded)
                 {
                     logger.LogInformation("Added external login to account: {0}, {1}", email, info.LoginProvider);
+                    await emailSender.SendEmailTemplated(user.Email, "Account Linked", "AccountLinked", externalResult).ConfigureAwait(false);
                 }
                 else
                 {
                     LogErrors("Adding external login", result);
                 }
 
-                return new ExternalUserResult(user, result, false);
+                return externalResult;
             }
             else
             {
@@ -88,12 +91,12 @@ namespace CollAction.Services.User
                         logger.LogInformation("Created user from external login");
                     }
 
-                    return new ExternalUserResult(user, result, true);
+                    return new ExternalUserResult(user, result, info, true);
                 }
                 else
                 {
                     LogErrors("Creating user", result);
-                    return new ExternalUserResult(result);
+                    return new ExternalUserResult(result, info);
                 }
             }
         }
