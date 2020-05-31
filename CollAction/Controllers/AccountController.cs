@@ -144,7 +144,7 @@ namespace CollAction.Controllers
                 return Redirect($"{model.ErrorUrl}?error=lockout&message={WebUtility.UrlEncode("User is locked out")}&returnUrl={model.ReturnUrl}");
             }
 
-            // If the user can't login with the external login, 
+            // If the user can't login with the external login, create a new account or link one
             string email = info.Principal.FindFirstValue(ClaimTypes.Email);
             ExternalUserResult newUserResult = await userService.CreateOrAddExternalToUser(email, info).ConfigureAwait(false);
             if (newUserResult.Result.Succeeded)
