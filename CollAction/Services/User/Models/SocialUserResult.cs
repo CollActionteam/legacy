@@ -21,6 +21,7 @@ namespace CollAction.Services.User.Models
         public ApplicationUser? User { get; set; }
 
         public IdentityResult Result { get; set; }
+
         public bool AddedUser { get; }
     }
 }
