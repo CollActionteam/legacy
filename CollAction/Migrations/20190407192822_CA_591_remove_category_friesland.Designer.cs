@@ -12,7 +12,7 @@ namespace CollAction.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20190407192822_CA_591_remove_category_friesland")]
-    partial class CA_591_remove_category_friesland
+    partial class CA591RemoveCategoryFriesland
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

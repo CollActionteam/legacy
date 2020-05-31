@@ -1,10 +1,19 @@
-﻿namespace CollAction.Services.Image
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CollAction.Services.Image
 {
-    public class ImageServiceOptions
+    public sealed class ImageServiceOptions
     {
-        public string S3AwsAccessKeyID { get; set; }
-        public string S3AwsAccessKey { get; set; }
-        public string S3Bucket { get; set; }
-        public string S3Region { get; set; }
+        [Required]
+        public string S3AwsAccessKeyID { get; set; } = null!;
+
+        [Required]
+        public string S3AwsAccessKey { get; set; } = null!;
+
+        [Required]
+        public string S3Bucket { get; set; } = null!;
+
+        [Required]
+        public string S3Region { get; set; } = null!;
     }
 }

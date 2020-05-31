@@ -1,0 +1,14 @@
+.container {
+  display: block;
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--c-grey-d10);
+}
+
+.title {
+  display: block;
+  margin-bottom: var(--spacing-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+}

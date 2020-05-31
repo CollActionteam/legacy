@@ -1,0 +1,71 @@
+@import '../Styles/responsive';
+
+.commentContainer {
+    position: relative;
+
+    &::before {
+        position: absolute;
+        content: '';
+        width: 1px;
+        height: 100%;
+        top: 16px; // grid padding
+        left: var(--spacing-lg);
+        background-color: var(--c-grey-d10);
+    }
+
+    @include breakpoint-down(sm) {
+        &::before {
+            left: var(--spacing-xs);
+        }
+    }
+}
+
+.comment {
+    position: relative;
+    margin-left: var(--spacing-xl);
+    border: 0;
+    box-shadow: none;
+
+    p { 
+        margin-bottom: var(--spacing);
+        font-size: var(--font-size);
+    }
+
+    &::before,
+    &::after {
+        position: absolute;
+        content: '';
+        border-radius: 50%;
+    }
+
+    &::before {
+        top: 0;
+        width: 1rem;
+        height: 1rem;
+        left: calc((var(--spacing-lg) * -1) + 0.45rem);
+        background: white;
+        border: 1px solid var(--c-grey-d10);
+    }
+
+    @include breakpoint-down(sm) {
+        margin-left: var(--spacing);
+
+        &::before {
+            left: calc((var(--spacing-lg) * -1) + 1rem);
+        }
+      }
+    
+    // &::after {
+    //     top: 0.25rem;
+    //     width: 0.7rem;
+    //     height: 0.7rem;
+    //     left: calc((var(--spacing-lg) * -1) + 0.65rem);
+    //     background: var(--c-green);
+    //     z-index: 1;
+    // }
+}
+
+.commentDetails {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-md);
+}

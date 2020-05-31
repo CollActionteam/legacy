@@ -1,10 +1,20 @@
-﻿namespace CollAction.Services.Email
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CollAction.Services.Email
 {
-    public class AuthMessageSenderOptions
+    public sealed class AuthMessageSenderOptions
     {
-        public string FromAddress { get; set; }
-        public string SesAwsAccessKeyID { get; set; }
-        public string SesAwsAccessKey { get; set; }
-        public string SesRegion { get; set; }
+        [Required]
+        [EmailAddress]
+        public string FromAddress { get; set; } = null!;
+
+        [Required]
+        public string SesAwsAccessKeyID { get; set; } = null!;
+
+        [Required]
+        public string SesAwsAccessKey { get; set; } = null!;
+
+        [Required]
+        public string SesRegion { get; set; } = null!;
     }
 }

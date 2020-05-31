@@ -22,7 +22,7 @@ namespace CollAction.Migrations
         {
             migrationBuilder.DropIndex("ProjectIdIndex", "ProjectParticipantCounts");
 
-            migrationBuilder.Sql(@"DROP MATERIALIZED VIEW ""ProjectParticipantCount"";");
+            migrationBuilder.Sql(@"DROP MATERIALIZED VIEW ""ProjectParticipantCounts"";");
         }
     }
 }

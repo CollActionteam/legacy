@@ -1,0 +1,16 @@
+.consentDialog {
+    width: 100%;
+    background-color: var(--c-green);
+    color: white;
+    padding: var(--spacing) 0;
+
+    a {
+        color: white;
+        text-decoration: underline;
+    }
+
+    button {
+        margin: 20px 5px 5px 5px;
+        border: 1px solid white;
+    }
+}

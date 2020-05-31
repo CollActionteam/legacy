@@ -1,0 +1,25 @@
+@import '../Styles/responsive';
+
+.banner {
+    height: 480px;
+    width: 100%;
+    background-image: linear-gradient(rgba(35, 216, 132, 0.25), rgba(35, 216, 132, 0.25)), url(../../assets/cheering-people.jpg);
+    background-size: cover;
+    background-position: center;
+
+    h2 {
+        color: var(--c-green);
+    }
+
+    div {
+        color: white;
+    }
+
+    .mission {
+        font-size: var(--font-size-xl);
+    }
+}
+
+.rightColumn {
+    padding-left: 40px;
+}

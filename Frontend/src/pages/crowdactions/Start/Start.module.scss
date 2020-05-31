@@ -1,0 +1,20 @@
+@import '../../../components/Styles/responsive';
+
+.banner {
+  height: 450px;
+  background-image: url(../../../assets/happy-people.jpg);
+  background-size: cover;
+  background-position: center;
+}
+
+.cardContainer {
+  background-color: var(--c-grey);
+}
+
+.callToAction {
+  text-align: center;
+}
+
+.kickstart {
+  margin-bottom: var(--spacing-xxl-2);
+}

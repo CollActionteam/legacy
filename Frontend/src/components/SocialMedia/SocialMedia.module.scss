@@ -1,0 +1,9 @@
+.list {
+    margin-left: 0;
+}
+
+.listItem {
+    display: inline-block;
+    padding-right: var(--spacing-xs);
+    padding-bottom: var(--spacing-xs);
+}

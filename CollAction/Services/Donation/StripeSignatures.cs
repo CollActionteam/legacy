@@ -1,8 +1,13 @@
-﻿namespace CollAction.Services.Donation
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CollAction.Services.Donation
 {
-    public class StripeSignatures
+    public sealed class StripeSignatures
     {
-        public string StripeChargeableWebhookSecret { get; set; }
-        public string StripePaymentEventWebhookSecret { get; set; }
+        [Required]
+        public string StripeChargeableWebhookSecret { get; set; } = null!;
+
+        [Required]
+        public string StripePaymentEventWebhookSecret { get; set; } = null!;
     }
 }

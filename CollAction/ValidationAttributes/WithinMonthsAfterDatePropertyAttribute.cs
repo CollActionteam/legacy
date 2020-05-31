@@ -1,65 +1,60 @@
-using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
 namespace CollAction.ValidationAttributes
 {
-    public class WithinMonthsAfterDatePropertyAttribute : ValidationAttribute, IClientModelValidator
+    /// <summary>
+    /// Validates if the input date falls within the specified number of months after the date property being compared to.
+    /// </summary>
+    public sealed class WithinMonthsAfterDatePropertyAttribute : ValidationAttribute
     {
-        private readonly string _dateProperty;
-
-        private readonly int _months;
+        private readonly string dateProperty;
+        private readonly int months;
 
         public WithinMonthsAfterDatePropertyAttribute(int months, string dateProperty)
         {
-            _months = months; 
-            _dateProperty = dateProperty;
+            this.months = months;
+            this.dateProperty = dateProperty;
         }
 
-        /// <summary>
-        ///     returns True if the input date falls within the specified number of months after the date property being compared to.
-        /// </summary>
-        protected override ValidationResult IsValid(object value, ValidationContext context)
+        protected override ValidationResult IsValid(object? value, ValidationContext context)
         {
-            if (value == null) return ValidationResult.Success;
+            if (value == null)
+            {
+                return ValidationResult.Success;
+            }
 
-            var startDate = GetReferencedDate(context.ObjectInstance);
-            var maxDate = GetMaxDate(startDate);            
-            var checkDate = (DateTime)value;
-            if (checkDate <= startDate || checkDate > maxDate)
+            DateTime startDate = GetReferencedDate(context.ObjectInstance);
+            DateTime maxDate = startDate.AddMonths(months);
+            DateTime dateToCheck = (DateTime)value;
+
+            if (dateToCheck < startDate || dateToCheck > maxDate)
             {
                 return new ValidationResult(ErrorMessage);
             }
-
-            return ValidationResult.Success;
+            else
+            {
+                return ValidationResult.Success;
+            }
         }
 
-        public void AddValidation(ClientModelValidationContext context)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "dataProperty is an argument of the attribute")]
+        private DateTime GetReferencedDate(object instance)
         {
-            var now = DateTime.Now;
-            var duration = now.AddMonths(_months) - now;
-
-            context.Attributes["data-val"] = "true";
-            context.Attributes["data-val-WithinMonthsAfterDate"] = ErrorMessage;
-            context.Attributes["data-val-WithinMonthsAfterDate-propertyname"] = _dateProperty;
-            context.Attributes["data-val-WithinMonthsAfterDate-months"] = _months.ToString();
-        }
-
-        private DateTime GetReferencedDate(Object instance)
-        {
-            PropertyInfo propertyInfo = instance.GetType().GetProperty(_dateProperty);
+            PropertyInfo? propertyInfo = instance.GetType().GetProperty(dateProperty);
             if (propertyInfo == null || propertyInfo.PropertyType != typeof(DateTime))
             {
-                throw new ArgumentException(String.Format("The specified property '{0}' does not refer to a valid DateTime property.", _dateProperty));
+                throw new ArgumentException($"The specified property '{dateProperty}' does not refer to a valid DateTime property", nameof(dateProperty));
             }
 
-            return (DateTime)propertyInfo.GetValue(instance, null);
-        }
+            object? propValue = propertyInfo.GetValue(instance, null);
+            if (propValue == null)
+            {
+                throw new ArgumentException($"The specified property '{dateProperty}' contained a null value", nameof(dateProperty));
+            }
 
-        private DateTime GetMaxDate(DateTime startDate)
-        {
-            return startDate.AddMonths(_months);
+            return (DateTime)propValue;
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace CollAction.Migrations
 {
-    public partial class migration_to_aspnetcore2 : Migration
+    public partial class MigrationToAspnetcore2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

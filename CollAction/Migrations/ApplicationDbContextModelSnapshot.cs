@@ -15,58 +15,76 @@ namespace CollAction.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
-                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
+                .HasAnnotation("ProductVersion", "3.1.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("CollAction.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                        .HasColumnType("text");
 
-                    b.Property<int>("AccessFailedCount");
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("integer");
 
                     b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
+                        .IsConcurrencyToken()
+                        .HasColumnType("text");
 
                     b.Property<string>("Email")
+                        .HasColumnType("character varying(256)")
                         .HasMaxLength(256);
 
-                    b.Property<bool>("EmailConfirmed");
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("FirstName")
+                        .HasColumnType("character varying(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("LastName")
+                        .HasColumnType("character varying(250)")
                         .HasMaxLength(250);
 
-                    b.Property<bool>("LockoutEnabled");
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("boolean");
 
-                    b.Property<DateTimeOffset?>("LockoutEnd");
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("NormalizedEmail")
+                        .HasColumnType("character varying(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("NormalizedUserName")
+                        .HasColumnType("character varying(256)")
                         .HasMaxLength(256);
 
-                    b.Property<string>("PasswordHash");
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("text");
 
-                    b.Property<string>("PhoneNumber");
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("text");
 
-                    b.Property<bool>("PhoneNumberConfirmed");
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("boolean");
 
-                    b.Property<DateTime>("RegistrationDate");
+                    b.Property<DateTime>("RegistrationDate")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("RepresentsNumberParticipants")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
                         .HasDefaultValue(1);
 
-                    b.Property<string>("SecurityStamp");
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("text");
 
-                    b.Property<bool>("TwoFactorEnabled");
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("UserName")
+                        .HasColumnType("character varying(256)")
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
@@ -81,55 +99,208 @@ namespace CollAction.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("CollAction.Models.Category", b =>
+            modelBuilder.Entity("CollAction.Models.Crowdaction", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int>("Color");
+                    b.Property<int>("AnonymousUserParticipants")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("BannerImageFileId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("CardImageFileId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("CreatorComments")
+                        .HasColumnType("character varying(20000)")
+                        .HasMaxLength(20000);
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(120);
+                        .HasColumnType("character varying(10000)")
+                        .HasMaxLength(10000);
 
-                    b.Property<string>("File")
+                    b.Property<string>("DescriptionVideoLink")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("DescriptiveImageFileId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("DisplayPriority")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1);
+
+                    b.Property<DateTime>("End")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("FinishJobId")
+                        .HasColumnType("character varying(100)")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Goal")
                         .IsRequired()
-                        .HasMaxLength(255);
+                        .HasColumnType("character varying(10000)")
+                        .HasMaxLength(10000);
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(40);
+                        .HasColumnType("character varying(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<int>("NumberCrowdactionEmailsSent")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("OwnerId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Proposal")
+                        .IsRequired()
+                        .HasColumnType("character varying(300)")
+                        .HasMaxLength(300);
+
+                    b.Property<DateTime>("Start")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Target")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.HasIndex("BannerImageFileId");
+
+                    b.HasIndex("CardImageFileId");
+
+                    b.HasIndex("DescriptiveImageFileId");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasName("IX_Crowdactions_Name");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("Crowdactions");
                 });
 
-            modelBuilder.Entity("CollAction.Models.DataProtectionKey", b =>
+            modelBuilder.Entity("CollAction.Models.CrowdactionCategory", b =>
                 {
-                    b.Property<string>("FriendlyName")
+                    b.Property<int>("Category")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CrowdactionId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Category", "CrowdactionId");
+
+                    b.HasIndex("CrowdactionId");
+
+                    b.ToTable("CrowdactionCategories");
+                });
+
+            modelBuilder.Entity("CollAction.Models.CrowdactionComment", b =>
+                {
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasMaxLength(449);
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<string>("KeyDataXml")
-                        .IsRequired();
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.HasKey("FriendlyName");
+                    b.Property<DateTime>("CommentedAt")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.ToTable("DataProtectionKeys");
+                    b.Property<int>("CrowdactionId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CrowdactionId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CrowdactionComments");
+                });
+
+            modelBuilder.Entity("CollAction.Models.CrowdactionParticipant", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("CrowdactionId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("ParticipationDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("SubscribedToCrowdactionEmails")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("UnsubscribeToken")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("UserId", "CrowdactionId");
+
+                    b.HasIndex("CrowdactionId");
+
+                    b.ToTable("CrowdactionParticipants");
+                });
+
+            modelBuilder.Entity("CollAction.Models.CrowdactionParticipantCount", b =>
+                {
+                    b.Property<int>("CrowdactionId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("integer");
+
+                    b.HasKey("CrowdactionId");
+
+                    b.ToTable("CrowdactionParticipantCounts");
+                });
+
+            modelBuilder.Entity("CollAction.Models.CrowdactionTag", b =>
+                {
+                    b.Property<int>("TagId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CrowdactionId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("TagId", "CrowdactionId");
+
+                    b.HasIndex("CrowdactionId");
+
+                    b.ToTable("CrowdactionTags");
                 });
 
             modelBuilder.Entity("CollAction.Models.DonationEventLog", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("EventData")
+                        .IsRequired()
                         .HasColumnType("json");
 
-                    b.Property<int>("Type");
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
 
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -141,334 +312,43 @@ namespace CollAction.Migrations
             modelBuilder.Entity("CollAction.Models.ImageFile", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("Date");
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Filepath")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<int>("Height");
+                    b.Property<int>("Height")
+                        .HasColumnType("integer");
 
-                    b.Property<int>("Width");
+                    b.Property<int>("Width")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.ToTable("ImageFiles");
                 });
 
-            modelBuilder.Entity("CollAction.Models.Job", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(500);
-
-                    b.Property<int?>("LocationId");
-
-                    b.Property<DateTime>("PostDate");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(200);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LocationId");
-
-                    b.ToTable("Jobs");
-                });
-
-            modelBuilder.Entity("CollAction.Models.Location", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("CountryId")
-                        .HasMaxLength(2);
-
-                    b.Property<int>("Feature");
-
-                    b.Property<int>("FeatureClass");
-
-                    b.Property<decimal>("Latitude")
-                        .HasColumnType("numeric(13,10)");
-
-                    b.Property<string>("Level1Id")
-                        .HasMaxLength(20);
-
-                    b.Property<string>("Level2Id")
-                        .HasMaxLength(80);
-
-                    b.Property<string>("LocationContinentId");
-
-                    b.Property<decimal>("Longitude")
-                        .HasColumnType("numeric(13,10)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200);
-
-                    b.Property<string>("TimeZone")
-                        .IsRequired()
-                        .HasMaxLength(40);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CountryId");
-
-                    b.HasIndex("Level1Id");
-
-                    b.HasIndex("Level2Id");
-
-                    b.HasIndex("LocationContinentId");
-
-                    b.ToTable("Locations");
-                });
-
-            modelBuilder.Entity("CollAction.Models.LocationAlternateName", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("AlternateName")
-                        .IsRequired()
-                        .HasMaxLength(400);
-
-                    b.Property<bool>("IsColloquial");
-
-                    b.Property<bool>("IsHistoric");
-
-                    b.Property<bool>("IsPreferredName");
-
-                    b.Property<bool>("IsShortName");
-
-                    b.Property<string>("LanguageCode")
-                        .IsRequired()
-                        .HasMaxLength(7);
-
-                    b.Property<int>("LocationId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LocationId");
-
-                    b.ToTable("LocationAlternateNames");
-                });
-
-            modelBuilder.Entity("CollAction.Models.LocationContinent", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(2);
-
-                    b.Property<int>("LocationId");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(20);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LocationId");
-
-                    b.ToTable("LocationContinents");
-                });
-
-            modelBuilder.Entity("CollAction.Models.LocationCountry", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(2);
-
-                    b.Property<string>("CapitalCity")
-                        .IsRequired()
-                        .HasMaxLength(200);
-
-                    b.Property<string>("ContinentId")
-                        .IsRequired()
-                        .HasMaxLength(2);
-
-                    b.Property<int>("LocationId");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ContinentId");
-
-                    b.HasIndex("LocationId");
-
-                    b.ToTable("LocationCountries");
-                });
-
-            modelBuilder.Entity("CollAction.Models.LocationLevel1", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(20);
-
-                    b.Property<int>("LocationId");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(200);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LocationId");
-
-                    b.ToTable("LocationLevel1");
-                });
-
-            modelBuilder.Entity("CollAction.Models.LocationLevel2", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(80);
-
-                    b.Property<int>("LocationId");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(200);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LocationId");
-
-                    b.ToTable("LocationLevel2");
-                });
-
-            modelBuilder.Entity("CollAction.Models.Project", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("AnonymousUserParticipants");
-
-                    b.Property<int?>("BannerImageFileId");
-
-                    b.Property<int>("CategoryId");
-
-                    b.Property<string>("CreatorComments")
-                        .HasMaxLength(20000);
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(10000);
-
-                    b.Property<int?>("DescriptionVideoLinkId");
-
-                    b.Property<int?>("DescriptiveImageFileId");
-
-                    b.Property<int>("DisplayPriority")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(1);
-
-                    b.Property<DateTime>("End");
-
-                    b.Property<string>("Goal")
-                        .IsRequired()
-                        .HasMaxLength(10000);
-
-                    b.Property<int?>("LocationId");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
-                    b.Property<int>("NumberProjectEmailsSend");
-
-                    b.Property<string>("OwnerId");
-
-                    b.Property<string>("Proposal")
-                        .IsRequired()
-                        .HasMaxLength(300);
-
-                    b.Property<DateTime>("Start");
-
-                    b.Property<int>("Status");
-
-                    b.Property<int>("Target");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BannerImageFileId");
-
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("DescriptionVideoLinkId");
-
-                    b.HasIndex("DescriptiveImageFileId");
-
-                    b.HasIndex("LocationId");
-
-                    b.HasIndex("Name")
-                        .IsUnique()
-                        .HasName("IX_Projects_Name");
-
-                    b.HasIndex("OwnerId");
-
-                    b.ToTable("Projects");
-                });
-
-            modelBuilder.Entity("CollAction.Models.ProjectParticipant", b =>
-                {
-                    b.Property<string>("UserId");
-
-                    b.Property<int>("ProjectId");
-
-                    b.Property<DateTime>("ParticipationDate");
-
-                    b.Property<bool>("SubscribedToProjectEmails");
-
-                    b.Property<Guid>("UnsubscribeToken");
-
-                    b.HasKey("UserId", "ProjectId");
-
-                    b.HasIndex("ProjectId");
-
-                    b.ToTable("ProjectParticipants");
-                });
-
-            modelBuilder.Entity("CollAction.Models.ProjectParticipantCount", b =>
-                {
-                    b.Property<int>("ProjectId");
-
-                    b.Property<int>("Count");
-
-                    b.HasKey("ProjectId");
-
-                    b.ToTable("ProjectParticipantCounts");
-                });
-
-            modelBuilder.Entity("CollAction.Models.ProjectTag", b =>
-                {
-                    b.Property<int>("TagId");
-
-                    b.Property<int>("ProjectId");
-
-                    b.HasKey("TagId", "ProjectId");
-
-                    b.HasIndex("ProjectId");
-
-                    b.ToTable("ProjectTags");
-                });
-
             modelBuilder.Entity("CollAction.Models.Tag", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(120);
+                        .HasColumnType("character varying(30)")
+                        .HasMaxLength(30);
 
                     b.HasKey("Id");
 
@@ -480,15 +360,19 @@ namespace CollAction.Migrations
             modelBuilder.Entity("CollAction.Models.UserEvent", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("EventData")
                         .IsRequired()
                         .HasColumnType("json");
 
-                    b.Property<DateTime>("EventLoggedAt");
+                    b.Property<DateTime>("EventLoggedAt")
+                        .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -497,34 +381,39 @@ namespace CollAction.Migrations
                     b.ToTable("UserEvents");
                 });
 
-            modelBuilder.Entity("CollAction.Models.VideoLink", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.DataProtection.EntityFrameworkCore.DataProtectionKey", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<DateTime>("Date");
+                    b.Property<string>("FriendlyName")
+                        .HasColumnType("text");
 
-                    b.Property<string>("Link")
-                        .IsRequired()
-                        .HasMaxLength(2083);
+                    b.Property<string>("Xml")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.ToTable("VideoLinks");
+                    b.ToTable("DataProtectionKeys");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                        .HasColumnType("text");
 
                     b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
+                        .IsConcurrencyToken()
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
+                        .HasColumnType("character varying(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("NormalizedName")
+                        .HasColumnType("character varying(256)")
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
@@ -539,14 +428,19 @@ namespace CollAction.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<string>("ClaimType");
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("text");
 
-                    b.Property<string>("ClaimValue");
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("text");
 
                     b.Property<string>("RoleId")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -558,14 +452,19 @@ namespace CollAction.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<string>("ClaimType");
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("text");
 
-                    b.Property<string>("ClaimValue");
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("text");
 
                     b.Property<string>("UserId")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -576,14 +475,18 @@ namespace CollAction.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.Property<string>("LoginProvider");
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("text");
 
-                    b.Property<string>("ProviderKey");
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("text");
 
-                    b.Property<string>("ProviderDisplayName");
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("text");
 
                     b.Property<string>("UserId")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -594,9 +497,11 @@ namespace CollAction.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
 
-                    b.Property<string>("RoleId");
+                    b.Property<string>("RoleId")
+                        .HasColumnType("text");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -607,17 +512,103 @@ namespace CollAction.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.Property<string>("UserId");
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
 
-                    b.Property<string>("LoginProvider");
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("text");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
 
-                    b.Property<string>("Value");
+                    b.Property<string>("Value")
+                        .HasColumnType("text");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("CollAction.Models.Crowdaction", b =>
+                {
+                    b.HasOne("CollAction.Models.ImageFile", "BannerImage")
+                        .WithMany()
+                        .HasForeignKey("BannerImageFileId");
+
+                    b.HasOne("CollAction.Models.ImageFile", "CardImage")
+                        .WithMany()
+                        .HasForeignKey("CardImageFileId");
+
+                    b.HasOne("CollAction.Models.ImageFile", "DescriptiveImage")
+                        .WithMany()
+                        .HasForeignKey("DescriptiveImageFileId");
+
+                    b.HasOne("CollAction.Models.ApplicationUser", "Owner")
+                        .WithMany("Crowdactions")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.SetNull);
+                });
+
+            modelBuilder.Entity("CollAction.Models.CrowdactionCategory", b =>
+                {
+                    b.HasOne("CollAction.Models.Crowdaction", "Crowdaction")
+                        .WithMany("Categories")
+                        .HasForeignKey("CrowdactionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CollAction.Models.CrowdactionComment", b =>
+                {
+                    b.HasOne("CollAction.Models.Crowdaction", "Crowdaction")
+                        .WithMany("Comments")
+                        .HasForeignKey("CrowdactionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CollAction.Models.ApplicationUser", "User")
+                        .WithMany("CrowdactionComments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull);
+                });
+
+            modelBuilder.Entity("CollAction.Models.CrowdactionParticipant", b =>
+                {
+                    b.HasOne("CollAction.Models.Crowdaction", "Crowdaction")
+                        .WithMany("Participants")
+                        .HasForeignKey("CrowdactionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CollAction.Models.ApplicationUser", "User")
+                        .WithMany("Participates")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CollAction.Models.CrowdactionParticipantCount", b =>
+                {
+                    b.HasOne("CollAction.Models.Crowdaction", "Crowdaction")
+                        .WithOne("ParticipantCounts")
+                        .HasForeignKey("CollAction.Models.CrowdactionParticipantCount", "CrowdactionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CollAction.Models.CrowdactionTag", b =>
+                {
+                    b.HasOne("CollAction.Models.Crowdaction", "Crowdaction")
+                        .WithMany("Tags")
+                        .HasForeignKey("CrowdactionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CollAction.Models.Tag", "Tag")
+                        .WithMany("CrowdactionTags")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CollAction.Models.DonationEventLog", b =>
@@ -627,193 +618,62 @@ namespace CollAction.Migrations
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("CollAction.Models.Job", b =>
-                {
-                    b.HasOne("CollAction.Models.Location", "Location")
-                        .WithMany()
-                        .HasForeignKey("LocationId");
-                });
-
-            modelBuilder.Entity("CollAction.Models.Location", b =>
-                {
-                    b.HasOne("CollAction.Models.LocationCountry", "Country")
-                        .WithMany("Locations")
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("CollAction.Models.LocationLevel1", "Level1")
-                        .WithMany("Locations")
-                        .HasForeignKey("Level1Id")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("CollAction.Models.LocationLevel2", "Level2")
-                        .WithMany("Locations")
-                        .HasForeignKey("Level2Id")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("CollAction.Models.LocationContinent")
-                        .WithMany("Locations")
-                        .HasForeignKey("LocationContinentId");
-                });
-
-            modelBuilder.Entity("CollAction.Models.LocationAlternateName", b =>
-                {
-                    b.HasOne("CollAction.Models.Location", "Location")
-                        .WithMany("AlternateNames")
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("CollAction.Models.LocationContinent", b =>
-                {
-                    b.HasOne("CollAction.Models.Location", "Location")
-                        .WithMany()
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("CollAction.Models.LocationCountry", b =>
-                {
-                    b.HasOne("CollAction.Models.LocationContinent", "Continent")
-                        .WithMany()
-                        .HasForeignKey("ContinentId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("CollAction.Models.Location", "Location")
-                        .WithMany()
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("CollAction.Models.LocationLevel1", b =>
-                {
-                    b.HasOne("CollAction.Models.Location", "Location")
-                        .WithMany()
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("CollAction.Models.LocationLevel2", b =>
-                {
-                    b.HasOne("CollAction.Models.Location", "Location")
-                        .WithMany()
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("CollAction.Models.Project", b =>
-                {
-                    b.HasOne("CollAction.Models.ImageFile", "BannerImage")
-                        .WithMany()
-                        .HasForeignKey("BannerImageFileId");
-
-                    b.HasOne("CollAction.Models.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("CollAction.Models.VideoLink", "DescriptionVideoLink")
-                        .WithMany()
-                        .HasForeignKey("DescriptionVideoLinkId");
-
-                    b.HasOne("CollAction.Models.ImageFile", "DescriptiveImage")
-                        .WithMany()
-                        .HasForeignKey("DescriptiveImageFileId");
-
-                    b.HasOne("CollAction.Models.Location", "Location")
-                        .WithMany()
-                        .HasForeignKey("LocationId");
-
-                    b.HasOne("CollAction.Models.ApplicationUser", "Owner")
-                        .WithMany("Projects")
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.SetNull);
-                });
-
-            modelBuilder.Entity("CollAction.Models.ProjectParticipant", b =>
-                {
-                    b.HasOne("CollAction.Models.Project", "Project")
-                        .WithMany("Participants")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("CollAction.Models.ApplicationUser", "User")
-                        .WithMany("Participates")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("CollAction.Models.ProjectParticipantCount", b =>
-                {
-                    b.HasOne("CollAction.Models.Project", "Project")
-                        .WithOne("ParticipantCounts")
-                        .HasForeignKey("CollAction.Models.ProjectParticipantCount", "ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("CollAction.Models.ProjectTag", b =>
-                {
-                    b.HasOne("CollAction.Models.Project", "Project")
-                        .WithMany("Tags")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("CollAction.Models.Tag", "Tag")
-                        .WithMany("ProjectTags")
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("CollAction.Models.UserEvent", b =>
                 {
                     b.HasOne("CollAction.Models.ApplicationUser", "User")
-                        .WithMany()
+                        .WithMany("UserEvents")
                         .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("CollAction.Models.ApplicationUser")
+                    b.HasOne("CollAction.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("CollAction.Models.ApplicationUser")
+                    b.HasOne("CollAction.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("CollAction.Models.ApplicationUser")
+                    b.HasOne("CollAction.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("CollAction.Models.ApplicationUser")
+                    b.HasOne("CollAction.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

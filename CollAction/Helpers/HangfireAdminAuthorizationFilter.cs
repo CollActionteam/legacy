@@ -6,6 +6,6 @@ namespace CollAction.Helpers
     public sealed class HangfireAdminAuthorizationFilter : IDashboardAuthorizationFilter
     {
         public bool Authorize([NotNull] DashboardContext context)
-            => context.GetHttpContext().User?.IsInRole(Constants.AdminRole) ?? false;
+            => context.GetHttpContext().User?.IsInRole(AuthorizationConstants.AdminRole) ?? false;
     }
 }

@@ -1,0 +1,22 @@
+@import '../Styles/responsive';
+
+.callToAction {
+  h1 {
+    color: var(--c-green);
+    padding-bottom: var(--spacing-xxl-2);
+    text-align: center;
+  }
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;  
+
+  a {
+    text-align: center;
+    &:not(:last-child) {
+      margin-bottom: var(--spacing-xxl-2);
+    }
+  }
+}

@@ -1,27 +1,35 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{51C74C39-2056-46A7-A5B3-17DB27D9CFB1}"
-	ProjectSection(ProjectDependencies) = postProject
-		{8C93DECB-4DF9-4D39-9817-A30E0B5D1EB2} = {8C93DECB-4DF9-4D39-9817-A30E0B5D1EB2}
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollAction", "CollAction\CollAction.csproj", "{8C93DECB-4DF9-4D39-9817-A30E0B5D1EB2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4AD6D0E9-47B4-4714-BF39-6743118BE31C}"
 	ProjectSection(SolutionItems) = preProject
-		.dockerignore = .dockerignore
 		.gitignore = .gitignore
-		.travis.yml = .travis.yml
-		scripts\deploy.sh = scripts\deploy.sh
-		scripts\docker-push.sh = scripts\docker-push.sh
-		LICENSE = LICENSE
-		NuGet.config = NuGet.config
-		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollAction.Tests", "CollAction.Tests\CollAction.Tests.csproj", "{1898F9B1-7EEE-4152-A0D2-2FAE91BEDCDC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{72EA00C6-36F3-4CB7-81FF-496492FFA09B}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\on_push.yml = .github\workflows\on_push.yml
+		.github\workflows\on_tag_version.yml = .github\workflows\on_tag_version.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker", "docker", "{BECC17AF-2D3D-4942-8391-F297062D4752}"
+	ProjectSection(SolutionItems) = preProject
+		.dockerignore = .dockerignore
+		docker-compose.yml = docker-compose.yml
+		env_collaction = env_collaction
+		env_collaction.template = env_collaction.template
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{F21123A8-7994-4CD6-823E-5FB8C5201AFD}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,18 +41,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{51C74C39-2056-46A7-A5B3-17DB27D9CFB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{51C74C39-2056-46A7-A5B3-17DB27D9CFB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{51C74C39-2056-46A7-A5B3-17DB27D9CFB1}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{51C74C39-2056-46A7-A5B3-17DB27D9CFB1}.Debug|x64.Build.0 = Debug|Any CPU
-		{51C74C39-2056-46A7-A5B3-17DB27D9CFB1}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{51C74C39-2056-46A7-A5B3-17DB27D9CFB1}.Debug|x86.Build.0 = Debug|Any CPU
-		{51C74C39-2056-46A7-A5B3-17DB27D9CFB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{51C74C39-2056-46A7-A5B3-17DB27D9CFB1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{51C74C39-2056-46A7-A5B3-17DB27D9CFB1}.Release|x64.ActiveCfg = Release|Any CPU
-		{51C74C39-2056-46A7-A5B3-17DB27D9CFB1}.Release|x64.Build.0 = Release|Any CPU
-		{51C74C39-2056-46A7-A5B3-17DB27D9CFB1}.Release|x86.ActiveCfg = Release|Any CPU
-		{51C74C39-2056-46A7-A5B3-17DB27D9CFB1}.Release|x86.Build.0 = Release|Any CPU
 		{8C93DECB-4DF9-4D39-9817-A30E0B5D1EB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8C93DECB-4DF9-4D39-9817-A30E0B5D1EB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C93DECB-4DF9-4D39-9817-A30E0B5D1EB2}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -72,6 +68,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{72EA00C6-36F3-4CB7-81FF-496492FFA09B} = {4AD6D0E9-47B4-4714-BF39-6743118BE31C}
+		{BECC17AF-2D3D-4942-8391-F297062D4752} = {4AD6D0E9-47B4-4714-BF39-6743118BE31C}
+		{F21123A8-7994-4CD6-823E-5FB8C5201AFD} = {4AD6D0E9-47B4-4714-BF39-6743118BE31C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DB330D39-D1A2-4E5A-A0EC-5CB96176B3B2}

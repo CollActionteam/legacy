@@ -1,9 +1,9 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+using System;
 
 namespace CollAction.Migrations
 {
-    public partial class unsubscribetoken : Migration
+    public partial class Unsubscribetoken : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

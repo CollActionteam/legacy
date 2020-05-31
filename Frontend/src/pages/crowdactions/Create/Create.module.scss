@@ -1,0 +1,38 @@
+@import '../../../components//Styles/responsive.scss';
+
+.login {
+  text-align: center;
+}
+
+.title {
+  h2, p {
+    margin-bottom: var(--spacing-md);
+  }
+}
+
+.formRow {
+  margin-bottom: var(--spacing-lg) !important;
+}
+
+.bannerContainer {
+  height: 100%;
+}
+
+.submit {
+  text-align: center;
+}
+
+.submitErrors {	
+  margin-top: var(--spacing-lg);
+  text-align: center;	
+  color: var(--c-red);	
+
+  ul {	
+    list-style: none;	
+    margin-left: 0;	
+  }	
+}
+
+.label {
+  margin-bottom: var(--spacing);
+}

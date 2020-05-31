@@ -1,0 +1,16 @@
+﻿@inject Microsoft.Extensions.Options.IOptions<CollAction.Services.SiteOptions> SiteOptions 
+@inject Microsoft.Extensions.Options.IOptions<CollAction.Services.Email.AuthMessageSenderOptions> MessageOptions
+
+<p>
+    Hi and welcome!
+<p>
+<p>
+    You have registered an account on <a href="@SiteOptions.Value.PublicAddress">CollAction</a>!
+</p>
+<p>
+    If you didn't register this account you can contact us at <a href="mailto:@MessageOptions.Value.FromAddress">@MessageOptions.Value.FromAddress</a> to remove it, or you can <a href="@(SiteOptions.Value.PublicUrl)account/forgot-password">reset the password</a> and remove the account from the profile page yourself.
+</p>
+<p>
+    Warm regards,<br>
+    The CollAction Team
+</p>

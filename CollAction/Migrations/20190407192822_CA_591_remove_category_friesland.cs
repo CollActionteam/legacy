@@ -2,7 +2,7 @@
 
 namespace CollAction.Migrations
 {
-    public partial class CA_591_remove_category_friesland : Migration
+    public partial class CA591RemoveCategoryFriesland : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

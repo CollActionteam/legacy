@@ -11,7 +11,7 @@ namespace CollAction.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20170512102454_description-image")]
-    partial class descriptionimage
+    partial class Descriptionimage
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

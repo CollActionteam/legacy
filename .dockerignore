@@ -6,9 +6,13 @@
 .vscode
 docker-compose.yml
 docker-compose.*.yml
+env_collaction
+env_postgres
 CollAction/bin
 CollAction/obj
-CollAction/node_modules
-CollAction/*.txt
-CollAction/wwwroot/js
+CollAction/*cache
+CollAction/*json
 CollAction/CollAction.csproj.user
+CollAction.Tests
+scripts
+Frontend

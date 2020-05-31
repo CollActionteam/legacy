@@ -1,154 +1,199 @@
-﻿using CollAction.Models;
-using SixLabors.ImageSharp;
-using Microsoft.AspNetCore.Http;
-using System;
-using System.IO;
-using System.Threading.Tasks;
-using SixLabors.ImageSharp.PixelFormats;
-using Microsoft.Extensions.Options;
+﻿using Amazon;
 using Amazon.S3;
 using Amazon.S3.Model;
-using Amazon;
-using Hangfire;
+using CollAction.Data;
 using CollAction.Helpers;
+using CollAction.Models;
+using Hangfire;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace CollAction.Services.Image
 {
-    public class AmazonS3ImageService : IImageService
+    public sealed class AmazonS3ImageService : IImageService
     {
-        private readonly AmazonS3Client _client;
-        private readonly string _bucket;
-        private readonly string _region;
-        private readonly IBackgroundJobClient _jobClient;
-        private readonly int _imageResizeThreshold;
+        private readonly AmazonS3Client client;
+        private readonly string bucket;
+        private readonly string region;
+        private readonly JpegEncoder encoder;
+        private readonly IRecurringJobManager recurringJobManager;
+        private readonly ILogger<AmazonS3ImageService> logger;
+        private readonly ApplicationDbContext context;
 
-        public AmazonS3ImageService(IOptions<ImageServiceOptions> options, IOptions<ImageProcessingOptions> processingOptions, IBackgroundJobClient jobClient)
+        public AmazonS3ImageService(IOptions<ImageServiceOptions> options, IRecurringJobManager recurringJobManager, ApplicationDbContext context, ILogger<AmazonS3ImageService> logger)
         {
-            _client = new AmazonS3Client(options.Value.S3AwsAccessKeyID, options.Value.S3AwsAccessKey, RegionEndpoint.GetBySystemName(options.Value.S3Region));
-            _bucket = options.Value.S3Bucket;
-            _region = options.Value.S3Region;
-            _jobClient = jobClient;
-            _imageResizeThreshold = processingOptions.Value.MaxImageDimensionPixels;
+            this.recurringJobManager = recurringJobManager;
+            this.logger = logger;
+            this.context = context;
+            client = new AmazonS3Client(options.Value.S3AwsAccessKeyID, options.Value.S3AwsAccessKey, RegionEndpoint.GetBySystemName(options.Value.S3Region));
+            bucket = options.Value.S3Bucket;
+            region = options.Value.S3Region;
+            encoder = new JpegEncoder() { Quality = 90 };
         }
 
-        public async Task<ImageFile> UploadImage(ImageFile currentImage, IFormFile fileUploaded, string imageDescription)
+        public async Task<ImageFile> UploadImage(IFormFile fileUploaded, string imageDescription, int imageResizeThreshold, CancellationToken token)
         {
-            using (Image<Rgba32> image = await UploadToImage(fileUploaded))
+            logger.LogInformation("Retrieving image");
+            using Image<Rgba32> image = await LoadImageFromRequest(fileUploaded, imageResizeThreshold, token).ConfigureAwait(false);
+            var currentImage = new ImageFile(filepath: $"{Guid.NewGuid()}.jpg", date: DateTime.UtcNow, description: imageDescription, height: image.Height, width: image.Width);
+
+            logger.LogInformation("Uploading image to S3");
+            using MemoryStream imageBytes = ConvertImageToJpg(image);
+            await UploadToS3(imageBytes, currentImage.Filepath, token).ConfigureAwait(false);
+
+            logger.LogInformation("Saving image information to database");
+            context.ImageFiles.Add(currentImage);
+            await context.SaveChangesAsync(token).ConfigureAwait(false);
+
+            logger.LogInformation("Done processing image");
+
+            return currentImage;
+        }
+
+        public async Task DeleteImage(ImageFile? imageFile, CancellationToken token)
+        {
+            if (imageFile != null)
             {
-                if (currentImage == null)
-                {
-                    currentImage = new ImageFile()
-                    {
-                        Filepath = $"{Guid.NewGuid()}.png"
-                    };
-                }
+                logger.LogInformation("Deleting image");
+                context.ImageFiles.Remove(imageFile);
+                await context.SaveChangesAsync(token).ConfigureAwait(false);
 
-                currentImage.Date = DateTime.UtcNow;
-                currentImage.Description = imageDescription;
-                currentImage.Height = image.Height;
-                currentImage.Width = image.Width;
-
-                byte[] imageBytes = ConvertImageToPng(image);
-                _jobClient.Enqueue(() => 
-                    UploadToS3(imageBytes, currentImage.Filepath));
-
-                return currentImage;
+                logger.LogInformation("Removing image from S3");
+                await DeleteObject(imageFile.Filepath, token).ConfigureAwait(false);
             }
         }
 
-        public void DeleteImage(ImageFile imageFile)
-        {
-            if (imageFile != null)
-                _jobClient.Enqueue(() => 
-                    DeleteObject(imageFile.Filepath));
-        }
+        public Uri GetUrl(ImageFile imageFile)
+            => new Uri($"https://{bucket}.s3.{region}.amazonaws.com/{imageFile.Filepath}");
 
-        public string GetUrl(ImageFile imageFile)
-            => $"https://{_bucket}.s3.{_region}.amazonaws.com/{imageFile.Filepath}";
-
-        public async Task DeleteObject(string filePath)
+        public async Task DeleteObject(string filePath, CancellationToken token)
         {
             var deleteRequest = new DeleteObjectRequest()
             {
-                BucketName = _bucket,
+                BucketName = bucket,
                 Key = filePath
             };
 
-            DeleteObjectResponse response = await _client.DeleteObjectAsync(deleteRequest);
+            logger.LogInformation("Deleting image from s3");
+            DeleteObjectResponse response = await client.DeleteObjectAsync(deleteRequest, token).ConfigureAwait(false);
             if (!response.HttpStatusCode.IsSuccess())
+            {
+                logger.LogError("Error removing image from s3");
                 throw new InvalidOperationException($"failed to delete S3 object {filePath}, {response.HttpStatusCode}");
-        }
-
-        public async Task UploadToS3(byte[] image, string path)
-        {
-            using (MemoryStream ms = new MemoryStream(image))
-            {
-                var putRequest = new PutObjectRequest()
-                {
-                    BucketName = _bucket,
-                    ContentType = "image/png",
-                    Key = path,
-                    InputStream = ms,
-                    CannedACL = S3CannedACL.PublicRead,
-                    AutoCloseStream = false
-                };
-
-                PutObjectResponse response = await _client.PutObjectAsync(putRequest);
-                if (!response.HttpStatusCode.IsSuccess())
-                    throw new InvalidOperationException($"failed to upload S3 object {path}, {response.HttpStatusCode}");
             }
+
+            logger.LogInformation("Successfully removed image from s3");
         }
 
-        public async Task<Image<Rgba32>> UploadToImage(IFormFile fileUploaded)
+        public async Task UploadToS3(MemoryStream image, string path, CancellationToken cancellationToken)
         {
-            using (Stream uploadStream = fileUploaded.OpenReadStream())
+            logger.LogInformation("Adding image to s3");
+            var putRequest = new PutObjectRequest()
             {
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    await uploadStream.CopyToAsync(ms);
-                    var image = SixLabors.ImageSharp.Image.Load(ms.ToArray());
-                    var scaleRatio = GetScaleRatioForImage(image);
-                    if (scaleRatio != 1.0)
-                    {
-                        image.Mutate(x => x
-                            .Resize((int)(image.Width*scaleRatio), (int)(image.Height*scaleRatio))
-                            );
-                    }
-                    return image;
-                }
+                BucketName = bucket,
+                ContentType = "image/jpg",
+                Key = path,
+                InputStream = image,
+                CannedACL = S3CannedACL.PublicRead,
+                AutoCloseStream = false
+            };
+
+            putRequest.Headers.CacheControl = "max-age=31556952"; // We don't change these images, one year caching header
+
+            PutObjectResponse response = await client.PutObjectAsync(putRequest, cancellationToken).ConfigureAwait(false);
+            if (!response.HttpStatusCode.IsSuccess())
+            {
+                logger.LogError("Error uploading image to s3");
+                throw new InvalidOperationException($"failed to upload S3 object {path}, {response.HttpStatusCode}");
             }
+
+            logger.LogInformation("Successfully added image to s3");
         }
 
-        private byte[] ConvertImageToPng(Image<Rgba32> image)
+        public async Task RemoveDanglingImages(CancellationToken token)
         {
-            using (MemoryStream ms = new MemoryStream())
+            // Fetch images without crowdactions older than 1 hour
+            var danglingImages = await context.ImageFiles.FromSqlRaw(
+                @"SELECT *
+                  FROM public.""ImageFiles"" I
+                  WHERE NOT EXISTS
+                  (
+                      SELECT NULL
+                      FROM public.""Crowdactions"" P
+                      WHERE P.""BannerImageFileId"" = I.""Id"" OR P.""DescriptiveImageFileId"" = I.""Id"" OR P.""CardImageFileId"" = I.""Id""
+                  ) AND I.""Date"" < 'now'::timestamp - '1 hour'::interval").ToListAsync().ConfigureAwait(false);
+
+            await Task.WhenAll(danglingImages.Select(i => DeleteObject(i.Filepath, token))).ConfigureAwait(false);
+
+            context.ImageFiles.RemoveRange(danglingImages);
+            await context.SaveChangesAsync().ConfigureAwait(false);
+        }
+
+        public void InitializeDanglingImageJob()
+        {
+            recurringJobManager.AddOrUpdate("dangling-image-job", () => RemoveDanglingImages(CancellationToken.None), Cron.Hourly);
+        }
+
+        public void Dispose()
+        {
+            client.Dispose();
+        }
+
+        private static double GetScaleRatioForImage(Image<Rgba32> image, int imageResizeThreshold)
+        {
+            if (imageResizeThreshold < 1)
             {
-                image.SaveAsPng(ms);
-                return ms.ToArray();
+                throw new ValidationException($"Invalid image resize threshold: {imageResizeThreshold}");
             }
-        }
 
-        private double GetScaleRatioForImage(Image<Rgba32> image)
-        {
-            if (image.Width > _imageResizeThreshold || image.Height > _imageResizeThreshold)
+            if (image.Width > imageResizeThreshold || image.Height > imageResizeThreshold)
             {
-                if (image.Width > image.Height) 
+                if (image.Width > image.Height)
                 {
-                    return ( (double)_imageResizeThreshold/(double)image.Width);
+                    return (double)imageResizeThreshold / image.Width;
                 }
                 else
                 {
-                    return ( (double)_imageResizeThreshold/(double)image.Height);
+                    return (double)imageResizeThreshold / image.Height;
                 }
             }
 
             return 1.0;
         }
-    
-        public void Dispose()
+
+        private static async Task<Image<Rgba32>> LoadImageFromRequest(IFormFile fileUploaded, int imageResizeThreshold, CancellationToken token)
         {
-            _client.Dispose();
+            using Stream uploadStream = fileUploaded.OpenReadStream();
+            using MemoryStream ms = new MemoryStream();
+            await uploadStream.CopyToAsync(ms, token).ConfigureAwait(false);
+            var image = SixLabors.ImageSharp.Image.Load(ms.ToArray());
+            var scaleRatio = GetScaleRatioForImage(image, imageResizeThreshold);
+            if (scaleRatio != 1.0)
+            {
+                image.Mutate(x => x
+                     .Resize((int)(image.Width * scaleRatio), (int)(image.Height * scaleRatio)));
+            }
+
+            return image;
+        }
+
+        private MemoryStream ConvertImageToJpg(Image<Rgba32> image)
+        {
+            MemoryStream ms = new MemoryStream();
+            image.SaveAsJpeg(ms, encoder);
+            return ms;
         }
     }
 }

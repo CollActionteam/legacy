@@ -1,0 +1,144 @@
+{
+    "home" : {
+        "carousel" : {
+            "title" : "Power to the crowd",
+            "text": "We help people solve collective action problems through crowdacting."
+        },
+        "intro" : {
+            "title" : "Together we make waves",
+            "text" : "Do you want to make the world a better place, but do you sometimes feel that your actions are only a drop in the ocean? Well, not anymore, because we are introducing crowdacting: taking action knowing that you are one of many. We revamp the neighbourhood with a hundred people or switch to renewable energy with hundreds or thousands of people at the same time. <a href=\"/about\">Find out more about what crowdacting</a>, take action collectively with one of the existing crowdactions, or <a href=\"/crowdactions/start\">start your own crowdaction</a>."
+        },
+        "timeToAct" : {
+            "title" : "Time to act",
+            "steps" : {
+                "step1": {
+                    "title" : "Idea",
+                    "text" : "Propose a collective action and set a target number of participants.",
+                    "button" : "Start crowdaction"
+                },
+                "step2": {
+                    "title" : "Crowd",
+                    "text" : "People pledge to take action if the target is met before the deadline.",
+                    "button" : "Find crowdaction"
+                },
+                "step3": {
+                    "title" : "Action",
+                    "text" : "If enough people commit, we all act!",
+                    "button" : "Read more"
+                }
+            }
+        },
+        "stats" : {
+            "title" : "Our collective impact",
+            "numberActionsTaken" : "Actions taken",
+            "numberCrowdactions" : "Crowdactions started",
+            "numberUsers" : "CollActivists"
+        },
+        "crowdactions" : {
+            "title" : "Join a crowdaction",
+            "button" : "Find more crowdactions"
+        },
+        "share" : {
+            "title" : "Share now"
+        }
+    },
+    "about": {
+        "mission": {
+            "title" : "Our mission",
+            "text" : "Many things are going well in the world. But we’re also facing some large and urgent problems. We see that traditional solutions to these problems are just not enough. At the same time there are so many people that want to do something to create a better world. That’s why we came up with a new approach: crowdacting. With crowdacting we ask: “Would you take action if a (hundred/thousand/million) other people would do the same?"
+        },
+        "about" : {
+            "title" : "About CollAction",
+            "text" : "Do you sometimes have the feeling that your actions are only a drop in the ocean? Well, not anymore, because we are introducing crowdacting: taking action knowing that you are one of many. We revamp the neighbourhood with a hundred people or switch to renewable energy with hundreds or thousands of people at the same time. Find out more about what crowdacting is in the video or the FAQs, take action collectively with one of the <a href=\"/crowdactions/find\">existing crowdactions</a>, or <a href=\"/crowdactions/start\">start your own crowdaction</a>.<br /><strong>Power to the Crowd.</strong>"
+        },
+        "join" : {
+            "title" : "Join our team!",
+            "text" : "CollAction is always looking for fun people who want to make a difference by making CollAction the next big thing! Please note that these are all volunteer positions for now (all current team members are volunteers as well :) )<br /><br />We’re looking for:<br /> <br /><ul><li><strong>Communications guru</strong>: As the communications guru you are responsible for developing and implementing our communications strategy and further build the growing CollAction community. For those who need a good excuse to spend all day on Facebook. <a href=\"mailto:hello@collaction.org\">Email</a> us for more info!</li><li><strong>Crowdaction Starter</strong>: Do you sometimes think ‘AAAH THE WORLD IS ON FIRE, I NEED TO DO SOMETHING BUT WHAT!?’. Well, maybe chill out first and have some herbal tea :). Then get your hands dirty and <a href=\"/crowdactions/start\">Start a crowdaction here</a>."
+        },
+        "team" : {
+            "title" : "Meet the team",
+            "team" : [
+                {
+                    "name": "Arnout Jansen",
+                    "photo": "nophoto.png"
+                },
+                {
+                    "name": "Clara Doyle",
+                    "photo": "clara-doyle.jpg"
+                },
+                {
+                    "name": "Daniela Becker",
+                    "photo": "daniela-becker.png"
+                },
+                {
+                    "name": "Dominik Guz",
+                    "photo": "nophoto.png"
+                },
+                {
+                    "name": "Edoardo Felici",
+                    "photo": "edoardo-felici.png"
+                },
+                {
+                    "name": "Georgie Kusbiantoro",
+                    "photo": "georgie-kusbiantoro.png"
+                },
+                {
+                    "name": "Jeppe Bijker",
+                    "photo": "jeppe-bijker.jpg"
+                },
+                {
+                    "name": "Jonas Schneider",
+                    "photo": "jonas-s.jpg"
+                },
+                {
+                    "name": "Kisjonah Roos",
+                    "photo": "kisjonah-roos.jpg"
+                },
+                {
+                    "name": "Lena Hartog",
+                    "photo": "lena-hartog.jpg"
+                },
+                {
+                    "name": "Luuk Boschker",
+                    "photo": "luuk-boschker.png"
+                },
+                {
+                    "name": "Laura Christiaens",
+                    "photo": "laura-c.jpeg"
+                },
+                {
+                    "name": "Lucie Morauw",
+                    "photo": "lucie-morauw.jpeg"
+                },
+                {
+                    "name": "Mara de Pater",
+                    "photo": "mara-de-pater.jpg"
+                },
+                {
+                    "name": "Ron van den Akker",
+                    "photo": "ron-van-den-akker.png"
+                },
+                {
+                    "name": "Shirley Zheng",
+                    "photo": "shirley-zheng.jpeg"
+                },
+                {
+                    "name": "Spencer Heijnen",
+                    "photo": "spencer-heijnen.png"
+                },
+                {
+                    "name": "Tim Stokman",
+                    "photo": "tim-stokman.png"
+                },
+                {
+                    "name": "Tuanh Lam",
+                    "photo": "tuanh-lam.jpg"
+                }
+            ]
+        },
+        "partners" : {
+            "title" : "Our partners",
+            "text" : "We couldn’t do what we’re doing without the support of our great partners, including the ones below. Please <a href=\"mailto:hello@collaction.org\">send us an email</a> if you want to join this group of early adopters.<br /><br /><ul><li><a href=\"https://www.sidnfonds.nl\">SIDN Fonds</a></li><li><a href=\"https://www.essense.eu\">Essense</a></li><li><a href=\"https://www.socialcoder.org/Home/Index\">Social Coder</a></li><li><a href=\"https://www.deceuvel.nl/en/\">De Ceuvel</a></li></ul>"
+        }
+    }
+}

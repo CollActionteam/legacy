@@ -1,0 +1,69 @@
+.wrapper {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+}
+
+input {
+  width: 100%;
+  border-radius: 2rem;
+  height: 2.3rem;
+  padding: 0 var(--spacing);
+  margin-right: var(--spacing-xs);
+  border: 1px solid var(--c-grey-d10);
+  transition: background-color var(--transition-duration),
+    color var(--transition-duration);
+
+  &::placeholder {
+    color: var(--c-grey-d20);
+  }
+
+  &:hover,
+  &:focus {
+    border-color: var(--c-grey-d20);
+  }
+}
+
+.hidden {
+  position: absolute;
+  left: -5000px;
+}
+
+.submit {
+  position: absolute;
+  top: 0;
+  right: 0.5rem;
+  border: 0;
+  border-radius: 2.3rem;
+  min-width: 2.3rem;
+  height: 2.3rem;
+  cursor: pointer;
+  color: var(--c-white);
+  background-color: var(--c-black);
+  transition: background-color var(--transition-duration);
+
+  &:hover,
+  &:focus {
+    background-color: var(--c-black);
+  }
+
+  &:disabled {
+    color: var(--c-black);
+    opacity: 0.5;
+    background-color: transparent;
+  }
+}
+
+.submitIcon {
+  display: inline;
+  padding-left: var(--spacing-xs);
+  padding-right: var(--spacing-xxs);
+
+  .submit:disabled & {
+    padding-right: var(--spacing-xs);
+  }
+}
+
+.submitLabel {
+  padding-right: var(--spacing-xs);
+}

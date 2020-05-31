@@ -11,7 +11,7 @@ namespace CollAction.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20170730084318_CA_256_change_category_names")]
-    partial class CA_256_change_category_names
+    partial class CA256ChangeCategoryNames
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

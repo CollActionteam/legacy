@@ -1,0 +1,41 @@
+@mixin heading {
+  line-height: normal;
+}
+
+h1,
+.h1 {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing);
+  @include heading;
+}
+
+h2,
+.h2 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing);
+  @include heading;
+}
+
+h3,
+.h3 {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing);
+  @include heading;
+}
+
+h4,
+.h4 {
+  font-size: var(--font-size);
+  font-weight: var(--font-weight-semibold);
+  @include heading;
+}
+
+h5,
+.h5 {
+  font-size: var(--font-size);
+  font-weight: var(--font-weight-semibold);
+  @include heading;
+}

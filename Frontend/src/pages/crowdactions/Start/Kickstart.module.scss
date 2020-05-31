@@ -1,0 +1,19 @@
+.kickstart {
+  background-color: var(--c-grey);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-lg);
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.title {
+  color: var(--c-green);
+  margin-bottom: var(--spacing);
+}
+
+.image {
+  height: min-content;
+  margin-left: var(--spacing);
+}
+

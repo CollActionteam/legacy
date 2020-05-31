@@ -1,0 +1,98 @@
+@import '../Styles/responsive';
+
+.container {
+  @include breakpoint-up(sm) {
+    max-width: 60%;
+    margin: 0 auto;
+  }
+  
+  @include breakpoint-down(sm) {
+    &::before {
+      content: url(../../assets/svg/time-to-act-crowd.svg);
+      display: block;
+      $step-top: 0;
+      margin: $step-top auto var(--spacing-m) auto;
+      margin-inline-start: auto;
+      margin-inline-end: auto;
+      margin-block-start: $step-top;
+      margin-block-end: var(--spacing-m);
+    }
+  }
+}
+.step {
+  $step-bottom: calc(var(--spacing) * 6.25); // 100px;
+  $step-top: 0;
+  text-align: left;
+  text-align: start;
+  padding: $step-top var(--spacing-s) $step-bottom;
+  padding-inline-start: var(--spacing-s);
+  padding-inline-end: var(--spacing-s);
+  padding-block-start: $step-top;
+  padding-block-end: $step-bottom;
+  
+  &:last-child {
+    $last-step-bottom: 0;
+    padding-bottom: $last-step-bottom;
+    padding-block-end: $last-step-bottom;
+  }
+
+  @include breakpoint-down(sm) {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding-top: var(--spacing);
+    padding-bottom: var(--spacing);
+    padding-block-start: var(--spacing);
+    padding-block-end: var(--spacing);
+    text-align: center;
+  }
+  @include breakpoint-up(sm) {
+    max-width: 55%;
+    
+    &::before {
+      position: absolute;
+
+      right: -110%;
+
+      @include breakpoint-up(md) {
+        right: -85%;
+      }
+      
+      display: block;
+    }
+
+    &.step1::before {
+      content: url(../../assets/svg/time-to-act-idea.svg);
+    }
+
+    &.step2::before {
+      content: url(../../assets/svg/time-to-act-crowd.svg);
+    }
+
+    &.step3::before {
+      content: url(../../assets/svg/time-to-act-act.svg);
+    }
+  }
+}
+.stepTitle {
+  color: var(--c-green);
+  font-size: var(--heading-s-left-font-size);
+  font-weight: var(--heading-s-left-font-weight);
+  line-height: var(--heading-s-left-line-height);
+  letter-spacing: var(--heading-s-left-letter-spacing);
+  color: var(--heading-s-left-color);
+
+  margin-bottom: var(--spacing-l);
+  margin-block-end: var(--spacing-l);
+}
+.stepBody {
+  font-size: var(--body-l-default-left-font-size);
+  font-weight: var(--body-l-default-left-font-weight);
+  line-height: var(--body-l-default-left-line-height);
+  letter-spacing: var(--body-l-default-left-letter-spacing);
+  color: var(--body-l-default-left-color);
+
+  margin-bottom: var(--spacing-l);
+  margin-block-end: var(--spacing-l);
+  font-size: var(--font-size-md);
+}

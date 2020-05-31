@@ -1,0 +1,20 @@
+.faq {
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-md);
+  font-size: var(--font-size-md);
+  border-bottom: solid 1px var(--c-grey-d20);
+
+  h3 {
+    cursor: pointer;
+    margin: var(--spacing) auto;
+  }
+
+  p, ul {
+    margin-bottom: var(--spacing);
+  }
+}
+
+.icon {
+  float: right;
+  font-size: 0.6em;
+}

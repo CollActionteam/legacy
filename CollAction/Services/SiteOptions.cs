@@ -1,7 +1,14 @@
-﻿namespace CollAction.Services
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace CollAction.Services
 {
-    public class SiteOptions
+    public sealed class SiteOptions
     {
-        public string PublicAddress { get; set; }
+        [Required]
+        public string PublicAddress { get; set; } = null!;
+
+        public Uri PublicUrl
+            => new Uri(PublicAddress);
     }
 }

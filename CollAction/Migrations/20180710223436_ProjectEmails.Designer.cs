@@ -12,7 +12,7 @@ namespace CollAction.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20180710223436_unsubscribe-token")]
-    partial class unsubscribetoken
+    partial class Unsubscribetoken
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -9,15 +9,15 @@ using System.Threading.Tasks;
 
 namespace CollAction.Services.ViewRender
 {
-    public class ViewRenderService : IViewRenderService
+    public sealed class ViewRenderService : IViewRenderService
     {
-        private readonly ICompositeViewEngine _viewEngine;
-        private readonly IUrlHelper _urlHelper;
+        private readonly ICompositeViewEngine viewEngine;
+        private readonly IUrlHelper urlHelper;
 
         public ViewRenderService(ICompositeViewEngine viewEngine, IUrlHelper urlHelper)
         {
-            _viewEngine = viewEngine;
-            _urlHelper = urlHelper;
+            this.viewEngine = viewEngine;
+            this.urlHelper = urlHelper;
         }
 
         public Task<string> Render(string viewPath)
@@ -25,7 +25,7 @@ namespace CollAction.Services.ViewRender
 
         public async Task<string> Render<TModel>(string viewPath, TModel model)
         {
-            ViewEngineResult viewEngineResult = _viewEngine.GetView("~/", viewPath, false);
+            ViewEngineResult viewEngineResult = viewEngine.GetView("~/", viewPath, false);
 
             if (!viewEngineResult.Success)
             {
@@ -34,25 +34,23 @@ namespace CollAction.Services.ViewRender
 
             IView view = viewEngineResult.View;
 
-            using (var output = new StringWriter())
+            using var output = new StringWriter();
+            var viewContext = new ViewContext()
             {
-                var viewContext = new ViewContext()
+                HttpContext = urlHelper.ActionContext.HttpContext,
+                RouteData = urlHelper.ActionContext.RouteData,
+                ActionDescriptor = urlHelper.ActionContext.ActionDescriptor,
+                View = view,
+                ViewData = new ViewDataDictionary<TModel>(new EmptyModelMetadataProvider(), new ModelStateDictionary())
                 {
-                    HttpContext = _urlHelper.ActionContext.HttpContext,
-                    RouteData = _urlHelper.ActionContext.RouteData,
-                    ActionDescriptor = _urlHelper.ActionContext.ActionDescriptor,
-                    View = view,
-                    ViewData = new ViewDataDictionary<TModel>(new EmptyModelMetadataProvider(), new ModelStateDictionary())
-                    {
-                        Model = model
-                    },
-                    Writer = output
-                };
+                    Model = model
+                },
+                Writer = output
+            };
 
-                await view.RenderAsync(viewContext);
+            await view.RenderAsync(viewContext).ConfigureAwait(false);
 
-                return output.ToString();
-            }
+            return output.ToString();
         }
     }
-} 
+}

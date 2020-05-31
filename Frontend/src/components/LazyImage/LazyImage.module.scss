@@ -1,0 +1,7 @@
+// For the image to have a width/height so that react-lazy-load-image-component can pick it up
+.lazyImage {
+  * {
+    min-height: 1px;
+    min-width: 1px;
+  }
+}

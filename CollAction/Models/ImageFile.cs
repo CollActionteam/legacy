@@ -4,8 +4,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CollAction.Models
 {
-    public class ImageFile
+    public sealed class ImageFile
     {
+        public ImageFile(string filepath, int width, int height, DateTime date, string description)
+        {
+            Filepath = filepath;
+            Width = width;
+            Height = height;
+            Date = date;
+            Description = description;
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
