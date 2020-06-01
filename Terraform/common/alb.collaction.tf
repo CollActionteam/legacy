@@ -58,15 +58,3 @@ resource "aws_security_group" "outbound-alb" {
   name = "outbound-alb"
   description = "Provide access for the ALB"
 }
-
-# data "aws_route53_zone" "collaction" {
-#   name = "collaction.org."
-# }
-
-# resource "aws_route53_record" "api-collaction" {
-#   zone_id = data.aws_route53_zone.collaction.zone_id
-#   name    = local.hostname
-#   type    = "CNAME"
-#   ttl     = "300"
-#   records = [aws_alb.api-collaction.dns_name]
-# }
