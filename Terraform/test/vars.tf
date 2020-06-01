@@ -26,9 +26,9 @@ variable "environment" {
 #   default = 20
 # }
 
-variable "hostname" {
-  default = "test.collaction.org"
-}
+# variable "hostname" {
+#   default = "api-test.collaction.org"
+# }
 
 variable "route53_zone_name" {
   default = "collaction.org."
