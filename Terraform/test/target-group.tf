@@ -13,7 +13,7 @@ resource "aws_alb_target_group" "api-collaction" {
   port        = 5000
   protocol    = "HTTP"
   vpc_id      = module.vpc.default.id
-  target_type = "ip"
+  target_type = "instance"
 
   health_check {
     healthy_threshold   = 3
