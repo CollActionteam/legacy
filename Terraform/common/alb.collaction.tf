@@ -1,4 +1,4 @@
-# This is the existing group for the old EC2 based Test environment
+# This group allows access to the EC2 instance that is running the Test tasks
 # Remove when Test is replaced with Fargate
 data "aws_security_group" "elb-outbound" {
   name = "elb-outbound"
