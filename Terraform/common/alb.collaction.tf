@@ -1,12 +1,19 @@
+# This is the existing group for the old EC2 based Test environment
+# Remove when Test is replaced with Fargate
+data "aws_security_group" "ec2-inbound" {
+  name = "ec2-inbound"
+}
+
 # Load-balancer in the public subnets
 # Note: this load balancer services all environments. Traffic is sent to test, staging or production containers by listener rules
 # defined with the ecs-services definitions.
 resource "aws_alb" "api-collaction" {
-  name            = "api-collaction"
-  subnets         = module.vpc.subnet_ids.ids
+  name    = "api-collaction"
+  subnets = module.vpc.subnet_ids.ids
   security_groups = [
     aws_security_group.inbound-alb.id,
-    aws_security_group.outbound-alb.id
+    aws_security_group.outbound-alb.id,
+    data.aws_security_group.ec2-inbound.id # Allow access from the EC2 instance that is running the Test API
   ]
 }
 
@@ -55,6 +62,6 @@ resource "aws_security_group" "inbound-alb" {
 }
 
 resource "aws_security_group" "outbound-alb" {
-  name = "outbound-alb"
+  name        = "outbound-alb"
   description = "Provide access for the ALB"
 }
