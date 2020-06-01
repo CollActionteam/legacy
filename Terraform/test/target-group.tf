@@ -10,7 +10,7 @@ data "aws_alb_listener" "api-collaction" {
 # Target group for the load balancer
 resource "aws_alb_target_group" "api-collaction" {
   name        = "api-${var.environment}-collaction"
-  port        = 5000
+  port        = 80
   protocol    = "HTTP"
   vpc_id      = module.vpc.default.id
   target_type = "instance"
