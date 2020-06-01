@@ -76,6 +76,7 @@ const routing = (
 
                             {/* Redirects from old site to new site */}
                             <Redirect exact from="/projects/:slug/:crowdactionId/details" to="/crowdactions/:slug/:crowdactionId" />
+                            <Redirect exact from="/projects/details/:crowdactionId" to="/crowdactions/_/:crowdactionId" />
                             <Redirect exact from="/projects/embed/:crowdactionId" to="/crowdactions/_/:crowdactionId/widget" />
                             <Redirect exact from="/Donation/Donate" to="/donate" />
                             <Redirect exact from="/account/FinishRegistration" to={{
