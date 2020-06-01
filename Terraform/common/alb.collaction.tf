@@ -1,7 +1,7 @@
 # This is the existing group for the old EC2 based Test environment
 # Remove when Test is replaced with Fargate
-data "aws_security_group" "ec2-inbound" {
-  name = "ec2-inbound"
+data "aws_security_group" "elb-outbound" {
+  name = "elb-outbound"
 }
 
 # Load-balancer in the public subnets
@@ -13,7 +13,7 @@ resource "aws_alb" "api-collaction" {
   security_groups = [
     aws_security_group.inbound-alb.id,
     aws_security_group.outbound-alb.id,
-    data.aws_security_group.ec2-inbound.id # Allow access from the EC2 instance that is running the Test API
+    data.aws_security_group.elb-outbound.id # Allow access from the EC2 instance that is running the Test API
   ]
 }
 
