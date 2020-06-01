@@ -17,12 +17,12 @@ resource "aws_alb_target_group" "api-collaction" {
 
   health_check {
     healthy_threshold   = 3
-    interval            = 300
+    interval            = 30
     protocol            = "HTTP"
     matcher             = "200-399"
-    timeout             = 120
+    timeout             = 3
     path                = "/health"
-    unhealthy_threshold = 10
+    unhealthy_threshold = 2
   }
 }
 
