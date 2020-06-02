@@ -263,12 +263,6 @@ const CrowdactionDetailsPage = ({
                   </div>
                 )}
               </Container>
-              <Grid item xs={12}>
-                <Container>
-                  <h3 className={styles.header}>User Comments</h3>
-                  <CrowdactionComments id={crowdactionId} />
-                </Container>
-              </Grid>
             </Grid>
             <Grid item md={5} xs={12}>
               <Container>
@@ -359,6 +353,13 @@ const CrowdactionDetailsPage = ({
                     )}
                   </div>
                 )}
+              </Container>
+            </Grid>
+
+            <Grid item md={7} xs={12}>
+              <Container>
+                <h3 className={styles.header}>User Comments</h3>
+                <CrowdactionComments id={crowdactionId} />
               </Container>
             </Grid>
           </Grid>
