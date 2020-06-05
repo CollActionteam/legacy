@@ -16,6 +16,38 @@ import { Link, useHistory } from 'react-router-dom';
 import { gql, useMutation } from '@apollo/client';
 import Loader from '../../../components/Loader/Loader';
 import Utils from '../../../utils';
+import {DatePicker, KeyboardDatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
+import MomentUtils from '@date-io/moment';
+
+//https://material-ui-pickers.dev/guides/form-integration
+// @ts-ignore
+const DatePickerField = ({ field, form, ...other }) => {
+  const currentError = form.errors[field.name];
+
+  return (
+      <DatePicker
+          clearable
+          disablePast
+          autoOk
+          name={field.name}
+          value={field.value}
+          placeholder={"dd/mm/yyyy"}
+          helperText={currentError}
+          error={Boolean(currentError)}
+          variant="inline"
+          format="DD/MM/yyyy"
+          onError={error => {
+            // handle as a side effect
+            if (error !== currentError) {
+              form.setFieldError(field.name, error);
+            }
+          }}
+          // if you are using custom validation schema you probably want to pass `true` as third argument
+          onChange={date => form.setFieldValue(field.name, date, true)}
+          {...other}
+      />
+  );
+};
 
 const CreateCrowdactionPage = () => {
   const user = useUser();
@@ -118,7 +150,7 @@ const CreateCrowdactionPage = () => {
   )
 
   const createCrowdactionForm = (
-    <>
+      <MuiPickersUtilsProvider utils={MomentUtils}>
       <Helmet>
         <title>Create a crowdaction</title>
         <meta name="description" content="Create a crowdaction" />
@@ -191,10 +223,7 @@ const CreateCrowdactionPage = () => {
                       label="Launch date"
                       type="date"
                       helperText="Set a date from which people will be able to join the crowdaction"
-                      component={TextField}
-                      InputLabelProps={{
-                        shrink: true
-                      }}
+                      component={DatePickerField}
                       className={styles.formRow}
                       fullWidth
                     >
@@ -204,10 +233,7 @@ const CreateCrowdactionPage = () => {
                       label="Sign-up duration"
                       type="date"
                       helperText="Set a specific end date for when the sign-up closes. Sign-up closes on 00:00 GMT on this date"
-                      component={TextField}
-                      InputLabelProps={{
-                        shrink: true
-                      }}
+                      component={DatePickerField}
                       className={styles.formRow}
                       fullWidth
                     >
@@ -333,7 +359,7 @@ const CreateCrowdactionPage = () => {
           </Form>
           )}
       </Formik>
-    </>
+      </MuiPickersUtilsProvider>
   );
 
   return user ? createCrowdactionForm : pleaseLogin;

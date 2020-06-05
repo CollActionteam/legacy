@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import moment from "moment";
 
 export interface ICrowdactionForm {
   crowdactionName: string;
@@ -61,6 +62,19 @@ var minimumDate = new Date();
 var maximumDate = new Date();
 maximumDate.setMonth(minimumDate.getMonth() + 12);
 
+//Doesn't seem to work...
+// Yup.addMethod(Yup.date, 'format', function (formats, parseStrict) {
+//   return this.transform(function (value, originalValue) {
+//     if (this.isType(value)) return value;
+//     console.log(originalValue, value);
+//
+//     value = moment(originalValue, formats, parseStrict);
+//     console.log(originalValue, value);
+//
+//     return value.isValid() ? value.toDate() : new Date('');
+//   });
+// });
+
 export const validations = Yup.object({
   crowdactionName: Yup.string()
     .required('Please write a clear, brief title')
@@ -74,13 +88,15 @@ export const validations = Yup.object({
     .required('Please choose the number of people you want to join')
     .moreThan(0, 'You can choose up to one million participants')
     .lessThan(1000001, 'Please choose no more then one million participants'),
-  startDate: Yup.date()
-    .required('Please set a launch date')
-    .min(minimumDate, 'Please ensure the launch date starts somewhere in the near future')
-    .max(maximumDate, 'Please ensure the launch date is within the next 12 months'),
-  endDate: Yup.date()
-    .required('Please enter the date when the sign-up closes')
-    .when('startDate', determineEndDateValidation),
+  // startDate: Yup.date()
+  //     // @ts-ignore
+  //     .format('DD/MM/YYYY', true)
+  //   .required('Please set a launch date')
+  //   .min(minimumDate, 'Please ensure the launch date starts somewhere in the near future')
+  //   .max(maximumDate, 'Please ensure the launch date is within the next 12 months'),
+  // endDate: Yup.date()
+  //   .required('Please enter the date when the sign-up closes')
+  //   .when('startDate', determineEndDateValidation),
   hashtags: Yup.string()
     .max(30, 'Please keep the number of hashtags civil, no more then 30 characters')
     .matches(/^[a-zA-Z_0-9]+(;[a-zA-Z_0-9]+)*$/, 'Don\'t use spaces or #, must contain a letter, can contain digits and underscores. Separate multiple tags with a colon \';\''),
