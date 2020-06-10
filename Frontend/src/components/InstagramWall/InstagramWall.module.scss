@@ -1,0 +1,58 @@
+.container {
+    $size: 200px;
+    $padding: 20px;
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    a {
+        position: relative;
+        color: #000;
+        font-weight: normal;
+        margin: 10px 5px;
+        text-align: center;
+        transition: transform var(--transition-duration);
+
+        &:hover {
+            text-decoration: none;
+            transform: scale(1.05);
+
+            .caption {
+                opacity: 1;
+            }
+        }
+    }
+
+    img {
+        width: $size;
+    }
+
+    .date {
+        font-size: 9pt;
+        font-weight: var(--font-weight-bold);
+        color: #555;
+    }
+
+    .caption {
+        position: absolute;
+        transition: opacity var(--transition-duration);
+        top: 0;
+        left: 0;
+        right: 0;
+        opacity: 0;
+        height: $size;
+        overflow: hidden;
+        font-size: 8pt;
+        line-height: 1.2;
+        background-color: rgba(255, 255, 255, 0.8);
+
+        .padding {
+            padding: $padding;
+            height: $size - $padding;
+            white-space: pre-wrap;
+            overflow: hidden;
+        }
+    }
+
+}

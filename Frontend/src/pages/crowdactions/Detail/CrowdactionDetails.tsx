@@ -26,6 +26,7 @@ import Formatter from '../../../formatter';
 import LazyImage from '../../../components/LazyImage/LazyImage';
 import { TextField } from 'formik-material-ui';
 import CrowdactionComments from '../../../components/CrowdactionComments/CrowdactionComments';
+import {InstagramWall} from "../../../components/InstagramWall/InstagramWall";
 
 type TParams = {
   slug: string;
@@ -171,6 +172,8 @@ const CrowdactionDetailsPage = ({
       crowdaction.categories[0] ? crowdaction.categories[0].category : 'OTHER'
     }.jpg`);
 
+    let instagramUser = "slowfashionseason";
+
     return (
       <>
         <Helmet>
@@ -262,6 +265,14 @@ const CrowdactionDetailsPage = ({
                     ></iframe>
                   </div>
                 )}
+
+                {instagramUser && <div>
+                  <a href={"https://www.instagram.com/" + instagramUser} rel="noopener noreferrer" target="_blank">
+                    <h3 className={styles.header}>Instagram @{instagramUser}</h3>
+                  </a>
+                  <InstagramWall user={instagramUser} />
+                </div>}
+
               </Container>
               <Grid item xs={12}>
                 <Container>

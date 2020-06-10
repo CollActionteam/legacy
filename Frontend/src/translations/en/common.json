@@ -40,6 +40,9 @@
         },
         "share" : {
             "title" : "Share now"
+        },
+        "follow": {
+            "title": "Follow us"
         }
     },
     "about": {
