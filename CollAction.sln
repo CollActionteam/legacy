@@ -23,6 +23,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker", "docker", "{BECC17
 		docker-compose.yml = docker-compose.yml
 		env_collaction = env_collaction
 		env_collaction.template = env_collaction.template
+		env_postgres = env_postgres
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{F21123A8-7994-4CD6-823E-5FB8C5201AFD}"

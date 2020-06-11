@@ -55,8 +55,6 @@ namespace CollAction.Services.Initialization
                 logger.LogInformation("Seeding database");
                 jobClient.Enqueue(() => SeedTestData(admin.Id, CancellationToken.None));
             }
-            logger.LogInformation("Migrating card images, setting up jobs");
-            await MigrateCardImages(CancellationToken.None).ConfigureAwait(false);
         }
 
         public async Task SeedTestData(string adminId, CancellationToken cancellationToken)
@@ -64,39 +62,6 @@ namespace CollAction.Services.Initialization
             var admin = await userManager.FindByIdAsync(adminId).ConfigureAwait(false);
             var seededUsers = await SeedTestUsers(cancellationToken).ConfigureAwait(false);
             await SeedRandomCrowdactions(seededUsers.Concat(new[] { admin }), cancellationToken).ConfigureAwait(false);
-        }
-
-        // TODO: Remove once this has run in production
-        public async Task MigrateCardImages(CancellationToken token)
-        {
-            List<int> crowdactionsToMigrate =
-                await context.Crowdactions
-                             .Where(c => c.CardImageFileId == null && c.BannerImageFileId != null)
-                             .Select(c => c.Id)
-                             .ToListAsync(token)
-                             .ConfigureAwait(false);
-            crowdactionsToMigrate.ForEach(crowdactionId => jobClient.Enqueue(() => MigrateCardImage(crowdactionId, CancellationToken.None)));
-        }
-
-        // TODO: Remove once this has run in production
-        public async Task MigrateCardImage(int crowdactionId, CancellationToken token)
-        {
-            Crowdaction crowdaction =
-                await context.Crowdactions
-                             .Include(c => c.BannerImage)
-                             .SingleAsync(c => c.Id == crowdactionId, token)
-                             .ConfigureAwait(false);
-
-            if (crowdaction.BannerImage == null)
-            {
-                throw new InvalidOperationException($"Banner image not found when migrating for crowdaction: {crowdaction.Id}");
-            }
-
-            Uri bannerImageUrl = imageService.GetUrl(crowdaction.BannerImage);
-            byte[] bannerImage = await DownloadFile(bannerImageUrl, token).ConfigureAwait(false);
-            ImageFile uploadedImage = await imageService.UploadImage(ToFormFile(bannerImage, bannerImageUrl), crowdaction.BannerImage.Description, MaxImageCardDimensionPixels, token).ConfigureAwait(false);
-            crowdaction.CardImage = uploadedImage;
-            await context.SaveChangesAsync(token).ConfigureAwait(false);
         }
 
         private static IFormFile ToFormFile(byte[] imageBytes, Uri url)
