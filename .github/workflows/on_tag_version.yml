@@ -41,8 +41,9 @@ jobs:
     
   deploy_backend:
     runs-on: ubuntu-latest
-    run:
-      working-directory: Terraform/staging
+    defaults:
+      run:
+        working-directory: Terraform/staging
     steps:
     - name: Get the version
       id: get_version
