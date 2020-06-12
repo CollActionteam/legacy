@@ -189,6 +189,8 @@ namespace CollAction.Services.Initialization
                 "https://collaction-production.s3.eu-central-1.amazonaws.com/6e6c12b1-eaae-4811-aa1c-c169d10f1a59.png",
             }.Select(b => new Uri(b)).Select(b => (b, DownloadFile(b, cancellationToken))).ToList();
 
+            string?[] instagramUsers = new string?[] { "slowfashionseason", "collaction_org", null };
+
             await Task.WhenAll(descriptiveImages.Select(d => d.descriptiveImageBytes).Concat(bannerImages.Select(b => b.bannerImageBytes))).ConfigureAwait(false);
 
             List<string> tags = Enumerable.Range(10, r.Next(60))
@@ -248,7 +250,7 @@ namespace CollAction.Services.Initialization
                         bannerImageFileId: bannerImage?.Id,
                         descriptiveImageFileId: descriptiveImage?.Id,
                         cardImageFileId: cardImage?.Id,
-                        instagramUser: "slowfashionseason",
+                        instagramUser: instagramUsers[r.Next(instagramUsers.Length)],
                         creatorComments: r.Next(4) == 0 ? null : $"<p>{string.Join("</p><p>", Faker.Lorem.Paragraphs(r.Next(3) + 1))}</p>",
                         goal: Faker.Company.CatchPhrase(),
                         proposal: Faker.Company.BS(),
