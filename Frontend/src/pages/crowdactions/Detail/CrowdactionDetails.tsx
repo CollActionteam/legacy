@@ -265,7 +265,7 @@ const CrowdactionDetailsPage = ({
                 )}
 
                 {crowdaction.instagramUser && <div>
-                  <a href={"https://www.instagram.com/" + crowdaction.instagramUser} rel="noopener noreferrer" target="_blank">
+                  <a href={`https://www.instagram.com/${crowdaction.instagramUser}`} rel="noopener noreferrer" target="_blank">
                     <h3 className={styles.header}>Instagram @{crowdaction.instagramUser}</h3>
                   </a>
                   <InstagramWall wallItems={crowdaction.instagramWall} />
