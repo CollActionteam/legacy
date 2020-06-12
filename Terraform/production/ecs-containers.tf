@@ -14,9 +14,10 @@ data "aws_security_group" "rds_inbound_security_group" {
 module "fargate" {
   source = "../modules/fargate"
 
-  region      = var.region
-  cluster     = "collaction-${var.environment}"
-  environment = var.environment
+  region            = var.region
+  cluster           = "collaction-${var.environment}"
+  capacity_provider = "FARGATE"
+  environment       = var.environment
 
   imageversion      = var.imageversion
   api_cpu           = var.api_cpu
@@ -32,7 +33,7 @@ module "fargate" {
   ssm_dbpassword = aws_ssm_parameter.DbPassword
 
   sg_rds_access = module.rds.inbound_security_group
-  subnet_ids = module.vpc.subnet_ids
+  subnet_ids    = module.vpc.subnet_ids
 
   vpc               = module.vpc.default
   route53_zone_name = "collaction.org."
