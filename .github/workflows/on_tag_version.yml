@@ -62,7 +62,6 @@ jobs:
 
     - name: Terraform Apply
       working-directory: ./Terraform/staging
-      if: github.ref == 'refs/heads/master' && github.event_name == 'push'
       run: terraform apply -auto-approve -var "imageversion=${{ steps.get_version.outputs.VERSION }}"
       env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
