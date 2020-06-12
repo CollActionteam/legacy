@@ -23,7 +23,10 @@ namespace CollAction.Services.Proxy
                 var result = await proxyClient.GetAsync(url, token).ConfigureAwait(false);
                 result.EnsureSuccessStatusCode();
                 var stream = await result.Content.ReadAsStreamAsync().ConfigureAwait(false);
-                return new FileStreamResult(stream, new MediaTypeHeaderValue(result.Content.Headers.ContentType.MediaType));
+                return new FileStreamResult(stream, new MediaTypeHeaderValue(result.Content.Headers.ContentType.MediaType))
+                {
+                    LastModified = result.Content.Headers.LastModified
+                };
             }
             else
             {

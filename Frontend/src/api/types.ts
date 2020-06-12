@@ -61,6 +61,7 @@ export enum CrowdactionDisplayPriority {
 }
 
 export interface IInstagramWallItem {
+  id: string;
   shortCode: string;
   thumbnailSrc: string;
   caption: string | null;

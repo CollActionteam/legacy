@@ -33,6 +33,7 @@ export const Fragments = {
       }
     }
     instagramWall {
+      id
       shortCode
       thumbnailSrc
       caption

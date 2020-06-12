@@ -18,6 +18,7 @@ import Loader from "../../components/Loader/Loader";
 const GET_INSTAGRAM_WALL = gql`
   query GetInstagramWall($user: String!) {
     instagramWall(user: $user) {
+      id
       shortCode
       thumbnailSrc
       caption

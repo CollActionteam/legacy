@@ -7,6 +7,7 @@ namespace CollAction.GraphQl.Queries
     {
         public InstagramWallItemGraph()
         {
+            Field<IdGraphType>("id", resolve: x => x.Source.ShortCode);
             Field(x => x.ShortCode);
             Field(x => x.Link);
             Field(x => x.Date);
