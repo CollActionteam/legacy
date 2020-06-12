@@ -17,9 +17,6 @@ resource "aws_ecs_task_definition" "api-collaction" {
             "hostPort": 5000
           }
         ],
-        "links": [
-          "db:db"
-        ],
         "logConfiguration": {
             "logDriver": "awslogs",
             "options": {
@@ -53,7 +50,7 @@ resource "aws_ecs_task_definition" "api-collaction" {
           %{endfor}
           {
             "name": "DbHost",
-            "valueFrom": "db"
+            "valueFrom": "localhost"
           },
           {
             "name": "Db",
@@ -73,6 +70,12 @@ resource "aws_ecs_task_definition" "api-collaction" {
         "name": "db",
         "image": "postgres:12-alpine",
         "networkMode": "awsvpc",
+        "portMappings": [
+          {
+            "containerPort": 5432,
+            "hostPort": 5432
+          }
+        ],
         "secrets": [
           {
             "name": "POSTGRES_DB",
