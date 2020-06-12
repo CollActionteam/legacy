@@ -33,6 +33,11 @@ resource "aws_ecs_task_definition" "api-collaction" {
           {
             "name": "ASPNETCORE_URLS",
             "value": "http://*:5000"
+          },
+          {
+          {
+            "name": "DbHost",
+            "value": "localhost"
           }
         ],
         "secrets": [
@@ -48,10 +53,6 @@ resource "aws_ecs_task_definition" "api-collaction" {
             "valueFrom": "${param.arn}"
           },
           %{endfor}
-          {
-            "name": "DbHost",
-            "valueFrom": "localhost"
-          },
           {
             "name": "Db",
             "valueFrom": "${aws_ssm_parameter.Db.arn}"
