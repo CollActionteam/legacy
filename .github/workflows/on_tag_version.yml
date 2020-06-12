@@ -68,6 +68,4 @@ jobs:
 
     - name: Terraform Apply
       if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-      run: terraform apply -auto-approve
-      with:
-        imageversion: ${{ steps.get_version.outputs.VERSION }}
+      run: terraform apply -auto-approve -var 'imageversion=${{ steps.get_version.outputs.VERSION }}'
