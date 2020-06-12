@@ -8,6 +8,7 @@ resource "aws_ecs_service" "api-collaction" {
   
   capacity_provider_strategy {
     capacity_provider = var.capacity_provider
+    weight            = 100
   }
 
   network_configuration {
