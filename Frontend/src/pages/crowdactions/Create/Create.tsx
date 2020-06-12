@@ -81,6 +81,7 @@ const CreateCrowdactionPage = () => {
           start: form.startDate,
           end: form.endDate,
           goal: form.goal,
+          instagramUser: form.instagramUser || null,
           tags: form.tags ? form.tags.split(';') : [],
           creatorComments: form.comments || null,
           descriptiveImageFileId: imageId || null,
@@ -287,6 +288,16 @@ const CreateCrowdactionPage = () => {
                       name="youtube"
                       label="YouTube video link"
                       helperText="A video to go with your crowdaction. Use the format https://www.youtube.com/embed/-wtIMTCHWuI"
+                      component={TextField}
+                      className={styles.formRow}
+                      fullWidth
+                    >
+                    </Field>
+
+                    <Field
+                      name="instagramUser"
+                      label="Instagram User"
+                      helperText="Add your instagram user here, the wall will be added to your crowdaction page"
                       component={TextField}
                       className={styles.formRow}
                       fullWidth
