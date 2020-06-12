@@ -51,7 +51,7 @@ namespace CollAction.Services.Instagram
 
         private IEnumerable<InstagramWallItem> ParseInstagramResponse(string json)
         {
-            logger.LogDebug(json);
+            logger.LogDebug("Instagram JSON: {0}", json);
             dynamic deserialized = JsonConvert.DeserializeObject<dynamic>(json);
             var edges = (IEnumerable<dynamic>)(deserialized.graphql?.user?.edge_owner_to_timeline_media?.edges ?? Enumerable.Empty<dynamic>());
             logger.LogInformation("Retrieving instagram timeline, found {0} items", edges.Count());
