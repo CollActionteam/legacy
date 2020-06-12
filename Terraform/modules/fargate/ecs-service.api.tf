@@ -4,7 +4,6 @@ resource "aws_ecs_service" "api-collaction" {
   cluster         = aws_ecs_cluster.cluster.id
   task_definition = aws_ecs_task_definition.api-collaction.arn
   desired_count   = var.api_desired_count
-  launch_type     = "FARGATE"
   
   capacity_provider_strategy {
     capacity_provider = var.capacity_provider
