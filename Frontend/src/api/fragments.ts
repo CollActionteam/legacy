@@ -38,6 +38,7 @@ export const Fragments = {
       caption
       accessibilityCaption
       link      
+      date
     }
     instagramUser
     goal

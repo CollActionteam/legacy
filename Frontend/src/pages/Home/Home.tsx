@@ -13,6 +13,7 @@ import { gql, useQuery } from "@apollo/client";
 import InstagramWall from "../../components/InstagramWall/InstagramWall";
 import { Alert } from "../../components/Alert/Alert";
 import { IInstagramWallItem } from "../../api/types";
+import Loader from "../../components/Loader/Loader";
 
 const GET_INSTAGRAM_WALL = gql`
   query GetInstagramWall($user: String!) {
@@ -22,6 +23,7 @@ const GET_INSTAGRAM_WALL = gql`
       caption
       accessibilityCaption
       link      
+      date
     }
   }
 `;
@@ -64,6 +66,7 @@ const HomePage = () => {
         <Section center title={t('home.follow.title')}>
             Instagram: <a href="https://www.instagram.com/collaction_org" target="_blank" rel="noopener noreferrer" >@collaction_org</a>
             <Alert type="error" text={error?.message} />
+            { loading && <Loader /> }
             { wallData && <InstagramWall wallItems={wallData} /> }
         </Section>
     </>
