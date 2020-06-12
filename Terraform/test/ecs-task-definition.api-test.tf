@@ -35,7 +35,6 @@ resource "aws_ecs_task_definition" "api-collaction" {
             "value": "http://*:5000"
           },
           {
-          {
             "name": "DbHost",
             "value": "localhost"
           }
