@@ -32,6 +32,14 @@ export const Fragments = {
         name
       }
     }
+    instagramWall {
+      shortCode
+      thumbnailSrc
+      caption
+      accessibilityCaption
+      link      
+    }
+    instagramUser
     goal
     start
     end

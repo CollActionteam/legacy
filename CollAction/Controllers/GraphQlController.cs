@@ -140,7 +140,7 @@ namespace CollAction.Controllers
                 UserContext = new UserContext(User, context, serviceProvider),
                 ComplexityConfiguration = new ComplexityConfiguration()
                 {
-                    MaxDepth = 20
+                    MaxDepth = 21
                 },
                 ValidationRules = validationRules,
                 CancellationToken = cancellation,
