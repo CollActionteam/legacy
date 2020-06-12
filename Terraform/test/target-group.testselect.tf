@@ -1,6 +1,6 @@
 # Target group for the load balancer
 resource "aws_alb_target_group" "testselect" {
-  name        = "testselect-collaction"
+  name        = "testselect"
   port        = 5000
   protocol    = "HTTP"
   vpc_id      = module.vpc.default.id
