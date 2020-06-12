@@ -124,7 +124,7 @@ namespace CollAction.Tests.Integration.Service
         public async Task TestFinishRegistration()
         {
             // Setup
-            var crowdaction = new Crowdaction($"test-{Guid.NewGuid()}", CrowdactionStatus.Running, await context.Users.Select(u => u.Id).FirstAsync().ConfigureAwait(false), 10, DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1), "t", "t", "t", null, null);
+            var crowdaction = new Crowdaction($"test-{Guid.NewGuid()}", CrowdactionStatus.Running, await context.Users.Select(u => u.Id).FirstAsync().ConfigureAwait(false), 10, DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1), "t", "t", "t", "t", null, null);
             context.Crowdactions.Add(crowdaction);
             await context.SaveChangesAsync().ConfigureAwait(false);
 

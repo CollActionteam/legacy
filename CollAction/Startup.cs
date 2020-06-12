@@ -1,4 +1,5 @@
 ﻿using AspNetCore.IServiceCollection.AddIUrlHelper;
+using CollAction.Controllers;
 using CollAction.Data;
 using CollAction.GraphQl;
 using CollAction.Helpers;
@@ -10,7 +11,9 @@ using CollAction.Services.Email;
 using CollAction.Services.HtmlValidator;
 using CollAction.Services.Image;
 using CollAction.Services.Initialization;
+using CollAction.Services.Instagram;
 using CollAction.Services.Newsletter;
+using CollAction.Services.Proxy;
 using CollAction.Services.Statistics;
 using CollAction.Services.User;
 using CollAction.Services.ViewRender;
@@ -26,7 +29,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -138,6 +140,14 @@ namespace CollAction
             services.AddScoped<ICrowdactionService, CrowdactionService>();
             services.AddScoped<IStatisticsService, StatisticsService>();
             services.AddScoped<IInitializationService, InitializationService>();
+            services.AddScoped<IInstagramService, InstagramService>();
+            services.AddScoped<IProxyService, ProxyService>();
+            services.AddHttpClient<IInstagramService, InstagramService>(
+                c =>
+                {
+                    c.BaseAddress = new Uri("https://www.instagram.com");
+                });
+            services.AddHttpClient<IProxyService, ProxyService>();
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<INewsletterService, NewsletterService>();
             services.AddTransient<IDonationService, DonationService>();

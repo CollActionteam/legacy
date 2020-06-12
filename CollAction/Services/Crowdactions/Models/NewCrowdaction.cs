@@ -42,6 +42,10 @@ namespace CollAction.Services.Crowdactions.Models
         [WithinMonthsAfterDateProperty(12, "Start", ErrorMessage = "The deadline must be within a year of the start date")]
         public DateTime End { get; set; }
 
+        [MinLength(1)]
+        [MaxLength(30)]
+        public string? InstagramName { get; set; }
+
         public int? CardImageFileId { get; set; }
 
         public int? BannerImageFileId { get; set; }

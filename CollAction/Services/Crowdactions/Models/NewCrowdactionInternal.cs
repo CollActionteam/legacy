@@ -1,13 +1,14 @@
-﻿using CollAction.Models;
+﻿using CollAction.Migrations;
+using CollAction.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace CollAction.Services.Crowdactions.Models
 {
-    public class NewCrowdactionInternal
+    public sealed class NewCrowdactionInternal
     {
-        public NewCrowdactionInternal(string name, int target, string proposal, string description, string goal, string? creatorComments, DateTime start, DateTime end, int? cardImageFileId, int? bannerImageFileId, int? descriptiveImageFileId, string? descriptionVideoLink, IEnumerable<Category> categories, IEnumerable<string> tags, CrowdactionDisplayPriority displayPriority, CrowdactionStatus status, int anonymousUserParticipants, string? ownerId)
+        public NewCrowdactionInternal(string name, int target, string proposal, string description, string goal, string? creatorComments, DateTime start, DateTime end, string? instagramName, int? cardImageFileId, int? bannerImageFileId, int? descriptiveImageFileId, string? descriptionVideoLink, IEnumerable<Category> categories, IEnumerable<string> tags, CrowdactionDisplayPriority displayPriority, CrowdactionStatus status, int anonymousUserParticipants, string? ownerId)
         {
             Name = name;
             Target = target;
@@ -21,6 +22,7 @@ namespace CollAction.Services.Crowdactions.Models
             BannerImageFileId = bannerImageFileId;
             DescriptiveImageFileId = descriptiveImageFileId;
             DescriptionVideoLink = descriptionVideoLink;
+            InstagramName = instagramName;
             Categories = categories;
             Tags = tags;
             DisplayPriority = displayPriority;
@@ -52,6 +54,8 @@ namespace CollAction.Services.Crowdactions.Models
         public int? DescriptiveImageFileId { get; set; }
 
         public string? DescriptionVideoLink { get; set; }
+
+        public string? InstagramName { get; }
 
         public IEnumerable<Category> Categories { get; set; }
 

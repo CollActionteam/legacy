@@ -11,11 +11,11 @@ namespace CollAction.Models
 {
     public sealed class Crowdaction
     {
-        public Crowdaction(string name, CrowdactionStatus status, string? ownerId, int target, DateTime start, DateTime end, string description, string goal, string proposal, string? creatorComments, string? descriptionVideoLink, CrowdactionDisplayPriority displayPriority = CrowdactionDisplayPriority.Medium, int? bannerImageFileId = null, int? descriptiveImageFileId = null, int? cardImageFileId = null, int anonymousUserParticipants = 0) : this(name, status, ownerId, target, start, end, description, goal, proposal, creatorComments, descriptionVideoLink, new List<CrowdactionCategory>(), new List<CrowdactionTag>(), displayPriority, bannerImageFileId, descriptiveImageFileId, cardImageFileId, anonymousUserParticipants)
+        public Crowdaction(string name, CrowdactionStatus status, string? ownerId, int target, DateTime start, DateTime end, string? instagramName, string description, string goal, string proposal, string? creatorComments, string? descriptionVideoLink, CrowdactionDisplayPriority displayPriority = CrowdactionDisplayPriority.Medium, int? bannerImageFileId = null, int? descriptiveImageFileId = null, int? cardImageFileId = null, int anonymousUserParticipants = 0) : this(name, status, ownerId, target, start, end, instagramName, description, goal, proposal, creatorComments, descriptionVideoLink, new List<CrowdactionCategory>(), new List<CrowdactionTag>(), displayPriority, bannerImageFileId, descriptiveImageFileId, cardImageFileId, anonymousUserParticipants)
         {
         }
 
-        public Crowdaction(string name, CrowdactionStatus status, string? ownerId, int target, DateTime start, DateTime end, string description, string goal, string proposal, string? creatorComments, string? descriptionVideoLink, ICollection<CrowdactionCategory> categories, ICollection<CrowdactionTag> tags, CrowdactionDisplayPriority displayPriority = CrowdactionDisplayPriority.Medium, int? bannerImageFileId = null, int? descriptiveImageFileId = null, int? cardImageFileId = null, int anonymousUserParticipants = 0)
+        public Crowdaction(string name, CrowdactionStatus status, string? ownerId, int target, DateTime start, DateTime end, string? instagramName, string description, string goal, string proposal, string? creatorComments, string? descriptionVideoLink, ICollection<CrowdactionCategory> categories, ICollection<CrowdactionTag> tags, CrowdactionDisplayPriority displayPriority = CrowdactionDisplayPriority.Medium, int? bannerImageFileId = null, int? descriptiveImageFileId = null, int? cardImageFileId = null, int anonymousUserParticipants = 0)
         {
             Name = name;
             Status = status;
@@ -35,6 +35,7 @@ namespace CollAction.Models
             Categories = categories;
             Tags = tags;
             AnonymousUserParticipants = anonymousUserParticipants;
+            InstagramName = instagramName;
         }
 
         [NotMapped]
@@ -78,6 +79,7 @@ namespace CollAction.Models
         [MaxLength(20000)]
         public string? CreatorComments { get; set; }
 
+        [MaxLength(2048)]
         public string? DescriptionVideoLink { get; set; }
 
         public CrowdactionDisplayPriority DisplayPriority { get; set; }
@@ -101,6 +103,10 @@ namespace CollAction.Models
 
         [ForeignKey("CardImageFileId")]
         public ImageFile? CardImage { get; set; }
+
+        [MinLength(1)]
+        [MaxLength(30)]
+        public string? InstagramName { get; set; }
 
         public CrowdactionParticipantCount? ParticipantCounts { get; set; }
 

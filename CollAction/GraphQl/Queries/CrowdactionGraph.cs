@@ -2,11 +2,16 @@
 using CollAction.Helpers;
 using CollAction.Models;
 using CollAction.Services.Crowdactions;
+using CollAction.Services.Instagram;
+using CollAction.Services.Instagram.Models;
 using GraphQL.Authorization;
 using GraphQL.EntityFramework;
 using GraphQL.Types;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CollAction.GraphQl.Queries
 {
@@ -97,6 +102,23 @@ namespace CollAction.GraphQl.Queries
                     }
 
                     return c.Source.Percentage;
+                });
+            FieldAsync<NonNullGraphType<ListGraphType<NonNullGraphType<InstagramTimelineItemGraph>>>, IEnumerable<InstagramTimelineItem>>(
+                "instagramTimeline",
+                resolve: c =>
+                {
+                    string? instagramName = c.Source.InstagramName;
+                    if (instagramName != null)
+                    {
+                        return c.GetUserContext()
+                                .ServiceProvider
+                                .GetRequiredService<IInstagramService>()
+                                .GetItems(instagramName, c.CancellationToken);
+                    }
+                    else
+                    {
+                        return Task.FromResult(Enumerable.Empty<InstagramTimelineItem>());
+                    }
                 });
             AddNavigationField(nameof(Crowdaction.DescriptiveImage), c => c.Source.DescriptiveImage);
             AddNavigationField(nameof(Crowdaction.BannerImage), c => c.Source.BannerImage);

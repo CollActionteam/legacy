@@ -16,6 +16,7 @@ namespace CollAction.GraphQl.Mutations.Input
             Field(x => x.CreatorComments, true);
             Field(x => x.Start);
             Field(x => x.End);
+            Field(x => x.InstagramName, true);
             Field(x => x.BannerImageFileId, true);
             Field(x => x.CardImageFileId, true);
             Field(x => x.DescriptiveImageFileId, true);
