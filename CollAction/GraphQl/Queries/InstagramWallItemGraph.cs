@@ -3,9 +3,9 @@ using GraphQL.Types;
 
 namespace CollAction.GraphQl.Queries
 {
-    public sealed class InstagramTimelineItemGraph : ObjectGraphType<InstagramTimelineItem>
+    public sealed class InstagramWallItemGraph : ObjectGraphType<InstagramWallItem>
     {
-        public InstagramTimelineItemGraph()
+        public InstagramWallItemGraph()
         {
             Field(x => x.ShortCode);
             Field(x => x.Link);

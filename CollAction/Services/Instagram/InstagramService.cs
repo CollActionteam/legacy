@@ -25,10 +25,10 @@ namespace CollAction.Services.Instagram
             this.logger = logger;
         }
 
-        public async Task<IEnumerable<InstagramTimelineItem>> GetItems(string instagramName, CancellationToken token)
+        public async Task<IEnumerable<InstagramWallItem>> GetItems(string instagramUser, CancellationToken token)
         {
             // TODO: Stop using the instagram private api
-            Uri url = new Uri($"/{instagramName}/?__a=1", UriKind.Relative);
+            Uri url = new Uri($"/{instagramUser}/?__a=1", UriKind.Relative);
             try
             {
                 return await cache.GetOrCreateAsync(
@@ -36,7 +36,7 @@ namespace CollAction.Services.Instagram
                                  async (ICacheEntry entry) =>
                                  {
                                      entry.SlidingExpiration = CacheExpiration;
-                                     logger.LogInformation("Retrieving instagram timeline for {0}", instagramName);
+                                     logger.LogInformation("Retrieving instagram timeline for {0}", instagramUser);
                                      var result = await instagramClient.GetAsync(url, token).ConfigureAwait(false);
                                      result.EnsureSuccessStatusCode();
                                      return ParseInstagramResponse(await result.Content.ReadAsStringAsync().ConfigureAwait(false));
@@ -45,11 +45,11 @@ namespace CollAction.Services.Instagram
             catch (Exception e)
             {
                 logger.LogError(e, "Error retrieving items from instagram timeline");
-                return Enumerable.Empty<InstagramTimelineItem>(); // External APIs can fail here, lets be a little robust here. Don't cache the failures though.. so catch outside the cache
+                return Enumerable.Empty<InstagramWallItem>(); // External APIs can fail here, lets be a little robust here. Don't cache the failures though.. so catch outside the cache
             }
         }
 
-        private IEnumerable<InstagramTimelineItem> ParseInstagramResponse(string json)
+        private IEnumerable<InstagramWallItem> ParseInstagramResponse(string json)
         {
             dynamic deserialized = JsonConvert.DeserializeObject<dynamic>(json);
             var edges = (IEnumerable<dynamic>)(deserialized.graphql?.user?.edge_owner_to_timeline_media?.edges ?? Enumerable.Empty<dynamic>());
@@ -61,7 +61,7 @@ namespace CollAction.Services.Instagram
                 {
                     var captionEdges = (IEnumerable<dynamic>?)e.edge_media_to_caption?.edges;
                     string? caption = (string?)captionEdges?.FirstOrDefault()?.node?.text;
-                    return new InstagramTimelineItem(
+                    return new InstagramWallItem(
                         (string)e.shortcode,
                         (string)e.thumbnail_src,
                         (string?)e.accessibility_caption,

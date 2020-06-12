@@ -148,7 +148,7 @@ namespace CollAction.Migrations
                         .HasColumnType("character varying(10000)")
                         .HasMaxLength(10000);
 
-                    b.Property<string>("InstagramName")
+                    b.Property<string>("InstagramUser")
                         .HasColumnType("character varying(30)")
                         .HasMaxLength(30);
 

@@ -35,6 +35,7 @@ namespace CollAction.GraphQl.Queries
             Field(x => x.IsComingSoon);
             Field(x => x.Name);
             Field(x => x.NumberCrowdactionEmailsSent);
+            Field(x => x.InstagramUser, true);
             Field<IdGraphType, string?>(nameof(Crowdaction.OwnerId)).Resolve(x => x.Source.OwnerId);
             Field(x => x.Proposal);
             Field(x => x.RemainingTime);
@@ -103,21 +104,21 @@ namespace CollAction.GraphQl.Queries
 
                     return c.Source.Percentage;
                 });
-            FieldAsync<NonNullGraphType<ListGraphType<NonNullGraphType<InstagramTimelineItemGraph>>>, IEnumerable<InstagramTimelineItem>>(
-                "instagramTimeline",
+            FieldAsync<NonNullGraphType<ListGraphType<NonNullGraphType<InstagramWallItemGraph>>>, IEnumerable<InstagramWallItem>>(
+                "instagramWall",
                 resolve: c =>
                 {
-                    string? instagramName = c.Source.InstagramName;
-                    if (instagramName != null)
+                    string? instagramUser = c.Source.InstagramUser;
+                    if (instagramUser != null)
                     {
                         return c.GetUserContext()
                                 .ServiceProvider
                                 .GetRequiredService<IInstagramService>()
-                                .GetItems(instagramName, c.CancellationToken);
+                                .GetItems(instagramUser, c.CancellationToken);
                     }
                     else
                     {
-                        return Task.FromResult(Enumerable.Empty<InstagramTimelineItem>());
+                        return Task.FromResult(Enumerable.Empty<InstagramWallItem>());
                     }
                 });
             AddNavigationField(nameof(Crowdaction.DescriptiveImage), c => c.Source.DescriptiveImage);

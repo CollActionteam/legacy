@@ -106,7 +106,7 @@ namespace CollAction.Services.Crowdactions
                 description: newCrowdaction.Description,
                 goal: newCrowdaction.Goal,
                 proposal: newCrowdaction.Proposal,
-                instagramName: newCrowdaction.InstagramName,
+                instagramUser: newCrowdaction.InstagramUser,
                 creatorComments: newCrowdaction.CreatorComments,
                 descriptionVideoLink: newCrowdaction.DescriptionVideoLink?.Replace("www.youtube.com", "www.youtube-nocookie.com", StringComparison.Ordinal),
                 displayPriority: newCrowdaction.DisplayPriority,
@@ -189,7 +189,7 @@ namespace CollAction.Services.Crowdactions
                 description: newCrowdaction.Description,
                 goal: newCrowdaction.Goal,
                 proposal: newCrowdaction.Proposal,
-                instagramName: newCrowdaction.InstagramName,
+                instagramUser: newCrowdaction.InstagramUser,
                 creatorComments: newCrowdaction.CreatorComments,
                 descriptionVideoLink: newCrowdaction.DescriptionVideoLink?.Replace("www.youtube.com", "www.youtube-nocookie.com", StringComparison.Ordinal),
                 displayPriority: CrowdactionDisplayPriority.Medium,
@@ -273,7 +273,7 @@ namespace CollAction.Services.Crowdactions
             crowdaction.Proposal = updatedCrowdaction.Proposal;
             crowdaction.Goal = updatedCrowdaction.Goal;
             crowdaction.CreatorComments = updatedCrowdaction.CreatorComments;
-            crowdaction.InstagramName = updatedCrowdaction.InstagramName;
+            crowdaction.InstagramUser = updatedCrowdaction.InstagramUser;
             crowdaction.Target = updatedCrowdaction.Target;
             crowdaction.Start = updatedCrowdaction.Start;
             crowdaction.End = updatedCrowdaction.End.Date.AddHours(23).AddMinutes(59).AddSeconds(59);

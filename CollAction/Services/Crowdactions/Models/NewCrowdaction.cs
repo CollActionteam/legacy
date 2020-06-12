@@ -44,7 +44,7 @@ namespace CollAction.Services.Crowdactions.Models
 
         [MinLength(1)]
         [MaxLength(30)]
-        public string? InstagramName { get; set; }
+        public string? InstagramUser { get; set; }
 
         public int? CardImageFileId { get; set; }
 

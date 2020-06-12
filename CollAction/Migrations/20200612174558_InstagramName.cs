@@ -2,7 +2,7 @@
 
 namespace CollAction.Migrations
 {
-    public partial class InstagramName : Migration
+    public partial class InstagramUser : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,7 +16,7 @@ namespace CollAction.Migrations
                 oldNullable: true);
 
             migrationBuilder.AddColumn<string>(
-                name: "InstagramName",
+                name: "InstagramUser",
                 table: "Crowdactions",
                 maxLength: 30,
                 nullable: true);
@@ -25,7 +25,7 @@ namespace CollAction.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "InstagramName",
+                name: "InstagramUser",
                 table: "Crowdactions");
 
             migrationBuilder.AlterColumn<string>(

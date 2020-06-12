@@ -2,9 +2,9 @@
 
 namespace CollAction.Services.Instagram.Models
 {
-    public sealed class InstagramTimelineItem
+    public sealed class InstagramWallItem
     {
-        public InstagramTimelineItem(string shortCode, string thumbnailSrc, string? accessibilityCaption, string? caption, DateTimeOffset date)
+        public InstagramWallItem(string shortCode, string thumbnailSrc, string? accessibilityCaption, string? caption, DateTimeOffset date)
         {
             ShortCode = shortCode;
             ThumbnailSrc = thumbnailSrc;

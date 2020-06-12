@@ -3,14 +3,18 @@ using CollAction.GraphQl.Mutations.Input;
 using CollAction.Helpers;
 using CollAction.Models;
 using CollAction.Services.Crowdactions;
+using CollAction.Services.Instagram;
+using CollAction.Services.Instagram.Models;
 using GraphQL.Authorization;
 using GraphQL.EntityFramework;
 using GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace CollAction.GraphQl.Queries
 {
@@ -118,6 +122,18 @@ namespace CollAction.GraphQl.Queries
                 nameof(ApplicationDbContext.Users),
                 c => c.DbContext.Users,
                 typeof(ApplicationUserGraph)).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
+
+            FieldAsync<NonNullGraphType<ListGraphType<NonNullGraphType<InstagramWallItemGraph>>>, IEnumerable<InstagramWallItem>>(
+                "instagramWall",
+                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "user" }),
+                resolve: c =>
+                {
+                    string instagramUser = c.GetArgument<string>("user");
+                    return c.GetUserContext()
+                            .ServiceProvider
+                            .GetRequiredService<IInstagramService>()
+                            .GetItems(instagramUser, c.CancellationToken);
+                });
 
             AddSingleField(
                 name: "user",

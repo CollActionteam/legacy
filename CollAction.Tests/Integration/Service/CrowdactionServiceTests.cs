@@ -187,7 +187,7 @@ namespace CollAction.Tests.Integration.Service
                     start: DateTime.Now.AddDays(-10),
                     end: DateTime.Now.AddDays(30),
                     goal: Guid.NewGuid().ToString(),
-                    instagramName: "test",
+                    instagramUser: "test",
                     creatorComments: Guid.NewGuid().ToString(),
                     proposal: Guid.NewGuid().ToString(),
                     target: 40,

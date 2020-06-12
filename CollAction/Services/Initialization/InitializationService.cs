@@ -248,7 +248,7 @@ namespace CollAction.Services.Initialization
                         bannerImageFileId: bannerImage?.Id,
                         descriptiveImageFileId: descriptiveImage?.Id,
                         cardImageFileId: cardImage?.Id,
-                        instagramName: "slowfashionseason",
+                        instagramUser: "slowfashionseason",
                         creatorComments: r.Next(4) == 0 ? null : $"<p>{string.Join("</p><p>", Faker.Lorem.Paragraphs(r.Next(3) + 1))}</p>",
                         goal: Faker.Company.CatchPhrase(),
                         proposal: Faker.Company.BS(),

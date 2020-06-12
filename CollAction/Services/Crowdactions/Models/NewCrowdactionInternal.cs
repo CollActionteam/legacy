@@ -8,7 +8,7 @@ namespace CollAction.Services.Crowdactions.Models
 {
     public sealed class NewCrowdactionInternal
     {
-        public NewCrowdactionInternal(string name, int target, string proposal, string description, string goal, string? creatorComments, DateTime start, DateTime end, string? instagramName, int? cardImageFileId, int? bannerImageFileId, int? descriptiveImageFileId, string? descriptionVideoLink, IEnumerable<Category> categories, IEnumerable<string> tags, CrowdactionDisplayPriority displayPriority, CrowdactionStatus status, int anonymousUserParticipants, string? ownerId)
+        public NewCrowdactionInternal(string name, int target, string proposal, string description, string goal, string? creatorComments, DateTime start, DateTime end, string? instagramUser, int? cardImageFileId, int? bannerImageFileId, int? descriptiveImageFileId, string? descriptionVideoLink, IEnumerable<Category> categories, IEnumerable<string> tags, CrowdactionDisplayPriority displayPriority, CrowdactionStatus status, int anonymousUserParticipants, string? ownerId)
         {
             Name = name;
             Target = target;
@@ -22,7 +22,7 @@ namespace CollAction.Services.Crowdactions.Models
             BannerImageFileId = bannerImageFileId;
             DescriptiveImageFileId = descriptiveImageFileId;
             DescriptionVideoLink = descriptionVideoLink;
-            InstagramName = instagramName;
+            InstagramUser = instagramUser;
             Categories = categories;
             Tags = tags;
             DisplayPriority = displayPriority;
@@ -55,7 +55,7 @@ namespace CollAction.Services.Crowdactions.Models
 
         public string? DescriptionVideoLink { get; set; }
 
-        public string? InstagramName { get; }
+        public string? InstagramUser { get; }
 
         public IEnumerable<Category> Categories { get; set; }
 

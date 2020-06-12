@@ -7,6 +7,6 @@ namespace CollAction.Services.Instagram
 {
     public interface IInstagramService
     {
-        public Task<IEnumerable<InstagramTimelineItem>> GetItems(string instagramName, CancellationToken token);
+        public Task<IEnumerable<InstagramWallItem>> GetItems(string instagramUser, CancellationToken token);
     }
 }
