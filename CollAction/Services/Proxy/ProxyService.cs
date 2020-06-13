@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Net.Http.Headers;
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,6 +12,12 @@ namespace CollAction.Services.Proxy
     public sealed class ProxyService : IProxyService
     {
         private readonly HttpClient proxyClient;
+        private static string[] AllowedHosts =
+            new string[]
+            {
+                "fbcdn.net",
+                "cdninstagram.com"
+            };
 
         public ProxyService(HttpClient proxyClient)
         {
@@ -35,6 +43,6 @@ namespace CollAction.Services.Proxy
         }
 
         private static bool CanProxy(Uri url)
-            => url.Host.EndsWith("fbcdn.net", StringComparison.Ordinal);
+            => AllowedHosts.Any(h => url.Host.EndsWith(h, StringComparison.Ordinal));
     }
 }
