@@ -1,3 +1,10 @@
+name: Build and push branches
+
+on: 
+  push:
+    branches_ignore:
+      - master
+
   build_frontend:
     runs-on: ubuntu-latest
 
