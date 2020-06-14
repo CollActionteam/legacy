@@ -49,7 +49,7 @@ resource "aws_security_group" "stitch" {
   ingress {
     # See https://www.stitchdata.com/docs/destinations/postgresql/connecting-an-amazon-postgresql-rds-data-warehouse-to-stitch#prerequisites
     description = "Incoming network traffic from Stitch"
-    protocol    = "PostgresQL"
+    protocol    = "tcp"
     from_port   = 5432
     to_port     = 5432
     cidr_blocks = [
