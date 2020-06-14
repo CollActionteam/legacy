@@ -14,7 +14,7 @@ resource "aws_db_instance" "collaction" {
   name                      = "collactiondb"
   username                  = "postgres"
   password                  = random_password.db_password.result
-  publicly_accessible       = var.publicly_accessible
+  publicly_accessible       = true
   deletion_protection       = var.deletion_protection
   vpc_security_group_ids = [
     aws_security_group.rds.id
@@ -31,7 +31,8 @@ resource "aws_security_group" "rds" {
     from_port   = "5432"
     to_port     = "5432"
     security_groups = [
-      aws_security_group.access_rds.id
+      aws_security_group.access_rds.id,
+      aws_security_group.stitch.id
     ]
   }
 }
@@ -40,3 +41,23 @@ resource "aws_security_group" "access_rds" {
   name        = "access-rds-${var.identifier}"
   description = "Provide access to RDS ${var.identifier}"
 }
+
+resource "aws_security_group" "stitch" {
+  name        = "stitch-${var.identifier}"
+  description = "Provide access to RDS ${var.identifier} for Stitch"
+
+  ingress {
+    # See https://www.stitchdata.com/docs/destinations/postgresql/connecting-an-amazon-postgresql-rds-data-warehouse-to-stitch#prerequisites
+    description = "Incoming network traffic from Stitch"
+    protocol    = "PostgresQL"
+    from_port   = 5432
+    to_port     = 5432
+    cidr_blocks = [
+      "52.23.137.21/32",
+      "52.204.223.208/32",
+      "52.204.228.32/32",
+      "52.204.230.227/32"
+    ]
+  }
+}
+

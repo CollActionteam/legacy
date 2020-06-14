@@ -22,7 +22,10 @@ variable "deletion_protection" {
   default     = true
 }
 
-variable "publicly_accessible" {
-  description = "Set if the database is publicly available"
-  default     = false
+variable "route53_zone_name" {
+  description = "The zone in which to create a hostname to this environment"
+}
+
+variable "rds_hostname" {
+  description = "The DNS hostname for the database instance"
 }

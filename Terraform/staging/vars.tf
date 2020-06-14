@@ -37,3 +37,8 @@ variable "hostname" {
 variable "route53_zone_name" {
   default = "collaction.org."
 }
+
+variable "rds_hostname" {
+  description = "DNS entry for the RDS database"
+  default = "db-staging.collaction.org"
+}
