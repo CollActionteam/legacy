@@ -17,7 +17,11 @@ namespace CollAction.Services.Proxy
     public sealed class ProxyService : IProxyService
     {
         private readonly HttpClient proxyClient;
-        // As a complete list as I can get of facebook/instagram cdns
+        /*
+         * As a complete list as I can get of facebook/instagram cdns
+         * We don't want to be an open proxy (for security/liability), 
+         * so lets restrict what hosts are allowed
+         */
         private static readonly string[] AllowedHosts =
             new string[]
             {
