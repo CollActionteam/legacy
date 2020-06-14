@@ -1,6 +1,6 @@
 variable "environment" {
   description = "The name of this environment"
-  default = "staging"
+  default     = "staging"
 }
 
 variable "imageversion" {
@@ -8,18 +8,18 @@ variable "imageversion" {
 }
 
 variable "api_desired_count" {
-  description = "The desired number of instances of the API container"  
-  default = 1
+  description = "The desired number of instances of the API container"
+  default     = 1
 }
 
 variable "api_cpu" {
   description = "Assigned number of vCPUs for the API container"
-  default = 256
+  default     = 256
 }
 
 variable "api_memory" {
   description = "Assigned memory (GB) for the API container"
-  default = 512
+  default     = 512
 }
 
 variable "rds_instance_class" {
@@ -40,5 +40,5 @@ variable "route53_zone_name" {
 
 variable "rds_hostname" {
   description = "DNS entry for the RDS database"
-  default = "db-staging.collaction.org"
+  default     = "db-staging.collaction.org"
 }
