@@ -10,6 +10,7 @@ using Xunit;
 namespace CollAction.Tests.Integration.Service
 {
     [Trait("Category", "Integration")]
+    [Trait("SkipInActions", "true")]
     public sealed class InstagramServiceTests : IntegrationTestBase
     {
         private readonly IInstagramService instagramService;
