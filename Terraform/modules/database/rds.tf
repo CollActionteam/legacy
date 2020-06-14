@@ -17,7 +17,8 @@ resource "aws_db_instance" "collaction" {
   publicly_accessible       = true
   deletion_protection       = var.deletion_protection
   vpc_security_group_ids = [
-    aws_security_group.rds.id
+    aws_security_group.rds.id,
+    aws_security_group.stitch.id
   ]
 }
 
@@ -31,8 +32,7 @@ resource "aws_security_group" "rds" {
     from_port   = "5432"
     to_port     = "5432"
     security_groups = [
-      aws_security_group.access_rds.id,
-      aws_security_group.stitch.id
+      aws_security_group.access_rds.id
     ]
   }
 }
