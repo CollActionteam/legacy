@@ -10,7 +10,7 @@ using Xunit;
 namespace CollAction.Tests.Integration.Service
 {
     [Trait("Category", "Integration")]
-    [Trait("SkipInActions", "true")]
+    [Trait("SkipInActions", "true")] // Instagram blocks github actions ips, probably marked as spammer
     public sealed class InstagramServiceTests : IntegrationTestBase
     {
         private readonly IInstagramService instagramService;
