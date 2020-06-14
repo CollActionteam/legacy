@@ -5,6 +5,7 @@ on:
     branches_ignore:
       - master
 
+jobs:
   build_frontend:
     runs-on: ubuntu-latest
 
