@@ -55,7 +55,8 @@ namespace CollAction.Services.Proxy
                 var stream = await result.Content.ReadAsStreamAsync().ConfigureAwait(false);
                 return new FileStreamResult(stream, new MediaTypeHeaderValue(result.Content.Headers.ContentType.MediaType))
                 {
-                    LastModified = result.Content.Headers.LastModified
+                    LastModified = result.Content.Headers.LastModified,
+                    EnableRangeProcessing = true
                 };
             }
             else
