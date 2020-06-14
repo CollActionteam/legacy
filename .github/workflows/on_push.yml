@@ -2,7 +2,7 @@ name: Build and push branches
 
 on: 
   push:
-    branches_ignore:
+    branches-ignore:
       - master
 
 jobs:
