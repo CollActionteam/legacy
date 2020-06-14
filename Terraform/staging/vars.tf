@@ -1,20 +1,24 @@
 variable "environment" {
+  description = "The name of this environment"
   default = "staging"
 }
 
 variable "imageversion" {
-  default = "v2.0.0-beta2"
+  description = "The tagname of the image to deploy"
 }
 
 variable "api_desired_count" {
+  description = "The desired number of instances of the API container"  
   default = 1
 }
 
 variable "api_cpu" {
+  description = "Assigned number of vCPUs for the API container"
   default = 256
 }
 
 variable "api_memory" {
+  description = "Assigned memory (GB) for the API container"
   default = 512
 }
 

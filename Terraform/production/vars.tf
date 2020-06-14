@@ -5,7 +5,6 @@ variable "environment" {
 
 variable "imageversion" {
   description = "The tagname of the image to deploy"
-  default = "v2.0.0-beta2"
 }
 
 variable "api_desired_count" {
@@ -32,7 +31,6 @@ variable "rds_allocated_storage" {
 }
 
 variable "hostname" {
-  description = "The hostname under which to register the environment"
   default = "api.collaction.org"
 }
 
