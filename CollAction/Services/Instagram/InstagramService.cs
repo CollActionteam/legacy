@@ -16,7 +16,7 @@ namespace CollAction.Services.Instagram
         private readonly IMemoryCache cache;
         private readonly HttpClient instagramClient;
         private readonly ILogger<InstagramService> logger;
-        private static readonly TimeSpan CacheExpiration = TimeSpan.FromMinutes(10);
+        private static readonly TimeSpan CacheExpiration = TimeSpan.FromMinutes(30);
 
         public InstagramService(IMemoryCache cache, HttpClient instagramClient, ILogger<InstagramService> logger)
         {

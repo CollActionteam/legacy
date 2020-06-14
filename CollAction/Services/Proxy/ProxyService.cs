@@ -12,7 +12,7 @@ namespace CollAction.Services.Proxy
     public sealed class ProxyService : IProxyService
     {
         private readonly HttpClient proxyClient;
-        private static string[] AllowedHosts =
+        private static readonly string[] AllowedHosts =
             new string[]
             {
                 "fbcdn.net",
