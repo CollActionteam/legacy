@@ -30,6 +30,7 @@ namespace CollAction.Controllers
         private readonly IServiceProvider serviceProvider;
         private readonly IMemoryCache cache;
         private readonly ISchema schema;
+        private const int MaxGraphQlQueryComplexity = 21;
         private static readonly TimeSpan CacheExpiration = TimeSpan.FromMinutes(1);
 
         private class CacheKey : IEquatable<CacheKey>
@@ -140,7 +141,7 @@ namespace CollAction.Controllers
                 UserContext = new UserContext(User, context, serviceProvider),
                 ComplexityConfiguration = new ComplexityConfiguration()
                 {
-                    MaxDepth = 21
+                    MaxDepth = MaxGraphQlQueryComplexity
                 },
                 ValidationRules = validationRules,
                 CancellationToken = cancellation,
