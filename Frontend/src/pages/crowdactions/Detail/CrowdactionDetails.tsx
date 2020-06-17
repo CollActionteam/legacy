@@ -114,6 +114,8 @@ const CrowdactionDetailsPage = ({
     ],
   });
 
+  const joinText = crowdaction && crowdaction.id === "174" ? "Join Slow Fashion Season" : "Join crowdaction";
+
   const renderStats = (crowdaction: ICrowdaction) => {
     if (crowdaction && crowdaction.remainingTime) {
       const endDate = new Date(crowdaction.end);
@@ -132,7 +134,7 @@ const CrowdactionDetailsPage = ({
                 }
               }}
             >
-              Join crowdaction
+              {joinText}
             </Button>
           </div>
           <div className={styles.deadline}>
@@ -349,7 +351,7 @@ const CrowdactionDetailsPage = ({
                                   type="submit"
                                   disabled={formik.isSubmitting}
                                 >
-                                  Join CrowdAction
+                                  {joinText}
                                 </Button>
                               </Form>
                             </FormikContext.Provider>
