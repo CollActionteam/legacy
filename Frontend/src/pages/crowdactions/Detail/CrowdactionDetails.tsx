@@ -132,7 +132,7 @@ const CrowdactionDetailsPage = ({
                 }
               }}
             >
-              Join crowdaction
+              Join
             </Button>
           </div>
           <div className={styles.deadline}>
@@ -343,7 +343,7 @@ const CrowdactionDetailsPage = ({
                                   type="submit"
                                   disabled={formik.isSubmitting}
                                 >
-                                  Join CrowdAction
+                                  Join
                                 </Button>
                               </Form>
                             </FormikContext.Provider>
