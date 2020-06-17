@@ -77,6 +77,14 @@
   margin-bottom: var(--spacing);
 }
 
+.joinButton, .joinSection {
+  button {
+    font-size: var(--font-size-md-3);
+    width: 80%;
+    margin: 0 auto;
+  }
+}
+
 .deadline {
   font-size: var(--font-size-sm);
   color: var(--c-grey-d30);
