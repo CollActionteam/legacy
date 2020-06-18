@@ -29,3 +29,7 @@ variable "route53_zone_name" {
 variable "rds_hostname" {
   description = "The DNS hostname for the database instance"
 }
+
+variable "backup_retention_period" {
+  description = "Number of days to keep a backup"
+}
