@@ -8,6 +8,7 @@ variable "capacity_provider" {
 
 variable "imageversion" {
   description = "The tagname of the image to deploy"
+  default     = "latest"
 }
 
 variable "hostname" {
