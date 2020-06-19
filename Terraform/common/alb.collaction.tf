@@ -8,8 +8,10 @@ data "aws_security_group" "elb-outbound" {
 # Note: this load balancer services all environments. Traffic is sent to test, staging or production containers by listener rules
 # defined with the ecs-services definitions.
 resource "aws_alb" "api-collaction" {
-  name    = "api-collaction"
-  subnets = module.vpc.subnet_ids.ids
+  name         = "api-collaction"
+  subnets      = module.vpc.subnet_ids.ids
+  idle_timeout = 360
+  
   security_groups = [
     aws_security_group.inbound-alb.id,
     aws_security_group.outbound-alb.id,
