@@ -1,6 +1,6 @@
 variable "environment" {
   description = "The name of this environment"
-  default = "prod"
+  default     = "prod"
 }
 
 variable "imageversion" {
@@ -9,17 +9,17 @@ variable "imageversion" {
 
 variable "api_desired_count" {
   description = "The desired number of instances of the API container"
-  default = 0
+  default     = 0
 }
 
 variable "api_cpu" {
   description = "Assigned number of vCPUs for the API container"
-  default = 512
+  default     = 512
 }
 
 variable "api_memory" {
   description = "Assigned memory (GB) for the API container"
-  default = 1024
+  default     = 1024
 }
 
 variable "rds_instance_class" {
