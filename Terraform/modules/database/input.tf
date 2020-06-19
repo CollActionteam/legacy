@@ -33,3 +33,11 @@ variable "rds_hostname" {
 variable "backup_retention_period" {
   description = "Number of days to keep a backup"
 }
+
+variable "performance_insights_enabled" {
+  default = false
+}
+
+variable "multi_az" {
+  default = false
+}

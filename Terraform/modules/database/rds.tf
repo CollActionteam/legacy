@@ -18,8 +18,10 @@ resource "aws_db_instance" "collaction" {
   deletion_protection                   = var.deletion_protection
   backup_retention_period               = var.backup_retention_period
   backup_window                         = "04:00-05:00" 
-  performance_insights_enabled          = true
+  performance_insights_enabled          = var.performance_insights_enabled
   performance_insights_retention_period = 30
+  multi_az                              = var.multi_az
+
 
   vpc_security_group_ids = [
     aws_security_group.rds.id,
