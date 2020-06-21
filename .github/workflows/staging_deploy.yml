@@ -33,12 +33,11 @@ jobs:
 
     - name: Download current task definition
       working-directory: ./Terraform/staging
-      run: |
-        aws ecs describe-task-definition --task-definition api-staging-collaction-task --query taskDefinition > api-staging-collaction-task.json
+      run: aws ecs describe-task-definition --task-definition api-staging-collaction-task --query taskDefinition > api-staging-collaction-task.json
 
-    - name: Update image of task definition
-      id: render-api-container
+    - name: Update ECS task definition with latest image version
       working-directory: ./Terraform/staging
+      id: render-api-container
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
         task-definition: api-staging-collection-task.json
