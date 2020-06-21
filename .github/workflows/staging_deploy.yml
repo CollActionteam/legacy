@@ -3,7 +3,7 @@ name: Deploy to staging
 on: 
   push:
     branches:
-      - master
+      - staging-via-ecs-deploy
 
 jobs:
   deploy_backend_master:
@@ -24,24 +24,30 @@ jobs:
         tags: ${{ steps.get_imagetag.outputs.TAG }},latest
         dockerfile: CollAction/Dockerfile
 
-    - uses: hashicorp/setup-terraform@v1
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
       with:
-        cli_config_credentials_token: ${{ secrets.TERRAFORM_CLOUD_API_TOKEN }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}      
+          aws-region: eu-central-1
 
-    - name: Terraform Init
+    - name: Download current task definition
       working-directory: ./Terraform/staging
-      run: terraform init
+      run: |
+        aws ecs describe-task-definition --task-definition api-staging-collaction-task --query taskDefinition > api-staging-collaction-task.json
 
-    - name: Terraform Plan
+    - name: Update image of task definition
+      id: render-api-container
       working-directory: ./Terraform/staging
-      run: terraform plan -var "imageversion=${{ steps.get_imagetag.outputs.TAG }}"
-      env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}      
-
-    - name: Terraform Apply
-      working-directory: ./Terraform/staging
-      run: terraform apply -auto-approve -var "imageversion=${{ steps.get_imagetag.outputs.TAG }}"
-      env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}      
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: api-staging-collection-task.json
+        container-name: api
+        image: collaction/backend:${{ steps.get_imagetag.outputs.TAG }}
+        
+    - name: Deploy to ECS
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ steps.render-api-container.outputs.task-definition }}
+        cluster: collaction-staging
+        service: api-staging-collaction
