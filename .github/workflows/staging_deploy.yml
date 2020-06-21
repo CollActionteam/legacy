@@ -3,7 +3,7 @@ name: Deploy to staging
 on: 
   push:
     branches:
-      - staging-via-ecs-deploy
+      - master
 
 jobs:
   deploy_backend_master:
