@@ -38,7 +38,7 @@ jobs:
       id: render-api-container
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
-        task-definition: ./api-staging-collection-task.json
+        task-definition: ./api-staging-collaction-task.json
         container-name: api
         image: collaction/backend:${{ steps.get_imagetag.outputs.TAG }}
         
