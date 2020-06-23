@@ -51,6 +51,8 @@ resource "aws_alb_listener" "https-redirect" {
 
     redirect {
       status_code = "HTTP_301"
+      protocol    = "HTTPS"
+      port        = 443
     }
   }
 }
