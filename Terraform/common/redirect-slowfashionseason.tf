@@ -7,3 +7,13 @@ module "slowfashionseason" {
   domain            = "www.slowfashionseason.org"
   redirect_to_path  = "/crowdactions/slow-fashion-season-2020/174"
 }
+
+module "slowfashionseason-sub" {
+  source = "../modules/redirectrule"
+
+  alb               = aws_alb.api-collaction
+  alb_listener      = aws_alb_listener.api-collaction
+  route53_zone_name = "collaction.org."
+  domain            = "slowfashionseason.collaction.org"
+  redirect_to_path  = "/crowdactions/slow-fashion-season-2020/174"
+}
