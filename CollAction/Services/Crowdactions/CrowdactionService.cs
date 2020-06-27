@@ -20,7 +20,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Security.Claims;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -116,15 +115,14 @@ namespace CollAction.Services.Crowdactions
                 categories: newCrowdaction.Categories.Select(c => new CrowdactionCategory((c))).ToList(),
                 tags: crowdactionTags);
 
+            if (!crowdaction.IsClosed)
+            {
+                crowdaction.FinishJobId = jobClient.Schedule(() => CrowdactionEndProcess(crowdaction.Id, CancellationToken.None), crowdaction.End);
+            }
+
             context.Crowdactions.Add(crowdaction);
             await context.SaveChangesAsync(token).ConfigureAwait(false);
             await RefreshParticipantCount(token).ConfigureAwait(false);
-
-            if (crowdaction.IsClosed)
-            {
-                crowdaction.FinishJobId = jobClient.Schedule(() => CrowdactionEndProcess(crowdaction.Id, CancellationToken.None), crowdaction.End);
-                await context.SaveChangesAsync().ConfigureAwait(false);
-            }
 
             return crowdaction;
         }
@@ -262,7 +260,7 @@ namespace CollAction.Services.Crowdactions
             logger.LogInformation("Updating crowdaction: {0}", updatedCrowdaction.Name);
 
             bool approved = updatedCrowdaction.Status == CrowdactionStatus.Running && crowdaction.Status != CrowdactionStatus.Running;
-            bool changeFinishJob = (approved || crowdaction.End != updatedCrowdaction.End) && updatedCrowdaction.End < DateTime.UtcNow;
+            bool changeFinishJob = (approved || crowdaction.End != updatedCrowdaction.End) && updatedCrowdaction.End > DateTime.UtcNow;
             bool removeFinishJob = updatedCrowdaction.Status != CrowdactionStatus.Running && crowdaction.FinishJobId != null;
             bool deleted = updatedCrowdaction.Status == CrowdactionStatus.Deleted;
 
@@ -359,7 +357,12 @@ namespace CollAction.Services.Crowdactions
         {
             logger.LogInformation("Processing end of crowdaction: {0}", crowdactionId);
             await RefreshParticipantCount(token).ConfigureAwait(false); // Ensure the participant count is up-to-date
-            Crowdaction? crowdaction = await context.Crowdactions.Include(c => c.ParticipantCounts).FirstAsync(c => c.Id == crowdactionId, token).ConfigureAwait(false);
+            Crowdaction? crowdaction = 
+                await context.Crowdactions
+                             .Include(c => c.ParticipantCounts)
+                             .Include(c => c.Owner)
+                             .FirstAsync(c => c.Id == crowdactionId, token)
+                             .ConfigureAwait(false);
 
             if (crowdaction == null)
             {
@@ -450,15 +453,6 @@ namespace CollAction.Services.Crowdactions
             }
 
             return participant;
-        }
-
-        public async Task<CrowdactionComment> CreateCommentInternal(string comment, int crowdactionId, string userId, DateTime commentedAt, CancellationToken token)
-        {
-            var crowdactionComment = new CrowdactionComment(comment, userId, crowdactionId, commentedAt);
-            context.CrowdactionComments.Add(crowdactionComment);
-            await context.SaveChangesAsync(token).ConfigureAwait(false);
-
-            return crowdactionComment;
         }
 
         public async Task<CrowdactionComment> CreateComment(string comment, int crowdactionId, ClaimsPrincipal user, CancellationToken token)

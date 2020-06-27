@@ -59,9 +59,12 @@ namespace CollAction.Services.Initialization
 
         public async Task SeedTestData(string adminId, CancellationToken cancellationToken)
         {
-            var admin = await userManager.FindByIdAsync(adminId).ConfigureAwait(false);
-            var seededUsers = await SeedTestUsers(cancellationToken).ConfigureAwait(false);
-            await SeedRandomCrowdactions(seededUsers.Concat(new[] { admin }), cancellationToken).ConfigureAwait(false);
+            if (!await context.Crowdactions.AnyAsync().ConfigureAwait(false))
+            {
+                var admin = await userManager.FindByIdAsync(adminId).ConfigureAwait(false);
+                var seededUsers = await SeedTestUsers(cancellationToken).ConfigureAwait(false);
+                await SeedRandomCrowdactions(seededUsers.Concat(new[] { admin }), cancellationToken).ConfigureAwait(false);
+            }
         }
 
         private static IFormFile ToFormFile(byte[] imageBytes, Uri url)
@@ -228,14 +231,16 @@ namespace CollAction.Services.Initialization
                 context.CrowdactionParticipants.AddRange(
                     userIds.Where(userId => r.Next(2) == 0)
                            .Select(userId => new CrowdactionParticipant(userId, crowdaction.Id, r.Next(2) == 1, now, Guid.NewGuid())));
-
-                for (int i = -24 * r.Next(3, 30); i < 0; i += r.Next(5) + 1)
-                {
-                    DateTime commentedAt = DateTime.Now.AddHours(i).AddMinutes(r.Next(-40, 40)).AddSeconds(r.Next(-40, 40));
-                    string comment = $"<p>{string.Join("</p><p>", Faker.Lorem.Paragraphs(r.Next(2) + 1))}</p>";
-                    string userId = userIds[r.Next(userIds.Count)];
-                    await crowdactionService.CreateCommentInternal(comment, crowdaction.Id, userId, commentedAt, cancellationToken).ConfigureAwait(false);
-                }
+                context.CrowdactionComments.AddRange(
+                    Enumerable.Range(-24 * 30, 24 * 30)
+                              .Where(i => r.Next(4) == 0)
+                              .Select(i =>
+                              {
+                                  DateTime commentedAt = DateTime.Now.AddHours(i).AddMinutes(r.Next(-40, 40)).AddSeconds(r.Next(-40, 40));
+                                  string comment = $"<p>{string.Join("</p><p>", Faker.Lorem.Paragraphs(r.Next(2) + 1))}</p>";
+                                  string userId = userIds[r.Next(userIds.Count)];
+                                  return new CrowdactionComment(comment, userId, crowdaction.Id, commentedAt);
+                              }));
 
                 await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             }

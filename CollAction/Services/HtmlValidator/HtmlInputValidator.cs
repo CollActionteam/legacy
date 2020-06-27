@@ -1,5 +1,4 @@
 using Ganss.XSS;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace CollAction.Services.HtmlValidator
