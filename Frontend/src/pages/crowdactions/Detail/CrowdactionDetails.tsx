@@ -242,7 +242,7 @@ const CrowdactionDetailsPage = ({
                     </figure>
                   </div>
                 )}
-                {comments && (
+                {(comments && comments.__html) &&(
                   <div>
                     <h3 className={styles.header}>Other comments</h3>
                     <p dangerouslySetInnerHTML={comments}></p>
