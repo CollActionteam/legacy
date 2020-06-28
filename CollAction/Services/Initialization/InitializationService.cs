@@ -233,7 +233,7 @@ namespace CollAction.Services.Initialization
                            .Select(userId => new CrowdactionParticipant(userId, crowdaction.Id, r.Next(2) == 1, now, Guid.NewGuid())));
                 context.CrowdactionComments.AddRange(
                     Enumerable.Range(-24 * 30, 24 * 30)
-                              .Where(i => r.Next(4) == 0)
+                              .Where(i => r.Next(30) == 0)
                               .Select(i =>
                               {
                                   DateTime commentedAt = DateTime.Now.AddHours(i).AddMinutes(r.Next(-40, 40)).AddSeconds(r.Next(-40, 40));
