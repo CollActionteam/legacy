@@ -46,7 +46,11 @@ export class RichTextEditorFormControl extends React.Component<
             height: this.props.height || "calc(var(--spacing) * 20)",
             overflow: "scroll",
             borderBottom: "1px solid var(--c-grey-d20)"
-          }
+          },
+          placeHolder: {
+            // make the whole editor clickable
+            height: "calc(100% - 55px)" 
+          },
         },
       },
     });
@@ -62,7 +66,7 @@ export class RichTextEditorFormControl extends React.Component<
   render() {
     return (
       <MuiThemeProvider theme={this.defaultTheme}>
-        <FormControl id={this.props.name} fullWidth={this.props.fullWidth} className={`${styles.container} ${this.props.className}`}>
+        <FormControl id={this.props.name} fullWidth={this.props.fullWidth} className={this.props.className}>
           <InputLabel
             error={this.hasError()}
             htmlFor={this.props.name}
@@ -72,7 +76,6 @@ export class RichTextEditorFormControl extends React.Component<
             {this.props.label}
           </InputLabel>
           <MUIRichTextEditor
-            error={this.hasError()}
             label={this.props.hint}
             controls={this.richTextControls}
             onChange={(state: any) => {
@@ -85,9 +88,11 @@ export class RichTextEditorFormControl extends React.Component<
             }}
           ></MUIRichTextEditor>
           <Field name={this.props.name} type="hidden"></Field>
-          <p className="MuiFormHelperText-root Mui-error">
-            <ErrorMessage name={this.props.name} />
-          </p>
+          <div hidden={!this.hasError()} className={styles.error}>
+            <p className="MuiFormHelperText-root Mui-error">
+              <ErrorMessage name={this.props.name} />
+            </p>
+          </div>
         </FormControl>
       </MuiThemeProvider>
     );
