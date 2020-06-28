@@ -135,14 +135,15 @@ const CrowdactionDetailsPage = ({
               Join
             </Button>
           </div>
-          <div className={styles.deadline}>
+          {crowdactionId !== "174" /* Note: This block is hidden for Slow Fashion Season 2020 */
+          && <div className={styles.deadline}>
             <span>
               This crowdaction will only start if it reaches its goal by
               <br></br>
               {Formatter.time(endDate)} on {Formatter.date(endDate)} (
               {Formatter.timezone()} timezone).
             </span>
-          </div>
+          </div>}
         </div>
       );
     } else {
