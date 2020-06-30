@@ -1,0 +1,41 @@
+﻿
+    <p>
+        Hi!
+    </p>
+
+    <p>
+        Thanks for your interest in the test CollAction crowdaction, but it appears you are already participating.
+    </p>
+
+    <p>
+        Did you know you can easily create an account with us? You'll be able to keep track of the crowdactions you are committed to, and even <a href="https://public.example.com/crowdactions/start">start your own crowdactions!</a>
+    </p>
+    <p>
+        <a href="https://public.example.com/account/finish-registration?email=test%40example.com&amp;code=test">Create your account now!</a>
+    </p>
+
+
+<p>
+    Warm regards,<br>
+    The CollAction Team
+</p>
+
+<span style="#share-buttons img {}">
+    <div id="share-buttons">
+        <p>
+            Multiply your impact and share the crowdaction with the buttons below 🙂
+        </p>
+        <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fcrowd.example.com%2F">
+            <img style="width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;" src="https://public.example.com/social/facebook.png" alt="Facebook" />
+        </a>
+        <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fcrowd.example.com%2F&amp;title=test" target="_blank">
+            <img style="width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;" src="https://public.example.com/social/linkedin.png" alt="LinkedIn" />
+        </a>
+        <a href="https://twitter.com/intent/tweet?text=test&amp;url=https%3A%2F%2Fcrowd.example.com%2F" target="_blank">
+            <img style="width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;" src="https://public.example.com/social/twitter.png" alt="Twitter" />
+        </a>
+    </div>
+</span>
+<br/>
+<br/>
+

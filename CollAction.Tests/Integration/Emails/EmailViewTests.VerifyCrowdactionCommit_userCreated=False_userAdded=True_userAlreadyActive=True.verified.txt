@@ -1,0 +1,46 @@
+﻿
+    <p>
+        Hi!
+    </p>
+
+    <p>
+        Thank you for participating in a CollAction crowdaction!
+    </p>
+    <p>
+        In crowdacting, we only act collectively when we meet the target before the deadline,
+        so please feel very welcome to share this crowdaction on social media through the social media buttons
+        below and on the <a href="https://crowd.example.com/">test crowdaction page</a>!
+    </p>
+    <p>
+        We"ll keep you updated on the crowdaction. Also feel free to Like us on <a href="https://www.facebook.com/collaction.org/">Facebook</a> to stay up to date on everything CollAction!
+    </p>
+
+
+    <p>
+        You can <a href="https://public.example.com/account/login">log in</a> to keep track of the crowdactions you are committed to, and even <a href="https://public.example.com/crowdactions/start">start your own crowdactions!</a>
+    </p>
+
+<p>
+    Warm regards,<br>
+    The CollAction Team
+</p>
+
+<span style="#share-buttons img {}">
+    <div id="share-buttons">
+        <p>
+            Multiply your impact and share the crowdaction with the buttons below 🙂
+        </p>
+        <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fcrowd.example.com%2F">
+            <img style="width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;" src="https://public.example.com/social/facebook.png" alt="Facebook" />
+        </a>
+        <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fcrowd.example.com%2F&amp;title=test" target="_blank">
+            <img style="width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;" src="https://public.example.com/social/linkedin.png" alt="LinkedIn" />
+        </a>
+        <a href="https://twitter.com/intent/tweet?text=test&amp;url=https%3A%2F%2Fcrowd.example.com%2F" target="_blank">
+            <img style="width: 25px; padding: 5px;border: 0;box-shadow: 0;display: inline;" src="https://public.example.com/social/twitter.png" alt="Twitter" />
+        </a>
+    </div>
+</span>
+<br/>
+<br/>
+

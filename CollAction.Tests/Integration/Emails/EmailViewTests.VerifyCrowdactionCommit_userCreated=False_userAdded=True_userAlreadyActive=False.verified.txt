@@ -1,4 +1,4 @@
-
+﻿
     <p>
         Hi!
     </p>
@@ -15,6 +15,12 @@
         We"ll keep you updated on the crowdaction. Also feel free to Like us on <a href="https://www.facebook.com/collaction.org/">Facebook</a> to stay up to date on everything CollAction!
     </p>
 
+    <p>
+        Did you know you can easily create an account with us? You'll be able to keep track of the crowdactions you are committed to, and even <a href="https://public.example.com/crowdactions/start">start your own crowdactions!</a>
+    </p>
+    <p>
+        <a href="https://public.example.com/account/finish-registration?email=test%40example.com&amp;code=test">Create your account now!</a>
+    </p>
 
 
 <p>
@@ -41,6 +47,3 @@
 <br/>
 <br/>
 
-    <p>
-        PS: Did you know you can start your own crowdaction on <a href="https://public.example.com/crowdactions/start">www.collaction.org/start</a>?
-    </p>
