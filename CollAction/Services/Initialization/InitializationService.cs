@@ -234,7 +234,7 @@ namespace CollAction.Services.Initialization
                     DateTime commentedAt = DateTime.Now.AddHours(i).AddMinutes(r.Next(-40, 40)).AddSeconds(r.Next(-40, 40));
                     string comment = $"<p>{string.Join("</p><p>", Faker.Lorem.Paragraphs(r.Next(2) + 1))}</p>";
                     string userId = userIds[r.Next(userIds.Count)];
-                    await crowdactionService.CreateCommentInternal(comment, crowdaction.Id, userId, commentedAt, cancellationToken).ConfigureAwait(false);
+                    await crowdactionService.CreateCommentInternal(comment, crowdaction.Id, userId, commentedAt, (CrowdactionCommentStatus)r.Next(3), cancellationToken).ConfigureAwait(false);
                 }
 
                 await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);

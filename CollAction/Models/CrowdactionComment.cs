@@ -5,12 +5,13 @@ namespace CollAction.Models
 {
     public class CrowdactionComment
     {
-        public CrowdactionComment(string comment, string userId, int crowdactionId, DateTime commentedAt)
+        public CrowdactionComment(string comment, string? userId, int crowdactionId, DateTime commentedAt, CrowdactionCommentStatus status)
         {
             Comment = comment;
             UserId = userId;
             CrowdactionId = crowdactionId;
             CommentedAt = commentedAt;
+            Status = status;
         }
 
         public int Id { get; set; }
@@ -27,5 +28,7 @@ namespace CollAction.Models
         public int CrowdactionId { get; set; }
 
         public Crowdaction? Crowdaction { get; set; }
+
+        public CrowdactionCommentStatus Status { get; set; }
     }
 }

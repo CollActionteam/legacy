@@ -96,6 +96,33 @@ namespace CollAction.GraphQl.Mutations
                                   .CreateComment(comment, crowdactionId, context.User, c.CancellationToken);
                 });
 
+            FieldAsync<NonNullGraphType<CrowdactionCommentGraph>, CrowdactionComment>(
+                "createCommentAnonymous",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<IdGraphType>>() { Name = "crowdactionId" },
+                    new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "comment" }),
+                resolve: c =>
+                {
+                    int crowdactionId = c.GetArgument<int>("crowdactionId");
+                    string comment = c.GetArgument<string>("comment");
+                    var context = c.GetUserContext();
+                    return context.ServiceProvider
+                                  .GetRequiredService<ICrowdactionService>()
+                                  .CreateCommentAnonymous(comment, crowdactionId, c.CancellationToken);
+                });
+
+            FieldAsync<NonNullGraphType<CrowdactionCommentGraph>, CrowdactionComment>(
+                "approveComment",
+                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<IdGraphType>>() { Name = "commentId" }),
+                resolve: c =>
+                {
+                    int commentId = c.GetArgument<int>("commentId");
+                    var context = c.GetUserContext();
+                    return context.ServiceProvider
+                                  .GetRequiredService<ICrowdactionService>()
+                                  .ApproveComment(commentId, c.CancellationToken);
+                }).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
+
             FieldAsync<NonNullGraphType<IntGraphType>, int>(
                 "deleteComment",
                 arguments: new QueryArguments(new QueryArgument<NonNullGraphType<IdGraphType>>() { Name = "commentId" }),

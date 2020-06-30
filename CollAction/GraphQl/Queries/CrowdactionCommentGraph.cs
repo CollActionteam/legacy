@@ -10,7 +10,7 @@ namespace CollAction.GraphQl.Queries
     {
         public CrowdactionCommentGraph(IEfGraphQLService<ApplicationDbContext> graphService) : base(graphService)
         {
-            Field(x => x.Id);
+            Field<NonNullGraphType<IdGraphType>, int>(nameof(CrowdactionComment.Id)).Resolve(x => x.Source.Id);
             Field<NonNullGraphType<DateTimeOffsetGraphType>, DateTime>(nameof(CrowdactionComment.CommentedAt)).Resolve(x => x.Source.CommentedAt);
             Field(x => x.Comment);
             Field<IdGraphType, string?>(nameof(CrowdactionComment.UserId)).Resolve(x => x.Source.UserId);
