@@ -518,6 +518,9 @@ namespace CollAction.Services.Crowdactions
             context.CrowdactionComments.Add(crowdactionComment);
             await context.SaveChangesAsync(token).ConfigureAwait(false);
 
+            IList<ApplicationUser> administrators = await userManager.GetUsersInRoleAsync(AuthorizationConstants.AdminRole).ConfigureAwait(false);
+            await emailSender.SendEmailsTemplated(administrators.Select(a => a.Email), $"A new anonymous comment was submitted on CollAction", "CrowdactionCommentAddedAdmin").ConfigureAwait(false);
+
             return crowdactionComment;
         }
 
