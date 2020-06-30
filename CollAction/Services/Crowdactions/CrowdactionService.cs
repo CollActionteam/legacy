@@ -115,14 +115,15 @@ namespace CollAction.Services.Crowdactions
                 categories: newCrowdaction.Categories.Select(c => new CrowdactionCategory((c))).ToList(),
                 tags: crowdactionTags);
 
-            if (!crowdaction.IsClosed)
-            {
-                crowdaction.FinishJobId = jobClient.Schedule(() => CrowdactionEndProcess(crowdaction.Id, CancellationToken.None), crowdaction.End);
-            }
-
             context.Crowdactions.Add(crowdaction);
             await context.SaveChangesAsync(token).ConfigureAwait(false);
             await RefreshParticipantCount(token).ConfigureAwait(false);
+
+            if (!crowdaction.IsClosed)
+            {
+                crowdaction.FinishJobId = jobClient.Schedule(() => CrowdactionEndProcess(crowdaction.Id, CancellationToken.None), crowdaction.End);
+                await context.SaveChangesAsync(token).ConfigureAwait(false);
+            }
 
             return crowdaction;
         }
@@ -361,7 +362,7 @@ namespace CollAction.Services.Crowdactions
                 await context.Crowdactions
                              .Include(c => c.ParticipantCounts)
                              .Include(c => c.Owner)
-                             .FirstAsync(c => c.Id == crowdactionId, token)
+                             .FirstOrDefaultAsync(c => c.Id == crowdactionId, token)
                              .ConfigureAwait(false);
 
             if (crowdaction == null)

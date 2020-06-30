@@ -13,7 +13,6 @@ using CollAction.Services.Initialization;
 using CollAction.Services.Newsletter;
 using CollAction.Services.Statistics;
 using CollAction.Services.User;
-using CollAction.Services.ViewRender;
 using GraphiQl;
 using Hangfire;
 using Hangfire.PostgreSql;
@@ -30,6 +29,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RazorLight;
+using RazorLight.Extensions;
 using Serilog;
 using Stripe;
 using System;
@@ -128,6 +129,12 @@ namespace CollAction
             });
 
             services.AddUrlHelper();
+            services.AddRazorLight(() => {
+                return new RazorLightEngineBuilder()
+                               .UseMemoryCachingProvider()
+                               .UseEmbeddedResourcesProject(typeof(Startup).Assembly, "CollAction.Views.Emails")
+                               .Build();
+            });
             services.AddHealthChecks()
                     .AddDbContextCheck<ApplicationDbContext>();
 
@@ -140,7 +147,6 @@ namespace CollAction
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<INewsletterService, NewsletterService>();
             services.AddTransient<IDonationService, DonationService>();
-            services.AddTransient<IViewRenderService, ViewRenderService>();
             services.AddTransient<IMailChimpManager, MailChimpManager>();
             services.AddTransient<IHtmlInputValidator, HtmlInputValidator>();
 

@@ -4,7 +4,33 @@
     <UserSecretsId>aspnet-CollAction-29a5d7b8-3530-4482-9ed6-572bd6c178fa</UserSecretsId>
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
+    <PreserveCompilationReferences>true</PreserveCompilationReferences>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
   </PropertyGroup>
+  <ItemGroup>
+    <Content Remove="Views\Emails\CrowdactionAddedAdmin.cshtml" />
+    <Content Remove="Views\Emails\CrowdactionApproval.cshtml" />
+    <Content Remove="Views\Emails\CrowdactionCommit.cshtml" />
+    <Content Remove="Views\Emails\CrowdactionConfirmation.cshtml" />
+    <Content Remove="Views\Emails\CrowdactionFailed.cshtml" />
+    <Content Remove="Views\Emails\CrowdactionSuccess.cshtml" />
+    <Content Remove="Views\Emails\DeleteAccount.cshtml" />
+    <Content Remove="Views\Emails\DonationThankYou.cshtml" />
+    <Content Remove="Views\Emails\ResetPassword.cshtml" />
+    <Content Remove="Views\Emails\UserCreated.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\Emails\CrowdactionAddedAdmin.cshtml" />
+    <EmbeddedResource Include="Views\Emails\CrowdactionApproval.cshtml" />
+    <EmbeddedResource Include="Views\Emails\CrowdactionCommit.cshtml" />
+    <EmbeddedResource Include="Views\Emails\CrowdactionConfirmation.cshtml" />
+    <EmbeddedResource Include="Views\Emails\CrowdactionFailed.cshtml" />
+    <EmbeddedResource Include="Views\Emails\CrowdactionSuccess.cshtml" />
+    <EmbeddedResource Include="Views\Emails\DeleteAccount.cshtml" />
+    <EmbeddedResource Include="Views\Emails\DonationThankYou.cshtml" />
+    <EmbeddedResource Include="Views\Emails\ResetPassword.cshtml" />
+    <EmbeddedResource Include="Views\Emails\UserCreated.cshtml" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.IServiceCollection.AddIUrlHelper" Version="1.1.0" />
@@ -38,6 +64,7 @@
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="3.1.4" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.3" PrivateAssets="All" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.3" />
+    <PackageReference Include="RazorLight" Version="2.0.0-beta9" />
     <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
     <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="3.1.0" />

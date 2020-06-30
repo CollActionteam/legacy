@@ -1,6 +1,7 @@
 .vs
 *.user
 *.cache
+*.received.txt
 env_collaction
 env_postgres
 node_modules

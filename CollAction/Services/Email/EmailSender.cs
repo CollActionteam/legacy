@@ -2,11 +2,10 @@
 using Amazon.SimpleEmail;
 using Amazon.SimpleEmail.Model;
 using CollAction.Helpers;
-using CollAction.Services.ViewRender;
 using Hangfire;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using RazorLight;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,16 +16,16 @@ namespace CollAction.Services.Email
     public sealed class EmailSender : IEmailSender
     {
         private readonly AuthMessageSenderOptions authOptions;
-        private readonly IServiceProvider serviceProvider;
         private readonly ILogger<EmailSender> logger;
         private readonly IBackgroundJobClient jobClient;
+        private readonly IRazorLightEngine engine;
 
-        public EmailSender(IOptions<AuthMessageSenderOptions> authOptions, IBackgroundJobClient jobClient, ILogger<EmailSender> logger, IServiceProvider serviceProvider)
+        public EmailSender(IOptions<AuthMessageSenderOptions> authOptions, IBackgroundJobClient jobClient, ILogger<EmailSender> logger, IRazorLightEngine engine)
         {
             this.authOptions = authOptions.Value;
-            this.serviceProvider = serviceProvider;
             this.logger = logger;
             this.jobClient = jobClient;
+            this.engine = engine;
         }
 
         public void SendEmails(IEnumerable<string> emails, string subject, string message)
@@ -48,8 +47,7 @@ namespace CollAction.Services.Email
 
         public async Task SendEmailsTemplated<TModel>(IEnumerable<string> emails, string subject, string emailTemplate, TModel model)
         {
-            var viewRenderer = serviceProvider.GetService<IViewRenderService>(); // This dependency is not available from tasks, so we have to inject it like this
-            string message = await viewRenderer.Render($"Views/Emails/{emailTemplate}.cshtml", model).ConfigureAwait(false);
+            string message = await engine.CompileRenderAsync($"{emailTemplate}.cshtml", model).ConfigureAwait(false);
             SendEmails(emails, subject, message);
         }
 

@@ -1,0 +1,15 @@
+<p>
+Hi!,
+</p>
+<p>
+As requested, your account has been deleted.
+</p>
+<p>
+Regards,
+</p>
+<p>
+On behalf of the CollAction team,
+</p>
+<p>
+Ron
+</p>

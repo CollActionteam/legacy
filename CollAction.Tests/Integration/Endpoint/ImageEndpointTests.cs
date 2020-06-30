@@ -38,12 +38,12 @@ namespace CollAction.Tests.Integration.Endpoint
             using var descriptionContent = new StringContent("My Description");
             using var sizeContent = new StringContent("400");
             using var client = TestServer.CreateClient();
-            client.DefaultRequestHeaders.Add("Cookie", await GetAuthCookie(client, seedOptions).ConfigureAwait(false));
+            client.DefaultRequestHeaders.Add("Cookie", await GetAuthCookie(client, seedOptions));
             content.Add(streamContent, "Image", "test.png");
             content.Add(descriptionContent, "ImageDescription");
             content.Add(sizeContent, "ImageResizeThreshold");
-            using var response = await client.PostAsync(new Uri("/image", UriKind.Relative), content).ConfigureAwait(false);
-            string body = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            using var response = await client.PostAsync(new Uri("/image", UriKind.Relative), content);
+            string body = await response.Content.ReadAsStringAsync();
             Assert.True(response.IsSuccessStatusCode, body);
             var imageMessage = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(body);
             Assert.True(imageMessage.ContainsKey("id"));
@@ -51,8 +51,8 @@ namespace CollAction.Tests.Integration.Endpoint
             Assert.True(imageId > 0);
 
             // Cleanup
-            var image = await context.ImageFiles.FindAsync(imageId).ConfigureAwait(false);
-            await imageService.DeleteImage(image, CancellationToken.None).ConfigureAwait(false);
+            var image = await context.ImageFiles.FindAsync(imageId);
+            await imageService.DeleteImage(image, CancellationToken.None);
        }
     }
 }
