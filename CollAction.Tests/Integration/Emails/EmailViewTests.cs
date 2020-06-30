@@ -57,7 +57,7 @@ namespace CollAction.Tests.Unit
 
         [Fact]
         public async Task VerifyDonationThankYou()
-            => await Verifier.Verify(await engine.CompileRenderAsync("DonationThankYou.cshtml", false));
+            => await Verifier.Verify(await engine.CompileRenderAsync("DonationThankYou.cshtml", true));
 
         [Fact]
         public async Task VerifyResetPassword()

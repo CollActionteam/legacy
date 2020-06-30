@@ -17,3 +17,4 @@ On behalf of the CollAction team,
 Ron
 </p>
 
+    <p>PS. If you've setup a recurring donation then you can cancel your recurring donations on your <a href="https://collaction.org/Manage">account page</a> or by e-mailing <a href="mailto:hello@collaction.org">hello@collaction.org</a>. Cancellations sent through e-mail will be processed within five days, cancellations through your account page will be processed immediately.</p>
