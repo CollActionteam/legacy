@@ -652,6 +652,18 @@ namespace CollAction.Services.Crowdactions
             return crowdactions;
         }
 
+        public IQueryable<CrowdactionComment> SearchCrowdactionComments(int? crowdactionId, CrowdactionCommentStatus? status)
+        {
+            var comments =
+                crowdactionId != null ?
+                    context.CrowdactionComments.Where(c => c.CrowdactionId == crowdactionId) :
+                    context.CrowdactionComments;
+
+            return status != null ?
+                       comments.Where(c => c.Status == status) :
+                       comments;
+        }
+
         public Task RefreshParticipantCount(CancellationToken token)
             => context.Database.ExecuteSqlRawAsync("REFRESH MATERIALIZED VIEW CONCURRENTLY \"CrowdactionParticipantCounts\";", token);
 

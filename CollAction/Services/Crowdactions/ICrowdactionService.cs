@@ -41,6 +41,8 @@ namespace CollAction.Services.Crowdactions
 
         IQueryable<Crowdaction> SearchCrowdactions(Category? category, SearchCrowdactionStatus? status);
 
+        IQueryable<CrowdactionComment> SearchCrowdactionComments(int? crowdactionId, CrowdactionCommentStatus? status);
+
         Task RefreshParticipantCount(CancellationToken token);
 
         void InitializeRefreshParticipantCountJob();

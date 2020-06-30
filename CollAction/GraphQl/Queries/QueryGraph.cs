@@ -62,23 +62,20 @@ namespace CollAction.GraphQl.Queries
                 arguments: new QueryArgument[]
                 {
                     new QueryArgument<IdGraphType>() { Name = "crowdactionId" },
+                    new QueryArgument<CrowdactionCommentStatusGraph>() { Name = "status" }
                 },
                 resolve: c =>
                 {
                     string? crowdactionId = c.GetArgument<string?>("crowdactionId");
+                    int? id = crowdactionId != null ?
+                                  (int?)int.Parse(crowdactionId, CultureInfo.InvariantCulture) :
+                                  null;
+                    CrowdactionCommentStatus? status = c.GetArgument<CrowdactionCommentStatus?>("status");
 
-                    if (crowdactionId != null)
-                    {
-                        int id = int.Parse(crowdactionId, CultureInfo.InvariantCulture);
-                        return c.DbContext
-                                .CrowdactionComments
-                                .Where(c => c.CrowdactionId == id);
-                    }
-                    else
-                    {
-                        return c.DbContext
-                                .CrowdactionComments;
-                    }
+                    var context = c.GetUserContext();
+                    return context.ServiceProvider
+                                  .GetRequiredService<ICrowdactionService>()
+                                  .SearchCrowdactionComments(id, status);
                 });
 
             AddSingleField(
@@ -92,26 +89,21 @@ namespace CollAction.GraphQl.Queries
                     new QueryArgument[]
                     {
                         new QueryArgument<IdGraphType>() { Name = "crowdactionId" },
+                        new QueryArgument<CrowdactionCommentStatusGraph>() { Name = "status" }
                     }),
                 resolve: c =>
                 {
                     string? crowdactionId = c.GetArgument<string?>("crowdactionId");
+                    int? id = crowdactionId != null ?
+                                  (int?)int.Parse(crowdactionId, CultureInfo.InvariantCulture) :
+                                  null;
+                    CrowdactionCommentStatus? status = c.GetArgument<CrowdactionCommentStatus?>("status");
 
-                    if (crowdactionId != null)
-                    {
-                        int id = int.Parse(crowdactionId, CultureInfo.InvariantCulture);
-                        return c.GetUserContext()
-                                .Context
-                                .CrowdactionComments
-                                .CountAsync(c => c.CrowdactionId == id, c.CancellationToken);
-                    }
-                    else
-                    {
-                        return c.GetUserContext()
-                                .Context
-                                .CrowdactionComments
-                                .CountAsync(c.CancellationToken);
-                    }
+                    var context = c.GetUserContext();
+                    return context.ServiceProvider
+                                  .GetRequiredService<ICrowdactionService>()
+                                  .SearchCrowdactionComments(id, status)
+                                  .CountAsync(c.CancellationToken);
                 });
 
             AddQueryField(
