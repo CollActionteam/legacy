@@ -213,7 +213,7 @@ namespace CollAction.Services.Crowdactions
 
         public async Task<int> DeleteCrowdaction(int id, CancellationToken token)
         {
-            Crowdaction? crowdaction = await context.Crowdactions.FindAsync(id).ConfigureAwait(false);
+            Crowdaction? crowdaction = await context.Crowdactions.SingleOrDefaultAsync(c => c.Id == id).ConfigureAwait(false);
 
             if (crowdaction == null)
             {
@@ -377,7 +377,7 @@ namespace CollAction.Services.Crowdactions
 
         public async Task<CrowdactionResult> SendCrowdactionEmail(int crowdactionId, string subject, string message, ClaimsPrincipal performingUser, CancellationToken token)
         {
-            Crowdaction? crowdaction = await context.Crowdactions.FindAsync(new object[] { crowdactionId }, token).ConfigureAwait(false);
+            Crowdaction? crowdaction = await context.Crowdactions.SingleOrDefaultAsync(c => c.Id == crowdactionId, token).ConfigureAwait(false);
             if (crowdaction == null)
             {
                 return new CrowdactionResult(new ValidationResult("Crowdaction could not be found", new[] { nameof(crowdactionId) }));
@@ -503,7 +503,7 @@ namespace CollAction.Services.Crowdactions
 
             comment = SanitizeComment(comment);
 
-            Crowdaction? crowdaction = await context.Crowdactions.FindAsync(new[] { crowdactionId }, token).ConfigureAwait(false);
+            Crowdaction? crowdaction = await context.Crowdactions.SingleOrDefaultAsync(c => c.Id == crowdactionId, token).ConfigureAwait(false);
 
             if (crowdaction == null)
             {
@@ -526,7 +526,7 @@ namespace CollAction.Services.Crowdactions
 
         public async Task<CrowdactionComment> ApproveComment(int commentId, CancellationToken token)
         {
-            CrowdactionComment? crowdactionComment = await context.CrowdactionComments.FindAsync(new[] { commentId }, token).ConfigureAwait(false);
+            CrowdactionComment? crowdactionComment = await context.CrowdactionComments.SingleOrDefaultAsync(c => c.Id == commentId, token).ConfigureAwait(false);
 
             if (crowdactionComment == null)
             {
@@ -548,7 +548,7 @@ namespace CollAction.Services.Crowdactions
 
         public async Task<AddParticipantResult> CommitToCrowdactionAnonymous(string email, int crowdactionId, CancellationToken token)
         {
-            Crowdaction? crowdaction = await context.Crowdactions.FindAsync(new object[] { crowdactionId }, token).ConfigureAwait(false);
+            Crowdaction? crowdaction = await context.Crowdactions.SingleOrDefaultAsync(c => c.Id == crowdactionId, token).ConfigureAwait(false);
             if (crowdaction == null || !crowdaction.IsActive)
             {
                 logger.LogError("Crowdaction not found or active: {0}", crowdactionId);
@@ -600,7 +600,7 @@ namespace CollAction.Services.Crowdactions
 
         public async Task<AddParticipantResult> CommitToCrowdactionLoggedIn(ClaimsPrincipal user, int crowdactionId, CancellationToken token)
         {
-            Crowdaction? crowdaction = await context.Crowdactions.FindAsync(new object[] { crowdactionId }, token).ConfigureAwait(false);
+            Crowdaction? crowdaction = await context.Crowdactions.SingleOrDefaultAsync(c => c.Id == crowdactionId, token).ConfigureAwait(false);
             if (crowdaction == null || !crowdaction.IsActive)
             {
                 logger.LogError("Crowdaction not found or active: {0}", crowdactionId);

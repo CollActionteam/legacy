@@ -16,6 +16,7 @@ import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { RichTextEditorFormControl } from '../RichTextEditorFormContol/RichTextEditorFormControl';
 import styles from './CrowdactionComments.module.scss';
+import { ICrowdactionComment } from '../../api/types';
 
 interface ICrowdactionCommentsProps {
   id: string;
@@ -154,10 +155,10 @@ export default ({ id }: ICrowdactionCommentsProps) => {
       before: maxCursor, // Use the ID as cursor so we can have a 'stable' comment pagination
     },
   });
-  const comments = data?.comments;
+  const comments: ICrowdactionComment[] | undefined = data?.comments;
   const lastId =
     comments && comments.length > 0
-      ? (comments[comments.length - 1].id - 1).toString()
+      ? (parseInt(comments[comments.length - 1].id) - 1).toString()
       : maxCursor;
   const [deleteComment] = useMutation(DELETE_COMMENT, {
     update: (cache: DataProxy, mutationResult: FetchResult) => {
@@ -210,8 +211,13 @@ export default ({ id }: ICrowdactionCommentsProps) => {
     setSubmitting(false);
   };
 
+  // If the comments returned are an exact multiple of "numCommentsPerFetch"
+  // then there are probably more. The only exception is if there are exactly
+  // a multiple of "numCommentsPerFetch" in the database.
+  // Bit of a performance trick, stops us from needing an extra count query.
   const probablyHasMoreComments =
     lastId !== maxCursor &&
+    comments &&
     (comments.length - commentChangeNum) % numCommentsPerFetch === 0;
 
   return (

@@ -60,6 +60,17 @@ export enum CrowdactionDisplayPriority {
   BOTTOM = "BOTTOM",
 }
 
+export interface ICrowdactionComment {
+  id: string;
+  comment: string;
+  status: string;
+  commentedAt: string;
+  userId: string | null;
+  user: IUser | null;
+  crowdactionId: string;
+  crowdaction: ICrowdaction | null;
+}
+
 export interface ICrowdaction {
   anonymousUserParticipants: number;
   bannerImage: IImageFile;
