@@ -100,15 +100,17 @@ namespace CollAction.GraphQl.Mutations
                 "createCommentAnonymous",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IdGraphType>>() { Name = "crowdactionId" },
-                    new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "comment" }),
+                    new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "comment" },
+                    new QueryArgument<NonNullGraphType<StringGraphType>>() { Name = "name" }),
                 resolve: c =>
                 {
                     int crowdactionId = c.GetArgument<int>("crowdactionId");
                     string comment = c.GetArgument<string>("comment");
+                    string name = c.GetArgument<string>("name");
                     var context = c.GetUserContext();
                     return context.ServiceProvider
                                   .GetRequiredService<ICrowdactionService>()
-                                  .CreateCommentAnonymous(comment, crowdactionId, c.CancellationToken);
+                                  .CreateCommentAnonymous(comment, name, crowdactionId, c.CancellationToken);
                 });
 
             FieldAsync<NonNullGraphType<CrowdactionCommentGraph>, CrowdactionComment>(

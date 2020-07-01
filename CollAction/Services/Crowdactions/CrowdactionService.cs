@@ -453,7 +453,7 @@ namespace CollAction.Services.Crowdactions
 
         public async Task<CrowdactionComment> CreateCommentInternal(string comment, int crowdactionId, string userId, DateTime commentedAt, CrowdactionCommentStatus status, CancellationToken token)
         {
-            var crowdactionComment = new CrowdactionComment(comment, userId, crowdactionId, commentedAt, status);
+            var crowdactionComment = new CrowdactionComment(comment, null, userId, crowdactionId, commentedAt, status);
             context.CrowdactionComments.Add(crowdactionComment);
             await context.SaveChangesAsync(token).ConfigureAwait(false);
 
@@ -487,14 +487,14 @@ namespace CollAction.Services.Crowdactions
                 throw new InvalidOperationException($"Crowdaction is not active when adding comment");
             }
 
-            var crowdactionComment = new CrowdactionComment(comment, applicationUser.Id, crowdactionId, DateTime.UtcNow, CrowdactionCommentStatus.Approved);
+            var crowdactionComment = new CrowdactionComment(comment, applicationUser.Id, null, crowdactionId, DateTime.UtcNow, CrowdactionCommentStatus.Approved);
             context.CrowdactionComments.Add(crowdactionComment);
             await context.SaveChangesAsync(token).ConfigureAwait(false);
 
             return crowdactionComment;
         }
 
-        public async Task<CrowdactionComment> CreateCommentAnonymous(string comment, int crowdactionId, CancellationToken token)
+        public async Task<CrowdactionComment> CreateCommentAnonymous(string comment, string name, int crowdactionId, CancellationToken token)
         {
             if (!htmlInputValidator.IsSafe(comment))
             {
@@ -514,7 +514,7 @@ namespace CollAction.Services.Crowdactions
                 throw new InvalidOperationException($"Crowdaction is not active when adding comment");
             }
 
-            var crowdactionComment = new CrowdactionComment(comment, null, crowdactionId, DateTime.UtcNow, CrowdactionCommentStatus.WaitingForApproval);
+            var crowdactionComment = new CrowdactionComment(comment, null, name, crowdactionId, DateTime.UtcNow, CrowdactionCommentStatus.WaitingForApproval);
             context.CrowdactionComments.Add(crowdactionComment);
             await context.SaveChangesAsync(token).ConfigureAwait(false);
 

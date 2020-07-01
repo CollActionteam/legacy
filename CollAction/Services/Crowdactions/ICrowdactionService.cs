@@ -29,7 +29,7 @@ namespace CollAction.Services.Crowdactions
 
         Task<CrowdactionComment> CreateComment(string comment, int crowdactionId, ClaimsPrincipal user, CancellationToken token);
 
-        Task<CrowdactionComment> CreateCommentAnonymous(string comment, int crowdactionId, CancellationToken token);
+        Task<CrowdactionComment> CreateCommentAnonymous(string comment, string name, int crowdactionId, CancellationToken token);
 
         Task<CrowdactionComment> ApproveComment(int commentId, CancellationToken token);
 
