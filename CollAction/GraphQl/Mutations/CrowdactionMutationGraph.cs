@@ -19,7 +19,7 @@ namespace CollAction.GraphQl.Mutations
             FieldAsync<NonNullGraphType<CrowdactionResultGraph>, CrowdactionResult>(
                 "createCrowdaction",
                 arguments: new QueryArguments(
-                    new QueryArgument<NewCrowdactionInputGraph>() { Name = "crowdaction" }),
+                    new QueryArgument<NonNullGraphType<NewCrowdactionInputGraph>>() { Name = "crowdaction" }),
                 resolve: c =>
                 {
                     var crowdaction = c.GetArgument<NewCrowdaction>("crowdaction");
@@ -32,7 +32,7 @@ namespace CollAction.GraphQl.Mutations
             FieldAsync<NonNullGraphType<CrowdactionResultGraph>, CrowdactionResult>(
                 "updateCrowdaction",
                 arguments: new QueryArguments(
-                    new QueryArgument<UpdatedCrowdactionInputGraph>() { Name = "crowdaction" }),
+                    new QueryArgument<NonNullGraphType<UpdatedCrowdactionInputGraph>>() { Name = "crowdaction" }),
                 resolve: c =>
                 {
                     var crowdaction = c.GetArgument<UpdatedCrowdaction>("crowdaction");
@@ -44,7 +44,7 @@ namespace CollAction.GraphQl.Mutations
 
             FieldAsync<NonNullGraphType<IdGraphType>, int>(
                 "deleteCrowdaction",
-                arguments: new QueryArguments(new QueryArgument<IdGraphType>() { Name = "id" }),
+                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<IdGraphType>>() { Name = "id" }),
                 resolve: c =>
                 {
                     var context = c.GetUserContext();
