@@ -7,7 +7,7 @@ import {
   FetchResult,
 } from '@apollo/client';
 import Loader from '../Loader/Loader';
-import { Grid, Box } from '@material-ui/core';
+import { Grid, Box, TextField } from '@material-ui/core';
 import Formatter from '../../formatter';
 import { Button } from '../Button/Button';
 import { useUser } from '../../providers/UserProvider';
@@ -26,6 +26,22 @@ const DELETE_COMMENT = gql`
   mutation($commentId: ID!) {
     crowdaction {
       deleteComment(commentId: $commentId)
+    }
+  }
+`;
+
+const CREATE_COMMENT_ANONYMOUS = gql`
+  mutation($crowdactionId: ID!, $comment: String!) {
+    crowdaction {
+      createCommentAnonymous(crowdactionId: $crowdactionId, comment: $comment) {
+        id
+        comment
+        commentedAt
+        user {
+          id
+          fullName
+        }
+      }
     }
   }
 `;
@@ -49,9 +65,10 @@ const CREATE_COMMENT = gql`
 const GET_COMMENTS = gql`
   query($crowdactionId: ID!, $take: Int!, $before: String!) {
     comments: crowdactionComments(
-      crowdactionId: $crowdactionId
-      take: $take
-      where: [{ path: "id", comparison: lessThanOrEqual, value: [$before] }]
+      crowdactionId: $crowdactionId,
+      status: APPROVED,
+      take: $take,
+      where: [{ path: "id", comparison: lessThanOrEqual, value: [$before] }],
       orderBy: [{ path: "id", descending: true }]
     ) {
       id
@@ -146,6 +163,7 @@ const updateCacheAfterFetch = (
 
 export default ({ id }: ICrowdactionCommentsProps) => {
   const user = useUser();
+  const [hasPostedAnonymously, setHasPostedAnonymously] = useState(false);
   const [mutationError, setMutationError] = useState('');
   const [commentChangeNum, setCommentChangeNum] = useState(0); // The net count difference in comments, counting deletions and new comments
   const { data, loading, fetchMore, error } = useQuery<any>(GET_COMMENTS, {
@@ -180,6 +198,12 @@ export default ({ id }: ICrowdactionCommentsProps) => {
       setMutationError(errorData.message);
     },
   });
+  const [createCommentAnonymous] = useMutation(CREATE_COMMENT_ANONYMOUS, {
+    onError: (errorData) => {
+      console.error(errorData.message);
+      setMutationError(errorData.message);
+    },
+  });
   const loadMore = () => {
     fetchMore({
       variables: {
@@ -198,15 +222,23 @@ export default ({ id }: ICrowdactionCommentsProps) => {
   }, [error]);
 
   const validationSchema = Yup.object({
+    name: Yup.string(),
     comment: Yup.string().required(
       'You must add a comment in the comment field'
     ),
   });
 
   const onSubmit = async (values: any, { setSubmitting, resetForm }: any) => {
-    await createComment({
-      variables: { comment: values.comment, crowdactionId: id },
-    });
+    if (user) {
+      await createComment({
+        variables: { comment: values.comment, crowdactionId: id },
+      });
+    } else {
+      await createCommentAnonymous({
+        variables: { comment: values.comment, crowdactionId: id },
+      });
+      setHasPostedAnonymously(true);
+    }
     resetForm({});
     setSubmitting(false);
   };
@@ -225,32 +257,40 @@ export default ({ id }: ICrowdactionCommentsProps) => {
       <Grid container spacing={4}>
         <Alert type="error" text={error?.message} />
         <Alert type="error" text={mutationError} />
-        {user ? (
-          <Grid item xs={12} className={styles.commentContainer}>
-            <Formik
-              initialValues={{ comment: '' }}
-              validationSchema={validationSchema}
-              onSubmit={onSubmit}
-            >
-              {(formik) => (
-                <div className={styles.comment}>
-                  <Form className={styles.form}>
-                    <RichTextEditorFormControl
-                      key={formik.submitCount} // Hack to ensure the component resets after submitting..
-                      formik={formik}
-                      height="130px"
-                      name="comment"
-                      label=""
-                      hint="Write a comment"
-                      fullWidth
-                    />
-                    <Button type="submit">Comment</Button>
-                  </Form>
-                </div>
-              )}
-            </Formik>
-          </Grid>
-        ) : null}
+        <Grid item xs={12} className={styles.commentContainer}>
+          <Formik
+            initialValues={{ comment: '', name: '' }}
+            validationSchema={validationSchema}
+            onSubmit={onSubmit}
+          >
+            {(formik) => (
+              <div className={styles.comment}>
+                <Form className={styles.form}>
+                  { !user && <Alert type="warning" text="Anonymous comments need to be approved before they're posted to crowdaction page. This process might take a few days. To publish your comment immediately, log in." /> }
+                  { hasPostedAnonymously && <Alert type="info" text="Your comment has been posted. It might take a few days for a moderator to approve your comment." /> }
+                  { !user &&
+                      <TextField
+                          fullWidth
+                          label="Name"
+                          type="text"
+                          { ...formik.getFieldProps('name') }
+                      /> 
+                  }
+                  <RichTextEditorFormControl
+                    key={formik.submitCount} // Hack to ensure the component resets after submitting..
+                    formik={formik}
+                    height="130px"
+                    name="comment"
+                    label=""
+                    hint="Write a comment"
+                    fullWidth
+                  />
+                  <Button type="submit">Comment</Button>
+                </Form>
+              </div>
+            )}
+          </Formik>
+        </Grid>
         {comments?.map((comment: any) => {
           const commentDate = new Date(comment.commentedAt);
           return (
