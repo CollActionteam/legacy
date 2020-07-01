@@ -213,7 +213,7 @@ namespace CollAction.Services.Crowdactions
 
         public async Task<int> DeleteCrowdaction(int id, CancellationToken token)
         {
-            Crowdaction? crowdaction = await context.Crowdactions.SingleOrDefaultAsync(c => c.Id == id).ConfigureAwait(false);
+            Crowdaction? crowdaction = await context.Crowdactions.SingleOrDefaultAsync(c => c.Id == id, token).ConfigureAwait(false);
 
             if (crowdaction == null)
             {
