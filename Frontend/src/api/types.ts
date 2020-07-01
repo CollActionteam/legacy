@@ -15,6 +15,7 @@ export interface ISettings {
   categories: string[];
   displayPriorities: string[];
   crowdactionStatusses: string[];
+  crowdactionCommentStatusses: string[];
 }
 
 export interface IDonationEventLog {
@@ -65,6 +66,7 @@ export interface ICrowdactionComment {
   comment: string;
   status: string;
   commentedAt: string;
+  anonymousCommentUser: string | null;
   userId: string | null;
   user: IUser | null;
   crowdactionId: string;

@@ -1,13 +1,16 @@
 import React, { useState } from "react";
-import { Paper, TableContainer, Table, TableHead, TableCell, TableRow, TableBody, TablePagination, Dialog, DialogTitle, DialogContent, DialogActions } from "@material-ui/core";
+import { Paper, TableContainer, Table, TableHead, TableCell, TableRow, TableBody, TablePagination, Dialog, DialogTitle, DialogContent, DialogActions, MenuItem, Select, InputLabel } from "@material-ui/core";
 import { gql, useQuery, useMutation } from "@apollo/client";
 import { ICrowdactionComment } from "../../../api/types";
 import { Alert } from "../../Alert/Alert";
 import Loader from "../../Loader/Loader";
 import Formatter from "../../../formatter";
 import { Button } from "../../Button/Button";
+import { useSettings } from "../../../providers/SettingsProvider";
 
 export default () => {
+    const { crowdactionCommentStatusses } = useSettings();
+    const [status, setStatus] = useState("NONE");
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -22,7 +25,8 @@ export default () => {
             variables: {
                 skip: rowsPerPage * page,
                 take: rowsPerPage,
-                orderBy: "id"
+                orderBy: "id",
+                status: status === "NONE" ? null : status
             }
         }
     );
@@ -100,6 +104,11 @@ export default () => {
                 <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
             </DialogActions>
         </Dialog>
+        <InputLabel shrink id="status">Status</InputLabel>
+        <Select name="status" labelId="status" value={status} onChange={(ev) => setStatus(ev.target.value as string)}>
+            <MenuItem key="" value="NONE">NONE</MenuItem>
+            { crowdactionCommentStatusses.map(c => <MenuItem key={c} value={c}>{c}</MenuItem>) }
+        </Select>
         <TableContainer component={Paper}>
             <Table aria-label="simple table">
                 <TableHead>
@@ -116,13 +125,13 @@ export default () => {
                 <TableBody>
                     { data?.crowdactionComments.map((u: ICrowdactionComment) => (
                         <TableRow key={u.id}>
-                            <TableCell component="th" scope="row">{ u.user?.fullName }</TableCell>
+                            <TableCell component="th" scope="row">{ u.user?.fullName ?? u.anonymousCommentUser }</TableCell>
                             <TableCell align="left">{ u.crowdaction?.name }</TableCell>
                             <TableCell align="left">{ Formatter.date(new Date(u.commentedAt)) }</TableCell>
                             <TableCell align="left">{ u.status }</TableCell>
                             <TableCell align="left">{ u.comment }</TableCell>
-                            <TableCell align="center">{ u.status === 'WAITING_FOR_APPROVAL' && <Button onClick={() => { setApproveDialogOpen(true); setToMutate(u)}}>Approve</Button> }</TableCell>
-                            <TableCell align="center"><Button onClick={() => { setDeleteDialogOpen(true); setToMutate(u); }}>Delete</Button></TableCell>
+                            <TableCell align="center">{ u.status !== 'APPROVED' && <Button onClick={() => { setApproveDialogOpen(true); setToMutate(u)}}>Approve</Button> }</TableCell>
+                            <TableCell align="center">{ u.status !== 'DELETED' && <Button onClick={() => { setDeleteDialogOpen(true); setToMutate(u); }}>Delete</Button> }</TableCell>
                         </TableRow>))
                     }
                     <TableRow>
@@ -136,11 +145,12 @@ export default () => {
 
 const GET_COMMENTS = gql`
     query GetCommentData($skip: Int!, $take: Int!, $orderBy: String!, $status: CrowdactionCommentStatus) {
-        crowdactionComments(orderBy: [{ path: $orderBy, descending: false}], skip: $skip, take: $take, status: $status) {
+        crowdactionComments(orderBy: [{ path: $orderBy, descending: true}], skip: $skip, take: $take, status: $status) {
           id
           comment
           commentedAt
           status
+          anonymousCommentUser
           crowdaction {
             name
           }
@@ -149,7 +159,7 @@ const GET_COMMENTS = gql`
             fullName
           }
         }
-        crowdactionCommentCount
+        crowdactionCommentCount(status: $status)
     }
 `;
 
@@ -169,6 +179,7 @@ const APPROVE_COMMENT = gql`
               comment
               commentedAt
               status
+              anonymousCommentUser
               user {
                 id
                 fullName

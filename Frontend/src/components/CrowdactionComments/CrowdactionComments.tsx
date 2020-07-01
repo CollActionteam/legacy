@@ -31,12 +31,13 @@ const DELETE_COMMENT = gql`
 `;
 
 const CREATE_COMMENT_ANONYMOUS = gql`
-  mutation($crowdactionId: ID!, $comment: String!) {
+  mutation($crowdactionId: ID!, $comment: String!, $name: String!) {
     crowdaction {
-      createCommentAnonymous(crowdactionId: $crowdactionId, comment: $comment) {
+      createCommentAnonymous(crowdactionId: $crowdactionId, comment: $comment, name: $name) {
         id
         comment
         commentedAt
+        anonymousCommentUser
         user {
           id
           fullName
@@ -53,6 +54,7 @@ const CREATE_COMMENT = gql`
         id
         comment
         commentedAt
+        anonymousCommentUser
         user {
           id
           fullName
@@ -74,6 +76,7 @@ const GET_COMMENTS = gql`
       id
       comment
       commentedAt
+      anonymousCommentUser
       user {
         id
         fullName
@@ -222,7 +225,9 @@ export default ({ id }: ICrowdactionCommentsProps) => {
   }, [error]);
 
   const validationSchema = Yup.object({
-    name: Yup.string(),
+    name: user ? Yup.string() : Yup.string().required(
+      'You must add a name to post the comment'
+    ),
     comment: Yup.string().required(
       'You must add a comment in the comment field'
     ),
@@ -235,7 +240,7 @@ export default ({ id }: ICrowdactionCommentsProps) => {
       });
     } else {
       await createCommentAnonymous({
-        variables: { comment: values.comment, crowdactionId: id },
+        variables: { comment: values.comment, name: values.name, crowdactionId: id },
       });
       setHasPostedAnonymously(true);
     }
@@ -266,8 +271,8 @@ export default ({ id }: ICrowdactionCommentsProps) => {
             {(formik) => (
               <div className={styles.comment}>
                 <Form className={styles.form}>
-                  { !user && <Alert type="warning" text="Anonymous comments need to be approved before they're posted to crowdaction page. This process might take a few days. To publish your comment immediately, log in." /> }
-                  { hasPostedAnonymously && <Alert type="info" text="Your comment has been posted. It might take a few days for a moderator to approve your comment." /> }
+                  { !user && <Alert type="warning" text="Comments placed when not logged in need to be approved by a administrator before they're posted to crowdaction page. This process might take a few days. To publish your comment immediately, log in with your account." /> }
+                  { hasPostedAnonymously && <Alert type="info" text="Your comment has been posted. It might take a few days for a administrator to approve your comment." /> }
                   { !user &&
                       <TextField
                           fullWidth
@@ -291,7 +296,7 @@ export default ({ id }: ICrowdactionCommentsProps) => {
             )}
           </Formik>
         </Grid>
-        {comments?.map((comment: any) => {
+        {comments?.map((comment: ICrowdactionComment) => {
           const commentDate = new Date(comment.commentedAt);
           return (
             <Grid
@@ -301,7 +306,7 @@ export default ({ id }: ICrowdactionCommentsProps) => {
               className={styles.commentContainer}
             >
               <div className={styles.comment}>
-                <h4>{comment.user.fullName}</h4>
+                <h4>{comment.user?.fullName ?? comment.anonymousCommentUser}</h4>
                 <span dangerouslySetInnerHTML={{ __html: comment.comment }} />
                 <span className={styles.commentDetails}>
                   {Formatter.date(commentDate)} {Formatter.time(commentDate)}
