@@ -9,6 +9,7 @@ namespace CollAction.Migrations
             migrationBuilder.AddColumn<string>(
                 name: "AnonymousCommentUser",
                 table: "CrowdactionComments",
+                maxLength: 20,
                 nullable: true);
 
             migrationBuilder.AddColumn<int>(

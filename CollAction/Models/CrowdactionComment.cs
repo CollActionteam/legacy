@@ -22,6 +22,7 @@ namespace CollAction.Models
         [Required]
         public string Comment { get; set; } = null!;
 
+        [MaxLength(20)]
         public string? AnonymousCommentUser { get; set; } = null!;
 
         public string? UserId { get; set; } = null;

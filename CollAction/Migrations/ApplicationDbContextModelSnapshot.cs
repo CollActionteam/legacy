@@ -212,7 +212,8 @@ namespace CollAction.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("AnonymousCommentUser")
-                        .HasColumnType("text");
+                        .HasColumnType("character varying(20)")
+                        .HasMaxLength(20);
 
                     b.Property<string>("Comment")
                         .IsRequired()

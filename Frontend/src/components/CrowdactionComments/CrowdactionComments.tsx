@@ -227,7 +227,7 @@ export default ({ id }: ICrowdactionCommentsProps) => {
   const validationSchema = Yup.object({
     name: user ? Yup.string() : Yup.string().required(
       'You must add a name to post the comment'
-    ),
+    ).max(20, 'A name can be a maximum of 20 characters'),
     comment: Yup.string().required(
       'You must add a comment in the comment field'
     ),

@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CollAction.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200701021447_AnonymousComments")]
+    [Migration("20200701023837_AnonymousComments")]
     partial class AnonymousComments
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -214,7 +214,8 @@ namespace CollAction.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("AnonymousCommentUser")
-                        .HasColumnType("text");
+                        .HasColumnType("character varying(20)")
+                        .HasMaxLength(20);
 
                     b.Property<string>("Comment")
                         .IsRequired()
