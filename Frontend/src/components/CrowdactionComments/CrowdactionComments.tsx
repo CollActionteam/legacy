@@ -202,11 +202,16 @@ export default ({ id }: ICrowdactionCommentsProps) => {
     ),
   });
 
-  const onSubmit = async (values: any, { setSubmitting, resetForm }: any) => {
+  const initialValues = {
+    comments: ''
+  };
+
+  const onSubmit = async (values: any, { setSubmitting, resetForm, setFieldValue }: any) => {
     await createComment({
       variables: { comment: values.comment, crowdactionId: id },
     });
-    resetForm({});
+    setFieldValue('comment', '', false);
+    // resetForm(initialValues);
     setSubmitting(false);
   };
 
@@ -222,15 +227,15 @@ export default ({ id }: ICrowdactionCommentsProps) => {
         {user ? (
           <Grid item xs={12} className={styles.commentContainer}>
             <Formik
-              initialValues={{ comment: '' }}
+              initialValues={initialValues}
+              enableReinitialize={true}
               validationSchema={validationSchema}
-              onSubmit={onSubmit}
+              onSubmit={async (values, actions) => onSubmit(values, actions)}
             >
               {(formik) => (
                 <div className={styles.comment}>
                   <Form className={styles.form}>
                     <RichTextEditorFormControl
-                      key={formik.submitCount} // Hack to ensure the component resets after submitting..
                       formik={formik}
                       height="130px"
                       name="comment"
@@ -238,7 +243,9 @@ export default ({ id }: ICrowdactionCommentsProps) => {
                       hint="Write a comment"
                       fullWidth
                     />
-                    <Button type="submit">Comment</Button>
+                    <div className={styles.submitComment}>
+                      <Button type="submit" >Comment</Button>
+                    </div>
                   </Form>
                 </div>
               )}

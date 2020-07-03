@@ -7688,7 +7688,7 @@ ms@^2.1.1:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
 
-mui-rte@^1.23.5s:
+mui-rte@^1.23:
   version "1.23.1"
   resolved "https://registry.yarnpkg.com/mui-rte/-/mui-rte-1.23.1.tgz#61f68e5a36d2246a692d6df93f3891b2f95ac3d2"
   integrity sha512-ps8OGU9JFUjNVOlIRG8wmt1dRNwPKNsu6jED8XOTaczXAKPG68QLoedaYFISEzF7Q4MXd0dZjKCO6TvQsHEdZA==
