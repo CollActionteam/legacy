@@ -117,7 +117,7 @@ namespace CollAction
                                    .AllowAnyHeader()
                                    .AllowCredentials()
                                    .SetPreflightMaxAge(TimeSpan.FromMinutes(10))
-                                   .SetIsOriginAllowed(IsOriginAllowed));
+                                   .WithOrigins(configuration.Get<SiteOptions>().PublicAddress));
                 }
                 else
                 {
@@ -184,13 +184,7 @@ namespace CollAction
             }).ValidateDataAnnotations();
         }
 
-    private bool IsOriginAllowed(string origin)
-    {
-        var allowedOrigins = configuration.Get<SiteOptions>().AllowedCorsOrigins?.Split(",") ?? new string[0];
-        return allowedOrigins.Any(allowed => origin.Contains(allowed));
-    }
-
-    public void Configure(IApplicationBuilder app, IHostApplicationLifetime applicationLifetime)
+        public void Configure(IApplicationBuilder app, IHostApplicationLifetime applicationLifetime)
         {
             applicationLifetime.ApplicationStopping.Register(Log.CloseAndFlush);
             app.UseRouting();

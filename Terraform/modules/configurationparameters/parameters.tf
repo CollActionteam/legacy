@@ -39,7 +39,6 @@ variable "string_parameters" {
     "S3Bucket",
     "S3Region",
     "SeedTestData",
-    "SesRegion",
-    "AllowedCorsOrigins"
+    "SesRegion"
   ]
 }
