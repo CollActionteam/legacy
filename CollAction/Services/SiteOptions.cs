@@ -8,6 +8,9 @@ namespace CollAction.Services
         [Required]
         public string PublicAddress { get; set; } = null!;
 
+        [Required]
+        public string AllowedCorsOrigins {get; set;} = null!;
+
         public Uri PublicUrl
             => new Uri(PublicAddress);
     }

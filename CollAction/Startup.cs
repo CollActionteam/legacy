@@ -34,6 +34,7 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using Stripe;
 using System;
+using System.Linq;
 
 namespace CollAction
 {
@@ -116,7 +117,7 @@ namespace CollAction
                                    .AllowAnyHeader()
                                    .AllowCredentials()
                                    .SetPreflightMaxAge(TimeSpan.FromMinutes(10))
-                                   .WithOrigins(configuration.Get<SiteOptions>().PublicAddress));
+                                   .SetIsOriginAllowed(IsOriginAllowed));
                 }
                 else
                 {
@@ -183,7 +184,13 @@ namespace CollAction
             }).ValidateDataAnnotations();
         }
 
-        public void Configure(IApplicationBuilder app, IHostApplicationLifetime applicationLifetime)
+    private bool IsOriginAllowed(string origin)
+    {
+        var allowedOrigins = configuration.Get<SiteOptions>().AllowedCorsOrigins?.Split(",") ?? new string[0];
+        return allowedOrigins.Any(allowed => origin.Contains(allowed));
+    }
+
+    public void Configure(IApplicationBuilder app, IHostApplicationLifetime applicationLifetime)
         {
             applicationLifetime.ApplicationStopping.Register(Log.CloseAndFlush);
             app.UseRouting();
