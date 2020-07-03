@@ -87,9 +87,9 @@ const ResetPasswordPage = () => {
                     <FormikProvider value={formik}>
                         <Form onSubmit={formik.handleSubmit}>
                             <FormGroup>
-                                <TextField name="password" label="Password" type="password" error={(formik.touched.password || formik.submitCount > 0) && Boolean(formik.errors.password)} fullWidth { ...formik.getFieldProps('password') } />
+                                <TextField label="Password" type="password" error={(formik.touched.password || formik.submitCount > 0) && Boolean(formik.errors.password)} fullWidth { ...formik.getFieldProps('password') } />
                                 { formik.touched.password || formik.submitCount > 0 ? <Alert type="error" text={formik.errors.password} /> : null }
-                                <TextField name="confirmPassword" label="Confirm Password" error={(formik.touched.confirmPassword || formik.submitCount > 0) && Boolean(formik.errors.confirmPassword)} type="password" fullWidth { ...formik.getFieldProps('confirmPassword') } />
+                                <TextField label="Confirm Password" error={(formik.touched.confirmPassword || formik.submitCount > 0) && Boolean(formik.errors.confirmPassword)} type="password" fullWidth { ...formik.getFieldProps('confirmPassword') } />
                                 { formik.touched.confirmPassword || formik.submitCount > 0 ? <Alert type="error" text={formik.errors.confirmPassword} /> : null }
                             </FormGroup>
 
