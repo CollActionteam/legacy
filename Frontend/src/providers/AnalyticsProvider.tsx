@@ -28,11 +28,7 @@ const getCookie = (name: string) => {
             .split('; ')
             .map(row => row.split('='))
             .find(row => row[0] === name);
-  if (found) {
-    return found[1];
-  } else {
-    return null;
-  }
+  return found ? found[1] : null;
 };
 
 // Get local time as ISO string with tz offset at the end.
