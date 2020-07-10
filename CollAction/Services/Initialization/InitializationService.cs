@@ -159,15 +159,13 @@ namespace CollAction.Services.Initialization
 
             await Task.WhenAll(descriptiveImages.Select(d => d.descriptiveImageBytes).Concat(bannerImages.Select(b => b.bannerImageBytes))).ConfigureAwait(false);
 
-            const int NumTags = 30;
-            List<string> tags = Enumerable.Range(0, NumTags)
+            List<string> tags = Enumerable.Range(0, seedOptions.NumberSeededTags)
                                           .Select(r => Faker.Internet.DomainWord())
                                           .Distinct()
                                           .ToList();
 
-            const int NumCrowdactions = 40;
             var crowdactionNames =
-                Enumerable.Range(0, NumCrowdactions)
+                Enumerable.Range(0, seedOptions.NumberSeededCrowdactions)
                           .Select(i => Faker.Company.Name())
                           .Distinct()
                           .ToList();
@@ -239,12 +237,10 @@ namespace CollAction.Services.Initialization
                 context.CrowdactionParticipants.AddRange(
                     userIds.Where(userId => r.Next(2) == 0)
                            .Select(userId => new CrowdactionParticipant(userId, crowdaction.Id, r.Next(2) == 1, now, Guid.NewGuid())));
-
                 // Generate an average of 48 random comments over the last 30 days
-                const int NumDaysComments = 30;
                 context.CrowdactionComments.AddRange(
-                    Enumerable.Range(-24 * NumDaysComments, 24 * NumDaysComments)
-                              .Where(i => r.Next(15) == 0)
+                    Enumerable.Range(-24 * seedOptions.NumberDaysSeededForComments, 24 * seedOptions.NumberDaysSeededForComments)
+                              .Where(i => r.NextDouble() <= seedOptions.ProbabilityCommentSeededPerHour)
                               .Select(i =>
                               {
                                   DateTime commentedAt = DateTime.Now.AddHours(i).AddMinutes(r.Next(-30, 30)).AddSeconds(r.Next(-30, 30));
