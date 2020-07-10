@@ -239,7 +239,7 @@ namespace CollAction.Services.Initialization
                            .Select(userId => new CrowdactionParticipant(userId, crowdaction.Id, r.Next(2) == 1, now, Guid.NewGuid())));
                 await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
-                var comments =
+                IEnumerable<CrowdactionComment> comments =
                     Enumerable.Range(-24 * seedOptions.NumberDaysSeededForComments, 24 * seedOptions.NumberDaysSeededForComments)
                               .Where(i => r.NextDouble() <= seedOptions.ProbabilityCommentSeededPerHour)
                               .Select(i =>
