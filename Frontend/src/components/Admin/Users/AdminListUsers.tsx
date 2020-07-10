@@ -128,7 +128,7 @@ export default () => {
 };
 
 const GET_USERS = gql`
-    query GetUserData($skip: Int!, $take: Int!, $orderBy: String!, $search: String) {
+    query GetUserData($skip: Int!, $take: Int!, $orderBy: String!, $search: String!) {
         users(
           orderBy: [{ path: $orderBy, descending: false}], 
           skip: $skip, 
