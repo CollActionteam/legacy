@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Paper, TableContainer, Table, TableHead, TableCell, TableRow, TableBody, TablePagination, Dialog, DialogTitle, DialogContent, DialogActions } from "@material-ui/core";
+import { Paper, TableContainer, Table, TableHead, TableCell, TableRow, TableBody, TablePagination, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from "@material-ui/core";
 import { gql, useQuery, useMutation } from "@apollo/client";
 import { IUser } from "../../../api/types";
 import { Alert } from "../../Alert/Alert";
@@ -14,6 +14,7 @@ export default () => {
     const [toDelete, setToDelete] = useState<IUser | null>(null);
     const [info, setInfo] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [search, setSearch] = useState("");
     const {data, loading, error: loadingError} = useQuery(
         GET_USERS,
         {
@@ -21,7 +22,8 @@ export default () => {
             variables: {
                 skip: rowsPerPage * page,
                 take: rowsPerPage,
-                orderBy: "lastName"
+                orderBy: "lastName",
+                search: search
             }
         }
     );
@@ -75,6 +77,7 @@ export default () => {
                 <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
             </DialogActions>
         </Dialog>
+        <TextField label="Search user" type="text" value={search} onChange={(ev) => { setSearch(ev.target.value); setPage(0); }} />
         <TableContainer component={Paper}>
             <Table aria-label="simple table">
                 <TableHead>
@@ -110,8 +113,16 @@ export default () => {
 };
 
 const GET_USERS = gql`
-    query GetUserData($skip: Int!, $take: Int!, $orderBy: String!) {
-        users(orderBy: [{ path: $orderBy, descending: false}], skip: $skip, take: $take) {
+    query GetUserData($skip: Int!, $take: Int!, $orderBy: String!, $search: String) {
+        users(
+          orderBy: [{ path: $orderBy, descending: false}], 
+          skip: $skip, 
+          take: $take,
+          where: [
+            {path: "firstName", comparison: contains, value: [$search], connector: OR}, 
+            {path: "lastName", comparison: contains, value: [$search], connector: OR},
+            {path: "email", comparison: contains, value: [$search], connector: OR}
+          ]) {
             id
             email
             isSubscribedNewsletter
