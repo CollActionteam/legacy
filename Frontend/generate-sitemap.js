@@ -5,9 +5,9 @@
  * nodejs, and generates a sitemap.xml in the /public folder, which gets
  * deployed to our CDN.
  *
- * I'm generating the sitemap XML through querying the GraphQL API of the 
+ * We're generating the sitemap XML through querying the GraphQL API of the 
  * production site, and then generating the XML from that. We should be 
- * deploying regularly, so this is fine.
+ * deploying regularly, so this is a decent trade-off.
  * 
  * Unfortunately, nodejs doesn't have a build-in xml generator, since this
  * is a pretty simple job, I'm just outputting the xml manually.
