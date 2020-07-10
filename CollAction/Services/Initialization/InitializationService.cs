@@ -59,7 +59,7 @@ namespace CollAction.Services.Initialization
 
         public async Task SeedTestData(string adminId, CancellationToken cancellationToken)
         {
-            if (!await context.Crowdactions.AnyAsync().ConfigureAwait(false))
+            if (!await context.Crowdactions.AnyAsync().ConfigureAwait(false)) // Protect against seeding multiple times
             {
                 var admin = await userManager.FindByIdAsync(adminId).ConfigureAwait(false);
                 var seededUsers = await SeedTestUsers(cancellationToken).ConfigureAwait(false);
@@ -159,13 +159,13 @@ namespace CollAction.Services.Initialization
 
             await Task.WhenAll(descriptiveImages.Select(d => d.descriptiveImageBytes).Concat(bannerImages.Select(b => b.bannerImageBytes))).ConfigureAwait(false);
 
-            List<string> tags = Enumerable.Range(10, r.Next(60))
+            List<string> tags = Enumerable.Range(0, seedOptions.NumberSeededTags)
                                           .Select(r => Faker.Internet.DomainWord())
                                           .Distinct()
                                           .ToList();
 
             var crowdactionNames =
-                Enumerable.Range(0, r.Next(40, 120))
+                Enumerable.Range(0, seedOptions.NumberSeededCrowdactions)
                           .Select(i => Faker.Company.Name())
                           .Distinct()
                           .ToList();
@@ -178,16 +178,21 @@ namespace CollAction.Services.Initialization
             {
                 DateTime start = now.Date.AddDays(r.Next(-10, 20));
 
+                const int MaxTagsForCrowdaction = 4;
                 IEnumerable<string> crowdactionTags =
-                    Enumerable.Range(0, r.Next(5))
+                    Enumerable.Range(0, r.Next(MaxTagsForCrowdaction + 1))
                               .Select(i => r.Next(tags.Count))
                               .Distinct()
                               .Select(i => tags[i])
                               .ToList();
 
-                List<Category> categories = new[] { r.Next(7), r.Next(7) }.Distinct()
-                                                                          .Select(i => (Category)i)
-                                                                          .ToList();
+                int numberCategories = Enum.GetValues(typeof(Category)).Length;
+                List<Category> categories = 
+                    new[] 
+                    {
+                        (Category)r.Next(numberCategories),
+                        (Category)r.Next(numberCategories)
+                    }.Distinct().ToList();
 
                 (Uri descriptiveImageUrl, Task<byte[]> descriptiveImageBytes) = descriptiveImages[r.Next(descriptiveImages.Count)];
                 ImageFile? descriptiveImage = r.Next(3) == 0
@@ -204,7 +209,8 @@ namespace CollAction.Services.Initialization
                                           : await imageService.UploadImage(ToFormFile(bannerImageBytes.Result, bannerImageUrl), Faker.Company.BS(), MaxImageCardDimensionPixels, cancellationToken).ConfigureAwait(false);
 
                 ApplicationUser owner = users.ElementAt(users.Count() - 1);
-                CrowdactionStatus status = (CrowdactionStatus)r.Next(3);
+                int numberStatusses = Enum.GetValues(typeof(CrowdactionStatus)).Length;
+                CrowdactionStatus status = (CrowdactionStatus)r.Next(numberStatusses);
                 NewCrowdactionInternal newCrowdaction =
                     new NewCrowdactionInternal(
                         name: crowdactionName,
@@ -231,18 +237,23 @@ namespace CollAction.Services.Initialization
                 context.CrowdactionParticipants.AddRange(
                     userIds.Where(userId => r.Next(2) == 0)
                            .Select(userId => new CrowdactionParticipant(userId, crowdaction.Id, r.Next(2) == 1, now, Guid.NewGuid())));
-                context.CrowdactionComments.AddRange(
-                    Enumerable.Range(-24 * 30, 24 * 30)
-                              .Where(i => r.Next(30) == 0)
+                await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+
+                IEnumerable<CrowdactionComment> comments =
+                    Enumerable.Range(-24 * seedOptions.NumberDaysSeededForComments, 24 * seedOptions.NumberDaysSeededForComments)
+                              .Where(i => r.NextDouble() <= seedOptions.ProbabilityCommentSeededPerHour)
                               .Select(i =>
                               {
-                                  DateTime commentedAt = DateTime.Now.AddHours(i).AddMinutes(r.Next(-40, 40)).AddSeconds(r.Next(-40, 40));
+                                  DateTime commentedAt = DateTime.Now.AddHours(i).AddMinutes(r.Next(-30, 30)).AddSeconds(r.Next(-30, 30));
                                   string comment = $"<p>{string.Join("</p><p>", Faker.Lorem.Paragraphs(r.Next(2) + 1))}</p>";
                                   string userId = userIds[r.Next(userIds.Count)];
                                   return new CrowdactionComment(comment, userId, crowdaction.Id, commentedAt);
-                              }));
-
-                await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+                              });
+                foreach (var comment in comments) // Insert one-by-one to preserve insertion order
+                {
+                    context.CrowdactionComments.Add(comment);
+                    await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+                }
             }
         }
     }

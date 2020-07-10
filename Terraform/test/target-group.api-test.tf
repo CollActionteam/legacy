@@ -1,10 +1,11 @@
 # Target group for the load balancer
 resource "aws_alb_target_group" "api-collaction" {
-  name        = "api-${var.environment}-collaction"
-  port        = 5000
-  protocol    = "HTTP"
-  vpc_id      = module.vpc.default.id
-  target_type = "ip"
+  name                 = "api-${var.environment}-collaction"
+  port                 = 5000
+  protocol             = "HTTP"
+  vpc_id               = module.vpc.default.id
+  target_type          = "ip"
+  deregistration_delay = 10
 
   health_check {
     healthy_threshold   = 3

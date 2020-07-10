@@ -144,18 +144,25 @@ namespace CollAction.Controllers
                 return Redirect($"{model.ErrorUrl}?error=lockout&message={WebUtility.UrlEncode("User is locked out")}&returnUrl={model.ReturnUrl}");
             }
 
-            // If the user does not have an account, create one
+            // If the user can't login with the external login, create a new account or link one
             string email = info.Principal.FindFirstValue(ClaimTypes.Email);
-            UserResult newUserResult = await userService.CreateUser(email, info).ConfigureAwait(false);
+            ExternalUserResult newUserResult = await userService.CreateOrAddExternalToUser(email, info).ConfigureAwait(false);
             if (newUserResult.Result.Succeeded)
             {
-                return Redirect(model.FinishRegistrationUrl);
+                if (newUserResult.AddedUser)
+                {
+                    return Redirect(model.FinishRegistrationUrl);
+                }
+                else
+                {
+                    return Redirect(model.ReturnUrl);
+                }
             }
             else
             {
                 string error = string.Join(", ", newUserResult.Result.Errors.Select(e => e.Description));
                 logger.LogError(error);
-                return Redirect($"{model.ErrorUrl}?error=user-create&message={WebUtility.UrlEncode(error)}&returnUrl={model.ReturnUrl}");
+                return Redirect($"{model.ErrorUrl}?error=external-login-create&message={WebUtility.UrlEncode(error)}&returnUrl={model.ReturnUrl}");
             }
         }
     }

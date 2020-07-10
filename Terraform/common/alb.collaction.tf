@@ -40,6 +40,23 @@ resource "aws_alb_listener" "api-collaction" {
   }
 }
 
+resource "aws_alb_listener" "https-redirect" {
+  load_balancer_arn = aws_alb.api-collaction.id
+  port              = 80
+  protocol          = "HTTP"
+
+  # By default, this listener will forward traffic to port 443
+  default_action {
+    type = "redirect"
+
+    redirect {
+      status_code = "HTTP_301"
+      port        = 443
+      protocol    = "HTTPS"
+    }
+  }
+}
+
 # Load balancer protection
 resource "aws_security_group" "inbound-alb" {
   name        = "inbound-alb"
@@ -51,6 +68,14 @@ resource "aws_security_group" "inbound-alb" {
     protocol    = "tcp"
     from_port   = 443
     to_port     = 443
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    # Incoming access for https traffic
+    protocol    = "tcp"
+    from_port   = 80
+    to_port     = 80
     cidr_blocks = ["0.0.0.0/0"]
   }
 
