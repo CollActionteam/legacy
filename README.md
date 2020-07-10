@@ -1,7 +1,7 @@
 # CollAction
 
 CollAction is the world's first official crowdacting platform that aims to solve collective action problems with the ultimate goal of having positive social and ecological impact. 
-Copyright (C) 2017, Stichting CollAction
+Copyright (C) 2020, Stichting CollAction
 
 ## Running the project
 
