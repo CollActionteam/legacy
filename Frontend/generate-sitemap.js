@@ -32,7 +32,7 @@ const query = `
 const backend = process.env.REACT_APP_BACKEND_URL;
 const frontend = process.env.URL;
 
-process.stdout.write('<?xml version="1.0" encoding="UTF-8"?>');
+process.stdout.write('<?xml version="1.0" encoding="UTF-8"?>\n');
 process.stdout.write('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">');
 process.stdout.write(`<url><loc>${frontend}</loc><changefreq>always</changefreq><priority>1.0</priority></url>`);
 process.stdout.write(`<url><loc>${frontend}/privacy-policy</loc><changefreq>monthly</changefreq><priority>0.1</priority></url>`);
