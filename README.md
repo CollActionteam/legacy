@@ -93,7 +93,7 @@ When you run the site, you can configure the following settings through either e
 * NumberSeededCrowdactions: How many crowdactions are seeded
 * NumberSeededTags: How many tags are seeded
 * NumberDaysSeededForComments: How many days worths of comments are seeded per crowdaction
-* ProbabilityCommentSeededPerHour: Per hour timerange, what are the odds a comment is seeded
+* ProbabilityCommentSeededPerHour: Per hour, what are the odds a comment is seeded
 * ASPNETCORE_URLS: Which ports/protocols to expose (example: https://*:44301) 
 * ASPNETCORE_ENVIRONMENT: Which environment are we hosting in (Development/Staging/Production)
 
