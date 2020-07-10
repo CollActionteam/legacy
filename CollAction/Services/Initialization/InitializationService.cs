@@ -249,7 +249,7 @@ namespace CollAction.Services.Initialization
                                   string userId = userIds[r.Next(userIds.Count)];
                                   return new CrowdactionComment(comment, userId, crowdaction.Id, commentedAt);
                               });
-                foreach (var comment in comments)
+                foreach (var comment in comments) // Insert one-by-one to preserve insertion order
                 {
                     context.CrowdactionComments.Add(comment);
                     await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
