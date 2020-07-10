@@ -451,15 +451,6 @@ namespace CollAction.Services.Crowdactions
             return participant;
         }
 
-        public async Task<CrowdactionComment> CreateCommentInternal(string comment, int crowdactionId, string userId, DateTime commentedAt, CrowdactionCommentStatus status, CancellationToken token)
-        {
-            var crowdactionComment = new CrowdactionComment(comment, null, userId, crowdactionId, commentedAt, status);
-            context.CrowdactionComments.Add(crowdactionComment);
-            await context.SaveChangesAsync(token).ConfigureAwait(false);
-
-            return crowdactionComment;
-        }
-
         public async Task<CrowdactionComment> CreateComment(string comment, int crowdactionId, ClaimsPrincipal user, CancellationToken token)
         {
             if (!htmlInputValidator.IsSafe(comment))

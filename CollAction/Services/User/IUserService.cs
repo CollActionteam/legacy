@@ -9,7 +9,7 @@ namespace CollAction.Services.User
 {
     public interface IUserService
     {
-        Task<UserResult> CreateUser(string email, ExternalLoginInfo info);
+        Task<ExternalUserResult> CreateOrAddExternalToUser(string email, ExternalLoginInfo info);
 
         Task<UserResult> CreateUser(NewUser newUser);
 

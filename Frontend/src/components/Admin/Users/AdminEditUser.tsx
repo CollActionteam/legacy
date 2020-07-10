@@ -102,7 +102,6 @@ export default ({ userId } : IEditUserProps): any => {
                 <FormGroup>
                     <FormControl>
                         <TextField
-                            name="fistName"
                             label="First Name"
                             type="text"
                             { ...formik.getFieldProps('firstName') }
@@ -111,7 +110,6 @@ export default ({ userId } : IEditUserProps): any => {
                     </FormControl>
                     <FormControl>
                         <TextField
-                            name="lastName"
                             label="Last Name"
                             type="text"
                             { ...formik.getFieldProps('lastName') }
@@ -120,7 +118,6 @@ export default ({ userId } : IEditUserProps): any => {
                     </FormControl>
                     <FormControl>
                         <TextField
-                            name="representsNumberParticipants"
                             label="Represents number participants"
                             type="number"
                             { ...formik.getFieldProps('representsNumberParticipants') }
@@ -130,7 +127,6 @@ export default ({ userId } : IEditUserProps): any => {
                     <FormControl className={classes.formControl}>
                         <FormControlLabel
                             control={<Checkbox
-                                name="isAdmin"
                                 checked={formik.values.isAdmin}
                                 { ...formik.getFieldProps('isAdmin') }
                             />}

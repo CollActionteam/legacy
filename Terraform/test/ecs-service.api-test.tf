@@ -1,10 +1,11 @@
 # The service running the task
 resource "aws_ecs_service" "api-collaction" {
-  name            = "api-${var.environment}-collaction"
-  cluster         = aws_ecs_cluster.cluster.id
-  task_definition = aws_ecs_task_definition.api-collaction.arn
-  desired_count   = 1
-  
+  name                               = "api-${var.environment}-collaction"
+  cluster                            = aws_ecs_cluster.cluster.id
+  task_definition                    = aws_ecs_task_definition.api-collaction.arn
+  desired_count                      = 1
+  deployment_minimum_healthy_percent = 50
+
   capacity_provider_strategy {
     capacity_provider = var.capacity_provider
     weight            = 100
