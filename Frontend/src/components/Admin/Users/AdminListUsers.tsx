@@ -62,6 +62,21 @@ export default () => {
     );
     const userCount = data?.userCount ?? 0;
 
+    const onSearchChange = (ev: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setSearch(ev.target.value);
+        setPage(0);
+    };
+
+    const onDeleteUserClick = (user: IUser) => {
+        setDeleteDialogOpen(true);
+        setToDelete(user);
+    };
+
+    const onChangeRowsPerPage = (ev: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setPage(0);
+        setRowsPerPage(parseInt((ev.target.value)));
+    };
+
     return <>
         { loading ? <Loader /> : null }
         <Alert type="info" text={info} />
@@ -77,7 +92,7 @@ export default () => {
                 <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
             </DialogActions>
         </Dialog>
-        <TextField label="Search user" type="text" value={search} onChange={(ev) => { setSearch(ev.target.value); setPage(0); }} />
+        <TextField label="Search user" type="text" value={search} onChange={onSearchChange} />
         <TableContainer component={Paper}>
             <Table aria-label="simple table">
                 <TableHead>
@@ -100,11 +115,11 @@ export default () => {
                             <TableCell align="right">{ u.isAdmin ? "Yes" : "No" }</TableCell>
                             <TableCell align="right">{ Formatter.date(new Date(u.registrationDate)) } { Formatter.time(new Date(u.registrationDate)) }</TableCell>
                             <TableCell align="right"><Button to={`/admin/users/edit/${u.id}`}>Edit</Button></TableCell>
-                            <TableCell align="right"><Button onClick={() => { setDeleteDialogOpen(true); setToDelete(u); }}>Delete</Button></TableCell>
+                            <TableCell align="right"><Button onClick={() => onDeleteUserClick(u)}>Delete</Button></TableCell>
                         </TableRow>))
                     }
                     <TableRow>
-                        <TablePagination count={userCount} page={page} rowsPerPageOptions={[5, 10, 25, 50]} rowsPerPage={rowsPerPage} onChangePage={(_ev, newPage) => setPage(newPage)} onChangeRowsPerPage={(ev) => { setPage(0); setRowsPerPage(parseInt((ev.target.value))) } } />
+                        <TablePagination count={userCount} page={page} rowsPerPageOptions={[5, 10, 25, 50]} rowsPerPage={rowsPerPage} onChangePage={(_ev, newPage) => setPage(newPage)} onChangeRowsPerPage={onChangeRowsPerPage} />
                     </TableRow>
                 </TableBody>
             </Table>
