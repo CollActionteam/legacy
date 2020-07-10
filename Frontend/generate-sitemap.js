@@ -29,7 +29,7 @@ const query = `
   }
 `;
 
-const backend = process.env.REACT_APP_BACKEND_URL;
+const backend = process.env.SITEMAP_BACKEND_URL;
 const frontend = process.env.URL;
 
 process.stdout.write('<?xml version="1.0" encoding="UTF-8"?>\n');
@@ -39,7 +39,9 @@ process.stdout.write(`<url><loc>${frontend}/privacy-policy</loc><changefreq>mont
 process.stdout.write(`<url><loc>${frontend}/about</loc><changefreq>monthly</changefreq><priority>0.3</priority></url>`);
 process.stdout.write(`<url><loc>${frontend}/donate</loc><changefreq>monthly</changefreq><priority>0.3</priority></url>`);
 process.stdout.write(`<url><loc>${frontend}/find</loc><changefreq>always</changefreq><priority>0.3</priority></url>`);
-https.get(`${backend}/graphql?query=${encodeURIComponent(query)}`, (res) => {
+
+const graphqlQuery = `${backend}/graphql?query=${encodeURIComponent(query)}`;
+https.get(graphqlQuery, (res) => {
   if (res.statusCode !== 200) {
     console.error(`GraphQL Error: ${res.statusCode}`);
     process.exit(1);

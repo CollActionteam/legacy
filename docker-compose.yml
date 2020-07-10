@@ -34,6 +34,7 @@ services:
       dockerfile: Dockerfile
       args:
         REACT_APP_BACKEND_URL: https://localhost:44301
+        SITEMAP_BACKEND_URL: https://api.collaction.org
         URL: https://localhost:3000
         BUILD_CONFIG: Debug
     ports:
