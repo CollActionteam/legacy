@@ -94,11 +94,11 @@ export default ({ user, crowdaction }: ICrowdactionParticipatingProps) => {
                             To personalize the message, you can add {'{firstname}'} and {'{lastname}'} to your message (including the brackets) - these will be substituted with the user's first and last name. 
                         </p>
                         <FormGroup>
-                            <TextField fullWidth error={formik.submitCount > 0 && formik.errors.subject !== undefined} name="subject" label="Subject" {...formik.getFieldProps('subject')} />
+                            <TextField fullWidth error={formik.submitCount > 0 && formik.errors.subject !== undefined} label="Subject" {...formik.getFieldProps('subject')} />
                             { formik.submitCount > 0 ? <Alert type="error" text={formik.errors.subject} /> : null }
                         </FormGroup>
                         <FormGroup>
-                            <TextField fullWidth error={formik.submitCount > 0 && formik.errors.message !== undefined} multiline={true} name="message" rows={40} label="E-Mail Message" {...formik.getFieldProps('message')} />
+                            <TextField fullWidth error={formik.submitCount > 0 && formik.errors.message !== undefined} multiline={true} rows={40} label="E-Mail Message" {...formik.getFieldProps('message')} />
                             { formik.submitCount > 0 ? <Alert type="error" text={formik.errors.message} /> : null }
                         </FormGroup>
                     </DialogContent>

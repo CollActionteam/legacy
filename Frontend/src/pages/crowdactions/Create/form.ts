@@ -4,6 +4,7 @@ export interface ICrowdactionForm {
   crowdactionName: string;
   proposal: string;
   category: string;
+  secondCategory: string;
   banner: any | null;
   target: string;
   startDate: string;
@@ -22,6 +23,7 @@ export const initialValues: ICrowdactionForm = {
   crowdactionName: '',
   proposal: '',
   category: '',
+  secondCategory: '',
   banner: null,
   target: '',
   startDate: '',
@@ -72,6 +74,13 @@ export const validations = Yup.object({
     .max(300, 'Best keep the objective short, no more then 300 characters'),
   category: Yup.string()
     .required('Select a category that most closely aligns with your crowdaction'),
+  secondCategory: Yup.string()
+                     .when("category", {
+                         is: val => val?.length > 0,
+                         then: Yup
+                             .string()
+                             .notOneOf([Yup.ref("category")], "The two categories can't be the same")
+                          }),
   target: Yup.number()
     .required('Please choose the number of people you want to join')
     .moreThan(0, 'You can choose up to one million participants')

@@ -74,7 +74,7 @@ const CreateCrowdactionPage = () => {
           name: form.crowdactionName,
           bannerImageFileId: bannerId,
           cardImageFileId: cardId,
-          categories: [form.category],
+          categories: [form.category, form.secondCategory].filter(c => c !== ''),
           target: form.target,
           proposal: form.proposal,
           description: form.description,
@@ -162,7 +162,7 @@ const CreateCrowdactionPage = () => {
                       className={styles.formRow}
                       fullWidth
                     />
-                    <Categories props={props}></Categories>
+                    <Categories props={props} />
                   </Container>
                 </Grid>
               </Grid>

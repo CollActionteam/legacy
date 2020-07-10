@@ -23,8 +23,12 @@ const SEND_EVENT = gql`
 
 // Get cookie by name
 const getCookie = (name: string) => {
-    var v = document.cookie.match(`(^|;) ?'${name}'=([^;]*)(;|$)`);
-    return v ? v[2] : null;
+  const found =
+    document.cookie
+            .split('; ')
+            .map(row => row.split('='))
+            .find(row => row[0] === name);
+  return found ? found[1] : null;
 };
 
 // Get local time as ISO string with tz offset at the end.

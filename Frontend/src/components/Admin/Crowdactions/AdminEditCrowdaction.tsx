@@ -216,7 +216,6 @@ export default ({ crowdactionId } : IEditCrowdactionProps): any => {
                 <FormGroup>
                     <FormControl>
                         <TextField
-                            name="name"
                             label="Crowdaction Name"
                             type="text"
                             { ...formik.getFieldProps('name') }
@@ -225,7 +224,6 @@ export default ({ crowdactionId } : IEditCrowdactionProps): any => {
                     </FormControl>
                     <FormControl>
                         <TextField
-                            name="description"
                             label="Description"
                             type="text"
                             multiline={true}
@@ -236,7 +234,6 @@ export default ({ crowdactionId } : IEditCrowdactionProps): any => {
                     </FormControl>
                     <FormControl>
                         <TextField
-                            name="proposal"
                             label="Crowdaction Proposal"
                             type="text"
                             multiline={true}
@@ -247,7 +244,6 @@ export default ({ crowdactionId } : IEditCrowdactionProps): any => {
                     </FormControl>
                     <FormControl >
                         <TextField
-                            name="goal"
                             label="Crowdaction Goal"
                             type="text"
                             multiline={true}
@@ -258,7 +254,6 @@ export default ({ crowdactionId } : IEditCrowdactionProps): any => {
                     </FormControl>
                     <FormControl >
                         <TextField
-                            name="creatorComments"
                             multiline={true}
                             rows={5}
                             label="Creator Comments"
@@ -269,7 +264,6 @@ export default ({ crowdactionId } : IEditCrowdactionProps): any => {
                     </FormControl>
                     <FormControl >
                         <TextField
-                            name="target"
                             label="Target"
                             type="number"
                             { ...formik.getFieldProps('target') }
@@ -278,7 +272,6 @@ export default ({ crowdactionId } : IEditCrowdactionProps): any => {
                     </FormControl>
                     <FormControl >
                         <TextField
-                            name="start"
                             label="Start"
                             type="date"
                             InputLabelProps={{ shrink: true }}
@@ -288,7 +281,6 @@ export default ({ crowdactionId } : IEditCrowdactionProps): any => {
                     </FormControl>
                     <FormControl >
                         <TextField
-                            name="end"
                             label="End"
                             type="date"
                             InputLabelProps={{ shrink: true }}
@@ -298,7 +290,6 @@ export default ({ crowdactionId } : IEditCrowdactionProps): any => {
                     </FormControl>
                     <FormControl >
                         <TextField
-                            name="descriptionVideoLink"
                             label="Description Video Link"
                             type="text"
                             { ...formik.getFieldProps('descriptionVideoLink') }
@@ -325,7 +316,6 @@ export default ({ crowdactionId } : IEditCrowdactionProps): any => {
                     </FormControl>
                     <FormControl >
                         <TextField
-                            name="tags"
                             label="Tags - separated by ';'"
                             type="text"
                             { ...formik.getFieldProps('tags') }
@@ -334,7 +324,6 @@ export default ({ crowdactionId } : IEditCrowdactionProps): any => {
                     </FormControl>
                     <FormControl >
                         <TextField
-                            name="numberCrowdactionEmailsSent"
                             label="Number Crowdaction E-Mails Send"
                             type="number"
                             { ...formik.getFieldProps('numberCrowdactionEmailsSent') }
@@ -343,7 +332,6 @@ export default ({ crowdactionId } : IEditCrowdactionProps): any => {
                     </FormControl>
                     <FormControl >
                         <TextField
-                            name="anonymousUserParticipants"
                             label="Anonymous Participants"
                             type="number"
                             { ...formik.getFieldProps('anonymousUserParticipants') }
@@ -352,7 +340,7 @@ export default ({ crowdactionId } : IEditCrowdactionProps): any => {
                     </FormControl>
                     <FormControl className={classes.formControl}>
                         <InputLabel shrink id="first-category-label">First Category</InputLabel>
-                        <Select name="firstCategory" labelId="first-category-label" { ...formik.getFieldProps('firstCategory')}>
+                        <Select labelId="first-category-label" { ...formik.getFieldProps('firstCategory')}>
                             <MenuItem key="" value="NONE">NONE</MenuItem>
                             { categories.map(c => <MenuItem key={c} value={c}>{c}</MenuItem>) }
                         </Select>
@@ -360,7 +348,7 @@ export default ({ crowdactionId } : IEditCrowdactionProps): any => {
                     </FormControl>
                     <FormControl className={classes.formControl}>
                         <InputLabel shrink id="second-category-label">Second Category</InputLabel>
-                        <Select labelId="second-category-label" name="secondCategory" { ...formik.getFieldProps('secondCategory')}>
+                        <Select labelId="second-category-label" { ...formik.getFieldProps('secondCategory')}>
                             <MenuItem key="" value="NONE">NONE</MenuItem>
                             { categories.map(c => <MenuItem key={c} value={c}>{c}</MenuItem>) }
                         </Select>
@@ -368,21 +356,20 @@ export default ({ crowdactionId } : IEditCrowdactionProps): any => {
                     </FormControl>
                     <FormControl className={classes.formControl}>
                         <InputLabel shrink id="status-label">Status</InputLabel>
-                        <Select labelId="status-label" name="status" { ...formik.getFieldProps('status')}>
+                        <Select labelId="status-label" { ...formik.getFieldProps('status')}>
                             { crowdactionStatusses.map(s => <MenuItem key={s} value={s}>{s}</MenuItem>) }
                         </Select>
                         <Alert type="error" text={formik.errors.status} />
                     </FormControl>
                     <FormControl className={classes.formControl}>
                         <InputLabel shrink id="display-priority-label">Display Priority</InputLabel>
-                        <Select labelId="display-priority-label" name="displayPriority" { ...formik.getFieldProps('displayPriority')}>
+                        <Select labelId="display-priority-label" { ...formik.getFieldProps('displayPriority')}>
                             { displayPriorities.map(d => <MenuItem key={d} value={d}>{d}</MenuItem>) }
                         </Select>
                         <Alert type="error" text={formik.errors.displayPriority} />
                     </FormControl>
                     <FormControl >
                         <TextField
-                            name="descriptiveImageDescription"
                             label="Descriptive Image Description"
                             InputLabelProps={{ shrink: true }}
                             type="text"
@@ -412,7 +399,6 @@ export default ({ crowdactionId } : IEditCrowdactionProps): any => {
                     </FormControl>
                     <FormControl ></FormControl>
                         <TextField
-                            name="bannerImageDescription"
                             label="Banner Image Description"
                             type="text"
                             InputLabelProps={{ shrink: true }}

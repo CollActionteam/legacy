@@ -73,7 +73,7 @@ const FinishRegistrationSocialPage = () => {
                         lastName: values.lastName,
                         isSubscribedNewsletter: values.isSubscribedNewsletter,
                         representsNumberParticipants: 1,
-                        isAdmin: false
+                        isAdmin: user?.isAdmin
                     },
                 }
             });
@@ -97,14 +97,14 @@ const FinishRegistrationSocialPage = () => {
                     <FormikProvider value={formik}>
                         <Form onSubmit={formik.handleSubmit}>
                             <FormGroup>
-                                <TextField name="firstName" label="First Name" type="text" { ... formik.getFieldProps('firstName') } />
-                                <TextField name="lastName" label="Last Name" type="text" { ...formik.getFieldProps('lastName') } />
+                                <TextField label="First Name" type="text" { ... formik.getFieldProps('firstName') } />
+                                <TextField label="Last Name" type="text" { ...formik.getFieldProps('lastName') } />
                                 <FormControlLabel
-                                    control={<Checkbox name="isSubscribedNewsletter" { ...formik.getFieldProps('isSubscribedNewsletter')} />}
+                                    control={<Checkbox { ...formik.getFieldProps('isSubscribedNewsletter')} />}
                                     label={<>I would like to receive an update from CollAction every once in a while - don't worry, we like spam as little as you do! <span role="img" aria-label="smiley">🙂</span></>} />
                                 <FormControl>
                                     <FormControlLabel
-                                        control={<Checkbox name="privacyPolicy" { ...formik.getFieldProps('privacyPolicy') } />}
+                                        control={<Checkbox { ...formik.getFieldProps('privacyPolicy') } />}
                                         label={<>I've read and agreed to the <Link to="/privacy-policy">privacy policy</Link></>}
                                         />
                                     { formik.submitCount > 0 ? <Alert type="error" text={formik.errors.privacyPolicy} /> : null }

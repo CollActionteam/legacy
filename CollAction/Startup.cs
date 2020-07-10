@@ -117,6 +117,7 @@ namespace CollAction
                             builder.AllowAnyMethod()
                                    .AllowAnyHeader()
                                    .AllowCredentials()
+                                   .SetPreflightMaxAge(TimeSpan.FromMinutes(10))
                                    .WithOrigins(configuration.Get<SiteOptions>().PublicAddress));
                 }
                 else
@@ -126,6 +127,7 @@ namespace CollAction
                             builder.AllowAnyMethod()
                                    .AllowAnyHeader()
                                    .AllowCredentials()
+                                   .SetPreflightMaxAge(TimeSpan.FromMinutes(10))
                                    .SetIsOriginAllowed(_ => true));
                 }
             });

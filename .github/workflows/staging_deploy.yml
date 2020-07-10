@@ -1,0 +1,50 @@
+name: Deploy to staging
+
+on: 
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy_backend_master:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Determine image tag
+      id: get_imagetag
+      run: echo ::set-output name=TAG::sha-${GITHUB_SHA:12}    
+
+    - uses: docker/build-push-action@v1
+      with:
+        username: ${{ secrets.DockerUsername }}
+        password: ${{ secrets.DockerPassword }}
+        repository: collaction/backend
+        tags: ${{ steps.get_imagetag.outputs.TAG }},latest
+        dockerfile: CollAction/Dockerfile
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}      
+          aws-region: eu-central-1
+
+    - name: Download current task definition
+      run: aws ecs describe-task-definition --task-definition api-staging-collaction-task --query taskDefinition > ./api-staging-collaction-task.json
+
+    - name: Update ECS task definition with latest image version
+      id: render-api-container
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: ./api-staging-collaction-task.json
+        container-name: api
+        image: collaction/backend:${{ steps.get_imagetag.outputs.TAG }}
+        
+    - name: Deploy to ECS
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ steps.render-api-container.outputs.task-definition }}
+        cluster: collaction-staging
+        service: api-staging-collaction
