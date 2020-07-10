@@ -298,7 +298,6 @@ export default ({ crowdactionId } : IEditCrowdactionProps): any => {
                     </FormControl>
                     <FormControl >
                         <TextField
-                            name="instagramUser"
                             label="Instagram User"
                             type="text"
                             { ...formik.getFieldProps('instagramUser') }
@@ -307,7 +306,6 @@ export default ({ crowdactionId } : IEditCrowdactionProps): any => {
                     </FormControl>
                     <FormControl >
                         <TextField
-                            name="ownerEmail"
                             label="Owner E-Mail"
                             type="text"
                             { ...formik.getFieldProps('ownerEmail') }
