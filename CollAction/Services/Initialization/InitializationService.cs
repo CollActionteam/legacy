@@ -246,7 +246,8 @@ namespace CollAction.Services.Initialization
                               {
                                   DateTime commentedAt = DateTime.Now.AddHours(i).AddMinutes(r.Next(-30, 30)).AddSeconds(r.Next(-30, 30));
                                   string comment = $"<p>{string.Join("</p><p>", Faker.Lorem.Paragraphs(r.Next(2) + 1))}</p>";
-                                  (string? userId, string? anonymousUser) = r.Next(3) == 0 ? ((string?)null, Faker.Name.FullName()) : (userIds[r.Next(userIds.Count)], null);
+                                  string anonymousName = Faker.Name.First();
+                                  (string? userId, string? anonymousUser) = r.Next(3) == 0 ? ((string?)null, anonymousName.Substring(0, Math.Min(20, anonymousName.Length))) : (userIds[r.Next(userIds.Count)], null);
                                   var status = (CrowdactionCommentStatus)r.Next(3);
                                   return new CrowdactionComment(comment, userId, anonymousUser, crowdaction.Id, commentedAt, status);
                               });
