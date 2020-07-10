@@ -237,8 +237,9 @@ namespace CollAction.Services.Initialization
                 context.CrowdactionParticipants.AddRange(
                     userIds.Where(userId => r.Next(2) == 0)
                            .Select(userId => new CrowdactionParticipant(userId, crowdaction.Id, r.Next(2) == 1, now, Guid.NewGuid())));
-                // Generate an average of 48 random comments over the last 30 days
-                context.CrowdactionComments.AddRange(
+                await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+
+                var comments =
                     Enumerable.Range(-24 * seedOptions.NumberDaysSeededForComments, 24 * seedOptions.NumberDaysSeededForComments)
                               .Where(i => r.NextDouble() <= seedOptions.ProbabilityCommentSeededPerHour)
                               .Select(i =>
@@ -247,9 +248,12 @@ namespace CollAction.Services.Initialization
                                   string comment = $"<p>{string.Join("</p><p>", Faker.Lorem.Paragraphs(r.Next(2) + 1))}</p>";
                                   string userId = userIds[r.Next(userIds.Count)];
                                   return new CrowdactionComment(comment, userId, crowdaction.Id, commentedAt);
-                              }));
-
-                await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+                              });
+                foreach (var comment in comments)
+                {
+                    context.CrowdactionComments.Add(comment);
+                    await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+                }
             }
         }
     }
