@@ -1,7 +1,7 @@
 # CollAction
 
 CollAction is the world's first official crowdacting platform that aims to solve collective action problems with the ultimate goal of having positive social and ecological impact. 
-Copyright (C) 2017, Stichting CollAction
+Copyright (C) 2020, Stichting CollAction
 
 ## Running the project
 
@@ -90,6 +90,10 @@ When you run the site, you can configure the following settings through either e
 * StripeSecretApiKey: The stripe secret (non-shareable) key used to access the stripe API
 * StripeChargeableWebhookSecret: The webhook secret used for the chargeable endpoint (pings back when we can initiate a payment)
 * StripePaymentEventWebhookSecret: The webhook secret used for the event endpoint (used for logging stripe events)
+* NumberSeededCrowdactions: How many crowdactions are seeded
+* NumberSeededTags: How many tags are seeded
+* NumberDaysSeededForComments: How many days worths of comments are seeded per crowdaction
+* ProbabilityCommentSeededPerHour: Per hour, what are the odds a comment is seeded
 * ASPNETCORE_URLS: Which ports/protocols to expose (example: https://*:44301) 
 * ASPNETCORE_ENVIRONMENT: Which environment are we hosting in (Development/Staging/Production)
 
