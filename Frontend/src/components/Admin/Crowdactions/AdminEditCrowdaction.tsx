@@ -103,7 +103,7 @@ export default ({ crowdactionId } : IEditCrowdactionProps): any => {
             target: Yup.number().required("Must be filled in").min(1, "Must be a positive number"),
             anonymousUserParticipants: Yup.number().required("Must be filled in").min(0, "Must be a positive number"),
             firstCategory: Yup.string(),
-            instagramUser: Yup.string(),
+            instagramUser: Yup.string().max(30, "An instagram username has a maximum length of 30 characters"),
             secondCategory: Yup.string(),
             tags: Yup.string(),
             numberCrowdactionEmailsSent: Yup.number().required("Must be filled in").min(0, "Must be a positive number"),
