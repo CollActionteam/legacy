@@ -28,7 +28,7 @@ resource "aws_ecs_task_definition" "api-collaction" {
         "environment": [
           {
             "name": "ASPNETCORE_ENVIRONMENT",
-            "value": "Production"
+            "value": "Staging"
           },
           {
             "name": "ASPNETCORE_URLS",
