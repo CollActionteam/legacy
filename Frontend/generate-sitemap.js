@@ -24,7 +24,6 @@ const query = `
       descriptionVideoLink
       url
       bannerImage {
-        description
         url
       }
     }
@@ -68,7 +67,7 @@ https.get(graphqlQuery, (res) => {
             const priority = crowdaction.displayPriority === 'TOP' ? 1.0 : (crowdaction.displayPriority === 'MEDIUM' ? 0.8 : 0.6);
             const changeFreq = crowdaction.isClosed ? 'monthly' : 'hourly';
             const bannerImage = crowdaction.bannerImage;
-            const imageMap = bannerImage ? `<image:image><image:loc>${bannerImage.url}</image:loc><image:caption>${bannerImage.description}</image:caption><image:title>${bannerImage.description}</image:title></image:image>` : '';
+            const imageMap = bannerImage ? `<image:image><image:loc>${bannerImage.url}</image:loc><image:caption>${crowdaction.name}</image:caption><image:title>${crowdaction.name}</image:title></image:image>` : '';
             const video = crowdaction.descriptionVideoLink;
             const videoId = video ? (video.lastIndexOf('watch?v=') ? video.substring(video.lastIndexOf('=') + 1) : video.substring(video.lastIndexOf('/') + 1)) : null;
             const videoMap = video ? `<video:video><video:title>${crowdaction.name}</video:title><video:thumbnail_loc>https://img.youtube.com/vi/${videoId}/0.jpg</video:thumbnail_loc><video:description>${crowdaction.name}</video:description><video:player_loc allow_embed="yes">${video}</video:player_loc></video:video>` : '';
