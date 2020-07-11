@@ -52,7 +52,7 @@ https.get(graphqlQuery, (res) => {
       'data', 
       chunk => {
         body += chunk.toString();
-    });
+      });
     res.on(
         'end',
         () => {
