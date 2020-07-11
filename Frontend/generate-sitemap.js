@@ -43,7 +43,7 @@ process.stdout.write(`<url><loc>${frontend}/find</loc><changefreq>always</change
 const graphqlQuery = `${backend}/graphql?query=${encodeURIComponent(query)}`;
 https.get(graphqlQuery, (res) => {
   if (res.statusCode !== 200) {
-    console.error(`GraphQL Error: ${res.statusCode}`);
+    console.error(`Unexpected HTTP Status: ${res.statusCode}`);
     process.exit(1);
   }
   else {
