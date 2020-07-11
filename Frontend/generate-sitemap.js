@@ -56,7 +56,12 @@ https.get(graphqlQuery, (res) => {
     res.on(
         'end',
         () => {
-          const crowdactions = JSON.parse(body).data.crowdactions;
+          const parsed = JSON.parse(body);
+          if (parsed.errors) {
+            console.error(`GraphQL Error: ${parsed.errors}`);
+            process.exit(1);
+          }
+          const crowdactions = parsed.data.crowdactions;
           crowdactions.forEach(crowdaction => {
             const priority = crowdaction.displayPriority === 'TOP' ? 1.0 : (crowdaction.displayPriority === 'MEDIUM' ? 0.8 : 0.6);
             const changeFreq = crowdaction.isClosed ? 'monthly' : 'hourly';
