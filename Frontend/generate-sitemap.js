@@ -18,8 +18,11 @@ const https = require('https');
 const query = `
   query {
     crowdactions(status: ACTIVE) {
+      name
+      description
       displayPriority
       isClosed
+      descriptionVideoLink
       url
       bannerImage {
         description
@@ -33,8 +36,8 @@ const backend = process.env.SITEMAP_BACKEND_URL;
 const frontend = process.env.URL;
 
 process.stdout.write('<?xml version="1.0" encoding="UTF-8"?>\n');
-process.stdout.write('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">');
-process.stdout.write(`<url><loc>${frontend}</loc><changefreq>always</changefreq><priority>1.0</priority></url>`);
+process.stdout.write('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">');
+process.stdout.write(`<url><loc>${frontend}</loc><changefreq>always</changefreq><priority>1.0</priority><video:video><video:title>Crowdacting</video:title><video:duration>208</video:duration><video:thumbnail_loc>https://img.youtube.com/vi/xnIJo91Gero/0.jpg</video:thumbnail_loc><video:description>What is crowdacting</video:description><video:player_loc allow_embed="yes">https://www.youtube.com/watch?v=xnIJo91Gero</video:player_loc></video:video></url>`);
 process.stdout.write(`<url><loc>${frontend}/privacy-policy</loc><changefreq>monthly</changefreq><priority>0.1</priority></url>`);
 process.stdout.write(`<url><loc>${frontend}/about</loc><changefreq>monthly</changefreq><priority>0.3</priority></url>`);
 process.stdout.write(`<url><loc>${frontend}/donate</loc><changefreq>monthly</changefreq><priority>0.3</priority></url>`);
@@ -67,7 +70,10 @@ https.get(graphqlQuery, (res) => {
             const changeFreq = crowdaction.isClosed ? 'monthly' : 'hourly';
             const bannerImage = crowdaction.bannerImage;
             const imageMap = bannerImage ? `<image:image><image:loc>${bannerImage.url}</image:loc><image:caption>${bannerImage.description}</image:caption><image:title>${bannerImage.description}</image:title></image:image>` : '';
-            process.stdout.write(`<url><loc>${frontend}${crowdaction.url}</loc><changefreq>${changeFreq}</changefreq><priority>${priority}</priority>${imageMap}</url>`);
+            const video = crowdaction.descriptionVideoLink;
+            const videoId = video ? video.substring(video.lastIndexOf('/')) : null;
+            const videoMap = video ? `<video:video><video:title>${crowdaction.name}</video:title><video:thumbnail_loc>https://img.youtube.com/vi/${videoId}/0.jpg</video:thumbnail_loc><video:description>${crowdaction.description}</video:description><video:player_loc allow_embed="yes">${video}</video:player_loc></video:video></url>` : '';
+            process.stdout.write(`<url><loc>${frontend}${crowdaction.url}</loc><changefreq>${changeFreq}</changefreq><priority>${priority}</priority>${imageMap}${videoMap}</url>`);
           });
           process.stdout.write('</urlset>');
         });
