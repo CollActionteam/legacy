@@ -21,7 +21,7 @@ const query = `
       displayPriority
       isClosed
       url
-      cardImage {
+      bannerImage {
         description
         url
       }
@@ -65,8 +65,8 @@ https.get(graphqlQuery, (res) => {
           crowdactions.forEach(crowdaction => {
             const priority = crowdaction.displayPriority === 'TOP' ? 1.0 : (crowdaction.displayPriority === 'MEDIUM' ? 0.8 : 0.6);
             const changeFreq = crowdaction.isClosed ? 'monthly' : 'hourly';
-            const cardImage = crowdaction.cardImage;
-            const imageMap = cardImage ? `<image:image><image:loc>${cardImage.url}</image:loc><image:caption>${cardImage.description}</image:caption><image:title>${cardImage.description}</image:title></image:image>` : '';
+            const bannerImage = crowdaction.bannerImage;
+            const imageMap = bannerImage ? `<image:image><image:loc>${bannerImage.url}</image:loc><image:caption>${bannerImage.description}</image:caption><image:title>${bannerImage.description}</image:title></image:image>` : '';
             process.stdout.write(`<url><loc>${frontend}${crowdaction.url}</loc><changefreq>${changeFreq}</changefreq><priority>${priority}</priority>${imageMap}</url>`);
           });
           process.stdout.write('</urlset>');
