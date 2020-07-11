@@ -19,7 +19,6 @@ const query = `
   query {
     crowdactions(status: ACTIVE) {
       name
-      description
       displayPriority
       isClosed
       descriptionVideoLink
@@ -71,8 +70,8 @@ https.get(graphqlQuery, (res) => {
             const bannerImage = crowdaction.bannerImage;
             const imageMap = bannerImage ? `<image:image><image:loc>${bannerImage.url}</image:loc><image:caption>${bannerImage.description}</image:caption><image:title>${bannerImage.description}</image:title></image:image>` : '';
             const video = crowdaction.descriptionVideoLink;
-            const videoId = video ? video.substring(video.lastIndexOf('/')) : null;
-            const videoMap = video ? `<video:video><video:title>${crowdaction.name}</video:title><video:thumbnail_loc>https://img.youtube.com/vi/${videoId}/0.jpg</video:thumbnail_loc><video:description>${crowdaction.description}</video:description><video:player_loc allow_embed="yes">${video}</video:player_loc></video:video></url>` : '';
+            const videoId = video ? (video.lastIndexOf('=') ? video.substring(video.lastIndexOf('=') + 1) : video.substring(video.lastIndexOf('/') + 1)) : null;
+            const videoMap = video ? `<video:video><video:title>${crowdaction.name}</video:title><video:thumbnail_loc>https://img.youtube.com/vi/${videoId}/0.jpg</video:thumbnail_loc><video:description>${crowdaction.name}</video:description><video:player_loc allow_embed="yes">${video}</video:player_loc></video:video></url>` : '';
             process.stdout.write(`<url><loc>${frontend}${crowdaction.url}</loc><changefreq>${changeFreq}</changefreq><priority>${priority}</priority>${imageMap}${videoMap}</url>`);
           });
           process.stdout.write('</urlset>');
