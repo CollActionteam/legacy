@@ -67,4 +67,7 @@ https.get(graphqlQuery, (res) => {
           process.stdout.write('</urlset>');
         });
   }
-});
+}).on('error', (err) => {
+  console.error("Error: " + err.message);
+  process.exit(1);
+});;
