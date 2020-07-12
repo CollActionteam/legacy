@@ -5,6 +5,7 @@ using CollAction.Models;
 using CollAction.Services.Crowdactions;
 using CollAction.Services.Instagram;
 using CollAction.Services.Instagram.Models;
+using CollAction.Services.User;
 using GraphQL.Authorization;
 using GraphQL.EntityFramework;
 using GraphQL.Types;
@@ -66,23 +67,20 @@ namespace CollAction.GraphQl.Queries
                 arguments: new QueryArgument[]
                 {
                     new QueryArgument<IdGraphType>() { Name = "crowdactionId" },
+                    new QueryArgument<CrowdactionCommentStatusGraph>() { Name = "status" }
                 },
                 resolve: c =>
                 {
                     string? crowdactionId = c.GetArgument<string?>("crowdactionId");
+                    int? id = crowdactionId != null ?
+                                  (int?)int.Parse(crowdactionId, CultureInfo.InvariantCulture) :
+                                  null;
+                    CrowdactionCommentStatus? status = c.GetArgument<CrowdactionCommentStatus?>("status");
 
-                    if (crowdactionId != null)
-                    {
-                        int id = int.Parse(crowdactionId, CultureInfo.InvariantCulture);
-                        return c.DbContext
-                                .CrowdactionComments
-                                .Where(c => c.CrowdactionId == id);
-                    }
-                    else
-                    {
-                        return c.DbContext
-                                .CrowdactionComments;
-                    }
+                    var context = c.GetUserContext();
+                    return context.ServiceProvider
+                                  .GetRequiredService<ICrowdactionService>()
+                                  .SearchCrowdactionComments(id, status);
                 });
 
             AddSingleField(
@@ -96,32 +94,38 @@ namespace CollAction.GraphQl.Queries
                     new QueryArgument[]
                     {
                         new QueryArgument<IdGraphType>() { Name = "crowdactionId" },
+                        new QueryArgument<CrowdactionCommentStatusGraph>() { Name = "status" }
                     }),
                 resolve: c =>
                 {
                     string? crowdactionId = c.GetArgument<string?>("crowdactionId");
+                    int? id = crowdactionId != null ?
+                                  (int?)int.Parse(crowdactionId, CultureInfo.InvariantCulture) :
+                                  null;
+                    CrowdactionCommentStatus? status = c.GetArgument<CrowdactionCommentStatus?>("status");
 
-                    if (crowdactionId != null)
-                    {
-                        int id = int.Parse(crowdactionId, CultureInfo.InvariantCulture);
-                        return c.GetUserContext()
-                                .Context
-                                .CrowdactionComments
-                                .CountAsync(c => c.CrowdactionId == id, c.CancellationToken);
-                    }
-                    else
-                    {
-                        return c.GetUserContext()
-                                .Context
-                                .CrowdactionComments
-                                .CountAsync(c.CancellationToken);
-                    }
+                    var context = c.GetUserContext();
+                    return context.ServiceProvider
+                                  .GetRequiredService<ICrowdactionService>()
+                                  .SearchCrowdactionComments(id, status)
+                                  .CountAsync(c.CancellationToken);
                 });
 
             AddQueryField(
-                nameof(ApplicationDbContext.Users),
-                c => c.DbContext.Users,
-                typeof(ApplicationUserGraph)).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
+                name: nameof(ApplicationDbContext.Users),
+                arguments: new QueryArgument[] 
+                {
+                    new QueryArgument<StringGraphType>() { Name = "search" }
+                },
+                resolve: c =>
+                {
+                    string? search = c.GetArgument<string?>("search");
+                    return c.GetUserContext()
+                            .ServiceProvider
+                            .GetRequiredService<IUserService>()
+                            .SearchUsers(search);
+                },
+                graphType: typeof(ApplicationUserGraph)).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
 
             FieldAsync<NonNullGraphType<ListGraphType<NonNullGraphType<InstagramWallItemGraph>>>, IEnumerable<InstagramWallItem>>(
                 "instagramWall",
@@ -142,7 +146,16 @@ namespace CollAction.GraphQl.Queries
 
             FieldAsync<NonNullGraphType<IntGraphType>, int>(
                 "userCount",
-                resolve: c => c.GetUserContext().Context.Users.CountAsync()).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
+                arguments: new QueryArguments(new QueryArgument<StringGraphType>() { Name = "search" }),
+                resolve: c =>
+                {
+                    string? search = c.GetArgument<string?>("search");
+                    return c.GetUserContext()
+                            .ServiceProvider
+                            .GetRequiredService<IUserService>()
+                            .SearchUsers(search)
+                            .CountAsync();
+                }).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
 
             AddSingleField(
                 name: "currentUser",

@@ -15,6 +15,7 @@ export interface ISettings {
   categories: string[];
   displayPriorities: string[];
   crowdactionStatusses: string[];
+  crowdactionCommentStatusses: string[];
 }
 
 export interface IDonationEventLog {
@@ -68,6 +69,18 @@ export interface IInstagramWallItem {
   accessibilityCaption: string | null;
   link: string;
   date: string;
+}
+
+export interface ICrowdactionComment {
+  id: string;
+  comment: string;
+  status: string;
+  commentedAt: string;
+  anonymousCommentUser: string | null;
+  userId: string | null;
+  user: IUser | null;
+  crowdactionId: string;
+  crowdaction: ICrowdaction | null;
 }
 
 export interface ICrowdaction {

@@ -43,6 +43,10 @@ export default ({ children }: any) => {
             <ListItemIcon><FontAwesomeIcon icon={["far", "user"]} /></ListItemIcon>
             <ListItemText primary="Users" />
           </ListItem>
+          <ListItem button key="Comments" onClick={() => history.push("/admin/comments/list")}>
+            <ListItemIcon><FontAwesomeIcon icon={["far", "comments"]} /></ListItemIcon>
+            <ListItemText primary="Comments" />
+          </ListItem>
         </List>
       </Drawer>
       <main className={classes.content}>

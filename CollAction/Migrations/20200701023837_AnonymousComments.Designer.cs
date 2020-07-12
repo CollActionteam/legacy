@@ -3,15 +3,17 @@ using System;
 using CollAction.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace CollAction.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200701023837_AnonymousComments")]
+    partial class AnonymousComments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -125,8 +127,7 @@ namespace CollAction.Migrations
                         .HasMaxLength(10000);
 
                     b.Property<string>("DescriptionVideoLink")
-                        .HasColumnType("character varying(2048)")
-                        .HasMaxLength(2048);
+                        .HasColumnType("text");
 
                     b.Property<int?>("DescriptiveImageFileId")
                         .HasColumnType("integer");
@@ -147,10 +148,6 @@ namespace CollAction.Migrations
                         .IsRequired()
                         .HasColumnType("character varying(10000)")
                         .HasMaxLength(10000);
-
-                    b.Property<string>("InstagramUser")
-                        .HasColumnType("character varying(30)")
-                        .HasMaxLength(30);
 
                     b.Property<string>("Name")
                         .IsRequired()
