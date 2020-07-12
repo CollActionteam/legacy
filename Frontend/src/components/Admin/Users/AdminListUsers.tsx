@@ -82,6 +82,7 @@ export default () => {
         <Alert type="info" text={info} />
         <Alert type="error" text={error} />
         <Alert type="error" text={loadingError?.message} />
+        { data?.users && data.users.length === 0 && search.length > 0 && <Alert type="error" text="No search results" /> }
         <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
             <DialogTitle>Delete user { toDelete?.email }?</DialogTitle>
             <DialogContent>
@@ -92,7 +93,7 @@ export default () => {
                 <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
             </DialogActions>
         </Dialog>
-        <TextField label="Search user" type="text" value={search} onChange={onSearchChange} />
+        <TextField label="Search user (case-sensitive)" fullWidth type="text" value={search} onChange={onSearchChange} />
         <TableContainer component={Paper}>
             <Table aria-label="simple table">
                 <TableHead>
