@@ -7,6 +7,7 @@ import AdminEditCrowdaction from "../../components/Admin/Crowdactions/AdminEditC
 import AdminListUsers from "../../components/Admin/Users/AdminListUsers";
 import AdminListCrowdactions from "../../components/Admin/Crowdactions/AdminListCrowdactions";
 import { Helmet } from "react-helmet";
+import AdminListComments from "../../components/Admin/Comments/AdminListComments";
 
 type TParams = {
   type: string;
@@ -23,6 +24,8 @@ const AdminPage = ({ match } : RouteComponentProps<TParams>): any => {
         return <AdminListCrowdactions />;
       } else if (match.params.type === "users") {
         return <AdminListUsers />;
+      } else if (match.params.type === "comments") {
+        return <AdminListComments />;
       }
     } else if (match.params.action === "edit" && match.params.id !== undefined) {
       if (match.params.type === "crowdactions") {
