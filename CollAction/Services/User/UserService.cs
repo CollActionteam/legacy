@@ -141,6 +141,23 @@ namespace CollAction.Services.User
             return (IdentityResult.Success, code);
         }
 
+        public IQueryable<ApplicationUser> SearchUsers(string? searchString)
+        {
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+#pragma warning disable CA1307 // Not needed, translated to sql
+                return context.Users
+                              .Where(u => u.Email.Contains(searchString) ||
+                                          u.FirstName!.Contains(searchString) ||
+                                          u.LastName!.Contains(searchString));
+#pragma warning restore CA1307 // Not needed, translated to sql
+            }
+            else
+            {
+                return context.Users;
+            }
+        }
+
         public async Task<IdentityResult> ResetPassword(string email, string code, string password)
         {
             ApplicationUser? user = await userManager.FindByEmailAsync(email).ConfigureAwait(false);

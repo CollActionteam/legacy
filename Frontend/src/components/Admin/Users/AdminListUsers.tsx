@@ -134,11 +134,7 @@ const GET_USERS = gql`
           orderBy: [{ path: $orderBy, descending: false}], 
           skip: $skip, 
           take: $take,
-          where: [
-            {path: "firstName", comparison: contains, value: [$search], connector: OR}, 
-            {path: "lastName", comparison: contains, value: [$search], connector: OR},
-            {path: "email", comparison: contains, value: [$search], connector: OR}
-          ]) {
+          search: $search) {
             id
             email
             isSubscribedNewsletter
@@ -149,7 +145,7 @@ const GET_USERS = gql`
             registrationDate
             representsNumberParticipants
         }
-        userCount
+        userCount(search: $search)
     }
 `;
 
