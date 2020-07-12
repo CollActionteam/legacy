@@ -213,7 +213,7 @@ namespace CollAction.Services.Crowdactions
 
         public async Task<int> DeleteCrowdaction(int id, CancellationToken token)
         {
-            Crowdaction? crowdaction = await context.Crowdactions.FindAsync(id).ConfigureAwait(false);
+            Crowdaction? crowdaction = await context.Crowdactions.SingleOrDefaultAsync(c => c.Id == id, token).ConfigureAwait(false);
 
             if (crowdaction == null)
             {
@@ -382,7 +382,7 @@ namespace CollAction.Services.Crowdactions
 
         public async Task<CrowdactionResult> SendCrowdactionEmail(int crowdactionId, string subject, string message, ClaimsPrincipal performingUser, CancellationToken token)
         {
-            Crowdaction? crowdaction = await context.Crowdactions.FindAsync(new object[] { crowdactionId }, token).ConfigureAwait(false);
+            Crowdaction? crowdaction = await context.Crowdactions.SingleOrDefaultAsync(c => c.Id == crowdactionId, token).ConfigureAwait(false);
             if (crowdaction == null)
             {
                 return new CrowdactionResult(new ValidationResult("Crowdaction could not be found", new[] { nameof(crowdactionId) }));
@@ -483,8 +483,53 @@ namespace CollAction.Services.Crowdactions
                 throw new InvalidOperationException($"Crowdaction is not active when adding comment");
             }
 
-            var crowdactionComment = new CrowdactionComment(comment, applicationUser.Id, crowdactionId, DateTime.UtcNow);
+            var crowdactionComment = new CrowdactionComment(comment, applicationUser.Id, null, crowdactionId, DateTime.UtcNow, CrowdactionCommentStatus.Approved);
             context.CrowdactionComments.Add(crowdactionComment);
+            await context.SaveChangesAsync(token).ConfigureAwait(false);
+
+            return crowdactionComment;
+        }
+
+        public async Task<CrowdactionComment> CreateCommentAnonymous(string comment, string name, int crowdactionId, CancellationToken token)
+        {
+            if (!htmlInputValidator.IsSafe(comment))
+            {
+                throw new InvalidOperationException("Comment contains unsafe html");
+            }
+
+            comment = SanitizeComment(comment);
+
+            Crowdaction? crowdaction = await context.Crowdactions.SingleOrDefaultAsync(c => c.Id == crowdactionId, token).ConfigureAwait(false);
+
+            if (crowdaction == null)
+            {
+                throw new InvalidOperationException($"Crowdaction does not exist when adding comment");
+            }
+            else if (crowdaction.Status != CrowdactionStatus.Running)
+            {
+                throw new InvalidOperationException($"Crowdaction is not active when adding comment");
+            }
+
+            var crowdactionComment = new CrowdactionComment(comment, null, name, crowdactionId, DateTime.UtcNow, CrowdactionCommentStatus.WaitingForApproval);
+            context.CrowdactionComments.Add(crowdactionComment);
+            await context.SaveChangesAsync(token).ConfigureAwait(false);
+
+            IList<ApplicationUser> administrators = await userManager.GetUsersInRoleAsync(AuthorizationConstants.AdminRole).ConfigureAwait(false);
+            await emailSender.SendEmailsTemplated(administrators.Select(a => a.Email), $"A new anonymous comment was submitted on CollAction", "CrowdactionCommentAddedAdmin").ConfigureAwait(false);
+
+            return crowdactionComment;
+        }
+
+        public async Task<CrowdactionComment> ApproveComment(int commentId, CancellationToken token)
+        {
+            CrowdactionComment? crowdactionComment = await context.CrowdactionComments.SingleOrDefaultAsync(c => c.Id == commentId, token).ConfigureAwait(false);
+
+            if (crowdactionComment == null)
+            {
+                throw new InvalidOperationException($"Comment does not exist when approving comment");
+            }
+
+            crowdactionComment.Status = CrowdactionCommentStatus.Approved;
             await context.SaveChangesAsync(token).ConfigureAwait(false);
 
             return crowdactionComment;
@@ -499,7 +544,7 @@ namespace CollAction.Services.Crowdactions
 
         public async Task<AddParticipantResult> CommitToCrowdactionAnonymous(string email, int crowdactionId, CancellationToken token)
         {
-            Crowdaction? crowdaction = await context.Crowdactions.FindAsync(new object[] { crowdactionId }, token).ConfigureAwait(false);
+            Crowdaction? crowdaction = await context.Crowdactions.SingleOrDefaultAsync(c => c.Id == crowdactionId, token).ConfigureAwait(false);
             if (crowdaction == null || !crowdaction.IsActive)
             {
                 logger.LogError("Crowdaction not found or active: {0}", crowdactionId);
@@ -551,7 +596,7 @@ namespace CollAction.Services.Crowdactions
 
         public async Task<AddParticipantResult> CommitToCrowdactionLoggedIn(ClaimsPrincipal user, int crowdactionId, CancellationToken token)
         {
-            Crowdaction? crowdaction = await context.Crowdactions.FindAsync(new object[] { crowdactionId }, token).ConfigureAwait(false);
+            Crowdaction? crowdaction = await context.Crowdactions.SingleOrDefaultAsync(c => c.Id == crowdactionId, token).ConfigureAwait(false);
             if (crowdaction == null || !crowdaction.IsActive)
             {
                 logger.LogError("Crowdaction not found or active: {0}", crowdactionId);
@@ -601,6 +646,18 @@ namespace CollAction.Services.Crowdactions
             }
 
             return crowdactions;
+        }
+
+        public IQueryable<CrowdactionComment> SearchCrowdactionComments(int? crowdactionId, CrowdactionCommentStatus? status)
+        {
+            var comments =
+                crowdactionId != null ?
+                    context.CrowdactionComments.Where(c => c.CrowdactionId == crowdactionId) :
+                    context.CrowdactionComments;
+
+            return status != null ?
+                       comments.Where(c => c.Status == status) :
+                       comments;
         }
 
         public Task RefreshParticipantCount(CancellationToken token)

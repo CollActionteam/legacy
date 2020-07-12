@@ -1,6 +1,7 @@
 ﻿using CollAction.Data;
 using CollAction.Models;
 using GraphQL.EntityFramework;
+using GraphQL.Types;
 
 namespace CollAction.GraphQl.Queries
 {
@@ -8,6 +9,7 @@ namespace CollAction.GraphQl.Queries
     {
         public CrowdactionParticipantCountGraph(IEfGraphQLService<ApplicationDbContext> entityFrameworkGraphQlService) : base(entityFrameworkGraphQlService)
         {
+            Field<NonNullGraphType<IdGraphType>, int>(nameof(CrowdactionParticipantCount.CrowdactionId)).Resolve(x => x.Source.CrowdactionId);
             Field(x => x.Count);
         }
     }

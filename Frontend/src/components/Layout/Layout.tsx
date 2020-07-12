@@ -39,6 +39,7 @@ import {
   faEnvelope,
   faHeart,
   faUser,
+  faComments
 } from '@fortawesome/free-regular-svg-icons';
 import ConsentDialog from '../ConsentDialog/ConsentDialog';
 import { useLocation } from 'react-router-dom';
@@ -52,6 +53,7 @@ library.add(
   faSpinner,
   faClock,
   faUser,
+  faComments,
   faTools,
   faExclamationCircle,
   faTrash,
