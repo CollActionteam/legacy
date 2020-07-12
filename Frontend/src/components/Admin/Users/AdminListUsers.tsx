@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Paper, TableContainer, Table, TableHead, TableCell, TableRow, TableBody, TablePagination, Dialog, DialogTitle, DialogContent, DialogActions } from "@material-ui/core";
+import { Paper, TableContainer, Table, TableHead, TableCell, TableRow, TableBody, TablePagination, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from "@material-ui/core";
 import { gql, useQuery, useMutation } from "@apollo/client";
 import { IUser } from "../../../api/types";
 import { Alert } from "../../Alert/Alert";
@@ -14,6 +14,7 @@ export default () => {
     const [toDelete, setToDelete] = useState<IUser | null>(null);
     const [info, setInfo] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [search, setSearch] = useState("");
     const {data, loading, error: loadingError} = useQuery(
         GET_USERS,
         {
@@ -21,7 +22,8 @@ export default () => {
             variables: {
                 skip: rowsPerPage * page,
                 take: rowsPerPage,
-                orderBy: "lastName"
+                orderBy: "lastName",
+                search: search
             }
         }
     );
@@ -60,11 +62,27 @@ export default () => {
     );
     const userCount = data?.userCount ?? 0;
 
+    const onSearchChange = (ev: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setSearch(ev.target.value);
+        setPage(0);
+    };
+
+    const onDeleteUserClick = (user: IUser) => {
+        setDeleteDialogOpen(true);
+        setToDelete(user);
+    };
+
+    const onChangeRowsPerPage = (ev: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setPage(0);
+        setRowsPerPage(parseInt((ev.target.value)));
+    };
+
     return <>
         { loading ? <Loader /> : null }
         <Alert type="info" text={info} />
         <Alert type="error" text={error} />
         <Alert type="error" text={loadingError?.message} />
+        { data?.users && data.users.length === 0 && search.length > 0 && <Alert type="error" text="No search results" /> }
         <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
             <DialogTitle>Delete user { toDelete?.email }?</DialogTitle>
             <DialogContent>
@@ -75,6 +93,7 @@ export default () => {
                 <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
             </DialogActions>
         </Dialog>
+        <TextField label="Search user (case-sensitive)" fullWidth type="text" value={search} onChange={onSearchChange} />
         <TableContainer component={Paper}>
             <Table aria-label="simple table">
                 <TableHead>
@@ -97,11 +116,11 @@ export default () => {
                             <TableCell align="right">{ u.isAdmin ? "Yes" : "No" }</TableCell>
                             <TableCell align="right">{ Formatter.date(new Date(u.registrationDate)) } { Formatter.time(new Date(u.registrationDate)) }</TableCell>
                             <TableCell align="right"><Button to={`/admin/users/edit/${u.id}`}>Edit</Button></TableCell>
-                            <TableCell align="right"><Button onClick={() => { setDeleteDialogOpen(true); setToDelete(u); }}>Delete</Button></TableCell>
+                            <TableCell align="right"><Button onClick={() => onDeleteUserClick(u)}>Delete</Button></TableCell>
                         </TableRow>))
                     }
                     <TableRow>
-                        <TablePagination count={userCount} page={page} rowsPerPageOptions={[5, 10, 25, 50]} rowsPerPage={rowsPerPage} onChangePage={(_ev, newPage) => setPage(newPage)} onChangeRowsPerPage={(ev) => { setPage(0); setRowsPerPage(parseInt((ev.target.value))) } } />
+                        <TablePagination count={userCount} page={page} rowsPerPageOptions={[5, 10, 25, 50]} rowsPerPage={rowsPerPage} onChangePage={(_ev, newPage) => setPage(newPage)} onChangeRowsPerPage={onChangeRowsPerPage} />
                     </TableRow>
                 </TableBody>
             </Table>
@@ -110,8 +129,12 @@ export default () => {
 };
 
 const GET_USERS = gql`
-    query GetUserData($skip: Int!, $take: Int!, $orderBy: String!) {
-        users(orderBy: [{ path: $orderBy, descending: false}], skip: $skip, take: $take) {
+    query GetUserData($skip: Int!, $take: Int!, $orderBy: String!, $search: String!) {
+        users(
+          orderBy: [{ path: $orderBy, descending: false}], 
+          skip: $skip, 
+          take: $take,
+          search: $search) {
             id
             email
             isSubscribedNewsletter
@@ -122,7 +145,7 @@ const GET_USERS = gql`
             registrationDate
             representsNumberParticipants
         }
-        userCount
+        userCount(search: $search)
     }
 `;
 

@@ -3,6 +3,7 @@ using CollAction.GraphQl.Mutations.Input;
 using CollAction.Helpers;
 using CollAction.Models;
 using CollAction.Services.Crowdactions;
+using CollAction.Services.User;
 using GraphQL.Authorization;
 using GraphQL.EntityFramework;
 using GraphQL.Types;
@@ -107,9 +108,20 @@ namespace CollAction.GraphQl.Queries
                 });
 
             AddQueryField(
-                nameof(ApplicationDbContext.Users),
-                c => c.DbContext.Users,
-                typeof(ApplicationUserGraph)).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
+                name: nameof(ApplicationDbContext.Users),
+                arguments: new QueryArgument[] 
+                {
+                    new QueryArgument<StringGraphType>() { Name = "search" }
+                },
+                resolve: c =>
+                {
+                    string? search = c.GetArgument<string?>("search");
+                    return c.GetUserContext()
+                            .ServiceProvider
+                            .GetRequiredService<IUserService>()
+                            .SearchUsers(search);
+                },
+                graphType: typeof(ApplicationUserGraph)).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
 
             AddSingleField(
                 name: "user",
@@ -118,7 +130,16 @@ namespace CollAction.GraphQl.Queries
 
             FieldAsync<NonNullGraphType<IntGraphType>, int>(
                 "userCount",
-                resolve: c => c.GetUserContext().Context.Users.CountAsync()).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
+                arguments: new QueryArguments(new QueryArgument<StringGraphType>() { Name = "search" }),
+                resolve: c =>
+                {
+                    string? search = c.GetArgument<string?>("search");
+                    return c.GetUserContext()
+                            .ServiceProvider
+                            .GetRequiredService<IUserService>()
+                            .SearchUsers(search)
+                            .CountAsync();
+                }).AuthorizeWith(AuthorizationConstants.GraphQlAdminPolicy);
 
             AddSingleField(
                 name: "currentUser",
