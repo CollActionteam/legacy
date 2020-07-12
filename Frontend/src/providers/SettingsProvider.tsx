@@ -30,6 +30,11 @@ export const GET_SETTINGS = gql`
                 name
             }
         }
+        crowdactionCommentStatusses: __type(name: "CrowdactionCommentStatus") {
+            enumValues {
+                name
+            }
+        }
     }
 `; 
 
@@ -44,7 +49,8 @@ const defaultSettings: ISettings = {
     externalLoginProviders: [],
     categories: [],
     displayPriorities: [],
-    crowdactionStatusses: []
+    crowdactionStatusses: [],
+    crowdactionCommentStatusses: []
 };
 
 export const SettingsContext = React.createContext(defaultSettings);
@@ -66,7 +72,8 @@ const mapSettings = (settingsData: any): ISettings => {
         facebookPixelID: misc.facebookPixelID,
         categories: settingsData.categories.enumValues.map((v: any) => v.name),
         displayPriorities: settingsData.displayPriorities.enumValues.map((v: any) => v.name),
-        crowdactionStatusses: settingsData.crowdactionStatusses.enumValues.map((v: any) => v.name)
+        crowdactionStatusses: settingsData.crowdactionStatusses.enumValues.map((v: any) => v.name),
+        crowdactionCommentStatusses: settingsData.crowdactionCommentStatusses.enumValues.map((v: any) => v.name)
     };
 };
 

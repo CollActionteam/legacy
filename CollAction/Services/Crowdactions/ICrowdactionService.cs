@@ -29,11 +29,17 @@ namespace CollAction.Services.Crowdactions
 
         Task<CrowdactionComment> CreateComment(string comment, int crowdactionId, ClaimsPrincipal user, CancellationToken token);
 
+        Task<CrowdactionComment> CreateCommentAnonymous(string comment, string name, int crowdactionId, CancellationToken token);
+
+        Task<CrowdactionComment> ApproveComment(int commentId, CancellationToken token);
+
         Task DeleteComment(int commentId, CancellationToken token);
 
         bool CanSendCrowdactionEmail(Crowdaction crowdaction);
 
         IQueryable<Crowdaction> SearchCrowdactions(Category? category, SearchCrowdactionStatus? status);
+
+        IQueryable<CrowdactionComment> SearchCrowdactionComments(int? crowdactionId, CrowdactionCommentStatus? status);
 
         Task RefreshParticipantCount(CancellationToken token);
 
