@@ -33,7 +33,7 @@ const CreateCrowdactionPage = () => {
   };
 
   const [createCrowdaction] = useMutation(gql`
-    mutation Create($crowdaction: NewCrowdactionInputGraph) {
+    mutation Create($crowdaction: NewCrowdactionInputGraph!) {
       crowdaction {
         createCrowdaction(crowdaction: $crowdaction) {
           succeeded
