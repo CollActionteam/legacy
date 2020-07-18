@@ -1,8 +1,6 @@
 FROM ubuntu:focal AS build
 ARG REACT_APP_BACKEND_URL
 ARG INLINE_RUNTIME_CHUNK=false
-ARG SITEMAP_BACKEND_URL=https://api.collaction.org
-ARG URL=https://collaction.org
 
 # Initial dependencies
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y curl gnupg openssl gettext-base

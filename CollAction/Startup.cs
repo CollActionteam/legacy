@@ -11,6 +11,7 @@ using CollAction.Services.HtmlValidator;
 using CollAction.Services.Image;
 using CollAction.Services.Initialization;
 using CollAction.Services.Newsletter;
+using CollAction.Services.Sitemap;
 using CollAction.Services.Statistics;
 using CollAction.Services.User;
 using CollAction.Services.ViewRender;
@@ -96,7 +97,8 @@ namespace CollAction
 
             services.AddMvc()
                     .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
-                    .AddNewtonsoftJson();
+                    .AddNewtonsoftJson()
+                    .AddXmlSerializerFormatters();
 
             services.AddHangfire(
                 config => config.UseSerilogLogProvider()
@@ -139,6 +141,7 @@ namespace CollAction
             services.AddScoped<ICrowdactionService, CrowdactionService>();
             services.AddScoped<IStatisticsService, StatisticsService>();
             services.AddScoped<IInitializationService, InitializationService>();
+            services.AddScoped<ISitemapService, SitemapService>();
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<INewsletterService, NewsletterService>();
             services.AddTransient<IDonationService, DonationService>();

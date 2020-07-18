@@ -58,8 +58,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "node generate-sitemap.js > public/sitemap.xml && react-scripts build",
-    "sitemap": "node generate-sitemap.js",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "analyze-source": "source-map-explorer build/static/js/*"
