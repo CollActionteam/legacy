@@ -97,8 +97,7 @@ namespace CollAction
 
             services.AddMvc()
                     .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
-                    .AddNewtonsoftJson()
-                    .AddXmlSerializerFormatters();
+                    .AddNewtonsoftJson();
 
             services.AddHangfire(
                 config => config.UseSerilogLogProvider()
