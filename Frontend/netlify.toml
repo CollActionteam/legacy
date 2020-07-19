@@ -1,5 +1,5 @@
 [build]
-  publish = "build"
+  publish = "Frontend/build"
   command = "yarn run build"
 
 [[redirects]]
