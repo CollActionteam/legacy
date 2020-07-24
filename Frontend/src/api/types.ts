@@ -15,6 +15,7 @@ export interface ISettings {
   categories: string[];
   displayPriorities: string[];
   crowdactionStatusses: string[];
+  crowdactionCommentStatusses: string[];
 }
 
 export interface IDonationEventLog {
@@ -58,6 +59,18 @@ export enum CrowdactionDisplayPriority {
   TOP = "TOP",
   MEDIUM = "MEDIUM",
   BOTTOM = "BOTTOM",
+}
+
+export interface ICrowdactionComment {
+  id: string;
+  comment: string;
+  status: string;
+  commentedAt: string;
+  anonymousCommentUser: string | null;
+  userId: string | null;
+  user: IUser | null;
+  crowdactionId: string;
+  crowdaction: ICrowdaction | null;
 }
 
 export interface ICrowdaction {

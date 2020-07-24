@@ -71,6 +71,14 @@ resource "aws_security_group" "inbound-alb" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    # Incoming access for https traffic
+    protocol    = "tcp"
+    from_port   = 80
+    to_port     = 80
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
     # Outgoing traffic 
     protocol    = "tcp"

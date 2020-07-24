@@ -1,6 +1,8 @@
-﻿using CollAction.Services.User.Models;
+﻿using CollAction.Models;
+using CollAction.Services.User.Models;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json.Linq;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,7 +11,7 @@ namespace CollAction.Services.User
 {
     public interface IUserService
     {
-        Task<UserResult> CreateUser(string email, ExternalLoginInfo info);
+        Task<ExternalUserResult> CreateOrAddExternalToUser(string email, ExternalLoginInfo info);
 
         Task<UserResult> CreateUser(NewUser newUser);
 
@@ -26,5 +28,7 @@ namespace CollAction.Services.User
         Task<UserResult> FinishRegistration(NewUser newUser, string code);
 
         Task<int> IngestUserEvent(ClaimsPrincipal trackedUser, JObject eventData, bool canTrack, CancellationToken token);
+
+        IQueryable<ApplicationUser> SearchUsers(string? searchString);
     }
 }

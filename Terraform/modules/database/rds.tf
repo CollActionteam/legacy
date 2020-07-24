@@ -19,7 +19,7 @@ resource "aws_db_instance" "collaction" {
   backup_retention_period               = var.backup_retention_period
   backup_window                         = "04:00-05:00" 
   performance_insights_enabled          = var.performance_insights_enabled
-  performance_insights_retention_period = var.performance_insights_enabled ? 30 : 0
+  performance_insights_retention_period = var.performance_insights_enabled == false ? 0 : 7 # Either 7 or 731 (2 years)
   multi_az                              = var.multi_az
 
   vpc_security_group_ids = [

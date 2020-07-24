@@ -4,7 +4,7 @@ resource "aws_ecs_service" "testselect" {
   cluster         = aws_ecs_cluster.cluster.id
   task_definition = aws_ecs_task_definition.testselect.arn
   desired_count   = 1
-  
+
   capacity_provider_strategy {
     capacity_provider = var.capacity_provider
     weight            = 100
