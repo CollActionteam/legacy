@@ -236,6 +236,7 @@ export default ({ id }: ICrowdactionCommentsProps) => {
                 <div className={styles.comment}>
                   <Form className={styles.form}>
                     <RichTextEditorFormControl
+                      key={formik.submitCount} // Hack to ensure the component resets after submitting..
                       formik={formik}
                       height="130px"
                       name="comment"
@@ -244,7 +245,7 @@ export default ({ id }: ICrowdactionCommentsProps) => {
                       fullWidth
                     />
                     <div className={styles.submitComment}>
-                      <Button type="submit" >Comment</Button>
+                      <Button type="submit">Comment</Button>
                     </div>
                   </Form>
                 </div>
