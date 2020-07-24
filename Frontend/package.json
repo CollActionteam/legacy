@@ -20,7 +20,7 @@
     "gray-matter": "^4.0",
     "i18next": "^19.3",
     "immutable": "^3.8",
-    "mui-rte": "^1.23",
+    "mui-rte": "1.14",
     "node-sass": "^4.13",
     "normalize.css": "^8.0",
     "react": "^16.13",
