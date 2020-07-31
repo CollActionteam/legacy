@@ -16,9 +16,6 @@ const SocialMediaSharing = ({ crowdaction }: ISocialMediaSharingProps) => {
       <FacebookShareButton quote={`${crowdaction.name}: ${crowdaction.proposal}`} hashtag={crowdaction.tags.map(tag => `#${tag.tag.name}`).join(' ')} url={shareUrl}>
         <FacebookIcon size={32} round />
       </FacebookShareButton>
-      <FacebookShareCount url={shareUrl}>
-        {count => count}
-      </FacebookShareCount>
 
       <TwitterShareButton url={shareUrl} title={crowdaction.name} hashtags={crowdaction.tags.map(tag => `#${tag.tag.name}`)}>
         <TwitterIcon size={32} round />
@@ -31,9 +28,6 @@ const SocialMediaSharing = ({ crowdaction }: ISocialMediaSharingProps) => {
       <TumblrShareButton url={shareUrl} title={crowdaction.name} caption={crowdaction.proposal} tags={crowdaction.tags.map(tag => tag.tag.name)}>
         <TumblrIcon size={32} round />        
       </TumblrShareButton>
-      <TumblrShareCount url={shareUrl}>
-        {count => count}
-      </TumblrShareCount>
 
       <EmailShareButton url={shareUrl} subject={crowdaction.name} body="Hi! Check out this crowdaction: ">
         <EmailIcon size={32} round />
