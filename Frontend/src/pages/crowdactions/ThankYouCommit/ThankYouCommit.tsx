@@ -7,7 +7,6 @@ import {gql, useQuery} from "@apollo/client";
 import {ICrowdaction} from "../../../api/types";
 import {Fragments} from "../../../api/fragments";
 import styles from "./ThankYouCommit.module.scss";
-import CrowdactionShare from "../../../components/CrowdactionShare/CrowdactionShare";
 import DonationLayout from "../../../components/DonationLayout/DonationLayout";
 import SocialMediaSharing from "../SocialMediaSharing/SocialMediaSharing";
 
