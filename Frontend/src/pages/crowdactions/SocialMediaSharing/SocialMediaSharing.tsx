@@ -1,8 +1,8 @@
 import React from 'react';
-import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton, FacebookShareCount, LinkedinIcon, LinkedinShareButton, TumblrIcon, TumblrShareButton, TumblrShareCount, TwitterIcon, TwitterShareButton, WhatsappIcon, WhatsappShareButton } from 'react-share';
+import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TumblrIcon, TumblrShareButton, TwitterIcon, TwitterShareButton, WhatsappIcon, WhatsappShareButton } from 'react-share';
 import { ICrowdaction } from '../../../api/types';
-
 import styles from './SocialMediaSharing.module.scss';
+
 
 interface ISocialMediaSharingProps {
   crowdaction: ICrowdaction;
