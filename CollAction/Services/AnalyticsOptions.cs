@@ -2,7 +2,7 @@
 
 namespace CollAction.Services
 {
-    public class AnalyticsOptions
+    public sealed class AnalyticsOptions
     {
         [Required]
         public string GoogleAnalyticsID { get; set; } = null!;

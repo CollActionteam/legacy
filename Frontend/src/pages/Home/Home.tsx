@@ -9,9 +9,37 @@ import TimeToAct from "../../components/TimeToAct/TimeToAct";
 
 import { useTranslation } from 'react-i18next';
 import { Helmet } from "react-helmet";
+import { gql, useQuery } from "@apollo/client";
+import InstagramWall from "../../components/InstagramWall/InstagramWall";
+import { Alert } from "../../components/Alert/Alert";
+import { IInstagramWallItem } from "../../api/types";
+import Loader from "../../components/Loader/Loader";
+
+const GET_INSTAGRAM_WALL = gql`
+  query GetInstagramWall($user: String!) {
+    instagramWall(user: $user) {
+      id
+      shortCode
+      thumbnailSrc
+      caption
+      accessibilityCaption
+      link      
+      date
+    }
+  }
+`;
 
 const HomePage = () => {
   const { t } = useTranslation();
+  const { data, error, loading } = useQuery(
+    GET_INSTAGRAM_WALL,
+    {
+      variables: {
+        user: "collaction_org"
+      }
+    }
+  );
+  const wallData = data?.instagramWall as IInstagramWallItem[] | null;
   return (
     <>
       <Helmet>
@@ -36,6 +64,12 @@ const HomePage = () => {
           <GhostButton to="/crowdactions/find">{t('home.crowdactions.button')}</GhostButton>
         </div>
       </Section>
+        <Section center title={t('home.follow.title')}>
+            Instagram: <a href="https://www.instagram.com/collaction_org" target="_blank" rel="noopener noreferrer" >@collaction_org</a>
+            <Alert type="error" text={error?.message} />
+            { loading && <Loader /> }
+            { wallData && <InstagramWall wallItems={wallData} /> }
+        </Section>
     </>
   )
 }

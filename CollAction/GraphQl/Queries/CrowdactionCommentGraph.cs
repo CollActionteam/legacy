@@ -6,7 +6,7 @@ using System;
 
 namespace CollAction.GraphQl.Queries
 {
-    public class CrowdactionCommentGraph : EfObjectGraphType<ApplicationDbContext, CrowdactionComment>
+    public sealed class CrowdactionCommentGraph : EfObjectGraphType<ApplicationDbContext, CrowdactionComment>
     {
         public CrowdactionCommentGraph(IEfGraphQLService<ApplicationDbContext> graphService) : base(graphService)
         {

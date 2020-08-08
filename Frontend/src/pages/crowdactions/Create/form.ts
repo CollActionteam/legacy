@@ -10,6 +10,7 @@ export interface ICrowdactionForm {
   startDate: string;
   endDate: string;
   tags: string;
+  instagramUser: string;
   description: string;
   goal: string;
   image: any | null;
@@ -29,6 +30,7 @@ export const initialValues: ICrowdactionForm = {
   tags: '',
   endDate: '',
   description: '',
+  instagramUser: '',
   goal: '',
   image: null,
   imageDescription: '',
@@ -93,6 +95,7 @@ export const validations = Yup.object({
   hashtags: Yup.string()
     .max(30, 'Please keep the number of hashtags civil, no more then 30 characters')
     .matches(/^[a-zA-Z_0-9]+(;[a-zA-Z_0-9]+)*$/, 'Don\'t use spaces or #, must contain a letter, can contain digits and underscores. Separate multiple tags with a colon \';\''),
+  instagramUser: Yup.string().max(30, "An instagram username has a maximum length of 30 characters"),
   description: Yup.string()
     .required('Give a succinct description of what you are gathering participants for')
     .max(10000, 'Please use no more then 10.000 characters'),

@@ -13,14 +13,14 @@ using Xunit;
 namespace CollAction.Tests.Integration.Service
 {
     [Trait("Category", "Integration")]
-    public sealed class ImageServicesTests : IntegrationTestBase
+    public sealed class ImageServiceTests : IntegrationTestBase
     {
         private readonly byte[] testImage = new byte[] { 0x42, 0x4D, 0x1E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1A, 0x00, 0x00, 0x00, 0x0C, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x00, 0xFF, 0x00 };
         private readonly MemoryStream imageMs;
         private readonly IImageService imageService;
         private readonly Mock<IFormFile> upload;
 
-        public ImageServicesTests() : base(false)
+        public ImageServiceTests() : base(false)
         {
             imageMs = new MemoryStream(testImage);
             imageService = Scope.ServiceProvider.GetRequiredService<IImageService>();

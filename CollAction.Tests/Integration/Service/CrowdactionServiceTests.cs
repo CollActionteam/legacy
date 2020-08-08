@@ -70,7 +70,7 @@ namespace CollAction.Tests.Integration.Service
         public async Task TestCrowdactionUpdate()
         {
             var user = await context.Users.FirstAsync().ConfigureAwait(false);
-            var newCrowdaction = new NewCrowdactionInternal("test" + Guid.NewGuid(), 100, "test", "test", "test", null, DateTime.UtcNow, DateTime.UtcNow.AddDays(1), null, null, null, null, new[] { Category.Community }, Array.Empty<string>(), CrowdactionDisplayPriority.Bottom, CrowdactionStatus.Running, 0, user.Id);
+            var newCrowdaction = new NewCrowdactionInternal("test" + Guid.NewGuid(), 100, "test", "test", "test", null, DateTime.UtcNow, DateTime.UtcNow.AddDays(1), null, null, null, null, null, new[] { Category.Community }, Array.Empty<string>(), CrowdactionDisplayPriority.Bottom, CrowdactionStatus.Running, 0, user.Id);
             Crowdaction crowdaction = await crowdactionService.CreateCrowdactionInternal(newCrowdaction, CancellationToken.None).ConfigureAwait(false);
             Assert.NotNull(crowdaction);
 
@@ -117,7 +117,7 @@ namespace CollAction.Tests.Integration.Service
         [Fact]
         public async Task TestCommentCreate()
         {
-            var newCrowdaction = new NewCrowdactionInternal("test" + Guid.NewGuid(), 100, "test", "test", "test", null, DateTime.UtcNow, DateTime.UtcNow.AddDays(1), null, null, null, null, new[] { Category.Community }, Array.Empty<string>(), CrowdactionDisplayPriority.Bottom, CrowdactionStatus.Running, 0, null);
+            var newCrowdaction = new NewCrowdactionInternal("test" + Guid.NewGuid(), 100, "test", "test", "test", null, DateTime.UtcNow, DateTime.UtcNow.AddDays(1), null, null, null, null, null, new[] { Category.Community }, Array.Empty<string>(), CrowdactionDisplayPriority.Bottom, CrowdactionStatus.Running, 0, null);
             Crowdaction crowdaction = await crowdactionService.CreateCrowdactionInternal(newCrowdaction, CancellationToken.None).ConfigureAwait(false);
             Assert.NotNull(crowdaction);
 
@@ -143,7 +143,7 @@ namespace CollAction.Tests.Integration.Service
         { 
             // Setup
             var user = await context.Users.FirstAsync().ConfigureAwait(false);
-            Crowdaction crowdaction = new Crowdaction($"test-{Guid.NewGuid()}", CrowdactionStatus.Running, user.Id, 10, DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1), "t", "t", "t", null, null);
+            Crowdaction crowdaction = new Crowdaction($"test-{Guid.NewGuid()}", CrowdactionStatus.Running, user.Id, 10, DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1), "t", "t", "t", "t", null, null);
             context.Crowdactions.Add(crowdaction);
             await context.SaveChangesAsync().ConfigureAwait(false);
 
@@ -161,7 +161,7 @@ namespace CollAction.Tests.Integration.Service
             // Setup
             var user = await context.Users.FirstAsync().ConfigureAwait(false);
             var userClaim = await signInManager.CreateUserPrincipalAsync(user).ConfigureAwait(false);
-            var crowdaction = new Crowdaction($"test-{Guid.NewGuid()}", CrowdactionStatus.Running, user.Id, 10, DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1), "t", "t", "t", null, null);
+            var crowdaction = new Crowdaction($"test-{Guid.NewGuid()}", CrowdactionStatus.Running, user.Id, 10, DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1), "t", "t", "t", "t", null, null);
             context.Crowdactions.Add(crowdaction);
             await context.SaveChangesAsync().ConfigureAwait(false);
 
@@ -187,6 +187,7 @@ namespace CollAction.Tests.Integration.Service
                     start: DateTime.Now.AddDays(-10),
                     end: DateTime.Now.AddDays(30),
                     goal: Guid.NewGuid().ToString(),
+                    instagramUser: "test",
                     creatorComments: Guid.NewGuid().ToString(),
                     proposal: Guid.NewGuid().ToString(),
                     target: 40,
@@ -217,7 +218,7 @@ namespace CollAction.Tests.Integration.Service
             Category searchCategory = (Category)r.Next(7);
             for (int i = 0; i < r.Next(10, 30); i++)
             {
-                var newCrowdaction = new NewCrowdactionInternal("test" + Guid.NewGuid(), 100, "test", "test", "test", null, DateTime.UtcNow.AddDays(r.Next(-20, 20)), DateTime.UtcNow.AddDays(r.Next(21, 50)), null, null, null, null, new[] { searchCategory }, Array.Empty<string>(), CrowdactionDisplayPriority.Bottom, (CrowdactionStatus)r.Next(3), 0, null);
+                var newCrowdaction = new NewCrowdactionInternal("test" + Guid.NewGuid(), 100, "test", "test", "test", null, DateTime.UtcNow.AddDays(r.Next(-20, 20)), DateTime.UtcNow.AddDays(r.Next(21, 50)), null, null, null, null, null, new[] { searchCategory }, Array.Empty<string>(), CrowdactionDisplayPriority.Bottom, (CrowdactionStatus)r.Next(3), 0, null);
                 Crowdaction crowdaction = await crowdactionService.CreateCrowdactionInternal(newCrowdaction, CancellationToken.None).ConfigureAwait(false);
             }
 

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CollAction.Models
 {
-    public class CrowdactionComment
+    public sealed class CrowdactionComment
     {
         public CrowdactionComment(string comment, string? userId, string? anonymousCommentUser, int crowdactionId, DateTime commentedAt, CrowdactionCommentStatus status)
         {

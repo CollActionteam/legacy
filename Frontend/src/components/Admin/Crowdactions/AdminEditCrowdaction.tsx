@@ -76,6 +76,7 @@ export default ({ crowdactionId } : IEditCrowdactionProps): any => {
             goal: "",
             status: "",
             proposal: "",
+            instagramUser: "",
             target: "",
             anonymousUserParticipants: 0,
             firstCategory: "",
@@ -102,6 +103,7 @@ export default ({ crowdactionId } : IEditCrowdactionProps): any => {
             target: Yup.number().required("Must be filled in").min(1, "Must be a positive number"),
             anonymousUserParticipants: Yup.number().required("Must be filled in").min(0, "Must be a positive number"),
             firstCategory: Yup.string(),
+            instagramUser: Yup.string().max(30, "An instagram username has a maximum length of 30 characters"),
             secondCategory: Yup.string(),
             tags: Yup.string(),
             numberCrowdactionEmailsSent: Yup.number().required("Must be filled in").min(0, "Must be a positive number"),
@@ -137,9 +139,10 @@ export default ({ crowdactionId } : IEditCrowdactionProps): any => {
                         proposal: values.proposal,
                         description: values.description,
                         goal: values.goal,
-                        creatorComments: values.creatorComments === "" ? null : values.creatorComments,
+                        creatorComments: values.creatorComments || null,
                         start: values.start,
                         end: values.end,
+                        instagramUser: values.instagramUser || null,
                         descriptionVideoLink: values.descriptionVideoLink === "" ? null : values.descriptionVideoLink,
                         displayPriority: values.displayPriority,
                         numberCrowdactionEmailsSent: values.numberCrowdactionEmailsSent,
@@ -168,6 +171,7 @@ export default ({ crowdactionId } : IEditCrowdactionProps): any => {
             displayPriority: data.crowdaction.displayPriority,
             start: data.crowdaction.start,
             end: data.crowdaction.end,
+            instagramUser: data.crowdaction.instagramUser ?? "",
             ownerEmail: data.crowdaction.ownerWithEmail?.email ?? "",
             ownerId: formik.values.ownerId,
             status: data.crowdaction.status,
@@ -291,6 +295,14 @@ export default ({ crowdactionId } : IEditCrowdactionProps): any => {
                             { ...formik.getFieldProps('descriptionVideoLink') }
                         />
                         <Alert type="error" text={formik.errors.descriptionVideoLink} />
+                    </FormControl>
+                    <FormControl >
+                        <TextField
+                            label="Instagram User"
+                            type="text"
+                            { ...formik.getFieldProps('instagramUser') }
+                        />
+                        <Alert type="error" text={formik.errors.instagramUser} />
                     </FormControl>
                     <FormControl >
                         <TextField

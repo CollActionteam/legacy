@@ -43,6 +43,10 @@ namespace CollAction.Services.Crowdactions.Models
         [DataType(DataType.Date)]
         public DateTime End { get; set; }
 
+        [MinLength(1)]
+        [MaxLength(30)]
+        public string? InstagramUser { get; set; }
+
         public int? CardImageFileId { get; set; }
 
         public int? BannerImageFileId { get; set; }

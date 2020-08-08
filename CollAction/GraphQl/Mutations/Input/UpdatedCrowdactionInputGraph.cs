@@ -20,6 +20,7 @@ namespace CollAction.GraphQl.Mutations.Input
             Field(x => x.BannerImageFileId, true);
             Field(x => x.CardImageFileId, true);
             Field(x => x.DescriptiveImageFileId, true);
+            Field(x => x.InstagramUser, true);
             Field(x => x.DescriptionVideoLink, true);
             Field(x => x.Tags);
             Field(x => x.DisplayPriority);

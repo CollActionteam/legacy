@@ -61,6 +61,16 @@ export enum CrowdactionDisplayPriority {
   BOTTOM = "BOTTOM",
 }
 
+export interface IInstagramWallItem {
+  id: string;
+  shortCode: string;
+  thumbnailSrc: string;
+  caption: string | null;
+  accessibilityCaption: string | null;
+  link: string;
+  date: string;
+}
+
 export interface ICrowdactionComment {
   id: string;
   comment: string;
@@ -87,6 +97,8 @@ export interface ICrowdaction {
   descriptiveImage: IImageFile;
   descriptiveImageFileId: string;
   displayPriority: CrowdactionDisplayPriority;
+  instagramWall: IInstagramWallItem[];
+  instagramUser: string | null;
   start: string;
   end: string;
   goal: string;
