@@ -7,8 +7,3 @@
   from = "/sitemap.xml"
   to = "$REACT_APP_BACKEND_URL/sitemap"
   status = 200
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
