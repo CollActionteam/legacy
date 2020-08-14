@@ -39,7 +39,7 @@
     '''
 
 [[headers]]
-  for = "/widgets/*"
+  for = "/widget/*"
   [headers.value]
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
