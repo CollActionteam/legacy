@@ -1,6 +1,6 @@
 [build]
-  base = "Frontend"
-  publish = "Frontend/build/"
+  base = "Frontend/"
+  publish = "build/"
   command = "yarn run setup-netlify && yarn run build"
 
 [build.environment]
