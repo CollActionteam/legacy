@@ -1,7 +1,7 @@
 [build]
   base = "Frontend/"
   publish = "Frontend/build"
-  command = "yarn run setup-netlify && cat ../netlify.toml && yarn run build"
+  command = "yarn run setup-netlify && cat $REACT_APP_BACKEND_URL && cat ../netlify.toml && yarn run build"
 
 [build.environment]
   INLINE_RUNTIME_CHUNK = "false"
