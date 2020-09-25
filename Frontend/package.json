@@ -62,7 +62,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "setup-netlify": "sed -i -e 's/$REACT_APP_BACKEND_URL/$REACT_APP_BACKEND_URL' ../netlify.toml",
+    "setup-netlify": "sed -i -e 's/$REACT_APP_BACKEND_URL/$REACT_APP_BACKEND_URL/g' ../netlify.toml",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "analyze-source": "source-map-explorer build/static/js/*"
