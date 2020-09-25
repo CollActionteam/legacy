@@ -30,7 +30,9 @@ jobs:
     - name: Get the version
       id: get_version
       run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}    
+
     - uses: actions/checkout@v2
+
     - uses: docker/build-push-action@v1
       with:
         username: ${{ secrets.DockerUsername }}

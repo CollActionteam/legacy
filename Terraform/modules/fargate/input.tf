@@ -6,6 +6,10 @@ variable "cluster" {
   description = "Name of the Fargate cluster"
 }
 
+variable "capacity_provider" {
+  description = "The capacity provider to use. Can be FARGATE or FARGATE_SPOT"
+}
+
 variable "imageversion" {
   description = "The version of the image to deploy to this environment"
 }

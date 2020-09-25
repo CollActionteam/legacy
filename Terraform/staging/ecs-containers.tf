@@ -10,9 +10,10 @@ data "aws_alb_listener" "api-collaction" {
 module "fargate" {
   source = "../modules/fargate"
 
-  region      = var.region
-  cluster     = "collaction-${var.environment}"
-  environment = var.environment
+  region            = var.region
+  cluster           = "collaction-${var.environment}"
+  capacity_provider = "FARGATE_SPOT"
+  environment       = var.environment
 
   imageversion      = var.imageversion
   api_cpu           = var.api_cpu

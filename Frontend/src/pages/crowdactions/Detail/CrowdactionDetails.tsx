@@ -132,7 +132,7 @@ const CrowdactionDetailsPage = ({
                 }
               }}
             >
-              Join crowdaction
+              Join
             </Button>
           </div>
           <div className={styles.deadline}>
@@ -242,7 +242,7 @@ const CrowdactionDetailsPage = ({
                     </figure>
                   </div>
                 )}
-                {comments && (
+                {(comments && comments.__html) &&(
                   <div>
                     <h3 className={styles.header}>Other comments</h3>
                     <p dangerouslySetInnerHTML={comments}></p>
@@ -263,12 +263,6 @@ const CrowdactionDetailsPage = ({
                   </div>
                 )}
               </Container>
-              <Grid item xs={12}>
-                <Container>
-                  <h3 className={styles.header}>User Comments</h3>
-                  <CrowdactionComments id={crowdactionId} />
-                </Container>
-              </Grid>
             </Grid>
             <Grid item md={5} xs={12}>
               <Container>
@@ -324,7 +318,6 @@ const CrowdactionDetailsPage = ({
                                     </span>
                                     <input
                                       type="hidden"
-                                      name="email"
                                       {...formik.getFieldProps('email')}
                                     />
                                   </React.Fragment>
@@ -349,7 +342,7 @@ const CrowdactionDetailsPage = ({
                                   type="submit"
                                   disabled={formik.isSubmitting}
                                 >
-                                  Join CrowdAction
+                                  Join
                                 </Button>
                               </Form>
                             </FormikContext.Provider>
@@ -359,6 +352,13 @@ const CrowdactionDetailsPage = ({
                     )}
                   </div>
                 )}
+              </Container>
+            </Grid>
+
+            <Grid item md={7} xs={12}>
+              <Container>
+                <h3 className={styles.header}>User Comments</h3>
+                <CrowdactionComments id={crowdactionId} />
               </Container>
             </Grid>
           </Grid>

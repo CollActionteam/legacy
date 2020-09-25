@@ -1,0 +1,6 @@
+# This prevents the applications to be uploaded to Terraform remote state
+.github/
+.vscode/
+CollAction/
+CollActionTests/
+Frontend/

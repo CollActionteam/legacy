@@ -2,33 +2,18 @@ variable "environment" {
   default = "test"
 }
 
-# variable "imageversion" {
-#   default = "v2.0.0-beta2"
-# }
+variable "capacity_provider" {
+  default = "FARGATE_SPOT"
+}
 
-# variable "api_desired_count" {
-#   default = 1
-# }
+variable "imageversion" {
+  description = "The tagname of the image to deploy"
+  default     = "latest"
+}
 
-# variable "api_cpu" {
-#   default = 256
-# }
-
-# variable "api_memory" {
-#   default = 512
-# }
-
-# variable "rds_instance_class" {
-#   default = "db.t2.micro"
-# }
-
-# variable "rds_allocated_storage" {
-#   default = 20
-# }
-
-# variable "hostname" {
-#   default = "api-test.collaction.org"
-# }
+variable "hostname" {
+  default = "api-test.collaction.org"
+}
 
 variable "route53_zone_name" {
   default = "collaction.org."
