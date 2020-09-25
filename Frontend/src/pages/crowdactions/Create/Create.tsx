@@ -16,14 +16,12 @@ import { Link, useHistory } from 'react-router-dom';
 import { gql, useMutation } from '@apollo/client';
 import Loader from '../../../components/Loader/Loader';
 import Utils from '../../../utils';
-import {DatePicker, KeyboardDatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
+import {DatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import MomentUtils from '@date-io/moment';
 
 //https://material-ui-pickers.dev/guides/form-integration
 // @ts-ignore
 const DatePickerField = ({ field, form, ...other }) => {
-  const currentError = form.errors[field.name];
-
   return (
       <DatePicker
           clearable

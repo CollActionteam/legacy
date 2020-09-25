@@ -36,21 +36,6 @@ export const initialValues: ICrowdactionForm = {
   youtube: ''
 };
 
-const determineEndDateValidation = (startDate: any, schema: any) => {
-  if (!startDate) {
-    return;
-  }
-
-  const minDate = new Date(startDate) as Date;
-  minDate.setDate(minDate.getDate() + 1);
-  const maxDate = new Date(startDate);
-  maxDate.setMonth(maxDate.getMonth() + 12);
-
-  return schema
-    .min(minDate, 'Please ensure your sign up ends after it starts :-)')
-    .max(maxDate, 'The deadline must be within a year of the start date');
-};
-
 const determineImageDescriptionValidation = (image: any, schema: any) => {
   if (!image) {
     return;
