@@ -10,6 +10,7 @@
   from = "/sitemap.xml"
   to = "$REACT_APP_BACKEND_URL/sitemap"
   status = 200
+  force = true
 
 [[redirects]]
   from = "/*"
