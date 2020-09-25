@@ -1,0 +1,19 @@
+@import '../../../components/Styles/responsive.scss';
+
+.shareButtons {
+  display: flex;
+  align-items: center;
+
+  @include breakpoint-down(md) {
+    justify-content: center;
+    margin-bottom: var(--spacing);
+  }
+
+  button, span {
+    margin-right: var(--spacing-xs);
+  }
+
+  button {
+    height: 32px;
+  }
+}

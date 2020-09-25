@@ -36,6 +36,7 @@
     "react-lazy-load-image-component": "^1.4",
     "react-router-dom": "^5.1",
     "react-router-hash-link": "1.2",
+    "react-share": "^4.2.1",
     "react-slick": "^0.26",
     "slick-carousel": "^1.8",
     "yup": "^0.28"
