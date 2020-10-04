@@ -36,21 +36,6 @@ export const initialValues: ICrowdactionForm = {
   youtube: ''
 };
 
-const determineEndDateValidation = (startDate: any, schema: any) => {
-  if (!startDate) {
-    return;
-  }
-
-  const minDate = new Date(startDate) as Date;
-  minDate.setDate(minDate.getDate() + 1);
-  const maxDate = new Date(startDate);
-  maxDate.setMonth(maxDate.getMonth() + 12);
-
-  return schema
-    .min(minDate, 'Please ensure your sign up ends after it starts :-)')
-    .max(maxDate, 'The deadline must be within a year of the start date');
-};
-
 const determineImageDescriptionValidation = (image: any, schema: any) => {
   if (!image) {
     return;
@@ -83,13 +68,6 @@ export const validations = Yup.object({
     .required('Please choose the number of people you want to join')
     .moreThan(0, 'You can choose up to one million participants')
     .lessThan(1000001, 'Please choose no more then one million participants'),
-  startDate: Yup.date()
-    .required('Please set a launch date')
-    .min(minimumDate, 'Please ensure the launch date starts somewhere in the near future')
-    .max(maximumDate, 'Please ensure the launch date is within the next 12 months'),
-  endDate: Yup.date()
-    .required('Please enter the date when the sign-up closes')
-    .when('startDate', determineEndDateValidation),
   hashtags: Yup.string()
     .max(30, 'Please keep the number of hashtags civil, no more then 30 characters')
     .matches(/^[a-zA-Z_0-9]+(;[a-zA-Z_0-9]+)*$/, 'Don\'t use spaces or #, must contain a letter, can contain digits and underscores. Separate multiple tags with a colon \';\''),

@@ -7,8 +7,8 @@ import {gql, useQuery} from "@apollo/client";
 import {ICrowdaction} from "../../../api/types";
 import {Fragments} from "../../../api/fragments";
 import styles from "./ThankYouCommit.module.scss";
-import CrowdactionShare from "../../../components/CrowdactionShare/CrowdactionShare";
 import DonationLayout from "../../../components/DonationLayout/DonationLayout";
+import SocialMediaSharing from "../SocialMediaSharing/SocialMediaSharing";
 
 type TParams = {
     slug: string,
@@ -39,8 +39,7 @@ const ThankYouCommitPage = ({match}: RouteComponentProps<TParams>): any => {
                 </Hidden>
                 <Grid item sm={12} md={7}>
                     <h3>Now go make waves and share it!</h3>
-
-                    {crowdaction && <CrowdactionShare crowdaction={crowdaction} />}
+                    {crowdaction && <SocialMediaSharing crowdaction={crowdaction} />}
                     <br/>
                 </Grid>
             </Grid>

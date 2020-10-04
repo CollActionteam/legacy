@@ -26,6 +26,7 @@ import Formatter from '../../../formatter';
 import LazyImage from '../../../components/LazyImage/LazyImage';
 import { TextField } from 'formik-material-ui';
 import CrowdactionComments from '../../../components/CrowdactionComments/CrowdactionComments';
+import SocialMediaSharing from '../SocialMediaSharing/SocialMediaSharing';
 
 type TParams = {
   slug: string;
@@ -198,6 +199,7 @@ const CrowdactionDetailsPage = ({
                     <LazyImage src={defaultBanner} alt={crowdaction.name} />
                   )}
                 </figure>
+                <SocialMediaSharing crowdaction={crowdaction}></SocialMediaSharing>
               </Container>
             </Grid>
             <Grid item md={5} xs={12}>
