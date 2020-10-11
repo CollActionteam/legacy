@@ -50,6 +50,7 @@ export const Fragments = {
     isFailed
     totalParticipants
     percentage
-    numberCrowdactionEmailsSent
+    numberCrowdactionEmailsSent,
+    descriptionVideoLink
   `,
 };

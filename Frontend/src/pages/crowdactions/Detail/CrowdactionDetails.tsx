@@ -244,6 +244,7 @@ const CrowdactionDetailsPage = ({
                     </figure>
                   </div>
                 )}
+
                 {(comments && comments.__html) &&(
                   <div>
                     <h3 className={styles.header}>Other comments</h3>
@@ -266,6 +267,7 @@ const CrowdactionDetailsPage = ({
                 )}
               </Container>
             </Grid>
+
             <Grid item md={5} xs={12}>
               <Container>
                 {crowdaction.owner && (
