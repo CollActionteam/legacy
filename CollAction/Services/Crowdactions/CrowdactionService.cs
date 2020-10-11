@@ -119,10 +119,10 @@ namespace CollAction.Services.Crowdactions
             await context.SaveChangesAsync(token).ConfigureAwait(false);
             await RefreshParticipantCount(token).ConfigureAwait(false);
 
-            if (crowdaction.IsClosed)
+            if (!crowdaction.IsClosed)
             {
                 crowdaction.FinishJobId = jobClient.Schedule(() => CrowdactionEndProcess(crowdaction.Id, CancellationToken.None), crowdaction.End);
-                await context.SaveChangesAsync().ConfigureAwait(false);
+                await context.SaveChangesAsync(token).ConfigureAwait(false);
             }
 
             return crowdaction;
@@ -261,7 +261,7 @@ namespace CollAction.Services.Crowdactions
             logger.LogInformation("Updating crowdaction: {0}", updatedCrowdaction.Name);
 
             bool approved = updatedCrowdaction.Status == CrowdactionStatus.Running && crowdaction.Status != CrowdactionStatus.Running;
-            bool changeFinishJob = (approved || crowdaction.End != updatedCrowdaction.End) && updatedCrowdaction.End < DateTime.UtcNow;
+            bool changeFinishJob = (approved || crowdaction.End != updatedCrowdaction.End) && updatedCrowdaction.End > DateTime.UtcNow;
             bool removeFinishJob = updatedCrowdaction.Status != CrowdactionStatus.Running && crowdaction.FinishJobId != null;
             bool deleted = updatedCrowdaction.Status == CrowdactionStatus.Deleted;
 
@@ -358,7 +358,12 @@ namespace CollAction.Services.Crowdactions
         {
             logger.LogInformation("Processing end of crowdaction: {0}", crowdactionId);
             await RefreshParticipantCount(token).ConfigureAwait(false); // Ensure the participant count is up-to-date
-            Crowdaction? crowdaction = await context.Crowdactions.Include(c => c.ParticipantCounts).FirstAsync(c => c.Id == crowdactionId, token).ConfigureAwait(false);
+            Crowdaction? crowdaction = 
+                await context.Crowdactions
+                             .Include(c => c.ParticipantCounts)
+                             .Include(c => c.Owner)
+                             .FirstOrDefaultAsync(c => c.Id == crowdactionId, token)
+                             .ConfigureAwait(false);
 
             if (crowdaction == null)
             {

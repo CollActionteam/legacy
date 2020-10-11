@@ -37,7 +37,7 @@ namespace CollAction.Tests.Integration.Service
         [Fact]
         public async Task TestPasswordReset()
         {
-            var (result, code) = await userService.ForgotPassword("nonexistent@collaction.org").ConfigureAwait(false);
+            var (result, code) = await userService.ForgotPassword("nonexistent@collaction.org");
             Assert.False(result.Succeeded);
             Assert.Null(code);
 
@@ -50,25 +50,25 @@ namespace CollAction.Tests.Integration.Service
                     LastName = testEmail,
                     IsSubscribedNewsletter = false,
                     Password = Guid.NewGuid().ToString()
-                }).ConfigureAwait(false);
+                });
             ApplicationUser user = testUserCreation.User;
-            (result, code) = await userService.ForgotPassword(user.Email).ConfigureAwait(false);
+            (result, code) = await userService.ForgotPassword(user.Email);
             Assert.True(result.Succeeded);
             Assert.NotNull(code);
 
-            result = await userService.ResetPassword(user.Email, code, "").ConfigureAwait(false);
+            result = await userService.ResetPassword(user.Email, code, "");
             Assert.False(result.Succeeded);
-            result = await userService.ResetPassword(user.Email, "", "Test_0_tesT").ConfigureAwait(false);
+            result = await userService.ResetPassword(user.Email, "", "Test_0_tesT");
             Assert.False(result.Succeeded);
-            result = await userService.ResetPassword(user.Email, code, "Test_0_tesT").ConfigureAwait(false);
+            result = await userService.ResetPassword(user.Email, code, "Test_0_tesT");
             Assert.True(result.Succeeded);
 
-            var principal = await signInManager.CreateUserPrincipalAsync(user).ConfigureAwait(false);
-            result = await userService.ChangePassword(principal, "Test_0_tesT", "").ConfigureAwait(false);
+            var principal = await signInManager.CreateUserPrincipalAsync(user);
+            result = await userService.ChangePassword(principal, "Test_0_tesT", "");
             Assert.False(result.Succeeded);
-            result = await userService.ChangePassword(new ClaimsPrincipal(), "Test_0_tesT", "Test_1_tesT").ConfigureAwait(false);
+            result = await userService.ChangePassword(new ClaimsPrincipal(), "Test_0_tesT", "Test_1_tesT");
             Assert.False(result.Succeeded);
-            result = await userService.ChangePassword(principal, "Test_0_tesT", "Test_1_tesT").ConfigureAwait(false);
+            result = await userService.ChangePassword(principal, "Test_0_tesT", "Test_1_tesT");
             Assert.True(result.Succeeded);
         }
 
@@ -83,11 +83,11 @@ namespace CollAction.Tests.Integration.Service
                     LastName = GetRandomString(),
                     Password = GetRandomString(),
                     IsSubscribedNewsletter = true
-                }).ConfigureAwait(false);
+                });
             var user = result.User;
             Assert.True(result.Result.Succeeded);
 
-            var principal = await signInManager.CreateUserPrincipalAsync(result.User).ConfigureAwait(false);
+            var principal = await signInManager.CreateUserPrincipalAsync(result.User);
             result = await userService.UpdateUser(
                 new UpdatedUser()
                 {
@@ -98,7 +98,7 @@ namespace CollAction.Tests.Integration.Service
                     IsSubscribedNewsletter = false,
                     Id = result.User.Id
                 },
-                principal).ConfigureAwait(false);
+                principal);
             Assert.True(result.Result.Succeeded);
 
             result = await userService.UpdateUser(
@@ -111,12 +111,12 @@ namespace CollAction.Tests.Integration.Service
                     IsSubscribedNewsletter = false,
                     Id = result.User.Id
                 },
-                principal).ConfigureAwait(false);
+                principal);
             Assert.False(result.Result.Succeeded);
 
-            var deleteResult = await userService.DeleteUser(user.Id, new ClaimsPrincipal()).ConfigureAwait(false);
+            var deleteResult = await userService.DeleteUser(user.Id, new ClaimsPrincipal());
             Assert.False(deleteResult.Succeeded);
-            deleteResult = await userService.DeleteUser(user.Id, principal).ConfigureAwait(false);
+            deleteResult = await userService.DeleteUser(user.Id, principal);
             Assert.True(deleteResult.Succeeded);
         }
 
@@ -124,13 +124,13 @@ namespace CollAction.Tests.Integration.Service
         public async Task TestFinishRegistration()
         {
             // Setup
-            var crowdaction = new Crowdaction($"test-{Guid.NewGuid()}", CrowdactionStatus.Running, await context.Users.Select(u => u.Id).FirstAsync().ConfigureAwait(false), 10, DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1), "t", "t", "t", null, null);
+            var crowdaction = new Crowdaction($"test-{Guid.NewGuid()}", CrowdactionStatus.Running, await context.Users.Select(u => u.Id).FirstAsync(), 10, DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1), "t", "t", "t", null, null);
             context.Crowdactions.Add(crowdaction);
-            await context.SaveChangesAsync().ConfigureAwait(false);
+            await context.SaveChangesAsync();
 
             // Test
             string testEmail = GetTestEmail();
-            AddParticipantResult commitResult = await crowdactionService.CommitToCrowdactionAnonymous(testEmail, crowdaction.Id, CancellationToken.None).ConfigureAwait(false);
+            AddParticipantResult commitResult = await crowdactionService.CommitToCrowdactionAnonymous(testEmail, crowdaction.Id, CancellationToken.None);
             Assert.Equal(AddParticipantScenario.AnonymousCreatedAndAdded, commitResult.Scenario);
 
             var finishRegistrationResult = await userService.FinishRegistration(
@@ -142,7 +142,7 @@ namespace CollAction.Tests.Integration.Service
                     IsSubscribedNewsletter = false,
                     Password = "Test_0_tesT"
                 },
-                commitResult.PasswordResetToken).ConfigureAwait(false);
+                commitResult.PasswordResetToken);
             Assert.True(finishRegistrationResult.Result.Succeeded);
             Assert.NotNull(finishRegistrationResult.User);
         }

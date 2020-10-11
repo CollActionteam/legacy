@@ -35,7 +35,7 @@ namespace CollAction.Tests.Integration.Endpoint
         public async Task TestCrowdactionList()
         {
             var newCrowdaction = new NewCrowdactionInternal("test" + Guid.NewGuid(), 100, "test", "test", "test", null, DateTime.UtcNow, DateTime.UtcNow.AddDays(1), null, null, null, null, new[] { Category.Community }, Array.Empty<string>(), CrowdactionDisplayPriority.Bottom, CrowdactionStatus.Running, 0, null);
-            Crowdaction createdCrowdaction = await crowdactionService.CreateCrowdactionInternal(newCrowdaction, CancellationToken.None).ConfigureAwait(false);
+            Crowdaction createdCrowdaction = await crowdactionService.CreateCrowdactionInternal(newCrowdaction, CancellationToken.None);
             Assert.NotNull(createdCrowdaction);
             
             const string QueryCrowdactions = @"
@@ -52,8 +52,8 @@ namespace CollAction.Tests.Integration.Endpoint
                     }
                 }";
 
-            HttpResponseMessage response = await PerformGraphQlQuery(QueryCrowdactions, null).ConfigureAwait(false);
-            string content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            HttpResponseMessage response = await PerformGraphQlQuery(QueryCrowdactions, null);
+            string content = await response.Content.ReadAsStringAsync();
             Assert.True(response.IsSuccessStatusCode, content);
             JsonDocument result = JsonDocument.Parse(content);
             Assert.Throws<KeyNotFoundException>(() => result.RootElement.GetProperty("errors"));
@@ -73,7 +73,7 @@ namespace CollAction.Tests.Integration.Endpoint
                 }";
             dynamic variables = new { crowdactionId };
             response = await PerformGraphQlQuery(QueryCrowdaction, variables);
-            content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            content = await response.Content.ReadAsStringAsync();
             Assert.True(response.IsSuccessStatusCode, content);
             result = JsonDocument.Parse(content);
             Assert.Throws<KeyNotFoundException>(() => result.RootElement.GetProperty("errors"));
@@ -100,17 +100,17 @@ namespace CollAction.Tests.Integration.Endpoint
                   }
                 }";
 
-            HttpResponseMessage response = await PerformGraphQlQuery(QueryCrowdactions, null).ConfigureAwait(false);
-            string content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            HttpResponseMessage response = await PerformGraphQlQuery(QueryCrowdactions, null);
+            string content = await response.Content.ReadAsStringAsync();
             Assert.True(response.IsSuccessStatusCode, content);
             JsonDocument result = JsonDocument.Parse(content);
             Assert.Equal(1, result.RootElement.GetProperty("errors").GetArrayLength());
 
             using var httpClient = TestServer.CreateClient();
             // Retry call as admin
-            httpClient.DefaultRequestHeaders.Add("Cookie", await GetAuthCookie(httpClient, seedOptions).ConfigureAwait(false));
-            response = await PerformGraphQlQuery(httpClient, QueryCrowdactions, null).ConfigureAwait(false);
-            content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            httpClient.DefaultRequestHeaders.Add("Cookie", await GetAuthCookie(httpClient, seedOptions));
+            response = await PerformGraphQlQuery(httpClient, QueryCrowdactions, null);
+            content = await response.Content.ReadAsStringAsync();
             Assert.True(response.IsSuccessStatusCode, content);
             result = JsonDocument.Parse(content);
             Assert.Throws<KeyNotFoundException>(() => result.RootElement.GetProperty("errors"));
@@ -133,7 +133,7 @@ namespace CollAction.Tests.Integration.Endpoint
                                 creatorComments: ""dd"",
                                 start: ""{DateTime.UtcNow.AddDays(10).ToString("o", CultureInfo.InvariantCulture)}"",
                                 end: ""{DateTime.UtcNow.AddDays(20).ToString("o", CultureInfo.InvariantCulture)}"",
-                                descriptionVideoLink: ""https://www.youtube-nocookie.com/watch?v=a1"",
+                                descriptionVideoLink: ""https://www.youtube-nocookie.com/embed/a1"",
                                 tags:[""b"", ""a""]
                             }}) {{
                                 succeeded
@@ -149,12 +149,13 @@ namespace CollAction.Tests.Integration.Endpoint
                     }}";
 
             using var httpClient = TestServer.CreateClient();
-            httpClient.DefaultRequestHeaders.Add("Cookie", await GetAuthCookie(httpClient, seedOptions).ConfigureAwait(false));
-            HttpResponseMessage response = await PerformGraphQlQuery(httpClient, createCrowdaction, null).ConfigureAwait(false);
-            string content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            httpClient.DefaultRequestHeaders.Add("Cookie", await GetAuthCookie(httpClient, seedOptions));
+            HttpResponseMessage response = await PerformGraphQlQuery(httpClient, createCrowdaction, null);
+            string content = await response.Content.ReadAsStringAsync();
             JsonDocument result = JsonDocument.Parse(content);
             Assert.True(response.IsSuccessStatusCode, content);
             Assert.Throws<KeyNotFoundException>(() => result.RootElement.GetProperty("errors"));
+            Assert.True(result.RootElement.GetProperty("data").GetProperty("crowdaction").GetProperty("createCrowdaction").GetProperty("succeeded").GetBoolean());
         }
 
         protected override void ConfigureReplacementServicesProvider(IServiceCollection collection)

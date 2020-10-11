@@ -20,11 +20,11 @@ namespace CollAction.Tests.Integration.Service
         public async Task TestStatistics()
         {
             // Crappy test.. TODO: need to clean the database to do something like this better
-            int numberActions = await statisticsService.NumberActionsTaken(CancellationToken.None).ConfigureAwait(false);
+            int numberActions = await statisticsService.NumberActionsTaken(CancellationToken.None);
             Assert.True(numberActions >= 0);
-            int numberUsers = await statisticsService.NumberUsers(CancellationToken.None).ConfigureAwait(false);
+            int numberUsers = await statisticsService.NumberUsers(CancellationToken.None);
             Assert.True(numberUsers >= 0);
-            int numberCrowdactions = await statisticsService.NumberCrowdactions(CancellationToken.None).ConfigureAwait(false);
+            int numberCrowdactions = await statisticsService.NumberCrowdactions(CancellationToken.None);
             Assert.True(numberCrowdactions >= 0);
         }
     }

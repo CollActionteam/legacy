@@ -1,0 +1,14 @@
+
+<p>
+    Hi and welcome!
+<p>
+<p>
+    You have registered an account on <a href="http://localhost:3000">CollAction</a>!
+</p>
+<p>
+    If you didn't register this account you can contact us at <a href="mailto:hello@collaction.org">hello@collaction.org</a> to remove it, or you can <a href="http://localhost:3000/account/forgot-password">reset the password</a> and remove the account from the profile page yourself.
+</p>
+<p>
+    Warm regards,<br>
+    The CollAction Team
+</p>

@@ -55,10 +55,10 @@ namespace CollAction.Tests.Integration
 
         public async Task InitializeAsync()
         {
-            await databaseInitLock.WaitAsync().ConfigureAwait(false); // Don't run migrations in parallel
+            await databaseInitLock.WaitAsync(); // Don't run migrations in parallel
             try
             {
-                await Scope.ServiceProvider.GetRequiredService<IInitializationService>().InitializeDatabase().ConfigureAwait(false);
+                await Scope.ServiceProvider.GetRequiredService<IInitializationService>().InitializeDatabase();
             }
             finally
             {
@@ -75,8 +75,8 @@ namespace CollAction.Tests.Integration
                 { "Password", seedOptions.AdminPassword }
             };
             using var formContent = new FormUrlEncodedContent(loginContent);
-            HttpResponseMessage authResult = await httpClient.PostAsync(new Uri("/account/login", UriKind.Relative), formContent).ConfigureAwait(false);
-            string authResultContent = await authResult.Content.ReadAsStringAsync().ConfigureAwait(false);
+            HttpResponseMessage authResult = await httpClient.PostAsync(new Uri("/account/login", UriKind.Relative), formContent);
+            string authResultContent = await authResult.Content.ReadAsStringAsync();
             Assert.True(authResult.IsSuccessStatusCode, authResultContent);
             string cookie = authResult.Headers.Single(h => h.Key == "Set-Cookie").Value.Single().Split(";").First();
             Assert.True(authResult.IsSuccessStatusCode, authResultContent);
@@ -97,7 +97,7 @@ namespace CollAction.Tests.Integration
 
             using (content)
             {
-                return await httpClient.PostAsync(new Uri("/graphql", UriKind.Relative), content, CancellationToken.None).ConfigureAwait(false);
+                return await httpClient.PostAsync(new Uri("/graphql", UriKind.Relative), content, CancellationToken.None);
             }
         }
 
