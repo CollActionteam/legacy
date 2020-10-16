@@ -295,7 +295,7 @@ const CreateCrowdactionPage = () => {
                         fullWidth
                       >
                       </Field>
-                  }
+                    }
 
                     <RichTextEditorFormControl
                       formik={props}

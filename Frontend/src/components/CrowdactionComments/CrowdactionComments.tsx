@@ -290,7 +290,9 @@ export default ({ id }: ICrowdactionCommentsProps) => {
                     hint="Write a comment"
                     fullWidth
                   />
-                  <Button type="submit">Comment</Button>
+                  <div className={styles.commentButtonContainer}>
+                    <Button type="submit">Comment</Button>
+                  </div>
                 </Form>
               </div>
             )}
@@ -312,7 +314,7 @@ export default ({ id }: ICrowdactionCommentsProps) => {
                   {Formatter.date(commentDate)} {Formatter.time(commentDate)}
                 </span>
                 {user?.isAdmin ? (
-                  <div>
+                  <div className={styles.commentButtonContainer}>
                     <Button
                       onClick={() =>
                         deleteComment({ variables: { commentId: comment.id } })

@@ -5,3 +5,11 @@
 .label {
   top: calc(var(--spacing) * -1) !important;
 }
+
+.error {
+  border-top: 1px var(--c-red) solid;
+
+  // Plot over the editor's bottom line
+  margin-top: -1px;
+  z-index: 1;
+}
