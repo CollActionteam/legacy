@@ -16,6 +16,7 @@ services:
       - db:db
     ports:
       - "44301:44301"
+      - "44300:44300"
     environment:
       PublicAddress: https://localhost:3000
       DbHost: db
@@ -23,17 +24,20 @@ services:
       DbPassword: test
       Db: CollActionDb
       ASPNETCORE_ENVIRONMENT: Development
-      ASPNETCORE_URLS: https://*:44301
+      ASPNETCORE_URLS: https://*:44301;http://*:44300
       Kestrel__Certificates__Default__Path: /app/collaction.pfx
       Kestrel__Certificates__Default__Password: test
 
   frontend:
     image: frontend
+    links:
+      - backend:backend
     build:
       context: Frontend
       dockerfile: Dockerfile
       args:
         REACT_APP_BACKEND_URL: https://localhost:44301
+        SITEMAP_LOCATION: http://backend:44300/sitemap
         BUILD_CONFIG: Debug
     ports:
       - "3000:3000"

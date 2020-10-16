@@ -31,28 +31,28 @@ namespace CollAction.Tests.Integration.Service
         [Fact]
         public async Task TestUpload()
         {
-            Models.ImageFile imageFile = await imageService.UploadImage(upload.Object, "test", 1600, CancellationToken.None).ConfigureAwait(false);
+            Models.ImageFile imageFile = await imageService.UploadImage(upload.Object, "test", 1600, CancellationToken.None);
 
             Assert.NotNull(imageFile);
             Assert.NotNull(imageFile.Filepath);
             Assert.Equal("test", imageFile.Description);
-            Assert.Equal(HttpStatusCode.OK, await CheckUrl(imageService.GetUrl(imageFile)).ConfigureAwait(false));
+            Assert.Equal(HttpStatusCode.OK, await CheckUrl(imageService.GetUrl(imageFile)));
 
-            await imageService.DeleteImage(imageFile, CancellationToken.None).ConfigureAwait(false);
+            await imageService.DeleteImage(imageFile, CancellationToken.None);
         }
 
         [Fact]
         public async Task TestDelete()
         {
-            Models.ImageFile imageFile = await imageService.UploadImage(upload.Object, "test", 1600, CancellationToken.None).ConfigureAwait(false);
-            await imageService.DeleteImage(imageFile, CancellationToken.None).ConfigureAwait(false);
-            Assert.Equal(HttpStatusCode.Forbidden, await CheckUrl(imageService.GetUrl(imageFile)).ConfigureAwait(false));
+            Models.ImageFile imageFile = await imageService.UploadImage(upload.Object, "test", 1600, CancellationToken.None);
+            await imageService.DeleteImage(imageFile, CancellationToken.None);
+            Assert.Equal(HttpStatusCode.Forbidden, await CheckUrl(imageService.GetUrl(imageFile)));
         }
 
         private static async Task<HttpStatusCode> CheckUrl(Uri url)
         {
             using HttpClient client = new HttpClient();
-            using HttpResponseMessage response = await client.GetAsync(url).ConfigureAwait(false);
+            using HttpResponseMessage response = await client.GetAsync(url);
             return response.StatusCode;
         }
     }

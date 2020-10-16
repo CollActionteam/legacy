@@ -1,5 +1,7 @@
 FROM ubuntu:focal AS build
 ARG REACT_APP_BACKEND_URL
+ARG SITEMAP_LOCATION
+ARG BUILD_CONFIG
 ARG INLINE_RUNTIME_CHUNK=false
 
 # Initial dependencies
@@ -11,7 +13,7 @@ RUN openssl req -x509 -nodes -days 99999 -newkey rsa:2048 -subj "/C=NL/ST=Noord 
 
 # Generate nginx conf
 COPY nginx.conf.template .
-RUN envsubst '$REACT_APP_BACKEND_URL' < ./nginx.conf.template > ./nginx.conf
+RUN envsubst '$REACT_APP_BACKEND_URL,$SITEMAP_LOCATION' < ./nginx.conf.template > ./nginx.conf
 
 # Install yarn
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
