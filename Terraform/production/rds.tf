@@ -6,7 +6,7 @@ module "rds" {
   allocated_storage            = var.rds_allocated_storage
   backup_retention_period      = 7
   performance_insights_enabled = true
-  multi_az                     = true
+  multi_az                     = false
   route53_zone_name            = var.route53_zone_name
   rds_hostname                 = var.rds_hostname
 }

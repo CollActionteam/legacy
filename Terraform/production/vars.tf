@@ -23,7 +23,7 @@ variable "api_memory" {
 }
 
 variable "rds_instance_class" {
-  default = "db.t2.medium"
+  default = "db.t2.small"
 }
 
 variable "rds_allocated_storage" {
