@@ -7,7 +7,7 @@ resource "aws_db_instance" "collaction" {
   identifier                            = var.identifier
   final_snapshot_identifier             = "final-${var.identifier}"
   engine                                = "postgres"
-  engine_version                        = "12.2"
+  engine_version                        = "12.3"
   storage_type                          = "gp2"
   allocated_storage                     = var.allocated_storage
   instance_class                        = var.instance_class
