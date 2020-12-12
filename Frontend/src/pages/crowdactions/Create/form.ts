@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { isDate, parse, addDays, startOfDay, addMonths } from 'date-fns';
 
 export interface ICrowdactionForm {
   crowdactionName: string;
@@ -36,6 +37,8 @@ export const initialValues: ICrowdactionForm = {
   youtube: ''
 };
 
+const today = startOfDay(new Date());
+
 const determineImageDescriptionValidation = (image: any, schema: any) => {
   if (!image) {
     return;
@@ -44,9 +47,11 @@ const determineImageDescriptionValidation = (image: any, schema: any) => {
   return schema.required('Please provide a short description for the image');
 }
 
-var minimumDate = new Date();
-var maximumDate = new Date();
-maximumDate.setMonth(minimumDate.getMonth() + 12);
+const transformToDate = (value: Date, originalValue: string | Date) => 
+  isDate(originalValue) ? originalValue : parseDate(originalValue as string);
+
+export const parseDate = (value: string) =>
+  parse(value, 'd/M/yyyy', new Date());
 
 export const validations = Yup.object({
   crowdactionName: Yup.string()
@@ -68,6 +73,16 @@ export const validations = Yup.object({
     .required('Please choose the number of people you want to join')
     .moreThan(0, 'You can choose up to one million participants')
     .lessThan(1000001, 'Please choose no more then one million participants'),
+  startDate: Yup.date()
+    .transform(transformToDate).typeError('Please enter a valid date, using the format d/M/yyyy')
+    .required('Please enter a launch date')
+    .min(addDays(today, 1), 'Please ensure the launch date starts somewhere in the near future')
+    .max(addMonths(today, 12), 'Please ensure the launch date is within the next 12 months'),
+  endDate: Yup.date()
+    .transform(transformToDate).typeError('Please enter a valid date, using the format d/M/yyyy')
+    .required('Please enter an end date')
+    .when('startDate', (started: Date, yup: any) => started && yup.min(addDays(started, 1), 'Please ensure your sign up ends after it starts :-)'))
+    .when('startDate', (started: Date, yup: any) => started && yup.max(addMonths(started, 12), 'The deadline must be within a year of the start date')),
   hashtags: Yup.string()
     .max(30, 'Please keep the number of hashtags civil, no more then 30 characters')
     .matches(/^[a-zA-Z_0-9]+(;[a-zA-Z_0-9]+)*$/, 'Don\'t use spaces or #, must contain a letter, can contain digits and underscores. Separate multiple tags with a colon \';\''),

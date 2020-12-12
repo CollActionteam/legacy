@@ -3,7 +3,6 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.0.0-beta.50",
-    "@date-io/moment": "1.x",
     "@fortawesome/fontawesome-svg-core": "^1.2",
     "@fortawesome/free-brands-svg-icons": "^5.12",
     "@fortawesome/free-regular-svg-icons": "^5.12",
@@ -11,9 +10,9 @@
     "@fortawesome/react-fontawesome": "^0.1",
     "@material-ui/core": "^4.9",
     "@material-ui/icons": "^4.9",
-    "@material-ui/pickers": "^3.2.10",
     "@stripe/react-stripe-js": "^1.1",
     "@stripe/stripe-js": "1.5",
+    "date-fns": "^2.16.1",
     "draft-js": "0.11",
     "draft-js-export-html": "^1.4",
     "formik": "^2.1",
@@ -61,7 +60,7 @@
     "typescript": "^3.8"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "export REACT_APP_BACKEND_URL=https://localhost:44301 && react-scripts start",
     "build": "react-scripts build",
     "setup-netlify": "envsubst '$REACT_APP_BACKEND_URL' < ../netlify.toml | tee ../netlify.toml",
     "test": "react-scripts test",
