@@ -313,6 +313,13 @@ const CreateCrowdactionPage = () => {
                           Submit crowdaction
                         </Button>
                     }
+                    { !props.isValid &&
+                      <div className={styles.submitErrors}>
+                        <ul>
+                          <li>Not all fields are filled in correctly. Please verify and try again.</li>
+                        </ul>
+                      </div>
+                    }
                     { props.status &&
                       <div className={styles.submitErrors}>
                         <ul>
