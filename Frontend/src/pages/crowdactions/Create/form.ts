@@ -83,9 +83,9 @@ export const validations = Yup.object({
     .required('Please enter an end date')
     .when('startDate', (started: Date, yup: any) => started && yup.min(addDays(started, 1), 'Please ensure your sign up ends after it starts :-)'))
     .when('startDate', (started: Date, yup: any) => started && yup.max(addMonths(started, 12), 'The deadline must be within a year of the start date')),
-  hashtags: Yup.string()
-    .max(30, 'Please keep the number of hashtags civil, no more then 30 characters')
-    .matches(/^[a-zA-Z_0-9]+(;[a-zA-Z_0-9]+)*$/, 'Don\'t use spaces or #, must contain a letter, can contain digits and underscores. Separate multiple tags with a colon \';\''),
+  tags: Yup.string()
+    .max(300, 'Please keep the number of hashtags civil, no more then 300 characters')
+    .matches(/^([A-Za-z][A-Za-z0-9_-]{0,29})+(;[A-Za-z][A-Za-z0-9_-]{0,29})*$/, 'Tags must be between one and thirty characters, start with a letter, and only contain letters, numbers, underscores or dashes. Seperate tags with a colon \';\''),
   description: Yup.string()
     .required('Give a succinct description of what you are gathering participants for')
     .max(10000, 'Please use no more then 10.000 characters'),
