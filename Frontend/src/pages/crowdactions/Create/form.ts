@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { isDate, parse, addDays, startOfDay, addMonths } from 'date-fns';
+import { parse, addDays, startOfDay, addMonths, isDate, isValid } from 'date-fns';
 
 export interface ICrowdactionForm {
   crowdactionName: string;
@@ -50,8 +50,10 @@ const determineImageDescriptionValidation = (image: any, schema: any) => {
 const transformToDate = (value: Date, originalValue: string | Date) => 
   isDate(originalValue) ? originalValue : parseDate(originalValue as string);
 
-export const parseDate = (value: string) =>
-  parse(value, 'd/M/yyyy', new Date());
+export const parseDate = (value: string) => {
+  const date = parse(value, 'd/M/yyyy', new Date());
+  return isValid(date) ? date : undefined;
+}
 
 export const validations = Yup.object({
   crowdactionName: Yup.string()
@@ -74,13 +76,13 @@ export const validations = Yup.object({
     .moreThan(0, 'You can choose up to one million participants')
     .lessThan(1000001, 'Please choose no more then one million participants'),
   startDate: Yup.date()
-    .transform(transformToDate).typeError('Please enter a valid date, using the format d/M/yyyy')
-    .required('Please enter a launch date')
+    .transform(transformToDate)
+    .required('Please enter a valid launch date, using the format d/M/yyyy')
     .min(addDays(today, 1), 'Please ensure the launch date starts somewhere in the near future')
     .max(addMonths(today, 12), 'Please ensure the launch date is within the next 12 months'),
   endDate: Yup.date()
-    .transform(transformToDate).typeError('Please enter a valid date, using the format d/M/yyyy')
-    .required('Please enter an end date')
+    .transform(transformToDate)
+    .required('Please enter a valid end date, using the format d/MM/yyyy')
     .when('startDate', (started: Date, yup: any) => started && yup.min(addDays(started, 1), 'Please ensure your sign up ends after it starts :-)'))
     .when('startDate', (started: Date, yup: any) => started && yup.max(addMonths(started, 12), 'The deadline must be within a year of the start date')),
   tags: Yup.string()
