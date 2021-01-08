@@ -2,8 +2,11 @@ name: Deploy to staging
 
 on: 
   push:
-    branches:
-      - master
+    # Staging environment is offline
+    branches-ignore:
+      - '**'
+    # branches:
+    #   - master
 
 jobs:
   deploy_backend_master:
