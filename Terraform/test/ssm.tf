@@ -1,17 +1,17 @@
 module "ssm" {
   source      = "../modules/configurationparameters"
-  environment = "test"
+  environment = var.environment
 }
 
 # Database settings for the database task
 resource "aws_ssm_parameter" "Db" {
-  name  = "/collaction/test/Db"
+  name  = "/collaction/${var.environment}/Db"
   type  = "String"
   value = "CollActionDb"
 }
 
 resource "aws_ssm_parameter" "DbUser" {
-  name  = "/collaction/test/DbUser"
+  name  = "/collaction/${var.environment}/DbUser"
   type  = "String"
   value = "postgres"
 }
@@ -22,7 +22,7 @@ resource "random_password" "db_password" {
 }
 
 resource "aws_ssm_parameter" "DbPassword" {
-  name  = "/collaction/test/DbPassword"
+  name  = "/collaction/${var.environment}/DbPassword"
   type  = "SecureString"
   value = random_password.db_password.result
 }
