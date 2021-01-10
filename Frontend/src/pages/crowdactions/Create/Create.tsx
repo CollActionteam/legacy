@@ -10,42 +10,12 @@ import { Section } from '../../../components/Section/Section';
 import { useUser } from '../../../providers/UserProvider';
 import Categories from './Categories';
 import styles from './Create.module.scss';
-import { initialValues, ICrowdactionForm, validations } from './form';
+import { initialValues, ICrowdactionForm, validations, parseDate } from './form';
 import UploadImage from './UploadImage';
 import { Link, useHistory } from 'react-router-dom';
 import { gql, useMutation } from '@apollo/client';
 import Loader from '../../../components/Loader/Loader';
 import Utils from '../../../utils';
-import {DatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
-import MomentUtils from '@date-io/moment';
-
-//https://material-ui-pickers.dev/guides/form-integration
-// @ts-ignore
-const DatePickerField = ({ field, form, ...other }) => {
-  return (
-      <DatePicker
-          clearable
-          disablePast
-          autoOk
-          name={field.name}
-          value={field.value}
-          placeholder={"dd/mm/yyyy"}
-          // helperText={currentError}
-          error={false}
-          variant="inline"
-          format="DD/MM/yyyy"
-          // onError={error => {
-          //   // handle as a side effect
-          //   if (error !== currentError) {
-          //     form.setFieldError(field.name, error);
-          //   }
-          // }}
-          // if you are using custom validation schema you probably want to pass `true` as third argument
-          onChange={date => form.setFieldValue(field.name, date, true)}
-          {...other}
-      />
-  );
-};
 
 const CreateCrowdactionPage = () => {
   const user = useUser();
@@ -108,8 +78,8 @@ const CreateCrowdactionPage = () => {
           target: form.target,
           proposal: form.proposal,
           description: form.description,
-          start: form.startDate,
-          end: form.endDate,
+          start: parseDate(form.startDate),
+          end: parseDate(form.endDate),
           goal: form.goal,
           tags: form.tags ? form.tags.split(';') : [],
           creatorComments: form.comments || null,
@@ -148,7 +118,7 @@ const CreateCrowdactionPage = () => {
   )
 
   const createCrowdactionForm = (
-      <MuiPickersUtilsProvider utils={MomentUtils}>
+    <>
       <Helmet>
         <title>Create a crowdaction</title>
         <meta name="description" content="Create a crowdaction" />
@@ -220,8 +190,9 @@ const CreateCrowdactionPage = () => {
                       name="startDate"
                       label="Launch date"
                       type="text"
+                      placeholder="dd/mm/yyyy"
                       helperText="Set a date from which people will be able to join the crowdaction"
-                      component={DatePickerField}
+                      component={TextField}
                       className={styles.formRow}
                       fullWidth
                     >
@@ -230,8 +201,9 @@ const CreateCrowdactionPage = () => {
                       name="endDate"
                       label="Sign-up duration"
                       type="text"
+                      placeholder="dd/mm/yyyy"
                       helperText="Set a specific end date for when the sign-up closes. Sign-up closes on 00:00 GMT on this date"
-                      component={DatePickerField}
+                      component={TextField}
                       className={styles.formRow}
                       fullWidth
                     >
@@ -341,6 +313,13 @@ const CreateCrowdactionPage = () => {
                           Submit crowdaction
                         </Button>
                     }
+                    { !props.isValid &&
+                      <div className={styles.submitErrors}>
+                        <ul>
+                          <li>Not all fields are filled in correctly. Please verify and try again.</li>
+                        </ul>
+                      </div>
+                    }
                     { props.status &&
                       <div className={styles.submitErrors}>
                         <ul>
@@ -357,7 +336,7 @@ const CreateCrowdactionPage = () => {
           </Form>
           )}
       </Formik>
-      </MuiPickersUtilsProvider>
+    </>
   );
 
   return user ? createCrowdactionForm : pleaseLogin;
