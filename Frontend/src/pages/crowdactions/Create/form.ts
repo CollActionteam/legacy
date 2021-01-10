@@ -77,12 +77,12 @@ export const validations = Yup.object({
     .lessThan(1000001, 'Please choose no more then one million participants'),
   startDate: Yup.date()
     .transform(transformToDate)
-    .required('Please enter a valid launch date, using the format d/M/yyyy')
+    .required('Please enter a valid launch date, using the format dd/mm/yyyy')
     .min(addDays(today, 1), 'Please ensure the launch date starts somewhere in the near future')
     .max(addMonths(today, 12), 'Please ensure the launch date is within the next 12 months'),
   endDate: Yup.date()
     .transform(transformToDate)
-    .required('Please enter a valid end date, using the format d/MM/yyyy')
+    .required('Please enter a valid end date, using the format dd/mm/yyyy')
     .when('startDate', (started: Date, yup: any) => started && yup.min(addDays(started, 1), 'Please ensure your sign up ends after it starts :-)'))
     .when('startDate', (started: Date, yup: any) => started && yup.max(addMonths(started, 12), 'The deadline must be within a year of the start date')),
   tags: Yup.string()

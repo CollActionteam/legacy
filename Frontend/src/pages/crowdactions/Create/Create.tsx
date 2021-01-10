@@ -190,7 +190,7 @@ const CreateCrowdactionPage = () => {
                       name="startDate"
                       label="Launch date"
                       type="text"
-                      placeholder="d/M/yyyy"
+                      placeholder="dd/mm/yyyy"
                       helperText="Set a date from which people will be able to join the crowdaction"
                       component={TextField}
                       className={styles.formRow}
@@ -201,7 +201,7 @@ const CreateCrowdactionPage = () => {
                       name="endDate"
                       label="Sign-up duration"
                       type="text"
-                      placeholder="d/M/yyyy"
+                      placeholder="dd/mm/yyyy"
                       helperText="Set a specific end date for when the sign-up closes. Sign-up closes on 00:00 GMT on this date"
                       component={TextField}
                       className={styles.formRow}
