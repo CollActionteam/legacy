@@ -60,7 +60,7 @@
     "typescript": "^3.8"
   },
   "scripts": {
-    "start": "export REACT_APP_BACKEND_URL=https://localhost:44301 && react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "setup-netlify": "envsubst '$REACT_APP_BACKEND_URL' < ../netlify.toml | tee ../netlify.toml",
     "test": "react-scripts test",
