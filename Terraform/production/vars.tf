@@ -23,11 +23,11 @@ variable "api_memory" {
 }
 
 variable "rds_instance_class" {
-  default = "db.t2.small"
+  default = "db.t2.micro"
 }
 
 variable "rds_allocated_storage" {
-  default = 100
+  default = 20
 }
 
 variable "hostname" {
