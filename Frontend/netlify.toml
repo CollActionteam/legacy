@@ -1,14 +1,14 @@
 [build]
   base = "Frontend/"
   publish = "build/"
-  command = "yarn run setup-netlify && yarn run build"
+  command = "yarn run build"
 
 [build.environment]
   INLINE_RUNTIME_CHUNK = "false"
   
 [[redirects]]
   from = "/sitemap.xml"
-  to = "$REACT_APP_BACKEND_URL/sitemap"
+  to = "https://api.collaction.org/sitemap"
   status = 200
   force = true
 
@@ -40,7 +40,7 @@
     '''
 
 [[headers]]
-  for = "/widget/*"
+  for = "*/widget/"
   [headers.value]
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
