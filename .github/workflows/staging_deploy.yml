@@ -26,12 +26,16 @@ jobs:
         username: ${{ secrets.DockerUsername }}
         password: ${{ secrets.DockerPassword }}
 
+    - name: Checkout
+      uses: actions/checkout@v2
+
     - uses: docker/build-push-action@v1
       with:
         username: ${{ secrets.DockerUsername }}
         password: ${{ secrets.DockerPassword }}
         tags: collaction/backend:${{ steps.get_imagetag.outputs.TAG }},collaction/backend:latest
         dockerfile: CollAction/Dockerfile
+        context: .
         push: true
 
     - name: Configure AWS credentials

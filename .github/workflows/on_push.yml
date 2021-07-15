@@ -16,6 +16,8 @@ jobs:
       with:
         username: ${{ secrets.DockerUsername }}
         password: ${{ secrets.DockerPassword }}
+    - name: Checkout
+      uses: actions/checkout@v2
     - name: Get smart tag
       id: prepare
       uses: Surgo/docker-smart-tag-action@v1
@@ -37,6 +39,8 @@ jobs:
       with:
         username: ${{ secrets.DockerUsername }}
         password: ${{ secrets.DockerPassword }}
+    - name: Checkout
+      uses: actions/checkout@v2
     - name: Get smart tag
       id: prepare
       uses: Surgo/docker-smart-tag-action@v1
