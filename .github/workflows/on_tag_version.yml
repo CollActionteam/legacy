@@ -1,6 +1,7 @@
 name: On version tag
 
 on:
+  workflow_dispatch:
   push:
     tags:
       - v* # Push events matching v*, e.g. v2.0.0.
