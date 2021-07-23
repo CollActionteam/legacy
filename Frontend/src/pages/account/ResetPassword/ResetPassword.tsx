@@ -54,7 +54,7 @@ const ResetPasswordPage = () => {
                 .string()
                 .required("Please confirm the password")
                 .when("password", {
-                    is: val => val?.length > 0,
+                    is: (val: string | any[]) => val?.length > 0,
                     then: Yup
                         .string()
                         .oneOf([Yup.ref("password")], "Please confirm the password by entering the same one")
