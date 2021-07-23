@@ -12,7 +12,7 @@ interface ICrowdactionCardProps {
   target?: string | undefined;
 }
 
-export default ({ crowdaction, target }: ICrowdactionCardProps) => {
+const CrowdactionCard = ({ crowdaction, target }: ICrowdactionCardProps) => {
   const defaultCategoryImage = crowdaction.categories[0]
     ? crowdaction.categories[0].category
     : "OTHER";
@@ -54,3 +54,5 @@ export default ({ crowdaction, target }: ICrowdactionCardProps) => {
     </a>
   );
 };
+
+export default CrowdactionCard;

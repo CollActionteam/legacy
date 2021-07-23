@@ -29,7 +29,7 @@ const editCrowdactionStyles = makeStyles(theme => ({
   }
 }));
 
-export default ({ crowdactionId } : IEditCrowdactionProps): any => {
+const AdminEditCrowdaction = ({ crowdactionId } : IEditCrowdactionProps): any => {
     const classes = editCrowdactionStyles();
     const history = useHistory();
     const { categories, displayPriorities, crowdactionStatusses } = useSettings();
@@ -456,3 +456,5 @@ const GET_CROWDACTION = gql`
         }
     }
 `;
+
+export default AdminEditCrowdaction;

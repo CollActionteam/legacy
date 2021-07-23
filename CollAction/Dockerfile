@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
+FROM mcr.microsoft.com/dotnet/sdk:3.1 AS build
 ARG BUILD_CONFIG=Release
 ARG DOTNET_CLI_TELEMETRY_OPTOUT=1
 WORKDIR /src
@@ -10,7 +10,7 @@ RUN dotnet build CollAction.csproj -c $BUILD_CONFIG -o /app/build
 RUN dotnet publish CollAction.csproj -c $BUILD_CONFIG -o /app/publish
 RUN if [ "$BUILD_CONFIG" = "Debug" ] ; then dotnet dev-certs https -ep /app/publish/collaction.pfx -p test ; else echo skipping ssl ; fi
 
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim
+FROM mcr.microsoft.com/dotnet/aspnet:3.1
 WORKDIR /app
 COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "CollAction.dll"] 

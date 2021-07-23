@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { GhostButton } from "../Button/Button";
 import styles from "./TimeToAct.module.scss";
 
-export default () => {
+const TimeToAct = () => {
   const { t } = useTranslation();
   
   const step1Class = `${styles.step} ${styles.step1}`;
@@ -42,3 +42,5 @@ export default () => {
     </div>
   );
 };
+
+export default TimeToAct;

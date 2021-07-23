@@ -7,7 +7,7 @@ import Loader from "../../Loader/Loader";
 import Formatter from "../../../formatter";
 import { Button } from "../../Button/Button";
 
-export default () => {
+const AdminListUsers = () => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -120,7 +120,13 @@ export default () => {
                         </TableRow>))
                     }
                     <TableRow>
-                        <TablePagination count={userCount} page={page} rowsPerPageOptions={[5, 10, 25, 50]} rowsPerPage={rowsPerPage} onChangePage={(_ev, newPage) => setPage(newPage)} onChangeRowsPerPage={onChangeRowsPerPage} />
+                        <TablePagination 
+                            count={userCount}
+                            page={page}
+                            rowsPerPageOptions={[5, 10, 25, 50]}
+                            rowsPerPage={rowsPerPage}
+                            onPageChange={(_ev, newPage) => setPage(newPage)} onChangeRowsPerPage={onChangeRowsPerPage}
+                        />
                     </TableRow>
                 </TableBody>
             </Table>
@@ -162,3 +168,5 @@ const DELETE_USER = gql`
         }
     }
 `;
+
+export default AdminListUsers;

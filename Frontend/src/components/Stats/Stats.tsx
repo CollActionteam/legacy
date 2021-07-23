@@ -14,7 +14,7 @@ import styles from './Stats.module.scss';
 import Formatter from "../../formatter";
 import { Alert } from '../Alert/Alert';
 
-export default () => {
+const Stats = () => {
   const { t } = useTranslation();
   const { data, loading, error } = useQuery(GET_STATISTICS);
 
@@ -68,3 +68,5 @@ const GET_STATISTICS = gql`
     }
   }
 `;
+
+export default Stats;

@@ -7,7 +7,7 @@ interface ICategoryTagProperties {
   categories: ICrowdactionCategory[];
 }
 
-export default ({ categories }: ICategoryTagProperties) => {
+const CategoryTags = ({ categories }: ICategoryTagProperties) => {
   return (
     <div>
       {categories.map((item: ICrowdactionCategory) => (
@@ -18,3 +18,5 @@ export default ({ categories }: ICategoryTagProperties) => {
     </div>
   );
 };
+
+export default CategoryTags;

@@ -8,7 +8,7 @@ interface INavigationProps {
   items: { name: string; link: string }[];
 }
 
-export default ({ items }: INavigationProps) => {
+const Navigation = ({ items }: INavigationProps) => {
   const [collapsed, setCollapsed] = useState(true);
   const toggleNavigation = () => setCollapsed(!collapsed);
 
@@ -47,3 +47,5 @@ export default ({ items }: INavigationProps) => {
     </div>
   );
 };
+
+export default Navigation;

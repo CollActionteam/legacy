@@ -4,7 +4,7 @@ import { IconButton } from "../Button/Button";
 import styles from "./SocialMedia.module.scss";
 import { useAnalytics } from "../../providers/AnalyticsProvider";
 
-export default ({ socialMedia } : any) => {
+const SocialMedia = ({ socialMedia } : any) => {
   const { sendUserEvent } = useAnalytics();
   return (
     <ul className={styles.list}>
@@ -16,3 +16,5 @@ export default ({ socialMedia } : any) => {
     </ul>
   );
 };
+
+export default SocialMedia;

@@ -7,7 +7,7 @@ interface ICrowdactionsCreatedProps {
     user: IUser;
 }
 
-export default ({ user }: ICrowdactionsCreatedProps) => {
+const CrowdactionsCreated = ({ user }: ICrowdactionsCreatedProps) => {
     return <Card>
             <CardContent>
                 <h3>Crowdactions Created</h3>
@@ -19,3 +19,5 @@ export default ({ user }: ICrowdactionsCreatedProps) => {
             </CardContent>
         </Card>;
 };
+
+export default CrowdactionsCreated;

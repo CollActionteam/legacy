@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./NewsletterSignup.module.scss";
 import { useSettings } from "../../providers/SettingsProvider";
 
-export default () => {
+const NewsletterSignup = () => {
   const [ email, setEmail ] = useState("");
   const { mailChimpAccount, mailChimpNewsletterListId, mailChimpServer, mailChimpUserId } = useSettings();
 
@@ -43,3 +43,5 @@ export default () => {
     </div>
   </form> ;
 }
+
+export default NewsletterSignup;

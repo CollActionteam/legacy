@@ -10,7 +10,7 @@ interface INewsletterSubscriptionProps {
     user: IUser;
 }
 
-export default ({ user }: INewsletterSubscriptionProps) => {
+const NewsletterSubscription = ({ user }: INewsletterSubscriptionProps) => {
     const [ errorMessage, setErrorMessage ] = useState<string | null>(null);
     const { sendUserEvent } = useAnalytics();
     const [ toggleSubscription ] =
@@ -78,3 +78,5 @@ const UPDATE_USER = gql`
             }
         }
     }`;
+
+export default NewsletterSubscription;
