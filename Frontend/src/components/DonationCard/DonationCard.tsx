@@ -329,7 +329,7 @@ const InnerDonationCard = () => {
     </div>;
 }
 
-export default () => {
+const DonationCard = () => {
     const { consent } = useConsent();
     const { stripePublicKey } = useSettings();
 
@@ -347,3 +347,5 @@ export default () => {
         </Elements>;
     }
 };
+
+export default DonationCard;

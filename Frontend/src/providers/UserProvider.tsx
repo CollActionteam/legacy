@@ -6,7 +6,7 @@ import { Fragments } from "../api/fragments";
 
 export const UserContext = React.createContext(null as (IUser | null | undefined));
 
-export default ({ children }: any) => {
+const UserProvider = ({ children }: any) => {
     let { data, error } = useQuery(GET_USER);
 
     useEffect(() => {
@@ -53,3 +53,4 @@ export const GET_USER = gql`
     }
 `;
 
+export default UserProvider;

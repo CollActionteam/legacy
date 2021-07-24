@@ -77,7 +77,7 @@ const mapSettings = (settingsData: any): ISettings => {
     };
 };
 
-export default ({ children }: any) => {
+const SettingsProvider = ({ children }: any) => {
     let { data, error } = useQuery(GET_SETTINGS);
 
     useEffect(() => {
@@ -91,4 +91,5 @@ export default ({ children }: any) => {
     </SettingsContext.Provider>;
 };
 
+export default SettingsProvider;
 export const useSettings = () => useContext(SettingsContext);

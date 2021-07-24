@@ -32,7 +32,7 @@ const SEND_CROWDACTION_EMAIL = gql`
     }
 `;
 
-export default ({ user, crowdaction }: ICrowdactionParticipatingProps) => {
+const CrowdactionCreated = ({ user, crowdaction }: ICrowdactionParticipatingProps) => {
     const [ showSendCrowdaction, setShowSendCrowdaction ] = useState(false);
     const [ error, setError ] = useState<string | null>(null);
     const [ info, setInfo ] = useState<string | null>(null);
@@ -117,3 +117,5 @@ export default ({ user, crowdaction }: ICrowdactionParticipatingProps) => {
         </CardActions>
     </Card>;
 }
+
+export default CrowdactionCreated;

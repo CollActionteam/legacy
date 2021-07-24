@@ -11,7 +11,7 @@ interface IDeleteAccountProps {
     user: IUser;
 }
 
-export default ({ user }: IDeleteAccountProps) => {
+const DeleteAccount = ({ user }: IDeleteAccountProps) => {
     const [ hasDeletePopup, setHasDeletePopup] = useState(false);
     const [ errorMessage, setErrorMessage] = useState<string | null>(null);
     const { sendUserEvent } = useAnalytics();
@@ -75,3 +75,5 @@ const DELETE_USER = gql`
             }
         }
     }`;
+
+export default DeleteAccount;

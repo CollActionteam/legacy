@@ -63,7 +63,7 @@ namespace CollAction.Services.Crowdactions
 
         public async Task<Crowdaction> CreateCrowdactionInternal(NewCrowdactionInternal newCrowdaction, CancellationToken token)
         {
-            if (await context.Crowdactions.AnyAsync(c => c.Name == newCrowdaction.Name).ConfigureAwait(false))
+            if (await context.Crowdactions.AnyAsync(c => c.Name == newCrowdaction.Name, token).ConfigureAwait(false))
             {
                 throw new InvalidOperationException($"A crowdaction with this name already exists: {newCrowdaction.Name}");
             }
@@ -145,7 +145,7 @@ namespace CollAction.Services.Crowdactions
                 return new CrowdactionResult(new ValidationResult("Crowdaction owner could not be found"));
             }
 
-            if (await context.Crowdactions.AnyAsync(c => c.Name == newCrowdaction.Name).ConfigureAwait(false))
+            if (await context.Crowdactions.AnyAsync(c => c.Name == newCrowdaction.Name, token).ConfigureAwait(false))
             {
                 return new CrowdactionResult(new ValidationResult("A crowdaction with this name already exists", new[] { nameof(Crowdaction.Name) }));
             }
@@ -221,7 +221,7 @@ namespace CollAction.Services.Crowdactions
             }
 
             crowdaction.Status = CrowdactionStatus.Deleted;
-            await context.SaveChangesAsync().ConfigureAwait(false);
+            await context.SaveChangesAsync(token).ConfigureAwait(false);
 
             return id;
         }
@@ -253,7 +253,7 @@ namespace CollAction.Services.Crowdactions
                 return new CrowdactionResult(new ValidationResult("Crowdaction not found", new[] { nameof(Crowdaction.Id) }));
             }
 
-            if (crowdaction.Name != updatedCrowdaction.Name && await context.Crowdactions.AnyAsync(c => c.Name == updatedCrowdaction.Name).ConfigureAwait(false))
+            if (crowdaction.Name != updatedCrowdaction.Name && await context.Crowdactions.AnyAsync(c => c.Name == updatedCrowdaction.Name, token).ConfigureAwait(false))
             {
                 return new CrowdactionResult(new ValidationResult("A crowdaction with this name already exists", new[] { nameof(Crowdaction.Name) }));
             }
@@ -409,7 +409,7 @@ namespace CollAction.Services.Crowdactions
 
             foreach (CrowdactionParticipant participant in participants)
             {
-                Uri unsubscribeLink = new Uri(siteOptions.PublicUrl, $"{crowdaction.Url}/unsubscribe-email?userId={WebUtility.UrlEncode(participant.UserId)}&token={WebUtility.UrlEncode(participant.UnsubscribeToken.ToString())}");
+                Uri unsubscribeLink = new(siteOptions.PublicUrl, $"{crowdaction.Url}/unsubscribe-email?userId={WebUtility.UrlEncode(participant.UserId)}&token={WebUtility.UrlEncode(participant.UnsubscribeToken.ToString())}");
                 emailSender.SendEmail(participant.User!.Email, subject, FormatEmailMessage(message, participant.User, unsubscribeLink));
             }
 
@@ -439,7 +439,7 @@ namespace CollAction.Services.Crowdactions
             CrowdactionParticipant participant = await context
                  .CrowdactionParticipants
                  .Include(c => c.Crowdaction)
-                 .FirstAsync(c => c.CrowdactionId == crowdactionId && c.UserId == userId).ConfigureAwait(false);
+                 .FirstAsync(c => c.CrowdactionId == crowdactionId && c.UserId == userId, cancellationToken).ConfigureAwait(false);
 
             if (participant != null && participant.UnsubscribeToken == token)
             {
@@ -623,7 +623,7 @@ namespace CollAction.Services.Crowdactions
             return result;
         }
 
-        public IQueryable<Crowdaction> SearchCrowdactions(Category? category, SearchCrowdactionStatus? searchCrowdactionStatus)
+        public IQueryable<Crowdaction> SearchCrowdactions(Category? category, SearchCrowdactionStatus? status)
         {
             IQueryable<Crowdaction> crowdactions = context
                 .Crowdactions
@@ -631,7 +631,7 @@ namespace CollAction.Services.Crowdactions
                 .OrderBy(c => c.DisplayPriority).ThenBy(c => c.Id)
                 .AsQueryable();
 
-            crowdactions = searchCrowdactionStatus switch
+            crowdactions = status switch
             {
                 SearchCrowdactionStatus.Closed => crowdactions.Where(c => c.End < DateTime.UtcNow && c.Status == CrowdactionStatus.Running),
                 SearchCrowdactionStatus.ComingSoon => crowdactions.Where(c => c.Start > DateTime.UtcNow && c.Status == CrowdactionStatus.Running),
@@ -712,12 +712,12 @@ namespace CollAction.Services.Crowdactions
         {
             logger.LogInformation("Adding participant '{0}' to crowdaction '{1}'", userId, crowdactionId);
 
-            if (await context.CrowdactionParticipants.AnyAsync(part => part.UserId == userId && part.CrowdactionId == crowdactionId).ConfigureAwait(false))
+            if (await context.CrowdactionParticipants.AnyAsync(part => part.UserId == userId && part.CrowdactionId == crowdactionId, token).ConfigureAwait(false))
             {
                 return false;
             }
 
-            CrowdactionParticipant participant = new CrowdactionParticipant(userId: userId, crowdactionId: crowdactionId, subscribedToCrowdactionEmails: true, participationDate: DateTime.UtcNow, unsubscribeToken: Guid.NewGuid());
+            CrowdactionParticipant participant = new(userId: userId, crowdactionId: crowdactionId, subscribedToCrowdactionEmails: true, participationDate: DateTime.UtcNow, unsubscribeToken: Guid.NewGuid());
 
             try
             {

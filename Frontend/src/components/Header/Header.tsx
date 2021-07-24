@@ -11,7 +11,7 @@ import Navigation from '../Navigation/Navigation';
 
 import styles from './Header.module.scss';
 
-export default () => {
+const Header = () => {
   const user = useUser();
 
   const renderWithoutUser = () => {
@@ -76,3 +76,5 @@ export default () => {
     </div>
   );
 };
+
+export default Header;

@@ -12,7 +12,7 @@ import CrowdactionsCreated from "../../../components/Profile/CrowdactionsCreated
 import { Helmet } from "react-helmet";
 import {Section} from "../../../components/Section/Section";
 
-export default () => {
+const Profile = () => {
   const user = useUser() ?? null;
   if (user !== null) {
     return <div style={{ padding: 20 }}>
@@ -73,3 +73,5 @@ export default () => {
       </Grid>;
   }
 };
+
+export default Profile;

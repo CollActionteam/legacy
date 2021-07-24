@@ -70,7 +70,7 @@ const FinishRegistrationPage = () => {
                                   .required("Must fill in a password at least six characters long"),
             confirmPassword: Yup.string().required("Must fill in a confirmation password")
                                          .when("password", {
-                is: val => val && val.length > 0,
+                is: (val: string | any[]) => val && val.length > 0,
                 then: Yup.string()
                          .oneOf([Yup.ref("password")], "Both passwords need to be the same")
                          .required("Must fill in a confirmation password")

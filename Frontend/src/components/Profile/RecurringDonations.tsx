@@ -7,7 +7,7 @@ interface IRecurringDonationProps {
     user: IUser;
 }
 
-export default ({ user }: IRecurringDonationProps) => {
+const RecurringDonations = ({ user }: IRecurringDonationProps) => {
     return <Card>
         <CardContent>
             <h3>Donation Subscriptions</h3>
@@ -20,3 +20,5 @@ export default ({ user }: IRecurringDonationProps) => {
         </CardContent>
     </Card>;
 };
+
+export default RecurringDonations;

@@ -11,7 +11,7 @@ interface ICrowdactionParticipatingProps {
     participant: ICrowdactionParticipant;
 }
 
-export default ({ user, participant }: ICrowdactionParticipatingProps) => {
+const CrowdactionParticipating = ({ user, participant }: ICrowdactionParticipatingProps) => {
     const [ error, setError ] = useState("");
     const [ toggleSubscription ] = useMutation(
         SET_CROWDACTION_SUBSCRIPTION,
@@ -50,3 +50,5 @@ const SET_CROWDACTION_SUBSCRIPTION = gql`
         }
     }
 `;
+
+export default CrowdactionParticipating;

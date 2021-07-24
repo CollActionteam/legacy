@@ -68,7 +68,7 @@ library.add(
   faShareAlt
 );
 
-export default ({ children }: any) => {
+const Layout = ({ children }: any) => {
   const { pathname } = useLocation();
   const needsLayout = !pathname.endsWith('/widget');
   if (needsLayout) {
@@ -98,3 +98,5 @@ export default ({ children }: any) => {
     return <>{children}</>;
   }
 };
+
+export default Layout;

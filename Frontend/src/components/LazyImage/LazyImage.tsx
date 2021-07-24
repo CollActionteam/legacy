@@ -2,8 +2,10 @@ import { LazyLoadImageProps, LazyLoadImage } from "react-lazy-load-image-compone
 import React from "react";
 import styles from "./LazyImage.module.scss";
 
-export default (props: LazyLoadImageProps) => {
+const LazyImage = (props: LazyLoadImageProps) => {
     return <span className={styles.lazyImage}>
         <LazyLoadImage {...props} />
     </span>;
 };
+
+export default LazyImage;

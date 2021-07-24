@@ -25,7 +25,7 @@ const editUserStyles = makeStyles(theme => ({
   }
 }));
 
-export default ({ userId } : IEditUserProps): any => {
+const AdminEditUser = ({ userId } : IEditUserProps): any => {
     const classes = editUserStyles();
     const history = useHistory();
     const [ error, setError ] = useState<string | null>(null);
@@ -183,3 +183,5 @@ const GET_USER = gql`
         }
     }
 `;
+
+export default AdminEditUser;

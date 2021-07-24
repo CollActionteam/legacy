@@ -26,7 +26,7 @@ namespace CollAction.Controllers
             XDocument sitemap = await sitemapService.GetSitemap(token).ConfigureAwait(false);
             return new ContentResult()
             {
-                Content = sitemap.Declaration.ToString() + sitemap.ToString(SaveOptions.DisableFormatting),
+                Content = $"{sitemap.Declaration}{sitemap.ToString(SaveOptions.DisableFormatting)}",
                 ContentType = "text/xml",
                 StatusCode = 200
             };

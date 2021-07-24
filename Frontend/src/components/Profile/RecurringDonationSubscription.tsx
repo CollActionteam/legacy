@@ -21,7 +21,7 @@ const STOP_SUBSCRIPTION = gql`
     }
 `;
 
-export default ({ subscription }: IRecurringDonationItemProps) => {
+const RecurringDonationSubscription = ({ subscription }: IRecurringDonationItemProps) => {
     const [ stopSubscription ] = useMutation(STOP_SUBSCRIPTION,
         {
             variables: {
@@ -64,3 +64,5 @@ export default ({ subscription }: IRecurringDonationItemProps) => {
         </ListItem>
     </>;
 };
+
+export default RecurringDonationSubscription;

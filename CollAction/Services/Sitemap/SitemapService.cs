@@ -123,8 +123,8 @@ namespace CollAction.Services.Sitemap
             try
             {
                 return video.LastIndexOf("?watch?v=", StringComparison.Ordinal) >= 0
-                    ? video.Substring(video.LastIndexOf('=') + 1)
-                    : video.Substring(video.LastIndexOf('/') + 1);
+                    ? video[(video.LastIndexOf('=') + 1)..]
+                    : video[(video.LastIndexOf('/') + 1)..];
             }
             catch (ArgumentOutOfRangeException e)
             {
@@ -142,7 +142,7 @@ namespace CollAction.Services.Sitemap
                    new XElement(SitemapSchema + "changefreq", changeFrequency),
                    new XElement(SitemapSchema + "priority", priority)
                 };
-            return new XElement(SitemapSchema + "url", standardUrlElements.Concat(extraElements.Where(e => e != null)).ToArray());
+            return new XElement(SitemapSchema + "url", standardUrlElements.Concat((XElement[])extraElements.Where(e => e != null)).ToArray());
         }
     }
 }

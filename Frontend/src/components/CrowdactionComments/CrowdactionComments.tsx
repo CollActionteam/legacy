@@ -164,7 +164,7 @@ const updateCacheAfterFetch = (
   };
 };
 
-export default ({ id }: ICrowdactionCommentsProps) => {
+const CrowdactionComments = ({ id }: ICrowdactionCommentsProps) => {
   const user = useUser();
   const [hasPostedAnonymously, setHasPostedAnonymously] = useState(false);
   const [mutationError, setMutationError] = useState('');
@@ -344,3 +344,5 @@ export default ({ id }: ICrowdactionCommentsProps) => {
     </>
   );
 };
+
+export default CrowdactionComments;

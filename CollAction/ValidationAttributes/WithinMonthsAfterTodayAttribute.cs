@@ -8,29 +8,29 @@ namespace CollAction.ValidationAttributes
     /// </summary>
     public sealed class WithinMonthsAfterTodayAttribute : ValidationAttribute
     {
-        private readonly int months;
+        public int Months { get; }
 
         public WithinMonthsAfterTodayAttribute(int months)
         {
-            this.months = months;
+            Months = months;
         }
 
-        protected override ValidationResult IsValid(object? value, ValidationContext context)
+        protected override ValidationResult IsValid(object? value, ValidationContext validationContext)
         {
             if (value == null)
             {
-                return ValidationResult.Success;
+                return ValidationResult.Success!;
             }
 
             DateTime today = DateTime.UtcNow.Date;
-            var maxDate = today.AddMonths(months);
+            var maxDate = today.AddMonths(Months);
             var checkDate = (DateTime)value;
             if (checkDate < today || checkDate > maxDate)
             {
                 return new ValidationResult(ErrorMessage);
             }
 
-            return ValidationResult.Success;
+            return ValidationResult.Success!;
         }
     }
 }

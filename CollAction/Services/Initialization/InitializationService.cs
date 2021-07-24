@@ -59,7 +59,7 @@ namespace CollAction.Services.Initialization
 
         public async Task SeedTestData(string adminId, CancellationToken cancellationToken)
         {
-            if (!await context.Crowdactions.AnyAsync().ConfigureAwait(false)) // Protect against seeding multiple times
+            if (!await context.Crowdactions.AnyAsync(cancellationToken).ConfigureAwait(false)) // Protect against seeding multiple times
             {
                 var admin = await userManager.FindByIdAsync(adminId).ConfigureAwait(false);
                 var seededUsers = await SeedTestUsers(cancellationToken).ConfigureAwait(false);
@@ -76,7 +76,7 @@ namespace CollAction.Services.Initialization
         {
             using var client = new HttpClient();
             using var response = await client.GetAsync(url, cancellationToken).ConfigureAwait(false);
-            return await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+            return await response.Content.ReadAsByteArrayAsync(cancellationToken).ConfigureAwait(false);
         }
 
         private async Task<ApplicationUser> CreateAdminRoleAndUser()
@@ -170,7 +170,7 @@ namespace CollAction.Services.Initialization
                           .Distinct()
                           .ToList();
 
-            List<string> userIds = await context.Users.Select(u => u.Id).ToListAsync().ConfigureAwait(false);
+            List<string> userIds = await context.Users.Select(u => u.Id).ToListAsync(cancellationToken).ConfigureAwait(false);
             List<Crowdaction> crowdactions = new List<Crowdaction>(crowdactionNames.Count);
 
             // Generate random crowdactions

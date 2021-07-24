@@ -4,7 +4,7 @@ import { gql, useMutation } from "@apollo/client";
 import { Alert } from "../Alert/Alert";
 import { Button } from "../Button/Button";
 
-export default () => {
+const ResetPassword = () => {
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmNewPassword, setConfirmNewPassword] = useState("");
@@ -72,3 +72,5 @@ const CHANGE_PASSWORD = gql`
             }
         }
     }`;
+
+export default ResetPassword;

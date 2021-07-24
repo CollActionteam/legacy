@@ -7,7 +7,7 @@ import styles from "./Share.module.scss";
 import { Grid } from "@material-ui/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export default () => {
+const Share = () => {
   const { t } = useTranslation();
 
   const socialMedia = siteData.socialMedia
@@ -30,3 +30,5 @@ export default () => {
     </Grid>
   );
 };
+
+export default Share;

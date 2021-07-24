@@ -21,7 +21,7 @@ interface ICarouselProps {
   text: string;
 }
 
-export default ({ title, text }: ICarouselProps) => {
+const Carousel = ({ title, text }: ICarouselProps) => {
   const settings = {
     dots: false,
     infinite: true,
@@ -94,3 +94,5 @@ const GET_CAROUSEL_CROWDACTIONS = gql`
     }
   }
 `;
+
+export default Carousel;

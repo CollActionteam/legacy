@@ -6,11 +6,13 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.Slack;
 using System.Threading.Tasks;
 
+[assembly:CLSCompliant(false)]
 namespace CollAction
 {
     public static class Program

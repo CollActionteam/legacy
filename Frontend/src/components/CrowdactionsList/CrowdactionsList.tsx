@@ -14,7 +14,7 @@ interface ICrowdactionListProps {
   status?: string;
 }
 
-export default ({ category, status = CrowdactionStatusFilter.Open }: ICrowdactionListProps) => {
+const CrowdactionsList = ({ category, status = CrowdactionStatusFilter.Open }: ICrowdactionListProps) => {
   const { data, loading, error } = useQuery(
     FIND_CROWDACTIONS,
     category
@@ -66,3 +66,5 @@ const FIND_CROWDACTIONS = gql`
     }
   }
 `;
+
+export default CrowdactionsList;

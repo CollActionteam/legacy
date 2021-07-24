@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-export default ({ children }: any) => {
+const AdminSidebar = ({ children }: any) => {
     const classes = useStyles();
     const history = useHistory();
     return <div className={classes.root}>
@@ -54,3 +54,5 @@ export default ({ children }: any) => {
       </main>
     </div>;
 };
+
+export default AdminSidebar;
