@@ -1,4 +1,5 @@
 ﻿using Hangfire;
+using MailChimp.Net;
 using MailChimp.Net.Core;
 using MailChimp.Net.Interfaces;
 using MailChimp.Net.Models;
@@ -16,10 +17,10 @@ namespace CollAction.Services.Newsletter
         private readonly IBackgroundJobClient jobClient;
         private readonly ILogger<NewsletterService> logger;
 
-        public NewsletterService(IMailChimpManager mailChimpManager, IOptions<NewsletterServiceOptions> options, ILogger<NewsletterService> logger, IBackgroundJobClient jobClient)
+        public NewsletterService(IOptions<NewsletterServiceOptions> options, ILogger<NewsletterService> logger, IBackgroundJobClient jobClient)
         {
             newsletterListId = options.Value.MailChimpNewsletterListId;
-            this.mailChimpManager = mailChimpManager;
+            mailChimpManager = new MailChimpManager(new MailChimpOptions() { ApiKey = options.Value.MailChimpKey });
             this.jobClient = jobClient;
             this.logger = logger;
         }

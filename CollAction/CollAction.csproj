@@ -46,7 +46,7 @@
     <PackageReference Include="Hangfire.PostgreSql" Version="1.8.5.4" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.34" />
     <PackageReference Include="HtmlSanitizer" Version="5.0.404" />
-    <PackageReference Include="MailChimp.Net.V3" Version="4.2.1" />
+    <PackageReference Include="MailChimp.Net.V3" Version="5.2.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.17.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="5.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="5.0.8" />
