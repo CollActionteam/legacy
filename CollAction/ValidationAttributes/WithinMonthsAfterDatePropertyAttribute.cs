@@ -9,24 +9,24 @@ namespace CollAction.ValidationAttributes
     /// </summary>
     public sealed class WithinMonthsAfterDatePropertyAttribute : ValidationAttribute
     {
-        private readonly string dateProperty;
-        private readonly int months;
+        public string DateProperty { get; }
+        public int Months { get; }
 
         public WithinMonthsAfterDatePropertyAttribute(int months, string dateProperty)
         {
-            this.months = months;
-            this.dateProperty = dateProperty;
+            Months = months;
+            DateProperty = dateProperty;
         }
 
-        protected override ValidationResult IsValid(object? value, ValidationContext context)
+        protected override ValidationResult IsValid(object? value, ValidationContext validationContext)
         {
             if (value == null)
             {
-                return ValidationResult.Success;
+                return ValidationResult.Success!;
             }
 
-            DateTime startDate = GetReferencedDate(context.ObjectInstance);
-            DateTime maxDate = startDate.AddMonths(months);
+            DateTime startDate = GetReferencedDate(validationContext.ObjectInstance);
+            DateTime maxDate = startDate.AddMonths(Months);
             DateTime dateToCheck = (DateTime)value;
 
             if (dateToCheck < startDate || dateToCheck > maxDate)
@@ -35,23 +35,23 @@ namespace CollAction.ValidationAttributes
             }
             else
             {
-                return ValidationResult.Success;
+                return ValidationResult.Success!;
             }
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "dataProperty is an argument of the attribute")]
         private DateTime GetReferencedDate(object instance)
         {
-            PropertyInfo? propertyInfo = instance.GetType().GetProperty(dateProperty);
+            PropertyInfo? propertyInfo = instance.GetType().GetProperty(DateProperty);
             if (propertyInfo == null || propertyInfo.PropertyType != typeof(DateTime))
             {
-                throw new ArgumentException($"The specified property '{dateProperty}' does not refer to a valid DateTime property", nameof(dateProperty));
+                throw new ArgumentException($"The specified property '{DateProperty}' does not refer to a valid DateTime property", nameof(DateProperty));
             }
 
             object? propValue = propertyInfo.GetValue(instance, null);
             if (propValue == null)
             {
-                throw new ArgumentException($"The specified property '{dateProperty}' contained a null value", nameof(dateProperty));
+                throw new ArgumentException($"The specified property '{DateProperty}' contained a null value", nameof(DateProperty));
             }
 
             return (DateTime)propValue;

@@ -30,7 +30,7 @@ export const ConsentDescription = (consent: Consent) => {
 
 export const useConsent = () => useContext(ConsentContext);
 
-export default ({ children }: any) => {
+const ConsentProvider = ({ children }: any) => {
     const [ consent, setConsent ] = useState(initialConsentState);
     useEffect(() => {
         localStorage.setItem(consentKey, consent.join(";"));
@@ -46,3 +46,5 @@ export default ({ children }: any) => {
         { children }
     </ConsentContext.Provider>
 };
+
+export default ConsentProvider;

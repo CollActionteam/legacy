@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -47,13 +48,14 @@ namespace CollAction.Controllers
             public bool Equals([AllowNull] CacheKey? other)
                 => other != null &&
                    Query == other.Query &&
-                   jtokenComparer.Equals(Variables, other.Variables);
+                   ((Variables == null && other.Variables == null) ||
+                    (Variables != null && other.Variables != null && jtokenComparer.Equals(Variables, other.Variables)));
 
             public override bool Equals(object? obj)
                 => Equals(obj as CacheKey);
 
             public override int GetHashCode()
-                => HashCode.Combine(Query, jtokenComparer.GetHashCode(Variables));
+                => Variables == null ? -1 : HashCode.Combine(Query, jtokenComparer.GetHashCode(Variables));
         }
 
         public GraphQlController(ISchema schema, IDocumentExecuter executer, IEnumerable<IValidationRule> validationRules, ApplicationDbContext context, ILogger<GraphQlController> logger, IServiceProvider serviceProvider, IMemoryCache cache)
@@ -70,7 +72,7 @@ namespace CollAction.Controllers
         [HttpPost]
         public Task<ExecutionResult> Post([BindRequired, FromBody] GraphQlPostBody body, CancellationToken cancellation)
         {
-            if (!User.Identity.IsAuthenticated && body.Query.StartsWith("query", StringComparison.OrdinalIgnoreCase))
+            if (!(User.Identity?.IsAuthenticated ?? false) && body.Query.StartsWith("query", StringComparison.OrdinalIgnoreCase))
             {
                 logger.LogInformation("Executing graphql query with caching");
                 return cache.GetOrCreateAsync(
@@ -93,7 +95,7 @@ namespace CollAction.Controllers
         public Task<ExecutionResult> Get([FromQuery] GraphQlGetQuery getQuery, CancellationToken cancellation)
         {
             JObject? jsonVariables = ParseVariables(getQuery.Variables);
-            if (!User.Identity.IsAuthenticated && getQuery.Query.StartsWith("query", StringComparison.OrdinalIgnoreCase))
+            if (!(User.Identity?.IsAuthenticated ?? false) && getQuery.Query.StartsWith("query", StringComparison.OrdinalIgnoreCase))
             {
                 logger.LogInformation("Executing graphql query with caching");
                 return cache.GetOrCreateAsync(
@@ -123,9 +125,9 @@ namespace CollAction.Controllers
             {
                 return JObject.Parse(variables);
             }
-            catch (Exception exception)
+            catch (JsonReaderException exception)
             {
-                throw new Exception("Could not parse variables.", exception);
+                throw new InvalidOperationException("Could not parse variables.", exception);
             }
         }
 

@@ -10,7 +10,7 @@ import NewsletterSignup from "../NewsletterSignup/NewsletterSignup";
 
 import styles from "./Footer.module.scss";
 
-export default () => {
+const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return <div className={styles.footer}>
@@ -56,3 +56,5 @@ export default () => {
     </Container>
   </div>;
 };
+
+export default Footer;

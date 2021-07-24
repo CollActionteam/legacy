@@ -8,14 +8,14 @@ import { Fragments } from "../../../api/fragments";
 import Formatter from "../../../formatter";
 import { Button } from "../../Button/Button";
 
-export default () => {
+const AdminListCrowdactions = () => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [toDelete, setToDelete] = useState<ICrowdaction | null>(null);
     const [info, setInfo] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const {data, loading, error: loadingError} = useQuery(
+    const { data, loading, error: loadingError } = useQuery(
         GET_CROWDACTIONS,
         {
             fetchPolicy: "cache-and-network", // To ensure it updates after deleting/editting
@@ -26,7 +26,7 @@ export default () => {
             }
         }
     );
-    const [ deleteCrowdaction ] = useMutation(
+    const [deleteCrowdaction] = useMutation(
         DELETE_CROWDACTION,
         {
             variables: {
@@ -43,7 +43,7 @@ export default () => {
                 console.error(data.message);
             },
             awaitRefetchQueries: true,
-            refetchQueries: [{ 
+            refetchQueries: [{
                 query: GET_CROWDACTIONS,
                 variables: {
                     skip: rowsPerPage * page,
@@ -56,14 +56,14 @@ export default () => {
     const crowdactionCount = data?.crowdactionCount ?? 0;
 
     return <>
-        { loading ? <Loader /> : null }
+        {loading ? <Loader /> : null}
         <Alert type="info" text={info} />
         <Alert type="error" text={error} />
         <Alert type="error" text={loadingError?.message} />
         <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
-            <DialogTitle>Delete crowdaction { toDelete?.name }?</DialogTitle>
+            <DialogTitle>Delete crowdaction {toDelete?.name}?</DialogTitle>
             <DialogContent>
-                Are you sure you wish to delete "{ toDelete?.name }"?
+                Are you sure you wish to delete "{toDelete?.name}"?
             </DialogContent>
             <DialogActions>
                 <Button onClick={() => deleteCrowdaction()}>Yes</Button>
@@ -84,19 +84,27 @@ export default () => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    { data?.crowdactions.map((p: ICrowdaction) => (
+                    {data?.crowdactions.map((p: ICrowdaction) => (
                         <TableRow key={p.id}>
-                            <TableCell component="th" scope="row">{ p.name }</TableCell>
-                            <TableCell align="right">{ p.status }</TableCell>
-                            <TableCell align="right">{ Formatter.date(new Date(p.start)) }</TableCell>
-                            <TableCell align="right">{ Formatter.date(new Date(p.end)) } { Formatter.time(new Date(p.end)) }</TableCell>
-                            <TableCell align="right">{ p.isActive ? "Yes" : "No" }</TableCell>
+                            <TableCell component="th" scope="row">{p.name}</TableCell>
+                            <TableCell align="right">{p.status}</TableCell>
+                            <TableCell align="right">{Formatter.date(new Date(p.start))}</TableCell>
+                            <TableCell align="right">{Formatter.date(new Date(p.end))} {Formatter.time(new Date(p.end))}</TableCell>
+                            <TableCell align="right">{p.isActive ? "Yes" : "No"}</TableCell>
                             <TableCell align="right"><Button to={`/admin/crowdactions/edit/${p.id}`}>Edit</Button></TableCell>
                             <TableCell align="right"><Button onClick={() => { setDeleteDialogOpen(true); setToDelete(p); }}>Delete</Button></TableCell>
                         </TableRow>))
                     }
                     <TableRow>
-                        <TablePagination count={crowdactionCount} page={page} rowsPerPageOptions={[5, 10, 25, 50]} rowsPerPage={rowsPerPage} onChangePage={(_ev, newPage) => setPage(newPage)} onChangeRowsPerPage={(ev) => { setPage(0); setRowsPerPage(parseInt((ev.target.value))) }} />
+                        <TablePagination 
+                            component="div"
+                            count={crowdactionCount}
+                            page={page}
+                            rowsPerPageOptions={[5, 10, 25, 50]}
+                            rowsPerPage={rowsPerPage} onChangePage={(_ev, newPage) => setPage(newPage)}
+                            onPageChange={(_ev, newPage) => setPage(newPage)}
+                            onChangeRowsPerPage={(ev) => { setPage(0); setRowsPerPage(parseInt((ev.target.value))) }}
+                        />
                     </TableRow>
                 </TableBody>
             </Table>
@@ -120,3 +128,5 @@ const DELETE_CROWDACTION = gql`
         }
     }
 `;
+
+export default AdminListCrowdactions;

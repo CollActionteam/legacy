@@ -9,7 +9,7 @@ namespace CollAction.Helpers
 {
     public static class ValidationHelper
     {
-        public static IEnumerable<ValidationResult> Validate<TItem>(TItem item, IServiceProvider serviceProvider)
+        public static IEnumerable<ValidationResult> Validate<TItem>(TItem item, IServiceProvider serviceProvider) where TItem: class
         {
             var validationContext = new ValidationContext(item, serviceProvider: serviceProvider, items: null);
             var validationResults = new List<ValidationResult>();
@@ -17,14 +17,14 @@ namespace CollAction.Helpers
             return validationResults;
         }
 
-        public static IEnumerable<IdentityError> ValidateAsIdentity<TItem>(TItem item, IServiceProvider serviceProvider)
+        public static IEnumerable<IdentityError> ValidateAsIdentity<TItem>(TItem item, IServiceProvider serviceProvider) where TItem: class
             => Validate(item, serviceProvider).Select(ValidationResultToIdentityError);
 
         public static string GetValidationString(this ModelStateDictionary modelState)
             => string.Join(", ", modelState.Values.SelectMany(state => state.Errors).Select(error => error.ErrorMessage));
 
         private static IdentityError ValidationResultToIdentityError(ValidationResult result)
-            => new IdentityError()
+            => new()
             {
                 Code = string.Join("_", result.MemberNames),
                 Description = result.ErrorMessage

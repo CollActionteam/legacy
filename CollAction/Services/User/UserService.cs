@@ -109,7 +109,7 @@ namespace CollAction.Services.User
                 return new UserResult(IdentityResult.Failed(validationResults.ToArray()));
             }
 
-            ApplicationUser user = new ApplicationUser(email: newUser.Email, firstName: newUser.FirstName, lastName: newUser.LastName, registrationDate: DateTime.UtcNow);
+            ApplicationUser user = new(email: newUser.Email, firstName: newUser.FirstName, lastName: newUser.LastName, registrationDate: DateTime.UtcNow);
             IdentityResult result = await userManager.CreateAsync(user, newUser.Password).ConfigureAwait(false);
             if (result.Succeeded)
             {
@@ -136,7 +136,7 @@ namespace CollAction.Services.User
 
             logger.LogInformation("Sending reset password for user");
             string code = await userManager.GeneratePasswordResetTokenAsync(user).ConfigureAwait(false);
-            Uri callbackUrl = new Uri(siteOptions.PublicUrl, $"/account/reset-password?code={WebUtility.UrlEncode(code)}&email={WebUtility.UrlEncode(email)}");
+            Uri callbackUrl = new(siteOptions.PublicUrl, $"/account/reset-password?code={WebUtility.UrlEncode(code)}&email={WebUtility.UrlEncode(email)}");
             await emailSender.SendEmailTemplated(email, "Reset Password", "ResetPassword", callbackUrl).ConfigureAwait(false);
             return (IdentityResult.Success, code);
         }
@@ -145,12 +145,10 @@ namespace CollAction.Services.User
         {
             if (!string.IsNullOrWhiteSpace(searchString))
             {
-#pragma warning disable CA1307 // Not needed, translated to sql
                 return context.Users
-                              .Where(u => u.Email.Contains(searchString) ||
-                                          u.FirstName!.Contains(searchString) ||
-                                          u.LastName!.Contains(searchString));
-#pragma warning restore CA1307 // Not needed, translated to sql
+                              .Where(u => u.Email.Contains(searchString, StringComparison.Ordinal) ||
+                                          u.FirstName!.Contains(searchString, StringComparison.Ordinal) ||
+                                          u.LastName!.Contains(searchString, StringComparison.Ordinal));
             }
             else
             {
@@ -215,7 +213,7 @@ namespace CollAction.Services.User
             return new UserResult(user, result);
         }
 
-        public async Task<UserResult> UpdateUser(UpdatedUser updatedUser, ClaimsPrincipal loggedIn)
+        public async Task<UserResult> UpdateUser(UpdatedUser updatedUser, ClaimsPrincipal claimsUser)
         {
             IEnumerable<IdentityError> validationResults = ValidationHelper.ValidateAsIdentity(updatedUser, serviceProvider);
             if (validationResults.Any())
@@ -229,11 +227,11 @@ namespace CollAction.Services.User
                 return new UserResult(IdentityResult.Failed(new IdentityError() { Code = "NOUSER", Description = "This user doesn't exist" }));
             }
 
-            var loggedInUser = await userManager.GetUserAsync(loggedIn).ConfigureAwait(false);
+            var loggedInUser = await userManager.GetUserAsync(claimsUser).ConfigureAwait(false);
 
             // need to be logged in as either admin, or the user being updated, only admins can update representsNumberParticipants or change a user to admin
-            if (!(loggedIn.IsInRole(AuthorizationConstants.AdminRole) || loggedInUser.Id == user.Id) ||
-                (!loggedIn.IsInRole(AuthorizationConstants.AdminRole) && (updatedUser.representsNumberParticipants != user.RepresentsNumberParticipants || updatedUser.IsAdmin)))
+            if (!(claimsUser.IsInRole(AuthorizationConstants.AdminRole) || loggedInUser.Id == user.Id) ||
+                (!claimsUser.IsInRole(AuthorizationConstants.AdminRole) && (updatedUser.representsNumberParticipants != user.RepresentsNumberParticipants || updatedUser.IsAdmin)))
             {
                 return new UserResult(IdentityResult.Failed(new IdentityError() { Code = "NOPERM", Description = "You don't have permission to update this user" }));
             }

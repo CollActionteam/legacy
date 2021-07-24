@@ -7,8 +7,9 @@ interface ICrowdactionsParticipatingProps {
     user: IUser;
 }
 
-export default ({ user }: ICrowdactionsParticipatingProps) => {
-    return <Card>
+const CrowdactionsParticipating = ({ user }: ICrowdactionsParticipatingProps) => {
+    return (
+        <Card>
             <CardContent>
                 <h3>Crowdactions Participating</h3>
                 <br />
@@ -17,5 +18,8 @@ export default ({ user }: ICrowdactionsParticipatingProps) => {
                 }
                 { user.participates.length === 0 ? <p>You have no crowdactions you're participating in</p> : null }
             </CardContent>
-        </Card>;
+        </Card>
+    );
 };
+
+export default CrowdactionsParticipating;

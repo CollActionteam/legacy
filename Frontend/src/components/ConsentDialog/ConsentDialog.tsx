@@ -14,7 +14,7 @@ const initialConsentState: Record<Consent, boolean> = {
     [Consent.Stripe]: false,
 };
 
-export default () => {
+const ConsentDialog = () => {
     const { consent, setConsent, setAllowAllConsent } = useConsent();
     const [ showMoreOptions, setShowMoreOptions ] = useState(false);
     const [ info, setInfo ] = useState<string | null>(null);
@@ -81,3 +81,5 @@ export default () => {
         </Container>
     </div>;
 }; 
+
+export default ConsentDialog;

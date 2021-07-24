@@ -77,7 +77,7 @@ const RegisterUserPage = () => {
                 .string()
                 .required("Please confirm your e-mail address")
                 .when("email", {
-                    is: val => val?.length > 0,
+                    is: (val: string | any[]) => val?.length > 0,
                     then: Yup
                         .string()
                         .oneOf([Yup.ref("email")], "Please confirm your e-mail address by entering the same one")
@@ -90,7 +90,7 @@ const RegisterUserPage = () => {
                 .string()
                 .required("Please confirm the password")
                 .when("password", {
-                    is: val => val?.length > 0,
+                    is: (val: string | any[]) => val?.length > 0,
                     then: Yup
                         .string()
                         .oneOf([Yup.ref("password")], "Please confirm the password by entering the same one")

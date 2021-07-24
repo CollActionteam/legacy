@@ -2,7 +2,7 @@ import React from "react";
 
 import styles from "./ProgressRing.module.scss";
 
-export default ({
+const ProgressRing = ({
   progress,
   radius = 30,
   stroke = 4,
@@ -41,3 +41,5 @@ export default ({
       </div>
   </div>;
 };
+
+export default ProgressRing;

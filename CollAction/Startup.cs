@@ -151,7 +151,6 @@ namespace CollAction
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<INewsletterService, NewsletterService>();
             services.AddTransient<IDonationService, DonationService>();
-            services.AddTransient<IMailChimpManager, MailChimpManager>();
             services.AddTransient<IHtmlInputValidator, HtmlInputValidator>();
 
             // Configure application options
@@ -168,10 +167,6 @@ namespace CollAction
                     {
                         o.TokenLifespan = TimeSpan.FromDays(7); // 7 Days to finish setting up your account
                     });
-            services.AddOptions<MailChimpOptions>().Configure(options =>
-            {
-                options.ApiKey = configuration.Get<NewsletterServiceOptions>().MailChimpKey;
-            }).ValidateDataAnnotations();
             services.AddOptions<RequestOptions>().Configure(options =>
             {
                 options.ApiKey = configuration["StripeSecretApiKey"];

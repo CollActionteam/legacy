@@ -66,7 +66,7 @@ export const validations = Yup.object({
     .required('Select a category that most closely aligns with your crowdaction'),
   secondCategory: Yup.string()
                      .when("category", {
-                         is: val => val?.length > 0,
+                         is: (val: string | any[]) => val?.length > 0,
                          then: Yup
                              .string()
                              .notOneOf([Yup.ref("category")], "The two categories can't be the same")

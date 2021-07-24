@@ -7,7 +7,7 @@ import SettingsProvider from "./SettingsProvider";
 import GraphQLProvider from "./GraphQLProvider";
 import AnalyticsProvider from "./AnalyticsProvider";
 
-export default ({ children }: any) => {
+const AllProviders = ({ children }: any) => {
     return <I18nextProvider i18n={i18n}>
         <GraphQLProvider>
             <SettingsProvider>
@@ -22,3 +22,5 @@ export default ({ children }: any) => {
         </GraphQLProvider>
     </I18nextProvider>;
 };
+
+export default AllProviders;

@@ -108,7 +108,7 @@ export const AnalyticsContext = React.createContext(defaultAnalytics);
 
 export const useAnalytics = () => useContext(AnalyticsContext);
 
-export default ({ children }: any) => {
+const AnalyticsProvider = ({ children }: any) => {
     const { consent } = useConsent();
     const [ bufferedEvents, setBufferedEvents ] = useState<string[]>([]);
     const [ gaInitialized, setGaInitialized ] = useState(false);
@@ -219,3 +219,5 @@ export default ({ children }: any) => {
         { children }
     </AnalyticsContext.Provider>;
 };
+
+export default AnalyticsProvider;

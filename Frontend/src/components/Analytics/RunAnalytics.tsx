@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 import { useAnalytics } from '../../providers/AnalyticsProvider';
 import { useEffect } from 'react';
 
-export default () => {
+const RunAnalytics = () => {
     const { consent } = useConsent();
     const { pathname, search } = useLocation();
     const pixelConsent = consent.includes(Consent.Analytics) && consent.includes(Consent.Social);
@@ -38,3 +38,5 @@ export default () => {
 
     return null;
 };
+
+export default RunAnalytics;

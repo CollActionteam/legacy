@@ -8,7 +8,7 @@ import Formatter from "../../../formatter";
 import { Button } from "../../Button/Button";
 import { useSettings } from "../../../providers/SettingsProvider";
 
-export default () => {
+const AdminListComments = () => {
     const { crowdactionCommentStatusses } = useSettings();
     const [status, setStatus] = useState("NONE");
     const [page, setPage] = useState(0);
@@ -18,7 +18,7 @@ export default () => {
     const [toMutate, setToMutate] = useState<ICrowdactionComment | null>(null);
     const [info, setInfo] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const {data, loading, error: loadingError} = useQuery(
+    const { data, loading, error: loadingError } = useQuery(
         GET_COMMENTS,
         {
             fetchPolicy: "cache-and-network", // To ensure it updates after deleting/editting
@@ -30,7 +30,7 @@ export default () => {
             }
         }
     );
-    const [ approveComment ] = useMutation(
+    const [approveComment] = useMutation(
         APPROVE_COMMENT,
         {
             variables: {
@@ -49,7 +49,7 @@ export default () => {
             }
         }
     );
-    const [ deleteComment ] = useMutation(
+    const [deleteComment] = useMutation(
         DELETE_COMMENT,
         {
             variables: {
@@ -80,7 +80,7 @@ export default () => {
     const commentCount = data?.crowdactionCommentCount ?? 0;
 
     return <>
-        { loading ? <Loader /> : null }
+        {loading ? <Loader /> : null}
         <Alert type="info" text={info} />
         <Alert type="error" text={error} />
         <Alert type="error" text={loadingError?.message} />
@@ -107,7 +107,7 @@ export default () => {
         <InputLabel shrink id="status">Status</InputLabel>
         <Select name="status" labelId="status" value={status} onChange={(ev) => setStatus(ev.target.value as string)}>
             <MenuItem key="" value="NONE">NONE</MenuItem>
-            { crowdactionCommentStatusses.map(c => <MenuItem key={c} value={c}>{c}</MenuItem>) }
+            {crowdactionCommentStatusses.map(c => <MenuItem key={c} value={c}>{c}</MenuItem>)}
         </Select>
         <TableContainer component={Paper}>
             <Table aria-label="simple table">
@@ -123,19 +123,27 @@ export default () => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    { data?.crowdactionComments.map((u: ICrowdactionComment) => (
+                    {data?.crowdactionComments.map((u: ICrowdactionComment) => (
                         <TableRow key={u.id}>
-                            <TableCell component="th" scope="row">{ u.user?.fullName ?? u.anonymousCommentUser }</TableCell>
-                            <TableCell align="left">{ u.crowdaction?.name }</TableCell>
-                            <TableCell align="left">{ Formatter.date(new Date(u.commentedAt)) }</TableCell>
-                            <TableCell align="left">{ u.status }</TableCell>
-                            <TableCell align="left">{ u.comment }</TableCell>
-                            <TableCell align="center">{ u.status !== 'APPROVED' && <Button onClick={() => { setApproveDialogOpen(true); setToMutate(u)}}>Approve</Button> }</TableCell>
-                            <TableCell align="center">{ u.status !== 'DELETED' && <Button onClick={() => { setDeleteDialogOpen(true); setToMutate(u); }}>Delete</Button> }</TableCell>
+                            <TableCell component="th" scope="row">{u.user?.fullName ?? u.anonymousCommentUser}</TableCell>
+                            <TableCell align="left">{u.crowdaction?.name}</TableCell>
+                            <TableCell align="left">{Formatter.date(new Date(u.commentedAt))}</TableCell>
+                            <TableCell align="left">{u.status}</TableCell>
+                            <TableCell align="left">{u.comment}</TableCell>
+                            <TableCell align="center">{u.status !== 'APPROVED' && <Button onClick={() => { setApproveDialogOpen(true); setToMutate(u) }}>Approve</Button>}</TableCell>
+                            <TableCell align="center">{u.status !== 'DELETED' && <Button onClick={() => { setDeleteDialogOpen(true); setToMutate(u); }}>Delete</Button>}</TableCell>
                         </TableRow>))
                     }
                     <TableRow>
-                        <TablePagination count={commentCount} page={page} rowsPerPageOptions={[5, 10, 25, 50]} rowsPerPage={rowsPerPage} onChangePage={(_ev, newPage) => setPage(newPage)} onChangeRowsPerPage={(ev) => { setPage(0); setRowsPerPage(parseInt((ev.target.value))) } } />
+                        <TablePagination
+                            component="div"
+                            count={commentCount} 
+                            page={page} 
+                            rowsPerPageOptions={[5, 10, 25, 50]}
+                            rowsPerPage={rowsPerPage}
+                            onPageChange={(_ev, newPage) => setPage(newPage)}
+                            onChangeRowsPerPage={(ev) => { setPage(0); setRowsPerPage(parseInt((ev.target.value))) }} 
+                        />
                     </TableRow>
                 </TableBody>
             </Table>
@@ -188,3 +196,5 @@ const APPROVE_COMMENT = gql`
         }
     }
 `;
+
+export default AdminListComments;

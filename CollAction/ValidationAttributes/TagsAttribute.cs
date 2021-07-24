@@ -7,18 +7,18 @@ namespace CollAction.ValidationAttributes
 {
     public sealed class TagsAttribute : ValidationAttribute
     {
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        protected override ValidationResult IsValid(object? value, ValidationContext validationContext)
         {
-            var tags = (ICollection<string>)value;
+            var tags = (ICollection<string>?)value;
 
-            bool isValid = tags.All(t => Regex.IsMatch(t, @"^[A-Za-z][A-Za-z0-9_-]{0,29}$"));
+            bool isValid = tags?.All(t => Regex.IsMatch(t, @"^[A-Za-z][A-Za-z0-9_-]{0,29}$")) ?? true;
 
             if (!isValid)
             {
                 return new ValidationResult("Tags must be between one and thirty characters, start with a letter, and only contain letters, numbers, underscores or dashes");
             }
 
-            return ValidationResult.Success;
+            return ValidationResult.Success!;
         }
     }
 }

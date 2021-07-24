@@ -30,7 +30,7 @@ namespace CollAction.Services.Crowdactions.Models
 
         public Crowdaction? Crowdaction { get; set; }
 
-        public bool Succeeded { get; set; } = false;
+        public bool Succeeded { get; set; }
 
         public IEnumerable<ValidationResult> Errors { get; set; } = Enumerable.Empty<ValidationResult>();
     }
