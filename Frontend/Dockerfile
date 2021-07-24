@@ -15,11 +15,6 @@ RUN openssl req -x509 -nodes -days 99999 -newkey rsa:2048 -subj "/C=NL/ST=Noord 
 COPY nginx.conf.template .
 RUN envsubst '$REACT_APP_BACKEND_URL,$SITEMAP_LOCATION' < ./nginx.conf.template > ./nginx.conf
 
-# Install yarn
-#RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-#RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list
-#RUN apt-get update && apt-get install -y yarn
-
 # Build
 COPY . .
 RUN yarn
