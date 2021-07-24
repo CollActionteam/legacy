@@ -77,7 +77,7 @@ namespace CollAction.Services.Newsletter
                 }
                 catch (MailChimpException e)
                 {
-                    if (e.Status == 400 && e.Title.Equals("Forgotten Email Not Subscribed", StringComparison.InvariantCultureIgnoreCase))
+                    if (e.Status == 400 && e.Title.Equals("Forgotten Email Not Subscribed", StringComparison.OrdinalIgnoreCase))
                     {
                         var resubscribeException = new NeedsToResubscribeException(e);
                         logger.LogError(resubscribeException, "Newsletter member needs to resubscribe");

@@ -8,11 +8,11 @@ namespace CollAction.ValidationAttributes
 {
     public sealed class FileTypeAttribute : ValidationAttribute
     {
-        private readonly string[] types;
+        public string[] Types { get; }
 
         public FileTypeAttribute(params string[] types)
         {
-            this.types = types;
+            Types = types;
         }
 
         public override bool IsValid(object? value)
@@ -27,13 +27,13 @@ namespace CollAction.ValidationAttributes
                 throw new ArgumentException("Value being validated is not a IFormFile", nameof(value));
             }
 
-            string extension = Path.GetExtension(((IFormFile)value).FileName).ToLowerInvariant().Substring(1); // Strip off the preceeding dot.
-            return types.Contains(extension);
+            string extension = Path.GetExtension(((IFormFile)value).FileName).ToLowerInvariant()[1..]; // Strip off the preceeding dot.
+            return Types.Contains(extension);
         }
 
         public override string FormatErrorMessage(string name)
         {
-            return $"Invalid file type. Only files of type {string.Join(", ", types)} are accepted";
+            return $"Invalid file type. Only files of type {string.Join(", ", Types)} are accepted";
         }
     }
 }

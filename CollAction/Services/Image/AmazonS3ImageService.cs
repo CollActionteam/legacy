@@ -76,7 +76,7 @@ namespace CollAction.Services.Image
         }
 
         public Uri GetUrl(ImageFile imageFile)
-            => new Uri($"https://{bucket}.s3.{region}.amazonaws.com/{imageFile.Filepath}");
+            => new($"https://{bucket}.s3.{region}.amazonaws.com/{imageFile.Filepath}");
 
         public async Task DeleteObject(string filePath, CancellationToken token)
         {
@@ -133,12 +133,12 @@ namespace CollAction.Services.Image
                       SELECT NULL
                       FROM public.""Crowdactions"" P
                       WHERE P.""BannerImageFileId"" = I.""Id"" OR P.""DescriptiveImageFileId"" = I.""Id"" OR P.""CardImageFileId"" = I.""Id""
-                  ) AND I.""Date"" < 'now'::timestamp - '1 hour'::interval").ToListAsync().ConfigureAwait(false);
+                  ) AND I.""Date"" < 'now'::timestamp - '1 hour'::interval").ToListAsync(token).ConfigureAwait(false);
 
             await Task.WhenAll(danglingImages.Select(i => DeleteObject(i.Filepath, token))).ConfigureAwait(false);
 
             context.ImageFiles.RemoveRange(danglingImages);
-            await context.SaveChangesAsync().ConfigureAwait(false);
+            await context.SaveChangesAsync(token).ConfigureAwait(false);
         }
 
         public void InitializeDanglingImageJob()
@@ -176,7 +176,7 @@ namespace CollAction.Services.Image
         private static async Task<Image<Rgba32>> LoadImageFromRequest(IFormFile fileUploaded, int imageResizeThreshold, CancellationToken token)
         {
             using Stream uploadStream = fileUploaded.OpenReadStream();
-            using MemoryStream ms = new MemoryStream();
+            using MemoryStream ms = new();
             await uploadStream.CopyToAsync(ms, token).ConfigureAwait(false);
             var image = SixLabors.ImageSharp.Image.Load(ms.ToArray());
             var scaleRatio = GetScaleRatioForImage(image, imageResizeThreshold);
@@ -191,7 +191,7 @@ namespace CollAction.Services.Image
 
         private MemoryStream ConvertImageToJpg(Image<Rgba32> image)
         {
-            MemoryStream ms = new MemoryStream();
+            MemoryStream ms = new();
             image.SaveAsJpeg(ms, encoder);
             return ms;
         }

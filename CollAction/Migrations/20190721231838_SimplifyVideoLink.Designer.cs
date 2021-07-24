@@ -72,11 +72,11 @@ namespace CollAction.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
-                        .HasName("EmailIndex");
+                        .HasDatabaseName("EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex");
+                        .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -240,7 +240,7 @@ namespace CollAction.Migrations
 
                     b.HasIndex("Name")
                         .IsUnique()
-                        .HasName("IX_Projects_Name");
+                        .HasDatabaseName("IX_Projects_Name");
 
                     b.HasIndex("OwnerId");
 
@@ -342,7 +342,7 @@ namespace CollAction.Migrations
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex");
+                        .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles");
                 });

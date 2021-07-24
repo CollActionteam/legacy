@@ -15,9 +15,9 @@ namespace CollAction.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
-                .HasAnnotation("ProductVersion", "3.1.4")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63)
+                .HasAnnotation("ProductVersion", "5.0.8")
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
             modelBuilder.Entity("CollAction.Models.ApplicationUser", b =>
                 {
@@ -32,19 +32,19 @@ namespace CollAction.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Email")
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("character varying(250)")
-                        .HasMaxLength(250);
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("character varying(250)")
-                        .HasMaxLength(250);
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
@@ -53,12 +53,12 @@ namespace CollAction.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("text");
@@ -84,17 +84,17 @@ namespace CollAction.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
-                        .HasName("EmailIndex");
+                        .HasDatabaseName("EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex");
+                        .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -116,13 +116,13 @@ namespace CollAction.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("CreatorComments")
-                        .HasColumnType("character varying(20000)")
-                        .HasMaxLength(20000);
+                        .HasMaxLength(20000)
+                        .HasColumnType("character varying(20000)");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("character varying(10000)")
-                        .HasMaxLength(10000);
+                        .HasMaxLength(10000)
+                        .HasColumnType("character varying(10000)");
 
                     b.Property<string>("DescriptionVideoLink")
                         .HasColumnType("text");
@@ -139,18 +139,18 @@ namespace CollAction.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("FinishJobId")
-                        .HasColumnType("character varying(100)")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("Goal")
                         .IsRequired()
-                        .HasColumnType("character varying(10000)")
-                        .HasMaxLength(10000);
+                        .HasMaxLength(10000)
+                        .HasColumnType("character varying(10000)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("character varying(50)")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<int>("NumberCrowdactionEmailsSent")
                         .HasColumnType("integer");
@@ -160,8 +160,8 @@ namespace CollAction.Migrations
 
                     b.Property<string>("Proposal")
                         .IsRequired()
-                        .HasColumnType("character varying(300)")
-                        .HasMaxLength(300);
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
 
                     b.Property<DateTime>("Start")
                         .HasColumnType("timestamp without time zone");
@@ -182,7 +182,7 @@ namespace CollAction.Migrations
 
                     b.HasIndex("Name")
                         .IsUnique()
-                        .HasName("IX_Crowdactions_Name");
+                        .HasDatabaseName("IX_Crowdactions_Name");
 
                     b.HasIndex("OwnerId");
 
@@ -212,8 +212,8 @@ namespace CollAction.Migrations
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("AnonymousCommentUser")
-                        .HasColumnType("character varying(20)")
-                        .HasMaxLength(20);
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
 
                     b.Property<string>("Comment")
                         .IsRequired()
@@ -354,8 +354,8 @@ namespace CollAction.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("character varying(30)")
-                        .HasMaxLength(30);
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
 
                     b.HasKey("Id");
 
@@ -416,18 +416,18 @@ namespace CollAction.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<string>("NormalizedName")
-                        .HasColumnType("character varying(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex");
+                        .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles");
                 });
@@ -554,6 +554,14 @@ namespace CollAction.Migrations
                         .WithMany("Crowdactions")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("BannerImage");
+
+                    b.Navigation("CardImage");
+
+                    b.Navigation("DescriptiveImage");
+
+                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("CollAction.Models.CrowdactionCategory", b =>
@@ -563,6 +571,8 @@ namespace CollAction.Migrations
                         .HasForeignKey("CrowdactionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Crowdaction");
                 });
 
             modelBuilder.Entity("CollAction.Models.CrowdactionComment", b =>
@@ -577,6 +587,10 @@ namespace CollAction.Migrations
                         .WithMany("CrowdactionComments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Crowdaction");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CollAction.Models.CrowdactionParticipant", b =>
@@ -592,6 +606,10 @@ namespace CollAction.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Crowdaction");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CollAction.Models.CrowdactionParticipantCount", b =>
@@ -601,6 +619,8 @@ namespace CollAction.Migrations
                         .HasForeignKey("CollAction.Models.CrowdactionParticipantCount", "CrowdactionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Crowdaction");
                 });
 
             modelBuilder.Entity("CollAction.Models.CrowdactionTag", b =>
@@ -616,6 +636,10 @@ namespace CollAction.Migrations
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Crowdaction");
+
+                    b.Navigation("Tag");
                 });
 
             modelBuilder.Entity("CollAction.Models.DonationEventLog", b =>
@@ -623,6 +647,8 @@ namespace CollAction.Migrations
                     b.HasOne("CollAction.Models.ApplicationUser", "User")
                         .WithMany("DonationEvents")
                         .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CollAction.Models.UserEvent", b =>
@@ -630,6 +656,8 @@ namespace CollAction.Migrations
                     b.HasOne("CollAction.Models.ApplicationUser", "User")
                         .WithMany("UserEvents")
                         .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -681,6 +709,37 @@ namespace CollAction.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CollAction.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("CrowdactionComments");
+
+                    b.Navigation("Crowdactions");
+
+                    b.Navigation("DonationEvents");
+
+                    b.Navigation("Participates");
+
+                    b.Navigation("UserEvents");
+                });
+
+            modelBuilder.Entity("CollAction.Models.Crowdaction", b =>
+                {
+                    b.Navigation("Categories");
+
+                    b.Navigation("Comments");
+
+                    b.Navigation("ParticipantCounts");
+
+                    b.Navigation("Participants");
+
+                    b.Navigation("Tags");
+                });
+
+            modelBuilder.Entity("CollAction.Models.Tag", b =>
+                {
+                    b.Navigation("CrowdactionTags");
                 });
 #pragma warning restore 612, 618
         }

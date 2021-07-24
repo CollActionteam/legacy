@@ -45,7 +45,7 @@ namespace CollAction.Data
                    .HasAlternateKey(t => t.Name);
             builder.Entity<Crowdaction>()
                    .HasIndex(c => c.Name)
-                   .HasName("IX_Crowdactions_Name").IsUnique();
+                   .HasDatabaseName("IX_Crowdactions_Name").IsUnique();
             builder.Entity<Crowdaction>()
                    .HasMany(c => c.Comments)
                    .WithOne(c => c.Crowdaction!)
@@ -87,8 +87,7 @@ namespace CollAction.Data
 
             // All stored dates are UTC
             ValueConverter<DateTime, DateTime> dateTimeConverter =
-                new ValueConverter<DateTime, DateTime>(
-                    v => v, v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
+                new(v => v, v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
 
             foreach (IMutableEntityType entityType in builder.Model.GetEntityTypes())
             {

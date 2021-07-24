@@ -6,11 +6,11 @@ namespace CollAction.ValidationAttributes
 {
     public sealed class FileSizeAttribute : ValidationAttribute
     {
-        private readonly int maxSize;
+        public int MaxSize { get; }
 
         public FileSizeAttribute(int maxSize)
         {
-            this.maxSize = maxSize;
+            MaxSize = maxSize;
         }
 
         public override bool IsValid(object? value)
@@ -25,12 +25,12 @@ namespace CollAction.ValidationAttributes
                 throw new ArgumentException("Value being validated is not a IFormFile", nameof(value));
             }
 
-            return ((IFormFile)value).Length <= maxSize;
+            return ((IFormFile)value).Length <= MaxSize;
         }
 
         public override string FormatErrorMessage(string name)
         {
-            return $"The file size should not exceed {maxSize} bytes.";
+            return $"The file size should not exceed {MaxSize} bytes.";
         }
     }
 }

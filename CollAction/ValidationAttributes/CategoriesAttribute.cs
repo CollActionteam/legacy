@@ -7,11 +7,11 @@ namespace CollAction.ValidationAttributes
 {
     public sealed class CategoriesAttribute : ValidationAttribute
     {
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        protected override ValidationResult IsValid(object? value, ValidationContext validationContext)
         {
-            var categories = (ICollection<Category>)value;
+            var categories = (ICollection<Category>?)value;
 
-            if (!categories.Any())
+            if (categories == null || !categories.Any())
             {
                 return new ValidationResult("You need to specify up to two categories for the crowdaction");
             }
@@ -26,7 +26,7 @@ namespace CollAction.ValidationAttributes
                 return new ValidationResult("The crowdaction has duplicate categories");
             }
 
-            return ValidationResult.Success;
+            return ValidationResult.Success!;
         }
     }
 }

@@ -12,12 +12,12 @@ namespace CollAction.ValidationAttributes
         public override string FormatErrorMessage(string name)
             => $"The {name} contains HTML tags that are not allowed";
 
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        protected override ValidationResult IsValid(object? value, ValidationContext validationContext)
         {
-            bool isValid = validationContext.GetRequiredService<IHtmlInputValidator>().IsSafe((string)value);
+            bool isValid = value == null || validationContext.GetRequiredService<IHtmlInputValidator>().IsSafe((string)value);
             if (isValid)
             {
-                return ValidationResult.Success;
+                return ValidationResult.Success!;
             }
             else
             {
