@@ -19,8 +19,8 @@ To run the backend you need:
 * Visual Studio or Visual Studio code can be used to run the project. If you don't like IDEs you can use `dotnet run` to run it through the command line.
 
 For debugging the backend in Visual Studio code do the following:
-1. Run ` python3 ./Scripts/convert_env_for_vscode.py`
-2. Open the folder _./CollAction_ in Visual Studio Code
+1. Open the folder _./CollAction_ in Visual Studio Code
+2. Create _.env_ file from template
 3. Install the official C# extension for Visual Studio Code
 4. Press _Ctrl + Shift + D_ followed by _F5_
 
