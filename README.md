@@ -15,8 +15,14 @@ docker-compose up -d
 You can also run our services outside docker.
 
 To run the backend you need:
-* dotnet core 3.1 or higher
+* dotnet core 5.0 or higher
 * Visual Studio or Visual Studio code can be used to run the project. If you don't like IDEs you can use `dotnet run` to run it through the command line.
+
+For debugging the backend in Visual Studio code do the following:
+1. Run ` python3 ./Scripts/convert_env_for_vscode.py`
+2. Open the folder _./CollAction_ in Visual Studio Code
+3. Install the official C# extension for Visual Studio Code
+4. Press _Ctrl + Shift + D_ followed by _F5_
 
 To run the frontend you need:
 * A recent version of npm and yarn
