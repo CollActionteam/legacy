@@ -14,3 +14,6 @@ log-*
 
 # Module directory
 .terraform/
+
+# VSCode environment files
+.env
