@@ -9,7 +9,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
-      "program": "${workspaceFolder}/bin/Debug/netcoreapp3.1/CollAction.dll",
+      "program": "${workspaceFolder}/bin/MCD/Debug/net5.0/CollAction.dll",
       "args": [],
       "cwd": "${workspaceFolder}",
       "stopAtEntry": false,
@@ -21,6 +21,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "ASPNETCORE_URLS": "http://localhost:44301"
       },
+      "envFile": "${workspaceFolder}/.env",
       "sourceFileMap": {
         "/Views": "${workspaceFolder}/Views"
       },
