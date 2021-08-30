@@ -6,6 +6,7 @@ using GraphQL.Instrumentation;
 using GraphQL.Types;
 using GraphQL.Validation;
 using GraphQL.Validation.Complexity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Caching.Memory;
@@ -22,6 +23,8 @@ namespace CollAction.Controllers
 {
     [Route("graphql")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Identity.Application,Identity.External,Identity.TwoFactorRememberMe,Identity.TwoFactorUserId,Facebook,Twitter,Google,Bearer")]
+    [AllowAnonymous]
     public sealed class GraphQlController : Controller
     {
         private readonly IDocumentExecuter executer;

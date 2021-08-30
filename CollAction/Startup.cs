@@ -17,8 +17,7 @@ using CollAction.Services.User;
 using GraphiQl;
 using Hangfire;
 using Hangfire.PostgreSql;
-using MailChimp.Net;
-using MailChimp.Net.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
@@ -30,11 +29,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using RazorLight;
 using RazorLight.Extensions;
 using Serilog;
 using Stripe;
 using System;
+using System.Security.Cryptography.X509Certificates;
 
 namespace CollAction
 {
@@ -75,24 +76,6 @@ namespace CollAction
                 o.Cookie.SameSite = environment.IsProduction() ? SameSiteMode.Lax : SameSiteMode.None;
                 o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             });
-
-            IConfigurationSection authSection = configuration.GetSection("Authentication");
-            services.AddAuthentication()
-                    .AddFacebook(options =>
-                    {
-                        authSection.GetSection("Facebook").Bind(options);
-                        options.Scope.Add("email");
-                    })
-                    .AddTwitter(options =>
-                    {
-                        authSection.GetSection("Twitter").Bind(options);
-                        options.RetrieveUserDetails = true;
-                    })
-                    .AddGoogle(options =>
-                    {
-                        authSection.GetSection("Google").Bind(options);
-                        options.Scope.Add("email");
-                    });
 
             services.AddApplicationInsightsTelemetry(configuration);
 
@@ -183,6 +166,42 @@ namespace CollAction
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredLength = 8;
             }).ValidateDataAnnotations();
+
+            IConfigurationSection authSection = configuration.GetSection("Authentication");
+            var authenticationBuilder = services.AddAuthentication()
+                    .AddFacebook(options =>
+                    {
+                        authSection.GetSection("Facebook").Bind(options);
+                        options.Scope.Add("email");
+                    })
+                    .AddTwitter(options =>
+                    {
+                        authSection.GetSection("Twitter").Bind(options);
+                        options.RetrieveUserDetails = true;
+                    })
+                    .AddGoogle(options =>
+                    {
+                        authSection.GetSection("Google").Bind(options);
+                        options.Scope.Add("email");
+                    })
+                    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+                    {
+                        options.RequireHttpsMetadata = true;
+                        options.TokenValidationParameters = new TokenValidationParameters()
+                        { 
+                            ValidateIssuer = true,
+                            ValidIssuer = "CollAction",
+                            ValidateAudience = true,
+                            ValidAudience = "CollAction",
+                            RequireAudience = true,
+                            RequireExpirationTime = true,
+                            RequireSignedTokens = true,
+                        };
+
+                        var jwtSection = authSection.GetSection("Jwt");
+                        X509Certificate2 certificate = new(Convert.FromBase64String(jwtSection["Certificate"]), jwtSection["CertificatePassword"]);
+                        options.TokenValidationParameters.IssuerSigningKey = new X509SecurityKey(certificate);
+                    });
         }
 
         public void Configure(IApplicationBuilder app, IHostApplicationLifetime applicationLifetime)
@@ -205,6 +224,9 @@ namespace CollAction
                 app.UseForwardedHeaders(forwardedHeaderOptions);
             }
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             if (environment.IsProduction())
             {
                 app.UseHsts();
@@ -217,8 +239,6 @@ namespace CollAction
                 app.UseGraphiQl("/graphiql", "/graphql");
             }
 
-            app.UseAuthentication();
-            app.UseAuthorization();
             app.UseHangfireServer(new BackgroundJobServerOptions() { WorkerCount = 1 });
             app.UseEndpoints(endpoints =>
             {
