@@ -33,6 +33,8 @@ jobs:
       Authentication__Google__ClientSecret: ${{ secrets.Authentication__Google__ClientSecret }}
       Authentication__Twitter__ConsumerKey: ${{ secrets.Authentication__Twitter__ConsumerKey }}
       Authentication__Twitter__ConsumerSecret: ${{ secrets.Authentication__Twitter__ConsumerSecret }}
+      Authentication__Jwt__Certificate: ${{ secrets.Authentication__Jwt__Certificate }}
+      Authentication__Jwt__CertificatePassword: ${{ secrets.Authentication__Jwt__CertificatePassword }}
 
     services:
       postgres:
