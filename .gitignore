@@ -17,3 +17,6 @@ log-*
 
 # VSCode environment files
 .env
+
+# Local Netlify folder
+.netlify
