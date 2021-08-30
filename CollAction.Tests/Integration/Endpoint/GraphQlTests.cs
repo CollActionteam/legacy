@@ -1,17 +1,25 @@
-﻿using CollAction.Models;
+﻿using CollAction.Data;
+using CollAction.Models;
 using CollAction.Services;
 using CollAction.Services.Crowdactions;
 using CollAction.Services.Crowdactions.Models;
 using CollAction.Services.Email;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Security.Claims;
+using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,12 +31,16 @@ namespace CollAction.Tests.Integration.Endpoint
     public sealed class GraphQlTests : IntegrationTestBase
     {
         private readonly ICrowdactionService crowdactionService;
+        private readonly ApplicationDbContext context;
         private readonly SeedOptions seedOptions;
+        private readonly IConfiguration configuration;
 
         public GraphQlTests()
         {
             crowdactionService = Scope.ServiceProvider.GetRequiredService<ICrowdactionService>();
+            context = Scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             seedOptions = Scope.ServiceProvider.GetRequiredService<IOptions<SeedOptions>>().Value;
+            configuration = Scope.ServiceProvider.GetRequiredService<IConfiguration>();
         }
 
         [Fact]
@@ -109,6 +121,31 @@ namespace CollAction.Tests.Integration.Endpoint
             using var httpClient = TestServer.CreateClient();
             // Retry call as admin
             httpClient.DefaultRequestHeaders.Add("Cookie", await GetAuthCookie(httpClient, seedOptions));
+            response = await PerformGraphQlQuery(httpClient, QueryCrowdactions, null);
+            content = await response.Content.ReadAsStringAsync();
+            Assert.True(response.IsSuccessStatusCode, content);
+            result = JsonDocument.Parse(content);
+            Assert.Throws<KeyNotFoundException>(() => result.RootElement.GetProperty("errors"));
+
+            // Retry call as jwt admin
+            var user = await context.Users.FirstAsync();
+            var authSection = configuration.GetSection("Authentication");
+            var jwtSection = authSection.GetSection("Jwt");
+            using X509Certificate2 certificate = new(Convert.FromBase64String(jwtSection["Certificate"]), jwtSection["CertificatePassword"]);
+            var securityToken = new JwtSecurityToken(
+                "CollAction",
+                "CollAction",
+                new Claim[]
+                {
+                    new Claim("sub", user.Id),
+                    new Claim("role", "admin"),
+                    new Claim("name", user.FullName),
+                },
+                expires: DateTime.Now.AddDays(1),
+                signingCredentials: new SigningCredentials(new X509SecurityKey(certificate), "RS256"));
+            string httpToken = new JwtSecurityTokenHandler().WriteToken(securityToken);
+            httpClient.DefaultRequestHeaders.Clear();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", httpToken);
             response = await PerformGraphQlQuery(httpClient, QueryCrowdactions, null);
             content = await response.Content.ReadAsStringAsync();
             Assert.True(response.IsSuccessStatusCode, content);
