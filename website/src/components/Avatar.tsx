@@ -9,7 +9,7 @@ interface AvatarProps {
 
 export default function Avatar(props: AvatarProps) {
   return (
-    <div className="w-20 flex flex-col text-center pb-4">
+    <div className="w-20 hflex flex-col text-center pb-4">
       <div className="block h-20">
         <Image
           src={props.src}
