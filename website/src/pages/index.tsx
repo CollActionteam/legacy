@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 
 import Footer from "../components/Footer";
+import Avatar from "../components/Avatar";
 
 const Home: NextPage = () => {
   return (
@@ -50,17 +51,26 @@ const Home: NextPage = () => {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-x-5 mt-5 py-5 md:py-10 container">
           <div className="md:pt-2 md:pt-0">
-            <img className="block h-20 w-auto mx-auto my-4" src="/steps/proposal.svg" />
+            <img
+              className="block h-20 w-auto mx-auto my-4"
+              src="/steps/proposal.svg"
+            />
             <h2 className="text-collaction text-lg">Goal</h2>
             Choose or suggest a goal you would like to participate in
           </div>
           <div className="pt-4 md:pt-2 md:pt-0">
-            <img className="block h-20 w-auto mx-auto my-4" src="/steps/crowd.svg" />
+            <img
+              className="block h-20 w-auto mx-auto my-4"
+              src="/steps/crowd.svg"
+            />
             <h2 className="text-collaction text-lg">Crowd</h2>
             See how your actions are magnified by the crowd that has equal goals
           </div>
           <div className="pt-4 md:pt-2 md:pt-0">
-            <img className="block h-20 w-auto mx-auto my-4" src="/steps/act.svg" />
+            <img
+              className="block h-20 w-auto mx-auto my-4"
+              src="/steps/act.svg"
+            />
             <h2 className="text-collaction text-lg">Action</h2>
             Commit to the goal and make impact
           </div>
@@ -82,7 +92,8 @@ const Home: NextPage = () => {
             </div>
           </div>
           <p>
-            Would you like to support CollAction? <br /> Please send us a message at{" "}
+            Would you like to support CollAction? <br /> Please send us a
+            message at{" "}
             <a className="text-collaction" href="mailto:hello@collaction.org">
               hello@collaction.org
             </a>
@@ -118,9 +129,28 @@ const Home: NextPage = () => {
         </div>
       </section>
 
-      <section className="p-7 py-20 md:py-40 text-center bg-black-0">
+      <section className="px-5 py-10 bg-black-0">
+        <h1 className="text-collaction text-2xl font-bold text-center pb-10">Meet the team</h1>
+        <div className="grid grid-cols-3 md:grid-cols-6 justify-items-center container mx-auto gap-px">
+          <Avatar src={"/team/AkeyTsering_bw.jpg"} alt="Akey" />
+          <Avatar src={"/team/Arun_BW.jpg"} alt="Arun" />
+          <Avatar src={"/team/GillesMagalhaes_bw.jpg"} alt="Gilles" />
+          <Avatar src={"/team/Hans_bw.jpeg"} alt="Hans" />
+          <Avatar src={"/team/IsaacObella_bw.jpg"} alt="Isaac" />
+          <Avatar src={"/team/MaschavanderMarel.JPG"} alt="Mascha" />
+          <Avatar src={"/team/Mathias_square.png"} alt="Mathias" />
+          <Avatar src={"/team/NiklasSchumacher_bw.png"} alt="Niklas" />
+          <Avatar src={"/team/RubenHorn_bw.jpg"} alt="Ruben" />
+          <Avatar src={"/team/TomSiebring_bw.jpg"} alt="Tom" />
+          <Avatar src={"/team/TomTetteroo_bw.jpg"} alt="Tom" />
+        </div>
+      </section>
+
+      <section className="p-7 py-20 md:py-40 text-center">
         <div className="container mx-auto">
-          <h1 className="text-collaction text-2xl font-bold">Want to help us out?</h1>
+          <h1 className="text-collaction text-2xl font-bold">
+            Want to help us out?
+          </h1>
           <p>
             CollAction is run by volunteers only. Do you have a valuable skill
             set and want to help us out? <br /> Please send a message to{" "}
