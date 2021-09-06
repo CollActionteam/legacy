@@ -45,6 +45,7 @@ const Home: NextPage = () => {
                 href="https://en.wikipedia.org/wiki/Collective_action_problem"
                 className="text-collaction"
                 target="_blank"
+                rel="noreferrer"
               >
                 {" "}
                 collective action problems
@@ -129,6 +130,7 @@ const Home: NextPage = () => {
               <a
                 className="text-collaction"
                 target="_blank"
+                rel="noreferrer"
                 href="https://forms.gle/A233e3PHzA8VwEBGA"
               >
                 mailing list
@@ -137,6 +139,7 @@ const Home: NextPage = () => {
               <a
                 className="text-collaction"
                 target="_blank"
+                rel="noreferrer"
                 href="https://www.instagram.com/collaction_org/"
               >
                 Instagram
@@ -150,7 +153,7 @@ const Home: NextPage = () => {
               CollAction was founded in 2015 by Ron van den Akker and Spencer
               Heijnen. After great successes with fashion-related crowdactions,
               their team decided to focus solely on SlowFashion in 2020. As
-              there is still strong confidence that there's room for CollAction
+              there is still strong confidence that there&apos;s room for CollAction
               in this world, a new team has formed in 2021 and is expanding
               rapidly.
             </p>
