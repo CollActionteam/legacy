@@ -14,7 +14,7 @@ export default class MyDocument extends Document {
           />
           <meta
             property="og:image"
-            content="/public/android-chrome-256x256.png"
+            content="/android-chrome-256x256.png"
           />
 
           <meta
