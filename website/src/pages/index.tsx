@@ -8,8 +8,8 @@ const Home: NextPage = () => {
   return (
     <div className="bg-white text-black-400">
       <NavigationBar />
-      <section className="p-5 py-20">
-        <p className="text-4xl text-center rotatingText">
+      {/*<section className="p-5 py-20">
+        <p className="text-lg md:text-4xl text-center rotatingText">
           <span>
             Let’s <span className="text-collaction">be vegan for a month.</span>
             <br />
@@ -25,7 +25,7 @@ const Home: NextPage = () => {
             <br />
           </span>
         </p>
-      </section>
+  </section>*/}
       <section className="p-5 py-10 md:p-10 text-center bg-black-0">
         <div className="text-center">
           <h1 className="text-collaction text-2xl font-medium">Time to act</h1>

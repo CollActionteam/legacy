@@ -15,23 +15,63 @@
   animation-delay: 2s;
 }
 
-@keyframes move {
-  0% {
-    top: 0px;
+@screen md {
+  .rotatingText {
+    height: 1.125rem;
   }
-  20% {
-    top: -2.5rem;
+
+  .rotatingText > span {
+    animation: move-sm 10s normal forwards;
   }
-  40% {
-    top: -5rem;
+  @keyframes move-sm {
+    0% {
+      top: 0px;
+    }
+    20% {
+      top: -1.125rem;
+    }
+    40% {
+      top: -2.25rem;
+    }
+    60% {
+      top: -3.375rem;
+    }
+    80% {
+      top: -4.5rem;
+    }
+    100% {
+      top: -5.625rem;
+    }
   }
-  60% {
-    top: -7.5rem;
+}
+
+@screen lg {
+  .rotatingText {
+    height: 2.5rem;
   }
-  80% {
-    top: -10rem;
+
+  .rotatingText > span {
+    animation: move-lg 10s normal forwards;
   }
-  100% {
-    top: -12.5rem;
+
+  @keyframes move-lg {
+    0% {
+      top: 0px;
+    }
+    20% {
+      top: -2.5rem;
+    }
+    40% {
+      top: -5rem;
+    }
+    60% {
+      top: -7.5rem;
+    }
+    80% {
+      top: -10rem;
+    }
+    100% {
+      top: -12.5rem;
+    }
   }
 }
