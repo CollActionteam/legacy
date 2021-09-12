@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 
 import Footer from "../components/Footer";
-import Avatar from "../components/Avatar";
+import Team from "../components/Team";
 
 const Home: NextPage = () => {
   return (
@@ -18,7 +18,6 @@ const Home: NextPage = () => {
           </div>
         </div>
       </header>
-
       <section className="p-5 md:p-10 bg-black-0 text-center">
         <div className="container mx-auto">
           <div className="pb-8">
@@ -55,7 +54,6 @@ const Home: NextPage = () => {
           </div>
         </div>
       </section>
-
       <section className="p-5 py-10 md:p-10 text-center container mx-auto">
         <div className="text-center">
           <h1 className="text-collaction text-2xl font-medium">Time to act</h1>
@@ -88,7 +86,6 @@ const Home: NextPage = () => {
           </div>
         </div>
       </section>
-
       <section className="p-10 text-center bg-black-0">
         <div className="container mx-auto">
           <h1 className="text-collaction text-center text-2xl pb-4 font-medium">
@@ -113,7 +110,6 @@ const Home: NextPage = () => {
           </p>
         </div>
       </section>
-
       <section className="px-5 py-10 md:px-10 md:py-20 text-center">
         <div className="container mx-auto">
           <div className="px-4">
@@ -153,35 +149,25 @@ const Home: NextPage = () => {
               CollAction was founded in 2015 by Ron van den Akker and Spencer
               Heijnen. After great successes with fashion-related crowdactions,
               their team decided to focus solely on SlowFashion in 2020. As
-              there is still strong confidence that there&apos;s room for CollAction
-              in this world, a new team has formed in 2021 and is expanding
-              rapidly.
+              there is still strong confidence that there&apos;s room for
+              CollAction in this world, a new team has formed in 2021 and is
+              expanding rapidly.
             </p>
           </div>
         </div>
       </section>
-
-      <section className="px-5 py-10 bg-black-0">
-        <h1 className="text-collaction text-2xl font-medium text-center pb-10">
-          Meet the team
-        </h1>
-        <div className="container mx-auto">
-          <div className="grid grid-cols-3 md:grid-cols-4 justify-items-center gap-px mx-auto max-w-md">
-            <Avatar src={"/team/AkeyTsering_bw.jpg"} alt="Akey" />
-            <Avatar src={"/team/Arun_BW.jpg"} alt="Arun" />
-            <Avatar src={"/team/GillesMagalhaes_bw.jpg"} alt="Gilles" />
-            <Avatar src={"/team/Hans_bw.jpeg"} alt="Hans" />
-            <Avatar src={"/team/IsaacObella_bw.jpg"} alt="Isaac" />
-            <Avatar src={"/team/MaschavanderMarel.JPG"} alt="Mascha" />
-            <Avatar src={"/team/Mathias_square.png"} alt="Mathias" />
-            <Avatar src={"/team/NiklasSchumacher_bw.png"} alt="Niklas" />
-            <Avatar src={"/team/RubenHorn_bw.jpg"} alt="Ruben" />
-            <Avatar src={"/team/TomTetteroo_bw.jpg"} alt="Tom" />
-            <Avatar src={"/team/TomSiebring_bw.jpg"} alt="Tom" />
-          </div>
-        </div>
-      </section>
-
+      <Team name="new" title="Meet the team" background="bg-black-0" />
+      <Team
+        name="old"
+        title="The Giants"
+        description={
+          <>
+            You know the saying with shoulders and giants? <br />
+            Without the team below, CollAction would not exist.
+          </>
+        }
+      />
+      "
       <section className="p-7 py-20 text-center">
         <div className="container mx-auto">
           <h1 className="text-collaction text-2xl font-medium">
@@ -197,7 +183,6 @@ const Home: NextPage = () => {
           </p>
         </div>
       </section>
-
       <Footer />
     </div>
   );
