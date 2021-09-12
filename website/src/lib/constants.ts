@@ -1,0 +1,1 @@
+export const GA_TRACKING_ID = 'G-8DEJX1KVE0';
