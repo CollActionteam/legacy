@@ -4,10 +4,9 @@ import { GA_TRACKING_ID } from "../lib/constants";
 export default class MyDocument extends Document {
   render() {
     const currentURL = "https://collaction.org";
-    const description =
-      "Do you want to make the world a better place, but do you sometimes feel that your actions are only a drop in the ocean? Well, not anymore, because we are introducing crowdacting: taking action knowing that you are one of many. We revamp the neighbourhood with a hundred people or switch to renewable energy with thousands at the same time. Find out more about crowdacting, take action collectively with one of the existing crowdactions, or start your own crowdaction.";
+    const description = "Do you want to make the world a better place? Do your actions feel like a drop in the ocean?";
     const previewImage = "/android-chrome-256x256.png";
-    const pageTitle = "CollAction";
+    const pageTitle = "CollAction | Power to the Crowd | Act Now";
     return (
       <Html>
         <Head>
