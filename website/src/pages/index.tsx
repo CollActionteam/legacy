@@ -11,7 +11,7 @@ const Home: NextPage = () => {
       <section className="p-5 md:p-10 bg-black-0 text-center">
         <div className="container mx-auto">
           <div className="pb-8">
-            <h1 className="text-collaction font-medium">Power to the Crowd</h1>
+            <h1 className="text-collaction text-2xl font-medium">Power to the Crowd</h1>
             <p>
               Do you want to make the world a better place, but do your actions
               feel like a drop in the ocean? Thanks to crowdacting you can take
@@ -22,12 +22,12 @@ const Home: NextPage = () => {
           </div>
 
           <div className="pb-8">
-            <h1 className="text-collaction font-medium">Our mission</h1>
+            <h1 className="text-collaction text-2xl font-medium">Our mission</h1>
             <p>Make doing good fun and easy!</p>
           </div>
 
           <div className="pb-8">
-            <h1 className="text-collaction pt-2 font-medium">Our vision</h1>
+            <h1 className="text-collaction text-2xl font-medium">Our vision</h1>
             <p>
               Solve all{" "}
               <a

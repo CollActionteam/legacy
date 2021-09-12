@@ -34,6 +34,10 @@ export default function Teams(props: TeamProps) {
         photo: "IsaacObella_bw.jpg",
       },
       {
+        name: "Manon",
+        photo: "ManonCramer_bw.png"
+      },
+      {
         name: "Mascha",
         photo: "MaschavanderMarel.JPG",
       },
@@ -48,6 +52,10 @@ export default function Teams(props: TeamProps) {
       {
         name: "Ruben",
         photo: "RubenHorn_bw.jpg",
+      },
+      {
+        name: "Tana",
+        photo: "TanaViviers_bw.png"
       },
       {
         name: "Tom",
