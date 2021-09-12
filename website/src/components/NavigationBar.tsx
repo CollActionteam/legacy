@@ -1,0 +1,18 @@
+import React from "react";
+
+export default function NavigationBar() {
+  return (
+    <header className="w-full py-4">
+      <div className="flex items-center justify-between px-8">
+        <img className="block h-8 w-auto" src="/logo.svg" alt="CollAction" />
+        <div className="">
+          <div className="flex items-center">
+            <span className="px-4 py-1 text-sm text-collaction cursor-default font-semibold rounded-full">
+              NB: more to come soon!
+            </span>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+}

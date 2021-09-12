@@ -157,7 +157,7 @@ export default function Teams(props: TeamProps) {
         <div className="grid grid-cols-3 md:grid-cols-4 justify-items-center gap-px mx-auto max-w-md">
           {teams[props.name].map((member) => {
             let prefix = "/teams/" + props.name + "/";
-            return <Avatar src={prefix + member.photo} alt={member.name} />;
+            return <Avatar key={member.name} src={prefix + member.photo} alt={member.name} />;
           })}
         </div>
       </div>
