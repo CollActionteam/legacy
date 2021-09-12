@@ -8,48 +8,30 @@ const Home: NextPage = () => {
   return (
     <div className="bg-white text-black-400">
       <NavigationBar />
-      <section className="p-5 md:p-10 bg-black-0 text-center">
-        <div className="container mx-auto">
-          <div className="pb-8">
-            <h1 className="text-collaction text-2xl font-medium">Power to the Crowd</h1>
-            <p>
-              Do you want to make the world a better place, but do your actions
-              feel like a drop in the ocean? Thanks to crowdacting you can take
-              action, together with many like minded individuals. Let’s not eat
-              meat for a month together. Let’s reduce plastic together.
-              Together, we make waves!
-            </p>
-          </div>
-
-          <div className="pb-8">
-            <h1 className="text-collaction text-2xl font-medium">Our mission</h1>
-            <p>Make doing good fun and easy!</p>
-          </div>
-
-          <div className="pb-8">
-            <h1 className="text-collaction text-2xl font-medium">Our vision</h1>
-            <p>
-              Solve all{" "}
-              <a
-                href="https://en.wikipedia.org/wiki/Collective_action_problem"
-                className="text-collaction"
-                target="_blank"
-                rel="noreferrer"
-              >
-                {" "}
-                collective action problems
-              </a>{" "}
-              in the world.
-            </p>
-          </div>
-        </div>
+      <section className="p-5 py-20">
+        <p className="text-4xl text-center rotatingText">
+          <span>
+            Let’s <span className="text-collaction">be vegan for a month.</span>
+            <br />
+            Let’s <span className="text-collaction">separate our waste.</span>
+            <br />
+            Let’s <span className="text-collaction">reduce food waste.</span>
+            <br />
+            Let’s <span className="text-collaction">switch to a green energy provider.</span>
+            <br />
+            Let’s <span className="text-collaction">meet with an elderly once a week.</span>
+            <br />
+            <span className="text-collaction font-medium">Together we make waves!</span>
+            <br />
+          </span>
+        </p>
       </section>
-      <section className="p-5 py-10 md:p-10 text-center container mx-auto">
+      <section className="p-5 py-10 md:p-10 text-center bg-black-0">
         <div className="text-center">
           <h1 className="text-collaction text-2xl font-medium">Time to act</h1>
           <span>CollAction stands for Collective Action. How to act?</span>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-5 py-5 md:py-5 container">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-5 py-5 md:py-5 container mx-auto">
           <div>
             <img
               className="block h-20 w-auto mx-auto my-4"
@@ -73,6 +55,47 @@ const Home: NextPage = () => {
             />
             <h2 className="text-collaction text-lg">Action</h2>
             Commit to the goal and make impact
+          </div>
+        </div>
+      </section>
+
+      <section className="p-5 md:p-10 text-center">
+        <div className="container mx-auto">
+          <div className="pb-8">
+            <h1 className="text-collaction text-2xl font-medium">
+              Power to the Crowd
+            </h1>
+            <p>
+              Do you want to make the world a better place, but do your actions
+              feel like a drop in the ocean? Thanks to crowdacting you can take
+              action, together with many like minded individuals. Let’s not eat
+              meat for a month together. Let’s reduce plastic together.
+              Together, we make waves!
+            </p>
+          </div>
+
+          <div className="pb-8">
+            <h1 className="text-collaction text-2xl font-medium">
+              Our mission
+            </h1>
+            <p>Make doing good fun and easy!</p>
+          </div>
+
+          <div className="pb-8">
+            <h1 className="text-collaction text-2xl font-medium">Our vision</h1>
+            <p>
+              Solve all{" "}
+              <a
+                href="https://en.wikipedia.org/wiki/Collective_action_problem"
+                className="text-collaction"
+                target="_blank"
+                rel="noreferrer"
+              >
+                {" "}
+                collective action problems
+              </a>{" "}
+              in the world.
+            </p>
           </div>
         </div>
       </section>
@@ -138,10 +161,13 @@ const Home: NextPage = () => {
             <p>
               CollAction was founded in 2015 by Ron van den Akker and Spencer
               Heijnen. After great successes with fashion-related crowdactions,
-              their team decided to focus solely on SlowFashion in 2020. As
-              there is still strong confidence that there&apos;s room for
-              CollAction in this world, a new team has formed in 2021 and is
-              expanding rapidly.
+              their team decided to focus solely on{" "}
+              <a className="text-collaction" href="https://slowfashion.global/">
+                SlowFashion
+              </a>{" "}
+              in 2020. As there is still strong confidence that there&apos;s
+              room for CollAction in this world, a new team has formed in 2021
+              and is expanding rapidly.
             </p>
           </div>
         </div>
@@ -157,7 +183,7 @@ const Home: NextPage = () => {
           </>
         }
       />
-      <section className="p-7 py-20 text-center">
+      <section className="p-7 py-20 text-center bg-black-0">
         <div className="container mx-auto">
           <h1 className="text-collaction text-2xl font-medium">
             Want to help us out?

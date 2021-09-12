@@ -8,7 +8,7 @@ export default function NavigationBar() {
         <div className="">
           <div className="flex items-center">
             <span className="px-4 py-1 text-sm text-collaction cursor-default font-semibold rounded-full text-right">
-              NB: more to come soon!
+              App launch: October 31
             </span>
           </div>
         </div>

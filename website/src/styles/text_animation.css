@@ -1,0 +1,37 @@
+.rotatingText {
+  display: block;
+  height: 2.5rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.rotatingText > span {
+  position: relative;
+  top: 0;
+  left: 0;
+  display: inline-block;
+  white-space: nowrap;
+  animation: move 10s normal forwards;
+  animation-delay: 2s;
+}
+
+@keyframes move {
+  0% {
+    top: 0px;
+  }
+  20% {
+    top: -2.5rem;
+  }
+  40% {
+    top: -5rem;
+  }
+  60% {
+    top: -7.5rem;
+  }
+  80% {
+    top: -10rem;
+  }
+  100% {
+    top: -12.5rem;
+  }
+}

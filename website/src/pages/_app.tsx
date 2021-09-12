@@ -1,6 +1,7 @@
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import "tailwindcss/tailwind.css";
+import "../styles/text_animation.css";
 
 import { useEffect } from "react";
 import { useRouter } from "next/router";
