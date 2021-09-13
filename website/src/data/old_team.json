@@ -1,0 +1,80 @@
+{
+  "members": [
+    {
+      "name": "Arnout",
+      "photo": "nophoto.png"
+    },
+    {
+      "name": "Clara",
+      "photo": "clara-doyle.jpg"
+    },
+    {
+      "name": "Daniela",
+      "photo": "daniela-becker.png"
+    },
+    {
+      "name": "Dominik",
+      "photo": "nophoto.png"
+    },
+    {
+      "name": "Edoardo",
+      "photo": "edoardo-felici.png"
+    },
+    {
+      "name": "Georgie",
+      "photo": "georgie-kusbiantoro.png"
+    },
+    {
+      "name": "Jeppe",
+      "photo": "jeppe-bijker.jpg"
+    },
+    {
+      "name": "Jonas",
+      "photo": "jonas-s.jpg"
+    },
+    {
+      "name": "Kisjonah",
+      "photo": "kisjonah-roos.jpg"
+    },
+    {
+      "name": "Lena",
+      "photo": "lena-hartog.jpg"
+    },
+    {
+      "name": "Luuk",
+      "photo": "luuk-boschker.png"
+    },
+    {
+      "name": "Laura",
+      "photo": "laura-c.jpeg"
+    },
+    {
+      "name": "Lucie",
+      "photo": "lucie-morauw.jpeg"
+    },
+    {
+      "name": "Mara",
+      "photo": "mara-de-pater.jpg"
+    },
+    {
+      "name": "Ron",
+      "photo": "ron-van-den-akker.png"
+    },
+    {
+      "name": "Shirley",
+      "photo": "shirley-zheng.jpeg"
+    },
+    {
+      "name": "Spencer",
+      "photo": "spencer-heijnen.png"
+    },
+    {
+      "name": "Tim",
+      "photo": "tim-stokman.png"
+    },
+    {
+      "name": "Tuanh",
+      "photo": "tuanh-lam.jpg"
+    }
+  ]
+}
