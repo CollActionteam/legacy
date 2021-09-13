@@ -29,9 +29,14 @@ export default function Ticker() {
     </>,
   ];
 
-  const initialStates = sentences.map(() => false);
-  initialStates[0] = true;
-  const activeSentences = sentences.map((_, idx) => useState(initialStates[idx]));
+  const activeSentences = [
+    useState(true),
+    useState(false),
+    useState(false),
+    useState(false),
+    useState(false),
+    useState(false),
+  ]
 
   var [activeTickerIdx, setActiveTickerIdx] = useState(0);
   setTimeout(() => {
@@ -44,7 +49,7 @@ export default function Ticker() {
     }
     activeSentences[currentIdx][1](true);
     setActiveTickerIdx(currentIdx);
-  }, 8000);
+  }, 7000);
 
   const longestLine = sentences[4];
 
@@ -56,6 +61,7 @@ export default function Ticker() {
         </div>
         {sentences.map((sentence, idx) => (
           <div
+            key={idx}
             className={clsx(
               "ticker-item",
               activeSentences[idx][0] && "active-ticker-item",
