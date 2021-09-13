@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 
 import Team from "../components/home/Team";
+import Ticker from "../components/home/Ticker";
 import HelpOut from "../components/home/HelpOut";
 import WhatWeDo from "../components/home/WhatWeDo";
 import Vision from "../components/home/Vision";
@@ -28,7 +29,7 @@ const Home: NextPage = () => {
   }
   return (
     <>
-      {/* <Ticker /> */}
+      <Ticker />
       <WhatWeDo />
       <Vision />
       <Supporters />

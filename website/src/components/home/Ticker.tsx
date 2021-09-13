@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import clsx from "clsx";
 
 export default function Ticker() {
   const sentences = [
@@ -28,11 +29,42 @@ export default function Ticker() {
     </>,
   ];
 
+  const initialStates = sentences.map(() => false);
+  initialStates[0] = true;
+  const activeSentences = sentences.map((_, idx) => useState(initialStates[idx]));
+
+  var [activeTickerIdx, setActiveTickerIdx] = useState(0);
+  setTimeout(() => {
+    var currentIdx = activeTickerIdx;
+    activeSentences[currentIdx][1](false);
+    if (currentIdx + 1 >= sentences.length) {
+      currentIdx = 0;
+    } else {
+      currentIdx += 1;
+    }
+    activeSentences[currentIdx][1](true);
+    setActiveTickerIdx(currentIdx);
+  }, 8000);
+
+  const longestLine = sentences[4];
+
   return (
-    <section className="p-5 py-20">
-        <p className="text-lg md:text-4xl text-center rotatingText">
-            {sentences[0]}
-        </p>
+    <section className="p-5 py-12 md:py-32">
+      <p className="text-xl md:text-4xl text-center ticker-wrapper">
+        <div className="ticker-size-guide">
+          {longestLine}
+        </div>
+        {sentences.map((sentence, idx) => (
+          <div
+            className={clsx(
+              "ticker-item",
+              activeSentences[idx][0] && "active-ticker-item",
+            )}
+          >
+            {sentence}
+          </div>
+        ))}
+      </p>
     </section>
   );
 }
