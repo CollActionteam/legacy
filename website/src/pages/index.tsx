@@ -1,38 +1,16 @@
 import type { NextPage } from "next";
 
-import Footer from "../components/Footer";
-import Team from "../components/Team";
-import NavigationBar from "../components/NavigationBar";
+import Team from "../components/home/Team";
+import Ticker from "../components/home/Ticker";
+import HelpOut from "../components/home/HelpOut"
 
 const Home: NextPage = () => {
   return (
-    <div className="bg-white text-black-400">
-      <NavigationBar />
-      {/*<section className="p-5 py-20">
-        <p className="text-lg md:text-4xl text-center rotatingText">
-          <span>
-            Let’s <span className="text-collaction">be vegan for a month.</span>
-            <br />
-            Let’s <span className="text-collaction">separate our waste.</span>
-            <br />
-            Let’s <span className="text-collaction">reduce food waste.</span>
-            <br />
-            Let’s <span className="text-collaction">switch to a green energy provider.</span>
-            <br />
-            Let’s <span className="text-collaction">meet with an elderly once a week.</span>
-            <br />
-            <span className="text-collaction font-medium">Together we make waves!</span>
-            <br />
-          </span>
-        </p>
-  </section>*/}
+    <>
+      {/* <Ticker /> */}
       <section className="p-5 py-10 md:p-10 text-center bg-black-0">
-        <div className="text-center">
-          <h1 className="text-collaction text-2xl font-medium">Time to act</h1>
-          <span>CollAction stands for Collective Action. How to act?</span>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-5 py-5 md:py-5 container mx-auto">
-          <div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-5 pb-10 container mx-auto">
+          <div className="pb-10 md:pb-0">
             <img
               className="block h-20 w-auto mx-auto my-4"
               src="/steps/proposal.svg"
@@ -40,7 +18,7 @@ const Home: NextPage = () => {
             <h2 className="text-collaction text-lg">Goal</h2>
             Choose or suggest a goal you would like to participate in
           </div>
-          <div>
+          <div className="pb-10 md:pb-0">
             <img
               className="block h-20 w-auto mx-auto my-4"
               src="/steps/crowd.svg"
@@ -48,7 +26,7 @@ const Home: NextPage = () => {
             <h2 className="text-collaction text-lg">Crowd</h2>
             See how your actions are magnified by the crowd that has equal goals
           </div>
-          <div>
+          <div className="pb-10 md:pb-0">
             <img
               className="block h-20 w-auto mx-auto my-4"
               src="/steps/act.svg"
@@ -56,6 +34,31 @@ const Home: NextPage = () => {
             <h2 className="text-collaction text-lg">Action</h2>
             Commit to the goal and make impact
           </div>
+        </div>
+        <div className="container mx-auto text-justify">
+          <h1 className="text-collaction text-center text-2xl font-medium">
+            What we do
+          </h1>
+          <span>
+            We are CollAction. We will show that solving big Collective Action
+            Problems like climate change is possible. Moreover, we will show
+            that helping to solve these problems can be fun, and way easier than
+            people think. We will show that action can be taken by your group of
+            friends, your department of colleagues, or just by you together with
+            strangers. You can make a real impact, make a real change, and have
+            fun doing it. <br /> <br />
+            On our app you can sign up for a challenge to participate in. We
+            connect you to the people that also do the challenge, we show you
+            what you have achieved, and we try our best to ensure everyone acts
+            as promised. By doing so, we combine the power of the internet with
+            the demand of people that want to take action, e.g. against climate
+            change. <br /> <br />
+            People want to act, but see that governments are moving too slow and
+            that individual action is too small. By offering a hub for people to
+            unite, we amplify individual impact. At the same time this hub keeps
+            the barrier to act low and the impact immediate. Alone we are a drop
+            in the ocean, together we make waves.
+          </span>
         </div>
       </section>
 
@@ -123,6 +126,7 @@ const Home: NextPage = () => {
           </p>
         </div>
       </section>
+
       <section className="px-5 py-10 md:px-10 md:py-20 text-center">
         <div className="container mx-auto">
           <div className="px-4">
@@ -172,34 +176,22 @@ const Home: NextPage = () => {
           </div>
         </div>
       </section>
+
       <Team name="new" title="Meet the team" background="bg-black-0" />
+      <HelpOut />
+
       <Team
         name="old"
         title="The Giants"
+        background="bg-black-0"
         description={
           <>
             You know the saying with shoulders and giants? <br />
-            Without the team below, CollAction would not exist.
+            Without the team below, CollAction wouldn’t exist.
           </>
         }
       />
-      <section className="p-7 py-20 text-center bg-black-0">
-        <div className="container mx-auto">
-          <h1 className="text-collaction text-2xl font-medium">
-            Want to help us out?
-          </h1>
-          <p>
-            CollAction is run by volunteers only. Do you have a valuable skill
-            set and want to help us out? <br /> Please send a message to{" "}
-            <a className="text-collaction" href="mailto:hello@collaction.org">
-              hello@collaction.org
-            </a>
-            .
-          </p>
-        </div>
-      </section>
-      <Footer />
-    </div>
+    </>
   );
 };
 

@@ -1,7 +1,8 @@
 import React, { ReactNode } from "react";
 import clsx from "clsx";
 
-import Avatar from "./Avatar";
+import Avatar from "../Avatar";
+import people from "../../lib/people.json";
 
 interface TeamProps {
   name: "new" | "old";
@@ -10,62 +11,15 @@ interface TeamProps {
   background?: string;
 }
 
+interface IMember {
+  name: string;
+  photo: string;
+  linkedin_github?: string;
+}
+
 export default function Teams(props: TeamProps) {
   let teams = {
-    new: [
-      {
-        name: "Akey",
-        photo: "AkeyTsering_bw.jpg",
-      },
-      {
-        name: "Arun",
-        photo: "Arun_BW.jpg",
-      },
-      {
-        name: "Gilles",
-        photo: "GillesMagalhaes_bw.jpg",
-      },
-      {
-        name: "Hans",
-        photo: "Hans_bw.jpeg",
-      },
-      {
-        name: "Isaac",
-        photo: "IsaacObella_bw.jpg",
-      },
-      {
-        name: "Manon",
-        photo: "ManonCramer_bw.png"
-      },
-      {
-        name: "Mascha",
-        photo: "MaschavanderMarel.JPG",
-      },
-      {
-        name: "Mathias",
-        photo: "Mathias_square.png",
-      },
-      {
-        name: "Niklas",
-        photo: "NiklasSchumacher_bw.png",
-      },
-      {
-        name: "Ruben",
-        photo: "RubenHorn_bw.jpg",
-      },
-      {
-        name: "Tana",
-        photo: "TanaViviers_bw.png"
-      },
-      {
-        name: "Tom",
-        photo: "TomTetteroo_bw.jpg",
-      },
-      {
-        name: "Tom",
-        photo: "TomSiebring_bw.jpg",
-      },
-    ],
+    ...people,
     old: [
       {
         name: "Arnout",
@@ -148,7 +102,13 @@ export default function Teams(props: TeamProps) {
 
   return (
     <section className={clsx("px-5", "py-10", props.background || "")}>
-      <div className={clsx("pb-10", "pb-12" && props.name === "old", "text-center")}>
+      <div
+        className={clsx(
+          "pb-10",
+          "pb-12" && props.name === "old",
+          "text-center"
+        )}
+      >
         <h1
           className={clsx(
             "text-collaction",
@@ -163,9 +123,16 @@ export default function Teams(props: TeamProps) {
       </div>
       <div className="container mx-auto">
         <div className="grid grid-cols-3 md:grid-cols-4 justify-items-center gap-px mx-auto max-w-md">
-          {teams[props.name].map((member) => {
+          {teams[props.name].map((member: IMember) => {
             let prefix = "/teams/" + props.name + "/";
-            return <Avatar key={member.name} src={prefix + member.photo} alt={member.name} />;
+            return (
+              <Avatar
+                key={member.name}
+                src={prefix + member.photo}
+                alt={member.name}
+                linkedin_github={member.linkedin_github}
+              />
+            );
           })}
         </div>
       </div>

@@ -1,0 +1,88 @@
+{
+  "new": [
+    {
+      "name": "Akey",
+      "full_name": "Akey Tsering",
+      "photo": "AkeyTsering_bw.jpg",
+      "linkedin_github": "https://github.com/chinkysight"
+    },
+    {
+      "name": "Arun",
+      "full_name": "Arun Muralidharan",
+      "photo": "Arun_BW.jpg",
+      "linkedin_github": "https://github.com/arun-muralidharan"
+    },
+    {
+      "name": "Gilles",
+      "full_name": "Gilles Magalhaes Ribeiro",
+      "photo": "GillesMagalhaes_bw.jpg",
+      "linkedin_github": "https://linkedin.com/in/gilles-magalhaes-ribeiro"
+    },
+    {
+      "name": "Hans",
+      "full_name": "Hans Lak",
+      "photo": "Hans_bw.jpeg",
+      "linkedin_github": "https://linkedin.com/in/hanslak"
+    },
+    {
+      "name": "Isaac",
+      "full_name": "Isaac Obella",
+      "photo": "IsaacObella_bw.jpg",
+      "linkedin_github": "https://linkedin.com/in/obella-isaac-3bb759aa"
+    },
+    {
+      "name": "Manon",
+      "full_name": "Manon Cramer",
+      "photo": "ManonCramer_bw.png",
+      "linkedin_github": "https://linkedin.com/in/manon-cramer-83861052"
+    },
+    {
+      "name": "Mascha",
+      "full_name": "Mascha van der Marel",
+      "photo": "MaschavanderMarel.JPG",
+      "linkedin_github": "https://linkedin.com/in/mascha-van-der-marel-81053a7/"
+    },
+    {
+      "name": "Mathias",
+      "full_name": "Mathias Mogensen",
+      "photo": "Mathias_square.png",
+      "linkedin_github": "https://linkedin.com/in/mathias-mogensen-7755401b6"
+    },
+    {
+      "name": "Niels",
+      "full_name": "Niels Galjaard",
+      "photo": "default.png",
+      "linkedin_github": "https://linkedin.com/in/niels-galjaard-1b7163192/"
+    },
+    {
+      "name": "Niklas",
+      "full_name": "Niklas Schumacher",
+      "photo": "NiklasSchumacher_bw.png",
+      "linkedin_github": "https://linkedin.com/in/niklas-schumacher-4020a3161"
+    },
+    {
+      "name": "Ruben",
+      "full_name": "Ruben Horn",
+      "photo": "RubenHorn_bw.jpg",
+      "linkedin_github": "https://linkedin.com/in/ruben-horn-7153431b5"
+    },
+    {
+      "name": "Tana",
+      "full_name": "Tana Viviers",
+      "photo": "TanaViviers_bw.png",
+      "linkedin_github": "https://linkedin.com/in/tana-viviers-62120375"
+    },
+    {
+      "name": "Tom",
+      "full_name": "Tom Siebring",
+      "photo": "TomSiebring_bw.jpg",
+      "linkedin_github": "https://linkedin.com/in/tomsiebring"
+    },
+    {
+      "name": "Tom",
+      "full_name": "Tom Tetteroo",
+      "photo": "TomTetteroo_bw.jpg",
+      "linkedin_github": "https://linkedin.com/in/tom-tetteroo-11a77219a"
+    }
+  ]
+}

@@ -1,11 +1,11 @@
 import type { AppProps } from "next/app";
 import Head from "next/head";
-import "tailwindcss/tailwind.css";
-import "../styles/text_animation.css";
+import "../styles/globals.css";
 
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import * as gtag from "../lib/gtag";
+import Layout from "../components/Layout";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -27,7 +27,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>CollAction</title>
       </Head>
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </>
   );
 }
