@@ -31,7 +31,7 @@ export default function WhatWeDo() {
       </div>
       <div className="container mx-auto text-justify">
         <h1 className="text-collaction text-center text-2xl font-medium">
-          What we do
+          CollAction in a nutshell
         </h1>
         <span>
           We are CollAction. We will show that solving big Collective Action
