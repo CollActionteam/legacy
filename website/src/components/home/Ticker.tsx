@@ -49,7 +49,7 @@ export default function Ticker() {
     }
     activeSentences[currentIdx][1](true);
     setActiveTickerIdx(currentIdx);
-  }, 7000);
+  }, 4000);
 
   const longestLine = sentences[4];
 

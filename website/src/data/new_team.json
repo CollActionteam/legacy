@@ -19,16 +19,16 @@
       "linkedin_github": "https://linkedin.com/in/gilles-magalhaes-ribeiro"
     },
     {
-      "name": "Hans",
-      "full_name": "Hans Lak",
-      "photo": "Hans_bw.jpeg",
-      "linkedin_github": "https://linkedin.com/in/hanslak"
-    },
-    {
       "name": "Isaac",
       "full_name": "Isaac Obella",
       "photo": "IsaacObella_bw.jpg",
       "linkedin_github": "https://linkedin.com/in/obella-isaac-3bb759aa"
+    },
+    {
+      "name": "Liya",
+      "full_name": "Liya Wang",
+      "photo": "LiyaWang.jpeg",
+      "linkedin_github": "https://linkedin.com/in/liya-wang-9578111a4"
     },
     {
       "name": "Manon",
@@ -67,6 +67,12 @@
       "linkedin_github": "https://linkedin.com/in/ruben-horn-7153431b5"
     },
     {
+      "name": "Saksham",
+      "full_name": "Saksham Gupta",
+      "photo": "SakshamGupta_bw.jpeg",
+      "linkedin_github": "https://linkedin.com/in/sudo-saksham/"
+    },
+    {
       "name": "Tana",
       "full_name": "Tana Viviers",
       "photo": "TanaViviers_bw.png",
@@ -83,6 +89,12 @@
       "full_name": "Tom Tetteroo",
       "photo": "TomTetteroo_bw.jpg",
       "linkedin_github": "https://linkedin.com/in/tom-tetteroo-11a77219a"
+    },
+    {
+      "name": "Yash",
+      "full_name": "Yash Tiwari",
+      "photo": "YashTiwari_bw.jpeg",
+      "linkedin_github": "https://linkedin.com/in/yasht01/"
     }
   ]
 }
