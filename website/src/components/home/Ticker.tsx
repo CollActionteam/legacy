@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import clsx from "clsx";
 
 export default function Ticker() {
@@ -12,17 +12,20 @@ export default function Ticker() {
   ]
 
   var [activeTickerIdx, setActiveTickerIdx] = useState(0);
-  setTimeout(() => {
-    var currentIdx = activeTickerIdx;
-    activeSentences[currentIdx][1](false);
-    if (currentIdx + 1 >= 6) {
-      currentIdx = 0;
-    } else {
-      currentIdx += 1;
-    }
-    activeSentences[currentIdx][1](true);
-    setActiveTickerIdx(currentIdx);
-  }, 4000);
+
+  useEffect(() => {
+    setTimeout(() => {
+      var currentIdx = activeTickerIdx;
+      activeSentences[currentIdx][1](false);
+      if (currentIdx + 1 >= 6) {
+        currentIdx = 0;
+      } else {
+        currentIdx += 1;
+      }
+      activeSentences[currentIdx][1](true);
+      setActiveTickerIdx(currentIdx);
+    }, 4000);
+  }, []);
 
   return (
     <section className="p-5 py-12 md:py-32">
