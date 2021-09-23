@@ -2,33 +2,6 @@ import React, { useState } from "react";
 import clsx from "clsx";
 
 export default function Ticker() {
-  const sentences = [
-    <>
-      Let’s <span className="text-collaction">be vegan for a month.</span>
-    </>,
-    <>
-      Let’s <span className="text-collaction">separate our waste.</span>
-    </>,
-    <>
-      Let’s <span className="text-collaction">reduce food waste.</span>
-    </>,
-    <>
-      Let’s{" "}
-      <span className="text-collaction">
-        switch to a green energy provider.
-      </span>
-    </>,
-    <>
-      Let’s{" "}
-      <span className="text-collaction">meet with an elderly once a week.</span>
-    </>,
-    <>
-      <span className="text-collaction font-medium">
-        Together we make waves!
-      </span>
-    </>,
-  ];
-
   const activeSentences = [
     useState(true),
     useState(false),
@@ -42,7 +15,7 @@ export default function Ticker() {
   setTimeout(() => {
     var currentIdx = activeTickerIdx;
     activeSentences[currentIdx][1](false);
-    if (currentIdx + 1 >= sentences.length) {
+    if (currentIdx + 1 >= 6) {
       currentIdx = 0;
     } else {
       currentIdx += 1;
@@ -51,25 +24,33 @@ export default function Ticker() {
     setActiveTickerIdx(currentIdx);
   }, 4000);
 
-  const longestLine = sentences[4];
-
   return (
     <section className="p-5 py-12 md:py-32">
       <p className="text-xl md:text-4xl text-center ticker-wrapper">
         <div className="ticker-size-guide">
-          {longestLine}
+          Let's <span className="text-collaction">switch to a green energy provider.</span>
         </div>
-        {sentences.map((sentence, idx) => (
-          <div
-            key={idx}
-            className={clsx(
-              "ticker-item",
-              activeSentences[idx][0] && "active-ticker-item",
-            )}
-          >
-            {sentence}
-          </div>
-        ))}
+
+        <div className={clsx("ticker-item", activeSentences[0][0] && "active-ticker-item")}>
+          Let's <span className="text-collaction">be vegan for a month.</span>
+        </div>
+        <div className={clsx("ticker-item", activeSentences[1][0] && "active-ticker-item")}>
+          Let's <span className="text-collaction">separate our waste.</span>
+        </div>
+        <div className={clsx("ticker-item", activeSentences[2][0] && "active-ticker-item")}>
+          Let's <span className="text-collaction">reduce food waste.</span>
+        </div>
+        <div className={clsx("ticker-item", activeSentences[3][0] && "active-ticker-item")}>
+          Let's <span className="text-collaction">switch to a green energy provider.</span>
+        </div>
+        <div className={clsx("ticker-item", activeSentences[4][0] && "active-ticker-item")}>
+          Let's <span className="text-collaction">meet with an elderly once a week.</span>
+        </div>
+        <div className={clsx("ticker-item", activeSentences[5][0] && "active-ticker-item")}>
+          <span className="text-collaction font-medium">
+            Together we make waves!
+          </span>
+        </div>
       </p>
     </section>
   );
