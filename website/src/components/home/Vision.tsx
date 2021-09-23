@@ -22,7 +22,7 @@ export default function Vision() {
           <p>Make doing good fun and easy!</p>
         </div>
 
-        <div className="pb-8">
+        <div>
           <h1 className="text-collaction text-2xl font-medium">Our vision</h1>
           <p>
             Solve all{" "}
