@@ -10,8 +10,8 @@ export default function HelpOut() {
         <p>
           CollAction is run by volunteers only. Do you have a valuable skill set
           and want to help us out? <br /> Please send a message to{" "}
-          <a className="text-collaction" href="mailto:hello@collaction.org">
-            hello@collaction.org
+          <a className="text-collaction" href="mailto:tom@collaction.org">
+            tom@collaction.org
           </a>
           .
         </p>

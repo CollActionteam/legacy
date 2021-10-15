@@ -19,8 +19,8 @@ export default function Supporters() {
         <p>
           Would you like to support CollAction? <br /> Please send us a message
           at{" "}
-          <a className="text-collaction" href="mailto:hello@collaction.org">
-            hello@collaction.org
+          <a className="text-collaction" href="mailto:tom@collaction.org">
+            tom@collaction.org
           </a>
           .
         </p>

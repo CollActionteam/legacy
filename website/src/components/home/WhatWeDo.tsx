@@ -8,6 +8,8 @@ export default function WhatWeDo() {
           <img
             className="block h-20 w-auto mx-auto my-4"
             src="/steps/proposal.svg"
+            alt="Proposal"
+            width={80} height={80}
           />
           <h2 className="text-collaction text-lg">Goal</h2>
           Choose or suggest a goal you would like to participate in
@@ -16,6 +18,8 @@ export default function WhatWeDo() {
           <img
             className="block h-20 w-auto mx-auto my-4"
             src="/steps/crowd.svg"
+            alt="Crowd"
+            width={62} height={80}
           />
           <h2 className="text-collaction text-lg">Crowd</h2>
           See how your actions are magnified by the crowd that has equal goals
@@ -24,6 +28,8 @@ export default function WhatWeDo() {
           <img
             className="block h-20 w-auto mx-auto my-4"
             src="/steps/act.svg"
+            alt="Act"
+            width={59} height={80}
           />
           <h2 className="text-collaction text-lg">Action</h2>
           Commit to the goal and make impact
